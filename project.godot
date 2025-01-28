@@ -1,0 +1,65 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Nanashi"
+config/name_localized={
+"ja": "名無し"
+}
+config/description="Your Keys // Your Rhythm"
+config/version="0.0.0"
+run/main_scene="res://Main_Scenes/bootstrap.tscn"
+config/features=PackedStringArray("4.3", "C#", "Mobile")
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/show_image=false
+boot_splash/image="/home/evelyn/Downloads/Qlute Full Logo v3.png"
+boot_splash/fullsize=false
+boot_splash/use_filter=false
+config/icon="res://logo.png"
+
+[autoload]
+
+SettingsOperator="*res://Script/SettingsOperator.cs"
+SceneSwitch="*res://Script/SceneSwitch.cs"
+BeatmapListener="*res://Script/BeatmapListener.cs"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/aspect="expand"
+window/vsync/vsync_mode=0
+
+[dotnet]
+
+project/assembly_name="Qlute"
+
+[gui]
+
+theme/custom_font="res://Fonts/font.ttf"
+
+[input_devices]
+
+pointing/android/enable_long_press_as_right_click=true
+
+[internationalization]
+
+locale/locale_filter_mode=0
+
+[navigation]
+
+3d/rendering_method.mobile="mobile"
+3d/rendering_method="forward_plus"
+
+[rendering]
+
+textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)

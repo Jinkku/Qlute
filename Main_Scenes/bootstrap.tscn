@@ -1,0 +1,56 @@
+[gd_scene load_steps=3 format=3 uid="uid://dvm81no14tisl"]
+
+[ext_resource type="Script" path="res://Script/Bootstrap.cs" id="1_oli0r"]
+[ext_resource type="Texture2D" uid="uid://ba8p7q27num8t" path="res://Skin/System/highlightlogo.png" id="2_2xpbg"]
+
+[node name="Bootstrap" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oli0r")
+
+[node name="Noticestrip" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 147.0
+offset_bottom = 51.0
+text = "...btw this is a dev build so NO snoopie >:("
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -141.5
+offset_top = -40.5
+offset_right = 141.5
+offset_bottom = 40.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_2xpbg")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -158.0
+offset_top = 61.0
+offset_right = 158.0
+offset_bottom = 97.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true

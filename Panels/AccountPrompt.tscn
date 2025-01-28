@@ -1,0 +1,127 @@
+[gd_scene load_steps=4 format=3 uid="uid://845os5s4i7vj"]
+
+[ext_resource type="Script" path="res://Script/AccountPrompt.cs" id="1_ry2u7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_golg1"]
+
+[sub_resource type="Theme" id="Theme_oahhy"]
+Button/styles/focus = SubResource("StyleBoxEmpty_golg1")
+
+[node name="AccountPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -980.0
+offset_bottom = -470.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = SubResource("Theme_oahhy")
+script = ExtResource("1_ry2u7")
+
+[node name="RankingApi" type="HTTPRequest" parent="."]
+timeout = 3.0
+
+[node name="LoginApi" type="HTTPRequest" parent="."]
+timeout = 3.0
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 300.0
+color = Color(0.160784, 0.160784, 0.160784, 1)
+
+[node name="Highlight" type="ColorRect" parent="."]
+layout_mode = 0
+offset_top = 300.0
+offset_right = 300.0
+offset_bottom = 303.0
+color = Color(0.496574, 0.416992, 0.953125, 1)
+
+[node name="AccountPrompt" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 250.0
+
+[node name="Notice" type="Label" parent="."]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 10.0
+offset_right = 293.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(0.921875, 1, 0, 1)
+horizontal_alignment = 2
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="UsernameNotice" type="Label" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 96.0
+offset_bottom = 29.0
+text = "Username"
+
+[node name="PasswordNotice" type="Label" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 102.0
+offset_right = 96.0
+offset_bottom = 121.0
+text = "Password"
+
+[node name="Username" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 40.0
+offset_right = 290.0
+offset_bottom = 95.0
+placeholder_text = "Username here..."
+
+[node name="Password" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 130.0
+offset_right = 290.0
+offset_bottom = 185.0
+placeholder_text = "Very secret password..."
+secret = true
+
+[node name="CheckButton" type="CheckButton" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 189.0
+offset_right = 289.0
+offset_bottom = 216.0
+text = "Stay Logged in"
+
+[node name="CheckButton2" type="CheckButton" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 213.0
+offset_right = 289.0
+offset_bottom = 240.0
+text = "Save Password"
+
+[node name="Login" type="Button" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 244.0
+offset_right = 130.0
+offset_bottom = 294.0
+text = "Login"
+
+[node name="Create" type="Button" parent="."]
+layout_mode = 0
+offset_left = 170.0
+offset_top = 244.0
+offset_right = 290.0
+offset_bottom = 294.0
+text = "Create"
+
+[connection signal="draw" from="." to="." method="_on_draw"]
+[connection signal="request_completed" from="RankingApi" to="." method="_on_Ranking_request_completed"]
+[connection signal="request_completed" from="LoginApi" to="." method="_on_login_api_request_completed"]
+[connection signal="pressed" from="Login" to="." method="_on_login_pressed"]

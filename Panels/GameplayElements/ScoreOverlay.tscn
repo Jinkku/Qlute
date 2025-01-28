@@ -1,0 +1,88 @@
+[gd_scene load_steps=7 format=3 uid="uid://b0f11jnivkb1b"]
+
+[ext_resource type="FontFile" uid="uid://26bmgi83sgtv" path="res://Fonts/score.ttf" id="1_jd5hx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6s3ea"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_bottom_right = 200
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ucmn"]
+bg_color = Color(0.4375, 0.162695, 0.162695, 1)
+corner_radius_bottom_right = 150
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b2pnw"]
+bg_color = Color(0.178189, 0.396875, 0.128984, 1)
+corner_radius_bottom_right = 150
+corner_detail = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_lvexv"]
+font = ExtResource("1_jd5hx")
+font_size = 30
+shadow_color = Color(0, 0, 0, 0.403922)
+shadow_offset = Vector2(0, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_0ag8s"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -860.0
+offset_bottom = -620.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScoreBarBack" type="PanelContainer" parent="."]
+self_modulate = Color(1, 1, 1, 0.568627)
+layout_mode = 1
+offset_right = 420.0
+offset_bottom = 100.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_6s3ea")
+
+[node name="HealthBarNone" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_top = 80.0
+offset_right = 340.0
+offset_bottom = 100.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_7ucmn")
+
+[node name="HealthBarActive" type="PanelContainer" parent="."]
+layout_mode = 2
+offset_top = 80.0
+offset_right = 236.0
+offset_bottom = 100.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_b2pnw")
+
+[node name="Score" type="Label" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 285.0
+offset_bottom = 49.0
+text = "307,723,200"
+label_settings = SubResource("LabelSettings_lvexv")
+
+[node name="pp" type="Label" parent="."]
+layout_mode = 0
+offset_left = 110.0
+offset_top = 49.0
+offset_right = 189.0
+offset_bottom = 71.0
+theme_override_fonts/font = ExtResource("1_jd5hx")
+text = "9,999pp"
+label_settings = SubResource("LabelSettings_0ag8s")
+clip_text = true
+
+[node name="Accuracy" type="Label" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 49.0
+offset_right = 89.0
+offset_bottom = 71.0
+theme_override_fonts/font = ExtResource("1_jd5hx")
+text = "100.00%"
+label_settings = SubResource("LabelSettings_0ag8s")
+clip_text = true

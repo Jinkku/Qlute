@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://daegmq7jje8um"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 480.0
+grow_vertical = 2
+color = Color(0.0507813, 0.0507813, 0.0507813, 1)
+
+[node name="ColorRect" type="ColorRect" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 60.0
+grow_vertical = 2
+color = Color(0, 0, 0, 0.235294)
+
+[node name="VScrollBar" type="VScrollBar" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 224.0
+offset_right = 240.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Name" type="Label" parent="ColorRect"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 20.0
+offset_right = 285.0
+offset_bottom = 75.0
+theme_override_font_sizes/font_size = 48
+text = "Settings"
+
+[node name="Name2" type="Label" parent="ColorRect"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 80.0
+offset_right = 285.0
+offset_bottom = 135.0
+text = "Godot Version: 4.3"

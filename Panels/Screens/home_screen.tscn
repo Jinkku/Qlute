@@ -1,0 +1,193 @@
+[gd_scene load_steps=12 format=3 uid="uid://e3cikike8fhn"]
+
+[ext_resource type="Script" path="res://Script/home.cs" id="1_j2gfm"]
+[ext_resource type="PackedScene" uid="uid://cywxwx4is1g7o" path="res://Panels/beatmap_background.tscn" id="2_ouv1d"]
+[ext_resource type="Script" path="res://Script/play.gd" id="3_jccqs"]
+[ext_resource type="Script" path="res://Script/menunotice.gd" id="4_j0o5v"]
+[ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://font.ttf" id="5_pikml"]
+[ext_resource type="Script" path="res://Script/version.gd" id="6_1tkmr"]
+[ext_resource type="Texture2D" uid="uid://d0mgtsr4sjbjo" path="res://Skin/QWC 25.png" id="7_pqjhh"]
+[ext_resource type="PackedScene" uid="uid://8eid456d2fet" path="res://Panels/TopPanel.tscn" id="8_ndskd"]
+[ext_resource type="Script" path="res://Script/fps.gd" id="9_0g1gu"]
+
+[sub_resource type="GDScript" id="GDScript_txy7s"]
+script/source = "extends \"res://Script/leave.gd\"
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+func _on_pressed():
+	get_tree().quit()
+"
+
+[sub_resource type="Theme" id="Theme_h8xpn"]
+
+[node name="Home Screen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_j2gfm")
+
+[node name="BeatmapBackground" parent="." instance=ExtResource("2_ouv1d")]
+layout_mode = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="Play" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 60.0
+offset_top = -260.0
+offset_right = 454.0
+offset_bottom = -173.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Play"
+script = ExtResource("3_jccqs")
+
+[node name="Create" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 180.0
+offset_top = -130.0
+offset_right = 574.0
+offset_bottom = -43.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Level Editor"
+
+[node name="Browse" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 180.0
+offset_top = 40.0
+offset_right = 574.0
+offset_bottom = 127.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Browse"
+
+[node name="Leave" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 60.0
+offset_top = 180.0
+offset_right = 454.0
+offset_bottom = 267.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Leave"
+script = SubResource("GDScript_txy7s")
+
+[node name="MenuNotice" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -90.0
+offset_top = -81.0
+offset_right = 90.0
+offset_bottom = -41.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = SubResource("Theme_h8xpn")
+
+[node name="Timer" type="Timer" parent="MenuNotice"]
+wait_time = 5.0
+autostart = true
+
+[node name="NoticeText" type="Label" parent="MenuNotice"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Example Text"
+horizontal_alignment = 1
+
+[node name="HTTPRequest" type="HTTPRequest" parent="MenuNotice"]
+script = ExtResource("4_j0o5v")
+
+[node name="Version" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -25.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_pikml")
+text = "Nanashi/dev (0.0.0)"
+horizontal_alignment = 1
+script = ExtResource("6_1tkmr")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -260.0
+offset_top = 60.0
+offset_right = -10.0
+offset_bottom = 140.0
+grow_horizontal = 0
+texture = ExtResource("7_pqjhh")
+stretch_mode = 2
+
+[node name="TopPanel" parent="." instance=ExtResource("8_ndskd")]
+layout_mode = 1
+
+[node name="FPSCounter" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -77.0
+offset_top = -25.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="FPS" type="Label" parent="FPSCounter"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -43.0
+offset_top = -21.0
+offset_right = -2.0
+offset_bottom = 2.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_pikml")
+text = "0 fps"
+horizontal_alignment = 2
+script = ExtResource("9_0g1gu")
+
+[connection signal="resized" from="." to="." method="_on_resized"]
+[connection signal="pressed" from="Play" to="Play" method="_on_pressed"]
+[connection signal="pressed" from="Leave" to="Leave" method="_on_pressed"]
+[connection signal="timeout" from="MenuNotice/Timer" to="MenuNotice/HTTPRequest" method="_on_timer_timeout"]
+[connection signal="request_completed" from="MenuNotice/HTTPRequest" to="MenuNotice/HTTPRequest" method="_on_request_completed"]
