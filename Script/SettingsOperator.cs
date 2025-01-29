@@ -22,6 +22,7 @@ public partial class SettingsOperator : Node
     public Dictionary<string, object> Configuration { get; set; } = new Dictionary<string, object>
     {
         { "scaled", false },
+        { "windowmode", "fullscreen" },
 		{ "volume", 1 },
 		{ "skin", null },
 		{ "username", null },
@@ -33,6 +34,8 @@ public partial class SettingsOperator : Node
 		{ "teststrip", "Ya" },
 
     };
+
+    public Dictionary<string, object> Configurationbk {get; set;}
 
     public float Get_ppvalue(string filename){
         using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
@@ -111,8 +114,10 @@ public partial class SettingsOperator : Node
         { "client-secret", null },
 
     };
-	public override void _Ready()
+
+    public override void _Ready()
 	{
+        Configurationbk = new Dictionary<string, object>(Configuration);
         GD.Print("Please wait...");
         GD.Print("Checking if config file is saved...");
         if (System.IO.File.Exists(settingsfile))

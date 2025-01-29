@@ -28,7 +28,7 @@ public partial class Settings : Button
 	}
 	private void _on_pressed(){
 		Control AccountPanel = GetNode<Control>("%AccountPanel");
-		Panel SettingsPanel = GetNode<Panel>("%SettingsPanel");
+		Control SettingsPanel = GetNode<Control>("%SettingsPanel");
 		AnimationPlayer AniPlayer = GetNode<AnimationPlayer>("%AccountPanelAnimation");
 		if (SettingsPanel.Visible) {
 			SettingsPanel.Visible = false;

@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://8eid456d2fet"]
+[gd_scene load_steps=26 format=3 uid="uid://8eid456d2fet"]
 
 [ext_resource type="Script" path="res://Script/InfoBar.cs" id="1_bm6kj"]
 [ext_resource type="Texture2D" uid="uid://bvjgpego4fwun" path="res://Skin/System/settings.png" id="1_vco36"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://845os5s4i7vj" path="res://Panels/AccountPrompt.tscn" id="6_fi6td"]
 [ext_resource type="PackedScene" uid="uid://43pcqcuutdu4" path="res://Panels/AccountProfileCard.tscn" id="8_pxj8n"]
 [ext_resource type="Script" path="res://Script/AccountProfileCard.cs" id="9_yftj0"]
+[ext_resource type="PackedScene" uid="uid://daegmq7jje8um" path="res://Panels/Settings.tscn" id="12_41los"]
 
 [sub_resource type="Animation" id="Animation_xvajm"]
 resource_name = "Bootup"
@@ -145,33 +146,6 @@ unique_name_in_owner = true
 libraries = {
 "": SubResource("AnimationLibrary_dtwww")
 }
-
-[node name="SettingsPanel" type="Panel" parent="."]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 42.0
-offset_top = 72.0
-offset_right = -38.0
-offset_bottom = -28.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="TabBar" type="TabBar" parent="SettingsPanel"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 27.0
-grow_horizontal = 2
-current_tab = 0
-tab_count = 5
-tab_0/title = "General"
-tab_1/title = "Graphics"
-tab_2/title = "Audio"
-tab_3/title = "Gameplay"
-tab_4/title = "About"
 
 [node name="InfoBar" type="ColorRect" parent="."]
 z_index = 1
@@ -329,6 +303,11 @@ unique_name_in_owner = true
 libraries = {
 "": SubResource("AnimationLibrary_a1fwo")
 }
+
+[node name="SettingsPanel" parent="." instance=ExtResource("12_41los")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
 
 [connection signal="pressed" from="InfoBar/AccountButton" to="InfoBar/Settings" method="_on_AccountButton_pressed"]
 [connection signal="pressed" from="InfoBar/Download" to="InfoBar/Download" method="_on_downloadbutton_pressed"]

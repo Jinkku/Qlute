@@ -1,14 +1,19 @@
-[gd_scene format=3 uid="uid://daegmq7jje8um"]
+[gd_scene load_steps=2 format=3 uid="uid://daegmq7jje8um"]
 
-[node name="Control" type="Control"]
+[ext_resource type="Script" path="res://Script/SettingsPanel.cs" id="1_1vi74"]
+
+[node name="SettingsPanel" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -800.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_1vi74")
 
 [node name="ColorRect" type="ColorRect" parent="."]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -44,10 +49,33 @@ offset_bottom = 75.0
 theme_override_font_sizes/font_size = 48
 text = "Settings"
 
-[node name="Name2" type="Label" parent="ColorRect"]
+[node name="Godotversion" type="Label" parent="ColorRect"]
 layout_mode = 0
 offset_left = 80.0
 offset_top = 80.0
-offset_right = 285.0
-offset_bottom = 135.0
+offset_right = 229.0
+offset_bottom = 99.0
 text = "Godot Version: 4.3"
+
+[node name="Label" type="Label" parent="ColorRect"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 115.0
+offset_right = 196.0
+offset_bottom = 134.0
+text = "Window mode"
+
+[node name="OptionButton" type="OptionButton" parent="ColorRect"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 141.0
+offset_right = 435.0
+offset_bottom = 201.0
+item_count = 3
+popup/item_0/text = "Fullscreen"
+popup/item_1/text = "Borderless"
+popup/item_1/id = 1
+popup/item_2/text = "Windowed"
+popup/item_2/id = 2
+
+[connection signal="item_selected" from="ColorRect/OptionButton" to="." method="_changed_resolution"]
