@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -7,14 +8,17 @@ public partial class SettingsOperator : Node
 {	
 	public string homedir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + "/.qlute";
 	public string beatmapsdir => homedir + "/beatmaps";
+    public float ppbase = 0.072f;
 	public string downloadsdir => homedir + "/downloads";
 	public string replaydir => homedir + "/replays";
 	public string screenshotdir => homedir + "/screenshots";
 	public string skinsdir => homedir + "/skins";
     public string settingsfile => homedir + "/settings.cfg";
     public string nanashidb => homedir + "/nanashi.db";
-	public List<string> Beatmaps = new List<string>();
 	public List<string> BeatmapsURLs = new List<string>();
+    //public Dictionary<int, object> Beatmaps { get; set; } = new Dictionary<int, object>{
+
+	public List<Dictionary<string,object>> Beatmaps = new List<Dictionary<string,object>>();
     public Dictionary<string, object> Configuration { get; set; } = new Dictionary<string, object>
     {
         { "scaled", false },
@@ -29,6 +33,71 @@ public partial class SettingsOperator : Node
 		{ "teststrip", "Ya" },
 
     };
+
+    public float Get_ppvalue(string filename){
+        using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
+        var text = file.GetAsText();
+        var lines = text.Split("\n");
+        var ppvalue = 0.0f;
+        var hitob = 0;
+        var isHitObjectSection = false;
+        foreach (string line in lines)
+        {
+            if (line.Trim() == "[HitObjects]")
+            {
+                isHitObjectSection = true;
+                continue;
+            }
+
+            if (isHitObjectSection)
+            {
+                // Break if we reach an empty line or another section
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("["))
+                    break;
+                hitob++;
+            }
+        }
+        ppvalue = ppbase * hitob;
+        return ppvalue;
+        
+        }
+    public void Parse_Beatmapfile(string filename){
+        GD.Print("Parsing beatmap file...");
+        using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
+        var text = file.GetAsText();
+        var lines = text.Split("\n");
+        float ppvalue =     Get_ppvalue(filename);
+        string songtitle = "";
+        string artist = "";
+        string version = "";
+        int keycount = 4;
+        foreach (var line in lines)
+        {
+            if (line.StartsWith("Title:"))
+            {
+                songtitle = line.Split(":")[1];
+            }
+            if (line.StartsWith("Artist:"))
+            {
+                artist = line.Split(":")[1];
+            }
+            if (line.StartsWith("CircleSize:"))
+            {
+                keycount = int.Parse(line.Split(":")[1]);
+            }
+            if (line.StartsWith("Version:"))
+            {
+                version = line.Split(":")[1];
+            }
+        }
+		Beatmaps.Add(new Dictionary<string, object>{
+            { "Title", songtitle },
+            { "Artist", artist },
+            { "KeyCount", keycount },
+            { "Version", version },
+            { "pp", ppvalue },
+        });
+    }
     public Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
     {
         { "TopPanelSlidein", false },

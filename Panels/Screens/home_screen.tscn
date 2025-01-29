@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene load_steps=11 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" path="res://Script/home.cs" id="1_j2gfm"]
 [ext_resource type="PackedScene" uid="uid://cywxwx4is1g7o" path="res://Panels/beatmap_background.tscn" id="2_ouv1d"]
@@ -6,9 +6,8 @@
 [ext_resource type="Script" path="res://Script/menunotice.gd" id="4_j0o5v"]
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://font.ttf" id="5_pikml"]
 [ext_resource type="Script" path="res://Script/version.gd" id="6_1tkmr"]
-[ext_resource type="Texture2D" uid="uid://d0mgtsr4sjbjo" path="res://Skin/QWC 25.png" id="7_pqjhh"]
 [ext_resource type="PackedScene" uid="uid://8eid456d2fet" path="res://Panels/TopPanel.tscn" id="8_ndskd"]
-[ext_resource type="Script" path="res://Script/fps.gd" id="9_0g1gu"]
+[ext_resource type="PackedScene" uid="uid://8ue5al5uryf" path="res://Panels/Overlays/fps_counter.tscn" id="8_nogua"]
 
 [sub_resource type="GDScript" id="GDScript_txy7s"]
 script/source = "extends \"res://Script/leave.gd\"
@@ -23,7 +22,14 @@ func _on_pressed():
 	get_tree().quit()
 "
 
-[sub_resource type="Theme" id="Theme_h8xpn"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1gbip"]
+bg_color = Color(0, 0, 0, 0.568627)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 10.0
+expand_margin_right = 10.0
 
 [node name="Home Screen" type="Control"]
 layout_mode = 3
@@ -106,7 +112,7 @@ offset_right = 90.0
 offset_bottom = -41.0
 grow_horizontal = 2
 grow_vertical = 0
-theme = SubResource("Theme_h8xpn")
+theme_override_styles/panel = SubResource("StyleBoxFlat_1gbip")
 
 [node name="Timer" type="Timer" parent="MenuNotice"]
 wait_time = 5.0
@@ -147,44 +153,16 @@ offset_top = 60.0
 offset_right = -10.0
 offset_bottom = 140.0
 grow_horizontal = 0
-texture = ExtResource("7_pqjhh")
-stretch_mode = 2
 
 [node name="TopPanel" parent="." instance=ExtResource("8_ndskd")]
 layout_mode = 1
 
-[node name="FPSCounter" type="Panel" parent="."]
+[node name="FPSCounter" parent="." instance=ExtResource("8_nogua")]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -77.0
-offset_top = -25.0
-offset_right = -4.0
-offset_bottom = -4.0
-grow_horizontal = 0
-grow_vertical = 0
-
-[node name="FPS" type="Label" parent="FPSCounter"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -43.0
-offset_top = -21.0
-offset_right = -2.0
-offset_bottom = 2.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("5_pikml")
-text = "0 fps"
-horizontal_alignment = 2
-script = ExtResource("9_0g1gu")
+offset_left = -70.0
+offset_top = -50.0
+offset_right = -10.0
+offset_bottom = -10.0
 
 [connection signal="resized" from="." to="." method="_on_resized"]
 [connection signal="pressed" from="Play" to="Play" method="_on_pressed"]

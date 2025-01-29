@@ -14,3 +14,7 @@ func _on_request_completed(result: int, response_code: int, headers: PackedStrin
 	$"../NoticeText".set_text(body.get_string_from_utf8())
 	$"..".visible = true
 	#$MenuNotice.visible = true
+
+
+func _on_timer_timeout() -> void:
+	request("https://qlute.pxki.us.to/api/menunotice")
