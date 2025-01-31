@@ -1,0 +1,95 @@
+[gd_scene load_steps=9 format=3 uid="uid://b2lw0mmphsddc"]
+
+[ext_resource type="Script" path="res://Script/MusicCard.cs" id="1_aa04f"]
+[ext_resource type="StyleBox" uid="uid://drlu38602jgb8" path="res://Skin/System/buttontoggled.tres" id="1_vfwc8"]
+[ext_resource type="Texture2D" uid="uid://deou77c8rjeis" path="res://bgtest.png" id="2_hexqm"]
+[ext_resource type="StyleBox" uid="uid://fxawsqvq06j4" path="res://Skin/System/buttonidle.tres" id="2_nf3oy"]
+[ext_resource type="StyleBox" uid="uid://cuao4np4v7lo1" path="res://Skin/System/buttonhover.tres" id="2_vxxs3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i3see"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a1afo"]
+bg_color = Color(0.6, 0.6, 0.6, 0.568627)
+corner_radius_top_left = 35
+corner_radius_bottom_left = 35
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y4ldl"]
+bg_color = Color(0.192157, 0.192157, 0.192157, 0.568627)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 10.0
+expand_margin_right = 10.0
+
+[node name="MusicCard" type="Button"]
+clip_contents = true
+offset_right = 310.0
+offset_bottom = 115.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i3see")
+theme_override_styles/hover = ExtResource("2_vxxs3")
+theme_override_styles/pressed = ExtResource("1_vfwc8")
+theme_override_styles/normal = ExtResource("2_nf3oy")
+toggle_mode = true
+script = ExtResource("1_aa04f")
+metadata/Beatmapurl = ""
+
+[node name="SongBackgroundPreview" type="PanelContainer" parent="."]
+clip_children = 2
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -115.0
+offset_top = -1.0
+offset_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_a1afo")
+
+[node name="TextureRect" type="TextureRect" parent="SongBackgroundPreview"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_hexqm")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="SongTitle" type="Label" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 85.0
+offset_bottom = 29.0
+text = "Mystery Song"
+
+[node name="SongArtist" type="Label" parent="."]
+offset_left = 10.0
+offset_top = 31.0
+offset_right = 98.0
+offset_bottom = 50.0
+text = "idiotiplier"
+
+[node name="SongMapper" type="Label" parent="."]
+offset_left = 10.0
+offset_top = 52.0
+offset_right = 147.0
+offset_bottom = 71.0
+text = "mapped by idiot"
+
+[node name="LevelRating" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 80.0
+offset_right = 49.0
+offset_bottom = 105.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_y4ldl")
+
+[node name="Rating" type="Label" parent="LevelRating"]
+layout_mode = 2
+text = "Lv. 69"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

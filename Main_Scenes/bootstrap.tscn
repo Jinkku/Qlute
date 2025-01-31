@@ -1,8 +1,43 @@
-[gd_scene load_steps=4 format=3 uid="uid://dvm81no14tisl"]
+[gd_scene load_steps=6 format=3 uid="uid://dvm81no14tisl"]
 
 [ext_resource type="Script" path="res://Script/Bootstrap.cs" id="1_oli0r"]
 [ext_resource type="Texture2D" uid="uid://ba8p7q27num8t" path="res://Skin/System/highlightlogo.png" id="2_2xpbg"]
-[ext_resource type="PackedScene" uid="uid://8ue5al5uryf" path="res://Panels/Overlays/fps_counter.tscn" id="3_8fs4k"]
+
+[sub_resource type="Animation" id="Animation_v5m8g"]
+resource_name = "Intro"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_s0vrs"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rpwbx"]
+_data = {
+"Intro": SubResource("Animation_v5m8g"),
+"RESET": SubResource("Animation_s0vrs")
+}
 
 [node name="Bootstrap" type="Control"]
 layout_mode = 3
@@ -12,6 +47,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_oli0r")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../TextureRect")
+libraries = {
+"": SubResource("AnimationLibrary_rpwbx")
+}
 
 [node name="Noticestrip" type="Label" parent="."]
 visible = false
@@ -29,24 +70,18 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -141.5
-offset_top = -40.5
-offset_right = 141.5
-offset_bottom = 40.5
+offset_left = -216.5
+offset_top = -54.5
+offset_right = 216.5
+offset_bottom = 54.5
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_2xpbg")
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 3.0
 one_shot = true
 autostart = true
 
-[node name="FPSCounter" parent="." instance=ExtResource("3_8fs4k")]
-layout_mode = 1
-offset_left = -70.0
-offset_top = -50.0
-offset_right = -10.0
-offset_bottom = -10.0
-
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_intro_finished"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

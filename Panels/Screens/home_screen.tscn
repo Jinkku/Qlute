@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene load_steps=10 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" path="res://Script/home.cs" id="1_j2gfm"]
 [ext_resource type="PackedScene" uid="uid://cywxwx4is1g7o" path="res://Panels/beatmap_background.tscn" id="2_ouv1d"]
@@ -6,8 +6,7 @@
 [ext_resource type="Script" path="res://Script/menunotice.gd" id="4_j0o5v"]
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://font.ttf" id="5_pikml"]
 [ext_resource type="Script" path="res://Script/version.gd" id="6_1tkmr"]
-[ext_resource type="PackedScene" uid="uid://8eid456d2fet" path="res://Panels/TopPanel.tscn" id="8_ndskd"]
-[ext_resource type="PackedScene" uid="uid://8ue5al5uryf" path="res://Panels/Overlays/fps_counter.tscn" id="8_nogua"]
+[ext_resource type="PackedScene" uid="uid://bwpja5llmgtqo" path="res://Panels/Overlays/TopPanel.tscn" id="7_1w060"]
 
 [sub_resource type="GDScript" id="GDScript_txy7s"]
 script/source = "extends \"res://Script/leave.gd\"
@@ -154,22 +153,8 @@ offset_right = -10.0
 offset_bottom = 140.0
 grow_horizontal = 0
 
-[node name="TopPanel" parent="." instance=ExtResource("8_ndskd")]
+[node name="TopPanel" parent="." instance=ExtResource("7_1w060")]
 layout_mode = 1
-
-[node name="FPSCounter" parent="." instance=ExtResource("8_nogua")]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -70.0
-offset_top = -51.0
-offset_right = -10.0
-offset_bottom = -10.0
-grow_horizontal = 0
-grow_vertical = 0
 
 [connection signal="resized" from="." to="." method="_on_resized"]
 [connection signal="pressed" from="Play" to="Play" method="_on_pressed"]

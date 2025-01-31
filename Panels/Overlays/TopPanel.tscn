@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://mvmnxgxfeqc7"]
+[gd_scene load_steps=26 format=3 uid="uid://bwpja5llmgtqo"]
 
 [ext_resource type="Script" path="res://Script/InfoBar.cs" id="1_bm6kj"]
 [ext_resource type="Texture2D" uid="uid://bvjgpego4fwun" path="res://Skin/System/settings.png" id="1_vco36"]
@@ -148,7 +148,7 @@ libraries = {
 }
 
 [node name="InfoBar" type="ColorRect" parent="."]
-z_index = 2
+z_index = 1
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -268,6 +268,9 @@ keep_pressed_outside = true
 icon = ExtResource("5_6ko15")
 icon_alignment = 1
 
+[node name="Container" type="Container" parent="InfoBar"]
+layout_mode = 0
+
 [node name="LoginPanel" type="PanelContainer" parent="InfoBar"]
 visible = false
 layout_mode = 0
@@ -278,7 +281,6 @@ offset_bottom = 261.0
 
 [node name="AccountProfileCard" parent="." instance=ExtResource("8_pxj8n")]
 unique_name_in_owner = true
-z_index = 1
 layout_mode = 1
 offset_top = -205.0
 offset_bottom = -770.0
@@ -286,7 +288,6 @@ script = ExtResource("9_yftj0")
 
 [node name="AccountPanel" parent="." instance=ExtResource("6_fi6td")]
 unique_name_in_owner = true
-z_index = 1
 layout_mode = 0
 anchors_preset = 0
 anchor_right = 0.0
@@ -305,9 +306,8 @@ libraries = {
 
 [node name="SettingsPanel" parent="." instance=ExtResource("12_41los")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
-offset_top = 50.0
-offset_bottom = 50.0
 
 [connection signal="pressed" from="InfoBar/AccountButton" to="InfoBar/Settings" method="_on_AccountButton_pressed"]
 [connection signal="pressed" from="InfoBar/Download" to="InfoBar/Download" method="_on_downloadbutton_pressed"]

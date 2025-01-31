@@ -15,7 +15,6 @@ public partial class SettingsOperator : Node
 	public string skinsdir => homedir + "/skins";
     public string settingsfile => homedir + "/settings.cfg";
     public string nanashidb => homedir + "/nanashi.db";
-	public List<string> BeatmapsURLs = new List<string>();
     //public Dictionary<int, object> Beatmaps { get; set; } = new Dictionary<int, object>{
 
 	public List<Dictionary<string,object>> Beatmaps = new List<Dictionary<string,object>>();
@@ -73,6 +72,10 @@ public partial class SettingsOperator : Node
         string songtitle = "";
         string artist = "";
         string version = "";
+        string mapper = "";
+        string background = "";
+        string audio = "";
+        string rawurl = filename;
         int keycount = 4;
         foreach (var line in lines)
         {
@@ -88,6 +91,18 @@ public partial class SettingsOperator : Node
             {
                 keycount = int.Parse(line.Split(":")[1]);
             }
+            if (line.StartsWith("AudioFilename:"))
+            {
+                audio = line.Split(":")[1];
+            }
+//            if (line.StartsWith("[Events]"))
+//            {
+//                audio = line.Split(":")[1];
+//            }
+            if (line.StartsWith("Creator:"))
+            {
+                mapper = line.Split(":")[1];
+            }
             if (line.StartsWith("Version:"))
             {
                 version = line.Split(":")[1];
@@ -96,9 +111,13 @@ public partial class SettingsOperator : Node
 		Beatmaps.Add(new Dictionary<string, object>{
             { "Title", songtitle },
             { "Artist", artist },
+            { "Mapper", mapper },
             { "KeyCount", keycount },
             { "Version", version },
             { "pp", ppvalue },
+            { "background", background },
+            { "audio", audio },
+            { "rawurl", rawurl },
         });
     }
     public Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
@@ -110,6 +129,8 @@ public partial class SettingsOperator : Node
         { "ranknumber", null },
 		{ "playercolour", null },
         { "customapi", false},
+        { "fps" , 0},
+        { "ms" , 0.0f},
 		{ "client-id", null },
         { "client-secret", null },
 

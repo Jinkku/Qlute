@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://8ue5al5uryf"]
+[gd_scene load_steps=3 format=3 uid="uid://8ue5al5uryf"]
 
-[ext_resource type="Script" path="res://Script/fps.gd" id="1_lve5x"]
-[ext_resource type="Script" path="res://Script/Latency.cs" id="2_awr35"]
+[ext_resource type="Script" path="res://Script/FpsCounter.cs" id="1_8u44f"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nt8dy"]
 bg_color = Color(0, 0, 0, 0.568627)
@@ -17,21 +16,33 @@ shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(0, 4)
 
 [node name="FPSCounter" type="PanelContainer"]
-offset_right = 51.0
-offset_bottom = 41.0
+z_index = 1000
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -84.0
+offset_top = -51.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_nt8dy")
+script = ExtResource("1_8u44f")
 
 [node name="FPS" type="Label" parent="."]
 layout_mode = 2
-text = "0/1000
- "
+text = "fuck"
 horizontal_alignment = 1
-script = ExtResource("1_lve5x")
 
 [node name="Latency" type="Label" parent="."]
 layout_mode = 2
-text = "
-25ms"
 horizontal_alignment = 1
-script = ExtResource("2_awr35")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.15
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_refresh"]

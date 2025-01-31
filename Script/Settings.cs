@@ -44,7 +44,7 @@ public partial class Settings : Button
 		Control AccountProfileCard = GetNode<Control>("%AccountProfileCard");
 		Control AccountPanel = GetNode<Control>("%AccountPanel");
 		AnimationPlayer AniPlayer = GetNode<AnimationPlayer>("%AccountPanelAnimation");
-		Panel SettingsPanel = GetNode<Panel>("%SettingsPanel");
+		Control SettingsPanel = GetNode<Control>("%SettingsPanel");
 		Control Card;
 		var loggedin = (bool)SettingsOperator.Sessioncfg["loggedin"];
 		if (loggedin == true) {

@@ -9,9 +9,9 @@ public partial class BeatmapListener : Node
 	public static SettingsOperator SettingsOperator { get; set; }
 	public override void _Ready(){
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		foreach (string Dir in SettingsOperator.BeatmapsURLs){
-			GD.Print("Scratching..." + Dir);
-		}
+//		foreach (string Dir in SettingsOperator.BeatmapsURLs){
+//			GD.Print("Scratching..." + Dir);
+//		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
