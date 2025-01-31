@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=3 uid="uid://dpjsc7sxiwkm7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2j6ug"]
+bg_color = Color(0.0980392, 0.0980392, 0.0980392, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yy7gm"]
+bg_color = Color(0, 0, 0, 0.568627)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+
+[node name="ModsScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Modouter" type="PanelContainer" parent="."]
+layout_mode = 2
+offset_left = 170.0
+offset_top = 470.0
+offset_right = 570.0
+offset_bottom = 720.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_2j6ug")
+
+[node name="Modinner" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 170.0
+offset_top = 520.0
+offset_right = 570.0
+offset_bottom = 720.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_yy7gm")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 196.0
+offset_top = 486.0
+offset_right = 243.0
+offset_bottom = 505.0
+text = "Mods"

@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://ckiye2n1ir8qg"]
+[gd_scene load_steps=15 format=3 uid="uid://ckiye2n1ir8qg"]
 
 [ext_resource type="Script" path="res://Script/SongSelect.cs" id="1_fin0e"]
 [ext_resource type="PackedScene" uid="uid://cywxwx4is1g7o" path="res://Panels/beatmap_background.tscn" id="2_wg4n2"]
 [ext_resource type="Texture2D" uid="uid://m656ody0d2o" path="res://Skin/System/SongSelectPanel.svg" id="3_2cm8g"]
 [ext_resource type="Texture2D" uid="uid://pw443tw8pcsb" path="res://Skin/System/ReturnButton.png" id="4_p84v1"]
 [ext_resource type="PackedScene" uid="uid://b4xty06wpjuee" path="res://Panels/SongLoadingScreen.tscn" id="5_wfap8"]
+[ext_resource type="PackedScene" uid="uid://dpjsc7sxiwkm7" path="res://Panels/SongSelectElements/Mods.tscn" id="6_4xos4"]
 [ext_resource type="PackedScene" uid="uid://bwpja5llmgtqo" path="res://Panels/Overlays/TopPanel.tscn" id="6_fi2um"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llhhs"]
@@ -12,12 +13,27 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dfrpo"]
 bg_color = Color(0.269531, 0.269531, 0.269531, 0.47451)
 corner_radius_top_left = 25
+corner_radius_top_right = 25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vhtsk"]
 bg_color = Color(0, 0, 0, 0.47451)
 corner_radius_top_left = 25
+corner_radius_top_right = 25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vc7sc"]
+bg_color = Color(0, 0, 0, 0.47451)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6f4j3"]
+bg_color = Color(0.269531, 0.269531, 0.269531, 0.47451)
+corner_radius_top_left = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k1b3q"]
+bg_color = Color(0, 0, 0, 0.47451)
+corner_radius_top_left = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cv1hb"]
 bg_color = Color(0, 0, 0, 0.47451)
 corner_radius_top_left = 25
 
@@ -32,6 +48,8 @@ script = ExtResource("1_fin0e")
 
 [node name="BeatmapBackground" parent="." instance=ExtResource("2_wg4n2")]
 layout_mode = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
 [node name="SongDetails" type="TextureRect" parent="."]
 layout_mode = 1
@@ -110,7 +128,9 @@ grow_vertical = 2
 mouse_default_cursor_shape = 9
 max_value = 10.0
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="ModsScreen" parent="." instance=ExtResource("6_4xos4")]
+visible = false
+layout_mode = 1
 
 [node name="BackButton" type="TextureButton" parent="."]
 layout_mode = 1
@@ -134,6 +154,23 @@ rotation = 0.785398
 theme_override_font_sizes/font_size = 24
 text = "Back"
 
+[node name="Mods" type="Button" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 200.0
+offset_top = -86.0
+offset_right = 350.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 24
+theme_override_styles/focus = SubResource("StyleBoxEmpty_llhhs")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dfrpo")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_vhtsk")
+theme_override_styles/normal = SubResource("StyleBoxFlat_vc7sc")
+text = "Mods"
+
 [node name="Start" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = 3
@@ -147,9 +184,9 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 24
 theme_override_styles/focus = SubResource("StyleBoxEmpty_llhhs")
-theme_override_styles/hover = SubResource("StyleBoxFlat_dfrpo")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_vhtsk")
-theme_override_styles/normal = SubResource("StyleBoxFlat_vc7sc")
+theme_override_styles/hover = SubResource("StyleBoxFlat_6f4j3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_k1b3q")
+theme_override_styles/normal = SubResource("StyleBoxFlat_cv1hb")
 text = "Play"
 
 [node name="Lead" parent="." instance=ExtResource("5_wfap8")]
@@ -164,4 +201,5 @@ layout_mode = 1
 
 [connection signal="resized" from="." to="." method="_res_resize"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Mods" to="." method="_Start"]
 [connection signal="pressed" from="Start" to="." method="_Start"]

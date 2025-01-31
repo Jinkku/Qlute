@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -63,49 +64,64 @@ public partial class SettingsOperator : Node
         return ppvalue;
         
         }
+    public Texture2D LoadImage(string path){
+        var imagePath = path;
+        Image image = new Image();
+        image.Load(imagePath);
+
+        ImageTexture imageTexture = new ImageTexture();
+        imageTexture.SetImage(image);
+        return imageTexture;
+    }
     public void Parse_Beatmapfile(string filename){
         GD.Print("Parsing beatmap file...");
         using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
         var text = file.GetAsText();
         var lines = text.Split("\n");
-        float ppvalue =     Get_ppvalue(filename);
+        float ppvalue = Get_ppvalue(filename);
         string songtitle = "";
         string artist = "";
         string version = "";
         string mapper = "";
+        int levelrating = 0;
         string background = "";
         string audio = "";
         string rawurl = filename;
+        string path = filename.Replace(filename.Split("/").Last(),"");
         int keycount = 4;
         foreach (var line in lines)
         {
             if (line.StartsWith("Title:"))
             {
-                songtitle = line.Split(":")[1];
+            songtitle = line.Split(":")[1].Trim();
             }
             if (line.StartsWith("Artist:"))
             {
-                artist = line.Split(":")[1];
+            artist = line.Split(":")[1].Trim();
             }
             if (line.StartsWith("CircleSize:"))
             {
-                keycount = int.Parse(line.Split(":")[1]);
+            keycount = int.Parse(line.Split(":")[1].Trim());
             }
             if (line.StartsWith("AudioFilename:"))
             {
-                audio = line.Split(":")[1];
+            audio = line.Split(":")[1].Trim();
             }
-//            if (line.StartsWith("[Events]"))
-//            {
-//                audio = line.Split(":")[1];
-//            }
             if (line.StartsWith("Creator:"))
             {
-                mapper = line.Split(":")[1];
+            mapper = line.Split(":")[1].Trim();
             }
             if (line.StartsWith("Version:"))
             {
-                version = line.Split(":")[1];
+            version = line.Split(":")[1].Trim();
+            }
+            if (line.StartsWith("0,0,\"") && line.Contains("\""))
+            {
+            var parts = line.Split("\"");
+            if (parts.Length > 1)
+            {
+                background = parts[1].Trim();
+            }
             }
         }
 		Beatmaps.Add(new Dictionary<string, object>{
@@ -115,9 +131,11 @@ public partial class SettingsOperator : Node
             { "KeyCount", keycount },
             { "Version", version },
             { "pp", ppvalue },
+            { "levelrating", ppvalue*0.05 },
             { "background", background },
             { "audio", audio },
             { "rawurl", rawurl },
+            { "path", path },
         });
     }
     public Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
@@ -131,6 +149,7 @@ public partial class SettingsOperator : Node
         { "customapi", false},
         { "fps" , 0},
         { "ms" , 0.0f},
+        { "background" , null},
 		{ "client-id", null },
         { "client-secret", null },
 

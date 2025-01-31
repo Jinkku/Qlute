@@ -99,6 +99,7 @@ text = "Leave"
 script = SubResource("GDScript_txy7s")
 
 [node name="MenuNotice" type="PanelContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5

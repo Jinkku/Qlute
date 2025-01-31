@@ -6,7 +6,7 @@ using System.Linq;
 public partial class SongSelect : Control
 {
 	// Called when the node enters the scene tree for the first time.
-	
+	 [Export] private TextureRect textureRect;
 	public static SettingsOperator SettingsOperator { get; set; }
 	public List<object> SongEntry = new List<object>();
 	public int SongETick { get; set; }
@@ -23,7 +23,7 @@ public partial class SongSelect : Control
 
 		}
 	}
-	public void AddSongList(string song,string artist,string mapper,Vector2 pos)
+	public void AddSongList(string song,string artist,string mapper,int lv,string background,string path,Vector2 pos)
 	{
 		var button = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn").Instantiate();
 		SongEntry.Add(button);
@@ -32,13 +32,18 @@ public partial class SongSelect : Control
 		var SongTitle = button.GetNode<Label>("./SongTitle");
 		var SongArtist = button.GetNode<Label>("./SongArtist");
 		var SongMapper = button.GetNode<Label>("./SongMapper");
+		var TextureRect = button.GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
+		var Rating = button.GetNode<Label>("./LevelRating/Rating");
 		childButton.Position = pos;
 		childButton.Size = new Vector2(320, 115);
 		SongTitle.Text = song;
 		SongArtist.Text = artist;
 		SongMapper.Text = mapper;
+		Rating.Text = "Lv. "+lv.ToString("0");
 		childButton.Name = SongETick.ToString();
 		childButton.ClipText = true;
+		childButton.SetMeta("beatmapurl", path);
+		TextureRect.Texture = SettingsOperator.LoadImage(background);
 
 	}
 	public override void _Ready()
@@ -50,7 +55,7 @@ public partial class SongSelect : Control
 		{
 			GD.Print(song["Title"]);
 			//" ("+song["pp"].ToString()+"pp)" \nDiff:"+song["Version"].ToString()
-			AddSongList(song["Title"].ToString(),song["Artist"].ToString(),"mapped by " + song["Mapper"].ToString(), new Vector2(0, 50+ (115*SongETick)));
+			AddSongList(song["Title"].ToString(),song["Artist"].ToString(),"mapped by " + song["pp"].ToString(),(int)float.Parse(song["levelrating"].ToString()),song["path"].ToString()+song["background"].ToString(),song["rawurl"].ToString(), new Vector2(0, 50+ (115*SongETick)));
 			SongETick++;
 		}
 		_res_resize();
