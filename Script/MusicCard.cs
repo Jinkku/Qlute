@@ -14,6 +14,7 @@ public partial class MusicCard : Button
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		self = GetNode<Button>(".");
 		Cover = GetNode<TextureRect>("../../BeatmapBackground");
+		GD.Print(self.Name);
 		SongID = int.Parse(self.Name);
 	}
 
@@ -22,6 +23,7 @@ public partial class MusicCard : Button
 		GD.Print("Pressed");
 		var TextureRect = GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
 		Cover.Texture = TextureRect.Texture;
+		SettingsOperator.Sessioncfg["background"] = (Texture2D)TextureRect.Texture;
 	}
 	public override void _Process(double _delta)
 	{

@@ -55,7 +55,7 @@ public partial class SongSelect : Control
 		{
 			GD.Print(song["Title"]);
 			//" ("+song["pp"].ToString()+"pp)" \nDiff:"+song["Version"].ToString()
-			AddSongList(song["Title"].ToString(),song["Artist"].ToString(),"mapped by " + song["pp"].ToString(),(int)float.Parse(song["levelrating"].ToString()),song["path"].ToString()+song["background"].ToString(),song["rawurl"].ToString(), new Vector2(0, 50+ (115*SongETick)));
+			AddSongList(song["Title"].ToString(),song["Artist"].ToString(),"mapped by " + song["Mapper"].ToString(),(int)float.Parse(song["levelrating"].ToString()),song["path"].ToString()+song["background"].ToString(),song["rawurl"].ToString(), new Vector2(0, 50+ (115*SongETick)));
 			SongETick++;
 		}
 		_res_resize();

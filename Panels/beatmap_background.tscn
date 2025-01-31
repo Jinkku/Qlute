@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cywxwx4is1g7o"]
+[gd_scene load_steps=3 format=3 uid="uid://cywxwx4is1g7o"]
 
 [ext_resource type="Texture2D" uid="uid://dugxlwc4epe6i" path="res://DefaultWallpaper/a.png" id="1_cnrtj"]
+[ext_resource type="Script" path="res://Script/BeatmapBackground.cs" id="2_0i5aa"]
 
 [node name="BeatmapBackground" type="TextureRect"]
 z_index = -1
@@ -11,3 +12,4 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_cnrtj")
 stretch_mode = 6
+script = ExtResource("2_0i5aa")
