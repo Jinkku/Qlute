@@ -146,6 +146,8 @@ public partial class SettingsOperator : Node
         { "showaccountpro", false },
         { "ranknumber", null },
 		{ "playercolour", null },
+        { "SongID", 0 },
+        { "beatmapurl", null },
         { "customapi", false},
         { "fps" , 0},
         { "ms" , 0.0f},

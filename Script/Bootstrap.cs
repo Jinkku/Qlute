@@ -22,7 +22,7 @@ public partial class Bootstrap : Control
 					foreach (string Dir in Directory.GetDirectories(SettingsOperator.beatmapsdir)){
 						GD.Print(Dir);
 						foreach (string file in Directory.GetFiles(Dir, "*.osu")) {
-							GD.Print(file);
+							//GD.Print(file);
 							SettingsOperator.Parse_Beatmapfile(file);
 						}
 					}

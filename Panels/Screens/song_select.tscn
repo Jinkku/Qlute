@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://ckiye2n1ir8qg"]
+[gd_scene load_steps=16 format=3 uid="uid://ckiye2n1ir8qg"]
 
 [ext_resource type="Script" path="res://Script/SongSelect.cs" id="1_fin0e"]
 [ext_resource type="PackedScene" uid="uid://cywxwx4is1g7o" path="res://Panels/beatmap_background.tscn" id="2_wg4n2"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://b4xty06wpjuee" path="res://Panels/SongLoadingScreen.tscn" id="5_wfap8"]
 [ext_resource type="PackedScene" uid="uid://dpjsc7sxiwkm7" path="res://Panels/SongSelectElements/Mods.tscn" id="6_4xos4"]
 [ext_resource type="PackedScene" uid="uid://bwpja5llmgtqo" path="res://Panels/Overlays/TopPanel.tscn" id="6_fi2um"]
+[ext_resource type="Script" path="res://Script/Start.cs" id="6_k27ys"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llhhs"]
 
@@ -62,43 +63,51 @@ size_flags_vertical = 3
 texture = ExtResource("3_2cm8g")
 
 [node name="Points" type="Label" parent="SongDetails"]
+clip_children = 2
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -170.0
-offset_top = 145.0
+offset_top = 120.0
 offset_right = -22.0
-offset_bottom = 173.0
-theme_override_font_sizes/font_size = 24
+offset_bottom = 148.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 16
 text = "+0pp"
 horizontal_alignment = 2
 
 [node name="BPM" type="Label" parent="SongDetails"]
+clip_children = 2
 layout_mode = 0
 offset_left = 20.0
-offset_top = 145.0
+offset_top = 120.0
 offset_right = 168.0
-offset_bottom = 173.0
-theme_override_font_sizes/font_size = 24
+offset_bottom = 148.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 16
 text = "BPM: 0"
 
 [node name="Artist" type="Label" parent="SongDetails"]
+clip_children = 2
 layout_mode = 0
 offset_left = 20.0
-offset_top = 105.0
+offset_top = 97.0
 offset_right = 168.0
-offset_bottom = 133.0
-theme_override_font_sizes/font_size = 24
+offset_bottom = 125.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 16
 text = "Artist Name"
 
 [node name="Title" type="Label" parent="SongDetails"]
+clip_children = 2
 layout_mode = 0
 offset_left = 20.0
 offset_top = 65.0
 offset_right = 145.0
 offset_bottom = 93.0
-theme_override_colors/font_color = Color(0.698039, 0.752941, 1, 1)
+theme_override_colors/font_color = Color(0.601562, 0.962646, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
 theme_override_font_sizes/font_size = 24
 text = "Title Song"
 
@@ -114,19 +123,19 @@ grow_vertical = 2
 size_flags_vertical = 3
 texture = ExtResource("3_2cm8g")
 
-[node name="VScrollBar" type="VScrollBar" parent="SongPanel"]
-z_index = 1
+[node name="Scrolls" type="ScrollContainer" parent="SongPanel"]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_top = 0.07
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -8.0
-grow_horizontal = 0
+grow_horizontal = 2
 grow_vertical = 2
-mouse_default_cursor_shape = 9
-max_value = 10.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SongPanel/Scrolls"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
 
 [node name="ModsScreen" parent="." instance=ExtResource("6_4xos4")]
 visible = false
@@ -188,6 +197,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_6f4j3")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_k1b3q")
 theme_override_styles/normal = SubResource("StyleBoxFlat_cv1hb")
 text = "Play"
+script = ExtResource("6_k27ys")
 
 [node name="Lead" parent="." instance=ExtResource("5_wfap8")]
 visible = false
@@ -202,4 +212,4 @@ layout_mode = 1
 [connection signal="resized" from="." to="." method="_res_resize"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="Mods" to="." method="_Start"]
-[connection signal="pressed" from="Start" to="." method="_Start"]
+[connection signal="pressed" from="Start" to="Start" method="_Start"]

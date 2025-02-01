@@ -13,17 +13,24 @@ public partial class MusicCard : Button
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		self = GetNode<Button>(".");
-		Cover = GetNode<TextureRect>("../../BeatmapBackground");
-		GD.Print(self.Name);
-		SongID = int.Parse(self.Name);
+		Cover = GetTree().Root.GetNode<TextureRect>("Song Select/BeatmapBackground");
+		//SongID = int.Parse(self.Name);
 	}
 
 	
 	public void _on_pressed(){
 		GD.Print("Pressed");
 		var TextureRect = GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
+		var SongTitle = GetTree().Root.GetNode<Label>("Song Select/SongDetails/Title");
+		var SongArtist = GetTree().Root.GetNode<Label>("Song Select/SongDetails/Artist");
+		var Songpp = GetTree().Root.GetNode<Label>("Song Select/SongDetails/Points");
+		SongTitle.Text = self.GetMeta("Title").ToString();
+		SongArtist.Text = self.GetMeta("Artist").ToString();
+		Songpp.Text = "+" + self.GetMeta("pp").ToString()+"pp";
 		Cover.Texture = TextureRect.Texture;
 		SettingsOperator.Sessioncfg["background"] = (Texture2D)TextureRect.Texture;
+		SettingsOperator.Sessioncfg["SongID"] = self.GetMeta("SongID");
+		SettingsOperator.Sessioncfg["beatmapurl"] = self.GetMeta("beatmapurl");
 	}
 	public override void _Process(double _delta)
 	{

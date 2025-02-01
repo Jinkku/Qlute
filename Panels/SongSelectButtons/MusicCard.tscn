@@ -24,8 +24,10 @@ corner_radius_bottom_left = 35
 
 [node name="MusicCard" type="Button"]
 clip_contents = true
+custom_minimum_size = Vector2(0, 115)
 offset_right = 310.0
 offset_bottom = 115.0
+size_flags_horizontal = 3
 theme_override_styles/focus = SubResource("StyleBoxEmpty_i3see")
 theme_override_styles/hover = ExtResource("2_vxxs3")
 theme_override_styles/pressed = ExtResource("1_vfwc8")

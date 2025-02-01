@@ -15,27 +15,37 @@ public partial class SongSelect : Control
 		Control SongPanel = GetNode<Control>("SongPanel");
 		SongPanel.Size = new Vector2(window_size.X/3, window_size.Y);
 		SongPanel.Position = new Vector2(window_size.X-(window_size.X/3), 0);
+//		foreach (Button self in SongEntry)
+//		{
+//			var Y = self.Position.Y;
+//			self.SetPosition(new Vector2(0,Y));
+//			self.Size = new Vector2(window_size.X/3-8, 115);
+//
+//		}
+	}
+	public void _scrolling(){
+		VScrollBar scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
+		SongETick = 0;
 		foreach (Button self in SongEntry)
 		{
 			var Y = self.Position.Y;
-			self.SetPosition(new Vector2(0,Y));
-			self.Size = new Vector2(window_size.X/3, 115);
-
+			self.Position = new Vector2(0, 50+(SongETick*115) - (115*(float)scrollBar.Value));
+			SongETick++;
 		}
 	}
-	public void AddSongList(string song,string artist,string mapper,int lv,string background,string path,Vector2 pos)
+	public void AddSongList(string song,string artist,string mapper,int lv,string background,string path,float pp,Vector2 pos)
 	{
 		var button = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn").Instantiate();
 		SongEntry.Add(button);
-		GetNode<Control>("SongPanel").AddChild(button);
+		GetNode<VBoxContainer>("SongPanel/Scrolls/VBoxContainer").AddChild(button);
 		var childButton = button.GetNode<Button>(".");
 		var SongTitle = button.GetNode<Label>("./SongTitle");
 		var SongArtist = button.GetNode<Label>("./SongArtist");
 		var SongMapper = button.GetNode<Label>("./SongMapper");
 		var TextureRect = button.GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
 		var Rating = button.GetNode<Label>("./LevelRating/Rating");
-		childButton.Position = pos;
-		childButton.Size = new Vector2(320, 115);
+		//childButton.Position = pos;
+		//childButton.Size = new Vector2(312, 115);
 		SongTitle.Text = song;
 		SongArtist.Text = artist;
 		SongMapper.Text = mapper;
@@ -43,6 +53,10 @@ public partial class SongSelect : Control
 		childButton.Name = SongETick.ToString();
 		childButton.ClipText = true;
 		childButton.SetMeta("beatmapurl", path);
+		childButton.SetMeta("SongID", SongETick);
+		childButton.SetMeta("Title", song);
+		childButton.SetMeta("Artist", artist);
+		childButton.SetMeta("pp", pp.ToString("0"));
 		TextureRect.Texture = SettingsOperator.LoadImage(background);
 
 	}
@@ -50,13 +64,14 @@ public partial class SongSelect : Control
 	{
 		SongETick = 0;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
+		//var VScrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
 		foreach (var song in SettingsOperator.Beatmaps)
 
 		{
-			GD.Print(song["Title"]);
 			//" ("+song["pp"].ToString()+"pp)" \nDiff:"+song["Version"].ToString()
-			AddSongList(song["Title"].ToString(),song["Artist"].ToString(),"mapped by " + song["Mapper"].ToString(),(int)float.Parse(song["levelrating"].ToString()),song["path"].ToString()+song["background"].ToString(),song["rawurl"].ToString(), new Vector2(0, 50+ (115*SongETick)));
+			AddSongList(song["Title"].ToString(),song["Artist"].ToString(),"mapped by " + song["Mapper"].ToString(),(int)float.Parse(song["levelrating"].ToString()),song["path"].ToString()+song["background"].ToString(),song["rawurl"].ToString(),(float)song["pp"], new Vector2(0, 50+ (115*SongETick)));
 			SongETick++;
+			//VScrollBar.MaxValue = SongETick-1;
 		}
 		_res_resize();
 		//AnimationPlayer AniPlayer = GetNode<AnimationPlayer>("AnimationPlayer");

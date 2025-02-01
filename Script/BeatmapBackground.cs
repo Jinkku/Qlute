@@ -10,7 +10,10 @@ public partial class BeatmapBackground : TextureRect
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		self = GetNode<TextureRect>(".");
-		self.Texture = (Texture2D)SettingsOperator.Sessioncfg["background"];
+		Texture2D bg = (Texture2D)SettingsOperator.Sessioncfg["background"];
+		if (bg != null){
+		self.Texture = bg;
+		};
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

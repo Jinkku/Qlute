@@ -268,17 +268,6 @@ keep_pressed_outside = true
 icon = ExtResource("5_6ko15")
 icon_alignment = 1
 
-[node name="Container" type="Container" parent="InfoBar"]
-layout_mode = 0
-
-[node name="LoginPanel" type="PanelContainer" parent="InfoBar"]
-visible = false
-layout_mode = 0
-offset_left = 2.0
-offset_top = 52.0
-offset_right = 314.0
-offset_bottom = 261.0
-
 [node name="AccountProfileCard" parent="." instance=ExtResource("8_pxj8n")]
 unique_name_in_owner = true
 layout_mode = 1
