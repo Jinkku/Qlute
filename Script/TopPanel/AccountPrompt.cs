@@ -44,8 +44,7 @@ public partial class AccountPrompt : Control
 			if (n == 0){
 				Ranking.Visible = false;
 			}else{
-			n+=256000000;
-			Ranking.Text = "#"+n.ToString("0,0");}
+			Ranking.Text = "#" + n.ToString("N0");}
 		}
 		SettingsOperator.Sessioncfg["ranknumber"] = n;
 		
