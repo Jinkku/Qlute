@@ -10,11 +10,12 @@ public partial class SongSelect : Control
 	public static SettingsOperator SettingsOperator { get; set; }
 	public List<object> SongEntry = new List<object>();
 	public int SongETick { get; set; }
+	public Label Debug { get; set; }
 	public void _res_resize(){
 		var window_size = GetViewportRect().Size;
 		Control SongPanel = GetNode<Control>("SongPanel");
-		SongPanel.Size = new Vector2(window_size.X/3, window_size.Y);
-		SongPanel.Position = new Vector2(window_size.X-(window_size.X/3), 0);
+		SongPanel.Size = new Vector2(window_size.X/3, window_size.Y-105);
+		SongPanel.Position = new Vector2(window_size.X-(window_size.X/3), 105);
 //		foreach (Button self in SongEntry)
 //		{
 //			var Y = self.Position.Y;
@@ -35,6 +36,7 @@ public partial class SongSelect : Control
 	}
 	public void AddSongList(string song,string artist,string mapper,int lv,string background,string path,float pp,Vector2 pos)
 	{
+
 		var button = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn").Instantiate();
 		SongEntry.Add(button);
 		GetNode<VBoxContainer>("SongPanel/Scrolls/VBoxContainer").AddChild(button);
@@ -44,8 +46,6 @@ public partial class SongSelect : Control
 		var SongMapper = button.GetNode<Label>("./SongMapper");
 		var TextureRect = button.GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
 		var Rating = button.GetNode<Label>("./LevelRating/Rating");
-		//childButton.Position = pos;
-		//childButton.Size = new Vector2(312, 115);
 		SongTitle.Text = song;
 		SongArtist.Text = artist;
 		SongMapper.Text = mapper;
@@ -63,24 +63,23 @@ public partial class SongSelect : Control
 	public override void _Ready()
 	{
 		SongETick = 0;
+		Debug = GetNode<Label>("Debug");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		//var VScrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
 		foreach (var song in SettingsOperator.Beatmaps)
 
 		{
-			//" ("+song["pp"].ToString()+"pp)" \nDiff:"+song["Version"].ToString()
 			AddSongList(song["Title"].ToString(),song["Artist"].ToString(),"mapped by " + song["Mapper"].ToString(),(int)float.Parse(song["levelrating"].ToString()),song["path"].ToString()+song["background"].ToString(),song["rawurl"].ToString(),(float)song["pp"], new Vector2(0, 50+ (115*SongETick)));
 			SongETick++;
-			//VScrollBar.MaxValue = SongETick-1;
 		}
 		_res_resize();
-		//AnimationPlayer AniPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-		//AniPlayer.Play("RESET");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
+		if (SettingsOperator.Sessioncfg["beatmapurl"] != null){
+		Debug.Text = "Beatmapurl:" + SettingsOperator.Sessioncfg["beatmapurl"].ToString();}
 	}
 	
 	private void _on_animation_player_animation_finished(){

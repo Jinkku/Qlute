@@ -1,20 +1,48 @@
-[gd_scene load_steps=3 format=3 uid="uid://bmi44rm7jttn"]
+[gd_scene load_steps=5 format=3 uid="uid://bmi44rm7jttn"]
 
+[ext_resource type="Script" path="res://Script/Gameplay/Gameplay.cs" id="1_33mgo"]
 [ext_resource type="PackedScene" uid="uid://cywxwx4is1g7o" path="res://Panels/beatmap_background.tscn" id="1_uf7ne"]
 [ext_resource type="PackedScene" uid="uid://b0f11jnivkb1b" path="res://Panels/GameplayElements/ScoreOverlay.tscn" id="2_tii4h"]
 
-[node name="Control" type="Control"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wriyn"]
+size = Vector2(489.5, 75)
+
+[node name="Gameplay" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_33mgo")
 
 [node name="Beatmap_Background" parent="." instance=ExtResource("1_uf7ne")]
 layout_mode = 1
 
-[node name="Playfield" type="PanelContainer" parent="."]
+[node name="Control" parent="." instance=ExtResource("2_tii4h")]
+layout_mode = 1
+offset_top = 40.0
+offset_bottom = -580.0
+
+[node name="Time" type="Label" parent="."]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 297.0
+offset_right = 57.0
+offset_bottom = 316.0
+
+[node name="Hits" type="Label" parent="."]
+layout_mode = 0
+offset_left = 19.0
+offset_top = 183.0
+offset_right = 141.0
+offset_bottom = 202.0
+text = "0
+0
+0
+0"
+
+[node name="Playfield" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
@@ -25,7 +53,52 @@ offset_right = 200.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Control" parent="." instance=ExtResource("2_tii4h")]
+[node name="KeyBoxes" type="HBoxContainer" parent="Playfield"]
 layout_mode = 1
-offset_top = 40.0
-offset_bottom = -580.0
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 0
+
+[node name="Key1" type="ColorRect" parent="Playfield/KeyBoxes"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+color = Color(1, 0, 0, 1)
+
+[node name="Key2" type="ColorRect" parent="Playfield/KeyBoxes"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+color = Color(0.195312, 1, 0, 1)
+
+[node name="Key3" type="ColorRect" parent="Playfield/KeyBoxes"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+color = Color(0, 0.835938, 1, 1)
+
+[node name="Key4" type="ColorRect" parent="Playfield/KeyBoxes"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+color = Color(1, 0, 0.867188, 1)
+
+[node name="Area2D" type="Area2D" parent="Playfield/KeyBoxes"]
+position = Vector2(207.25, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Playfield/KeyBoxes/Area2D"]
+shape = SubResource("RectangleShape2D_wriyn")
+debug_color = Color(0, 0.0859375, 1, 0.42)
+
+[node name="Chart" type="ColorRect" parent="Playfield"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -200.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.227451)
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

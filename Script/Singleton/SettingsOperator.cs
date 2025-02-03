@@ -7,7 +7,8 @@ using System.Text.Json.Serialization;
 
 public partial class SettingsOperator : Node
 {	
-	public string homedir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + "/.qlute";
+	//public string homedir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + "/.qlute";
+    public string homedir = OS.GetUserDataDir();
 	public string beatmapsdir => homedir + "/beatmaps";
     public float ppbase = 0.072f;
 	public string downloadsdir => homedir + "/downloads";
@@ -138,6 +139,17 @@ public partial class SettingsOperator : Node
             { "path", path },
         });
     }
+    public Dictionary<string, int> Gameplaycfg { get; set; } = new Dictionary<string, int>
+    {
+        {"score", 0},
+        {"pp", 0},
+        {"time", 0},
+        {"timetotal", 0},
+        {"max", 0},
+        {"great", 0},
+        {"meh", 0},
+        {"bad", 0},
+    };
     public Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
     {
         { "TopPanelSlidein", false },
@@ -151,6 +163,7 @@ public partial class SettingsOperator : Node
         { "customapi", false},
         { "fps" , 0},
         { "ms" , 0.0f},
+        { "scrollspeed", (int)1346 },
         { "background" , null},
 		{ "client-id", null },
         { "client-secret", null },

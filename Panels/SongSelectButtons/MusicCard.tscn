@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b2lw0mmphsddc"]
+[gd_scene load_steps=10 format=3 uid="uid://b2lw0mmphsddc"]
 
 [ext_resource type="Script" path="res://Script/MusicCard.cs" id="1_aa04f"]
 [ext_resource type="StyleBox" uid="uid://drlu38602jgb8" path="res://Skin/System/buttontoggled.tres" id="1_vfwc8"]
@@ -8,8 +8,12 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i3see"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3w5u3"]
+bg_color = Color(0, 0, 0, 0.568627)
+corner_radius_bottom_left = 15
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y4ldl"]
-bg_color = Color(0.192157, 0.192157, 0.192157, 0.568627)
+bg_color = Color(0.47451, 0.678431, 1, 0.176471)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -59,12 +63,23 @@ offset_right = 147.0
 offset_bottom = 71.0
 text = "mapped by idiot"
 
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3w5u3")
+
 [node name="LevelRating" type="PanelContainer" parent="."]
 layout_mode = 0
 offset_left = 20.0
-offset_top = 80.0
-offset_right = 49.0
-offset_bottom = 105.0
+offset_top = 82.0
+offset_right = 64.0
+offset_bottom = 107.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_y4ldl")
 

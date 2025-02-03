@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://b0f11jnivkb1b"]
+[gd_scene load_steps=8 format=3 uid="uid://b0f11jnivkb1b"]
 
+[ext_resource type="Script" path="res://Script/Gameplay/ScoreOverlay.cs" id="1_j3lhn"]
 [ext_resource type="FontFile" uid="uid://26bmgi83sgtv" path="res://Fonts/score.ttf" id="1_jd5hx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6s3ea"]
@@ -25,7 +26,7 @@ shadow_offset = Vector2(0, 0)
 
 [sub_resource type="LabelSettings" id="LabelSettings_0ag8s"]
 
-[node name="Control" type="Control"]
+[node name="ScoreOverlay" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,6 +35,7 @@ offset_right = -860.0
 offset_bottom = -620.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_j3lhn")
 
 [node name="ScoreBarBack" type="PanelContainer" parent="."]
 self_modulate = Color(1, 1, 1, 0.568627)

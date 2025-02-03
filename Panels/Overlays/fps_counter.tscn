@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://8ue5al5uryf"]
 
-[ext_resource type="Script" path="res://Script/FpsCounter.cs" id="1_8u44f"]
+[ext_resource type="Script" path="res://Script/Singleton/FpsCounter.cs" id="1_8u44f"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nt8dy"]
 bg_color = Color(0, 0, 0, 0.568627)

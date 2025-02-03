@@ -1,12 +1,31 @@
-[gd_scene load_steps=2 format=3 uid="uid://daegmq7jje8um"]
+[gd_scene load_steps=5 format=3 uid="uid://daegmq7jje8um"]
 
 [ext_resource type="Script" path="res://Script/SettingsPanel.cs" id="1_1vi74"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llstv"]
+content_margin_left = 0.0
+content_margin_top = 25.0
+
+[sub_resource type="FontVariation" id="FontVariation_n76qt"]
+variation_opentype = {
+2003265652: 700
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_32tni"]
+content_margin_top = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.588235)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [node name="SettingsPanel" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 50.0
 offset_right = -800.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -29,48 +48,65 @@ offset_right = 60.0
 grow_vertical = 2
 color = Color(0, 0, 0, 0.235294)
 
-[node name="VScrollBar" type="VScrollBar" parent="ColorRect"]
+[node name="ScrollContainer" type="ScrollContainer" parent="ColorRect"]
 layout_mode = 1
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 224.0
-offset_right = 240.0
+offset_left = 70.0
+offset_right = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Name" type="Label" parent="ColorRect"]
-layout_mode = 0
-offset_left = 80.0
-offset_top = 20.0
-offset_right = 285.0
-offset_bottom = 75.0
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 15
+
+[node name="Name" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxEmpty_llstv")
 text = "Settings"
 
-[node name="Godotversion" type="Label" parent="ColorRect"]
-layout_mode = 0
-offset_left = 80.0
-offset_top = 80.0
-offset_right = 229.0
-offset_bottom = 99.0
-text = "Godot Version: 4.3"
+[node name="Section" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
+theme_override_fonts/font = SubResource("FontVariation_n76qt")
+text = "General"
 
-[node name="Label" type="Label" parent="ColorRect"]
-layout_mode = 0
-offset_left = 80.0
-offset_top = 115.0
-offset_right = 196.0
-offset_bottom = 134.0
+[node name="Godotversion" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Note: Most of these are not implemented yet.
+:<"
+
+[node name="Section2" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
+theme_override_fonts/font = SubResource("FontVariation_n76qt")
+text = "Game-specific Tweaks"
+
+[node name="ScrollSpeedn" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Scroll Speed"
+
+[node name="ScrollSpeed" type="HSlider" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Section3" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
+theme_override_fonts/font = SubResource("FontVariation_n76qt")
+text = "Display"
+
+[node name="WindowNotice" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
 text = "Window mode"
 
-[node name="OptionButton" type="OptionButton" parent="ColorRect"]
-layout_mode = 0
-offset_left = 80.0
-offset_top = 141.0
-offset_right = 435.0
-offset_bottom = 201.0
+[node name="WindowSelector" type="OptionButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_32tni")
 item_count = 3
 popup/item_0/text = "Fullscreen"
 popup/item_1/text = "Borderless"
@@ -78,4 +114,64 @@ popup/item_1/id = 1
 popup/item_2/text = "Windowed"
 popup/item_2/id = 2
 
-[connection signal="item_selected" from="ColorRect/OptionButton" to="." method="_changed_resolution"]
+[node name="CheckButton2" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Remove animations"
+
+[node name="CheckButton3" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Fade out when on break"
+
+[node name="CheckButton4" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Disable flashing effects"
+
+[node name="WindowNotice2" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Background Dim"
+
+[node name="HSlider" type="HSlider" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Section4" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
+theme_override_fonts/font = SubResource("FontVariation_n76qt")
+text = "Audio"
+
+[node name="AudioNotice" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Audio Device"
+
+[node name="AudioSelector" type="OptionButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_32tni")
+item_count = 3
+popup/item_0/text = "Fullscreen"
+popup/item_1/text = "Borderless"
+popup/item_1/id = 1
+popup/item_2/text = "Windowed"
+popup/item_2/id = 2
+
+[node name="CheckButton" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Bypass audio effects"
+
+[node name="Section5" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
+theme_override_fonts/font = SubResource("FontVariation_n76qt")
+text = "Debug"
+
+[node name="Version" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "0.0.0 Development Build"
+
+[node name="Section6" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
+theme_override_fonts/font = SubResource("FontVariation_n76qt")
+text = "Developer Tools (Shown if Development Build)"
+
+[connection signal="item_selected" from="ColorRect/ScrollContainer/VBoxContainer/WindowSelector" to="." method="_changed_resolution"]
+[connection signal="item_selected" from="ColorRect/ScrollContainer/VBoxContainer/AudioSelector" to="." method="_changed_resolution"]
