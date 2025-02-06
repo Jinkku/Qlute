@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://c3j07aaosy031"]
 
-[ext_resource type="Script" path="res://Script/TopPanel/AccountPrompt.cs" id="1_rr4jl"]
+[ext_resource type="Script" path="res://Script/TopPanel/AccountProfileCard.cs" id="1_7xhb7"]
 [ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="2_ltsae"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8lsa7"]
@@ -46,7 +46,7 @@ offset_bottom = -565.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("1_rr4jl")
+script = ExtResource("1_7xhb7")
 
 [node name="RankingApi" type="HTTPRequest" parent="."]
 timeout = 3.0
