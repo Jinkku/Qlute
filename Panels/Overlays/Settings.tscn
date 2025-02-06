@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://daegmq7jje8um"]
+[gd_scene load_steps=9 format=3 uid="uid://daegmq7jje8um"]
 
-[ext_resource type="Script" path="res://Script/SettingsPanel.cs" id="1_1vi74"]
+[ext_resource type="Script" path="res://Script/SettingsPanel.cs" id="1_gfh6f"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llstv"]
 content_margin_left = 0.0
@@ -11,10 +11,27 @@ variation_opentype = {
 2003265652: 700
 }
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v1adg"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_32tni"]
+content_margin_left = 8.0
 content_margin_top = 15.0
 content_margin_bottom = 15.0
 bg_color = Color(0, 0, 0, 0.588235)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 10.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_db3eo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m56sc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3de0r"]
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.128906, 0.128906, 0.128906, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -29,7 +46,7 @@ offset_top = 50.0
 offset_right = -800.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_1vi74")
+script = ExtResource("1_gfh6f")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 clip_contents = true
@@ -106,7 +123,9 @@ text = "Window mode"
 
 [node name="WindowSelector" type="OptionButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_v1adg")
 theme_override_styles/normal = SubResource("StyleBoxFlat_32tni")
+theme_override_constants/arrow_margin = 10
 item_count = 3
 popup/item_0/text = "Fullscreen"
 popup/item_1/text = "Borderless"
@@ -141,17 +160,25 @@ text = "Audio"
 
 [node name="AudioNotice" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-text = "Audio Device"
+text = "Audio device"
 
 [node name="AudioSelector" type="OptionButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_db3eo")
 theme_override_styles/normal = SubResource("StyleBoxFlat_32tni")
+theme_override_constants/arrow_margin = 10
 item_count = 3
-popup/item_0/text = "Fullscreen"
-popup/item_1/text = "Borderless"
+popup/item_0/text = "Audio Device 1"
+popup/item_1/text = "Dummy Audio 2"
 popup/item_1/id = 1
-popup/item_2/text = "Windowed"
+popup/item_2/text = "Twiggy NAC 2000"
 popup/item_2/id = 2
+
+[node name="Button" type="Button" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
+theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
+text = "Audio Offset Wizard"
 
 [node name="CheckButton" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -174,4 +201,4 @@ theme_override_fonts/font = SubResource("FontVariation_n76qt")
 text = "Developer Tools (Shown if Development Build)"
 
 [connection signal="item_selected" from="ColorRect/ScrollContainer/VBoxContainer/WindowSelector" to="." method="_changed_resolution"]
-[connection signal="item_selected" from="ColorRect/ScrollContainer/VBoxContainer/AudioSelector" to="." method="_changed_resolution"]
+[connection signal="item_selected" from="ColorRect/ScrollContainer/VBoxContainer/AudioSelector" to="." method="_changed_audiodevice"]

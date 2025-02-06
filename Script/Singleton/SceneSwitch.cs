@@ -12,9 +12,6 @@ public partial class SceneSwitch : Node
         CurrentScene = root.GetChild(-1);
         Node FpsIndicator = GD.Load<PackedScene>("res://Panels/Overlays/fps_counter.tscn").Instantiate();
         AddChild(FpsIndicator);
-        // Trying this later because right now it ain't working :/
-//        Node TopPanel = GD.Load<PackedScene>("res://Panels/Overlays/TopPanel.tscn").Instantiate();
-//        AddChild(TopPanel);
     }
     public void GotoScene(string path)
 {

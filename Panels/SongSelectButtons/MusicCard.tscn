@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b2lw0mmphsddc"]
+[gd_scene load_steps=11 format=3 uid="uid://b2lw0mmphsddc"]
 
 [ext_resource type="Script" path="res://Script/MusicCard.cs" id="1_aa04f"]
 [ext_resource type="StyleBox" uid="uid://drlu38602jgb8" path="res://Skin/System/buttontoggled.tres" id="1_vfwc8"]
@@ -13,13 +13,19 @@ bg_color = Color(0, 0, 0, 0.568627)
 corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y4ldl"]
-bg_color = Color(0.47451, 0.678431, 1, 0.176471)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-expand_margin_left = 10.0
-expand_margin_right = 10.0
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(1, 1, 1, 0.176471)
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_05hl1"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(1, 1, 1, 0)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a1afo"]
 bg_color = Color(1, 1, 1, 1)
@@ -28,8 +34,8 @@ corner_radius_bottom_left = 35
 
 [node name="MusicCard" type="Button"]
 clip_contents = true
-custom_minimum_size = Vector2(0, 115)
-offset_right = 310.0
+custom_minimum_size = Vector2(350, 115)
+offset_right = 350.0
 offset_bottom = 115.0
 size_flags_horizontal = 3
 theme_override_styles/focus = SubResource("StyleBoxEmpty_i3see")
@@ -74,18 +80,30 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_3w5u3")
 
-[node name="LevelRating" type="PanelContainer" parent="."]
-layout_mode = 0
-offset_left = 20.0
-offset_top = 82.0
-offset_right = 64.0
-offset_bottom = 107.0
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="LevelRating" type="PanelContainer" parent="PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(44, 25)
+layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_y4ldl")
 
-[node name="Rating" type="Label" parent="LevelRating"]
+[node name="Rating" type="Label" parent="PanelContainer/HBoxContainer/LevelRating"]
 layout_mode = 2
 text = "Lv. 69"
+horizontal_alignment = 1
+
+[node name="Difficulty" type="PanelContainer" parent="PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(44, 25)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_05hl1")
+
+[node name="Version" type="Label" parent="PanelContainer/HBoxContainer/Difficulty"]
+layout_mode = 2
+text = "Difficulty Name"
 horizontal_alignment = 1
 
 [node name="SongBackgroundPreview" type="PanelContainer" parent="."]

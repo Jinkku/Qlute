@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" path="res://Script/home.cs" id="1_j2gfm"]
-[ext_resource type="PackedScene" uid="uid://cywxwx4is1g7o" path="res://Panels/beatmap_background.tscn" id="2_ouv1d"]
+[ext_resource type="PackedScene" uid="uid://cywxwx4is1g7o" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
 [ext_resource type="Script" path="res://Script/play.gd" id="3_jccqs"]
 [ext_resource type="Script" path="res://Script/menunotice.gd" id="4_j0o5v"]
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://font.ttf" id="5_pikml"]

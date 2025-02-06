@@ -31,6 +31,9 @@ public partial class MusicCard : Button
 		SettingsOperator.Sessioncfg["background"] = (Texture2D)TextureRect.Texture;
 		SettingsOperator.Sessioncfg["SongID"] = self.GetMeta("SongID");
 		SettingsOperator.Sessioncfg["beatmapurl"] = self.GetMeta("beatmapurl");
+		SettingsOperator.Sessioncfg["beatmaptitle"] = self.GetMeta("Title").ToString();
+		SettingsOperator.Sessioncfg["beatmapartist"] = self.GetMeta("Artist").ToString();
+		SettingsOperator.Sessioncfg["beatmapdiff"] = self.GetMeta("Difficulty").ToString();
 	}
 	public override void _Process(double _delta)
 	{

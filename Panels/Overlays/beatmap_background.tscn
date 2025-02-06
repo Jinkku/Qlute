@@ -1,10 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://cywxwx4is1g7o"]
+[gd_scene load_steps=4 format=3 uid="uid://cywxwx4is1g7o"]
 
 [ext_resource type="Texture2D" uid="uid://dugxlwc4epe6i" path="res://DefaultWallpaper/a.png" id="1_cnrtj"]
 [ext_resource type="Script" path="res://Script/BeatmapBackground.cs" id="2_0i5aa"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7qcgk"]
+
 [node name="BeatmapBackground" type="TextureRect"]
 z_index = -1
+material = SubResource("ShaderMaterial_7qcgk")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

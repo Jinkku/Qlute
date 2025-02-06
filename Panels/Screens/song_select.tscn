@@ -1,10 +1,10 @@
 [gd_scene load_steps=18 format=3 uid="uid://ckiye2n1ir8qg"]
 
 [ext_resource type="Script" path="res://Script/SongSelect.cs" id="1_fin0e"]
-[ext_resource type="PackedScene" uid="uid://cywxwx4is1g7o" path="res://Panels/beatmap_background.tscn" id="2_wg4n2"]
+[ext_resource type="PackedScene" uid="uid://cywxwx4is1g7o" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
 [ext_resource type="Texture2D" uid="uid://m656ody0d2o" path="res://Skin/System/SongSelectPanel.svg" id="3_2cm8g"]
 [ext_resource type="Texture2D" uid="uid://pw443tw8pcsb" path="res://Skin/System/ReturnButton.png" id="4_p84v1"]
-[ext_resource type="PackedScene" uid="uid://b4xty06wpjuee" path="res://Panels/SongLoadingScreen.tscn" id="5_wfap8"]
+[ext_resource type="PackedScene" uid="uid://b4xty06wpjuee" path="res://Panels/Overlays/SongLoadingScreen.tscn" id="5_wfap8"]
 [ext_resource type="PackedScene" uid="uid://dpjsc7sxiwkm7" path="res://Panels/SongSelectElements/Mods.tscn" id="6_4xos4"]
 [ext_resource type="PackedScene" uid="uid://bwpja5llmgtqo" path="res://Panels/Overlays/TopPanel.tscn" id="6_fi2um"]
 [ext_resource type="Script" path="res://Script/Start.cs" id="6_k27ys"]
@@ -62,17 +62,6 @@ script = ExtResource("1_fin0e")
 
 [node name="BeatmapBackground" parent="." instance=ExtResource("2_wg4n2")]
 layout_mode = 1
-
-[node name="Debug" type="Label" parent="."]
-top_level = true
-layout_mode = 0
-offset_left = 20.0
-offset_top = 160.0
-offset_right = 172.0
-offset_bottom = 188.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 16
-text = "Visible Entries: 0/0"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
@@ -175,6 +164,17 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
 theme_override_font_sizes/font_size = 24
 text = "Title Song"
+
+[node name="Difficulty" type="Label" parent="SongDetails"]
+top_level = true
+layout_mode = 0
+offset_left = 20.0
+offset_top = 160.0
+offset_right = 172.0
+offset_bottom = 188.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 16
+text = "Difficulty Name"
 
 [node name="SongPanel" type="TextureRect" parent="."]
 layout_mode = 1

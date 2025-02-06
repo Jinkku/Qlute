@@ -102,7 +102,7 @@ public partial class SettingsOperator : Node
             }
             if (line.StartsWith("CircleSize:"))
             {
-            keycount = int.Parse(line.Split(":")[1].Trim());
+            keycount = (int)float.Parse(line.Split(":")[1].Trim());
             }
             if (line.StartsWith("AudioFilename:"))
             {
@@ -159,7 +159,11 @@ public partial class SettingsOperator : Node
         { "ranknumber", null },
 		{ "playercolour", null },
         { "SongID", 0 },
+        { "totalbeatmaps", 0 },
         { "beatmapurl", null },
+        { "beatmapname", null },
+        { "beatmapartist", null },
+        { "beatmapdiff", null },
         { "customapi", false},
         { "fps" , 0},
         { "ms" , 0.0f},

@@ -8,10 +8,10 @@
 [ext_resource type="Texture2D" uid="uid://c2l61nwy40vn1" path="res://Skin/System/chat.png" id="4_e4lty"]
 [ext_resource type="Script" path="res://Script/TopPanel/DownloadButton.cs" id="4_oeblg"]
 [ext_resource type="Texture2D" uid="uid://dkiv7s0dfykav" path="res://Skin/System/notifications.png" id="5_6ko15"]
-[ext_resource type="PackedScene" uid="uid://845os5s4i7vj" path="res://Panels/AccountPrompt.tscn" id="6_fi6td"]
-[ext_resource type="PackedScene" uid="uid://43pcqcuutdu4" path="res://Panels/AccountProfileCard.tscn" id="8_pxj8n"]
+[ext_resource type="PackedScene" uid="uid://845os5s4i7vj" path="res://Panels/Overlays/AccountPrompt.tscn" id="6_fi6td"]
+[ext_resource type="PackedScene" uid="uid://43pcqcuutdu4" path="res://Panels/Overlays/AccountProfileCard.tscn" id="8_pxj8n"]
 [ext_resource type="Script" path="res://Script/TopPanel/AccountProfileCard.cs" id="9_yftj0"]
-[ext_resource type="PackedScene" uid="uid://daegmq7jje8um" path="res://Panels/Settings.tscn" id="12_41los"]
+[ext_resource type="PackedScene" uid="uid://daegmq7jje8um" path="res://Panels/Overlays/Settings.tscn" id="12_41los"]
 
 [sub_resource type="Animation" id="Animation_xvajm"]
 resource_name = "Bootup"

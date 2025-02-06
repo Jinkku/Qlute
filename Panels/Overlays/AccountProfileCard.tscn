@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://43pcqcuutdu4"]
 
-[ext_resource type="Script" path="res://Script/TopPanel/AccountPrompt.cs" id="1_a688v"]
-[ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="2_0ag3i"]
+[ext_resource type="Script" path="res://Script/TopPanel/AccountPrompt.cs" id="1_rr4jl"]
+[ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="2_ltsae"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8lsa7"]
 
@@ -46,7 +46,7 @@ offset_bottom = -565.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("1_a688v")
+script = ExtResource("1_rr4jl")
 
 [node name="RankingApi" type="HTTPRequest" parent="."]
 timeout = 3.0
@@ -110,7 +110,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_gxl5j")
 [node name="ProfilePicture" type="TextureRect" parent="Panel/UsernameSection/RoundPicture"]
 unique_name_in_owner = true
 layout_mode = 2
-texture = ExtResource("2_0ag3i")
+texture = ExtResource("2_ltsae")
 expand_mode = 1
 stretch_mode = 4
 

@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3 uid="uid://byqa7t8heryyo"]
+
+[ext_resource type="Script" path="res://Script/DebugMenu/DebugMenu.cs" id="1_20h07"]
+
+[node name="DebugMenu" type="PanelContainer"]
+top_level = true
+offset_right = 350.0
+offset_bottom = 350.0
+mouse_default_cursor_shape = 2
+script = ExtResource("1_20h07")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="DebugNotice" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Debug Menu"
+
+[node name="Pointstxt" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Points Test"
+
+[node name="Pointstest" type="HSlider" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 150.0
