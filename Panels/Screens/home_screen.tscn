@@ -1,25 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene load_steps=8 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" path="res://Script/home.cs" id="1_j2gfm"]
 [ext_resource type="PackedScene" uid="uid://cywxwx4is1g7o" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
-[ext_resource type="Script" path="res://Script/play.gd" id="3_jccqs"]
 [ext_resource type="Script" path="res://Script/menunotice.gd" id="4_j0o5v"]
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://font.ttf" id="5_pikml"]
 [ext_resource type="Script" path="res://Script/version.gd" id="6_1tkmr"]
 [ext_resource type="PackedScene" uid="uid://bwpja5llmgtqo" path="res://Panels/Overlays/TopPanel.tscn" id="7_1w060"]
-
-[sub_resource type="GDScript" id="GDScript_txy7s"]
-script/source = "extends \"res://Script/leave.gd\"
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-func _on_pressed():
-	get_tree().quit()
-"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1gbip"]
 bg_color = Color(0, 0, 0, 0.568627)
@@ -56,7 +42,6 @@ offset_bottom = -173.0
 grow_vertical = 2
 theme_override_font_sizes/font_size = 32
 text = "Play"
-script = ExtResource("3_jccqs")
 
 [node name="Create" type="Button" parent="."]
 layout_mode = 1
@@ -96,7 +81,6 @@ offset_bottom = 267.0
 grow_vertical = 2
 theme_override_font_sizes/font_size = 32
 text = "Leave"
-script = SubResource("GDScript_txy7s")
 
 [node name="MenuNotice" type="PanelContainer" parent="."]
 visible = false
@@ -158,7 +142,10 @@ grow_horizontal = 0
 layout_mode = 1
 
 [connection signal="resized" from="." to="." method="_on_resized"]
-[connection signal="pressed" from="Play" to="Play" method="_on_pressed"]
+[connection signal="pressed" from="Play" to="." method="_play"]
+[connection signal="pressed" from="Create" to="." method="_create"]
+[connection signal="pressed" from="Browse" to="." method="_browse"]
+[connection signal="pressed" from="Leave" to="." method="_leave"]
 [connection signal="pressed" from="Leave" to="Leave" method="_on_pressed"]
 [connection signal="timeout" from="MenuNotice/Timer" to="MenuNotice/HTTPRequest" method="_on_timer_timeout"]
 [connection signal="request_completed" from="MenuNotice/HTTPRequest" to="MenuNotice/HTTPRequest" method="_on_request_completed"]

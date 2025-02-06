@@ -16,5 +16,11 @@ public partial class home : Node
 	public override void _Process(double delta)
 	{
 	}
+	private void _play(){
+		GetTree().ChangeSceneToFile("res://Panels/Screens/song_select.tscn");
+	}
+	private void _leave(){
+		GetTree().Quit();
+		}
 	
 }
