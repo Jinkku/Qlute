@@ -74,6 +74,14 @@ public partial class SongSelect : Control
 		}
 		GD.Print("Finished about " + (DateTime.Now.Second-timex) + "s");
 		_res_resize();
+		//var TextureRect = GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
+		var SongTitle = GetNode<Label>("PanelContainer/HBoxContainer/Title");
+		var SongArtist = GetNode<Label>("SongDetails/Artist");
+		var Songpp = GetNode<Label>("SongDetails/Points");
+		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No song selected";
+		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
+		Songpp.Text = "+" + SettingsOperator.Sessioncfg["maxpp"]?.ToString()+"pp" ?? "";
+		//Cover.Texture = TextureRect.Texture;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -89,9 +97,8 @@ public partial class SongSelect : Control
 	private void _on_animation_player_animation_finished(){
 
 	}
-	private void _Start(){
-		//AnimationPlayer AniPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-		//AniPlayer.Play("SongSelect-Start");
+	public void _Start(){
+		GetTree().ChangeSceneToFile("res://Panels/Screens/Gameplay.tscn");
 	}
 	private void _on_back_pressed(){
 		GetTree().ChangeSceneToFile("res://Panels/Screens/home_screen.tscn");

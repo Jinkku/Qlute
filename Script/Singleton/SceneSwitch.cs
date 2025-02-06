@@ -29,8 +29,8 @@ public partial class SceneSwitch : Node
 
 public void DeferredGotoScene(string path)
 {
-    // It is now safe to remove the current scene.
-    CurrentScene.Free();
+    // Dispose the current scene if it is not null.
+    CurrentScene?.Free();
 
     // Load a new scene.
     var nextScene = GD.Load<PackedScene>(path);

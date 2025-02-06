@@ -14,7 +14,6 @@ public partial class MusicCard : Button
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		self = GetNode<Button>(".");
 		Cover = GetTree().Root.GetNode<TextureRect>("Song Select/BeatmapBackground");
-		//SongID = int.Parse(self.Name);
 	}
 
 	
@@ -33,6 +32,7 @@ public partial class MusicCard : Button
 		SettingsOperator.Sessioncfg["beatmaptitle"] = self.GetMeta("Title").ToString();
 		SettingsOperator.Sessioncfg["beatmapartist"] = self.GetMeta("Artist").ToString();
 		SettingsOperator.Sessioncfg["beatmapdiff"] = self.GetMeta("Difficulty").ToString();
+		SettingsOperator.Sessioncfg["maxpp"] = self.GetMeta("pp");
 	}
 	public override void _Process(double _delta)
 	{

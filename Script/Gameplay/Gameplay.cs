@@ -44,19 +44,16 @@ public partial class Gameplay : Control
 				t=line;
 				timing = Convert.ToInt32(line.Split(",")[2]);
 				part = Convert.ToInt32(line.Split(",")[0]);
-				if (part == 64)
-				{
-					part = 0;}
-				else if (part == 192){
-					part = 1;}
-				else if (part == 320){
-					part = 2;}
-				else if (part == 448){
-					part = 3;}
-				var note = new ColorRect();
+				if (part == 64){part = 0;}
+				else if (part == 192){part = 1;}
+				else if (part == 320){part = 2;}
+				else if (part == 448){part = 3;}
+				var note = new Sprite2D();
 				GetNode<ColorRect>("Playfield/Chart").AddChild(note);
 				note.Position = new Vector2((part * 100), -timing);
-				note.Size = new Vector2(100,20);
+				note.Texture = GD.Load<Texture2D>("res://Skin/Game/note.png");
+				note.Centered = false;
+				note.Modulate = new Color("#70baff");
 				Notes.Add(note);
 				NotesT.Add(-timing);
             }
@@ -79,7 +76,7 @@ public partial class Gameplay : Control
 		Hits.Text = "Hits:\n" + SettingsOperator.Gameplaycfg["max"] + "\n" + SettingsOperator.Gameplaycfg["great"] + "\n" + SettingsOperator.Gameplaycfg["meh"] + "\n" + SettingsOperator.Gameplaycfg["bad"] + "\n";
 		foreach (ColorRect self in Keys)
 		{
-			if (Input.IsActionPressed("Key"+(Keyx+1).ToString()))
+			if (Input.IsActionPressed("Key"+(Keyx+1)))
 			{
 				self.Color = new Color(0.32f,0.42f,0.74f);
 			}
@@ -89,7 +86,10 @@ public partial class Gameplay : Control
 			}
 			Keyx++;
 		}
-		foreach (ColorRect self in Notes)
+		if (Input.IsActionJustPressed("pausemenu")){
+			GetTree().ChangeSceneToFile("res://Panels/Screens/song_select.tscn");
+		}
+		foreach (Sprite2D self in Notes)
 		{
 			self.Position = new Vector2(self.Position.X, NotesT[Ttick] + est);
 			Ttick++;

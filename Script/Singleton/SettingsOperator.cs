@@ -170,6 +170,7 @@ public partial class SettingsOperator : Node
         { "beatmapname", null },
         { "beatmapartist", null },
         { "beatmapdiff", null },
+        { "maxpp", 0 },
         { "customapi", false},
         { "fps" , 0},
         { "ms" , 0.0f},

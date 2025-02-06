@@ -4,8 +4,6 @@ using System.IO;
 using System.Runtime.CompilerServices;
 public partial class BeatmapListener : Node
 {
-	public string homedir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + "/.qlute";
-	public string beatmapsdir => homedir + "/beatmaps";
 	public static SettingsOperator SettingsOperator { get; set; }
 	public override void _Ready(){
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -16,7 +14,7 @@ public partial class BeatmapListener : Node
 				if (tmp == SettingsOperator.beatmapsdir){
 					GD.Print("Checking for beatmaps...");
 					foreach (string Dir in Directory.GetDirectories(SettingsOperator.beatmapsdir)){
-						GD.Print(Dir);
+						GD.Print(Dir);	
 						foreach (string file in Directory.GetFiles(Dir, "*.osu")) {
 							//GD.Print(file);
 							SettingsOperator.Parse_Beatmapfile(file);

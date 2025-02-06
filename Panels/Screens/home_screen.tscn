@@ -139,6 +139,7 @@ offset_bottom = 140.0
 grow_horizontal = 0
 
 [node name="TopPanel" parent="." instance=ExtResource("7_1w060")]
+z_index = 2
 layout_mode = 1
 
 [connection signal="resized" from="." to="." method="_on_resized"]

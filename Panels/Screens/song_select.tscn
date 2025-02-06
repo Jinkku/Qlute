@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://ckiye2n1ir8qg"]
+[gd_scene load_steps=19 format=3 uid="uid://ckiye2n1ir8qg"]
 
 [ext_resource type="Script" path="res://Script/SongSelect.cs" id="1_fin0e"]
 [ext_resource type="PackedScene" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" path="res://Panels/Overlays/SongLoadingScreen.tscn" id="5_wfap8"]
 [ext_resource type="PackedScene" uid="uid://dpjsc7sxiwkm7" path="res://Panels/SongSelectElements/Mods.tscn" id="6_4xos4"]
 [ext_resource type="PackedScene" uid="uid://bwpja5llmgtqo" path="res://Panels/Overlays/TopPanel.tscn" id="6_fi2um"]
-[ext_resource type="Script" path="res://Script/Start.cs" id="6_k27ys"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ixo7g"]
 bg_color = Color(0, 0, 0, 1)
@@ -281,7 +280,6 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_6f4j3")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_k1b3q")
 theme_override_styles/normal = SubResource("StyleBoxFlat_cv1hb")
 text = "Play"
-script = ExtResource("6_k27ys")
 
 [node name="Lead" parent="." instance=ExtResource("5_wfap8")]
 visible = false
@@ -291,7 +289,6 @@ offset_right = -630.0
 mouse_filter = 2
 
 [node name="TopPanel" parent="." instance=ExtResource("6_fi2um")]
-visible = false
 z_index = 2
 layout_mode = 1
 
@@ -300,4 +297,4 @@ layout_mode = 1
 [connection signal="resized" from="." to="." method="_res_resize"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="Mods" to="." method="_Start"]
-[connection signal="pressed" from="Start" to="Start" method="_Start"]
+[connection signal="pressed" from="Start" to="." method="_Start"]
