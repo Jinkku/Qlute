@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dvm81no14tisl"]
 
-[ext_resource type="Script" path="res://Script/Bootstrap.cs" id="1_oli0r"]
-[ext_resource type="Texture2D" uid="uid://ba8p7q27num8t" path="res://Skin/System/highlightlogo.png" id="2_2xpbg"]
+[ext_resource type="Script" path="res://Script/Bootstrap.cs" id="1_26srq"]
+[ext_resource type="Texture2D" uid="uid://ba8p7q27num8t" path="res://Skin/System/highlightlogo.png" id="2_abd43"]
 
 [sub_resource type="Animation" id="Animation_v5m8g"]
 resource_name = "Intro"
@@ -46,7 +46,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_oli0r")
+script = ExtResource("1_26srq")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../CenterContainer/logo")
@@ -73,7 +73,7 @@ grow_vertical = 2
 
 [node name="logo" type="TextureRect" parent="CenterContainer"]
 layout_mode = 2
-texture = ExtResource("2_2xpbg")
+texture = ExtResource("2_abd43")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 3.0

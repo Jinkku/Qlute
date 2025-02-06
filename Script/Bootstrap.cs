@@ -14,7 +14,6 @@ public partial class Bootstrap : Control
 		animationPlayer.Play("Intro");
 	}
 	public void _intro_finished(string animationame){
-		SceneSwitch SceneSwitch = GetNode<SceneSwitch>("/root/SceneSwitch");
-		SceneSwitch.GotoScene("res://Panels/Screens/home_screen.tscn");
+		GetTree().ChangeSceneToFile("res://Panels/Screens/home_screen.tscn");
 	}
 }
