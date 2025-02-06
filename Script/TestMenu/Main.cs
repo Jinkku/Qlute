@@ -15,14 +15,14 @@ public partial class Main : Control
 	SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 	var panelContainer = GetNode<VBoxContainer>("./PanelContainer/ScrollContainer/VBoxContainer");
 	string[] allfiles = Directory.GetFiles(Scenefolder, "*.tscn", SearchOption.AllDirectories);
-//	foreach (var file in allfiles)
-//	{
-//		var button = new Button();
-//		button.Text = file.Replace(Scenefolder, "").Replace(".tscn", "");
-//		button.SetMeta("path", file);
+	foreach (var file in allfiles)
+	{
+		var button = new Button();
+		button.Text = file.Replace(Scenefolder, "").Replace(".tscn", "");
+		button.SetMeta("path", file);
 //		button.Connect("pressed", this, "debugbuttonpressed");
-//		panelContainer.AddChild(button);
-//	}
+		panelContainer.AddChild(button);
+	}
 	}
 	
 
