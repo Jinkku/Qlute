@@ -66,12 +66,12 @@ public partial class SettingsOperator : Node
         
         }
     // Imaging processing part of the game because godot don't have a way to load images externally i suppose-
-    public Texture2D LoadImage(string path){
-        var imagePath = path;
-        Image image = new Image();
-        image.Load(imagePath);
+    public Texture2D LoadImage(string path)
+    {
+        var image = new Image();
+        image.Load(path);
 
-        ImageTexture imageTexture = new ImageTexture();
+        var imageTexture = new ImageTexture();
         imageTexture.SetImage(image);
 
         // Free the image from memory

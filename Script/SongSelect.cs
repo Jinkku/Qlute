@@ -8,6 +8,7 @@ public partial class SongSelect : Control
 	// Called when the node enters the scene tree for the first time.
 	 [Export] private TextureRect textureRect;
 	public static SettingsOperator SettingsOperator { get; set; }
+	public PackedScene musiccardtemplate;
 	public List<object> SongEntry = new List<object>();
 	public int SongETick { get; set; }
 	public Label Diff { get; set; }
@@ -30,7 +31,7 @@ public partial class SongSelect : Control
 	public void AddSongList(string song,string artist,string mapper,int lv,string background,string path,float pp, string difficulty,Vector2 pos)
 	{
 
-		var button = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn").Instantiate();
+		var button = musiccardtemplate.Instantiate();
 		SongEntry.Add(button);
 		GetNode<VBoxContainer>("SongPanel/Scrolls/VBoxContainer").AddChild(button);
 		var childButton = button.GetNode<Button>(".");
@@ -44,7 +45,7 @@ public partial class SongSelect : Control
 		SongArtist.Text = artist;
 		SongMapper.Text = mapper;
 		Version.Text = difficulty;
-		Rating.Text = "Lv. "+lv.ToString("0");
+		Rating.Text = "Lv. "+lv.ToString("000");
 		childButton.Name = SongETick.ToString();
 		childButton.ClipText = true;
 		childButton.SetMeta("beatmapurl", path);
@@ -58,9 +59,11 @@ public partial class SongSelect : Control
 	}
 	public override void _Ready()
 	{
+		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		SongETick = 0;
 		Diff = GetNode<Label>("SongDetails/Difficulty");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
+		var timex = DateTime.Now.Second;
 		foreach (var song in SettingsOperator.Beatmaps)
 
 		{
@@ -69,6 +72,7 @@ public partial class SongSelect : Control
 			, new Vector2(0, 50+ (115*SongETick)));
 			SongETick++;
 		}
+		GD.Print("Finished about " + (DateTime.Now.Second-timex) + "s");
 		_res_resize();
 	}
 

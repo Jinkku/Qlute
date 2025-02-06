@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://Script/MusicCard.cs" id="1_aa04f"]
 [ext_resource type="StyleBox" uid="uid://drlu38602jgb8" path="res://Skin/System/buttontoggled.tres" id="1_vfwc8"]
-[ext_resource type="Texture2D" uid="uid://deou77c8rjeis" path="res://bgtest.png" id="2_hexqm"]
 [ext_resource type="StyleBox" uid="uid://fxawsqvq06j4" path="res://Skin/System/buttonidle.tres" id="2_nf3oy"]
 [ext_resource type="StyleBox" uid="uid://cuao4np4v7lo1" path="res://Skin/System/buttonhover.tres" id="2_vxxs3"]
 
@@ -31,6 +30,8 @@ corner_radius_bottom_left = 15
 bg_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 35
 corner_radius_bottom_left = 35
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_2pxov"]
 
 [node name="MusicCard" type="Button"]
 clip_contents = true
@@ -124,7 +125,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_a1afo")
 [node name="BackgroundPreview" type="TextureRect" parent="SongBackgroundPreview"]
 layout_mode = 2
 mouse_filter = 2
-texture = ExtResource("2_hexqm")
+texture = SubResource("CanvasTexture_2pxov")
 expand_mode = 1
 stretch_mode = 6
 
