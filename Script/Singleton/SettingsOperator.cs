@@ -65,6 +65,7 @@ public partial class SettingsOperator : Node
         return ppvalue;
         
         }
+    // Imaging processing part of the game because godot don't have a way to load images externally i suppose-
     public Texture2D LoadImage(string path){
         var imagePath = path;
         Image image = new Image();
@@ -72,6 +73,10 @@ public partial class SettingsOperator : Node
 
         ImageTexture imageTexture = new ImageTexture();
         imageTexture.SetImage(image);
+
+        // Free the image from memory
+        image.Dispose();
+
         return imageTexture;
     }
     public void Parse_Beatmapfile(string filename){
@@ -154,6 +159,7 @@ public partial class SettingsOperator : Node
     {
         { "TopPanelSlidein", false },
         { "Reloadmap", false },
+        { "reloadbdb", false },
         { "loggedin", false },
         { "showaccountpro", false },
         { "ranknumber", null },
