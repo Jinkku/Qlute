@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://845os5s4i7vj"]
+[gd_scene load_steps=4 format=3 uid="uid://b4ys2qwkqf5m5"]
 
 [ext_resource type="Script" path="res://Script/TopPanel/AccountPrompt.cs" id="1_ppf2d"]
 
@@ -95,7 +95,7 @@ offset_left = 10.0
 offset_top = 189.0
 offset_right = 289.0
 offset_bottom = 216.0
-text = "Stay Logged in"
+text = "Stay logged in"
 
 [node name="CheckButton2" type="CheckButton" parent="."]
 layout_mode = 0
@@ -103,7 +103,7 @@ offset_left = 10.0
 offset_top = 213.0
 offset_right = 289.0
 offset_bottom = 240.0
-text = "Save Password"
+text = "Save password"
 
 [node name="Login" type="Button" parent="."]
 layout_mode = 0
