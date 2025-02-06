@@ -13,13 +13,8 @@ public partial class Bootstrap : Control
 		AnimationPlayer animationPlayer = GetNode<AnimationPlayer>("./AnimationPlayer");
 		animationPlayer.Play("Intro");
 	}
-	public void _intro_finished(){
-	}
-	private void _on_timer_timeout(){
-		GD.Print("Finished loading game...");
+	public void _intro_finished(string animationame){
 		SceneSwitch SceneSwitch = GetNode<SceneSwitch>("/root/SceneSwitch");
 		SceneSwitch.GotoScene("res://Panels/Screens/home_screen.tscn");
 	}
-	public override void _Process(double _delta){
-	}		
 }

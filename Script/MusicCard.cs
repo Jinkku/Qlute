@@ -21,7 +21,7 @@ public partial class MusicCard : Button
 	public void _on_pressed(){
 		GD.Print("Pressed");
 		var TextureRect = GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
-		var SongTitle = GetTree().Root.GetNode<Label>("Song Select/SongDetails/Title");
+		var SongTitle = GetTree().Root.GetNode<Label>("Song Select/PanelContainer/HBoxContainer/Title");
 		var SongArtist = GetTree().Root.GetNode<Label>("Song Select/SongDetails/Artist");
 		var Songpp = GetTree().Root.GetNode<Label>("Song Select/SongDetails/Points");
 		SongTitle.Text = self.GetMeta("Title").ToString();

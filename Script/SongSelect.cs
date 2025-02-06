@@ -33,7 +33,7 @@ public partial class SongSelect : Control
 
 		var button = musiccardtemplate.Instantiate();
 		SongEntry.Add(button);
-		GetNode<VBoxContainer>("SongPanel/Scrolls/VBoxContainer").AddChild(button);
+		GetNode<VBoxContainer>("SongPanel/Scrolls/SSelection").AddChild(button);
 		var childButton = button.GetNode<Button>(".");
 		var SongTitle = button.GetNode<Label>("./SongTitle");
 		var SongArtist = button.GetNode<Label>("./SongArtist");

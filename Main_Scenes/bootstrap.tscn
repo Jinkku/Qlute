@@ -12,10 +12,10 @@ tracks/0/path = NodePath(".:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.197683, 0.3, 0.402334),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_s0vrs"]
@@ -49,7 +49,7 @@ grow_vertical = 2
 script = ExtResource("1_oli0r")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-root_node = NodePath("../TextureRect")
+root_node = NodePath("../CenterContainer/logo")
 libraries = {
 "": SubResource("AnimationLibrary_rpwbx")
 }
@@ -63,19 +63,16 @@ offset_right = 147.0
 offset_bottom = 51.0
 text = "...btw this is a dev build so NO snoopie >:("
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -216.5
-offset_top = -54.5
-offset_right = 216.5
-offset_bottom = 54.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="logo" type="TextureRect" parent="CenterContainer"]
+layout_mode = 2
 texture = ExtResource("2_2xpbg")
 
 [node name="Timer" type="Timer" parent="."]

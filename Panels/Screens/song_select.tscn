@@ -1,10 +1,10 @@
-[gd_scene load_steps=18 format=3 uid="uid://ckiye2n1ir8qg"]
+[gd_scene load_steps=20 format=3 uid="uid://ckiye2n1ir8qg"]
 
 [ext_resource type="Script" path="res://Script/SongSelect.cs" id="1_fin0e"]
-[ext_resource type="PackedScene" uid="uid://cywxwx4is1g7o" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
+[ext_resource type="PackedScene" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
 [ext_resource type="Texture2D" uid="uid://m656ody0d2o" path="res://Skin/System/SongSelectPanel.svg" id="3_2cm8g"]
 [ext_resource type="Texture2D" uid="uid://pw443tw8pcsb" path="res://Skin/System/ReturnButton.png" id="4_p84v1"]
-[ext_resource type="PackedScene" uid="uid://b4xty06wpjuee" path="res://Panels/Overlays/SongLoadingScreen.tscn" id="5_wfap8"]
+[ext_resource type="PackedScene" path="res://Panels/Overlays/SongLoadingScreen.tscn" id="5_wfap8"]
 [ext_resource type="PackedScene" uid="uid://dpjsc7sxiwkm7" path="res://Panels/SongSelectElements/Mods.tscn" id="6_4xos4"]
 [ext_resource type="PackedScene" uid="uid://bwpja5llmgtqo" path="res://Panels/Overlays/TopPanel.tscn" id="6_fi2um"]
 [ext_resource type="Script" path="res://Script/Start.cs" id="6_k27ys"]
@@ -15,12 +15,18 @@ border_width_bottom = 5
 border_color = Color(0.265625, 0.63855, 1, 1)
 expand_margin_bottom = 5.0
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5vans"]
+content_margin_left = 20.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hes1f"]
 bg_color = Color(0.0980392, 0.0980392, 0.0980392, 0.501961)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vuoc0"]
+content_margin_top = 10.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llhhs"]
 
@@ -65,29 +71,6 @@ layout_mode = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
-[node name="ColorRect" type="ColorRect" parent="."]
-visible = false
-z_index = 1
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_right = -833.0
-offset_bottom = 188.0
-grow_horizontal = 2
-color = Color(0, 0, 0, 1)
-
-[node name="ColorRect" type="ColorRect" parent="ColorRect"]
-visible = false
-z_index = 1
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 181.0
-offset_bottom = 186.0
-grow_horizontal = 2
-rotation = -0.174533
-color = Color(0.206478, 0.165527, 0.441406, 1)
-
 [node name="PanelContainer" type="PanelContainer" parent="."]
 z_index = 1
 layout_mode = 1
@@ -99,11 +82,26 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ixo7g")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
 layout_mode = 2
-size_flags_horizontal = 8
 size_flags_vertical = 8
 alignment = 2
 
-[node name="LineEdit" type="LineEdit" parent="PanelContainer/HBoxContainer"]
+[node name="Title" type="Label" parent="PanelContainer/HBoxContainer"]
+z_index = 1
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5vans")
+text = "Title Song"
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 2
+
+[node name="Beatmapsearch" type="LineEdit" parent="PanelContainer/HBoxContainer/MarginContainer"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_hes1f")
@@ -111,36 +109,36 @@ placeholder_text = "Search Box for Songs"
 
 [node name="SongDetails" type="TextureRect" parent="."]
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 450.0
-grow_horizontal = 2
+offset_right = 320.0
 grow_vertical = 2
 size_flags_vertical = 3
 texture = ExtResource("3_2cm8g")
+expand_mode = 1
 
 [node name="Points" type="Label" parent="SongDetails"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -170.0
-offset_top = 140.0
+offset_left = -151.0
+offset_top = 179.0
 offset_right = -22.0
-offset_bottom = 168.0
+offset_bottom = 207.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 14
 text = "+0pp"
 horizontal_alignment = 2
 
 [node name="BPM" type="Label" parent="SongDetails"]
 layout_mode = 0
 offset_left = 20.0
-offset_top = 140.0
+offset_top = 179.0
 offset_right = 168.0
-offset_bottom = 168.0
+offset_bottom = 207.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 14
 text = "BPM: 0"
 
 [node name="Artist" type="Label" parent="SongDetails"]
@@ -150,31 +148,45 @@ offset_top = 117.0
 offset_right = 168.0
 offset_bottom = 145.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 14
 text = "Artist Name"
 
-[node name="Title" type="Label" parent="SongDetails"]
-z_index = 1
-layout_mode = 0
-offset_left = 20.0
-offset_top = 63.0
-offset_right = 145.0
-offset_bottom = 91.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 24
-text = "Title Song"
-
 [node name="Difficulty" type="Label" parent="SongDetails"]
-top_level = true
 layout_mode = 0
 offset_left = 20.0
-offset_top = 160.0
+offset_top = 138.0
 offset_right = 172.0
-offset_bottom = 188.0
+offset_bottom = 166.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 14
 text = "Difficulty Name"
+
+[node name="Mapper" type="Label" parent="SongDetails"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 158.0
+offset_right = 173.0
+offset_bottom = 186.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 14
+text = "mapped by idiotplier"
+
+[node name="PanelContainer" type="PanelContainer" parent="SongDetails"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.3
+anchor_right = 0.95
+anchor_bottom = 0.8
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SongDetails/PanelContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="SongDetails/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Leaderboard Screen"
 
 [node name="SongPanel" type="TextureRect" parent="."]
 layout_mode = 1
@@ -194,14 +206,20 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_vuoc0")
 follow_focus = true
 horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SongPanel/Scrolls"]
+[node name="SSelection" type="VBoxContainer" parent="SongPanel/Scrolls"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 5
+
+[node name="Margin" type="MarginContainer" parent="SongPanel/Scrolls"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_top = 10
 
 [node name="ModsScreen" parent="." instance=ExtResource("6_4xos4")]
 visible = false
@@ -212,8 +230,8 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -146.0
-offset_right = 152.0
+offset_top = -131.0
+offset_right = 137.0
 grow_vertical = 0
 texture_normal = ExtResource("4_p84v1")
 stretch_mode = 4
@@ -221,12 +239,12 @@ flip_h = true
 
 [node name="Label" type="Label" parent="BackButton"]
 layout_mode = 0
-offset_left = 47.0
-offset_top = 55.0
-offset_right = 108.0
-offset_bottom = 83.0
+offset_left = 48.0
+offset_top = 56.0
+offset_right = 94.0
+offset_bottom = 77.0
 rotation = 0.785398
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 20
 text = "Back"
 
 [node name="Mods" type="Button" parent="."]
@@ -273,8 +291,11 @@ offset_right = -630.0
 mouse_filter = 2
 
 [node name="TopPanel" parent="." instance=ExtResource("6_fi2um")]
+visible = false
 z_index = 2
 layout_mode = 1
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
 
 [connection signal="resized" from="." to="." method="_res_resize"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_pressed"]

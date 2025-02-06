@@ -1,9 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" path="res://Script/home.cs" id="1_j2gfm"]
-[ext_resource type="PackedScene" uid="uid://cywxwx4is1g7o" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
+[ext_resource type="PackedScene" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
 [ext_resource type="Script" path="res://Script/menunotice.gd" id="4_j0o5v"]
-[ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://font.ttf" id="5_pikml"]
+[ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="5_pikml"]
 [ext_resource type="Script" path="res://Script/version.gd" id="6_1tkmr"]
 [ext_resource type="PackedScene" uid="uid://bwpja5llmgtqo" path="res://Panels/Overlays/TopPanel.tscn" id="7_1w060"]
 

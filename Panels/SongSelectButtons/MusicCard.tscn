@@ -79,6 +79,7 @@ anchor_bottom = 1.0
 offset_top = -40.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_3w5u3")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
@@ -88,6 +89,7 @@ theme_override_constants/separation = 5
 [node name="LevelRating" type="PanelContainer" parent="PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(44, 25)
 layout_mode = 2
+tooltip_text = "1000pp"
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_y4ldl")
 

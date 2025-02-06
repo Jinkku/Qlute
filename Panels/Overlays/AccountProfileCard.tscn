@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://43pcqcuutdu4"]
+[gd_scene load_steps=9 format=3 uid="uid://c3j07aaosy031"]
 
 [ext_resource type="Script" path="res://Script/TopPanel/AccountPrompt.cs" id="1_rr4jl"]
 [ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="2_ltsae"]
