@@ -1,11 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene load_steps=9 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" path="res://Script/home.cs" id="1_j2gfm"]
-[ext_resource type="PackedScene" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
+[ext_resource type="PackedScene" uid="uid://cywxwx4is1g7o" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
 [ext_resource type="Script" path="res://Script/menunotice.gd" id="4_j0o5v"]
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="5_pikml"]
 [ext_resource type="Script" path="res://Script/version.gd" id="6_1tkmr"]
 [ext_resource type="PackedScene" uid="uid://bwpja5llmgtqo" path="res://Panels/Overlays/TopPanel.tscn" id="7_1w060"]
+
+[sub_resource type="FontVariation" id="FontVariation_bifyk"]
+base_font = ExtResource("5_pikml")
+variation_opentype = {
+2003265652: 700
+}
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1gbip"]
 bg_color = Color(0, 0, 0, 0.568627)
@@ -81,6 +87,35 @@ offset_bottom = 267.0
 grow_vertical = 2
 theme_override_font_sizes/font_size = 32
 text = "Leave"
+
+[node name="Titlesong" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -171.0
+offset_top = 60.0
+offset_right = -10.0
+offset_bottom = 88.0
+grow_horizontal = 0
+theme_override_fonts/font = SubResource("FontVariation_bifyk")
+theme_override_font_sizes/font_size = 24
+text = "Title Song"
+horizontal_alignment = 2
+
+[node name="Descsong" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -171.0
+offset_top = 90.0
+offset_right = -10.0
+offset_bottom = 118.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 18
+text = "Artist"
+horizontal_alignment = 2
 
 [node name="MenuNotice" type="PanelContainer" parent="."]
 visible = false
