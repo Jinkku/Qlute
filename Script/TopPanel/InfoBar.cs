@@ -21,7 +21,16 @@ public partial class InfoBar : ColorRect
 		Ana.Play("Bootup");
 		SettingsOperator.Sessioncfg["TopPanelSlidein"] = true;}
 	}
+	public void _hovered(){
+		TextureRect Ana = GetNode<TextureRect>("Shadow");
+		Ana.Visible = true;
+	}
+	public void _unhover(){
+		TextureRect Ana = GetNode<TextureRect>("Shadow");
+		Ana.Visible = false;
+	}
 	public override void _Process(double _delta){
+		Loadingicon.Visible = (bool)SettingsOperator.Sessioncfg["loggingin"];
 		
 	}
 }

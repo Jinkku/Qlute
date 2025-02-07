@@ -26,7 +26,8 @@ public partial class AccountPrompt : Control
 			Login();
 		}
 	}
-	public void Login(){LoginApi.Request(SettingsOperator.GetSetting("api") + "api/chkprofile?"+ User.Text +"?"+ PasswordHash);}
+	public void Login(){LoginApi.Request(SettingsOperator.GetSetting("api") + "api/chkprofile?"+ User.Text +"?"+ PasswordHash);
+	SettingsOperator.Sessioncfg["loggingin"] = true;}
 	public void Check_Rank(){RankingApi.Request(SettingsOperator.GetSetting("api") + "api/getstat?"+ Username +"?rank");}
 	
 	private void _on_login_pressed(){
@@ -57,6 +58,7 @@ public partial class AccountPrompt : Control
 		Label PlayerName = GetNode<Label>("%UPlayerName");
 		if ((bool)json["success"]) {
 			Notice.Text = "Logged in!";
+			
 			PlayerName.Text = Username;
 			Check_Rank();
 			SettingsOperator.SetSetting("username",Username);
@@ -70,6 +72,7 @@ public partial class AccountPrompt : Control
 		} else {
 			Notice.Text = "Incorrect Credentials";
 		}
+		SettingsOperator.Sessioncfg["loggingin"] = false;
 	}
 	static string ComputeSha256Hash(string rawData)
 	{

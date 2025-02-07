@@ -38,6 +38,6 @@ public partial class MusicCard : Button
 	}
 	public override void _Process(double _delta)
 	{
-		self.ToggleMode = SettingsOperator.Sessioncfg["SongID"].Equals(self.GetMeta("SongID"));
+		self.ButtonPressed = SettingsOperator.Sessioncfg["SongID"].Equals(self.GetMeta("SongID"));
 	}
 }

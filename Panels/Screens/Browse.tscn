@@ -1,0 +1,119 @@
+[gd_scene load_steps=3 format=3 uid="uid://1eecnwds7hxx"]
+
+[ext_resource type="PackedScene" uid="uid://b2lw0mmphsddc" path="res://Panels/SongSelectButtons/MusicCard.tscn" id="1_18hkt"]
+[ext_resource type="PackedScene" uid="uid://bwpja5llmgtqo" path="res://Panels/Overlays/TopPanel.tscn" id="1_k01ao"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Header" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 200.0
+grow_horizontal = 2
+color = Color(0.261989, 0.2211, 0.273438, 1)
+
+[node name="Label" type="Label" parent="Header"]
+layout_mode = 1
+offset_left = 20.0
+offset_top = 60.0
+offset_right = 137.0
+offset_bottom = 97.0
+theme_override_font_sizes/font_size = 32
+text = "Browse"
+
+[node name="SearchBox" type="LineEdit" parent="Header"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.164532, 0.138306, 0.171875, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="GridContainer" type="GridContainer" parent="ColorRect/MarginContainer"]
+layout_mode = 2
+columns = 3
+
+[node name="MusicCard" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="MusicCard2" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="MusicCard3" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="MusicCard4" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="MusicCard5" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="MusicCard6" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="MusicCard7" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="MusicCard8" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="MusicCard9" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="MusicCard10" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="MusicCard11" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="MusicCard12" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="MusicCard13" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="MusicCard14" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="MusicCard15" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="MusicCard16" parent="ColorRect/MarginContainer/GridContainer" instance=ExtResource("1_18hkt")]
+layout_mode = 2
+
+[node name="TopPanel" parent="." instance=ExtResource("1_k01ao")]
+layout_mode = 1

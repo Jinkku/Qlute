@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://dkiv7s0dfykav" path="res://Skin/System/notifications.png" id="5_6ko15"]
 [ext_resource type="PackedScene" uid="uid://b4ys2qwkqf5m5" path="res://Panels/Overlays/AccountPrompt.tscn" id="6_fi6td"]
 [ext_resource type="PackedScene" uid="uid://c3j07aaosy031" path="res://Panels/Overlays/AccountProfileCard.tscn" id="8_pxj8n"]
-[ext_resource type="PackedScene" path="res://Panels/Overlays/Settings.tscn" id="12_41los"]
+[ext_resource type="PackedScene" uid="uid://daegmq7jje8um" path="res://Panels/Overlays/Settings.tscn" id="12_41los"]
 
 [sub_resource type="Animation" id="Animation_xvajm"]
 resource_name = "Bootup"
@@ -216,7 +216,8 @@ grow_horizontal = 2
 color = Color(0.0745098, 0.0745098, 0.0745098, 0.568627)
 script = ExtResource("1_bm6kj")
 
-[node name="TextureRect" type="TextureRect" parent="InfoBar"]
+[node name="Shadow" type="TextureRect" parent="InfoBar"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -225,6 +226,7 @@ offset_top = 50.0
 offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = SubResource("GradientTexture2D_gkq3o")
 
 [node name="AccountButton" type="Button" parent="InfoBar"]
@@ -371,6 +373,8 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 1
 
+[connection signal="mouse_entered" from="InfoBar" to="InfoBar" method="_hovered"]
+[connection signal="mouse_exited" from="InfoBar" to="InfoBar" method="_unhover"]
 [connection signal="pressed" from="InfoBar/AccountButton" to="InfoBar/Settings" method="_on_AccountButton_pressed"]
 [connection signal="pressed" from="InfoBar/Download" to="InfoBar/Download" method="_on_downloadbutton_pressed"]
 [connection signal="pressed" from="InfoBar/Settings" to="InfoBar/Settings" method="_on_pressed"]
