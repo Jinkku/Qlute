@@ -11,7 +11,7 @@ public partial class Gameplay : Control
 	public List<object> Notes = new List<object>();
 	public List<object> Keys = new List<object>();
 	public List<int> NotesT = new List<int>();
-	public long startedtime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+	public long startedtime {get ;set; }
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -58,6 +58,8 @@ public partial class Gameplay : Control
 				NotesT.Add(-timing);
             }
         }
+		AudioPlayer.Instance.Play();
+		startedtime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 //		GD.Print(timing+" "+part);
 //		GetTree().Quit();
 	}
@@ -70,6 +72,7 @@ public partial class Gameplay : Control
 	{   
 		long unixTimeMilliseconds = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 		long est = unixTimeMilliseconds-startedtime;
+		//float est = AudioPlayer.Instance.GetPlaybackPosition()*1000;
 		int Ttick = 0;
 		int Keyx = 0;
 		Ttiming.Text = "Time: "+est;
@@ -91,7 +94,7 @@ public partial class Gameplay : Control
 		}
 		foreach (Sprite2D self in Notes)
 		{
-			self.Position = new Vector2(self.Position.X, NotesT[Ttick] + est);
+			self.Position = new Vector2(self.Position.X, NotesT[Ttick] + est + GetViewportRect().Size.Y/2);
 			Ttick++;
 		}
 	}

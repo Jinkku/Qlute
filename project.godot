@@ -34,6 +34,7 @@ SettingsOperator="*res://Script/Singleton/SettingsOperator.cs"
 SceneSwitch="*res://Script/Singleton/SceneSwitch.cs"
 BeatmapListener="*res://Script/Singleton/BeatmapListener.cs"
 Global="*res://Script/Singleton/Global.cs"
+AudioPlayer="*res://Script/Singleton/AudioPlayer.cs"
 
 [display]
 

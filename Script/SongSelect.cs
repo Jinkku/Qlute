@@ -33,7 +33,7 @@ public partial class SongSelect : Control
 			SongETick++;
 		}
 	}
-	public void AddSongList(string song,string artist,string mapper,int lv,string background,string path,float pp, string difficulty,Vector2 pos)
+	public void AddSongList(string song,string artist,string mapper,int lv,string background,string path,float pp, string difficulty,string audio,Vector2 pos)
 	{
 
 		var button = musiccardtemplate.Instantiate();
@@ -48,12 +48,13 @@ public partial class SongSelect : Control
 		var Version = button.GetNode<Label>("./PanelContainer/HBoxContainer/Difficulty/Version");
 		SongTitle.Text = song;
 		SongArtist.Text = artist;
-		SongMapper.Text = mapper;
+		SongMapper.Text = "Created by " + mapper;
 		Version.Text = difficulty;
 		Rating.Text = "Lv. "+lv.ToString("0");
 		childButton.Name = SongETick.ToString();
 		childButton.ClipText = true;
 		childButton.SetMeta("beatmapurl", path);
+		childButton.SetMeta("audio", audio);
 		childButton.SetMeta("SongID", SongETick);
 		childButton.SetMeta("Difficulty", difficulty);
 		childButton.SetMeta("Title", song);
@@ -73,8 +74,13 @@ public partial class SongSelect : Control
 		foreach (var song in SettingsOperator.Beatmaps)
 
 		{
-			AddSongList(song["Title"].ToString(),song["Artist"].ToString(),"mapped by " + song["Mapper"].ToString(),(int)float.Parse(song["levelrating"].ToString()),song["path"].ToString()+song["background"].ToString(),song["rawurl"].ToString(),(float)song["pp"]
-			,(string)song["Version"]
+			AddSongList(song["Title"].ToString(),
+			song["Artist"].ToString(),
+			song["Mapper"].ToString(),
+			(int)float.Parse(song["levelrating"].ToString()),
+			song["path"].ToString()+song["background"].ToString(),
+			song["rawurl"].ToString(),(float)song["pp"]
+			,(string)song["Version"],song["path"].ToString()+song["audio"].ToString()
 			, new Vector2(0, 50+ (115*SongETick)));
 			SongETick++;
 		}
@@ -96,7 +102,7 @@ public partial class SongSelect : Control
 		if (SettingsOperator.Sessioncfg["beatmaptitle"] != null){
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
 		Songpp.Text = "+" + SettingsOperator.Sessioncfg["maxpp"]?.ToString()+"pp" ?? "";
-		SongMapper.Text = SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
+		SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
 		SongBPM.Text = "BPM:" + SettingsOperator.Sessioncfg["beatmapbpm"]?.ToString() ?? "";
 		SongArtist.Visible = true;
 		Songpp.Visible = true;
@@ -119,6 +125,7 @@ public partial class SongSelect : Control
 
 	}
 	public void _Start(){
+		AudioPlayer.Instance.Stop();
 		GetTree().ChangeSceneToFile("res://Panels/Screens/Gameplay.tscn");
 	}
 	private void _on_back_pressed(){

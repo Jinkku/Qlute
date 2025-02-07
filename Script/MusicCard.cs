@@ -35,6 +35,16 @@ public partial class MusicCard : Button
 		SettingsOperator.Sessioncfg["beatmapmapper"] = self.GetMeta("Mapper").ToString();
 		SettingsOperator.Sessioncfg["maxpp"] = self.GetMeta("pp");
 		GD.Print(self.GetMeta("SongID"));
+		string audioPath = self.GetMeta("audio").ToString();
+		if (System.IO.File.Exists(audioPath))
+		{
+			AudioPlayer.Instance.Stream = AudioPlayer.LoadMP3(audioPath);
+			AudioPlayer.Instance.Play();
+		}
+		else
+		{
+			GD.PrintErr("Audio file not found: " + audioPath);
+		}
 	}
 	public override void _Process(double _delta)
 	{
