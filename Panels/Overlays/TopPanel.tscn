@@ -1,16 +1,16 @@
-[gd_scene load_steps=26 format=3 uid="uid://bwpja5llmgtqo"]
+[gd_scene load_steps=32 format=3 uid="uid://bwpja5llmgtqo"]
 
 [ext_resource type="Script" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
 [ext_resource type="Texture2D" uid="uid://bvjgpego4fwun" path="res://Skin/System/settings.png" id="1_vco36"]
 [ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="2_4cvop"]
 [ext_resource type="Script" path="res://Script/TopPanel/Settings.cs" id="2_6umcl"]
 [ext_resource type="Texture2D" uid="uid://bx4ufaujlqpm8" path="res://Skin/System/download.png" id="2_a0tun"]
+[ext_resource type="Texture2D" uid="uid://m7gp4julb5t0" path="res://Skin/System/loading.png" id="3_do024"]
 [ext_resource type="Texture2D" uid="uid://c2l61nwy40vn1" path="res://Skin/System/chat.png" id="4_e4lty"]
 [ext_resource type="Script" path="res://Script/TopPanel/DownloadButton.cs" id="4_oeblg"]
 [ext_resource type="Texture2D" uid="uid://dkiv7s0dfykav" path="res://Skin/System/notifications.png" id="5_6ko15"]
-[ext_resource type="PackedScene" path="res://Panels/Overlays/AccountPrompt.tscn" id="6_fi6td"]
+[ext_resource type="PackedScene" uid="uid://b4ys2qwkqf5m5" path="res://Panels/Overlays/AccountPrompt.tscn" id="6_fi6td"]
 [ext_resource type="PackedScene" uid="uid://c3j07aaosy031" path="res://Panels/Overlays/AccountProfileCard.tscn" id="8_pxj8n"]
-[ext_resource type="Script" path="res://Script/TopPanel/AccountProfileCard.cs" id="9_yftj0"]
 [ext_resource type="PackedScene" path="res://Panels/Overlays/Settings.tscn" id="12_41los"]
 
 [sub_resource type="Animation" id="Animation_xvajm"]
@@ -52,6 +52,53 @@ _data = {
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yewru"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pg4ve"]
+bg_color = Color(0.25, 0.25, 0.25, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qq0m8"]
+bg_color = Color(0.369792, 0.369792, 0.369792, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fw7wp"]
+bg_color = Color(0.231373, 0.231373, 0.231373, 1)
+
+[sub_resource type="Animation" id="Animation_1f010"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_tk3k2"]
+resource_name = "loading"
+length = 0.3
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 6.28319]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1f8y5"]
+_data = {
+"RESET": SubResource("Animation_1f010"),
+"loading": SubResource("Animation_tk3k2")
+}
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_56gsx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rix2n"]
@@ -62,6 +109,7 @@ bg_color = Color(0, 0, 0, 0)
 
 [sub_resource type="Animation" id="Animation_q6rti"]
 resource_name = "Drop in"
+length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -77,6 +125,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_xakw0"]
 resource_name = "Drop in_Profile"
+length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -92,6 +141,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_i6d4l"]
 resource_name = "Drop out"
+length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -107,6 +157,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_5i0r7"]
 resource_name = "Drop out_Profile"
+length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -152,12 +203,22 @@ z_index = 1
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = -50.0
+offset_bottom = 50.0
 grow_horizontal = 2
 color = Color(0.0745098, 0.0745098, 0.0745098, 0.568627)
 script = ExtResource("1_bm6kj")
 
-[node name="ProfilePicture" type="TextureRect" parent="InfoBar"]
+[node name="AccountButton" type="Button" parent="InfoBar"]
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 50.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yewru")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pg4ve")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_qq0m8")
+theme_override_styles/normal = SubResource("StyleBoxFlat_fw7wp")
+alignment = 0
+
+[node name="ProfilePicture" type="TextureRect" parent="InfoBar/AccountButton"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_right = 50.0
@@ -166,42 +227,36 @@ texture = ExtResource("2_4cvop")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="CardInfo" type="ColorRect" parent="InfoBar"]
-layout_mode = 2
-offset_left = 50.0
-offset_right = 200.0
-offset_bottom = 50.0
-color = Color(0.231373, 0.231373, 0.231373, 1)
-
-[node name="Ranking" type="Label" parent="InfoBar/CardInfo"]
+[node name="Ranking" type="Label" parent="InfoBar/AccountButton"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 0
-offset_left = 5.0
+offset_left = 55.0
 offset_top = 25.0
-offset_right = 53.0
+offset_right = 103.0
 offset_bottom = 44.0
 text = "#?"
 
-[node name="UPlayerName" type="Label" parent="InfoBar/CardInfo"]
+[node name="UPlayerName" type="Label" parent="InfoBar/AccountButton"]
 unique_name_in_owner = true
 layout_mode = 1
-offset_left = 5.0
+offset_left = 55.0
 offset_top = 5.0
-offset_right = 146.0
-offset_bottom = 24.0
+offset_right = 196.0
+offset_bottom = 46.0
 text = "If your seeing 
 this... it broke :<"
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="AccountButton" type="Button" parent="InfoBar"]
-layout_mode = 0
-offset_right = 200.0
-offset_bottom = 50.0
-theme_override_styles/focus = SubResource("StyleBoxEmpty_yewru")
-flat = true
-alignment = 0
+[node name="Loadingicon" type="Sprite2D" parent="InfoBar/AccountButton"]
+position = Vector2(175, 25)
+texture = ExtResource("3_do024")
+
+[node name="Loadinganimation" type="AnimationPlayer" parent="InfoBar/AccountButton/Loadingicon"]
+libraries = {
+"": SubResource("AnimationLibrary_1f8y5")
+}
 
 [node name="Button2" type="Button" parent="InfoBar"]
 layout_mode = 1
@@ -273,7 +328,6 @@ unique_name_in_owner = true
 layout_mode = 1
 offset_top = -205.0
 offset_bottom = -770.0
-script = ExtResource("9_yftj0")
 
 [node name="AccountPanel" parent="." instance=ExtResource("6_fi6td")]
 unique_name_in_owner = true

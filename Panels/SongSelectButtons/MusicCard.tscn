@@ -28,8 +28,9 @@ corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a1afo"]
 bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 35
-corner_radius_bottom_left = 35
+corner_radius_top_left = 58
+corner_radius_bottom_left = 58
+corner_detail = 1
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_2pxov"]
 
@@ -52,6 +53,7 @@ offset_left = 10.0
 offset_top = 10.0
 offset_right = 85.0
 offset_bottom = 29.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
 text = "Mystery Song"
 
 [node name="SongArtist" type="Label" parent="."]
@@ -60,6 +62,7 @@ offset_left = 10.0
 offset_top = 31.0
 offset_right = 98.0
 offset_bottom = 50.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
 text = "idiotiplier"
 
 [node name="SongMapper" type="Label" parent="."]
@@ -68,9 +71,11 @@ offset_left = 10.0
 offset_top = 52.0
 offset_right = 147.0
 offset_bottom = 71.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
 text = "mapped by idiot"
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+z_index = 1
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -112,14 +117,11 @@ horizontal_alignment = 1
 [node name="SongBackgroundPreview" type="PanelContainer" parent="."]
 clip_children = 1
 layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
+anchors_preset = -1
+anchor_left = 0.6
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -115.0
-offset_top = -1.0
-offset_bottom = 1.0
-grow_horizontal = 0
+grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_a1afo")

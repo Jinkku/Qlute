@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://bmi44rm7jttn"]
+[gd_scene load_steps=5 format=3 uid="uid://bmi44rm7jttn"]
 
 [ext_resource type="Script" path="res://Script/Gameplay/Gameplay.cs" id="1_33mgo"]
 [ext_resource type="PackedScene" path="res://Panels/Overlays/beatmap_background.tscn" id="1_uf7ne"]
 [ext_resource type="PackedScene" uid="uid://b0f11jnivkb1b" path="res://Panels/GameplayElements/ScoreOverlay.tscn" id="2_tii4h"]
-[ext_resource type="Texture2D" uid="uid://cbira43p7grwe" path="res://Skin/Game/note.png" id="4_ad6io"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wriyn"]
 size = Vector2(489.5, 75)
@@ -101,13 +100,6 @@ offset_bottom = -200.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.227451)
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(100, 20)
-texture = ExtResource("4_ad6io")
-centered = false
-region_enabled = true
-region_rect = Rect2(0, 0, 100, 20)
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="area_entered" from="Playfield/KeyBoxes/Area2D" to="." method="_perfectarea"]

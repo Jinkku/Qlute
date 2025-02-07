@@ -32,11 +32,12 @@ public partial class MusicCard : Button
 		SettingsOperator.Sessioncfg["beatmaptitle"] = self.GetMeta("Title").ToString();
 		SettingsOperator.Sessioncfg["beatmapartist"] = self.GetMeta("Artist").ToString();
 		SettingsOperator.Sessioncfg["beatmapdiff"] = self.GetMeta("Difficulty").ToString();
+		SettingsOperator.Sessioncfg["beatmapmapper"] = self.GetMeta("Mapper").ToString();
 		SettingsOperator.Sessioncfg["maxpp"] = self.GetMeta("pp");
+		GD.Print(self.GetMeta("SongID"));
 	}
 	public override void _Process(double _delta)
 	{
-		
-
+		self.ToggleMode = SettingsOperator.Sessioncfg["SongID"].Equals(self.GetMeta("SongID"));
 	}
 }

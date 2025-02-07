@@ -9,6 +9,11 @@ public partial class SongSelect : Control
 	 [Export] private TextureRect textureRect;
 	public static SettingsOperator SettingsOperator { get; set; }
 	public PackedScene musiccardtemplate;
+	public Label SongTitle { get; set; }
+	public Label SongArtist { get; set; }
+	public Label Songpp { get; set; }
+	public Label SongBPM { get; set; }
+	public Label SongMapper { get; set; }
 	public List<object> SongEntry = new List<object>();
 	public int SongETick { get; set; }
 	public Label Diff { get; set; }
@@ -45,7 +50,7 @@ public partial class SongSelect : Control
 		SongArtist.Text = artist;
 		SongMapper.Text = mapper;
 		Version.Text = difficulty;
-		Rating.Text = "Lv. "+lv.ToString("000");
+		Rating.Text = "Lv. "+lv.ToString("0");
 		childButton.Name = SongETick.ToString();
 		childButton.ClipText = true;
 		childButton.SetMeta("beatmapurl", path);
@@ -53,6 +58,7 @@ public partial class SongSelect : Control
 		childButton.SetMeta("Difficulty", difficulty);
 		childButton.SetMeta("Title", song);
 		childButton.SetMeta("Artist", artist);
+		childButton.SetMeta("Mapper", mapper);
 		childButton.SetMeta("pp", pp.ToString("0"));
 		TextureRect.Texture = SettingsOperator.LoadImage(background);
 
@@ -75,18 +81,33 @@ public partial class SongSelect : Control
 		GD.Print("Finished about " + (DateTime.Now.Second-timex) + "s");
 		_res_resize();
 		//var TextureRect = GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
-		var SongTitle = GetNode<Label>("PanelContainer/HBoxContainer/Title");
-		var SongArtist = GetNode<Label>("SongDetails/Artist");
-		var Songpp = GetNode<Label>("SongDetails/Points");
-		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No song selected";
-		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
-		Songpp.Text = "+" + SettingsOperator.Sessioncfg["maxpp"]?.ToString()+"pp" ?? "";
+		SongTitle = GetNode<Label>("PanelContainer/HBoxContainer/Title");
+		SongArtist = GetNode<Label>("SongDetails/Artist");
+		Songpp = GetNode<Label>("SongDetails/Points");
+		SongBPM = GetNode<Label>("SongDetails/BPM");
+		SongMapper = GetNode<Label>("SongDetails/Mapper");
 		//Cover.Texture = TextureRect.Texture;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
+		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No song selected";
+		if (SettingsOperator.Sessioncfg["beatmaptitle"] != null){
+		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
+		Songpp.Text = "+" + SettingsOperator.Sessioncfg["maxpp"]?.ToString()+"pp" ?? "";
+		SongMapper.Text = SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
+		SongBPM.Text = "BPM:" + SettingsOperator.Sessioncfg["beatmapbpm"]?.ToString() ?? "";
+		SongArtist.Visible = true;
+		Songpp.Visible = true;
+		SongMapper.Visible = true;
+		SongBPM.Visible = true;}
+		else {
+			SongArtist.Visible = false;
+			Songpp.Visible = false;
+			SongMapper.Visible = false;
+			SongBPM.Visible = false;
+		}
 		if (SettingsOperator.Sessioncfg["beatmapdiff"] != null){
 		Diff.Text = SettingsOperator.Sessioncfg["beatmapdiff"].ToString();}
 		else {
