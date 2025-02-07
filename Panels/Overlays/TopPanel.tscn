@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://bwpja5llmgtqo"]
+[gd_scene load_steps=34 format=3 uid="uid://bwpja5llmgtqo"]
 
 [ext_resource type="Script" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
 [ext_resource type="Texture2D" uid="uid://bvjgpego4fwun" path="res://Skin/System/settings.png" id="1_vco36"]
@@ -49,6 +49,14 @@ _data = {
 "Bootup": SubResource("Animation_xvajm"),
 "RESET": SubResource("Animation_k3xmf")
 }
+
+[sub_resource type="Gradient" id="Gradient_5vo6i"]
+colors = PackedColorArray(0, 0, 0, 0.568627, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gkq3o"]
+gradient = SubResource("Gradient_5vo6i")
+fill_from = Vector2(0.993865, 0)
+fill_to = Vector2(1, 0.996933)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yewru"]
 
@@ -203,10 +211,21 @@ z_index = 1
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 50.0
+offset_top = -50.0
 grow_horizontal = 2
 color = Color(0.0745098, 0.0745098, 0.0745098, 0.568627)
 script = ExtResource("1_bm6kj")
+
+[node name="TextureRect" type="TextureRect" parent="InfoBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 50.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_gkq3o")
 
 [node name="AccountButton" type="Button" parent="InfoBar"]
 layout_mode = 0
