@@ -18,6 +18,6 @@ public partial class ScoreOverlay : Control
 	public override void _Process(double delta)
 	{
 		score.Text = SettingsOperator.Gameplaycfg["score"].ToString("00000000");
-		pp.Text = SettingsOperator.Gameplaycfg["pp"].ToString("0,0") + "pp";
+		pp.Text = SettingsOperator.Gameplaycfg["pp"].ToString("N0") + "pp";
 	}
 }

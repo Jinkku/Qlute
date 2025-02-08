@@ -17,6 +17,7 @@ public partial class home : Node
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SongTitle = GetNode<Label>("./Titlesong");
 		SongArtist = GetNode<Label>("./Descsong");
+		_Process(0);
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)

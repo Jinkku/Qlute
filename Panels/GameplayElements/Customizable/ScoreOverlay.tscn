@@ -4,9 +4,12 @@
 [ext_resource type="FontFile" uid="uid://26bmgi83sgtv" path="res://Fonts/score.ttf" id="1_jd5hx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6s3ea"]
-bg_color = Color(0, 0, 0, 1)
+bg_color = Color(0.238715, 0.321072, 0.458333, 0.568627)
+border_width_right = 25
+border_color = Color(0.145209, 0.194272, 0.276042, 0.568627)
 corner_radius_bottom_right = 200
 corner_detail = 1
+expand_margin_right = 25.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ucmn"]
 bg_color = Color(0.338542, 0.338542, 0.338542, 1)

@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://Script/Gameplay/Gameplay.cs" id="1_33mgo"]
 [ext_resource type="PackedScene" path="res://Panels/Overlays/beatmap_background.tscn" id="1_uf7ne"]
-[ext_resource type="PackedScene" uid="uid://b0f11jnivkb1b" path="res://Panels/GameplayElements/ScoreOverlay.tscn" id="2_tii4h"]
+[ext_resource type="PackedScene" uid="uid://b0f11jnivkb1b" path="res://Panels/GameplayElements/Customizable/ScoreOverlay.tscn" id="2_tii4h"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wriyn"]
-size = Vector2(489.5, 75)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_55qcr"]
+size = Vector2(419, 12)
 
 [node name="Gameplay" type="Control"]
 layout_mode = 3
@@ -68,29 +68,29 @@ theme_override_constants/separation = 0
 [node name="Key1" type="ColorRect" parent="Playfield/KeyBoxes"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-color = Color(1, 0, 0, 1)
+color = Color(1, 0, 0, 0)
 
 [node name="Key2" type="ColorRect" parent="Playfield/KeyBoxes"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-color = Color(0.195312, 1, 0, 1)
+color = Color(1, 0, 0, 0)
 
 [node name="Key3" type="ColorRect" parent="Playfield/KeyBoxes"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-color = Color(0, 0.835938, 1, 1)
+color = Color(1, 0, 0, 0)
 
 [node name="Key4" type="ColorRect" parent="Playfield/KeyBoxes"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-color = Color(1, 0, 0.867188, 1)
+color = Color(1, 0, 0, 0)
 
-[node name="Area2D" type="Area2D" parent="Playfield/KeyBoxes"]
-position = Vector2(207.25, 0)
+[node name="perfect" type="Area2D" parent="Playfield/KeyBoxes"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Playfield/KeyBoxes/Area2D"]
-shape = SubResource("RectangleShape2D_wriyn")
-debug_color = Color(0, 0.0859375, 1, 0.42)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Playfield/KeyBoxes/perfect"]
+position = Vector2(199.5, -7)
+shape = SubResource("RectangleShape2D_55qcr")
+debug_color = Color(0.15625, 0, 1, 0.42)
 
 [node name="Chart" type="ColorRect" parent="Playfield"]
 layout_mode = 1
@@ -103,4 +103,4 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.227451)
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
-[connection signal="area_entered" from="Playfield/KeyBoxes/Area2D" to="." method="_perfectarea"]
+[connection signal="area_shape_entered" from="Playfield/KeyBoxes/perfect" to="." method="_perfect"]

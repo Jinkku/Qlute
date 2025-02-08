@@ -12,6 +12,9 @@ public partial class Gameplay : Control
 	public List<object> Keys = new List<object>();
 	public List<int> NotesT = new List<int>();
 	public long startedtime {get ;set; }
+	public void _perfect(Rid areaRid, Area2D area, long areaShapeIndex, long localShapeIndex){
+		SettingsOperator.Gameplaycfg["max"] +=1;
+	}
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -21,6 +24,8 @@ public partial class Gameplay : Control
 		foreach (int i in Enumerable.Range(1, 4)){
 			Keys.Add(GetNode<ColorRect>("Playfield/KeyBoxes/Key"+i));
 		}
+		
+		var noteblock = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn");
         using var file = FileAccess.Open(SettingsOperator.Sessioncfg["beatmapurl"].ToString(), FileAccess.ModeFlags.Read);
         var text = file.GetAsText();
         var lines = text.Split("\n");
@@ -48,12 +53,12 @@ public partial class Gameplay : Control
 				else if (part == 192){part = 1;}
 				else if (part == 320){part = 2;}
 				else if (part == 448){part = 3;}
-				var note = new Sprite2D();
+				var note = noteblock.Instantiate().GetNode<Area2D>(".");
+				var notetexture = noteblock.Instantiate().GetNode<Sprite2D>("./Notetext");
 				GetNode<ColorRect>("Playfield/Chart").AddChild(note);
 				note.Position = new Vector2((part * 100), -timing);
-				note.Texture = GD.Load<Texture2D>("res://Skin/Game/note.png");
-				note.Centered = false;
-				note.Modulate = new Color("#70baff");
+				notetexture.Texture = GD.Load<Texture2D>("res://Skin/Game/note.svg");
+				notetexture.Modulate = new Color("#70baff");
 				Notes.Add(note);
 				NotesT.Add(-timing);
             }
@@ -71,11 +76,16 @@ public partial class Gameplay : Control
 	public override void _Process(double delta)
 	{   
 		long unixTimeMilliseconds = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-		long est = unixTimeMilliseconds-startedtime;
+		float est = unixTimeMilliseconds-startedtime;
+		if ((float)SettingsOperator.Sessioncfg["songspeed"] != 1.0f){
+			est = est * (float)SettingsOperator.Sessioncfg["songspeed"];
+		}
 		//float est = AudioPlayer.Instance.GetPlaybackPosition()*1000;
 		int Ttick = 0;
 		int Keyx = 0;
-		Ttiming.Text = "Time: "+est;
+		SettingsOperator.Gameplaycfg["score"] = (int)(((double)SettingsOperator.Gameplaycfg["pp"] / SettingsOperator.Gameplaycfg["maxpp"]) * 1000000);
+		SettingsOperator.Gameplaycfg["pp"] =  SettingsOperator.Gameplaycfg["max"]+(SettingsOperator.Gameplaycfg["great"]/2)+(SettingsOperator.Gameplaycfg["meh"]/3)/(SettingsOperator.Gameplaycfg["bad"]+1);
+		Ttiming.Text = "Time: "+est+"\nSpeed:" + SettingsOperator.Sessioncfg["songspeed"];
 		Hits.Text = "Hits:\n" + SettingsOperator.Gameplaycfg["max"] + "\n" + SettingsOperator.Gameplaycfg["great"] + "\n" + SettingsOperator.Gameplaycfg["meh"] + "\n" + SettingsOperator.Gameplaycfg["bad"] + "\n";
 		foreach (ColorRect self in Keys)
 		{
@@ -92,9 +102,16 @@ public partial class Gameplay : Control
 		if (Input.IsActionJustPressed("pausemenu")){
 			GetTree().ChangeSceneToFile("res://Panels/Screens/song_select.tscn");
 		}
-		foreach (Sprite2D self in Notes)
+		var viewportSize = GetViewportRect().Size.Y;
+		foreach (Area2D self in Notes)
 		{
-			self.Position = new Vector2(self.Position.X, NotesT[Ttick] + est + GetViewportRect().Size.Y/2);
+			float notex = NotesT[Ttick] + (long)est + viewportSize/2;
+			if (notex > 0 && notex < viewportSize-100){
+				self.Position = new Vector2(self.Position.X, notex);
+				self.Visible = true;
+			} else {
+				self.Visible = false;
+			}
 			Ttick++;
 		}
 	}

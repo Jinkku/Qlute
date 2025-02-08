@@ -9,6 +9,7 @@ public partial class AudioPlayer : AudioStreamPlayer
 	public override void _Ready()
 	{
 		Instance = this;
+		Instance.Bus = "Master";
 	}
     public static AudioStreamMP3 LoadMP3(string path)
 {

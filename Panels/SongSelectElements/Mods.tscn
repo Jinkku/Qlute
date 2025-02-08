@@ -1,44 +1,101 @@
-[gd_scene load_steps=3 format=3 uid="uid://dpjsc7sxiwkm7"]
+[gd_scene load_steps=4 format=3 uid="uid://dpjsc7sxiwkm7"]
+
+[ext_resource type="Script" path="res://Script/Mods/Mods.cs" id="1_7gucc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2j6ug"]
-bg_color = Color(0.0980392, 0.0980392, 0.0980392, 1)
+bg_color = Color(1, 1, 1, 0.219608)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yy7gm"]
-bg_color = Color(0, 0, 0, 0.568627)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_188g2"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.331543, 0.331543, 0.65625, 1)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
-[node name="ModsScreen" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="Modouter" type="PanelContainer" parent="."]
-layout_mode = 2
-offset_left = 170.0
-offset_top = 470.0
-offset_right = 570.0
-offset_bottom = 720.0
+[node name="ModsScreen" type="PanelContainer"]
+offset_right = 400.0
+offset_bottom = 250.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_2j6ug")
+script = ExtResource("1_7gucc")
 
-[node name="Modinner" type="PanelContainer" parent="."]
-layout_mode = 0
-offset_left = 170.0
-offset_top = 520.0
-offset_right = 570.0
-offset_bottom = 720.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_yy7gm")
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
 
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_left = 196.0
-offset_top = 486.0
-offset_right = 243.0
-offset_bottom = 505.0
+[node name="MarginContainer" type="MarginContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 35.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Control/MarginContainer/HBoxContainer"]
+layout_mode = 2
 text = "Mods"
+
+[node name="Name3" type="Label" parent="Control/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "-"
+
+[node name="Multiplier" type="Label" parent="Control/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "1.0x"
+
+[node name="Button" type="Button" parent="Control/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Customize"
+
+[node name="margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="mods" type="GridContainer" parent="margin"]
+layout_mode = 2
+columns = 9
+
+[node name="DT" type="Button" parent="margin/mods"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_188g2")
+toggle_mode = true
+text = "DT"
+
+[node name="HT" type="Button" parent="margin/mods"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_188g2")
+toggle_mode = true
+text = "HT"
+
+[node name="Auto" type="Button" parent="margin/mods"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_188g2")
+toggle_mode = true
+text = "Auto"
+
+[node name="Mirror" type="Button" parent="margin/mods"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_188g2")
+toggle_mode = true
+text = "Mirror"
+
+[node name="Random" type="Button" parent="margin/mods"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_188g2")
+toggle_mode = true
+text = "Random"
+
+[connection signal="pressed" from="margin/mods/DT" to="." method="_on_dt_pressed"]
+[connection signal="pressed" from="margin/mods/HT" to="." method="_on_ht_pressed"]

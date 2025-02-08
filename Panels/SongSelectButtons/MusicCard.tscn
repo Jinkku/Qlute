@@ -95,7 +95,7 @@ theme_override_constants/separation = 5
 custom_minimum_size = Vector2(44, 25)
 layout_mode = 2
 tooltip_text = "1000pp"
-mouse_filter = 2
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_y4ldl")
 
 [node name="Rating" type="Label" parent="PanelContainer/HBoxContainer/LevelRating"]
@@ -104,15 +104,18 @@ text = "Lv. 69"
 horizontal_alignment = 1
 
 [node name="Difficulty" type="PanelContainer" parent="PanelContainer/HBoxContainer"]
+clip_contents = true
 custom_minimum_size = Vector2(44, 25)
 layout_mode = 2
+size_flags_horizontal = 3
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_05hl1")
 
 [node name="Version" type="Label" parent="PanelContainer/HBoxContainer/Difficulty"]
 layout_mode = 2
 text = "Difficulty Name"
-horizontal_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="SongBackgroundPreview" type="PanelContainer" parent="."]
 clip_children = 1
@@ -133,4 +136,6 @@ texture = SubResource("CanvasTexture_2pxov")
 expand_mode = 1
 stretch_mode = 6
 
+[connection signal="draw" from="." to="." method="_on_draw"]
+[connection signal="hidden" from="." to="." method="_on_hidden"]
 [connection signal="pressed" from="." to="." method="_on_pressed"]

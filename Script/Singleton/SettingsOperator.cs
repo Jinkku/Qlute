@@ -148,6 +148,7 @@ public partial class SettingsOperator : Node
     {
         {"score", 0},
         {"pp", 0},
+        { "maxpp", 0 },
         {"time", 0},
         {"timetotal", 0},
         {"max", 0},
@@ -173,8 +174,9 @@ public partial class SettingsOperator : Node
         { "beatmapmapper", null },
         { "beatmapbpm", null },
         { "beatmapdiff", null },
-        { "maxpp", 0 },
         { "customapi", false},
+        { "multiplier" , 1.0f},
+        { "songspeed" , 1.0f},
         { "fps" , 0},
         { "ms" , 0.0f},
         { "scrollspeed", (int)1346 },

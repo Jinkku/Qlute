@@ -16,6 +16,7 @@ public partial class SongSelect : Control
 	public Label SongMapper { get; set; }
 	public List<object> SongEntry = new List<object>();
 	public int SongETick { get; set; }
+	public PanelContainer ModScreen { get; set; }
 	public Label Diff { get; set; }
 	public void _res_resize(){
 		var window_size = GetViewportRect().Size;
@@ -53,6 +54,7 @@ public partial class SongSelect : Control
 		Rating.Text = "Lv. "+lv.ToString("0");
 		childButton.Name = SongETick.ToString();
 		childButton.ClipText = true;
+		childButton.SetMeta("bg", background);
 		childButton.SetMeta("beatmapurl", path);
 		childButton.SetMeta("audio", audio);
 		childButton.SetMeta("SongID", SongETick);
@@ -60,7 +62,7 @@ public partial class SongSelect : Control
 		childButton.SetMeta("Title", song);
 		childButton.SetMeta("Artist", artist);
 		childButton.SetMeta("Mapper", mapper);
-		childButton.SetMeta("pp", pp.ToString("0"));
+		childButton.SetMeta("pp", pp);
 		TextureRect.Texture = SettingsOperator.LoadImage(background);
 
 	}
@@ -69,6 +71,7 @@ public partial class SongSelect : Control
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		SongETick = 0;
 		Diff = GetNode<Label>("SongDetails/Difficulty");
+		ModScreen = GetNode<PanelContainer>("ModsScreen");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		var timex = DateTime.Now.Second;
 		foreach (var song in SettingsOperator.Beatmaps)
@@ -101,7 +104,7 @@ public partial class SongSelect : Control
 		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No song selected";
 		if (SettingsOperator.Sessioncfg["beatmaptitle"] != null){
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
-		Songpp.Text = "+" + SettingsOperator.Sessioncfg["maxpp"]?.ToString()+"pp" ?? "";
+		Songpp.Text = "+" + SettingsOperator.Gameplaycfg["maxpp"].ToString("N0")+"pp";
 		SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
 		SongBPM.Text = "BPM:" + SettingsOperator.Sessioncfg["beatmapbpm"]?.ToString() ?? "";
 		SongArtist.Visible = true;
@@ -124,7 +127,10 @@ public partial class SongSelect : Control
 	private void _on_animation_player_animation_finished(){
 
 	}
-	public void _Start(){
+	private void _Mods_show(){
+		ModScreen.Visible = !ModScreen.Visible;
+	}
+	private void _Start(){
 		AudioPlayer.Instance.Stop();
 		GetTree().ChangeSceneToFile("res://Panels/Screens/Gameplay.tscn");
 	}
