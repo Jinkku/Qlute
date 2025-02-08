@@ -23,7 +23,7 @@ public partial class SettingsOperator : Node
     public Dictionary<string, object> Configuration { get; set; } = new Dictionary<string, object>
     {
         { "scaled", false },
-        { "windowmode", "fullscreen" },
+        { "windowmode", 0 },
 		{ "volume", 1 },
 		{ "skin", null },
 		{ "username", null },
@@ -35,7 +35,6 @@ public partial class SettingsOperator : Node
 		{ "teststrip", "Ya" },
 
     };
-
     public Dictionary<string, object> Configurationbk {get; set;}
 
     public float Get_ppvalue(string filename){
@@ -204,8 +203,21 @@ public partial class SettingsOperator : Node
             GD.Print("Creating config...");
             SaveSettings();
         }
-    }
 
+		var resolutionIndex = int.TryParse(GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
+		changeres(resolutionIndex);
+    }
+    public void changeres(int index) {
+		GD.Print(string.Format("Resolution changed to {0}", index));
+		if (index == 0){
+			DisplayServer.WindowSetMode(DisplayServer.WindowMode.ExclusiveFullscreen);
+		} else if (index == 1){
+			DisplayServer.WindowSetMode(DisplayServer.WindowMode.Fullscreen);
+		} else if (index == 2){
+			DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);
+		}
+		SetSetting("windowmode",index);
+    }
     // Set a setting
     public void SetSetting(string key, object value)
     {

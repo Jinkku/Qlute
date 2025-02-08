@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://dkiv7s0dfykav" path="res://Skin/System/notifications.png" id="5_6ko15"]
 [ext_resource type="PackedScene" uid="uid://b4ys2qwkqf5m5" path="res://Panels/Overlays/AccountPrompt.tscn" id="6_fi6td"]
 [ext_resource type="PackedScene" uid="uid://c3j07aaosy031" path="res://Panels/Overlays/AccountProfileCard.tscn" id="8_pxj8n"]
-[ext_resource type="PackedScene" path="res://Panels/Overlays/Settings.tscn" id="12_41los"]
+[ext_resource type="PackedScene" uid="uid://d0qmsp3ewrdj4" path="res://Panels/Overlays/Settings.tscn" id="12_41los"]
 
 [sub_resource type="Animation" id="Animation_xvajm"]
 resource_name = "Bootup"

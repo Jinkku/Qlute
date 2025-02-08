@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
 [ext_resource type="Texture2D" uid="uid://m656ody0d2o" path="res://Skin/System/SongSelectPanel.svg" id="3_2cm8g"]
 [ext_resource type="Texture2D" uid="uid://pw443tw8pcsb" path="res://Skin/System/ReturnButton.png" id="4_p84v1"]
-[ext_resource type="PackedScene" path="res://Panels/Overlays/SongLoadingScreen.tscn" id="5_wfap8"]
+[ext_resource type="PackedScene" uid="uid://jffufacx3jwj" path="res://Panels/Overlays/SongLoadingScreen.tscn" id="5_wfap8"]
 [ext_resource type="PackedScene" uid="uid://dpjsc7sxiwkm7" path="res://Panels/SongSelectElements/Mods.tscn" id="6_4xos4"]
 [ext_resource type="PackedScene" uid="uid://bwpja5llmgtqo" path="res://Panels/Overlays/TopPanel.tscn" id="6_fi2um"]
 
