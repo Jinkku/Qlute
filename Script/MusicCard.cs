@@ -32,6 +32,8 @@ public partial class MusicCard : Button
 		SongArtist.Text = self.GetMeta("Artist").ToString();
 		Songpp.Text = "+" + self.GetMeta("pp").ToString()+"pp";
 		Cover.Texture = Preview.Texture;
+		Cover.Size = new Vector2(GetViewportRect().Size[0]+20,GetViewportRect().Size[1]+20);
+		Cover.Position = new Vector2(GetViewportRect().Size[0]-10,GetViewportRect().Size[1]-10);
 		SettingsOperator.Sessioncfg["background"] = (Texture2D)Preview.Texture;
 		SettingsOperator.Sessioncfg["SongID"] = self.GetMeta("SongID");
 		SettingsOperator.Sessioncfg["beatmapurl"] = self.GetMeta("beatmapurl");

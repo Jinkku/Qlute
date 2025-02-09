@@ -21,8 +21,11 @@ public partial class BeatmapBackground : TextureRect
 	public override void _Process(double _delta)
 	{
 		Vector2 mousePos = GetViewport().GetMousePosition();
-		Vector2 screensize = GetViewportRect().Size;
-		self.Position = new Vector2((mousePos[0]/screensize.X*10)-10, (mousePos[1]/screensize.Y*10)-10);
+        Vector2 screenSize = GetViewportRect().Size;
 
+        float offsetX = (mousePos.X / screenSize.X * 10) - 10;
+        float offsetY = (mousePos.Y / screenSize.Y * 10) - 10;
+
+        Position = new Vector2(offsetX, offsetY);
 	}
 }
