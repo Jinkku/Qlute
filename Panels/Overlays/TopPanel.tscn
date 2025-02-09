@@ -50,11 +50,11 @@ _data = {
 "RESET": SubResource("Animation_k3xmf")
 }
 
-[sub_resource type="Gradient" id="Gradient_5vo6i"]
+[sub_resource type="Gradient" id="Gradient_jfl4k"]
 colors = PackedColorArray(0, 0, 0, 0.568627, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_gkq3o"]
-gradient = SubResource("Gradient_5vo6i")
+gradient = SubResource("Gradient_jfl4k")
 fill_from = Vector2(0.993865, 0)
 fill_to = Vector2(1, 0.996933)
 
@@ -113,6 +113,8 @@ _data = {
 bg_color = Color(1, 1, 1, 0.34902)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0o1af"]
+content_margin_left = 12.0
+content_margin_right = 12.0
 bg_color = Color(0, 0, 0, 0)
 
 [sub_resource type="Animation" id="Animation_q6rti"]
@@ -280,15 +282,19 @@ libraries = {
 "": SubResource("AnimationLibrary_1f8y5")
 }
 
-[node name="Button2" type="Button" parent="InfoBar"]
+[node name="HBoxContainer" type="HBoxContainer" parent="InfoBar"]
 layout_mode = 1
-anchors_preset = 1
+anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -150.0
-offset_right = -100.0
-offset_bottom = 50.0
+anchor_bottom = 1.0
+offset_left = -99.0
 grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="Chat" type="Button" parent="InfoBar/HBoxContainer"]
+layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
@@ -296,31 +302,8 @@ keep_pressed_outside = true
 icon = ExtResource("4_e4lty")
 icon_alignment = 1
 
-[node name="Download" type="Button" parent="InfoBar"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -100.0
-offset_right = -50.0
-offset_bottom = 50.0
-grow_horizontal = 0
-theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
-theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
-keep_pressed_outside = true
-icon = ExtResource("2_a0tun")
-icon_alignment = 1
-script = ExtResource("4_oeblg")
-
-[node name="Settings" type="Button" parent="InfoBar"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -50.0
-offset_bottom = 50.0
-grow_horizontal = 0
+[node name="Settings" type="Button" parent="InfoBar/HBoxContainer"]
+layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
@@ -329,15 +312,18 @@ icon = ExtResource("1_vco36")
 icon_alignment = 1
 script = ExtResource("2_6umcl")
 
-[node name="Button3" type="Button" parent="InfoBar"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -200.0
-offset_right = -150.0
-offset_bottom = 50.0
-grow_horizontal = 0
+[node name="Download" type="Button" parent="InfoBar/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
+theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
+keep_pressed_outside = true
+icon = ExtResource("2_a0tun")
+icon_alignment = 1
+script = ExtResource("4_oeblg")
+
+[node name="Notifications" type="Button" parent="InfoBar/HBoxContainer"]
+layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
@@ -348,8 +334,8 @@ icon_alignment = 1
 [node name="AccountProfileCard" parent="." instance=ExtResource("8_pxj8n")]
 unique_name_in_owner = true
 layout_mode = 1
-offset_top = -205.0
-offset_bottom = -770.0
+offset_top = -462.5
+offset_bottom = -512.5
 
 [node name="AccountPanel" parent="." instance=ExtResource("6_fi6td")]
 unique_name_in_owner = true
@@ -376,7 +362,7 @@ layout_mode = 1
 
 [connection signal="mouse_entered" from="InfoBar" to="InfoBar" method="_hovered"]
 [connection signal="mouse_exited" from="InfoBar" to="InfoBar" method="_unhover"]
-[connection signal="pressed" from="InfoBar/AccountButton" to="InfoBar/Settings" method="_on_AccountButton_pressed"]
-[connection signal="pressed" from="InfoBar/Download" to="InfoBar/Download" method="_on_downloadbutton_pressed"]
-[connection signal="pressed" from="InfoBar/Settings" to="InfoBar/Settings" method="_on_pressed"]
-[connection signal="ready" from="InfoBar/Settings" to="InfoBar/Settings" method="ready"]
+[connection signal="pressed" from="InfoBar/AccountButton" to="InfoBar/HBoxContainer/Settings" method="_on_AccountButton_pressed"]
+[connection signal="pressed" from="InfoBar/HBoxContainer/Settings" to="InfoBar/HBoxContainer/Settings" method="_on_pressed"]
+[connection signal="ready" from="InfoBar/HBoxContainer/Settings" to="InfoBar/HBoxContainer/Settings" method="ready"]
+[connection signal="pressed" from="InfoBar/HBoxContainer/Download" to="InfoBar/HBoxContainer/Download" method="_on_downloadbutton_pressed"]

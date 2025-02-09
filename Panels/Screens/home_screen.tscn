@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene load_steps=13 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" path="res://Script/home.cs" id="1_j2gfm"]
 [ext_resource type="PackedScene" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
 [ext_resource type="Script" path="res://Script/menunotice.gd" id="4_j0o5v"]
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="5_pikml"]
 [ext_resource type="Script" path="res://Script/version.gd" id="6_1tkmr"]
-[ext_resource type="PackedScene" uid="uid://bwpja5llmgtqo" path="res://Panels/Overlays/TopPanel.tscn" id="7_1w060"]
 
 [sub_resource type="FontVariation" id="FontVariation_bifyk"]
 base_font = ExtResource("5_pikml")
@@ -21,6 +20,75 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 expand_margin_left = 10.0
 expand_margin_right = 10.0
+
+[sub_resource type="Gradient" id="Gradient_5vo6i"]
+colors = PackedColorArray(0, 0, 0, 0.568627, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dq1lp"]
+gradient = SubResource("Gradient_5vo6i")
+fill_from = Vector2(0.993865, 0)
+fill_to = Vector2(1, 0.996933)
+
+[sub_resource type="Animation" id="Animation_oqu4a"]
+resource_name = "Flash"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_vivcs"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_25xv4"]
+_data = {
+"Flash": SubResource("Animation_oqu4a"),
+"RESET": SubResource("Animation_vivcs")
+}
 
 [node name="Home Screen" type="Control"]
 layout_mode = 3
@@ -58,7 +126,7 @@ offset_right = 574.0
 offset_bottom = -43.0
 grow_vertical = 2
 theme_override_font_sizes/font_size = 32
-text = "Level Editor"
+text = "Create"
 
 [node name="Browse" type="Button" parent="."]
 layout_mode = 1
@@ -144,6 +212,19 @@ horizontal_alignment = 1
 [node name="HTTPRequest" type="HTTPRequest" parent="MenuNotice"]
 script = ExtResource("4_j0o5v")
 
+[node name="Shadow" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -64.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_dq1lp")
+flip_v = true
+
 [node name="Version" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 12
@@ -171,9 +252,20 @@ offset_right = -10.0
 offset_bottom = 140.0
 grow_horizontal = 0
 
-[node name="TopPanel" parent="." instance=ExtResource("7_1w060")]
-z_index = 2
+[node name="Flash" type="ColorRect" parent="."]
+visible = false
+top_level = true
 layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Flash"]
+libraries = {
+"": SubResource("AnimationLibrary_25xv4")
+}
 
 [connection signal="resized" from="." to="." method="_on_resized"]
 [connection signal="pressed" from="Play" to="." method="_play"]

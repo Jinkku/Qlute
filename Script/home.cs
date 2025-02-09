@@ -17,6 +17,8 @@ public partial class home : Node
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SongTitle = GetNode<Label>("./Titlesong");
 		SongArtist = GetNode<Label>("./Descsong");
+		AnimationPlayer ani = GetNode<AnimationPlayer>("Flash/AnimationPlayer");
+		ani.Play("Flash");
 		_Process(0);
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -27,6 +29,12 @@ public partial class home : Node
 	}
 	private void _play(){
 		GetTree().ChangeSceneToFile("res://Panels/Screens/song_select.tscn");
+	}
+	private void _browse(){
+		GetTree().ChangeSceneToFile("res://Panels/Screens/Browse.tscn");
+	}
+	private void _create(){
+		GetTree().ChangeSceneToFile("res://Panels/Screens/Create.tscn");
 	}
 	private void _leave(){
 		GetTree().Quit();

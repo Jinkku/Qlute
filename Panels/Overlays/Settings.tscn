@@ -191,14 +191,16 @@ theme_override_fonts/font = SubResource("FontVariation_n76qt")
 text = "Debug"
 
 [node name="Version" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "0.0.0 Development Build"
 
 [node name="Section6" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
-theme_override_fonts/font = SubResource("FontVariation_n76qt")
-text = "Developer Tools (Shown if Development Build)"
+text = "Development Build as of 2025-02-08
+
+"
+horizontal_alignment = 1
 
 [connection signal="item_selected" from="ColorRect/ScrollContainer/VBoxContainer/WindowSelector" to="." method="_changed_resolution"]
 [connection signal="item_selected" from="ColorRect/ScrollContainer/VBoxContainer/AudioSelector" to="." method="_changed_audiodevice"]
