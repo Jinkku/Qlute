@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://ckiye2n1ir8qg"]
+[gd_scene load_steps=23 format=3 uid="uid://ckiye2n1ir8qg"]
 
 [ext_resource type="Script" path="res://Script/SongSelect.cs" id="1_fin0e"]
 [ext_resource type="PackedScene" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://pw443tw8pcsb" path="res://Skin/System/ReturnButton.png" id="4_p84v1"]
 [ext_resource type="PackedScene" uid="uid://jffufacx3jwj" path="res://Panels/Overlays/SongLoadingScreen.tscn" id="5_wfap8"]
 [ext_resource type="PackedScene" uid="uid://dpjsc7sxiwkm7" path="res://Panels/SongSelectElements/Mods.tscn" id="6_4xos4"]
+[ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="6_wb004"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ixo7g"]
 bg_color = Color(0, 0, 0, 1)
@@ -26,22 +27,38 @@ corner_radius_bottom_left = 5
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vuoc0"]
 content_margin_top = 10.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ombo5"]
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u1xf2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gd11t"]
+content_margin_left = 10.0
+content_margin_right = 20.0
+bg_color = Color(0.92549, 0.294118, 0.180392, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fx5hl"]
+content_margin_left = 10.0
+content_margin_right = 20.0
+bg_color = Color(0.666667, 0.222387, 0.142361, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uenb6"]
+content_margin_left = 10.0
+content_margin_right = 20.0
+bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llhhs"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dfrpo"]
-bg_color = Color(0.269531, 0.269531, 0.269531, 0.47451)
-corner_radius_top_left = 25
-corner_radius_top_right = 25
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vhtsk"]
-bg_color = Color(0, 0, 0, 0.47451)
-corner_radius_top_left = 25
-corner_radius_top_right = 25
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0, 0, 0, 1)
+border_color = Color(1, 0.638021, 0.276042, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vc7sc"]
+content_margin_left = 10.0
+content_margin_right = 10.0
 bg_color = Color(0, 0, 0, 0.47451)
-corner_radius_top_left = 25
-corner_radius_top_right = 25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6f4j3"]
 bg_color = Color(0.269531, 0.269531, 0.269531, 0.47451)
@@ -234,6 +251,7 @@ grow_horizontal = 2
 grow_vertical = 0
 
 [node name="BackButton" type="TextureButton" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -255,23 +273,72 @@ rotation = 0.785398
 theme_override_font_sizes/font_size = 20
 text = "Back"
 
-[node name="Mods" type="Button" parent="."]
+[node name="BottomBar" type="Control" parent="."]
+z_index = 2
 layout_mode = 1
-anchors_preset = 2
+anchors_preset = 12
 anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 157.0
-offset_top = -86.0
-offset_right = 307.0
+offset_top = -100.0
+grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 24
+
+[node name="ControlPanel" type="PanelContainer" parent="BottomBar"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ombo5")
+
+[node name="Box" type="HBoxContainer" parent="BottomBar/ControlPanel"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Button" type="Button" parent="BottomBar/ControlPanel/Box"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_u1xf2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gd11t")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fx5hl")
+theme_override_styles/normal = SubResource("StyleBoxFlat_uenb6")
+text = "  Back"
+icon = ExtResource("6_wb004")
+
+[node name="Mods" type="Button" parent="BottomBar/ControlPanel/Box"]
+custom_minimum_size = Vector2(112, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
 theme_override_styles/focus = SubResource("StyleBoxEmpty_llhhs")
 theme_override_styles/hover = SubResource("StyleBoxFlat_dfrpo")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_vhtsk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dfrpo")
 theme_override_styles/normal = SubResource("StyleBoxFlat_vc7sc")
 text = "Mods"
 
-[node name="Start" type="Button" parent="."]
+[node name="Random" type="Button" parent="BottomBar/ControlPanel/Box"]
+custom_minimum_size = Vector2(112, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_llhhs")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dfrpo")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dfrpo")
+theme_override_styles/normal = SubResource("StyleBoxFlat_vc7sc")
+text = "Random"
+
+[node name="Collections" type="Button" parent="BottomBar/ControlPanel/Box"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_llhhs")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dfrpo")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dfrpo")
+theme_override_styles/normal = SubResource("StyleBoxFlat_vc7sc")
+text = "Collections"
+
+[node name="Start" type="Button" parent="BottomBar"]
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -298,5 +365,8 @@ mouse_filter = 2
 
 [connection signal="resized" from="." to="." method="_res_resize"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="Mods" to="." method="_Mods_show"]
-[connection signal="pressed" from="Start" to="." method="_Start"]
+[connection signal="pressed" from="BottomBar/ControlPanel/Box/Button" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="BottomBar/ControlPanel/Box/Mods" to="." method="_Mods_show"]
+[connection signal="pressed" from="BottomBar/ControlPanel/Box/Random" to="." method="_Mods_show"]
+[connection signal="pressed" from="BottomBar/ControlPanel/Box/Collections" to="." method="_Mods_show"]
+[connection signal="pressed" from="BottomBar/Start" to="." method="_Start"]

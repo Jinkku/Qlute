@@ -1,4 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dnxlc61trat1l"]
+[gd_scene load_steps=12 format=3 uid="uid://dnxlc61trat1l"]
+
+[ext_resource type="Script" path="res://Script/LevelEditor/Create.cs" id="1_4dycg"]
+[ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="1_s6crp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jucc0"]
 bg_color = Color(0, 0, 0, 0.568627)
@@ -14,6 +17,26 @@ bg_color = Color(0, 0, 0, 0.568627)
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_mplow"]
 size = Vector2(0, 0)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xm3b"]
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y7e17"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wjbl6"]
+content_margin_left = 10.0
+content_margin_right = 20.0
+bg_color = Color(0.92549, 0.294118, 0.180392, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ul0k5"]
+content_margin_left = 10.0
+content_margin_right = 20.0
+bg_color = Color(0.666667, 0.222387, 0.142361, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_724hy"]
+content_margin_left = 10.0
+content_margin_right = 20.0
+bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
+
 [node name="Control" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -21,6 +44,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_4dycg")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -76,3 +100,41 @@ anchor_bottom = 1.0
 offset_top = 100.0
 offset_right = 50.0
 grow_vertical = 2
+
+[node name="BottomBar" type="Control" parent="."]
+z_index = 2
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 1
+
+[node name="ControlPanel" type="PanelContainer" parent="BottomBar"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_7xm3b")
+
+[node name="Box" type="HBoxContainer" parent="BottomBar/ControlPanel"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Button" type="Button" parent="BottomBar/ControlPanel/Box"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_y7e17")
+theme_override_styles/hover = SubResource("StyleBoxFlat_wjbl6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ul0k5")
+theme_override_styles/normal = SubResource("StyleBoxFlat_724hy")
+text = "  Back"
+icon = ExtResource("1_s6crp")
+
+[connection signal="pressed" from="BottomBar/ControlPanel/Box/Button" to="." method="_on_back"]

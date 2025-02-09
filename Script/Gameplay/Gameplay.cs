@@ -14,6 +14,7 @@ public partial class Gameplay : Control
 	public long startedtime {get ;set; }
 	public void _perfect(Rid areaRid, Area2D area, long areaShapeIndex, long localShapeIndex){
 		SettingsOperator.Gameplaycfg["max"] +=1;
+		area.Visible = false;
 	}
 	public override void _Ready()
 	{
@@ -108,9 +109,9 @@ public partial class Gameplay : Control
 			float notex = NotesT[Ttick] + (long)est + viewportSize/2;
 			if (notex > 0 && notex < viewportSize-100){
 				self.Position = new Vector2(self.Position.X, notex);
-				self.Visible = true;
+				//self.Visible = true;
 			} else {
-				self.Visible = false;
+				//self.Visible = false;
 			}
 			Ttick++;
 		}

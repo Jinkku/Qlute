@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://8ue5al5uryf"]
+[gd_scene load_steps=5 format=3 uid="uid://8ue5al5uryf"]
 
 [ext_resource type="Script" path="res://Script/Singleton/FpsCounter.cs" id="1_8u44f"]
 
@@ -15,6 +15,15 @@ expand_margin_bottom = 5.0
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(0, 4)
 
+[sub_resource type="FontVariation" id="FontVariation_5gjgc"]
+variation_opentype = {
+2003265652: 700
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_u8wtu"]
+font = SubResource("FontVariation_5gjgc")
+font_size = 12
+
 [node name="FPSCounter" type="PanelContainer"]
 z_index = 1000
 anchors_preset = 3
@@ -22,8 +31,8 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -84.0
-offset_top = -51.0
+offset_left = -65.0
+offset_top = -45.0
 offset_right = -10.0
 offset_bottom = -10.0
 grow_horizontal = 0
@@ -34,11 +43,18 @@ script = ExtResource("1_8u44f")
 
 [node name="FPS" type="Label" parent="."]
 layout_mode = 2
-text = "fuck"
+theme_override_font_sizes/font_size = 12
+text = "a
+"
+label_settings = SubResource("LabelSettings_u8wtu")
 horizontal_alignment = 1
 
 [node name="Latency" type="Label" parent="."]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "a
+"
+label_settings = SubResource("LabelSettings_u8wtu")
 horizontal_alignment = 1
 
 [node name="Timer" type="Timer" parent="."]
