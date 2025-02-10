@@ -70,7 +70,7 @@ public partial class SongSelect : Control
 	{
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		SongETick = 0;
-		Diff = GetNode<Label>("SongDetails/Difficulty");
+		Diff = GetNode<Label>("SongDetails/Info/Plasa/Difficulty");
 		ModScreen = GetNode<PanelContainer>("ModsScreen");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		var timex = DateTime.Now.Second;
@@ -88,14 +88,12 @@ public partial class SongSelect : Control
 			SongETick++;
 		}
 		GD.Print("Finished about " + (DateTime.Now.Second-timex) + "s");
+		SongTitle = GetNode<Label>("SongControl/HBoxContainer/Margin/Title");
+		SongArtist = GetNode<Label>("SongDetails/Info/Plasa/Artist");
+		Songpp = GetNode<Label>("SongDetails/Info/Plasa/Points");
+		SongBPM = GetNode<Label>("SongDetails/Info/Plasa/BPM");
+		SongMapper = GetNode<Label>("SongDetails/Info/Plasa/Mapper");
 		_res_resize();
-		//var TextureRect = GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
-		SongTitle = GetNode<Label>("PanelContainer/HBoxContainer/Title");
-		SongArtist = GetNode<Label>("SongDetails/Artist");
-		Songpp = GetNode<Label>("SongDetails/Points");
-		SongBPM = GetNode<Label>("SongDetails/BPM");
-		SongMapper = GetNode<Label>("SongDetails/Mapper");
-		//Cover.Texture = TextureRect.Texture;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

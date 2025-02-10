@@ -52,11 +52,7 @@ public partial class Settings : Button
 		} else {
 			Card = AccountPanel;
 		}
-		if ((bool)SettingsOperator.Sessioncfg["showaccountpro"] == false) {
-			AniPlayer.Play("Drop in" + (loggedin == true ? "_Profile" : ""));
-		} else {
-			AniPlayer.Play("Drop out" + (loggedin == true ? "_Profile" : ""));
-		}
+		if (((bool)SettingsOperator.Sessioncfg["showaccountpro"] == true)) AniPlayer.PlayBackwards("Drop in" + (loggedin == true ? "_Profile" : "")); else AniPlayer.Play("Drop in" + (loggedin == true ? "_Profile" : ""));
 		SettingsOperator.Sessioncfg["showaccountpro"] = !(bool)SettingsOperator.Sessioncfg["showaccountpro"];
 		SettingsPanel.Visible = false;
 

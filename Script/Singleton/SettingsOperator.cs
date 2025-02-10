@@ -157,7 +157,8 @@ public partial class SettingsOperator : Node
     };
     public Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
     {
-        { "TopPanelSlidein", false },
+        { "TopPanelSlideip", false },
+        { "toppanelhide", false },
         { "Reloadmap", false },
         { "reloadbdb", false },
         { "loggedin", false },
@@ -184,7 +185,18 @@ public partial class SettingsOperator : Node
         { "client-secret", null },
 
     };
+    public void toppaneltoggle(){
+		Sessioncfg["toppanelhide"] = !(bool)Sessioncfg["toppanelhide"];
+		AnimationPlayer Ana = GetTree().Root.GetNode<AnimationPlayer>("TopPanelOnTop/TopPanel/Wabamp");
+		if (((bool)Sessioncfg["toppanelhide"] == true)) Ana.PlayBackwards("Bootup"); else Ana.Play("Bootup");}
 
+    public override void _Process(double _delta)
+	{
+
+		if (Input.IsActionJustPressed("Hide Panel")){
+            toppaneltoggle();
+        }
+    }
     public override void _Ready()
 	{
         Configurationbk = new Dictionary<string, object>(Configuration);

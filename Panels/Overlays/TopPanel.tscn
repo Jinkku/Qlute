@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://bwpja5llmgtqo"]
+[gd_scene load_steps=32 format=3 uid="uid://bwpja5llmgtqo"]
 
 [ext_resource type="Script" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
 [ext_resource type="Texture2D" uid="uid://bvjgpego4fwun" path="res://Skin/System/settings.png" id="1_vco36"]
@@ -50,11 +50,11 @@ _data = {
 "RESET": SubResource("Animation_k3xmf")
 }
 
-[sub_resource type="Gradient" id="Gradient_jfl4k"]
+[sub_resource type="Gradient" id="Gradient_n7q28"]
 colors = PackedColorArray(0, 0, 0, 0.568627, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_gkq3o"]
-gradient = SubResource("Gradient_jfl4k")
+gradient = SubResource("Gradient_n7q28")
 fill_from = Vector2(0.993865, 0)
 fill_to = Vector2(1, 0.996933)
 
@@ -149,38 +149,6 @@ tracks/0/keys = {
 "values": [Vector2(0, -205), Vector2(0, 50)]
 }
 
-[sub_resource type="Animation" id="Animation_i6d4l"]
-resource_name = "Drop out"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.5, 0.25),
-"update": 0,
-"values": [Vector2(0, 50), Vector2(0, -305)]
-}
-
-[sub_resource type="Animation" id="Animation_5i0r7"]
-resource_name = "Drop out_Profile"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../AccountProfileCard:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.5, 0.25),
-"update": 0,
-"values": [Vector2(0, 50), Vector2(0, -205)]
-}
-
 [sub_resource type="Animation" id="Animation_12due"]
 length = 0.001
 
@@ -188,8 +156,6 @@ length = 0.001
 _data = {
 "Drop in": SubResource("Animation_q6rti"),
 "Drop in_Profile": SubResource("Animation_xakw0"),
-"Drop out": SubResource("Animation_i6d4l"),
-"Drop out_Profile": SubResource("Animation_5i0r7"),
 "RESET": SubResource("Animation_12due")
 }
 
@@ -209,6 +175,7 @@ libraries = {
 }
 
 [node name="InfoBar" type="ColorRect" parent="."]
+unique_name_in_owner = true
 z_index = 1
 layout_mode = 1
 anchors_preset = 10
@@ -334,8 +301,8 @@ icon_alignment = 1
 [node name="AccountProfileCard" parent="." instance=ExtResource("8_pxj8n")]
 unique_name_in_owner = true
 layout_mode = 1
-offset_top = -462.5
-offset_bottom = -512.5
+offset_top = -205.0
+offset_bottom = -255.0
 
 [node name="AccountPanel" parent="." instance=ExtResource("6_fi6td")]
 unique_name_in_owner = true
@@ -360,6 +327,8 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 1
 
+[connection signal="animation_finished" from="Wabamp" to="InfoBar" method="_Slidepanelfinished"]
+[connection signal="animation_started" from="Wabamp" to="InfoBar" method="_Slidepanelstart"]
 [connection signal="mouse_entered" from="InfoBar" to="InfoBar" method="_hovered"]
 [connection signal="mouse_exited" from="InfoBar" to="InfoBar" method="_unhover"]
 [connection signal="pressed" from="InfoBar/AccountButton" to="InfoBar/HBoxContainer/Settings" method="_on_AccountButton_pressed"]

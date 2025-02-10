@@ -14,12 +14,15 @@ public partial class InfoBar : ColorRect
 		Loadinganimation.Play("loading");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		InfoBar TopPanel = GetNode<InfoBar>(".");
-		if ((bool)SettingsOperator.Sessioncfg["TopPanelSlidein"] == true) {
-			TopPanel.Position = new Vector2(0, 0);
-		}else{
+		if ((bool)SettingsOperator.Sessioncfg["toppanelhide"] != true){
 		AnimationPlayer Ana = GetNode<AnimationPlayer>("%Wabamp");
-		Ana.Play("Bootup");
-		SettingsOperator.Sessioncfg["TopPanelSlidein"] = true;}
+		Ana.Play("Bootup");}
+	}
+	private void _Slidepanelstart(string ani){
+		SettingsOperator.Sessioncfg["TopPanelSlideip"] = true;
+	}
+	private void _Slidepanelfinished(string ani){
+		SettingsOperator.Sessioncfg["TopPanelSlideip"] = false;
 	}
 	public void _hovered(){
 		TextureRect Ana = GetNode<TextureRect>("Shadow");

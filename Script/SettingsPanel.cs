@@ -11,7 +11,6 @@ public partial class SettingsPanel : Control
 		Windowmode = GetNode<OptionButton>("ColorRect/ScrollContainer/VBoxContainer/WindowSelector");
 		Windowmode.Selected = int.TryParse(SettingsOperator.GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
 	}
-
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{

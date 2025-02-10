@@ -1,9 +1,5 @@
 using Godot;
 using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 
 public partial class Bootstrap : Control
 {
@@ -11,9 +7,12 @@ public partial class Bootstrap : Control
 	public override void _Ready()
 	{		
 		AnimationPlayer animationPlayer = GetNode<AnimationPlayer>("./AnimationPlayer");
+		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		animationPlayer.Play("Intro");
+		SettingsOperator.Sessioncfg["toppanelhide"] = true;
 	}
 	public void _intro_finished(string animationame){
 		GetTree().ChangeSceneToFile("res://Panels/Screens/home_screen.tscn");
+		SettingsOperator.toppaneltoggle();
 	}
 }

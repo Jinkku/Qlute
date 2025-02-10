@@ -25,9 +25,9 @@ public partial class MusicCard : Button
 	}
 	
 	public void _on_pressed(){
-		var SongTitle = GetTree().Root.GetNode<Label>("Song Select/PanelContainer/HBoxContainer/Title");
-		var SongArtist = GetTree().Root.GetNode<Label>("Song Select/SongDetails/Artist");
-		var Songpp = GetTree().Root.GetNode<Label>("Song Select/SongDetails/Points");
+		var SongTitle = GetTree().Root.GetNode<Label>("Song Select/SongControl/HBoxContainer/Margin/Title");
+		var SongArtist = GetTree().Root.GetNode<Label>("Song Select/SongDetails/Info/Plasa/Artist");
+		var Songpp = GetTree().Root.GetNode<Label>("Song Select/SongDetails/Info/Plasa/Points");
 		SongTitle.Text = self.GetMeta("Title").ToString();
 		SongArtist.Text = self.GetMeta("Artist").ToString();
 		Songpp.Text = "+" + self.GetMeta("pp").ToString()+"pp";
