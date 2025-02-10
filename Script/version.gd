@@ -5,6 +5,6 @@ extends Label
 func _ready() -> void:
 	var version = str(ProjectSettings.get_setting("application/config/version"))
 	if version == '0.0.0':
-		set_text('Development Build (Nanashi)')
+		set_text('Development Build (Qlute)')
 	else:
-		set_text('Nanashi/stable ('+ version +')')
+		set_text('Qlute/stable ('+ version +')')

@@ -16,7 +16,7 @@ public partial class SettingsOperator : Node
 	public string screenshotdir => homedir + "/screenshots";
 	public string skinsdir => homedir + "/skins";
     public string settingsfile => homedir + "/settings.cfg";
-    public string nanashidb => homedir + "/nanashi.db";
+    public string Qlutedb => homedir + "/Qlute.db";
     //public Dictionary<int, object> Beatmaps { get; set; } = new Dictionary<int, object>{
 
 	public List<Dictionary<string,object>> Beatmaps = new List<Dictionary<string,object>>();

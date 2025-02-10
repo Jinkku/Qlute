@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Nanashi"
+config/name="Qlute"
 config/name_localized={
 "ja": "名無し"
 }
@@ -19,7 +19,7 @@ config/version="0.0.0"
 run/main_scene="res://Panels/Screens/bootstrap.tscn"
 run/print_header=false
 config/use_custom_user_dir=true
-config/custom_user_dir_name="Nanashi"
+config/custom_user_dir_name="Qlute"
 config/features=PackedStringArray("4.3", "C#", "Mobile")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
@@ -98,6 +98,7 @@ screenshot={
 
 [input_devices]
 
+pointing/emulate_touch_from_mouse=true
 pointing/android/enable_long_press_as_right_click=true
 
 [internationalization]
