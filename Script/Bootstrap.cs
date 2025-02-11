@@ -10,6 +10,7 @@ public partial class Bootstrap : Control
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		animationPlayer.Play("Intro");
 		SettingsOperator.Sessioncfg["toppanelhide"] = true;
+		SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
 	}
 	public void _intro_finished(string animationame){
 		GetTree().ChangeSceneToFile("res://Panels/Screens/home_screen.tscn");

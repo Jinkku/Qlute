@@ -25,36 +25,11 @@ public partial class MusicCard : Button
 	}
 	
 	public void _on_pressed(){
-		var SongTitle = GetTree().Root.GetNode<Label>("Song Select/SongControl/HBoxContainer/Margin/Title");
-		var SongArtist = GetTree().Root.GetNode<Label>("Song Select/SongDetails/Info/Plasa/Artist");
-		var Songpp = GetTree().Root.GetNode<Label>("Song Select/SongDetails/Info/Plasa/Points");
-		SongTitle.Text = self.GetMeta("Title").ToString();
-		SongArtist.Text = self.GetMeta("Artist").ToString();
-		Songpp.Text = "+" + self.GetMeta("pp").ToString()+"pp";
-		Cover.Texture = Preview.Texture;
-		Cover.Size = new Vector2(GetViewportRect().Size[0]+20,GetViewportRect().Size[1]+20);
-		Cover.Position = new Vector2(GetViewportRect().Size[0]-10,GetViewportRect().Size[1]-10);
-		SettingsOperator.Sessioncfg["background"] = (Texture2D)Preview.Texture;
-		SettingsOperator.Sessioncfg["SongID"] = self.GetMeta("SongID");
-		SettingsOperator.Sessioncfg["beatmapurl"] = self.GetMeta("beatmapurl");
-		SettingsOperator.Sessioncfg["beatmaptitle"] = self.GetMeta("Title").ToString();
-		SettingsOperator.Sessioncfg["beatmapartist"] = self.GetMeta("Artist").ToString();
-		SettingsOperator.Sessioncfg["beatmapdiff"] = self.GetMeta("Difficulty").ToString();
-		SettingsOperator.Sessioncfg["beatmapmapper"] = self.GetMeta("Mapper").ToString();
-		SettingsOperator.Gameplaycfg["maxpp"] = (int)self.GetMeta("pp");
-		string audioPath = self.GetMeta("audio").ToString();
-		if (System.IO.File.Exists(audioPath))
-		{
-			AudioPlayer.Instance.Stream = AudioPlayer.LoadMP3(audioPath);
-			AudioPlayer.Instance.Play();
-		}
-		else
-		{
-			GD.PrintErr("Audio file not found: " + audioPath);
-		}
+		int songID = (int)self.GetMeta("SongID");
+		SettingsOperator.SelectSongID(songID);
 	}
 	public override void _Process(double _delta)
 	{
-		self.ButtonPressed = SettingsOperator.Sessioncfg["SongID"].Equals(self.GetMeta("SongID"));
+		self.ButtonPressed = SettingsOperator.Sessioncfg["SongID"].ToString().Equals(self.GetMeta("SongID").ToString());
 	}
 }

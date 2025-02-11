@@ -19,7 +19,7 @@ public partial class SettingsOperator : Node
     public string Qlutedb => homedir + "/Qlute.db";
     //public Dictionary<int, object> Beatmaps { get; set; } = new Dictionary<int, object>{
 
-	public List<Dictionary<string,object>> Beatmaps = new List<Dictionary<string,object>>();
+    public static List<Dictionary<string,object>> Beatmaps = new List<Dictionary<string,object>>();
     public Dictionary<string, object> Configuration { get; set; } = new Dictionary<string, object>
     {
         { "scaled", false },
@@ -77,6 +77,35 @@ public partial class SettingsOperator : Node
         image.Dispose();
 
         return imageTexture;
+    }
+    public static int RndSongID(){
+        int id = new Random().Next(0, Beatmaps.Count);
+        return id;
+    }
+    public void SelectSongID(int id){
+        if(Beatmaps.ElementAt(id) != null)
+        {
+            var beatmap = Beatmaps[id];
+            Sessioncfg["SongID"] = id;
+            Sessioncfg["beatmapurl"] = beatmap["rawurl"];
+            Sessioncfg["beatmaptitle"] = beatmap["Title"];
+            Sessioncfg["beatmapartist"] = beatmap["Artist"];
+            Sessioncfg["beatmapdiff"] = beatmap["Version"];
+            Sessioncfg["beatmapmapper"] = beatmap["Mapper"];
+		    var Texture = LoadImage(beatmap["path"].ToString()+beatmap["background"].ToString());
+		    Sessioncfg["background"] = (Texture2D)Texture;
+            Gameplaycfg["maxpp"] = Convert.ToInt32(beatmap["pp"]);
+		    string audioPath = beatmap["path"]+ "" +beatmap["audio"];
+            if (System.IO.File.Exists(audioPath))
+            {
+                AudioPlayer.Instance.Stream = AudioPlayer.LoadMP3(audioPath);
+                AudioPlayer.Instance.Play();
+            }
+            else
+            {
+                GD.PrintErr("Audio file not found: " + audioPath);
+            }
+        } else{ GD.PrintErr("Can't select a song that don't exist :/");}
     }
     public void Parse_Beatmapfile(string filename){
         GD.Print("Parsing beatmap file...");
@@ -166,7 +195,7 @@ public partial class SettingsOperator : Node
         { "showaccountpro", false },
         { "ranknumber", null },
 		{ "playercolour", null },
-        { "SongID", 0 },
+        { "SongID", -1 },
         { "totalbeatmaps", 0 },
         { "beatmapurl", null },
         { "beatmaptitle", null },

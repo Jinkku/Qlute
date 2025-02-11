@@ -5,7 +5,7 @@
 
 [sub_resource type="Animation" id="Animation_v5m8g"]
 resource_name = "Intro"
-length = 0.5
+length = 1.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -13,22 +13,10 @@ tracks/0/path = NodePath(".:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.0333333, 0.0666667, 0.1, 0.133333, 0.166667, 0.2, 0.233333, 0.266667, 0.3, 0.333333, 0.366667, 0.4, 0.433333, 0.466667, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../../Flash:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
+"values": [Color(0, 0, 0, 1), Color(0.000296296, 0.000296296, 0.000296296, 1), Color(0.00237037, 0.00237037, 0.00237037, 1), Color(0.008, 0.008, 0.008, 1), Color(0.018963, 0.018963, 0.018963, 1), Color(0.037037, 0.037037, 0.037037, 1), Color(0.064, 0.064, 0.064, 1), Color(0.10163, 0.10163, 0.10163, 1), Color(0.151704, 0.151704, 0.151704, 1), Color(0.216, 0.216, 0.216, 1), Color(0.296296, 0.296296, 0.296296, 1), Color(0.39437, 0.39437, 0.39437, 1), Color(0.512, 0.512, 0.512, 1), Color(0.650963, 0.650963, 0.650963, 1), Color(0.813037, 0.813037, 0.813037, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_s0vrs"]
@@ -44,18 +32,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../../Flash:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rpwbx"]

@@ -55,16 +55,12 @@ public partial class SongSelect : Control
 		childButton.Name = SongETick.ToString();
 		childButton.ClipText = true;
 		childButton.SetMeta("bg", background);
-		childButton.SetMeta("beatmapurl", path);
-		childButton.SetMeta("audio", audio);
 		childButton.SetMeta("SongID", SongETick);
-		childButton.SetMeta("Difficulty", difficulty);
-		childButton.SetMeta("Title", song);
-		childButton.SetMeta("Artist", artist);
-		childButton.SetMeta("Mapper", mapper);
-		childButton.SetMeta("pp", pp);
 		TextureRect.Texture = SettingsOperator.LoadImage(background);
 
+	}
+	private void _on_random(){
+		SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
 	}
 	public override void _Ready()
 	{
@@ -119,6 +115,28 @@ public partial class SongSelect : Control
 		Diff.Text = SettingsOperator.Sessioncfg["beatmapdiff"].ToString();}
 		else {
 			Diff.Text = "";
+		}
+		if (Input.IsActionJustPressed("Songup")){
+			if ((int)SettingsOperator.Sessioncfg["SongID"]-1 >0 && (int)SettingsOperator.Sessioncfg["SongID"] != -1){
+				SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"]-1);
+			} else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1){
+				SettingsOperator.SelectSongID((int)SettingsOperator.Beatmaps.Count-1);
+			}
+
+		}else if (Input.IsActionJustPressed("Songdown")){
+			if ((int)SettingsOperator.Sessioncfg["SongID"]+1 <(int)SettingsOperator.Beatmaps.Count && (int)SettingsOperator.Sessioncfg["SongID"] != -1){
+				SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"]+1);
+			} else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1){
+				SettingsOperator.SelectSongID(0);
+			}
+
+		}else if (Input.IsActionJustPressed("Mod")){
+			_Mods_show();
+		}else if (Input.IsActionJustPressed("Random")){
+			_on_random();
+
+		}else if (Input.IsActionJustPressed("Collections")){
+
 		}
 	}
 	

@@ -10,11 +10,7 @@ public partial class BeatmapBackground : TextureRect
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		self = GetNode<TextureRect>(".");
-		bg = (Texture2D)SettingsOperator.Sessioncfg["background"];
-		if (bg != null){
-		self.Texture = bg;
-		};
+		_Process(0);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -27,5 +23,12 @@ public partial class BeatmapBackground : TextureRect
         float offsetY = (mousePos.Y / screenSize.Y * 10) - 10;
 
         Position = new Vector2(offsetX, offsetY);
+
+		if (Texture != SettingsOperator.Sessioncfg["background"]){
+			Texture = (Texture2D)SettingsOperator.Sessioncfg["background"];
+			Size = new Vector2(GetViewportRect().Size[0]+20,GetViewportRect().Size[1]+20);
+			Position = new Vector2(GetViewportRect().Size[0]-5,GetViewportRect().Size[1]-5);
+			GD.Print("a");
+		}
 	}
 }

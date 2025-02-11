@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene load_steps=14 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" path="res://Script/home.cs" id="1_j2gfm"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
 [ext_resource type="Script" path="res://Script/menunotice.gd" id="4_j0o5v"]
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="5_pikml"]
 [ext_resource type="Script" path="res://Script/version.gd" id="6_1tkmr"]
+[ext_resource type="Texture2D" uid="uid://cwnp10imrjpaf" path="res://Skin/System/mainmenulogo.png" id="6_xu4tp"]
 
 [sub_resource type="FontVariation" id="FontVariation_bifyk"]
 base_font = ExtResource("5_pikml")
@@ -102,55 +103,47 @@ script = ExtResource("1_j2gfm")
 [node name="BeatmapBackground" parent="." instance=ExtResource("2_ouv1d")]
 layout_mode = 1
 
-[node name="Play" type="Button" parent="."]
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 60.0
-offset_top = -260.0
-offset_right = 454.0
-offset_bottom = -173.0
+offset_left = 20.0
+offset_top = -96.0
+offset_right = 145.0
+offset_bottom = 96.0
 grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="Play" type="Button" parent="Control/VBoxContainer"]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Play"
 
-[node name="Create" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 180.0
-offset_top = -130.0
-offset_right = 574.0
-offset_bottom = -43.0
-grow_vertical = 2
+[node name="Create" type="Button" parent="Control/VBoxContainer"]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Create"
 
-[node name="Browse" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 180.0
-offset_top = 40.0
-offset_right = 574.0
-offset_bottom = 127.0
-grow_vertical = 2
+[node name="Browse" type="Button" parent="Control/VBoxContainer"]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Browse"
 
-[node name="Leave" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 60.0
-offset_top = 180.0
-offset_right = 454.0
-offset_bottom = 267.0
-grow_vertical = 2
+[node name="Leave" type="Button" parent="Control/VBoxContainer"]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Leave"
 
@@ -267,11 +260,48 @@ libraries = {
 "": SubResource("AnimationLibrary_25xv4")
 }
 
+[node name="IntroPending" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="IntroPending"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="logo" type="TextureRect" parent="IntroPending/CenterContainer"]
+layout_mode = 2
+texture = ExtResource("6_xu4tp")
+
+[node name="Label" type="Label" parent="IntroPending"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -103.0
+offset_top = 90.0
+offset_right = 103.0
+offset_bottom = 109.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Press any button to play!"
+horizontal_alignment = 1
+
 [connection signal="resized" from="." to="." method="_on_resized"]
-[connection signal="pressed" from="Play" to="." method="_play"]
-[connection signal="pressed" from="Create" to="." method="_create"]
-[connection signal="pressed" from="Browse" to="." method="_browse"]
-[connection signal="pressed" from="Leave" to="." method="_leave"]
-[connection signal="pressed" from="Leave" to="Leave" method="_on_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/Play" to="." method="_play"]
+[connection signal="pressed" from="Control/VBoxContainer/Create" to="." method="_create"]
+[connection signal="pressed" from="Control/VBoxContainer/Browse" to="." method="_browse"]
+[connection signal="pressed" from="Control/VBoxContainer/Leave" to="." method="_leave"]
+[connection signal="pressed" from="Control/VBoxContainer/Leave" to="Control/VBoxContainer/Leave" method="_on_pressed"]
 [connection signal="timeout" from="MenuNotice/Timer" to="MenuNotice/HTTPRequest" method="_on_timer_timeout"]
 [connection signal="request_completed" from="MenuNotice/HTTPRequest" to="MenuNotice/HTTPRequest" method="_on_request_completed"]

@@ -107,6 +107,7 @@ grow_vertical = 2
 script = ExtResource("1_fin0e")
 
 [node name="BeatmapBackground" parent="." instance=ExtResource("2_wg4n2")]
+self_modulate = Color(0.54902, 0.54902, 0.54902, 1)
 layout_mode = 1
 
 [node name="Patch" type="ColorRect" parent="."]
@@ -415,4 +416,5 @@ text = "Play"
 [connection signal="resized" from="." to="." method="_res_resize"]
 [connection signal="pressed" from="BottomBar/ControlPanel/Box/Button" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="BottomBar/ControlPanel/Box/Mods" to="." method="_Mods_show"]
+[connection signal="pressed" from="BottomBar/ControlPanel/Box/Random" to="." method="_on_random"]
 [connection signal="pressed" from="BottomBar/Start" to="." method="_Start"]

@@ -18,7 +18,7 @@ public partial class home : Node
 		SongTitle = GetNode<Label>("./Titlesong");
 		SongArtist = GetNode<Label>("./Descsong");
 		AnimationPlayer ani = GetNode<AnimationPlayer>("Flash/AnimationPlayer");
-		ani.Play("Flash");
+		//ani.Play("Flash");
 		_Process(0);
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
