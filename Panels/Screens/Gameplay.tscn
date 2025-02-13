@@ -28,9 +28,9 @@ offset_bottom = -580.0
 [node name="Time" type="Label" parent="."]
 layout_mode = 0
 offset_left = 17.0
-offset_top = 297.0
+offset_top = 320.0
 offset_right = 57.0
-offset_bottom = 316.0
+offset_bottom = 339.0
 
 [node name="Hits" type="Label" parent="."]
 layout_mode = 0

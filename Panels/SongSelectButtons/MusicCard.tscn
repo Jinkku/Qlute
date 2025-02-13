@@ -37,7 +37,6 @@ corner_detail = 1
 [sub_resource type="CanvasTexture" id="CanvasTexture_2pxov"]
 
 [node name="MusicCard" type="Button"]
-clip_contents = true
 custom_minimum_size = Vector2(350, 78)
 offset_right = 350.0
 offset_bottom = 78.0

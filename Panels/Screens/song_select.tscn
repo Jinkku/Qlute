@@ -356,6 +356,7 @@ layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="Button" type="Button" parent="BottomBar/ControlPanel/Box"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_u1xf2")
 theme_override_styles/hover = SubResource("StyleBoxFlat_gd11t")

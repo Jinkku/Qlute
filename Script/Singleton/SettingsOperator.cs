@@ -16,7 +16,8 @@ public partial class SettingsOperator : Node
 	public string screenshotdir => homedir + "/screenshots";
 	public string skinsdir => homedir + "/skins";
     public string settingsfile => homedir + "/settings.cfg";
-    public string Qlutedb => homedir + "/Qlute.db";
+    public string Qlutedb => homedir + "/qlute.db";
+    public int backgrounddim {get;set;}
     //public Dictionary<int, object> Beatmaps { get; set; } = new Dictionary<int, object>{
 
     public static List<Dictionary<string,object>> Beatmaps = new List<Dictionary<string,object>>();
@@ -25,6 +26,7 @@ public partial class SettingsOperator : Node
         { "scaled", false },
         { "windowmode", 0 },
 		{ "volume", 1 },
+		{ "backgrounddim", 70 },
 		{ "skin", null },
 		{ "username", null },
 		{ "password", null },
@@ -237,6 +239,11 @@ public partial class SettingsOperator : Node
             using var saveFile = FileAccess.Open(settingsfile, FileAccess.ModeFlags.Read);
             var json = saveFile.GetAsText();
             Configuration = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
+            foreach (string s in Configurationbk.Keys){
+                if (!Configuration.ContainsKey(s)){
+                    Configuration[s] = Configurationbk[s];
+                }
+            }
             saveFile.Close();
         }
         else
@@ -244,7 +251,7 @@ public partial class SettingsOperator : Node
             GD.Print("Creating config...");
             SaveSettings();
         }
-
+        backgrounddim = int.TryParse(GetSetting("backgrounddim").ToString(), out int bkd) ? bkd : 70;
 		var resolutionIndex = int.TryParse(GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
 		changeres(resolutionIndex);
     }

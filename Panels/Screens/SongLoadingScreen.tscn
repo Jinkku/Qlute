@@ -1,31 +1,37 @@
-[gd_scene load_steps=4 format=3 uid="uid://bla4qqlg1shra"]
+[gd_scene load_steps=15 format=3 uid="uid://bla4qqlg1shra"]
+
+[ext_resource type="Script" path="res://Script/SongLoadingScreen/SongLoadingScreen.cs" id="1_2kt4t"]
+[ext_resource type="Texture2D" uid="uid://dugxlwc4epe6i" path="res://DefaultWallpaper/a.png" id="1_4pmu1"]
+[ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="1_635sp"]
+[ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="2_h8mlh"]
+[ext_resource type="Script" path="res://Script/SongLoadingScreen/ImageScript.cs" id="2_yjtgo"]
 
 [sub_resource type="Animation" id="Animation_wuxwg"]
 resource_name = "AnimationSongTick"
-length = 5.0
+length = 2.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Catasi:position")
+tracks/0/path = NodePath("Centerish/Infoscreen/Previewimage:custom_minimum_size")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 4.7, 5),
-"transitions": PackedFloat32Array(0.25, 0.25, 0.25, 0.25),
+"times": PackedFloat32Array(0.533333, 0.566667, 0.6, 0.633333, 0.666667, 0.7, 0.733333, 0.766667, 0.8, 0.833333, 0.866667, 0.9, 0.933333, 0.966667, 1, 1.03333, 1.06667, 1.1, 1.13333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-625, 231), Vector2(0, 231), Vector2(0, 231), Vector2(-625, 231)]
+"values": [Vector2(100, 0), Vector2(100, 0.137174), Vector2(100, 1.09739), Vector2(100, 3.7037), Vector2(100, 8.77915), Vector2(100, 17.1468), Vector2(100, 29.6296), Vector2(100, 47.0507), Vector2(100, 70.2332), Vector2(100, 100), Vector2(100, 129.767), Vector2(100, 152.949), Vector2(100, 170.37), Vector2(100, 182.853), Vector2(100, 191.221), Vector2(100, 196.296), Vector2(100, 198.903), Vector2(100, 199.863), Vector2(100, 200)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Catasi:anchors_preset")
+tracks/1/path = NodePath("Centerish/Infoscreen:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [4]
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_mobq1"]
@@ -33,14 +39,26 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Catasi:position")
+tracks/0/path = NodePath("Centerish/Infoscreen/Previewimage:custom_minimum_size")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-625, 360)]
+"values": [Vector2(100, 200)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Centerish/Infoscreen:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_vcna2"]
@@ -49,96 +67,170 @@ _data = {
 "RESET": SubResource("Animation_mobq1")
 }
 
-[node name="Control" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wvjpw"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4rpdu"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+skew = Vector2(0.5, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b2ms5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jj613"]
+content_margin_left = 10.0
+content_margin_right = 20.0
+bg_color = Color(0.92549, 0.294118, 0.180392, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0hfqi"]
+content_margin_left = 10.0
+content_margin_right = 20.0
+bg_color = Color(0.666667, 0.222387, 0.142361, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jr6c1"]
+content_margin_left = 10.0
+content_margin_right = 20.0
+bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
+
+[node name="SongLoadingScreen" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_2kt4t")
 
-[node name="Catasi" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-grow_vertical = 2
-
-[node name="Polygon2D2" type="Polygon2D" parent="Catasi"]
-z_index = 1
-position = Vector2(25, -120)
-color = Color(0.132222, 0.102386, 0.214844, 1)
-antialiased = true
-polygon = PackedVector2Array(-25, 0, 600, 0, 476, 258, -25, 258)
-
-[node name="Polygon2D" type="Polygon2D" parent="Catasi"]
-z_index = 2
-position = Vector2(0, -120)
-color = Color(0.226041, 0.174988, 0.367188, 1)
-antialiased = true
-polygon = PackedVector2Array(0, 0, 600, 0, 476, 240, 0, 240)
-
-[node name="Title" type="Label" parent="Catasi"]
-z_index = 2
-layout_mode = 2
-offset_left = 20.0
-offset_top = -100.0
-offset_right = 446.0
-offset_bottom = -45.0
-theme_override_font_sizes/font_size = 48
-text = "The Purge March"
-
-[node name="Artist" type="Label" parent="Catasi"]
-z_index = 2
-layout_mode = 2
-offset_left = 20.0
-offset_top = -40.0
-offset_right = 150.0
-offset_bottom = 1.0
-theme_override_font_sizes/font_size = 36
-text = "Amane"
-
-[node name="DifficultyName" type="Label" parent="Catasi"]
-z_index = 2
-layout_mode = 2
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 470.0
-offset_bottom = 48.0
-theme_override_font_sizes/font_size = 24
-text = "Ainer's Blessedness and Punishment"
-
-[node name="Creator" type="Label" parent="Catasi"]
-z_index = 2
-layout_mode = 2
-offset_left = 20.0
-offset_top = 70.0
-offset_right = 230.0
-offset_bottom = 98.0
-theme_override_font_sizes/font_size = 24
-text = "Created By Noch"
-
-[node name="Container" type="Container" parent="."]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -360.0
-offset_bottom = -360.0
-grow_vertical = 2
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
 
 [node name="Wafuk" type="AnimationPlayer" parent="."]
-unique_name_in_owner = true
 libraries = {
 "": SubResource("AnimationLibrary_vcna2")
 }
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="BeatmapBackground" parent="." instance=ExtResource("1_635sp")]
+self_modulate = Color(0.392157, 0.392157, 0.392157, 1)
 layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -120.0
-offset_right = 40.0
-offset_bottom = 120.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+
+[node name="Centerish" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Infoscreen" type="VBoxContainer" parent="Centerish"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Centerish/Infoscreen"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Sweet Dreams"
+horizontal_alignment = 1
+
+[node name="Artist" type="Label" parent="Centerish/Infoscreen"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Tokana Nanashi"
+horizontal_alignment = 1
+
+[node name="S p l i t4" type="MarginContainer" parent="Centerish/Infoscreen"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 10
+
+[node name="Previewimage" type="PanelContainer" parent="Centerish/Infoscreen"]
+clip_children = 2
+custom_minimum_size = Vector2(100, 200)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wvjpw")
+
+[node name="TextureRect" type="TextureRect" parent="Centerish/Infoscreen/Previewimage"]
+layout_mode = 2
+texture = ExtResource("1_4pmu1")
+expand_mode = 2
+stretch_mode = 6
+script = ExtResource("2_yjtgo")
+
+[node name="Control" type="Control" parent="Centerish/Infoscreen"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="LevelPanel" type="PanelContainer" parent="Centerish/Infoscreen/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -27.5
+offset_top = -14.5
+offset_right = 27.5
+offset_bottom = 14.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4rpdu")
+
+[node name="Level" type="Label" parent="Centerish/Infoscreen/Control/LevelPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Lv. 1"
+horizontal_alignment = 1
+
+[node name="Difficulty" type="Label" parent="Centerish/Infoscreen"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Love me like you take me away~"
+horizontal_alignment = 1
+
+[node name="S p l i t2" type="MarginContainer" parent="Centerish/Infoscreen"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 35
+
+[node name="Source" type="Label" parent="Centerish/Infoscreen"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Source: MAKA PIE?!"
+horizontal_alignment = 1
+
+[node name="Creator" type="Label" parent="Centerish/Infoscreen"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Creator: dummy"
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="."]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+offset_right = 108.0
+grow_vertical = 0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_b2ms5")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jj613")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_0hfqi")
+theme_override_styles/normal = SubResource("StyleBoxFlat_jr6c1")
+text = "  Back"
+icon = ExtResource("2_h8mlh")
+
+[connection signal="timeout" from="Timer" to="." method="_Timer_load"]
+[connection signal="animation_finished" from="Wafuk" to="." method="_Animationf"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back"]

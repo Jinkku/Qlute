@@ -12,6 +12,7 @@ public partial class Gameplay : Control
 	public List<object> Keys = new List<object>();
 	public List<int> NotesT = new List<int>();
 	public long startedtime {get ;set; }
+	public TextureRect Beatmap_Background {get;set;}
 	public void _perfect(Rid areaRid, Area2D area, long areaShapeIndex, long localShapeIndex){
 		SettingsOperator.Gameplaycfg["max"] +=1;
 		area.Visible = false;
@@ -19,6 +20,8 @@ public partial class Gameplay : Control
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
+		Beatmap_Background = GetNode<TextureRect>("./Beatmap_Background");
+		Beatmap_Background.SelfModulate = new Color(1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)));
 		Control P = GetNode<Control>("Playfield");
 		Ttiming = GetNode<Label>("Time");
 		Hits = GetNode<Label>("Hits");
@@ -78,6 +81,7 @@ public partial class Gameplay : Control
 	{   
 		long unixTimeMilliseconds = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 		float est = unixTimeMilliseconds-startedtime;
+		Beatmap_Background.SelfModulate = new Color(1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)));
 		if ((float)SettingsOperator.Sessioncfg["songspeed"] != 1.0f){
 			est = est * (float)SettingsOperator.Sessioncfg["songspeed"];
 		}

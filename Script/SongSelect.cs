@@ -11,9 +11,9 @@ public partial class SongSelect : Control
 	public PackedScene musiccardtemplate;
 	public Label SongTitle { get; set; }
 	public Label SongArtist { get; set; }
+	public Label SongMapper { get; set; }
 	public Label Songpp { get; set; }
 	public Label SongBPM { get; set; }
-	public Label SongMapper { get; set; }
 	public List<object> SongEntry = new List<object>();
 	public int SongETick { get; set; }
 	public PanelContainer ModScreen { get; set; }
@@ -147,8 +147,9 @@ public partial class SongSelect : Control
 		ModScreen.Visible = !ModScreen.Visible;
 	}
 	private void _Start(){
-		AudioPlayer.Instance.Stop();
-		GetTree().ChangeSceneToFile("res://Panels/Screens/Gameplay.tscn");
+		//AudioPlayer.Instance.Stop();
+		GetTree().ChangeSceneToFile("res://Panels/Screens/SongLoadingScreen.tscn");
+		//
 	}
 	private void _on_back_pressed(){
 		GetTree().ChangeSceneToFile("res://Panels/Screens/home_screen.tscn");
