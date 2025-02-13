@@ -22,14 +22,14 @@ public partial class SettingsPanel : Control
 	{
 		SettingsOperator.changeres(index);
 	}
-	private void _backgrounddim_started()
+	private void _backgrounddim_started(float value)
 	{
+		SettingsOperator.backgrounddim = (int)BackgroundDim.Value;
 		
 	}
 	private void _backgrounddim_ended(int value)
 	{
 		SettingsOperator.SetSetting("backgrounddim",BackgroundDim.Value.ToString());
-		SettingsOperator.backgrounddim = (int)BackgroundDim.Value;
 		
 	}
 }
