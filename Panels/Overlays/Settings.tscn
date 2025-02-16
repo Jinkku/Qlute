@@ -93,7 +93,7 @@ theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
 theme_override_fonts/font = SubResource("FontVariation_n76qt")
 text = "General"
 
-[node name="Godotversion" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+[node name="Notice" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 text = "Note: Most of these are not implemented yet.
 :<"
@@ -144,6 +144,10 @@ text = "Fade out when on break"
 [node name="CheckButton4" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 text = "Disable flashing effects"
+
+[node name="CheckButton5" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Switch to 24-Hour Clock"
 
 [node name="WindowNotice2" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
 layout_mode = 2

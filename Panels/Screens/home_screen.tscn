@@ -103,49 +103,50 @@ script = ExtResource("1_j2gfm")
 [node name="BeatmapBackground" parent="." instance=ExtResource("2_ouv1d")]
 layout_mode = 1
 
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_right = 420.0
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AspectRatioContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Play" type="Button" parent="AspectRatioContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Play"
+
+[node name="Create" type="Button" parent="AspectRatioContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Create"
+
+[node name="Browse" type="Button" parent="AspectRatioContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Browse"
+
+[node name="Leave" type="Button" parent="AspectRatioContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Leave"
+
 [node name="Control" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 20.0
-offset_top = -96.0
-offset_right = 145.0
-offset_bottom = 96.0
-grow_vertical = 2
-theme_override_constants/separation = 15
-
-[node name="Play" type="Button" parent="Control/VBoxContainer"]
-custom_minimum_size = Vector2(400, 100)
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Play"
-
-[node name="Create" type="Button" parent="Control/VBoxContainer"]
-custom_minimum_size = Vector2(400, 100)
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Create"
-
-[node name="Browse" type="Button" parent="Control/VBoxContainer"]
-custom_minimum_size = Vector2(400, 100)
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Browse"
-
-[node name="Leave" type="Button" parent="Control/VBoxContainer"]
-custom_minimum_size = Vector2(400, 100)
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Leave"
 
 [node name="Titlesong" type="Label" parent="."]
 layout_mode = 1
@@ -157,6 +158,7 @@ offset_top = 60.0
 offset_right = -10.0
 offset_bottom = 88.0
 grow_horizontal = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = SubResource("FontVariation_bifyk")
 theme_override_font_sizes/font_size = 24
 text = "Title Song"
@@ -172,6 +174,7 @@ offset_top = 90.0
 offset_right = -10.0
 offset_bottom = 118.0
 grow_horizontal = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 18
 text = "Artist"
 horizontal_alignment = 2
@@ -235,6 +238,7 @@ horizontal_alignment = 1
 script = ExtResource("6_1tkmr")
 
 [node name="TextureRect" type="TextureRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -298,10 +302,10 @@ text = "Press any button to play!"
 horizontal_alignment = 1
 
 [connection signal="resized" from="." to="." method="_on_resized"]
-[connection signal="pressed" from="Control/VBoxContainer/Play" to="." method="_play"]
-[connection signal="pressed" from="Control/VBoxContainer/Create" to="." method="_create"]
-[connection signal="pressed" from="Control/VBoxContainer/Browse" to="." method="_browse"]
-[connection signal="pressed" from="Control/VBoxContainer/Leave" to="." method="_leave"]
-[connection signal="pressed" from="Control/VBoxContainer/Leave" to="Control/VBoxContainer/Leave" method="_on_pressed"]
+[connection signal="pressed" from="AspectRatioContainer/VBoxContainer/Play" to="." method="_play"]
+[connection signal="pressed" from="AspectRatioContainer/VBoxContainer/Create" to="." method="_create"]
+[connection signal="pressed" from="AspectRatioContainer/VBoxContainer/Browse" to="." method="_browse"]
+[connection signal="pressed" from="AspectRatioContainer/VBoxContainer/Leave" to="." method="_leave"]
+[connection signal="pressed" from="AspectRatioContainer/VBoxContainer/Leave" to="AspectRatioContainer/VBoxContainer/Leave" method="_on_pressed"]
 [connection signal="timeout" from="MenuNotice/Timer" to="MenuNotice/HTTPRequest" method="_on_timer_timeout"]
 [connection signal="request_completed" from="MenuNotice/HTTPRequest" to="MenuNotice/HTTPRequest" method="_on_request_completed"]

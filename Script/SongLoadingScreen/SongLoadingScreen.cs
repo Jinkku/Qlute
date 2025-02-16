@@ -32,8 +32,10 @@ public partial class SongLoadingScreen : Control
 		ArtificialLoad.Start();
 		if (anistate <1){
 			anistate++;
-		}else {
+		}else if (ani == "Dim"){
 			GetTree().ChangeSceneToFile("res://Panels/Screens/Gameplay.tscn");
+		}else{
+			Animation.Play("Dim");
 		}
 	}
 	private void _on_back(){

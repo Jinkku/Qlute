@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://hbkr7peitwa8"]
+
+[ext_resource type="Texture2D" uid="uid://die40m3acksoy" path="res://Skin/System/browse.png" id="1_tmfgi"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ux4lk"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0, 0, 0, 0.588235)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Button" type="Button"]
+offset_right = 200.0
+offset_bottom = 80.0
+theme_override_font_sizes/font_size = 12
+theme_override_styles/hover = SubResource("StyleBoxFlat_ux4lk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ux4lk")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ux4lk")
+text = "There is a beatmap that needs an update!"
+icon = ExtResource("1_tmfgi")
+alignment = 2
+text_overrun_behavior = 3
+autowrap_mode = 3
+clip_text = true

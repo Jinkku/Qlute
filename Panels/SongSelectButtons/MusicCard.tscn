@@ -38,8 +38,9 @@ corner_detail = 1
 
 [node name="MusicCard" type="Button"]
 custom_minimum_size = Vector2(350, 78)
-offset_right = 350.0
-offset_bottom = 78.0
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
 size_flags_horizontal = 3
 theme_override_styles/focus = SubResource("StyleBoxEmpty_i3see")
 theme_override_styles/hover = ExtResource("2_vxxs3")
@@ -143,6 +144,10 @@ texture = SubResource("CanvasTexture_2pxov")
 expand_mode = 1
 stretch_mode = 6
 
+[node name="Wait" type="Timer" parent="."]
+wait_time = 0.1
+
 [connection signal="draw" from="." to="." method="_on_draw"]
 [connection signal="hidden" from="." to="." method="_on_hidden"]
 [connection signal="pressed" from="." to="." method="_on_pressed"]
+[connection signal="timeout" from="Wait" to="." method="_go"]

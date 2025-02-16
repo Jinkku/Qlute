@@ -13,24 +13,28 @@ public partial class SongSelect : Control
 	public Label SongArtist { get; set; }
 	public Label SongMapper { get; set; }
 	public Label Songpp { get; set; }
+	public Label Debugtext { get; set; }
 	public Label SongBPM { get; set; }
 	public List<object> SongEntry = new List<object>();
 	public int SongETick { get; set; }
+	public int scrolly = 0;
 	public PanelContainer ModScreen { get; set; }
 	public Label Diff { get; set; }
+	public ScrollBar scrollBar { get; set; }
+	int startposition = 30;
 	public void _res_resize(){
 		var window_size = GetViewportRect().Size;
 		Control SongPanel = GetNode<Control>("SongPanel");
-		SongPanel.Size = new Vector2(window_size.X/3, window_size.Y-105);
-		SongPanel.Position = new Vector2(window_size.X-(window_size.X/3), 105);
+		SongPanel.Size = new Vector2(window_size.X/2.5f, window_size.Y-200);
+		SongPanel.Position = new Vector2(window_size.X-(window_size.X/2.5f), 105);
 	}
 	public void _scrolling(){
-		VScrollBar scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
+		scrolly = (int)scrollBar.Value;
 		SongETick = 0;
 		foreach (Button self in SongEntry)
 		{
 			var Y = self.Position.Y;
-			self.Position = new Vector2(0, 50+(SongETick*115) - (115*(float)scrollBar.Value));
+			self.Position = new Vector2(0, startposition+(SongETick*83) - (83*scrolly));
 			SongETick++;
 		}
 	}
@@ -39,7 +43,7 @@ public partial class SongSelect : Control
 
 		var button = musiccardtemplate.Instantiate();
 		SongEntry.Add(button);
-		GetNode<VBoxContainer>("SongPanel/Scrolls/SSelection").AddChild(button);
+		GetNode<Control>("SongPanel").AddChild(button);
 		var childButton = button.GetNode<Button>(".");
 		var SongTitle = button.GetNode<Label>("./SongTitle");
 		var SongArtist = button.GetNode<Label>("./SongArtist");
@@ -47,6 +51,7 @@ public partial class SongSelect : Control
 		var TextureRect = button.GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
 		var Rating = button.GetNode<Label>("./PanelContainer/HBoxContainer/LevelRating/Rating");
 		var Version = button.GetNode<Label>("./PanelContainer/HBoxContainer/Difficulty/Version");
+		childButton.Position = pos;
 		SongTitle.Text = song;
 		SongArtist.Text = artist;
 		SongMapper.Text = "Created by " + mapper;
@@ -57,22 +62,27 @@ public partial class SongSelect : Control
 		childButton.SetMeta("bg", background);
 		childButton.SetMeta("SongID", SongETick);
 		TextureRect.Texture = SettingsOperator.LoadImage(background);
-
 	}
 	private void _on_random(){
 		SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
 	}
 	public override void _Ready()
 	{
+		scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		SongETick = 0;
+		Debugtext = new Label();
+		Debugtext.ZIndex = 1024;
+		Debugtext.Text = "X3";
+		Debugtext.Position = new Vector2(100,100);
+		AddChild(Debugtext);
 		Diff = GetNode<Label>("SongDetails/Info/Plasa/Difficulty");
 		ModScreen = GetNode<PanelContainer>("ModsScreen");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		var timex = DateTime.Now.Second;
 		foreach (var song in SettingsOperator.Beatmaps)
 
-		{
+		{	
 			AddSongList(song["Title"].ToString(),
 			song["Artist"].ToString(),
 			song["Mapper"].ToString(),
@@ -80,9 +90,10 @@ public partial class SongSelect : Control
 			song["path"].ToString()+song["background"].ToString(),
 			song["rawurl"].ToString(),(float)song["pp"]
 			,(string)song["Version"],song["path"].ToString()+song["audio"].ToString()
-			, new Vector2(0, 50+ (115*SongETick)));
+			, new Vector2(0, startposition + (83*SongETick)));
 			SongETick++;
 		}
+		scrolly = (int)SettingsOperator.Sessioncfg["SongID"];
 		GD.Print("Finished about " + (DateTime.Now.Second-timex) + "s");
 		SongTitle = GetNode<Label>("SongControl/HBoxContainer/Margin/Title");
 		SongArtist = GetNode<Label>("SongDetails/Info/Plasa/Artist");
@@ -90,11 +101,14 @@ public partial class SongSelect : Control
 		SongBPM = GetNode<Label>("SongDetails/Info/Plasa/BPM");
 		SongMapper = GetNode<Label>("SongDetails/Info/Plasa/Mapper");
 		_res_resize();
+		_scrolling();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
+
+		scrollBar.MaxValue = SettingsOperator.Beatmaps.Count;
 		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No song selected";
 		if (SettingsOperator.Sessioncfg["beatmaptitle"] != null){
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
@@ -137,7 +151,14 @@ public partial class SongSelect : Control
 
 		}else if (Input.IsActionJustPressed("Collections")){
 
+		}else if (Input.IsActionJustPressed("scrolldown") && scrolly+1 < SettingsOperator.Beatmaps.Count){
+			scrollBar.Value++;
+			_scrolling();
+		}else if (Input.IsActionJustPressed("scrollup")&& scrolly-1 > -1){
+			scrollBar.Value--;
+			_scrolling();
 		}
+		Debugtext.Text = scrolly.ToString();
 	}
 	
 	private void _on_animation_player_animation_finished(){
