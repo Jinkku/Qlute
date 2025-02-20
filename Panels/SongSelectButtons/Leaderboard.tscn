@@ -1,0 +1,83 @@
+[gd_scene load_steps=7 format=3 uid="uid://b8wmh5ui3lgly"]
+
+[ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="1_kgn3a"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aqjbx"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.208333, 0.208333, 0.208333, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d0w7j"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t4qfi"]
+bg_color = Color(0.285645, 0.529816, 0.84375, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="FontVariation" id="FontVariation_g8nbp"]
+variation_opentype = {
+2003265652: 700
+}
+variation_embolden = 1.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_sbnv6"]
+font = SubResource("FontVariation_g8nbp")
+
+[node name="Button" type="Button"]
+custom_minimum_size = Vector2(350, 50)
+offset_right = 8.0
+offset_bottom = 8.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_aqjbx")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Profile" type="PanelContainer" parent="HBoxContainer"]
+clip_children = 1
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_d0w7j")
+
+[node name="Picture" type="TextureRect" parent="HBoxContainer/Profile"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("1_kgn3a")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Username" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "aquapoki
+#1"
+
+[node name="SongBackgroundPreview2" type="PanelContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 10
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_t4qfi")
+
+[node name="Label" type="Label" parent="HBoxContainer/SongBackgroundPreview2"]
+layout_mode = 2
+text = "SS"
+label_settings = SubResource("LabelSettings_sbnv6")
+horizontal_alignment = 1

@@ -195,6 +195,8 @@ public partial class SettingsOperator : Node
         { "loggedin", false },
         { "loggingin", false },
         { "showaccountpro", false },
+        { "settingspanelv", false },
+        { "notificationpanelv", false },
         { "ranknumber", null },
 		{ "playercolour", null },
         { "SongID", -1 },

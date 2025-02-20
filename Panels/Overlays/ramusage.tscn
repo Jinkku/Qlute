@@ -1,0 +1,74 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4s2gfxfdt80k"]
+
+[ext_resource type="Script" path="res://Script/Singleton/RamUsage.cs" id="1_app5p"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_owqsl"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.568627)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="RamUsage" type="PanelContainer"]
+top_level = true
+z_index = 1024
+z_as_relative = false
+custom_minimum_size = Vector2(150, 20)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_owqsl")
+script = ExtResource("1_app5p")
+
+[node name="VSplit" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="FreeT" type="Label" parent="VSplit"]
+layout_mode = 2
+text = "Used"
+
+[node name="Free" type="Label" parent="VSplit/FreeT"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -44.0
+offset_bottom = 19.0
+grow_horizontal = 0
+text = "0.0KB"
+horizontal_alignment = 2
+
+[node name="UsedT" type="Label" parent="VSplit"]
+visible = false
+layout_mode = 2
+text = "Used: "
+
+[node name="Used" type="Label" parent="VSplit/UsedT"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -44.0
+offset_bottom = 19.0
+grow_horizontal = 0
+text = "0.0KB"
+horizontal_alignment = 2
+
+[node name="TotalT" type="Label" parent="VSplit"]
+visible = false
+layout_mode = 2
+text = "Total: "
+
+[node name="Total" type="Label" parent="VSplit/TotalT"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -44.0
+offset_bottom = 19.0
+grow_horizontal = 0
+text = "0.0KB"
+horizontal_alignment = 2

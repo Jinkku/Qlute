@@ -35,7 +35,7 @@ SceneSwitch="*res://Script/Singleton/SceneSwitch.cs"
 BeatmapListener="*res://Script/Singleton/BeatmapListener.cs"
 Global="*res://Script/Singleton/Global.cs"
 AudioPlayer="*res://Script/Singleton/AudioPlayer.cs"
-TopPanelOnTop="*res://Script/Singleton/TopPanelOnTop.cs"
+TopPanelOnTop="*res://Script/Singleton/OnTopOverlays.cs"
 
 [display]
 

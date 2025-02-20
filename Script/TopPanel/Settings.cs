@@ -8,6 +8,9 @@ public partial class Settings : Button
 	//public static <string, object>GetSetting { get; set; }
 	
 	public static SettingsOperator SettingsOperator { get; set; }
+	public Control Card;
+	public Control SettingsPanel {get;set;}
+	public Control NotificationPanel {get;set;}
 	private void ready(){
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 
@@ -26,26 +29,40 @@ public partial class Settings : Button
 		}
 
 	}
-	private void _on_pressed(){
-		Control AccountPanel = GetNode<Control>("%AccountPanel");
-		Control SettingsPanel = GetNode<Control>("%SettingsPanel");
-		AnimationPlayer AniPlayer = GetNode<AnimationPlayer>("%AccountPanelAnimation");
-		if (SettingsPanel.Visible) {
-			SettingsPanel.Visible = false;
+	private bool chksettingsv(){
+		return (bool)SettingsOperator.Sessioncfg["settingspanelv"];
+	}
+	private bool chknotifv(){
+		return (bool)SettingsOperator.Sessioncfg["notificationpanelv"];
+	}
+	private bool chkaccountpos(){
+		return (bool)SettingsOperator.Sessioncfg["showaccountpro"];
+	}
+	private void togglesettingspanel(){
+		if (!(bool)SettingsOperator.Sessioncfg["settingspanelv"]){
+		SettingsPanel = GD.Load<PackedScene>("res://Panels/Overlays/Settings.tscn").Instantiate().GetNode<Control>(".");
+		GetTree().CurrentScene.AddChild(SettingsPanel);
 		} else {
-			SettingsPanel.Visible = true;
+			SettingsPanel.QueueFree();
 		}
-		if (AccountPanel.Position.Y >=-250) {
-			AniPlayer.Play("Drop out");
-		}
+		SettingsOperator.Sessioncfg["settingspanelv"] = !(bool)SettingsOperator.Sessioncfg["settingspanelv"];
 
 	}
-	public void _on_AccountButton_pressed(){
+	private void togglenotificationpanel(){
+		GD.Print("clicked");
+		if (!(bool)SettingsOperator.Sessioncfg["notificationpanelv"]){
+		NotificationPanel = GD.Load<PackedScene>("res://Panels/Overlays/NotificationPanel.tscn").Instantiate().GetNode<Control>(".");
+		GetTree().CurrentScene.AddChild(NotificationPanel);
+		} else {
+			NotificationPanel.QueueFree();
+		}
+		SettingsOperator.Sessioncfg["notificationpanelv"] = !(bool)SettingsOperator.Sessioncfg["notificationpanelv"];
+
+	}
+	private void toggleaccountpanel(){
 		Control AccountProfileCard = GetNode<Control>("%AccountProfileCard");
 		Control AccountPanel = GetNode<Control>("%AccountPanel");
 		AnimationPlayer AniPlayer = GetNode<AnimationPlayer>("%AccountPanelAnimation");
-		Control SettingsPanel = GetNode<Control>("%SettingsPanel");
-		Control Card;
 		var loggedin = (bool)SettingsOperator.Sessioncfg["loggedin"];
 		if (loggedin == true) {
 			Card = AccountProfileCard;
@@ -53,8 +70,23 @@ public partial class Settings : Button
 			Card = AccountPanel;
 		}
 		if (((bool)SettingsOperator.Sessioncfg["showaccountpro"] == true)) AniPlayer.PlayBackwards("Drop in" + (loggedin == true ? "_Profile" : "")); else AniPlayer.Play("Drop in" + (loggedin == true ? "_Profile" : ""));
-		SettingsOperator.Sessioncfg["showaccountpro"] = !(bool)SettingsOperator.Sessioncfg["showaccountpro"];
-		SettingsPanel.Visible = false;
+		SettingsOperator.Sessioncfg["showaccountpro"] = !(bool)SettingsOperator.Sessioncfg["showaccountpro"];}
+	private void _settings_pressed(){
+		if (chkaccountpos()) {
+			toggleaccountpanel();
+		}
+		togglesettingspanel();
+
+	}
+	private void _on_notifications(){
+		if (chkaccountpos()) {
+			toggleaccountpanel();
+		}
+		togglenotificationpanel();
+
+	}
+	private void _on_AccountButton_pressed(){
+		toggleaccountpanel();
 
 	}
 }

@@ -25,7 +25,7 @@ public partial class SongSelect : Control
 	public void _res_resize(){
 		var window_size = GetViewportRect().Size;
 		Control SongPanel = GetNode<Control>("SongPanel");
-		SongPanel.Size = new Vector2(window_size.X/2.5f, window_size.Y-200);
+		SongPanel.Size = new Vector2(window_size.X/2.5f, window_size.Y-150);
 		SongPanel.Position = new Vector2(window_size.X-(window_size.X/2.5f), 105);
 	}
 	public void _scrolling(){
@@ -71,11 +71,11 @@ public partial class SongSelect : Control
 		scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		SongETick = 0;
-		Debugtext = new Label();
-		Debugtext.ZIndex = 1024;
-		Debugtext.Text = "X3";
-		Debugtext.Position = new Vector2(100,100);
-		AddChild(Debugtext);
+		//Debugtext = new Label();
+		//Debugtext.ZIndex = 1024;
+		//Debugtext.Text = "X3";
+		//Debugtext.Position = new Vector2(100,100);
+		//AddChild(Debugtext);
 		Diff = GetNode<Label>("SongDetails/Info/Plasa/Difficulty");
 		ModScreen = GetNode<PanelContainer>("ModsScreen");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -95,7 +95,7 @@ public partial class SongSelect : Control
 		}
 		scrolly = (int)SettingsOperator.Sessioncfg["SongID"];
 		GD.Print("Finished about " + (DateTime.Now.Second-timex) + "s");
-		SongTitle = GetNode<Label>("SongControl/HBoxContainer/Margin/Title");
+		SongTitle = GetNode<Label>("SongDetails/Info/Plasa/Title");
 		SongArtist = GetNode<Label>("SongDetails/Info/Plasa/Artist");
 		Songpp = GetNode<Label>("SongDetails/Info/Plasa/Points");
 		SongBPM = GetNode<Label>("SongDetails/Info/Plasa/BPM");
@@ -158,7 +158,7 @@ public partial class SongSelect : Control
 			scrollBar.Value--;
 			_scrolling();
 		}
-		Debugtext.Text = scrolly.ToString();
+		//Debugtext.Text = scrolly.ToString();
 	}
 	
 	private void _on_animation_player_animation_finished(){

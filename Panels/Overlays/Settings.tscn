@@ -200,13 +200,6 @@ visible = false
 layout_mode = 2
 text = "0.0.0 Development Build"
 
-[node name="Section6" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-text = "Development Build as of 2025-02-11
-
-"
-horizontal_alignment = 1
-
 [connection signal="item_selected" from="ColorRect/ScrollContainer/VBoxContainer/WindowSelector" to="." method="_changed_resolution"]
 [connection signal="drag_ended" from="ColorRect/ScrollContainer/VBoxContainer/BackgroundDim" to="." method="_backgrounddim_ended"]
 [connection signal="value_changed" from="ColorRect/ScrollContainer/VBoxContainer/BackgroundDim" to="." method="_backgrounddim_started"]

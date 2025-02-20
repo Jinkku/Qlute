@@ -10,8 +10,6 @@ public partial class SceneSwitch : Node
         Viewport root = GetTree().Root;
         // Using a negative index counts from the end, so this gets the last child node of `root`.
         CurrentScene = root.GetChild(-1);
-        Node FpsIndicator = GD.Load<PackedScene>("res://Panels/Overlays/fps_counter.tscn").Instantiate();
-        AddChild(FpsIndicator);
     }
     public void GotoScene(string path)
 {

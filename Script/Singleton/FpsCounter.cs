@@ -10,6 +10,7 @@ public partial class FpsCounter : PanelContainer
 	Label FPS { get; set; }
 	public double deltam {get; set;}
 	public static SettingsOperator SettingsOperator { get; set; }
+	public PanelContainer RamUsage { get; set; }
 	public override void _Ready(){
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		FPS = GetNode<Label>("./FPS");
@@ -23,6 +24,13 @@ public partial class FpsCounter : PanelContainer
 		FPS.Text =(1/deltam).ToString("0")+ "fps\n ";
 		Latency.Text = " \n" + lat.ToString("0.00")+ "ms";
 
+	}
+	private void _on_mouse_entered(){
+		RamUsage = GD.Load<PackedScene>("res://Panels/Overlays/ramusage.tscn").Instantiate().GetNode<PanelContainer>(".");
+		GetTree().CurrentScene.AddChild(RamUsage);
+
+	}private void _on_mouse_exited(){
+		RamUsage.QueueFree();
 	}
 	public override void _Process(double delta)
 	{

@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://bwpja5llmgtqo"]
+[gd_scene load_steps=31 format=3 uid="uid://bwpja5llmgtqo"]
 
 [ext_resource type="Script" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
 [ext_resource type="Texture2D" uid="uid://bvjgpego4fwun" path="res://Skin/System/settings.png" id="1_vco36"]
@@ -6,12 +6,11 @@
 [ext_resource type="Script" path="res://Script/TopPanel/Settings.cs" id="2_6umcl"]
 [ext_resource type="Texture2D" uid="uid://m7gp4julb5t0" path="res://Skin/System/loading.png" id="3_do024"]
 [ext_resource type="Texture2D" uid="uid://c2l61nwy40vn1" path="res://Skin/System/chat.png" id="4_e4lty"]
+[ext_resource type="Texture2D" uid="uid://die40m3acksoy" path="res://Skin/System/browse.png" id="5_1kmfn"]
 [ext_resource type="Texture2D" uid="uid://dkiv7s0dfykav" path="res://Skin/System/notifications.png" id="5_6ko15"]
 [ext_resource type="PackedScene" uid="uid://b4ys2qwkqf5m5" path="res://Panels/Overlays/AccountPrompt.tscn" id="6_fi6td"]
 [ext_resource type="Script" path="res://Script/TopPanel/Overlays/Clock.cs" id="7_fe0ly"]
 [ext_resource type="PackedScene" uid="uid://c3j07aaosy031" path="res://Panels/Overlays/AccountProfileCard.tscn" id="8_pxj8n"]
-[ext_resource type="PackedScene" uid="uid://d0qmsp3ewrdj4" path="res://Panels/Overlays/Settings.tscn" id="12_41los"]
-[ext_resource type="PackedScene" uid="uid://hbkr7peitwa8" path="res://Panels/Overlays/Notification.tscn" id="12_bhldf"]
 
 [sub_resource type="Animation" id="Animation_xvajm"]
 resource_name = "Bootup"
@@ -260,6 +259,15 @@ grow_horizontal = 0
 grow_vertical = 2
 theme_override_constants/separation = 0
 
+[node name="Browse" type="Button" parent="InfoBar/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
+theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
+keep_pressed_outside = true
+icon = ExtResource("5_1kmfn")
+icon_alignment = 1
+
 [node name="Chat" type="Button" parent="InfoBar/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
@@ -282,6 +290,7 @@ script = ExtResource("2_6umcl")
 [node name="Clock" type="Label" parent="InfoBar/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "Time
 Date"
 horizontal_alignment = 1
@@ -294,7 +303,8 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
 keep_pressed_outside = true
 icon = ExtResource("5_6ko15")
-icon_alignment = 1
+alignment = 2
+icon_alignment = 2
 
 [node name="AccountProfileCard" parent="." instance=ExtResource("8_pxj8n")]
 unique_name_in_owner = true
@@ -320,26 +330,12 @@ libraries = {
 "": SubResource("AnimationLibrary_a1fwo")
 }
 
-[node name="SettingsPanel" parent="." instance=ExtResource("12_41los")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-
-[node name="Button" parent="." instance=ExtResource("12_bhldf")]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -210.0
-offset_top = 60.0
-offset_right = -10.0
-offset_bottom = 140.0
-grow_horizontal = 0
-
 [connection signal="animation_finished" from="Wabamp" to="InfoBar" method="_Slidepanelfinished"]
 [connection signal="animation_started" from="Wabamp" to="InfoBar" method="_Slidepanelstart"]
 [connection signal="mouse_entered" from="InfoBar" to="InfoBar" method="_hovered"]
 [connection signal="mouse_exited" from="InfoBar" to="InfoBar" method="_unhover"]
 [connection signal="pressed" from="InfoBar/AccountButton" to="InfoBar/HBoxContainer/Settings" method="_on_AccountButton_pressed"]
-[connection signal="pressed" from="InfoBar/HBoxContainer/Settings" to="InfoBar/HBoxContainer/Settings" method="_on_pressed"]
+[connection signal="pressed" from="InfoBar/HBoxContainer/Browse" to="InfoBar" method="_on_browse_pressed"]
+[connection signal="pressed" from="InfoBar/HBoxContainer/Settings" to="InfoBar/HBoxContainer/Settings" method="_settings_pressed"]
 [connection signal="ready" from="InfoBar/HBoxContainer/Settings" to="InfoBar/HBoxContainer/Settings" method="ready"]
+[connection signal="pressed" from="InfoBar/HBoxContainer/Notifications" to="InfoBar" method="_on_notifications"]
