@@ -11,9 +11,4 @@ public partial class OnTopOverlays : CanvasLayer
         Node FpsIndicator = GD.Load<PackedScene>("res://Panels/Overlays/fps_counter.tscn").Instantiate();
         AddChild(FpsIndicator); // Adds FPS Counter
 	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double _delta)
-	{
-	}
 }

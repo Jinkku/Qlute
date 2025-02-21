@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://ckiye2n1ir8qg"]
+[gd_scene load_steps=25 format=3 uid="uid://ckiye2n1ir8qg"]
 
 [ext_resource type="Script" path="res://Script/SongSelect.cs" id="1_fin0e"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
@@ -35,6 +35,13 @@ shadow_size = 12
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5vans"]
 content_margin_left = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8domg"]
+bg_color = Color(0, 0, 0, 0.568627)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ombo5"]
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
@@ -165,9 +172,9 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_left = -50.0
-offset_top = 50.0
+offset_top = 70.0
 offset_right = 90.0
-offset_bottom = 210.0
+offset_bottom = 230.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_tc17c")
 
@@ -270,13 +277,14 @@ icon = ExtResource("3_javs2")
 [node name="ScrollContainer" type="ScrollContainer" parent="SongDetails"]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = -1
 anchor_bottom = 1.0
 offset_left = 10.0
 offset_top = 250.0
 offset_right = 360.0
 offset_bottom = -70.0
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8domg")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SongDetails/ScrollContainer"]
 layout_mode = 2
