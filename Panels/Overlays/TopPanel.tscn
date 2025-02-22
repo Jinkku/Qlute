@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bwpja5llmgtqo"]
+[gd_scene load_steps=28 format=3 uid="uid://bwpja5llmgtqo"]
 
 [ext_resource type="Script" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
 [ext_resource type="Texture2D" uid="uid://bvjgpego4fwun" path="res://Skin/System/settings.png" id="1_vco36"]
@@ -115,6 +115,9 @@ bg_color = Color(1, 1, 1, 0.34902)
 content_margin_left = 12.0
 content_margin_right = 12.0
 bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="FontVariation" id="FontVariation_wtjku"]
+variation_embolden = 1.0
 
 [node name="TopPanel" type="Control"]
 layout_mode = 3
@@ -250,10 +253,12 @@ script = ExtResource("2_6umcl")
 [node name="Clock" type="Label" parent="InfoBar/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_wtjku")
 theme_override_font_sizes/font_size = 12
 text = "Time
 Date"
 horizontal_alignment = 1
+vertical_alignment = 1
 script = ExtResource("7_fe0ly")
 
 [node name="Notifications" type="Button" parent="InfoBar/HBoxContainer"]

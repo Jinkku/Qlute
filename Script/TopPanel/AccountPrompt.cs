@@ -22,6 +22,10 @@ public partial class AccountPrompt : Control
 			Log.Visible = false;
 			NotLog.Visible = true;
 		}
+		Label Ranking = GetNode<Label>("AccPanel/Log/Panel/RankingNumber");
+		Label PlayerName = GetNode<Label>("AccPanel/Log/Panel/UsernameSection/Username"); 
+		PlayerName.Text = SettingsOperator.GetSetting("username")?.ToString();
+		Ranking.Text ="#" + SettingsOperator.Sessioncfg["ranknumber"]?.ToString();
 	}
 	public override void _Ready()
 	{
