@@ -53,12 +53,6 @@ mouse_filter = 2
 theme = SubResource("Theme_oahhy")
 script = ExtResource("1_ppf2d")
 
-[node name="RankingApi" type="HTTPRequest" parent="."]
-timeout = 3.0
-
-[node name="LoginApi" type="HTTPRequest" parent="."]
-timeout = 3.0
-
 [node name="AccPanel" type="PanelContainer" parent="."]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 1
@@ -244,6 +238,4 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_6jcst")
 text = "Log out"
 
 [connection signal="draw" from="." to="." method="_on_draw"]
-[connection signal="request_completed" from="RankingApi" to="." method="_on_Ranking_request_completed"]
-[connection signal="request_completed" from="LoginApi" to="." method="_on_login_api_request_completed"]
 [connection signal="pressed" from="AccPanel/Notlog/VBoxContainer/HBoxContainer2/Login" to="." method="_on_login_pressed"]
