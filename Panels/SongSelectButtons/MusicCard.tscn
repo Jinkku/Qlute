@@ -80,7 +80,6 @@ theme_override_font_sizes/font_size = 12
 text = "mapped by idiot"
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
-z_index = 1
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0

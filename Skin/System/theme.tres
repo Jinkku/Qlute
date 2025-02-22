@@ -1,4 +1,33 @@
-[gd_resource type="Theme" load_steps=4 format=3 uid="uid://cu8ap5uak1q6c"]
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://cu8ap5uak1q6c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kjx47"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.25, 0.25, 0.25, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xtyly"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.568627)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p7jbp"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.568627)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3kel3"]
 bg_color = Color(0.09375, 0.09375, 0.09375, 1)
@@ -30,6 +59,9 @@ shadow_size = 5
 shadow_offset = Vector2(0, 2)
 
 [resource]
+LineEdit/styles/focus = SubResource("StyleBoxFlat_kjx47")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_xtyly")
+LineEdit/styles/read_only = SubResource("StyleBoxFlat_p7jbp")
 ProgressBar/styles/background = SubResource("StyleBoxFlat_3kel3")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_jxw2s")
 TooltipPanel/styles/panel = SubResource("StyleBoxFlat_vu2r3")

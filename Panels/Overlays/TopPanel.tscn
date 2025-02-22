@@ -1,20 +1,20 @@
-[gd_scene load_steps=31 format=3 uid="uid://bwpja5llmgtqo"]
+[gd_scene load_steps=27 format=3 uid="uid://bwpja5llmgtqo"]
 
 [ext_resource type="Script" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
 [ext_resource type="Texture2D" uid="uid://bvjgpego4fwun" path="res://Skin/System/settings.png" id="1_vco36"]
 [ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="2_4cvop"]
 [ext_resource type="Script" path="res://Script/TopPanel/Settings.cs" id="2_6umcl"]
 [ext_resource type="Texture2D" uid="uid://m7gp4julb5t0" path="res://Skin/System/loading.png" id="3_do024"]
+[ext_resource type="Script" path="res://Script/TopPanel/Ranking.cs" id="3_ggapr"]
 [ext_resource type="Texture2D" uid="uid://c2l61nwy40vn1" path="res://Skin/System/chat.png" id="4_e4lty"]
+[ext_resource type="Script" path="res://Script/TopPanel/UPlayerName.cs" id="4_v36dv"]
 [ext_resource type="Texture2D" uid="uid://die40m3acksoy" path="res://Skin/System/browse.png" id="5_1kmfn"]
 [ext_resource type="Texture2D" uid="uid://dkiv7s0dfykav" path="res://Skin/System/notifications.png" id="5_6ko15"]
-[ext_resource type="PackedScene" uid="uid://b4ys2qwkqf5m5" path="res://Panels/Overlays/AccountPrompt.tscn" id="6_fi6td"]
 [ext_resource type="Script" path="res://Script/TopPanel/Overlays/Clock.cs" id="7_fe0ly"]
-[ext_resource type="PackedScene" uid="uid://c3j07aaosy031" path="res://Panels/Overlays/AccountProfileCard.tscn" id="8_pxj8n"]
 
 [sub_resource type="Animation" id="Animation_xvajm"]
 resource_name = "Bootup"
-length = 0.5
+length = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -22,8 +22,8 @@ tracks/0/path = NodePath("InfoBar:position")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.329877, 0.329877),
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(0, -50), Vector2(0, 0)]
 }
@@ -116,48 +116,6 @@ content_margin_left = 12.0
 content_margin_right = 12.0
 bg_color = Color(0, 0, 0, 0)
 
-[sub_resource type="Animation" id="Animation_q6rti"]
-resource_name = "Drop in"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.25, 0.25),
-"update": 0,
-"values": [Vector2(0, -305), Vector2(0, 50)]
-}
-
-[sub_resource type="Animation" id="Animation_xakw0"]
-resource_name = "Drop in_Profile"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../AccountProfileCard:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.25, 0.25),
-"update": 0,
-"values": [Vector2(0, -205), Vector2(0, 50)]
-}
-
-[sub_resource type="Animation" id="Animation_12due"]
-length = 0.001
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_a1fwo"]
-_data = {
-"Drop in": SubResource("Animation_q6rti"),
-"Drop in_Profile": SubResource("Animation_xakw0"),
-"RESET": SubResource("Animation_12due")
-}
-
 [node name="TopPanel" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -225,6 +183,7 @@ offset_top = 25.0
 offset_right = 103.0
 offset_bottom = 44.0
 text = "#?"
+script = ExtResource("3_ggapr")
 
 [node name="UPlayerName" type="Label" parent="InfoBar/AccountButton"]
 unique_name_in_owner = true
@@ -237,6 +196,7 @@ text = "If your seeing
 this... it broke :<"
 clip_text = true
 text_overrun_behavior = 3
+script = ExtResource("4_v36dv")
 
 [node name="Loadingicon" type="Sprite2D" parent="InfoBar/AccountButton"]
 visible = false
@@ -303,32 +263,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
 keep_pressed_outside = true
 icon = ExtResource("5_6ko15")
-alignment = 2
-icon_alignment = 2
-
-[node name="AccountProfileCard" parent="." instance=ExtResource("8_pxj8n")]
-unique_name_in_owner = true
-layout_mode = 1
-offset_top = -205.0
-offset_bottom = -255.0
-
-[node name="AccountPanel" parent="." instance=ExtResource("6_fi6td")]
-unique_name_in_owner = true
-layout_mode = 0
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = -305.0
-offset_right = 0.0
-offset_bottom = -305.0
-grow_horizontal = 1
-grow_vertical = 1
-
-[node name="AccountPanelAnimation" type="AnimationPlayer" parent="AccountPanel"]
-unique_name_in_owner = true
-libraries = {
-"": SubResource("AnimationLibrary_a1fwo")
-}
+icon_alignment = 1
 
 [connection signal="animation_finished" from="Wabamp" to="InfoBar" method="_Slidepanelfinished"]
 [connection signal="animation_started" from="Wabamp" to="InfoBar" method="_Slidepanelstart"]
@@ -338,4 +273,4 @@ libraries = {
 [connection signal="pressed" from="InfoBar/HBoxContainer/Browse" to="InfoBar" method="_on_browse_pressed"]
 [connection signal="pressed" from="InfoBar/HBoxContainer/Settings" to="InfoBar/HBoxContainer/Settings" method="_settings_pressed"]
 [connection signal="ready" from="InfoBar/HBoxContainer/Settings" to="InfoBar/HBoxContainer/Settings" method="ready"]
-[connection signal="pressed" from="InfoBar/HBoxContainer/Notifications" to="InfoBar" method="_on_notifications"]
+[connection signal="pressed" from="InfoBar/HBoxContainer/Notifications" to="InfoBar/HBoxContainer/Settings" method="_on_notifications"]

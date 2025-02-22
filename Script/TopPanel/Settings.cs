@@ -49,9 +49,8 @@ public partial class Settings : Button
 
 	}
 	private void togglenotificationpanel(){
-		GD.Print("clicked");
 		if (!(bool)SettingsOperator.Sessioncfg["notificationpanelv"]){
-		NotificationPanel = GD.Load<PackedScene>("res://Panels/Overlays/NotificationPanel.tscn").Instantiate().GetNode<Control>(".");
+		NotificationPanel = GD.Load<PackedScene>("res://Panels/Overlays/NotificationPanel.tscn").Instantiate().GetNode<ColorRect>(".");
 		GetTree().CurrentScene.AddChild(NotificationPanel);
 		} else {
 			NotificationPanel.QueueFree();
@@ -60,16 +59,15 @@ public partial class Settings : Button
 
 	}
 	private void toggleaccountpanel(){
-		Control AccountProfileCard = GetNode<Control>("%AccountProfileCard");
-		Control AccountPanel = GetNode<Control>("%AccountPanel");
-		AnimationPlayer AniPlayer = GetNode<AnimationPlayer>("%AccountPanelAnimation");
+	//	AnimationPlayer AniPlayer = GetNode<AnimationPlayer>("%AccountPanelAnimation");
 		var loggedin = (bool)SettingsOperator.Sessioncfg["loggedin"];
-		if (loggedin == true) {
-			Card = AccountProfileCard;
+		if (!(bool)SettingsOperator.Sessioncfg["showaccountpro"]){
+		Card = GD.Load<PackedScene>("res://Panels/Overlays/AccountPrompt.tscn").Instantiate().GetNode<Control>(".");
+		Card.Position = new Vector2(0,50);
+		GetTree().Root.GetNode<ColorRect>("/root/TopPanelOnTop/TopPanel/InfoBar").AddChild(Card);
 		} else {
-			Card = AccountPanel;
+			Card.QueueFree();
 		}
-		if (((bool)SettingsOperator.Sessioncfg["showaccountpro"] == true)) AniPlayer.PlayBackwards("Drop in" + (loggedin == true ? "_Profile" : "")); else AniPlayer.Play("Drop in" + (loggedin == true ? "_Profile" : ""));
 		SettingsOperator.Sessioncfg["showaccountpro"] = !(bool)SettingsOperator.Sessioncfg["showaccountpro"];}
 	private void _settings_pressed(){
 		if (chkaccountpos()) {
