@@ -11,6 +11,6 @@ size = Vector2(100, 20)
 texture = ExtResource("1_3mpj0")
 centered = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="Perfect" type="CollisionShape2D" parent="."]
 position = Vector2(50, 42)
 shape = SubResource("RectangleShape2D_fj06c")
