@@ -11,11 +11,13 @@ public partial class MusicCard : Button
 	public Timer Wait { get; set; }
 	public TextureRect Preview { get; set; }
 	public int SongID { get; set; }
+	public Label SongTitle { get; set; }
 	public int waitt = 0;
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		self = GetNode<Button>(".");
+		SongTitle = GetNode<Label>("SongTitle");
 		Cover = GetTree().Root.GetNode<TextureRect>("Song Select/BeatmapBackground");
 		Preview = GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
 		Wait = GetNode<Timer>("./Wait");
@@ -46,7 +48,15 @@ public partial class MusicCard : Button
 		}else {
 			Visible = false;
 		}
-		Text = Position.Y.ToString();
+		bool? songuni = SettingsOperator.GetSetting("songunicode") as bool?;
+		if (songuni != null && songuni == true)
+		{
+			SongTitle.Text = SettingsOperator.Beatmaps[(int)self.GetMeta("SongID")]["TitleUnicode"].ToString();
+		}
+		else
+		{
+			SongTitle.Text = SettingsOperator.Beatmaps[(int)self.GetMeta("SongID")]["Title"].ToString();
+		}
 		self.ButtonPressed = SettingsOperator.Sessioncfg["SongID"].ToString().Equals(self.GetMeta("SongID").ToString());
 	}
 }

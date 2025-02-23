@@ -27,6 +27,7 @@ public partial class SettingsOperator : Node
         { "windowmode", 0 },
 		{ "volume", 1 },
 		{ "backgrounddim", 70 },
+		{ "songunicode", false },
 		{ "skin", null },
 		{ "username", null },
 		{ "password", null },
@@ -96,6 +97,7 @@ public partial class SettingsOperator : Node
         var text = file.GetAsText();
         var lines = text.Split("\n");
         string songtitle = "";
+        string songunicodet = "";
         string artist = "";
         string version = "";
         int timetotal = 0;
@@ -116,6 +118,10 @@ public partial class SettingsOperator : Node
             if (line.StartsWith("Title:"))
             {
             songtitle = line.Split(":")[1].Trim();
+            }
+            if (line.StartsWith("TitleUnicode:"))
+            {
+            songunicodet = line.Split(":")[1].Trim();
             }
             if (line.StartsWith("Artist:"))
             {
@@ -187,6 +193,7 @@ public partial class SettingsOperator : Node
         }
 		Beatmaps.Add(new Dictionary<string, object>{
             { "Title", songtitle },
+            { "TitleUnicode", songunicodet },
             { "Artist", artist },
             { "Mapper", mapper },
             { "KeyCount", keycount },
