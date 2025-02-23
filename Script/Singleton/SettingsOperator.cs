@@ -76,7 +76,15 @@ public partial class SettingsOperator : Node
 		    string audioPath = beatmap["path"]+ "" +beatmap["audio"];
             if (System.IO.File.Exists(audioPath))
             {
-                AudioPlayer.Instance.Stream = AudioPlayer.LoadMP3(audioPath);
+                AudioStream filestream = null;
+                if (audioPath.EndsWith(".mp3")){
+                    filestream = AudioPlayer.LoadMP3(audioPath);
+                } else if (audioPath.EndsWith(".wav")){
+                    filestream = AudioPlayer.LoadWAV(audioPath);
+                } else if (audioPath.EndsWith(".ogg")){
+                    filestream = AudioPlayer.LoadOGG(audioPath);
+                }
+                AudioPlayer.Instance.Stream = filestream;
                 AudioPlayer.Instance.Play();
             }
             else

@@ -7,7 +7,9 @@ public partial class BeatmapListener : Node
 	public static SettingsOperator SettingsOperator { get; set; }
 	public void Parse_BeatmapDir(string dir)
 	{
-		foreach (string file in Directory.GetFiles(dir, "*.osu"))
+		var files = Directory.GetFiles(dir, "*.osu");
+		Array.Sort(files, (x, y) => new FileInfo(x).Length.CompareTo(new FileInfo(y).Length));
+		foreach (string file in files)
 		{
 			//GD.Print(file);
 			SettingsOperator.Parse_Beatmapfile(file);

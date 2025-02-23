@@ -130,7 +130,7 @@ public partial class Gameplay : Control
 		var viewportSize = GetViewportRect().Size.Y;
 		foreach (var Notebox in Notes){
 			var notex = Notebox.timing + est + viewportSize/2;
-			if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && !Notebox.Nodes.Any() && notex > 0 && notex < viewportSize-100)
+			if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && !Notebox.Nodes.Any() && notex > -100 && notex < viewportSize+100)
 			{
 				foreach (int part in Notebox.Notes){
 					GD.Print("adddd");
@@ -139,7 +139,7 @@ public partial class Gameplay : Control
 					GetNode<ColorRect>("Playfield/Chart").AddChild(node);
 					node.Position = new Vector2(100 * part, notex);
 				}
-			} else if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && Notebox.Nodes.Any() && notex > 0 && notex < viewportSize-100)
+			} else if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && Notebox.Nodes.Any() && notex > -100 && notex < viewportSize+100)
 			{
 				foreach (var node in Notebox.Nodes){
 					node.Position = new Vector2(node.Position.X, notex);
