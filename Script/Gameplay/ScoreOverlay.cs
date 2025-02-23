@@ -10,8 +10,8 @@ public partial class ScoreOverlay : Control
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		score = GetNode<Label>("Score");
-		pp = GetNode<Label>("pp");
+		score = GetNode<Label>("ScoreBarBack/ScoreInfo/Score");
+		pp = GetNode<Label>("ScoreBarBack/ScoreInfo/InfoStatus/pp");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

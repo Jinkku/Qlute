@@ -1,25 +1,24 @@
-[gd_scene load_steps=8 format=3 uid="uid://b0f11jnivkb1b"]
+[gd_scene load_steps=6 format=3 uid="uid://b0f11jnivkb1b"]
 
 [ext_resource type="Script" path="res://Script/Gameplay/ScoreOverlay.cs" id="1_j3lhn"]
 [ext_resource type="FontFile" uid="uid://26bmgi83sgtv" path="res://Fonts/score.ttf" id="1_jd5hx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6s3ea"]
-bg_color = Color(0.238715, 0.321072, 0.458333, 0.568627)
-border_width_right = 25
-border_color = Color(0.145209, 0.194272, 0.276042, 0.568627)
-corner_radius_bottom_right = 200
-corner_detail = 1
+content_margin_left = 10.0
+content_margin_top = 10.0
+bg_color = Color(0.360406, 0.45266, 0.947917, 1)
+skew = Vector2(0.5, 0)
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.163493, 0.238045, 0.640625, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 25.0
 expand_margin_right = 25.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ucmn"]
-bg_color = Color(0.338542, 0.338542, 0.338542, 1)
-corner_radius_bottom_right = 150
-corner_detail = 1
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b2pnw"]
-bg_color = Color(0.94902, 0.94902, 0.94902, 1)
-corner_radius_bottom_right = 150
-corner_detail = 1
+expand_margin_bottom = 5.0
+shadow_size = 12
 
 [sub_resource type="LabelSettings" id="LabelSettings_lvexv"]
 font = ExtResource("1_jd5hx")
@@ -43,51 +42,45 @@ script = ExtResource("1_j3lhn")
 [node name="ScoreBarBack" type="PanelContainer" parent="."]
 self_modulate = Color(1, 1, 1, 0.568627)
 layout_mode = 1
-offset_right = 420.0
+offset_right = 359.0
 offset_bottom = 100.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_6s3ea")
 
-[node name="HealthBarNone" type="PanelContainer" parent="."]
-layout_mode = 0
-offset_top = 80.0
-offset_right = 340.0
-offset_bottom = 100.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_7ucmn")
-
-[node name="HealthBarActive" type="PanelContainer" parent="."]
+[node name="ScoreInfo" type="VBoxContainer" parent="ScoreBarBack"]
 layout_mode = 2
-offset_top = 80.0
-offset_right = 236.0
-offset_bottom = 100.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_b2pnw")
+theme_override_constants/separation = 0
 
-[node name="Score" type="Label" parent="."]
-layout_mode = 0
-offset_left = 10.0
-offset_top = 10.0
-offset_right = 285.0
-offset_bottom = 49.0
+[node name="Score" type="Label" parent="ScoreBarBack/ScoreInfo"]
+layout_mode = 2
 text = "00000000"
 label_settings = SubResource("LabelSettings_lvexv")
+clip_text = true
 
-[node name="pp" type="Label" parent="."]
-layout_mode = 0
-offset_left = 110.0
-offset_top = 49.0
-offset_right = 189.0
-offset_bottom = 71.0
+[node name="InfoStatus" type="HBoxContainer" parent="ScoreBarBack/ScoreInfo"]
+layout_mode = 2
+
+[node name="Accuracy" type="Label" parent="ScoreBarBack/ScoreInfo/InfoStatus"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_jd5hx")
+text = "100.00%"
+label_settings = SubResource("LabelSettings_0ag8s")
+clip_text = true
+
+[node name="pp" type="Label" parent="ScoreBarBack/ScoreInfo/InfoStatus"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
 theme_override_fonts/font = ExtResource("1_jd5hx")
 text = "9,999pp"
 label_settings = SubResource("LabelSettings_0ag8s")
 clip_text = true
 
-[node name="Accuracy" type="Label" parent="."]
-layout_mode = 0
-offset_left = 10.0
-offset_top = 49.0
-offset_right = 89.0
-offset_bottom = 71.0
-theme_override_fonts/font = ExtResource("1_jd5hx")
-text = "100.00%"
-label_settings = SubResource("LabelSettings_0ag8s")
-clip_text = true
+[node name="MarginContainer" type="MarginContainer" parent="ScoreBarBack/ScoreInfo"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 5
+
+[node name="HealthBar" type="ProgressBar" parent="ScoreBarBack/ScoreInfo"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+value = 24.0
+show_percentage = false
