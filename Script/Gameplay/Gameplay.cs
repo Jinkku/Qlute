@@ -105,6 +105,7 @@ public partial class Gameplay : Control
 			Keyx++;
 		}
 		if (Input.IsActionJustPressed("pausemenu")){
+			SettingsOperator.toppaneltoggle();
 			GetTree().ChangeSceneToFile("res://Panels/Screens/song_select.tscn");
 		}
 		var viewportSize = GetViewportRect().Size.Y;

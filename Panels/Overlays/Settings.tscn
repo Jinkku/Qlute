@@ -1,6 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://d0qmsp3ewrdj4"]
+[gd_scene load_steps=10 format=3 uid="uid://d0qmsp3ewrdj4"]
 
 [ext_resource type="Script" path="res://Script/SettingsPanel.cs" id="1_gfh6f"]
+
+[sub_resource type="FontVariation" id="FontVariation_tvan6"]
+variation_opentype = {
+2003265652: 700
+}
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llstv"]
 content_margin_left = 0.0
@@ -85,6 +90,7 @@ theme_override_constants/separation = 15
 
 [node name="Name" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_tvan6")
 theme_override_font_sizes/font_size = 48
 theme_override_styles/normal = SubResource("StyleBoxEmpty_llstv")
 text = "Settings"
@@ -93,12 +99,11 @@ text = "Settings"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
 theme_override_fonts/font = SubResource("FontVariation_n76qt")
-text = "General"
+text = "Important Infomation"
 
 [node name="Notice" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-text = "Note: Most of these are not implemented yet.
-:<"
+text = "Closed-Beta <3"
 
 [node name="Section2" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
 layout_mode = 2

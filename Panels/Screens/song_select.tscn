@@ -23,7 +23,6 @@ border_color = Color(0.266667, 0.639216, 1, 1)
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_detail = 14
-shadow_color = Color(0.266667, 0.639216, 1, 1)
 shadow_size = 12
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5vans"]

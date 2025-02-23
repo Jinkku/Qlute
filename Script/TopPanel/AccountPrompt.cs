@@ -30,8 +30,6 @@ public partial class AccountPrompt : Control
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		RankingApi = GetNode<HttpRequest>("RankingApi");
-		LoginApi = GetNode<HttpRequest>("LoginApi");
 		Password = GetNode<LineEdit>("AccPanel/Notlog/VBoxContainer/Password");
 		User = GetNode<LineEdit>("AccPanel/Notlog/VBoxContainer/Username");
 		NotLog = GetNode<MarginContainer>("AccPanel/Notlog");
