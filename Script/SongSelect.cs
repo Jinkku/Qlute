@@ -15,6 +15,7 @@ public partial class SongSelect : Control
 	public Label Songpp { get; set; }
 	public Label Debugtext { get; set; }
 	public Label SongBPM { get; set; }
+	public Label SongLen { get; set; }
 	public List<object> SongEntry = new List<object>();
 	public int SongETick { get; set; }
 	public int scrolly = 0;
@@ -99,6 +100,7 @@ public partial class SongSelect : Control
 		SongArtist = GetNode<Label>("SongDetails/Info/Plasa/Artist");
 		Songpp = GetNode<Label>("SongDetails/Info/Plasa/Points");
 		SongBPM = GetNode<Label>("SongDetails/Info/Plasa/BPM");
+		SongLen = GetNode<Label>("SongDetails/Info/Plasa/Length");
 		SongMapper = GetNode<Label>("SongDetails/Info/Plasa/Mapper");
 		_res_resize();
 		_scrolling();
@@ -114,16 +116,19 @@ public partial class SongSelect : Control
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
 		Songpp.Text = "+" + SettingsOperator.Gameplaycfg["maxpp"].ToString("N0")+"pp";
 		SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
-		SongBPM.Text = "BPM:" + SettingsOperator.Sessioncfg["beatmapbpm"]?.ToString() ?? "";
+		SongBPM.Text = "BPM - " + SettingsOperator.Sessioncfg["beatmapbpm"]?.ToString() ?? "";
+		SongLen.Text = TimeSpan.FromMilliseconds(SettingsOperator.Gameplaycfg["timetotal"]).ToString(@"mm\:ss") ?? "00:00";
 		SongArtist.Visible = true;
 		Songpp.Visible = true;
 		SongMapper.Visible = true;
+		SongLen.Visible = true;
 		SongBPM.Visible = true;}
 		else {
 			SongArtist.Visible = false;
 			Songpp.Visible = false;
 			SongMapper.Visible = false;
 			SongBPM.Visible = false;
+			SongLen.Visible = false;
 		}
 		if (SettingsOperator.Sessioncfg["beatmapdiff"] != null){
 		Diff.Text = SettingsOperator.Sessioncfg["beatmapdiff"].ToString();}

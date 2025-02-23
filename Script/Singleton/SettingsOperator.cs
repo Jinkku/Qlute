@@ -39,33 +39,7 @@ public partial class SettingsOperator : Node
     };
     public Dictionary<string, object> Configurationbk {get; set;}
 
-    public float Get_ppvalue(string filename){
-        using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
-        var text = file.GetAsText();
-        var lines = text.Split("\n");
-        var ppvalue = 0.0f;
-        var hitob = 0;
-        var isHitObjectSection = false;
-        foreach (string line in lines)
-        {
-            if (line.Trim() == "[HitObjects]")
-            {
-                isHitObjectSection = true;
-                continue;
-            }
 
-            if (isHitObjectSection)
-            {
-                // Break if we reach an empty line or another section
-                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("["))
-                    break;
-                hitob++;
-            }
-        }
-        ppvalue = ppbase * hitob;
-        return ppvalue;
-        
-        }
     // Imaging processing part of the game because godot don't have a way to load images externally i suppose-
     public Texture2D LoadImage(string path)
     {
@@ -93,6 +67,8 @@ public partial class SettingsOperator : Node
             Sessioncfg["beatmaptitle"] = beatmap["Title"];
             Sessioncfg["beatmapartist"] = beatmap["Artist"];
             Sessioncfg["beatmapdiff"] = beatmap["Version"];
+            Sessioncfg["beatmapbpm"] = beatmap["bpm"];
+            Gameplaycfg["timetotal"] = (int)beatmap["timetotal"];
             Sessioncfg["beatmapmapper"] = beatmap["Mapper"];
 		    var Texture = LoadImage(beatmap["path"].ToString()+beatmap["background"].ToString());
 		    Sessioncfg["background"] = (Texture2D)Texture;
@@ -109,20 +85,30 @@ public partial class SettingsOperator : Node
             }
         } else{ GD.PrintErr("Can't select a song that don't exist :/");}
     }
+    public float Get_ppvalue(int hitob){
+        var ppvalue = 0.0f;
+        ppvalue = ppbase * hitob;
+        return ppvalue;
+        }
     public void Parse_Beatmapfile(string filename){
         GD.Print("Parsing beatmap file...");
         using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
         var text = file.GetAsText();
         var lines = text.Split("\n");
-        float ppvalue = Get_ppvalue(filename);
         string songtitle = "";
         string artist = "";
         string version = "";
+        int timetotal = 0;
+        int bpm = 0;
+        float ppvalue = 0;
         string mapper = "";
+        int notetime = 0;
         int levelrating = 0;
         string background = "";
         string audio = "";
         string rawurl = filename;
+        var hitob = 0;
+        var isHitObjectSection = false;
         string path = filename.Replace(filename.Split("/").Last(),"");
         int keycount = 4;
         foreach (var line in lines)
@@ -159,6 +145,45 @@ public partial class SettingsOperator : Node
                 background = parts[1].Trim();
             }
             }
+            if (line.StartsWith("[TimingPoints]"))
+            {
+            var timingPointLines = lines.SkipWhile(l => !l.StartsWith("[TimingPoints]")).Skip(1);
+            foreach (var timingLine in timingPointLines)
+            {
+                GD.Print(timingLine);
+                if (string.IsNullOrWhiteSpace(timingLine) || timingLine.StartsWith("["))
+                break;
+
+                var timingParts = timingLine.Split(",");
+                if (timingParts.Length > 1 && float.TryParse(timingParts[1], out float bpmValue))
+                {
+                bpmValue = 60000 / bpmValue;
+                bpm = (int)bpmValue;
+                break;
+                }
+            }
+            }
+            if (line.Trim() == "[HitObjects]")
+            {
+                isHitObjectSection = true;
+                continue;
+            }
+
+            if (isHitObjectSection)
+            {
+                // Break if we reach an empty line or another section
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("["))
+                {
+                    ppvalue = Get_ppvalue(hitob);
+                    isHitObjectSection = !isHitObjectSection;
+                    timetotal = notetime;
+                    break;
+                }
+                var notecfg = line.Split(new[] { ',', ':' });
+                notetime = float.TryParse(notecfg[2], out float notetimev) ? (int)notetimev : 0;
+                var notesect = notecfg[0];
+                hitob++;
+            }
         }
 		Beatmaps.Add(new Dictionary<string, object>{
             { "Title", songtitle },
@@ -167,6 +192,8 @@ public partial class SettingsOperator : Node
             { "KeyCount", keycount },
             { "Version", version },
             { "pp", ppvalue },
+            { "bpm", bpm },
+            { "timetotal", (int)timetotal },
             { "levelrating", ppvalue*0.05 },
             { "background", background },
             { "audio", audio },

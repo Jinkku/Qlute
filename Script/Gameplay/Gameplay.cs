@@ -85,6 +85,7 @@ public partial class Gameplay : Control
 		if ((float)SettingsOperator.Sessioncfg["songspeed"] != 1.0f){
 			est = est * (float)SettingsOperator.Sessioncfg["songspeed"];
 		}
+		SettingsOperator.Gameplaycfg["time"] = (int)est;
 		//float est = AudioPlayer.Instance.GetPlaybackPosition()*1000;
 		int Ttick = 0;
 		int Keyx = 0;
