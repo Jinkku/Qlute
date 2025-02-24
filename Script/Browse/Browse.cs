@@ -28,7 +28,7 @@ public partial class Browse : Control
 	public override void _Ready()
 	{
 		BrowseApi = new HttpRequest();
-		BrowseApi.Timeout = 3;
+		BrowseApi.Timeout = 60;
 		AddChild(BrowseApi);
 		BrowseApi.Connect("request_completed", new Callable(this, nameof(_BrowseAPI_finished)));
 		StartBrowse();
@@ -38,8 +38,8 @@ public partial class Browse : Control
 	}
 	private void _BrowseAPI_finished(long result, long responseCode, string[] headers, byte[] body){
 		string BrowseEntries = (string)Encoding.UTF8.GetString(body);
-		var point = 0;
 		List<BrowseCatalogLegend> items = JsonSerializer.Deserialize<List<BrowseCatalogLegend>>(BrowseEntries);
+		try{
 		foreach (BrowseCatalogLegend line in items){
 			var Element = GD.Load<PackedScene>("res://Panels/BrowseElements/Card.tscn").Instantiate().GetNode<Button>(".");
 			//GD.Print(line.cover);
@@ -51,7 +51,9 @@ public partial class Browse : Control
 			//Element.GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview").Texture = SettingsOperator.LoadImage(pictures[0].card);
 			GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps").AddChild(Element);
 		}
-
+		}catch (Exception e){
+			GD.Print(e);
+		}
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	private void _on_back(){
