@@ -260,7 +260,7 @@ public partial class SettingsOperator : Node
         { "TopPanelSlideip", false },
         { "toppanelhide", false },
         { "Reloadmap", false },
-        { "reloadbdb", false },
+        { "reloaddb", false },
         { "loggedin", false },
         { "loggingin", false },
         { "showaccountpro", false },

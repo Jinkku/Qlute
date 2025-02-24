@@ -23,7 +23,6 @@ public partial class BeatmapListener : Node
 		{
 			string beatmapDir = Path.Combine(SettingsOperator.beatmapsdir, Path.GetFileNameWithoutExtension(file));
 			GD.Print(beatmapDir);
-			GetTree().Quit();
 			if (!Directory.Exists(beatmapDir))
 			{
 				Directory.CreateDirectory(beatmapDir);
@@ -34,9 +33,12 @@ public partial class BeatmapListener : Node
 				File.Delete(file);
 				continue;
 			}
-			System.IO.Compression.ZipFile.ExtractToDirectory(file, SettingsOperator.beatmapsdir);
+			System.IO.Compression.ZipFile.ExtractToDirectory(file, beatmapDir);
 			File.Delete(file);
-			GD.Print("Extracted and moved " + file + " to " + SettingsOperator.beatmapsdir);
+			GD.Print("Extracted and moved " + file + " to " + beatmapDir);
+			GD.Print("Parsing " + beatmapDir);
+			Parse_BeatmapDir(beatmapDir);
+			GD.Print("Parsed...");
 		}
 	}
 	public override void _Ready()
