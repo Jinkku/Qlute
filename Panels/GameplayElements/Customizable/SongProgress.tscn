@@ -12,6 +12,7 @@ offset_top = 30.0
 offset_bottom = 49.0
 grow_horizontal = 2
 value = 56.0
+show_percentage = false
 script = ExtResource("1_fvb55")
 
 [node name="Current" type="Label" parent="."]

@@ -10,7 +10,7 @@ public partial class SettingsOperator : Node
 	//public string homedir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + "/.qlute";
     public string homedir = OS.GetUserDataDir();
 	public string beatmapsdir => homedir + "/beatmaps";
-    public float ppbase = 0.072f;
+    public static float ppbase = 0.072f;
 	public string downloadsdir => homedir + "/downloads";
 	public string replaydir => homedir + "/replays";
 	public string screenshotdir => homedir + "/screenshots";
@@ -76,7 +76,15 @@ public partial class SettingsOperator : Node
 		    string audioPath = beatmap["path"]+ "" +beatmap["audio"];
             if (System.IO.File.Exists(audioPath))
             {
-                AudioPlayer.Instance.Stream = AudioPlayer.LoadMP3(audioPath);
+                AudioStream filestream = null;
+                if (audioPath.EndsWith(".mp3")){
+                    filestream = AudioPlayer.LoadMP3(audioPath);
+                } else if (audioPath.EndsWith(".wav")){
+                    filestream = AudioPlayer.LoadWAV(audioPath);
+                } else if (audioPath.EndsWith(".ogg")){
+                    filestream = AudioPlayer.LoadOGG(audioPath);
+                }
+                AudioPlayer.Instance.Stream = filestream;
                 AudioPlayer.Instance.Play();
             }
             else
@@ -85,12 +93,12 @@ public partial class SettingsOperator : Node
             }
         } else{ GD.PrintErr("Can't select a song that don't exist :/");}
     }
-    public float Get_ppvalue(int hitob){
+    public static float Get_ppvalue(int hitob){
         var ppvalue = 0.0f;
         ppvalue = ppbase * hitob;
         return ppvalue;
         }
-    public void Parse_Beatmapfile(string filename){
+    public static void Parse_Beatmapfile(string filename){
         GD.Print("Parsing beatmap file...");
         using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
         var text = file.GetAsText();
@@ -100,6 +108,10 @@ public partial class SettingsOperator : Node
         string version = "";
         int timetotal = 0;
         int bpm = 0;
+        int osubeatid = 0;
+        int osubeatidset = 0;
+        int qlbeatid = 0;
+        int qlbeatidset = 0;
         float ppvalue = 0;
         string mapper = "";
         int notetime = 0;
@@ -123,11 +135,28 @@ public partial class SettingsOperator : Node
             }
             if (line.StartsWith("CircleSize:"))
             {
-            keycount = (int)float.Parse(line.Split(":")[1].Trim());
+            //keycount = (int)float.Parse(line.Split(":")[1].Trim());
+            keycount = float.TryParse(line.Split(":")[1].Trim(), out float keycountv) ? (int)keycountv : 4;
             }
             if (line.StartsWith("AudioFilename:"))
             {
             audio = line.Split(":")[1].Trim();
+            }
+            if (line.StartsWith("BeatmapID:"))
+            {
+            osubeatid = int.TryParse(line.Split(":")[1].Trim(), out int osubeatidv) ? (int)osubeatidv : 0;
+            }
+            if (line.StartsWith("BeatmapSetID:"))
+            {
+            osubeatidset = int.TryParse(line.Split(":")[1].Trim(), out int osubeatidsetv) ? (int)osubeatidsetv : 0;
+            }
+            if (line.StartsWith("QluteBeatID:"))
+            {
+            qlbeatid = int.TryParse(line.Split(":")[1].Trim(), out int qlbeatidv) ? (int)qlbeatidv : 0;
+            }
+            if (line.StartsWith("QluteBeatIDSet:"))
+            {
+            qlbeatidset = int.TryParse(line.Split(":")[1].Trim(), out int qlbeatidsetv) ? (int)qlbeatidsetv : 0;
             }
             if (line.StartsWith("Creator:"))
             {
@@ -192,6 +221,10 @@ public partial class SettingsOperator : Node
             { "KeyCount", keycount },
             { "Version", version },
             { "pp", ppvalue },
+            { "osubeatid", osubeatid },
+            { "osubeatidset", osubeatidset },
+            { "beatid", qlbeatid },
+            { "beatidset", qlbeatidset },
             { "bpm", bpm },
             { "timetotal", (int)timetotal },
             { "levelrating", ppvalue*0.05 },
@@ -232,7 +265,7 @@ public partial class SettingsOperator : Node
         { "beatmaptitle", null },
         { "beatmapartist", null },
         { "beatmapmapper", null },
-        { "beatmapbpm", null },
+        { "beatmapbpm", 160 },
         { "beatmapdiff", null },
         { "customapi", false},
         { "multiplier" , 1.0f},

@@ -1,12 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bmi44rm7jttn"]
+[gd_scene load_steps=5 format=3 uid="uid://bmi44rm7jttn"]
 
 [ext_resource type="Script" path="res://Script/Gameplay/Gameplay.cs" id="1_33mgo"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="1_uf7ne"]
 [ext_resource type="PackedScene" uid="uid://b0f11jnivkb1b" path="res://Panels/GameplayElements/Customizable/ScoreOverlay.tscn" id="2_tii4h"]
 [ext_resource type="PackedScene" uid="uid://bq7vnj4ufmi3q" path="res://Panels/GameplayElements/Customizable/SongProgress.tscn" id="4_alds2"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_55qcr"]
-size = Vector2(419, 12)
 
 [node name="Gameplay" type="Control"]
 layout_mode = 3
@@ -69,29 +66,18 @@ theme_override_constants/separation = 0
 [node name="Key1" type="ColorRect" parent="Playfield/KeyBoxes"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-color = Color(1, 0, 0, 0)
 
 [node name="Key2" type="ColorRect" parent="Playfield/KeyBoxes"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-color = Color(1, 0, 0, 0)
 
 [node name="Key3" type="ColorRect" parent="Playfield/KeyBoxes"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-color = Color(1, 0, 0, 0)
 
 [node name="Key4" type="ColorRect" parent="Playfield/KeyBoxes"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-color = Color(1, 0, 0, 0)
-
-[node name="perfect" type="Area2D" parent="Playfield/KeyBoxes"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Playfield/KeyBoxes/perfect"]
-position = Vector2(199.5, -7)
-shape = SubResource("RectangleShape2D_55qcr")
-debug_color = Color(0.15625, 0, 1, 0.42)
 
 [node name="Chart" type="ColorRect" parent="Playfield"]
 layout_mode = 1
@@ -102,6 +88,17 @@ offset_bottom = -200.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.227451)
+
+[node name="Guard" type="ColorRect" parent="Playfield/Chart"]
+custom_minimum_size = Vector2(100, 10)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.494792, 0.589518, 1, 1)
 
 [node name="ProgressBar" parent="." instance=ExtResource("4_alds2")]
 layout_mode = 1
@@ -115,4 +112,3 @@ offset_bottom = -11.0
 grow_vertical = 0
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
-[connection signal="area_shape_entered" from="Playfield/KeyBoxes/perfect" to="." method="_perfect"]
