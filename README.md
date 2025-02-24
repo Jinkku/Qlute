@@ -2,6 +2,9 @@
   <img width="231" alt="Qlute Logo" src="https://github.com/Jinkkuu/Qlute/blob/master/Skin/System/mainmenulogo.png?raw=true">
 </p>
 
+> [!IMPORTANT]
+> Game still in beta, expect bugs and issues.
+
 # Qlute
 Embrace your Imagination
 
