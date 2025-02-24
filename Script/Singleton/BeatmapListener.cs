@@ -16,6 +16,29 @@ public partial class BeatmapListener : Node
 			SettingsOperator.Sessioncfg["reloadbdb"] = true;
 		}
 	}
+
+	public void CheckAndExtractOszFiles()
+	{
+		foreach (string file in Directory.GetFiles(SettingsOperator.downloadsdir, "*.osz"))
+		{
+			string beatmapDir = Path.Combine(SettingsOperator.beatmapsdir, Path.GetFileNameWithoutExtension(file));
+			GD.Print(beatmapDir);
+			GetTree().Quit();
+			if (!Directory.Exists(beatmapDir))
+			{
+				Directory.CreateDirectory(beatmapDir);
+			}
+			else
+			{
+				GD.Print("Directory already exists for " + file + ", cancelling extraction and removing file.");
+				File.Delete(file);
+				continue;
+			}
+			System.IO.Compression.ZipFile.ExtractToDirectory(file, SettingsOperator.beatmapsdir);
+			File.Delete(file);
+			GD.Print("Extracted and moved " + file + " to " + SettingsOperator.beatmapsdir);
+		}
+	}
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -53,9 +76,6 @@ public partial class BeatmapListener : Node
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		foreach (string beatmapfile in Directory.GetFiles(SettingsOperator.downloadsdir))
-		{
-
-		}
+		CheckAndExtractOszFiles();
 	}
 }

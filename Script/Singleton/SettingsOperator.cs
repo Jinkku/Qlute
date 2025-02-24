@@ -18,7 +18,6 @@ public partial class SettingsOperator : Node
     public string settingsfile => homedir + "/settings.cfg";
     public string Qlutedb => homedir + "/qlute.db";
     public int backgrounddim {get;set;}
-    //public Dictionary<int, object> Beatmaps { get; set; } = new Dictionary<int, object>{
 
     public static List<Dictionary<string,object>> Beatmaps = new List<Dictionary<string,object>>();
     public Dictionary<string, object> Configuration { get; set; } = new Dictionary<string, object>
@@ -41,7 +40,7 @@ public partial class SettingsOperator : Node
 
 
     // Imaging processing part of the game because godot don't have a way to load images externally i suppose-
-    public Texture2D LoadImage(string path)
+    public static Texture2D LoadImage(string path)
     {
         var image = new Image();
         image.Load(path);

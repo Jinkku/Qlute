@@ -1,7 +1,9 @@
 using Godot;
 using System;
 using System.Security.Cryptography;
+using System.Text.Json;
 using System.Text;
+using System.Collections.Generic;
 
 public partial class ApiOperator : Node
 {
@@ -12,6 +14,7 @@ public partial class ApiOperator : Node
 	public static string PasswordHash = null;
 	public static SettingsOperator SettingsOperator { get; set; }
 	public static ApiOperator Instance { get; set; }
+	public static string Beatmapapi = "https://catboy.best";
 	public override void _Ready()
 	{	
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -24,7 +27,6 @@ public partial class ApiOperator : Node
 		RankingApi.Timeout = 3;
 		AddChild(RankingApi);
 		AddChild(LoginApi);
-
 		LoginApi.Connect("request_completed", new Callable(this, nameof(_on_login_api_request_completed)));
 		RankingApi.Connect("request_completed", new Callable(this, nameof(_on_Ranking_request_completed)));
 		if ((Username != null || PasswordHash != null) && (bool)SettingsOperator.Sessioncfg["loggedin"] == false){
@@ -32,6 +34,7 @@ public partial class ApiOperator : Node
 			ApiOperator.Login(Username,PasswordHash);
 		}
 	}
+
 	private void _on_Ranking_request_completed(long result, long responseCode, string[] headers, byte[] body){
 		Ranking.Instance.Text = "#" + (string)Encoding.UTF8.GetString(body);
 		Ranking.Instance.Visible = true;

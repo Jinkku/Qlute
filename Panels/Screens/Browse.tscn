@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://1eecnwds7hxx"]
+[gd_scene load_steps=8 format=3 uid="uid://1eecnwds7hxx"]
 
 [ext_resource type="Script" path="res://Script/Browse/Browse.cs" id="1_gq7gs"]
-[ext_resource type="PackedScene" uid="uid://b2pypl6ci4s6g" path="res://Panels/BrowseElements/Card.tscn" id="1_ooft1"]
 [ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="2_gtswx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_61puy"]
@@ -63,7 +62,7 @@ offset_bottom = 50.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="BeatmapSec" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -74,7 +73,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.164532, 0.138306, 0.171875, 1)
 
-[node name="ScrollContainer" type="ScrollContainer" parent="ColorRect"]
+[node name="Scroll" type="ScrollContainer" parent="BeatmapSec"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -82,86 +81,21 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="ColorRect/ScrollContainer"]
+[node name="Center" type="CenterContainer" parent="BeatmapSec/Scroll"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="ColorRect/ScrollContainer/CenterContainer"]
+[node name="Spacer" type="MarginContainer" parent="BeatmapSec/Scroll/Center"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="GridContainer" type="GridContainer" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer"]
+[node name="Beatmaps" type="GridContainer" parent="BeatmapSec/Scroll/Center/Spacer"]
 layout_mode = 2
 columns = 3
-
-[node name="MusicCard" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard2" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard3" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard4" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard5" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard6" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard7" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard8" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard9" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard10" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard11" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard12" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard13" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard14" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard15" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard16" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard17" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard18" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard19" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard20" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard21" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
-
-[node name="MusicCard22" parent="ColorRect/ScrollContainer/CenterContainer/MarginContainer/GridContainer" instance=ExtResource("1_ooft1")]
-layout_mode = 2
 
 [node name="BottomBar" type="Control" parent="."]
 z_index = 2

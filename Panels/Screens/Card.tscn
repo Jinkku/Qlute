@@ -101,6 +101,38 @@ theme_override_constants/margin_left = 115
 layout_mode = 2
 theme_override_constants/separation = 5
 
+[node name="ColorRect" type="ColorRect" parent="PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+
+[node name="ColorRect2" type="ColorRect" parent="PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+
+[node name="ColorRect3" type="ColorRect" parent="PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+
+[node name="ColorRect4" type="ColorRect" parent="PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+
+[node name="ColorRect5" type="ColorRect" parent="PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+
+[node name="ColorRect6" type="ColorRect" parent="PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+
+[node name="ColorRect7" type="ColorRect" parent="PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+
+[node name="ColorRect8" type="ColorRect" parent="PanelContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+
 [node name="SongBackgroundPreview" type="PanelContainer" parent="."]
 clip_children = 2
 z_index = 1
