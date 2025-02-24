@@ -135,7 +135,7 @@ public partial class Gameplay : Control
 
 		// End Game
 
-		if (SettingsOperator.Gameplaycfg["timetotal"]-SettingsOperator.Gameplaycfg["time"] < 0)
+		if (SettingsOperator.Gameplaycfg["timetotal"]-SettingsOperator.Gameplaycfg["time"] < 2)
 		{
 			SettingsOperator.toppaneltoggle();
 			SettingsOperator.Sessioncfg["localpp"] = (double)SettingsOperator.Sessioncfg["localpp"] + SettingsOperator.Gameplaycfg["pp"];
