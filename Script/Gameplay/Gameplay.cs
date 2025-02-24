@@ -14,16 +14,26 @@ public partial class Gameplay : Control
 	public static SettingsOperator SettingsOperator { get; set; }
 	public static Label Ttiming { get; set; }
 	public static Label Hits { get; set; }
+	public static ColorRect Chart { get; set; }
 	public List<object> Keys = new List<object>();
+	public int Keyp = -1;
+	public List<bool> KeyC = new List<bool>(
+	);
+	public int JudgeResult = -1;
+	public int PerfectJudge = 50;
+	public int nodeSize = 54;
+	public int GreatJudge => PerfectJudge * 3;
+	public int MehJudge => PerfectJudge * 6;
+	public ColorRect meh {get;set;}
+	public ColorRect great {get;set;}
+	public ColorRect perfect {get;set;}
+	
+
 	public long startedtime {get ;set; }
 	public bool songstarted = false;
 	public Node2D noteblock {get;set;}
 	public List<NotesEn> Notes = new List<NotesEn>();
 	public TextureRect Beatmap_Background {get;set;}
-	public void _perfect(Rid areaRid, Area2D area, long areaShapeIndex, long localShapeIndex){
-		SettingsOperator.Gameplaycfg["max"] +=1;
-		area.Visible = false;
-	}
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -31,10 +41,33 @@ public partial class Gameplay : Control
 		AudioPlayer.Instance.Stop();
 		Beatmap_Background.SelfModulate = new Color(1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)));
 		Control P = GetNode<Control>("Playfield");
+		Chart = GetNode<ColorRect>("Playfield/Chart");
+
+		meh = new ColorRect();
+		meh.Size = new Vector2(400,MehJudge);
+		meh.Position = new Vector2(0,-MehJudge/2);
+		meh.Color = new Color(0.5f,0f,0f,0.4f);
+		meh.Visible = true;
+		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(meh);
+
+		great = new ColorRect();
+		great.Size = new Vector2(400,GreatJudge);
+		great.Position = new Vector2(0,-GreatJudge/2);
+		great.Color = new Color(0f,0.5f,0f,0.6f);
+		great.Visible = true;
+		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(great);
+		
+		perfect = new ColorRect();
+		perfect.Size = new Vector2(400,PerfectJudge);
+		perfect.Position = new Vector2(0,-PerfectJudge/2);
+		perfect.Color = new Color(0f,0f,0.5f,1f);
+		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(perfect);
+
 		Ttiming = GetNode<Label>("Time");
 		Hits = GetNode<Label>("Hits");
 		foreach (int i in Enumerable.Range(1, 4)){
 			Keys.Add(GetNode<ColorRect>("Playfield/KeyBoxes/Key"+i));
+			KeyC.Add(false);
 		}
 		
 		noteblock = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Area2D>(".");
@@ -113,10 +146,14 @@ public partial class Gameplay : Control
 			if (Input.IsActionPressed("Key"+(Keyx+1)))
 			{
 				self.Color = new Color(0.32f,0.42f,0.74f);
+				KeyC[Keyx] = true;
+				Keyp = Keyx;
 			}
 			else
 			{
 				self.Color = new Color(0.5f,0.5f,0.5f);
+				KeyC[Keyx] = false;
+				Keyp = -1;
 			}
 			Keyx++;
 		}
@@ -129,14 +166,13 @@ public partial class Gameplay : Control
 
 		var viewportSize = GetViewportRect().Size.Y;
 		foreach (var Notebox in Notes){
-			var notex = Notebox.timing + est + viewportSize/2;
+			var notex = Notebox.timing + est + viewportSize/2 + ((60000/(int)SettingsOperator.Sessioncfg["beatmapbpm"]));
 			if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && !Notebox.Nodes.Any() && notex > -100 && notex < viewportSize+100)
 			{
 				foreach (int part in Notebox.Notes){
-					GD.Print("adddd");
 					var node = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Area2D>(".");
 					Notebox.Nodes.Add(node);
-					GetNode<ColorRect>("Playfield/Chart").AddChild(node);
+					Chart.AddChild(node);
 					node.Position = new Vector2(100 * part, notex);
 				}
 			} else if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && Notebox.Nodes.Any() && notex > -100 && notex < viewportSize+100)
@@ -144,6 +180,10 @@ public partial class Gameplay : Control
 				foreach (var node in Notebox.Nodes){
 					node.Position = new Vector2(node.Position.X, notex);
 					Ttick++;
+					JudgeResult = checkjudge((int)notex,KeyC[(int)(node.Position.X / 100)],node,node.Visible);
+					if (JudgeResult < 4){
+						node.Visible = false;
+					}
 				}
 			} else{
 				foreach (var node in Notebox.Nodes){
@@ -151,11 +191,39 @@ public partial class Gameplay : Control
 				}
 				Notebox.Nodes.Clear();
 			}
+			// Game Judge
+			
+			if (JudgeResult == 0){
+				// Perfect
+			} else if (JudgeResult == 4){
+				// Bad
+				//SettingsOperator.Gameplaycfg["miss"]++;
+			}
+//			if (notex > -100 && notex < viewportSize+100){
+
+//			}
+
+
+
 
 		}
 		Ttiming.Text = "Time: " + est + "\n" + Ttick;
 
 		//
+	}
+	public int checkjudge(int timing,bool keyvalue, Area2D node,bool visibility){
+		if (timing+nodeSize > Chart.Size.Y-PerfectJudge/2 && timing+nodeSize < Chart.Size.Y+PerfectJudge/2 && keyvalue && visibility){
+			SettingsOperator.Gameplaycfg["max"]++;
+			node.Visible = false;
+			return 0;
+		} else if (timing+nodeSize > Chart.Size.Y-GreatJudge/2 && timing+nodeSize < Chart.Size.Y+GreatJudge/2 && keyvalue && visibility){
+			SettingsOperator.Gameplaycfg["great"]++;
+			node.Visible = false;
+			return 1;
+		}
+		 else{
+			return 4;
+		}
 	}
 }
 

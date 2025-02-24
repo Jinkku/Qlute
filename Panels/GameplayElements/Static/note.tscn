@@ -1,16 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://cfg55dbl1ip8a"]
+[gd_scene load_steps=2 format=3 uid="uid://cfg55dbl1ip8a"]
 
 [ext_resource type="Texture2D" uid="uid://beg5x4bfct3fv" path="res://Skin/Game/note.svg" id="1_3mpj0"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_fj06c"]
-size = Vector2(100, 20)
 
 [node name="Note" type="Area2D"]
 
 [node name="Notetext" type="Sprite2D" parent="."]
 texture = ExtResource("1_3mpj0")
 centered = false
-
-[node name="Perfect" type="CollisionShape2D" parent="."]
-position = Vector2(50, 42)
-shape = SubResource("RectangleShape2D_fj06c")

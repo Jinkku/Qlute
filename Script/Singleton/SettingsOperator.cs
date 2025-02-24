@@ -265,7 +265,7 @@ public partial class SettingsOperator : Node
         { "beatmaptitle", null },
         { "beatmapartist", null },
         { "beatmapmapper", null },
-        { "beatmapbpm", null },
+        { "beatmapbpm", 160 },
         { "beatmapdiff", null },
         { "customapi", false},
         { "multiplier" , 1.0f},
