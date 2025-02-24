@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="231" alt="Qlute Logo" src="https://github.com/Jinkkuu/Qlute/blob/master/Skin/System/mainmenulogo.png?raw=true">
+  <img width="231" alt="Qlute Logo" src="https://github.com/Jinkku/Qlute/blob/master/Skin/System/mainmenulogo.png?raw=true">
 </p>
 
 > [!IMPORTANT]
