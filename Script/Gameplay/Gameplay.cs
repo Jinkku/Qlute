@@ -161,13 +161,13 @@ public partial class Gameplay : Control
 				self.Color = new Color(0.32f,0.42f,0.74f);
 				KeyC[Keyx] = true;
 			}
-			else if (Input.IsActionPressed("Key"+(Keyx+1)))
+			else if (Input.IsActionJustPressed("Key"+(Keyx+1)))
 			{
 				self.Color = new Color(0.32f,0.42f,0.74f);
 				KeyC[Keyx] = true;
 				Keyp = Keyx;
 			}
-			else
+			else if (Input.IsActionJustReleased("Key"+(Keyx+1)))
 			{
 				self.Color = new Color(0.5f,0.5f,0.5f);
 				KeyC[Keyx] = false;
