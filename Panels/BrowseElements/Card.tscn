@@ -43,7 +43,7 @@ gradient = SubResource("Gradient_ubvrx")
 
 [node name="MusicCard" type="Button"]
 clip_contents = true
-custom_minimum_size = Vector2(350, 115)
+custom_minimum_size = Vector2(400, 115)
 offset_right = 350.0
 offset_bottom = 115.0
 size_flags_horizontal = 3
@@ -56,28 +56,34 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_cufpe")
 layout_mode = 0
 offset_left = 121.0
 offset_top = 7.0
-offset_right = 235.0
+offset_right = 384.0
 offset_bottom = 26.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
 text = "Mystery Song"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="SongArtist" type="Label" parent="."]
 layout_mode = 0
 offset_left = 121.0
 offset_top = 28.0
-offset_right = 209.0
+offset_right = 384.0
 offset_bottom = 47.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
 text = "idiotiplier"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="SongMapper" type="Label" parent="."]
 layout_mode = 0
 offset_left = 121.0
 offset_top = 49.0
-offset_right = 258.0
+offset_right = 384.0
 offset_bottom = 68.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
 text = "mapped by idiot"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 clip_children = 2
