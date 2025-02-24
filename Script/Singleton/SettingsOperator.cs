@@ -234,7 +234,16 @@ public partial class SettingsOperator : Node
             { "path", path },
         });
     }
-    public static Dictionary<string, int> Gameplaycfg { get; set; } = new Dictionary<string, int>
+    public static void ResetScore(){
+        Gameplaycfg["score"] = 0;
+        Gameplaycfg["pp"] = 0;
+        Gameplaycfg["max"] = 0;
+        Gameplaycfg["great"] = 0;
+        Gameplaycfg["meh"] = 0;
+        Gameplaycfg["bad"] = 0;
+        Gameplaycfg["time"] = 0;
+    }
+    public static Dictionary<string, double> Gameplaycfg { get; set; } = new Dictionary<string, double>
     {
         {"score", 0},
         {"pp", 0},

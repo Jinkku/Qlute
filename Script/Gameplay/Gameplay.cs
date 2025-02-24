@@ -71,6 +71,8 @@ public partial class Gameplay : Control
 			KeyC.Add(false);
 		}
 		
+		SettingsOperator.ResetScore();
+
 		noteblock = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Area2D>(".");
         using var file = FileAccess.Open(SettingsOperator.Sessioncfg["beatmapurl"].ToString(), FileAccess.ModeFlags.Read);
         var text = file.GetAsText();
