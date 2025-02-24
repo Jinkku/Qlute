@@ -1,5 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://oru46ou3jfjl"]
+[gd_scene load_steps=12 format=3 uid="uid://oru46ou3jfjl"]
 
+[ext_resource type="Script" path="res://Script/ResultsScreen/ResultsScreen.cs" id="1_e0sg4"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="1_xhck8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqbwm"]
@@ -30,6 +31,17 @@ content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
 bg_color = Color(1, 1, 1, 0.196078)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ed8p7"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.196078)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -84,17 +96,18 @@ shadow_color = Color(0.23801, 0.366319, 0.557292, 1)
 shadow_size = 1
 shadow_offset = Vector2(0, 4)
 
-[node name="Control" type="Control"]
+[node name="ResultsScreen" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_e0sg4")
 
 [node name="BeatmapBackground" parent="." instance=ExtResource("1_xhck8")]
-layout_mode = 0
-anchors_preset = 0
+self_modulate = Color(0.392157, 0.392157, 0.392157, 1)
+layout_mode = 1
 
 [node name="AlertBox" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -111,133 +124,248 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wqbwm")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="AlertBox"]
+[node name="Box" type="VBoxContainer" parent="AlertBox"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="PanelContainer" type="PanelContainer" parent="AlertBox/VBoxContainer"]
-custom_minimum_size = Vector2(150, 150)
+[node name="PanelContainer" type="PanelContainer" parent="AlertBox/Box"]
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_53ywu")
 
-[node name="Title" type="Label" parent="AlertBox/VBoxContainer"]
+[node name="Title" type="Label" parent="AlertBox/Box"]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_vqons")
 text = "Song Title"
 horizontal_alignment = 1
 
-[node name="Artist" type="Label" parent="AlertBox/VBoxContainer"]
+[node name="Artist" type="Label" parent="AlertBox/Box"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "Artist"
 horizontal_alignment = 1
 
-[node name="Difficulty" type="Label" parent="AlertBox/VBoxContainer"]
+[node name="Difficulty" type="Label" parent="AlertBox/Box"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "Difficulty"
 horizontal_alignment = 1
 
-[node name="Info" type="HBoxContainer" parent="AlertBox/VBoxContainer"]
+[node name="Creator" type="Label" parent="AlertBox/Box"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Creator"
+horizontal_alignment = 1
+
+[node name="Info" type="GridContainer" parent="AlertBox/Box"]
 layout_mode = 2
 size_flags_horizontal = 4
+columns = 5
 
-[node name="ComboC" type="PanelContainer" parent="AlertBox/VBoxContainer/Info"]
+[node name="pp" type="PanelContainer" parent="AlertBox/Box/Info"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
-[node name="ComboVC" type="VBoxContainer" parent="AlertBox/VBoxContainer/Info/ComboC"]
+[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/pp"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="AlertBox/VBoxContainer/Info/ComboC/ComboVC"]
+[node name="Name" type="Label" parent="AlertBox/Box/Info/pp/VC"]
 layout_mode = 2
 text = "pp"
 horizontal_alignment = 1
 
-[node name="Text" type="Label" parent="AlertBox/VBoxContainer/Info/ComboC/ComboVC"]
+[node name="Text" type="Label" parent="AlertBox/Box/Info/pp/VC"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0"
 horizontal_alignment = 1
 
-[node name="ComboC2" type="PanelContainer" parent="AlertBox/VBoxContainer/Info"]
+[node name="MAX" type="PanelContainer" parent="AlertBox/Box/Info"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
-[node name="ComboVC" type="VBoxContainer" parent="AlertBox/VBoxContainer/Info/ComboC2"]
+[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/MAX"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="AlertBox/VBoxContainer/Info/ComboC2/ComboVC"]
+[node name="Name" type="Label" parent="AlertBox/Box/Info/MAX/VC"]
 layout_mode = 2
 text = "MAX"
 horizontal_alignment = 1
 
-[node name="Text" type="Label" parent="AlertBox/VBoxContainer/Info/ComboC2/ComboVC"]
+[node name="Text" type="Label" parent="AlertBox/Box/Info/MAX/VC"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0"
 horizontal_alignment = 1
 
-[node name="ComboC3" type="PanelContainer" parent="AlertBox/VBoxContainer/Info"]
+[node name="GREAT" type="PanelContainer" parent="AlertBox/Box/Info"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
-[node name="ComboVC" type="VBoxContainer" parent="AlertBox/VBoxContainer/Info/ComboC3"]
+[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/GREAT"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="AlertBox/VBoxContainer/Info/ComboC3/ComboVC"]
+[node name="Name" type="Label" parent="AlertBox/Box/Info/GREAT/VC"]
 layout_mode = 2
 text = "GREAT"
 horizontal_alignment = 1
 
-[node name="Text" type="Label" parent="AlertBox/VBoxContainer/Info/ComboC3/ComboVC"]
+[node name="Text" type="Label" parent="AlertBox/Box/Info/GREAT/VC"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0"
 horizontal_alignment = 1
 
-[node name="ComboC4" type="PanelContainer" parent="AlertBox/VBoxContainer/Info"]
+[node name="MEH" type="PanelContainer" parent="AlertBox/Box/Info"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
-[node name="ComboVC" type="VBoxContainer" parent="AlertBox/VBoxContainer/Info/ComboC4"]
+[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/MEH"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="AlertBox/VBoxContainer/Info/ComboC4/ComboVC"]
+[node name="Name" type="Label" parent="AlertBox/Box/Info/MEH/VC"]
 layout_mode = 2
 text = "MEH"
 horizontal_alignment = 1
 
-[node name="Text" type="Label" parent="AlertBox/VBoxContainer/Info/ComboC4/ComboVC"]
+[node name="Text" type="Label" parent="AlertBox/Box/Info/MEH/VC"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0"
 horizontal_alignment = 1
 
-[node name="ComboC5" type="PanelContainer" parent="AlertBox/VBoxContainer/Info"]
+[node name="BAD" type="PanelContainer" parent="AlertBox/Box/Info"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
-[node name="ComboVC" type="VBoxContainer" parent="AlertBox/VBoxContainer/Info/ComboC5"]
+[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/BAD"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="AlertBox/VBoxContainer/Info/ComboC5/ComboVC"]
+[node name="Name" type="Label" parent="AlertBox/Box/Info/BAD/VC"]
 layout_mode = 2
 text = "BAD"
 horizontal_alignment = 1
 
-[node name="Text" type="Label" parent="AlertBox/VBoxContainer/Info/ComboC5/ComboVC"]
+[node name="Text" type="Label" parent="AlertBox/Box/Info/BAD/VC"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0"
 horizontal_alignment = 1
 
-[node name="Options" type="HBoxContainer" parent="AlertBox/VBoxContainer"]
+[node name="Combo" type="PanelContainer" parent="AlertBox/Box/Info"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
+
+[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/Combo"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="AlertBox/Box/Info/Combo/VC"]
+layout_mode = 2
+text = "Combo"
+horizontal_alignment = 1
+
+[node name="Text" type="Label" parent="AlertBox/Box/Info/Combo/VC"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
+text = "0"
+horizontal_alignment = 1
+
+[node name="Accuracy" type="PanelContainer" parent="AlertBox/Box/Info"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
+
+[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/Accuracy"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="AlertBox/Box/Info/Accuracy/VC"]
+layout_mode = 2
+text = "Acc"
+horizontal_alignment = 1
+
+[node name="Text" type="Label" parent="AlertBox/Box/Info/Accuracy/VC"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
+text = "100%"
+horizontal_alignment = 1
+
+[node name="AvgHit" type="PanelContainer" parent="AlertBox/Box/Info"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
+
+[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/AvgHit"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="AlertBox/Box/Info/AvgHit/VC"]
+layout_mode = 2
+text = "Avg. Hit"
+horizontal_alignment = 1
+
+[node name="Text" type="Label" parent="AlertBox/Box/Info/AvgHit/VC"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
+text = "0ms"
+horizontal_alignment = 1
+
+[node name="PH" type="PanelContainer" parent="AlertBox/Box/Info"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
+
+[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/PH"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="AlertBox/Box/Info/PH/VC"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Text" type="Label" parent="AlertBox/Box/Info/PH/VC"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
+horizontal_alignment = 1
+
+[node name="PH2" type="PanelContainer" parent="AlertBox/Box/Info"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
+
+[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/PH2"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="AlertBox/Box/Info/PH2/VC"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Text" type="Label" parent="AlertBox/Box/Info/PH2/VC"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
+horizontal_alignment = 1
+
+[node name="Options" type="HBoxContainer" parent="AlertBox/Box"]
 layout_mode = 2
 size_flags_vertical = 10
 alignment = 1
 
-[node name="Retry" type="Button" parent="AlertBox/VBoxContainer/Options"]
+[node name="Retry" type="Button" parent="AlertBox/Box/Options"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
 theme_override_styles/hover = SubResource("StyleBoxFlat_uquna")
@@ -245,7 +373,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_f25vf")
 theme_override_styles/normal = SubResource("StyleBoxFlat_rvt4u")
 text = "Retry"
 
-[node name="Continue" type="Button" parent="AlertBox/VBoxContainer/Options"]
+[node name="Continue" type="Button" parent="AlertBox/Box/Options"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
 theme_override_styles/hover = SubResource("StyleBoxFlat_uquna")
@@ -253,6 +381,19 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_f25vf")
 theme_override_styles/normal = SubResource("StyleBoxFlat_rvt4u")
 text = "Continue"
 
-[node name="space" type="MarginContainer" parent="AlertBox/VBoxContainer"]
+[node name="space" type="MarginContainer" parent="AlertBox/Box"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 15
+
+[node name="Flash" type="ColorRect" parent="."]
+self_modulate = Color(0, 0, 0, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Wafuk" type="AnimationPlayer" parent="."]

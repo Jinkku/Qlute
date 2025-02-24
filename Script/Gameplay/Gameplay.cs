@@ -130,6 +130,17 @@ public partial class Gameplay : Control
 			AudioPlayer.Instance.Play();
 			startedtime = unixTimeMilliseconds;
 		}
+
+		// End Game
+
+		if (SettingsOperator.Gameplaycfg["timetotal"]-SettingsOperator.Gameplaycfg["time"] < 0)
+		{
+			SettingsOperator.toppaneltoggle();
+			GetTree().ChangeSceneToFile("res://Panels/Screens/ResultsScreen.tscn");
+		}
+
+
+
 		Beatmap_Background.SelfModulate = new Color(1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)));
 		if ((float)SettingsOperator.Sessioncfg["songspeed"] != 1.0f){
 			est = est * (float)SettingsOperator.Sessioncfg["songspeed"];
@@ -144,7 +155,11 @@ public partial class Gameplay : Control
 		// Key imputs
 		foreach (ColorRect self in Keys)
 		{
-			if (Input.IsActionPressed("Key"+(Keyx+1)))
+			if (ModsOperator.Mods["auto"]){
+				self.Color = new Color(0.32f,0.42f,0.74f);
+				KeyC[Keyx] = true;
+			}
+			else if (Input.IsActionPressed("Key"+(Keyx+1)))
 			{
 				self.Color = new Color(0.32f,0.42f,0.74f);
 				KeyC[Keyx] = true;
@@ -168,7 +183,7 @@ public partial class Gameplay : Control
 		var viewportSize = GetViewportRect().Size.Y;
 		foreach (var Notebox in Notes){
 			var notex = Notebox.timing + est + viewportSize/2 + ((60000/(int)SettingsOperator.Sessioncfg["beatmapbpm"]));
-			if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && !Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150)
+			if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && !Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150 && delta/0.001 <4)
 			{
 				foreach (int part in Notebox.Notes){
 					var node = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Area2D>(".");
@@ -217,11 +232,11 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg["max"]++;
 			node.Visible = false;
 			return 0;
-		} else if (timing+nodeSize > Chart.Size.Y-GreatJudge/2 && timing+nodeSize < Chart.Size.Y+GreatJudge/2 && keyvalue && visibility){
+		} else if (timing+nodeSize > Chart.Size.Y-GreatJudge/2 && timing+nodeSize < Chart.Size.Y+GreatJudge/2 && keyvalue && visibility && !ModsOperator.Mods["auto"]){
 			SettingsOperator.Gameplaycfg["great"]++;
 			node.Visible = false;
 			return 1;
-		}else if (timing+nodeSize > Chart.Size.Y-MehJudge/2 && timing+nodeSize < Chart.Size.Y+MehJudge/2 && keyvalue && visibility){
+		}else if (timing+nodeSize > Chart.Size.Y-MehJudge/2 && timing+nodeSize < Chart.Size.Y+MehJudge/2 && keyvalue && visibility && !ModsOperator.Mods["auto"]){
 			SettingsOperator.Gameplaycfg["meh"]++;
 			node.Visible = false;
 			return 2;

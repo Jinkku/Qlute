@@ -13,6 +13,11 @@ public partial class TimeLeft : Label
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		Text = "-" + TimeSpan.FromMilliseconds(SettingsOperator.Gameplaycfg["timetotal"]-SettingsOperator.Gameplaycfg["time"]).ToString(@"mm\:ss") ?? "-00:00";
+		var etho = SettingsOperator.Gameplaycfg["timetotal"]-SettingsOperator.Gameplaycfg["time"];
+		if (etho < 0)
+		{
+			etho = 0;
+		}
+		Text = "-" + TimeSpan.FromMilliseconds(etho).ToString(@"mm\:ss") ?? "-00:00";
 	}
 }

@@ -37,6 +37,7 @@ Global="*res://Script/Singleton/Global.cs"
 AudioPlayer="*res://Script/Singleton/AudioPlayer.cs"
 TopPanelOnTop="*res://Script/Singleton/OnTopOverlays.cs"
 ApiOperator="*res://Script/Singleton/ApiOperator.cs"
+ModsOperator="*res://Script/Singleton/ModsOperator.cs"
 
 [display]
 

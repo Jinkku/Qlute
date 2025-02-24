@@ -14,12 +14,8 @@ public partial class Mods : PanelContainer
 	public override void _Process(double delta)
 	{
 	}
-	private void _on_ht_pressed(){
-		AudioPlayer.Instance.PitchScale = 0.5f;
-		SettingsOperator.Sessioncfg["songspeed"] = 0.5f;
-	}
-	private void _on_dt_pressed(){
-		AudioPlayer.Instance.PitchScale = 1.25f;
-		SettingsOperator.Sessioncfg["songspeed"] = 1.25f;
+	private void _reset(){
+		ModsOperator.Reset();
+		GD.Print("Mods Reset");
 	}
 }

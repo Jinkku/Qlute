@@ -398,21 +398,6 @@ grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 2
 
-[node name="ModsScreen" parent="." instance=ExtResource("6_4xos4")]
-visible = false
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -206.0
-offset_top = -263.0
-offset_right = 206.0
-offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 0
-
 [node name="BottomBar" type="Control" parent="."]
 z_index = 2
 layout_mode = 1
@@ -498,6 +483,15 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_6f4j3")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_k1b3q")
 theme_override_styles/normal = SubResource("StyleBoxFlat_cv1hb")
 text = "Play"
+
+[node name="ModsScreen" parent="." instance=ExtResource("6_4xos4")]
+visible = false
+z_index = 1
+layout_mode = 1
+offset_left = -206.0
+offset_top = -131.5
+offset_right = 206.0
+offset_bottom = 131.5
 
 [connection signal="resized" from="." to="." method="_res_resize"]
 [connection signal="scrolling" from="SongPanel/VScrollBar" to="." method="_scrolling"]
