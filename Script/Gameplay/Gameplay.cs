@@ -211,17 +211,6 @@ public partial class Gameplay : Control
 				}
 				Notebox.Nodes.Clear();
 			}
-			// Game Judge
-			
-			if (JudgeResult == 0){
-				// Perfect
-			} else if (JudgeResult == 4){
-				// Bad
-				//SettingsOperator.Gameplaycfg["miss"]++;
-			}
-//			if (notex > -100 && notex < viewportSize+100){
-
-//			}
 
 
 
