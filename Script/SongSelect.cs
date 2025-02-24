@@ -82,7 +82,6 @@ public partial class SongSelect : Control
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		var timex = DateTime.Now.Second;
 		foreach (var song in SettingsOperator.Beatmaps)
-
 		{	
 			AddSongList(song["Title"].ToString(),
 			song["Artist"].ToString(),
@@ -109,7 +108,11 @@ public partial class SongSelect : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
-
+		if ((bool)SettingsOperator.Sessioncfg["reloaddb"]){
+			SettingsOperator.Sessioncfg["reloaddb"] = false;
+			GetTree().ReloadCurrentScene();
+			
+		}
 		scrollBar.MaxValue = SettingsOperator.Beatmaps.Count;
 		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No song selected";
 		if (SettingsOperator.Sessioncfg["beatmaptitle"] != null){
