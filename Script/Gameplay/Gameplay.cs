@@ -47,20 +47,21 @@ public partial class Gameplay : Control
 		meh.Size = new Vector2(400,MehJudge);
 		meh.Position = new Vector2(0,-MehJudge/2);
 		meh.Color = new Color(0.5f,0f,0f,0.4f);
-		meh.Visible = true;
+		meh.Visible = false;
 		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(meh);
 
 		great = new ColorRect();
 		great.Size = new Vector2(400,GreatJudge);
 		great.Position = new Vector2(0,-GreatJudge/2);
 		great.Color = new Color(0f,0.5f,0f,0.6f);
-		great.Visible = true;
+		great.Visible = false;
 		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(great);
 		
 		perfect = new ColorRect();
 		perfect.Size = new Vector2(400,PerfectJudge);
 		perfect.Position = new Vector2(0,-PerfectJudge/2);
 		perfect.Color = new Color(0f,0f,0.5f,1f);
+		perfect.Visible = false;
 		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(perfect);
 
 		Ttiming = GetNode<Label>("Time");
@@ -167,7 +168,7 @@ public partial class Gameplay : Control
 		var viewportSize = GetViewportRect().Size.Y;
 		foreach (var Notebox in Notes){
 			var notex = Notebox.timing + est + viewportSize/2 + ((60000/(int)SettingsOperator.Sessioncfg["beatmapbpm"]));
-			if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && !Notebox.Nodes.Any() && notex > -100 && notex < viewportSize+100)
+			if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && !Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150)
 			{
 				foreach (int part in Notebox.Notes){
 					var node = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Area2D>(".");
@@ -175,7 +176,7 @@ public partial class Gameplay : Control
 					Chart.AddChild(node);
 					node.Position = new Vector2(100 * part, notex);
 				}
-			} else if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && Notebox.Nodes.Any() && notex > -100 && notex < viewportSize+100)
+			} else if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150)
 			{
 				foreach (var node in Notebox.Nodes){
 					node.Position = new Vector2(node.Position.X, notex);
@@ -220,6 +221,14 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg["great"]++;
 			node.Visible = false;
 			return 1;
+		}else if (timing+nodeSize > Chart.Size.Y-MehJudge/2 && timing+nodeSize < Chart.Size.Y+MehJudge/2 && keyvalue && visibility){
+			SettingsOperator.Gameplaycfg["meh"]++;
+			node.Visible = false;
+			return 2;
+		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility){
+			SettingsOperator.Gameplaycfg["bad"]++;
+			node.Visible = false;
+			return 2;
 		}
 		 else{
 			return 4;
