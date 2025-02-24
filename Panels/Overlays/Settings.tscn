@@ -122,6 +122,32 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
 theme_override_fonts/font = SubResource("FontVariation_n76qt")
+text = "User Interface"
+
+[node name="CheckButton2" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Remove animations"
+
+[node name="CheckButton4" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Disable flashing effects"
+
+[node name="CheckButton3" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Fade out when on break"
+
+[node name="CheckButton5" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Switch to 24-Hour Clock"
+
+[node name="Unicode" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Use original language for Songs"
+
+[node name="Section6" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
+theme_override_fonts/font = SubResource("FontVariation_n76qt")
 text = "Display"
 
 [node name="WindowNotice" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
@@ -139,22 +165,6 @@ popup/item_1/text = "Borderless"
 popup/item_1/id = 1
 popup/item_2/text = "Windowed"
 popup/item_2/id = 2
-
-[node name="CheckButton2" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-text = "Remove animations"
-
-[node name="CheckButton3" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-text = "Fade out when on break"
-
-[node name="CheckButton4" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-text = "Disable flashing effects"
-
-[node name="CheckButton5" type="CheckButton" parent="ColorRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-text = "Switch to 24-Hour Clock"
 
 [node name="WindowNotice2" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -207,6 +217,8 @@ visible = false
 layout_mode = 2
 text = "0.0.0 Development Build"
 
+[connection signal="pressed" from="ColorRect/ScrollContainer/VBoxContainer/CheckButton3" to="." method="_on_check_button_3_pressed"]
+[connection signal="pressed" from="ColorRect/ScrollContainer/VBoxContainer/Unicode" to="." method="_on_unicode"]
 [connection signal="item_selected" from="ColorRect/ScrollContainer/VBoxContainer/WindowSelector" to="." method="_changed_resolution"]
 [connection signal="drag_ended" from="ColorRect/ScrollContainer/VBoxContainer/BackgroundDim" to="." method="_backgrounddim_ended"]
 [connection signal="value_changed" from="ColorRect/ScrollContainer/VBoxContainer/BackgroundDim" to="." method="_backgrounddim_started"]
