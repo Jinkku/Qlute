@@ -334,12 +334,14 @@ layout_mode = 2
 
 [node name="Name" type="Label" parent="AlertBox/Box/Info/PH/VC"]
 layout_mode = 2
+text = "Total pp"
 horizontal_alignment = 1
 
 [node name="Text" type="Label" parent="AlertBox/Box/Info/PH/VC"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
+text = "0"
 horizontal_alignment = 1
 
 [node name="PH2" type="PanelContainer" parent="AlertBox/Box/Info"]

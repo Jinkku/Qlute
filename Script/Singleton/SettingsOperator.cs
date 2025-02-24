@@ -263,6 +263,7 @@ public partial class SettingsOperator : Node
         { "toppanelhide", false },
         { "Reloadmap", false },
         { "reloaddb", false },
+        { "localpp", (double)0 },
         { "loggedin", false },
         { "loggingin", false },
         { "showaccountpro", false },

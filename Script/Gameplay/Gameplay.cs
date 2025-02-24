@@ -138,6 +138,7 @@ public partial class Gameplay : Control
 		if (SettingsOperator.Gameplaycfg["timetotal"]-SettingsOperator.Gameplaycfg["time"] < 0)
 		{
 			SettingsOperator.toppaneltoggle();
+			SettingsOperator.Sessioncfg["localpp"] = (double)SettingsOperator.Sessioncfg["localpp"] + SettingsOperator.Gameplaycfg["pp"];
 			GetTree().ChangeSceneToFile("res://Panels/Screens/ResultsScreen.tscn");
 		}
 
