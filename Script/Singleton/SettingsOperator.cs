@@ -240,6 +240,7 @@ public partial class SettingsOperator : Node
         Gameplaycfg["great"] = 0;
         Gameplaycfg["meh"] = 0;
         Gameplaycfg["bad"] = 0;
+        Gameplaycfg["accuracy"] = 100;
         Gameplaycfg["time"] = 0;
     }
     public static Dictionary<string, double> Gameplaycfg { get; set; } = new Dictionary<string, double>
@@ -249,6 +250,7 @@ public partial class SettingsOperator : Node
         { "maxpp", 0 },
         {"time", 0},
         {"timetotal", 0},
+        {"accuracy", 100},
         {"max", 0},
         {"great", 0},
         {"meh", 0},
