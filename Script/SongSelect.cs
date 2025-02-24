@@ -19,6 +19,8 @@ public partial class SongSelect : Control
 	public List<object> SongEntry = new List<object>();
 	public int SongETick { get; set; }
 	public int scrolly = 0;
+	public Texture2D ImageCache {get;set;}
+	public string ImageURL {get;set;}
 	public PanelContainer ModScreen { get; set; }
 	public Label Diff { get; set; }
 	public ScrollBar scrollBar { get; set; }
@@ -62,7 +64,10 @@ public partial class SongSelect : Control
 		childButton.ClipText = true;
 		childButton.SetMeta("bg", background);
 		childButton.SetMeta("SongID", SongETick);
-		TextureRect.Texture = SettingsOperator.LoadImage(background);
+		if (background != ImageURL){
+			ImageCache = SettingsOperator.LoadImage(background);
+		}
+		TextureRect.Texture = ImageCache;
 	}
 	private void _on_random(){
 		SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
