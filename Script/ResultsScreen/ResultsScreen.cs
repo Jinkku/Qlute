@@ -34,7 +34,12 @@ public partial class ResultsScreen : Control
 		Bad.Text = SettingsOperator.Gameplaycfg["bad"].ToString("N0");
 		pp.Text = SettingsOperator.Gameplaycfg["pp"].ToString("N0")+"/"+SettingsOperator.Gameplaycfg["maxpp"].ToString("N0");
 	}
-
+	public void _retry(){
+		GetTree().ChangeSceneToFile("res://Panels/Screens/SongLoadingScreen.tscn");
+	}
+	public void _continue(){
+		GetTree().ChangeSceneToFile("res://Panels/Screens/song_select.tscn");
+	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{

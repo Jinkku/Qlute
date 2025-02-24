@@ -366,6 +366,7 @@ size_flags_vertical = 10
 alignment = 1
 
 [node name="Retry" type="Button" parent="AlertBox/Box/Options"]
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
 theme_override_styles/hover = SubResource("StyleBoxFlat_uquna")
@@ -374,6 +375,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_rvt4u")
 text = "Retry"
 
 [node name="Continue" type="Button" parent="AlertBox/Box/Options"]
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
 theme_override_styles/hover = SubResource("StyleBoxFlat_uquna")
@@ -395,3 +397,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
+
+[connection signal="pressed" from="AlertBox/Box/Options/Retry" to="." method="_retry"]
+[connection signal="pressed" from="AlertBox/Box/Options/Continue" to="." method="_continue"]
