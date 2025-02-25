@@ -22,6 +22,9 @@ public partial class SettingsPanel : Control
 	{
 		SettingsOperator.changeres(index);
 	}
+	private void _aow(){
+		GetTree().ChangeSceneToFile("res://Panels/Screens/AudioOffset.tscn");
+	}
 	private void _backgrounddim_started(float value)
 	{
 		SettingsOperator.backgrounddim = (int)BackgroundDim.Value;

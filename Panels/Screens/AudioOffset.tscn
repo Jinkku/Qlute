@@ -83,7 +83,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_rjlvf")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="OffsetSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_kuc6s")
 autoplay = true
 parameters/looping = true
@@ -126,34 +126,59 @@ horizontal_alignment = 1
 [node name="TickBox" type="HBoxContainer" parent="ModsScreen/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
-size_flags_vertical = 10
 alignment = 1
 
-[node name="Tick" type="PanelContainer" parent="ModsScreen/MarginContainer/VBoxContainer/TickBox"]
+[node name="Tick0" type="PanelContainer" parent="ModsScreen/MarginContainer/VBoxContainer/TickBox"]
+self_modulate = Color(1, 1, 1, 0.501961)
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i540u")
+
+[node name="Tick1" type="PanelContainer" parent="ModsScreen/MarginContainer/VBoxContainer/TickBox"]
+self_modulate = Color(1, 1, 1, 0.501961)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_i540u")
 
 [node name="Tick2" type="PanelContainer" parent="ModsScreen/MarginContainer/VBoxContainer/TickBox"]
+self_modulate = Color(1, 1, 1, 0.501961)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_i540u")
 
 [node name="Tick3" type="PanelContainer" parent="ModsScreen/MarginContainer/VBoxContainer/TickBox"]
+self_modulate = Color(1, 1, 1, 0.501961)
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_i540u")
 
-[node name="Tick4" type="PanelContainer" parent="ModsScreen/MarginContainer/VBoxContainer/TickBox"]
-custom_minimum_size = Vector2(100, 100)
+[node name="Offsetid" type="Label" parent="ModsScreen/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_i540u")
+size_flags_vertical = 3
+text = "Offset - 0ms"
+horizontal_alignment = 1
+vertical_alignment = 2
 
-[node name="HSlider" type="HSlider" parent="ModsScreen/MarginContainer/VBoxContainer"]
+[node name="OffsetSlider" type="HSlider" parent="ModsScreen/MarginContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 10
+size_flags_vertical = 3
 max_value = 400.0
 value = 200.0
+
+[node name="Speedid" type="Label" parent="ModsScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Speed - 1x"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="SpeedSlider" type="HSlider" parent="ModsScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+min_value = 0.01
+max_value = 2.0
+step = 0.01
+value = 1.0
 
 [node name="Ok" type="Button" parent="ModsScreen/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(150, 0)
@@ -165,3 +190,6 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_poxt0")
 text = "Finish"
 
 [connection signal="timeout" from="Timer" to="." method="_tick"]
+[connection signal="value_changed" from="ModsScreen/MarginContainer/VBoxContainer/OffsetSlider" to="." method="_offsetchanged"]
+[connection signal="value_changed" from="ModsScreen/MarginContainer/VBoxContainer/SpeedSlider" to="." method="_speedchanged"]
+[connection signal="pressed" from="ModsScreen/MarginContainer/VBoxContainer/Ok" to="." method="_goback"]
