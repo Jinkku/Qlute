@@ -61,7 +61,7 @@ public partial class Gameplay : Control
 		perfect.Size = new Vector2(400,PerfectJudge);
 		perfect.Position = new Vector2(0,-PerfectJudge/2);
 		perfect.Color = new Color(0f,0f,0.5f,1f);
-		perfect.Visible = true;
+		perfect.Visible = false;
 		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(perfect);
 
 		Ttiming = GetNode<Label>("Time");
@@ -165,17 +165,13 @@ public partial class Gameplay : Control
 		// Key imputs
 		foreach (ColorRect self in Keys)
 		{
-			if (ModsOperator.Mods["auto"]){
-				self.Color = new Color(0.32f,0.42f,0.74f);
-				KeyC[Keyx] = true;
-			}
-			else if (Input.IsActionJustPressed("Key"+(Keyx+1)))
+			if (Input.IsActionJustPressed("Key"+(Keyx+1)) && !ModsOperator.Mods["auto"])
 			{
 				self.Color = new Color(0.32f,0.42f,0.74f);
 				KeyC[Keyx] = true;
 				Keyp = Keyx;
 			}
-			else if (Input.IsActionJustReleased("Key"+(Keyx+1)))
+			else if (Input.IsActionJustReleased("Key"+(Keyx+1)) && !ModsOperator.Mods["auto"])
 			{
 				self.Color = new Color(0.5f,0.5f,0.5f);
 				KeyC[Keyx] = false;
@@ -204,13 +200,16 @@ public partial class Gameplay : Control
 			} else if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150)
 			{
 				foreach (var node in Notebox.Nodes){
+					if ((int)notex+nodeSize > Chart.Size.Y-PerfectJudge/2 && (int)notex+nodeSize < Chart.Size.Y+PerfectJudge/2  && ModsOperator.Mods["auto"]){
+						KeyC[(int)(node.Position.X / 100)] = true;
+					}else{
+						KeyC[(int)(node.Position.X / 100)] = false;
+					}
 					node.Position = new Vector2(node.Position.X, notex);
 					Ttick++;
 					JudgeResult = checkjudge((int)notex,KeyC[(int)(node.Position.X / 100)],node,node.Visible);
 					if (JudgeResult < 4){
 						KeyC[(int)(node.Position.X / 100)] = false;
-						node.Visible = false;
-						
 					}
 				}
 			} else{
@@ -233,18 +232,18 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg["max"]++;
 			node.Visible = false;
 			return 0;
-		} else if (timing+nodeSize > Chart.Size.Y-GreatJudge/2 && timing+nodeSize < Chart.Size.Y+GreatJudge/2 && keyvalue && visibility && !ModsOperator.Mods["auto"]){
+		} else if (timing+nodeSize > Chart.Size.Y-GreatJudge/2 && timing+nodeSize < Chart.Size.Y+GreatJudge/2 && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["great"]++;
 			node.Visible = false;
 			return 1;
-		}else if (timing+nodeSize > Chart.Size.Y-MehJudge/2 && timing+nodeSize < Chart.Size.Y+MehJudge/2 && keyvalue && visibility && !ModsOperator.Mods["auto"]){
+		}else if (timing+nodeSize > Chart.Size.Y-MehJudge/2 && timing+nodeSize < Chart.Size.Y+MehJudge/2 && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["meh"]++;
 			node.Visible = false;
 			return 2;
 		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility){
 			SettingsOperator.Gameplaycfg["bad"]++;
 			node.Visible = false;
-			return 2;
+			return 3;
 		}
 		 else{
 			return 4;
