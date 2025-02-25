@@ -6,7 +6,7 @@ using System.Reflection.Metadata;
 public class NotesEn {
 	public int timing {get;set;}
 	public List<object> Notes = new List<object>();
-	public List<Area2D> Nodes = new List<Area2D>();
+	public List<Sprite2D> Nodes = new List<Sprite2D>();
 	public List<bool> NotesHit = new List<bool>();
 }
 public partial class Gameplay : Control
@@ -17,6 +17,7 @@ public partial class Gameplay : Control
 	public static Label Hits { get; set; }
 	public static ColorRect Chart { get; set; }
 	public List<ColorRect> Keys = new List<ColorRect>();
+	public List<Tween> KeyAni = new List<Tween>();
 	public List<bool> KeyC = new List<bool>(
 	);
 	public int JudgeResult = -1;
@@ -32,6 +33,11 @@ public partial class Gameplay : Control
 	public long startedtime {get ;set; }
 	public bool songstarted = false;
 	public Node2D noteblock {get;set;}
+	public bool hittextinit = false;
+	public Label hittext {get;set;}
+	public Tween hittextani {get;set;}
+	private Tween hitnoteani {get;set;}
+	public Vector2 hittextoldpos {get;set;}
 	public List<NotesEn> Notes = new List<NotesEn>();
 	public TextureRect Beatmap_Background {get;set;}
 	public override void _Ready()
@@ -42,7 +48,11 @@ public partial class Gameplay : Control
 		Beatmap_Background.SelfModulate = new Color(1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)));
 		Control P = GetNode<Control>("Playfield");
 		Chart = GetNode<ColorRect>("Playfield/Chart");
-
+		hittext = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/hittext.tscn").Instantiate().GetNode<Label>(".");
+		hittextinit = true;
+		hittext.Modulate = new Color(1f,1f,1f,0f);
+		Chart.AddChild(hittext);
+		hittextoldpos = hittext.Position;
 		meh = new ColorRect();
 		meh.Size = new Vector2(400,MehJudge);
 		meh.Position = new Vector2(0,-MehJudge/2);
@@ -67,13 +77,14 @@ public partial class Gameplay : Control
 		Ttiming = GetNode<Label>("Time");
 		Hits = GetNode<Label>("Hits");
 		foreach (int i in Enumerable.Range(1, 4)){
-			Keys.Add(GetNode<ColorRect>("Playfield/KeyBoxes/Key"+i));
-			GetNode<ColorRect>("Playfield/KeyBoxes/Key"+i).Color = idlehit;
+			var notet = GetNode<ColorRect>("Playfield/KeyBoxes/Key"+i);
+			Keys.Add(notet);;
 			KeyC.Add(false);
+			notet.Color = idlehit;
 		}
 		
 		SettingsOperator.ResetScore();
-		noteblock = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Area2D>(".");
+		noteblock = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Sprite2D>(".");
         using var file = FileAccess.Open(SettingsOperator.Sessioncfg["beatmapurl"].ToString(), FileAccess.ModeFlags.Read);
         var text = file.GetAsText();
         var lines = text.Split("\n");
@@ -130,13 +141,14 @@ public partial class Gameplay : Control
 	}
 	public void hitnote(int Keyx,bool hit){
 		if (hit){
-		Keys[Keyx].Color = activehit;}
+		Keys[Keyx].Color = activehit;
+		if (hitnoteani != null){
+        hitnoteani.Kill();} // Abort the previous animation
+		hitnoteani = Keys[Keyx].CreateTween();
+		hitnoteani.TweenProperty(Keys[Keyx], "color", idlehit, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		hitnoteani.Play();
+		}
 		KeyC[Keyx] = hit;
-		var _tween = GetTree().CreateTween();
-			_tween.TweenProperty(Keys[Keyx], "color", idlehit, 0.2f)
-				.SetTrans(Tween.TransitionType.Cubic)
-				.SetEase(Tween.EaseType.Out);
-			_tween.Play();
 		}
 	public override void _Process(double delta)
 	{   
@@ -157,6 +169,9 @@ public partial class Gameplay : Control
 			GetTree().ChangeSceneToFile("res://Panels/Screens/ResultsScreen.tscn");
 		}
 
+		if (SettingsOperator.Gameplaycfg["combo"] > SettingsOperator.Gameplaycfg["maxcombo"]){
+			SettingsOperator.Gameplaycfg["maxcombo"] = SettingsOperator.Gameplaycfg["combo"];
+		}
 
 		
 		Beatmap_Background.SelfModulate = new Color(1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)));
@@ -202,7 +217,7 @@ public partial class Gameplay : Control
 			if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && !Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150 && delta/0.001 <4)
 			{
 				foreach (int part in Notebox.Notes){
-					var node = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Area2D>(".");
+					var node = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Sprite2D>(".");
 					Notebox.Nodes.Add(node);
 					Chart.AddChild(node);
 					node.Position = new Vector2(100 * part, notex);
@@ -237,21 +252,44 @@ public partial class Gameplay : Control
 
 		//
 	}
-	public int checkjudge(int timing,bool keyvalue, Area2D node,bool visibility){
+	public void Hittext(string word){
+		hittext.Modulate = new Color(1f,1f,1f,1f);
+		hittext.Position = new Vector2(hittextoldpos.X,hittextoldpos.Y-10);
+		//tween.TweenProperty(hittext, "position", new Vector2(hittext.Position.X,hittext.Position.Y+10), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		if (hittextani != null && hittextani.IsRunning()) {
+			hittextani.Stop();
+		}
+
+		hittextani = hittext.CreateTween();
+		hittextani.Parallel().TweenProperty(hittext, "modulate", new Color(1f,1f,1f,0f), 0.5).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		hittextani.Parallel().TweenProperty(hittext, "position", hittextoldpos, 0.5).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		hittextani.Play();
+		hittext.Text = word;
+	}
+	public int checkjudge(int timing,bool keyvalue, Sprite2D node,bool visibility){
 		if (timing+nodeSize > Chart.Size.Y-PerfectJudge/2 && timing+nodeSize < Chart.Size.Y+PerfectJudge/2 && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["max"]++;
+			SettingsOperator.Gameplaycfg["combo"]++;
+			Hittext("Perfect");
+
 			node.Visible = false;
 			return 0;
 		} else if (timing+nodeSize > Chart.Size.Y-GreatJudge/2 && timing+nodeSize < Chart.Size.Y+GreatJudge/2 && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["great"]++;
+			SettingsOperator.Gameplaycfg["combo"]++;
+			Hittext("Great");
 			node.Visible = false;
 			return 1;
 		}else if (timing+nodeSize > Chart.Size.Y-MehJudge/2 && timing+nodeSize < Chart.Size.Y+MehJudge/2 && keyvalue && visibility){
+			Hittext("Meh");
 			SettingsOperator.Gameplaycfg["meh"]++;
+			SettingsOperator.Gameplaycfg["combo"]++;
 			node.Visible = false;
 			return 2;
 		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility){
+			Hittext("Miss");
 			SettingsOperator.Gameplaycfg["bad"]++;
+			SettingsOperator.Gameplaycfg["combo"] = 0;
 			node.Visible = false;
 			return 3;
 		}
