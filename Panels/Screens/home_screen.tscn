@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene load_steps=23 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" path="res://Script/home.cs" id="1_j2gfm"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
@@ -6,6 +6,11 @@
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="5_pikml"]
 [ext_resource type="Script" path="res://Script/version.gd" id="6_1tkmr"]
 [ext_resource type="Texture2D" uid="uid://cwnp10imrjpaf" path="res://Skin/System/mainmenulogo.png" id="6_xu4tp"]
+[ext_resource type="Texture2D" uid="uid://die40m3acksoy" path="res://Skin/System/browse.png" id="7_2ki83"]
+[ext_resource type="Texture2D" uid="uid://ch5v1b6yxw67n" path="res://Skin/System/user.png" id="8_jb3ms"]
+[ext_resource type="Script" path="res://Script/Effects/ButtonBounce.cs" id="8_qhwge"]
+[ext_resource type="Texture2D" uid="uid://c3pkywhy0jve1" path="res://Skin/System/edit.png" id="9_ew3bx"]
+[ext_resource type="Texture2D" uid="uid://7tkemeqh46a0" path="res://Skin/System/exit.png" id="11_ioq3m"]
 
 [sub_resource type="FontVariation" id="FontVariation_bifyk"]
 base_font = ExtResource("5_pikml")
@@ -91,6 +96,23 @@ _data = {
 "RESET": SubResource("Animation_vivcs")
 }
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qejje"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e1jv3"]
+content_margin_left = 0.0
+bg_color = Color(0.705882, 0.705882, 0.705882, 1)
+skew = Vector2(0.5, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nwgwj"]
+content_margin_left = 0.0
+bg_color = Color(0.54902, 0.54902, 0.54902, 1)
+skew = Vector2(0.5, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nktxj"]
+content_margin_left = 0.0
+bg_color = Color(0.588235, 0.588235, 0.588235, 1)
+skew = Vector2(0.5, 0)
+
 [node name="Home Screen" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -102,42 +124,6 @@ script = ExtResource("1_j2gfm")
 
 [node name="BeatmapBackground" parent="." instance=ExtResource("2_ouv1d")]
 layout_mode = 1
-
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_left = 20.0
-offset_right = 420.0
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="AspectRatioContainer"]
-layout_mode = 2
-theme_override_constants/separation = 15
-
-[node name="Play" type="Button" parent="AspectRatioContainer/VBoxContainer"]
-custom_minimum_size = Vector2(400, 100)
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Play"
-
-[node name="Create" type="Button" parent="AspectRatioContainer/VBoxContainer"]
-custom_minimum_size = Vector2(400, 100)
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Create"
-
-[node name="Browse" type="Button" parent="AspectRatioContainer/VBoxContainer"]
-custom_minimum_size = Vector2(400, 100)
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Browse"
-
-[node name="Leave" type="Button" parent="AspectRatioContainer/VBoxContainer"]
-custom_minimum_size = Vector2(400, 100)
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Leave"
 
 [node name="Control" type="Control" parent="."]
 visible = false
@@ -301,11 +287,215 @@ grow_vertical = 2
 text = "Press any button to play!"
 horizontal_alignment = 1
 
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -25.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HomeButtons" type="HBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Play" type="Button" parent="PanelContainer/HomeButtons"]
+self_modulate = Color(0.414497, 0.650241, 0.994792, 1)
+custom_minimum_size = Vector2(154, 95)
+layout_mode = 2
+theme_override_constants/icon_max_width = 32
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
+theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
+theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
+icon_alignment = 1
+script = ExtResource("8_qhwge")
+
+[node name="Label" type="Label" parent="PanelContainer/HomeButtons/Play"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -37.0
+offset_top = -25.0
+offset_right = 13.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 14
+text = "Play"
+horizontal_alignment = 1
+
+[node name="Pic" type="TextureRect" parent="PanelContainer/HomeButtons/Play/Label"]
+texture_filter = 2
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -15.0
+offset_top = -40.0
+offset_right = 15.0
+offset_bottom = -10.0
+grow_horizontal = 2
+mouse_filter = 2
+texture = ExtResource("8_jb3ms")
+expand_mode = 1
+
+[node name="Create" type="Button" parent="PanelContainer/HomeButtons"]
+self_modulate = Color(0.536621, 0.633245, 0.817708, 1)
+custom_minimum_size = Vector2(154, 95)
+layout_mode = 2
+theme_override_constants/icon_max_width = 32
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
+theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
+theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
+icon_alignment = 1
+script = ExtResource("8_qhwge")
+
+[node name="Label" type="Label" parent="PanelContainer/HomeButtons/Create"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -54.0
+offset_top = -25.0
+offset_right = 29.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 14
+text = "Create"
+horizontal_alignment = 1
+
+[node name="Pic" type="TextureRect" parent="PanelContainer/HomeButtons/Create/Label"]
+texture_filter = 2
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -15.0
+offset_top = -40.0
+offset_right = 15.0
+offset_bottom = -10.0
+grow_horizontal = 2
+mouse_filter = 2
+texture = ExtResource("9_ew3bx")
+expand_mode = 1
+
+[node name="Browse" type="Button" parent="PanelContainer/HomeButtons"]
+self_modulate = Color(0.317393, 0.640625, 0.306966, 1)
+custom_minimum_size = Vector2(154, 95)
+layout_mode = 2
+theme_override_constants/icon_max_width = 32
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
+theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
+theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
+icon_alignment = 1
+script = ExtResource("8_qhwge")
+
+[node name="Label" type="Label" parent="PanelContainer/HomeButtons/Browse"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -54.0
+offset_top = -25.0
+offset_right = 34.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 14
+text = "Browse"
+horizontal_alignment = 1
+
+[node name="Pic" type="TextureRect" parent="PanelContainer/HomeButtons/Browse/Label"]
+texture_filter = 2
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -15.0
+offset_top = -40.0
+offset_right = 15.0
+offset_bottom = -10.0
+grow_horizontal = 2
+mouse_filter = 2
+texture = ExtResource("7_2ki83")
+expand_mode = 1
+
+[node name="Leave" type="Button" parent="PanelContainer/HomeButtons"]
+self_modulate = Color(1, 0.442708, 0.442708, 1)
+custom_minimum_size = Vector2(154, 95)
+layout_mode = 2
+theme_override_constants/icon_max_width = 32
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
+theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
+theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
+icon_alignment = 1
+script = ExtResource("8_qhwge")
+
+[node name="Label" type="Label" parent="PanelContainer/HomeButtons/Leave"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -54.0
+offset_top = -25.0
+offset_right = 18.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 14
+text = "Leave"
+horizontal_alignment = 1
+
+[node name="Pic" type="TextureRect" parent="PanelContainer/HomeButtons/Leave/Label"]
+texture_filter = 2
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -15.0
+offset_top = -40.0
+offset_right = 15.0
+offset_bottom = -10.0
+grow_horizontal = 2
+mouse_filter = 2
+texture = ExtResource("11_ioq3m")
+expand_mode = 1
+
 [connection signal="resized" from="." to="." method="_on_resized"]
-[connection signal="pressed" from="AspectRatioContainer/VBoxContainer/Play" to="." method="_play"]
-[connection signal="pressed" from="AspectRatioContainer/VBoxContainer/Create" to="." method="_create"]
-[connection signal="pressed" from="AspectRatioContainer/VBoxContainer/Browse" to="." method="_browse"]
-[connection signal="pressed" from="AspectRatioContainer/VBoxContainer/Leave" to="." method="_leave"]
-[connection signal="pressed" from="AspectRatioContainer/VBoxContainer/Leave" to="AspectRatioContainer/VBoxContainer/Leave" method="_on_pressed"]
 [connection signal="timeout" from="MenuNotice/Timer" to="MenuNotice/HTTPRequest" method="_on_timer_timeout"]
 [connection signal="request_completed" from="MenuNotice/HTTPRequest" to="MenuNotice/HTTPRequest" method="_on_request_completed"]
+[connection signal="mouse_entered" from="PanelContainer/HomeButtons/Play" to="PanelContainer/HomeButtons/Play" method="_focus"]
+[connection signal="mouse_exited" from="PanelContainer/HomeButtons/Play" to="PanelContainer/HomeButtons/Play" method="_unfocus"]
+[connection signal="pressed" from="PanelContainer/HomeButtons/Play" to="." method="_play"]
+[connection signal="mouse_entered" from="PanelContainer/HomeButtons/Create" to="PanelContainer/HomeButtons/Create" method="_focus"]
+[connection signal="mouse_exited" from="PanelContainer/HomeButtons/Create" to="PanelContainer/HomeButtons/Create" method="_unfocus"]
+[connection signal="pressed" from="PanelContainer/HomeButtons/Create" to="." method="_create"]
+[connection signal="mouse_entered" from="PanelContainer/HomeButtons/Browse" to="PanelContainer/HomeButtons/Browse" method="_focus"]
+[connection signal="mouse_exited" from="PanelContainer/HomeButtons/Browse" to="PanelContainer/HomeButtons/Browse" method="_unfocus"]
+[connection signal="pressed" from="PanelContainer/HomeButtons/Browse" to="." method="_browse"]
+[connection signal="mouse_entered" from="PanelContainer/HomeButtons/Leave" to="PanelContainer/HomeButtons/Leave" method="_focus"]
+[connection signal="mouse_exited" from="PanelContainer/HomeButtons/Leave" to="PanelContainer/HomeButtons/Leave" method="_unfocus"]
+[connection signal="pressed" from="PanelContainer/HomeButtons/Leave" to="." method="_leave"]
+[connection signal="pressed" from="PanelContainer/HomeButtons/Leave" to="PanelContainer/HomeButtons/Leave" method="_on_pressed"]
