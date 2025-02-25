@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://Script/version.gd" id="6_1tkmr"]
 [ext_resource type="Texture2D" uid="uid://cwnp10imrjpaf" path="res://Skin/System/mainmenulogo.png" id="6_xu4tp"]
 [ext_resource type="Texture2D" uid="uid://die40m3acksoy" path="res://Skin/System/browse.png" id="7_2ki83"]
-[ext_resource type="Texture2D" uid="uid://ch5v1b6yxw67n" path="res://Skin/System/user.png" id="8_jb3ms"]
+[ext_resource type="Texture2D" uid="uid://c1i4ywq15b2kd" path="res://Skin/System/play.png" id="7_w7ma2"]
 [ext_resource type="Script" path="res://Script/Effects/ButtonBounce.cs" id="8_qhwge"]
 [ext_resource type="Texture2D" uid="uid://c3pkywhy0jve1" path="res://Skin/System/edit.png" id="9_ew3bx"]
 [ext_resource type="Script" path="res://Script/IntroPending.cs" id="11_gngjn"]
@@ -252,7 +252,6 @@ libraries = {
 }
 
 [node name="HomeButtonBG" type="PanelContainer" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -310,7 +309,7 @@ offset_right = 15.0
 offset_bottom = -10.0
 grow_horizontal = 2
 mouse_filter = 2
-texture = ExtResource("8_jb3ms")
+texture = ExtResource("7_w7ma2")
 expand_mode = 1
 
 [node name="Create" type="Button" parent="HomeButtonBG/HomeButtons"]
@@ -449,6 +448,7 @@ texture = ExtResource("11_ioq3m")
 expand_mode = 1
 
 [node name="IntroPending" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
