@@ -189,7 +189,10 @@ public partial class Gameplay : Control
 		if (Input.IsActionJustPressed("pausemenu")){
 			SettingsOperator.toppaneltoggle();
 			GetTree().ChangeSceneToFile("res://Panels/Screens/song_select.tscn");
-		}
+		}else if (Input.IsActionJustPressed("retry")){
+			SettingsOperator.toppaneltoggle();
+			GetTree().ChangeSceneToFile("res://Panels/Screens/SongLoadingScreen.tscn");
+}
 		// Gamenotes
 
 
