@@ -17,6 +17,8 @@ public partial class SettingsOperator : Node
 	public string skinsdir => homedir + "/skins";
     public string settingsfile => homedir + "/settings.cfg";
     public string Qlutedb => homedir + "/qlute.db";
+    public static bool loopaudio = false;
+    public static bool jukebox = false;
     public int backgrounddim {get;set;}
 
     public static List<Dictionary<string,object>> Beatmaps = new List<Dictionary<string,object>>();
@@ -277,7 +279,7 @@ public partial class SettingsOperator : Node
         { "beatmaptitle", null },
         { "beatmapartist", null },
         { "beatmapmapper", null },
-        { "beatmapbpm", 160 },
+        { "beatmapbpm", (int)160 },
         { "beatmapdiff", null },
         { "customapi", false},
         { "multiplier" , 1.0f},

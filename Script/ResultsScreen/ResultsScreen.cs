@@ -14,6 +14,7 @@ public partial class ResultsScreen : Control
 	public Label Bad { get; set; }
 	public Label pp { get; set; }
 	public Label Totalpp { get; set; }
+	public Label Accuracy { get; set; }
 	public override void _Ready()
 	{
 		SongTitle = GetNode<Label>("AlertBox/Box/Title");
@@ -26,6 +27,7 @@ public partial class ResultsScreen : Control
 		Great = GetNode<Label>("AlertBox/Box/Info/GREAT/VC/Text");
 		Meh = GetNode<Label>("AlertBox/Box/Info/MEH/VC/Text");
 		Bad = GetNode<Label>("AlertBox/Box/Info/BAD/VC/Text");
+		Accuracy = GetNode<Label>("AlertBox/Box/Info/Accuracy/VC/Text");
 		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No Beatmaps Selected";
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "Please select a Beatmap!";
 		SongMapper.Text = "Creator: " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString();
@@ -34,8 +36,13 @@ public partial class ResultsScreen : Control
 		Great.Text = SettingsOperator.Gameplaycfg["great"].ToString("N0");
 		Meh.Text = SettingsOperator.Gameplaycfg["meh"].ToString("N0");
 		Bad.Text = SettingsOperator.Gameplaycfg["bad"].ToString("N0");
-		pp.Text = SettingsOperator.Gameplaycfg["pp"].ToString("N0")+"/"+SettingsOperator.Gameplaycfg["maxpp"].ToString("N0");
+		pp.Text = SettingsOperator.Gameplaycfg["pp"].ToString("N0")+"/"+(SettingsOperator.Gameplaycfg["maxpp"]*ModsMulti.multiplier).ToString("N0");
 		Totalpp.Text = ((double)SettingsOperator.Sessioncfg["localpp"]).ToString("N0");
+		var Acc = SettingsOperator.Gameplaycfg["accuracy"].ToString("P0");
+		if (Acc == "NaN"){
+			Acc = "100%";
+		}Accuracy.Text = Acc;
+
 	}
 	public void _retry(){
 		GetTree().ChangeSceneToFile("res://Panels/Screens/SongLoadingScreen.tscn");

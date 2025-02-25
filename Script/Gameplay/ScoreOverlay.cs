@@ -20,11 +20,11 @@ public partial class ScoreOverlay : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{	
-		SettingsOperator.Gameplaycfg["accuracy"] = (SettingsOperator.Gameplaycfg["max"] + (SettingsOperator.Gameplaycfg["great"]/2) + (SettingsOperator.Gameplaycfg["meh"]/3)) / (SettingsOperator.Gameplaycfg["max"] +SettingsOperator.Gameplaycfg["great"] + SettingsOperator.Gameplaycfg["meh"] + SettingsOperator.Gameplaycfg["bad"]);
-		SettingsOperator.Gameplaycfg["score"] = (int)(((double)SettingsOperator.Gameplaycfg["pp"] / SettingsOperator.Gameplaycfg["maxpp"]) * 1000000);
-		SettingsOperator.Gameplaycfg["pp"] = (int)((SettingsOperator.Gameplaycfg["max"]+(SettingsOperator.Gameplaycfg["great"]/2)+(SettingsOperator.Gameplaycfg["meh"]/3)/(SettingsOperator.Gameplaycfg["bad"]+1)) * SettingsOperator.ppbase);
 		score.Text = SettingsOperator.Gameplaycfg["score"].ToString("00000000");
-		pp.Text = SettingsOperator.Gameplaycfg["pp"].ToString("N0") + "pp";
-		Accuracy.Text = SettingsOperator.Gameplaycfg["accuracy"].ToString("P0");
+		pp.Text = ((int)SettingsOperator.Gameplaycfg["pp"]).ToString("N0") + "pp";
+		var Acc = SettingsOperator.Gameplaycfg["accuracy"].ToString("P0");
+		if (Acc == "NaN"){
+			Acc = "100%";
+		}Accuracy.Text = Acc;
 	}
 }

@@ -74,6 +74,7 @@ public partial class SongSelect : Control
 	}
 	public override void _Ready()
 	{
+		SettingsOperator.loopaudio = true;
 		scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		SongETick = 0;
@@ -122,10 +123,10 @@ public partial class SongSelect : Control
 		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No song selected";
 		if (SettingsOperator.Sessioncfg["beatmaptitle"] != null){
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
-		Songpp.Text = "+" + SettingsOperator.Gameplaycfg["maxpp"].ToString("N0")+"pp";
+		Songpp.Text = "+" + (SettingsOperator.Gameplaycfg["maxpp"]*ModsMulti.multiplier).ToString("N0")+"pp";
 		SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
-		SongBPM.Text = "BPM - " + SettingsOperator.Sessioncfg["beatmapbpm"]?.ToString() ?? "";
-		SongLen.Text = TimeSpan.FromMilliseconds(SettingsOperator.Gameplaycfg["timetotal"]).ToString(@"mm\:ss") ?? "00:00";
+		SongBPM.Text = "BPM - " + ((int)SettingsOperator.Sessioncfg["beatmapbpm"]*AudioPlayer.Instance.PitchScale).ToString("N0") ?? "";
+		SongLen.Text = TimeSpan.FromMilliseconds(SettingsOperator.Gameplaycfg["timetotal"]/AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00";
 		SongArtist.Visible = true;
 		Songpp.Visible = true;
 		SongMapper.Visible = true;
@@ -183,6 +184,7 @@ public partial class SongSelect : Control
 	private void _Start(){
 		//AudioPlayer.Instance.Stop();
 		GetTree().ChangeSceneToFile("res://Panels/Screens/SongLoadingScreen.tscn");
+		SettingsOperator.loopaudio = false;
 		//
 	}
 	private void _on_back_pressed(){

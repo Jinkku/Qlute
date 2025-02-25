@@ -61,7 +61,7 @@ public partial class Gameplay : Control
 		perfect.Size = new Vector2(400,PerfectJudge);
 		perfect.Position = new Vector2(0,-PerfectJudge/2);
 		perfect.Color = new Color(0f,0f,0.5f,1f);
-		perfect.Visible = false;
+		perfect.Visible = true;
 		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(perfect);
 
 		Ttiming = GetNode<Label>("Time");
@@ -72,7 +72,6 @@ public partial class Gameplay : Control
 		}
 		
 		SettingsOperator.ResetScore();
-
 		noteblock = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Area2D>(".");
         using var file = FileAccess.Open(SettingsOperator.Sessioncfg["beatmapurl"].ToString(), FileAccess.ModeFlags.Read);
         var text = file.GetAsText();
@@ -102,10 +101,15 @@ public partial class Gameplay : Control
 				t=line;
 				timing = Convert.ToInt32(line.Split(",")[2]);
 				part = Convert.ToInt32(line.Split(",")[0]);
+				var party = Convert.ToInt32(line.Split(",")[1]); // if converting
 				if (part == 64){part = 0;}
 				else if (part == 192){part = 1;}
 				else if (part == 320){part = 2;}
 				else if (part == 448){part = 3;}
+				else if (part<=256 & party <=192){part = 0;}
+				else if (part>256 & party <=192){part = 1;}
+				else if (part<=256 & party >192){part = 2;}
+				else if ((part>256 & party >192)){part = 3;}
 				if (timen != -timing)
 				{
 					timen = -timing;
@@ -135,7 +139,7 @@ public partial class Gameplay : Control
 
 		// End Game
 
-		if (SettingsOperator.Gameplaycfg["timetotal"]-SettingsOperator.Gameplaycfg["time"] < 2)
+		if (SettingsOperator.Gameplaycfg["timetotal"]-SettingsOperator.Gameplaycfg["time"] < -2000)
 		{
 			SettingsOperator.toppaneltoggle();
 			SettingsOperator.Sessioncfg["localpp"] = (double)SettingsOperator.Sessioncfg["localpp"] + SettingsOperator.Gameplaycfg["pp"];
@@ -143,11 +147,14 @@ public partial class Gameplay : Control
 		}
 
 
-
+		
 		Beatmap_Background.SelfModulate = new Color(1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)));
 		if ((float)SettingsOperator.Sessioncfg["songspeed"] != 1.0f){
 			est = est * (float)SettingsOperator.Sessioncfg["songspeed"];
 		}
+		SettingsOperator.Gameplaycfg["accuracy"] = (SettingsOperator.Gameplaycfg["max"] + (SettingsOperator.Gameplaycfg["great"]/2) + (SettingsOperator.Gameplaycfg["meh"]/3)) / (SettingsOperator.Gameplaycfg["max"] +SettingsOperator.Gameplaycfg["great"] + SettingsOperator.Gameplaycfg["meh"] + SettingsOperator.Gameplaycfg["bad"]);
+		SettingsOperator.Gameplaycfg["score"] = (SettingsOperator.Gameplaycfg["pp"] / SettingsOperator.Gameplaycfg["maxpp"]) * (1000000*ModsMulti.multiplier);
+		SettingsOperator.Gameplaycfg["pp"] = (SettingsOperator.Gameplaycfg["max"]+(SettingsOperator.Gameplaycfg["great"]/2)+(SettingsOperator.Gameplaycfg["meh"]/3)/(SettingsOperator.Gameplaycfg["bad"]+1)) * (SettingsOperator.ppbase * ModsMulti.multiplier);
 		SettingsOperator.Gameplaycfg["time"] = (int)est;
 		//float est = AudioPlayer.Instance.GetPlaybackPosition()*1000;
 		int Ttick = 0;
@@ -185,7 +192,7 @@ public partial class Gameplay : Control
 
 		var viewportSize = GetViewportRect().Size.Y;
 		foreach (var Notebox in Notes){
-			var notex = Notebox.timing + est + viewportSize/2 + ((60000/(int)SettingsOperator.Sessioncfg["beatmapbpm"]));
+			var notex = Notebox.timing + est + viewportSize/2;
 			if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && !Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150 && delta/0.001 <4)
 			{
 				foreach (int part in Notebox.Notes){
@@ -203,6 +210,7 @@ public partial class Gameplay : Control
 					if (JudgeResult < 4){
 						KeyC[(int)(node.Position.X / 100)] = false;
 						node.Visible = false;
+						
 					}
 				}
 			} else{

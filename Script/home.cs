@@ -15,6 +15,7 @@ public partial class home : Node
 	public override void _Ready()
 	{	
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
+		SettingsOperator.loopaudio = false;
 		SongTitle = GetNode<Label>("./Titlesong");
 		SongArtist = GetNode<Label>("./Descsong");
 		AnimationPlayer ani = GetNode<AnimationPlayer>("Flash/AnimationPlayer");
@@ -26,6 +27,16 @@ public partial class home : Node
 	{
 		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No song selected";
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
+
+		if (SettingsOperator.Gameplaycfg["timetotal"]-(AudioPlayer.Instance.GetPlaybackPosition()*1000) < -1000 && SettingsOperator.Beatmaps.Count>0)
+		{
+
+			SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
+			AudioPlayer.Instance.Play();
+		}
+
+
+
 	}
 	private void _play(){
 		GetTree().ChangeSceneToFile("res://Panels/Screens/song_select.tscn");
