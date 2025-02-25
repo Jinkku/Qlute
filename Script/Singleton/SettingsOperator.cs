@@ -253,6 +253,8 @@ public partial class SettingsOperator : Node
         {"time", 0},
         {"timetotal", 0},
         {"accuracy", 100},
+        {"combo", 0},
+        {"maxcombo",0},
         {"max", 0},
         {"great", 0},
         {"meh", 0},

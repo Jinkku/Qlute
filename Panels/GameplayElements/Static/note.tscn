@@ -2,8 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://beg5x4bfct3fv" path="res://Skin/Game/note.svg" id="1_3mpj0"]
 
-[node name="Note" type="Area2D"]
-
-[node name="Notetext" type="Sprite2D" parent="."]
+[node name="Note" type="Sprite2D"]
 texture = ExtResource("1_3mpj0")
 centered = false
