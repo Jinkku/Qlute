@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 public class NotesEn {
 	public int timing {get;set;}
 	public List<object> Notes = new List<object>();
@@ -15,8 +16,7 @@ public partial class Gameplay : Control
 	public static Label Ttiming { get; set; }
 	public static Label Hits { get; set; }
 	public static ColorRect Chart { get; set; }
-	public List<object> Keys = new List<object>();
-	public int Keyp = -1;
+	public List<ColorRect> Keys = new List<ColorRect>();
 	public List<bool> KeyC = new List<bool>(
 	);
 	public int JudgeResult = -1;
@@ -27,8 +27,8 @@ public partial class Gameplay : Control
 	public ColorRect meh {get;set;}
 	public ColorRect great {get;set;}
 	public ColorRect perfect {get;set;}
-	
-
+	public Color activehit = new Color(0.32f,0.42f,0.74f);
+	public Color idlehit = new Color(0.5f,0.5f,0.5f);
 	public long startedtime {get ;set; }
 	public bool songstarted = false;
 	public Node2D noteblock {get;set;}
@@ -68,6 +68,7 @@ public partial class Gameplay : Control
 		Hits = GetNode<Label>("Hits");
 		foreach (int i in Enumerable.Range(1, 4)){
 			Keys.Add(GetNode<ColorRect>("Playfield/KeyBoxes/Key"+i));
+			GetNode<ColorRect>("Playfield/KeyBoxes/Key"+i).Color = idlehit;
 			KeyC.Add(false);
 		}
 		
@@ -109,7 +110,7 @@ public partial class Gameplay : Control
 				else if (part<=256 & party <=192){part = 0;}
 				else if (part>256 & party <=192){part = 1;}
 				else if (part<=256 & party >192){part = 2;}
-				else if ((part>256 & party >192)){part = 3;}
+				else if (part>256 & party >192){part = 3;}
 				if (timen != -timing)
 				{
 					timen = -timing;
@@ -127,6 +128,16 @@ public partial class Gameplay : Control
 	private static void OnGuiInput(InputEvent inputEvent) {
 		GD.Print(inputEvent);
 	}
+	public void hitnote(int Keyx,bool hit){
+		if (hit){
+		Keys[Keyx].Color = activehit;}
+		KeyC[Keyx] = hit;
+		var _tween = GetTree().CreateTween();
+			_tween.TweenProperty(Keys[Keyx], "color", idlehit, 0.2f)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			_tween.Play();
+		}
 	public override void _Process(double delta)
 	{   
 		long unixTimeMilliseconds = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -167,15 +178,11 @@ public partial class Gameplay : Control
 		{
 			if (Input.IsActionJustPressed("Key"+(Keyx+1)) && !ModsOperator.Mods["auto"])
 			{
-				self.Color = new Color(0.32f,0.42f,0.74f);
-				KeyC[Keyx] = true;
-				Keyp = Keyx;
+				hitnote(Keyx,true);
 			}
 			else if (Input.IsActionJustReleased("Key"+(Keyx+1)) && !ModsOperator.Mods["auto"])
 			{
-				self.Color = new Color(0.5f,0.5f,0.5f);
-				KeyC[Keyx] = false;
-				Keyp = -1;
+				hitnote(Keyx,false);
 			}
 			Keyx++;
 		}
@@ -202,7 +209,7 @@ public partial class Gameplay : Control
 				foreach (var node in Notebox.Nodes){
 					if ((int)notex+nodeSize > Chart.Size.Y-PerfectJudge/2 && (int)notex+nodeSize < Chart.Size.Y+PerfectJudge/2  && ModsOperator.Mods["auto"]){
 						KeyC[(int)(node.Position.X / 100)] = true;
-					}else{
+					}else if (ModsOperator.Mods["auto"]){
 						KeyC[(int)(node.Position.X / 100)] = false;
 					}
 					node.Position = new Vector2(node.Position.X, notex);
