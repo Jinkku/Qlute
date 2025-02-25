@@ -4,7 +4,6 @@ using System;
 public partial class ButtonBounce : Button
 {
     private void _focus(){
-        GD.Print("hi");
 		var _tween = GetTree().CreateTween();
 			_tween.TweenProperty(this, "custom_minimum_size", new Vector2(180,95), 0.2f)
 				.SetTrans(Tween.TransitionType.Bounce)

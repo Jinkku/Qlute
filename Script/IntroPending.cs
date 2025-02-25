@@ -10,6 +10,8 @@ public partial class IntroPending : Control
 	{
 		HomeButtons = GetNode<PanelContainer>("../HomeButtonBG");
 		HomeButtonsPOS = HomeButtons.Position;
+		Visible = true;
+		HomeButtons.Visible = false;
 	}
 	private void _on_bomb_pressed(){
 		HomeButtons.Position = new Vector2(HomeButtons.Position.X,HomeButtons.Position.Y+150);
