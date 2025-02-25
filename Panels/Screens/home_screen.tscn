@@ -1,10 +1,11 @@
-[gd_scene load_steps=24 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene load_steps=27 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" path="res://Script/home.cs" id="1_j2gfm"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
 [ext_resource type="Script" path="res://Script/menunotice.gd" id="4_j0o5v"]
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="5_pikml"]
 [ext_resource type="Script" path="res://Script/version.gd" id="6_1tkmr"]
+[ext_resource type="Script" path="res://Script/Home/HomeButtonBg.cs" id="6_rg0tv"]
 [ext_resource type="Texture2D" uid="uid://cwnp10imrjpaf" path="res://Skin/System/mainmenulogo.png" id="6_xu4tp"]
 [ext_resource type="Texture2D" uid="uid://die40m3acksoy" path="res://Skin/System/browse.png" id="7_2ki83"]
 [ext_resource type="Texture2D" uid="uid://c1i4ywq15b2kd" path="res://Skin/System/play.png" id="7_w7ma2"]
@@ -113,6 +114,20 @@ skew = Vector2(0.5, 0)
 content_margin_left = 0.0
 bg_color = Color(0.588235, 0.588235, 0.588235, 1)
 skew = Vector2(0.5, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_doo6x"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.156863)
+skew = Vector2(0.5, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m6dsd"]
 
 [node name="Home Screen" type="Control"]
 layout_mode = 3
@@ -257,10 +272,13 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
+offset_left = -20.0
 offset_top = -25.0
+offset_right = 20.0
 offset_bottom = 70.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("6_rg0tv")
 
 [node name="HomeButtons" type="HBoxContainer" parent="HomeButtonBG"]
 layout_mode = 2
@@ -482,6 +500,7 @@ offset_right = 103.0
 offset_bottom = 109.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_doo6x")
 text = "Press any button to play!"
 horizontal_alignment = 1
 
@@ -492,6 +511,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_m6dsd")
 flat = true
 
 [connection signal="resized" from="." to="." method="_on_resized"]

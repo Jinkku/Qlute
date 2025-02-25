@@ -5,7 +5,7 @@ public partial class IntroPending : Control
 {
 	// Called when the node enters the scene tree for the first time.
 	public PanelContainer HomeButtons {get;set;}
-	public Vector2 HomeButtonsPOS {get;set;}
+	public static Vector2 HomeButtonsPOS {get;set;}
 	public override void _Ready()
 	{
 		HomeButtons = GetNode<PanelContainer>("../HomeButtonBG");
@@ -51,6 +51,12 @@ public partial class IntroPending : Control
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
-	{
+	{        
+		Vector2 mousePos = GetViewport().GetMousePosition();
+        Vector2 screenSize = GetViewportRect().Size;
+		float offsetX = (mousePos.X / screenSize.X * 10) - 10;
+        float offsetY = (mousePos.Y / screenSize.Y * 10) - 10;
+
+        Position = new Vector2(offsetX, offsetY);
 	}
 }
