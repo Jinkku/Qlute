@@ -44,7 +44,7 @@ public partial class ResultsScreen : Control
 		pp.Text = SettingsOperator.Gameplaycfg["pp"].ToString("N0")+"/"+(SettingsOperator.Gameplaycfg["maxpp"]*ModsMulti.multiplier).ToString("N0");
 		Totalpp.Text = ((double)SettingsOperator.Sessioncfg["localpp"]).ToString("N0");
 		Combo.Text = ((double)SettingsOperator.Gameplaycfg["maxcombo"]).ToString("N0");
-		Avgms.Text = ((double)SettingsOperator.Gameplaycfg["ms"]).ToString("N0");
+		Avgms.Text = ((double)SettingsOperator.Gameplaycfg["ms"]).ToString("N0")+"ms";
 		var Acc = SettingsOperator.Gameplaycfg["accuracy"].ToString("P0");
 		if (Acc == "NaN"){
 			Acc = "100%";

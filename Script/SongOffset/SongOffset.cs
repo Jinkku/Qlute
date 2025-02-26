@@ -3,7 +3,7 @@ using System;
 
 public partial class SongOffset : Control
 {
-	// Called when the node enters the scene tree for the first time.
+	public static SettingsOperator SettingsOperator { get; set; }
 	public int tick {get;set;}
 	public HSlider OffsetSlider {get;set;}
 	public Label Offset {get;set;}
@@ -13,12 +13,15 @@ public partial class SongOffset : Control
 	public Timer Timer {get;set;}
 	public override void _Ready()
 	{
+		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		OffsetSlider = GetNode<HSlider>("ModsScreen/MarginContainer/VBoxContainer/OffsetSlider");
 		Offset = GetNode<Label>("ModsScreen/MarginContainer/VBoxContainer/Offsetid");
 		SpeedSlider = GetNode<HSlider>("ModsScreen/MarginContainer/VBoxContainer/SpeedSlider");
 		Speed = GetNode<Label>("ModsScreen/MarginContainer/VBoxContainer/Speedid");
 		Audio = GetNode<AudioStreamPlayer>("OffsetSound");
 		Timer = GetNode<Timer>("Timer");
+		var offset = SettingsOperator.GetSetting("audiooffset") != null ? float.Parse(SettingsOperator.GetSetting("audiooffset").ToString()) : 0;
+		OffsetSlider.Value = 200-offset;
 		AudioPlayer.Instance.Stop();
 	}
 

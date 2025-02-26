@@ -31,6 +31,7 @@ public partial class SettingsOperator : Node
         { "windowmode", 0 },
 		{ "volume", 1 },
 		{ "backgrounddim", 70 },
+		{ "audiooffset", 0 },
 		{ "skin", null },
 		{ "username", null },
 		{ "password", null },
@@ -119,7 +120,6 @@ public partial class SettingsOperator : Node
         float ppvalue = 0;
         string mapper = "";
         int notetime = 0;
-        int levelrating = 0;
         string background = "";
         string audio = "";
         string rawurl = filename;
@@ -247,6 +247,9 @@ public partial class SettingsOperator : Node
         Gameplaycfg["bad"] = 0;
         Gameplaycfg["accuracy"] = 100;
         Gameplaycfg["time"] = 0;
+        Gameplaycfg["combo"] = 0;
+        Gameplaycfg["maxcombo"] = 0;
+        Gameplaycfg["avgms"] = 0;
     }
     public static void Addms(double ms){
         AllMiliSecondsFromBeatmap += ms;
