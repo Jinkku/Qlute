@@ -20,13 +20,10 @@ public partial class ModsOperator : Node
 	{
 		if (Mods["ht"]){
 			AudioPlayer.Instance.PitchScale = 0.5f;
-			SettingsOperator.Sessioncfg["songspeed"] = AudioPlayer.Instance.PitchScale;
 		} else if (Mods["dt"]) {
 			AudioPlayer.Instance.PitchScale = 1.25f;
-			SettingsOperator.Sessioncfg["songspeed"] = AudioPlayer.Instance.PitchScale;
 		} else{
 			AudioPlayer.Instance.PitchScale = 1f;
-			SettingsOperator.Sessioncfg["songspeed"] = 1f;
 		}
 	}
 

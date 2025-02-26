@@ -312,7 +312,6 @@ public partial class SettingsOperator : Node
         { "beatmapdiff", null },
         { "customapi", false},
         { "multiplier" , 1.0f},
-        { "songspeed" , 1.0f},
         { "fps" , 0},
         { "ms" , 0.0f},
         { "scrollspeed", (int)1346 },
