@@ -186,7 +186,22 @@ popup/item_1/id = 1
 popup/item_2/text = "Twiggy NAC 2000"
 popup/item_2/id = 2
 
-[node name="Button" type="Button" parent="ColorRect/ScrollContainer/VBoxContainer"]
+[node name="AudioNotice2" type="Label" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Audio offset - "
+
+[node name="AudioOffset" type="HSlider" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 400.0
+value = 200.0
+
+[node name="AudioOffsetAuto" type="Button" parent="ColorRect/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
+theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
+text = "Set offset by last played song (0ms)"
+
+[node name="AudioOffsetWizard2" type="Button" parent="ColorRect/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
 theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
@@ -211,3 +226,6 @@ text = "0.0.0 Development Build"
 [connection signal="drag_ended" from="ColorRect/ScrollContainer/VBoxContainer/BackgroundDim" to="." method="_backgrounddim_ended"]
 [connection signal="value_changed" from="ColorRect/ScrollContainer/VBoxContainer/BackgroundDim" to="." method="_backgrounddim_started"]
 [connection signal="item_selected" from="ColorRect/ScrollContainer/VBoxContainer/AudioSelector" to="." method="_changed_audiodevice"]
+[connection signal="value_changed" from="ColorRect/ScrollContainer/VBoxContainer/AudioOffset" to="." method="_on_audio_offset_value_changed"]
+[connection signal="pressed" from="ColorRect/ScrollContainer/VBoxContainer/AudioOffsetAuto" to="." method="_aoautoset"]
+[connection signal="pressed" from="ColorRect/ScrollContainer/VBoxContainer/AudioOffsetWizard2" to="." method="_aow"]

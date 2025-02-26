@@ -1,0 +1,195 @@
+[gd_scene load_steps=9 format=3 uid="uid://cc0dggpxt8tor"]
+
+[ext_resource type="Script" path="res://Script/SongOffset/SongOffset.cs" id="1_rjlvf"]
+[ext_resource type="AudioStream" uid="uid://c24x4j8einf4u" path="res://Sounds/audiooffset.mp3" id="2_kuc6s"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2j6ug"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.196078, 0.196078, 0.196078, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_left = 15.0
+expand_margin_top = 15.0
+expand_margin_right = 15.0
+expand_margin_bottom = 15.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i540u"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jen7q"]
+bg_color = Color(1, 1, 1, 0.0980392)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cxxv0"]
+content_margin_left = 5.0
+content_margin_top = 10.0
+content_margin_right = 5.0
+content_margin_bottom = 10.0
+bg_color = Color(0.427451, 0.643137, 0.992157, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.341797, 0.509643, 0.78125, 1)
+shadow_size = 1
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_508c6"]
+content_margin_left = 5.0
+content_margin_top = 10.0
+content_margin_right = 5.0
+content_margin_bottom = 10.0
+bg_color = Color(0.307617, 0.729167, 0.478872, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.23801, 0.557292, 0.31783, 1)
+shadow_size = 1
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_poxt0"]
+content_margin_left = 5.0
+content_margin_top = 10.0
+content_margin_right = 5.0
+content_margin_bottom = 10.0
+bg_color = Color(0.307617, 0.478872, 0.729167, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.23801, 0.366319, 0.557292, 1)
+shadow_size = 1
+shadow_offset = Vector2(0, 4)
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rjlvf")
+
+[node name="OffsetSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_kuc6s")
+autoplay = true
+parameters/looping = true
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.375
+autostart = true
+
+[node name="ModsScreen" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -180.0
+offset_right = 320.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2j6ug")
+
+[node name="MarginContainer" type="MarginContainer" parent="ModsScreen"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ModsScreen/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ModsScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+text = "Audio Offset Wizard"
+horizontal_alignment = 1
+
+[node name="TickBox" type="HBoxContainer" parent="ModsScreen/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+alignment = 1
+
+[node name="Tick0" type="PanelContainer" parent="ModsScreen/MarginContainer/VBoxContainer/TickBox"]
+self_modulate = Color(1, 1, 1, 0.501961)
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i540u")
+
+[node name="Tick1" type="PanelContainer" parent="ModsScreen/MarginContainer/VBoxContainer/TickBox"]
+self_modulate = Color(1, 1, 1, 0.501961)
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i540u")
+
+[node name="Tick2" type="PanelContainer" parent="ModsScreen/MarginContainer/VBoxContainer/TickBox"]
+self_modulate = Color(1, 1, 1, 0.501961)
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i540u")
+
+[node name="Tick3" type="PanelContainer" parent="ModsScreen/MarginContainer/VBoxContainer/TickBox"]
+self_modulate = Color(1, 1, 1, 0.501961)
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i540u")
+
+[node name="Offsetid" type="Label" parent="ModsScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Offset - 0ms"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="OffsetSlider" type="HSlider" parent="ModsScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+max_value = 400.0
+value = 200.0
+
+[node name="Speedid" type="Label" parent="ModsScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Speed - 1x"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="SpeedSlider" type="HSlider" parent="ModsScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+min_value = 0.01
+max_value = 2.0
+step = 0.01
+value = 1.0
+
+[node name="Ok" type="Button" parent="ModsScreen/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_jen7q")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cxxv0")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_508c6")
+theme_override_styles/normal = SubResource("StyleBoxFlat_poxt0")
+text = "Finish"
+
+[connection signal="timeout" from="Timer" to="." method="_tick"]
+[connection signal="value_changed" from="ModsScreen/MarginContainer/VBoxContainer/OffsetSlider" to="." method="_offsetchanged"]
+[connection signal="value_changed" from="ModsScreen/MarginContainer/VBoxContainer/SpeedSlider" to="." method="_speedchanged"]
+[connection signal="pressed" from="ModsScreen/MarginContainer/VBoxContainer/Ok" to="." method="_goback"]

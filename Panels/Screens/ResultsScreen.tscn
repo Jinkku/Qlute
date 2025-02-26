@@ -385,6 +385,15 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_f25vf")
 theme_override_styles/normal = SubResource("StyleBoxFlat_rvt4u")
 text = "Continue"
 
+[node name="AddCollection" type="Button" parent="AlertBox/Box/Options"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uquna")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_f25vf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_rvt4u")
+text = "+"
+
 [node name="space" type="MarginContainer" parent="AlertBox/Box"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 15
@@ -402,3 +411,4 @@ color = Color(0, 0, 0, 1)
 
 [connection signal="pressed" from="AlertBox/Box/Options/Retry" to="." method="_retry"]
 [connection signal="pressed" from="AlertBox/Box/Options/Continue" to="." method="_continue"]
+[connection signal="pressed" from="AlertBox/Box/Options/AddCollection" to="." method="_continue"]

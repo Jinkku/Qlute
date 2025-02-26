@@ -20,6 +20,9 @@ public partial class SettingsOperator : Node
     public static bool loopaudio = false;
     public static bool jukebox = false;
     public int backgrounddim {get;set;}
+    public static double AllMiliSecondsFromBeatmap {get;set;}
+    public static double MiliSecondsFromBeatmap {get;set;}
+    public static int MiliSecondsFromBeatmapTimes {get;set;}
 
     public static List<Dictionary<string,object>> Beatmaps = new List<Dictionary<string,object>>();
     public Dictionary<string, object> Configuration { get; set; } = new Dictionary<string, object>
@@ -28,6 +31,7 @@ public partial class SettingsOperator : Node
         { "windowmode", 0 },
 		{ "volume", 1 },
 		{ "backgrounddim", 70 },
+		{ "audiooffset", 0 },
 		{ "skin", null },
 		{ "username", null },
 		{ "password", null },
@@ -116,7 +120,6 @@ public partial class SettingsOperator : Node
         float ppvalue = 0;
         string mapper = "";
         int notetime = 0;
-        int levelrating = 0;
         string background = "";
         string audio = "";
         string rawurl = filename;
@@ -244,6 +247,20 @@ public partial class SettingsOperator : Node
         Gameplaycfg["bad"] = 0;
         Gameplaycfg["accuracy"] = 100;
         Gameplaycfg["time"] = 0;
+        Gameplaycfg["combo"] = 0;
+        Gameplaycfg["maxcombo"] = 0;
+        Gameplaycfg["avgms"] = 0;
+    }
+    public static void Addms(double ms){
+        AllMiliSecondsFromBeatmap += ms;
+        MiliSecondsFromBeatmapTimes++;
+    }
+    public static double Getms(){
+        return AllMiliSecondsFromBeatmap/MiliSecondsFromBeatmapTimes;
+    }
+    public static void Resetms(){
+        AllMiliSecondsFromBeatmap = 0;
+        MiliSecondsFromBeatmapTimes = 0;
     }
     public static Dictionary<string, double> Gameplaycfg { get; set; } = new Dictionary<string, double>
     {
@@ -256,6 +273,7 @@ public partial class SettingsOperator : Node
         {"combo", 0},
         {"maxcombo",0},
         {"max", 0},
+        {"avgms", 0},
         {"great", 0},
         {"meh", 0},
         {"bad", 0},
