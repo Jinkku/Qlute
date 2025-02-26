@@ -221,8 +221,7 @@ public partial class Gameplay : Control
 
 		var viewportSize = GetViewportRect().Size.Y;
 		foreach (var Notebox in Notes){
-			var notex = Notebox.timing + est + viewportSize/2;
-			var noterealtime = Notebox.timing + est + viewportSize/2;
+			var notex = Notebox.timing + est + Chart.Size.Y;
 			if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && !Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150 && delta/0.001 <4)
 			{
 				foreach (int part in Notebox.Notes){
