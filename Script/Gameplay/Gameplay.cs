@@ -233,7 +233,7 @@ public partial class Gameplay : Control
 			} else if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150)
 			{
 				foreach (var node in Notebox.Nodes){
-					if ((int)notex+nodeSize > Chart.Size.Y && (int)notex+nodeSize < Chart.Size.Y+10  && ModsOperator.Mods["auto"]){
+					if ((int)notex+nodeSize > Chart.Size.Y && (int)notex+nodeSize < Chart.Size.Y+MehJudge  && ModsOperator.Mods["auto"]){
 						KeyC[(int)(node.Position.X / 100)] = true;
 					}else if (ModsOperator.Mods["auto"]){
 						KeyC[(int)(node.Position.X / 100)] = false;
