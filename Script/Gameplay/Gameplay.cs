@@ -30,8 +30,6 @@ public partial class Gameplay : Control
 	public ColorRect perfect {get;set;}
 	public Color activehit = new Color(0.32f,0.42f,0.74f);
 	public Color idlehit = new Color(0.5f,0.5f,0.5f);
-	public double mshit {get;set;}
-	public double mshitold {get;set;}
 	public long startedtime {get ;set; }
 	public bool songstarted = false;
 	public Node2D noteblock {get;set;}
@@ -86,7 +84,6 @@ public partial class Gameplay : Control
 		}
 		
 		SettingsOperator.ResetScore();
-		SettingsOperator.Resetms();
 		noteblock = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Sprite2D>(".");
         using var file = FileAccess.Open(SettingsOperator.Sessioncfg["beatmapurl"].ToString(), FileAccess.ModeFlags.Read);
         var text = file.GetAsText();
@@ -156,7 +153,7 @@ public partial class Gameplay : Control
 	public override void _Process(double delta)
 	{   
 		long unixTimeMilliseconds = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-		float est = unixTimeMilliseconds-startedtime+float.Parse(SettingsOperator.GetSetting("audiooffset").ToString());
+		float est = unixTimeMilliseconds-startedtime;
 		if (est>=0 && !songstarted){
 			songstarted = true;
 			AudioPlayer.Instance.Play();
@@ -190,7 +187,7 @@ public partial class Gameplay : Control
 		int Keyx = 0;
 		//maxc=hits[0]+hits[1]+hits[2]+hits[3]
         //    accuracy=round(((hits[0]+(hits[1]/2)+(hits[2]/3))/(maxc))*100,2)
-		Hits.Text = "Hits:\n" + SettingsOperator.Gameplaycfg["max"] + "\n" + SettingsOperator.Gameplaycfg["great"] + "\n" + SettingsOperator.Gameplaycfg["meh"] + "\n" + SettingsOperator.Gameplaycfg["bad"] + "\n"+"ms:"+(mshitold-mshit)+"ms " + mshitold + " " + mshit + " " + SettingsOperator.Getms();
+		Hits.Text = "Hits:\n" + SettingsOperator.Gameplaycfg["max"] + "\n" + SettingsOperator.Gameplaycfg["great"] + "\n" + SettingsOperator.Gameplaycfg["meh"] + "\n" + SettingsOperator.Gameplaycfg["bad"] + "\n";
 		// Key imputs
 		foreach (ColorRect self in Keys)
 		{
@@ -217,7 +214,6 @@ public partial class Gameplay : Control
 		var viewportSize = GetViewportRect().Size.Y;
 		foreach (var Notebox in Notes){
 			var notex = Notebox.timing + est + viewportSize/2;
-			var noterealtime = Notebox.timing + est + viewportSize/2;
 			if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && !Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150 && delta/0.001 <4)
 			{
 				foreach (int part in Notebox.Notes){
@@ -229,7 +225,7 @@ public partial class Gameplay : Control
 			} else if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150)
 			{
 				foreach (var node in Notebox.Nodes){
-					if ((int)notex+nodeSize > Chart.Size.Y && (int)notex+nodeSize < Chart.Size.Y+10  && ModsOperator.Mods["auto"]){
+					if ((int)notex+nodeSize > Chart.Size.Y-PerfectJudge/2 && (int)notex+nodeSize < Chart.Size.Y+PerfectJudge/2  && ModsOperator.Mods["auto"]){
 						KeyC[(int)(node.Position.X / 100)] = true;
 					}else if (ModsOperator.Mods["auto"]){
 						KeyC[(int)(node.Position.X / 100)] = false;
@@ -238,11 +234,7 @@ public partial class Gameplay : Control
 					Ttick++;
 					JudgeResult = checkjudge((int)notex,KeyC[(int)(node.Position.X / 100)],node,node.Visible);
 					if (JudgeResult < 4){
-						mshitold = Chart.Size.Y;
 						KeyC[(int)(node.Position.X / 100)] = false;
-						mshit = notex;
-						SettingsOperator.Addms(mshitold-mshit);
-						SettingsOperator.Gameplaycfg["ms"] = SettingsOperator.Getms();
 					}
 				}
 			} else{

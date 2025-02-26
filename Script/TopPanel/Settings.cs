@@ -12,9 +12,7 @@ public partial class Settings : Button
 	public Control SettingsPanel {get;set;}
 	public Control NotificationPanel {get;set;}
 	public ColorRect TopPanel {get;set;}
-	public Settings Instance {get;set;}
 	private void ready(){
-		Instance = this;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		TopPanel = GetTree().Root.GetNode<ColorRect>("/root/TopPanelOnTop/TopPanel/InfoBar");
         Label PlayerName = GetNode<Label>("%UPlayerName");
@@ -42,7 +40,7 @@ public partial class Settings : Button
 		return (bool)SettingsOperator.Sessioncfg["showaccountpro"];
 	}
 	private void togglesettingspanel(){
-		var _tween = CreateTween();
+		var _tween = GetTree().CreateTween();
 		if (!(bool)SettingsOperator.Sessioncfg["settingspanelv"]){
 			SettingsPanel = GD.Load<PackedScene>("res://Panels/Overlays/Settings.tscn").Instantiate().GetNode<Control>(".");
 			if (TopPanel.HasNode("SettingsPanel")){
