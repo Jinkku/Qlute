@@ -21,10 +21,10 @@ public partial class Gameplay : Control
 	public List<bool> KeyC = new List<bool>(
 	);
 	public int JudgeResult = -1;
-	public int PerfectJudge = 50;
+	public int PerfectJudge = 500;
 	public int nodeSize = 54;
-	public int GreatJudge => PerfectJudge * 3;
-	public int MehJudge => PerfectJudge * 6;
+	public int GreatJudge {get;set;}
+	public int MehJudge {get;set;}
 	public ColorRect meh {get;set;}
 	public ColorRect great {get;set;}
 	public ColorRect perfect {get;set;}
@@ -55,25 +55,30 @@ public partial class Gameplay : Control
 		hittext.Modulate = new Color(1f,1f,1f,0f);
 		Chart.AddChild(hittext);
 		hittextoldpos = hittext.Position;
+
+		PerfectJudge = 500 / (int)(SettingsOperator.Sessioncfg["beatmapaccuracy"]);
+		GreatJudge = (int)(PerfectJudge*3);
+		MehJudge = (int)(PerfectJudge*6);
+
 		meh = new ColorRect();
 		meh.Size = new Vector2(400,MehJudge);
 		meh.Position = new Vector2(0,-MehJudge/2);
-		meh.Color = new Color(0.5f,0f,0f,0.4f);
-		meh.Visible = false;
+		meh.Color = new Color(0.5f,0f,0f,0.1f);
+		meh.Visible = true;
 		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(meh);
 
 		great = new ColorRect();
 		great.Size = new Vector2(400,GreatJudge);
 		great.Position = new Vector2(0,-GreatJudge/2);
-		great.Color = new Color(0f,0.5f,0f,0.6f);
-		great.Visible = false;
+		great.Color = new Color(0f,0.5f,0f,0.1f);
+		great.Visible = true;
 		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(great);
 		
 		perfect = new ColorRect();
 		perfect.Size = new Vector2(400,PerfectJudge);
 		perfect.Position = new Vector2(0,-PerfectJudge/2);
-		perfect.Color = new Color(0f,0f,0.5f,1f);
-		perfect.Visible = false;
+		perfect.Color = new Color(0f,0f,0.5f,0.1f);
+		perfect.Visible = true;
 		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(perfect);
 
 		Ttiming = GetNode<Label>("Time");

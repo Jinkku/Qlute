@@ -75,6 +75,7 @@ public partial class SettingsOperator : Node
             Sessioncfg["beatmapbpm"] = beatmap["bpm"];
             Gameplaycfg["timetotal"] = (int)beatmap["timetotal"];
             Sessioncfg["beatmapmapper"] = beatmap["Mapper"];
+            Sessioncfg["beatmapaccuracy"] = (int)beatmap["accuracy"];
 		    var Texture = LoadImage(beatmap["path"].ToString()+beatmap["background"].ToString());
 		    Sessioncfg["background"] = (Texture2D)Texture;
             Gameplaycfg["maxpp"] = Convert.ToInt32(beatmap["pp"]);
@@ -114,6 +115,7 @@ public partial class SettingsOperator : Node
         int timetotal = 0;
         int bpm = 0;
         int osubeatid = 0;
+        int accuracy = 0;
         int osubeatidset = 0;
         int qlbeatid = 0;
         int qlbeatidset = 0;
@@ -141,6 +143,10 @@ public partial class SettingsOperator : Node
             {
             //keycount = (int)float.Parse(line.Split(":")[1].Trim());
             keycount = float.TryParse(line.Split(":")[1].Trim(), out float keycountv) ? (int)keycountv : 4;
+            }if (line.StartsWith("OverallDifficulty:"))
+            {
+            //keycount = (int)float.Parse(line.Split(":")[1].Trim());
+            accuracy = float.TryParse(line.Split(":")[1].Trim(), out float accuracyv ) ? (int)accuracyv : 0;
             }
             if (line.StartsWith("AudioFilename:"))
             {
@@ -218,6 +224,7 @@ public partial class SettingsOperator : Node
                 hitob++;
             }
         }
+        GD.Print(accuracy);
 		Beatmaps.Add(new Dictionary<string, object>{
             { "Title", songtitle },
             { "Artist", artist },
@@ -232,6 +239,7 @@ public partial class SettingsOperator : Node
             { "bpm", bpm },
             { "timetotal", (int)timetotal },
             { "levelrating", ppvalue*0.05 },
+            { "accuracy", accuracy},
             { "background", background },
             { "audio", audio },
             { "rawurl", rawurl },
@@ -300,6 +308,7 @@ public partial class SettingsOperator : Node
         { "beatmapartist", null },
         { "beatmapmapper", null },
         { "beatmapbpm", (int)160 },
+        { "beatmapaccuracy", (int)0 },
         { "beatmapdiff", null },
         { "customapi", false},
         { "multiplier" , 1.0f},

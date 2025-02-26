@@ -16,6 +16,7 @@ public partial class SongSelect : Control
 	public Label Debugtext { get; set; }
 	public Label SongBPM { get; set; }
 	public Label SongLen { get; set; }
+	public Label SongAccuracy { get; set; }
 	public List<object> SongEntry = new List<object>();
 	public int SongETick { get; set; }
 	public int scrolly = 0;
@@ -107,6 +108,7 @@ public partial class SongSelect : Control
 		SongBPM = GetNode<Label>("SongDetails/Info/Plasa/BPM");
 		SongLen = GetNode<Label>("SongDetails/Info/Plasa/Length");
 		SongMapper = GetNode<Label>("SongDetails/Info/Plasa/Mapper");
+		SongAccuracy = GetNode<Label>("SongDetails/Info/Plasa/Accuracy");
 		_res_resize();
 		_scrolling();
 	}
@@ -127,15 +129,18 @@ public partial class SongSelect : Control
 		SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
 		SongBPM.Text = "BPM - " + ((int)SettingsOperator.Sessioncfg["beatmapbpm"]*AudioPlayer.Instance.PitchScale).ToString("N0") ?? "";
 		SongLen.Text = TimeSpan.FromMilliseconds(SettingsOperator.Gameplaycfg["timetotal"]/AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00";
+		SongAccuracy.Text = "Accuracy Lv. " + ((int)SettingsOperator.Sessioncfg["beatmapaccuracy"]).ToString("00") ?? "Accuracy Lv. 00";
 		SongArtist.Visible = true;
 		Songpp.Visible = true;
 		SongMapper.Visible = true;
 		SongLen.Visible = true;
-		SongBPM.Visible = true;}
+		SongBPM.Visible = true;
+		SongAccuracy.Visible = true;}
 		else {
 			SongArtist.Visible = false;
 			Songpp.Visible = false;
 			SongMapper.Visible = false;
+			SongAccuracy.Visible = false;
 			SongBPM.Visible = false;
 			SongLen.Visible = false;
 		}

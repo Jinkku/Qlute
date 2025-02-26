@@ -1,6 +1,6 @@
 [gd_scene load_steps=25 format=3 uid="uid://ckiye2n1ir8qg"]
 
-[ext_resource type="Script" path="res://Script/SongSelect.cs" id="1_fin0e"]
+[ext_resource type="Script" path="res://Script/SongSelect/SongSelect.cs" id="1_fin0e"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
 [ext_resource type="Texture2D" uid="uid://by5dgss2ux7gu" path="res://Skin/System/external.svg" id="3_javs2"]
 [ext_resource type="PackedScene" uid="uid://b8wmh5ui3lgly" path="res://Panels/SongSelectButtons/Leaderboard.tscn" id="4_17pch"]
@@ -220,14 +220,29 @@ layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -152.0
+offset_left = -147.0
 offset_top = 79.0
-offset_right = -23.0
+offset_right = -18.0
 offset_bottom = 107.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
 theme_override_font_sizes/font_size = 14
 text = "00:00"
 horizontal_alignment = 2
+
+[node name="Accuracy" type="Label" parent="SongDetails/Info/Plasa"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -114.0
+offset_top = 40.0
+offset_right = 2.0
+offset_bottom = 59.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 14
+text = "Accuracy Lv. 00"
+horizontal_alignment = 2
+clip_text = true
 
 [node name="BPM" type="Label" parent="SongDetails/Info/Plasa"]
 layout_mode = 0

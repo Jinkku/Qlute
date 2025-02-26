@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://d0qmsp3ewrdj4"]
 
-[ext_resource type="Script" path="res://Script/SettingsPanel.cs" id="1_gfh6f"]
+[ext_resource type="Script" path="res://Script/SettingsPanel/SettingsPanel.cs" id="1_gfh6f"]
 
 [sub_resource type="FontVariation" id="FontVariation_tvan6"]
 variation_opentype = {
