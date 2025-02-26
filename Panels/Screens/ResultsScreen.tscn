@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://oru46ou3jfjl"]
+[gd_scene load_steps=13 format=3 uid="uid://oru46ou3jfjl"]
 
 [ext_resource type="Script" path="res://Script/ResultsScreen/ResultsScreen.cs" id="1_e0sg4"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="1_xhck8"]
@@ -8,11 +8,12 @@ content_margin_left = 10.0
 content_margin_top = 10.0
 content_margin_right = 10.0
 content_margin_bottom = 10.0
-bg_color = Color(0, 0, 0, 0.54902)
+bg_color = Color(0.242188, 0.242188, 0.242188, 1)
 corner_radius_top_left = 25
 corner_radius_top_right = 25
 corner_radius_bottom_right = 25
 corner_radius_bottom_left = 25
+shadow_size = 24
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_53ywu"]
 bg_color = Color(1, 1, 1, 0.568627)
@@ -21,6 +22,11 @@ corner_radius_top_left = 25
 corner_radius_top_right = 25
 corner_radius_bottom_right = 25
 corner_radius_bottom_left = 25
+
+[sub_resource type="FontVariation" id="FontVariation_csg6c"]
+variation_opentype = {
+2003265652: 700
+}
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vqons"]
 content_margin_top = 10.0
@@ -110,16 +116,17 @@ self_modulate = Color(0.392157, 0.392157, 0.392157, 1)
 layout_mode = 1
 
 [node name="AlertBox" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(500, 0)
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.3
-anchor_top = 0.3
-anchor_right = 0.7
-anchor_bottom = 0.7
-offset_left = -10.0
-offset_top = -75.0
-offset_right = 10.0
-offset_bottom = 75.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -216.5
+offset_right = 250.0
+offset_bottom = 216.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wqbwm")
@@ -128,12 +135,19 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_wqbwm")
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="PanelContainer" type="PanelContainer" parent="AlertBox/Box"]
+[node name="Accuracy" type="PanelContainer" parent="AlertBox/Box"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_53ywu")
+
+[node name="Medal" type="Label" parent="AlertBox/Box/Accuracy"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_csg6c")
+theme_override_font_sizes/font_size = 32
+text = "SS"
+horizontal_alignment = 1
 
 [node name="Title" type="Label" parent="AlertBox/Box"]
 layout_mode = 2
