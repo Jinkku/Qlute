@@ -64,21 +64,21 @@ public partial class Gameplay : Control
 		meh.Size = new Vector2(400,MehJudge);
 		meh.Position = new Vector2(0,-MehJudge/2);
 		meh.Color = new Color(0.5f,0f,0f,0.1f);
-		meh.Visible = true;
+		meh.Visible = false;
 		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(meh);
 
 		great = new ColorRect();
 		great.Size = new Vector2(400,GreatJudge);
 		great.Position = new Vector2(0,-GreatJudge/2);
 		great.Color = new Color(0f,0.5f,0f,0.1f);
-		great.Visible = true;
+		great.Visible = false;
 		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(great);
 		
 		perfect = new ColorRect();
 		perfect.Size = new Vector2(400,PerfectJudge);
 		perfect.Position = new Vector2(0,-PerfectJudge/2);
 		perfect.Color = new Color(0f,0f,0.5f,0.1f);
-		perfect.Visible = true;
+		perfect.Visible = false;
 		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(perfect);
 
 		Ttiming = GetNode<Label>("Time");
@@ -183,8 +183,8 @@ public partial class Gameplay : Control
 
 		
 		Beatmap_Background.SelfModulate = new Color(1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)));
-		if ((float)SettingsOperator.Sessioncfg["songspeed"] != 1.0f){
-			est = est * (float)SettingsOperator.Sessioncfg["songspeed"];
+		if (AudioPlayer.Instance.PitchScale != 1.0f){
+			est = est * AudioPlayer.Instance.PitchScale;
 		}
 		SettingsOperator.Gameplaycfg["accuracy"] = (SettingsOperator.Gameplaycfg["max"] + (SettingsOperator.Gameplaycfg["great"]/2) + (SettingsOperator.Gameplaycfg["meh"]/3)) / (SettingsOperator.Gameplaycfg["max"] +SettingsOperator.Gameplaycfg["great"] + SettingsOperator.Gameplaycfg["meh"] + SettingsOperator.Gameplaycfg["bad"]);
 		SettingsOperator.Gameplaycfg["score"] = (SettingsOperator.Gameplaycfg["pp"] / SettingsOperator.Gameplaycfg["maxpp"]) * (1000000*ModsMulti.multiplier);
@@ -246,7 +246,7 @@ public partial class Gameplay : Control
 						mshitold = Chart.Size.Y;
 						KeyC[(int)(node.Position.X / 100)] = false;
 						mshit = notex;
-						SettingsOperator.Addms(mshitold-mshit);
+						SettingsOperator.Addms(mshitold-mshit-50);
 						SettingsOperator.Gameplaycfg["ms"] = SettingsOperator.Getms();
 					}
 				}
