@@ -43,6 +43,7 @@ ModsOperator="*res://Script/Singleton/ModsOperator.cs"
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+window/size/mode=4
 window/stretch/aspect="expand"
 window/vsync/vsync_mode=0
 
