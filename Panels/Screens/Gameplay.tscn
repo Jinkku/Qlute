@@ -103,6 +103,7 @@ grow_vertical = 0
 color = Color(0.494792, 0.589518, 1, 1)
 
 [node name="Combo" type="Label" parent="Playfield/Chart"]
+z_index = 1024
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
