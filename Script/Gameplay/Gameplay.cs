@@ -21,7 +21,7 @@ public partial class Gameplay : Control
 	public List<bool> KeyC = new List<bool>(
 	);
 	public int JudgeResult = -1;
-	public int PerfectJudge = 500;
+	public int PerfectJudge = 750;
 	public int nodeSize = 54;
 	public int GreatJudge {get;set;}
 	public int MehJudge {get;set;}
@@ -60,8 +60,9 @@ public partial class Gameplay : Control
 		hittext.Modulate = new Color(1f,1f,1f,0f);
 		Chart.AddChild(hittext);
 		hittextoldpos = hittext.Position;
+		reloadSkin();
 
-		PerfectJudge = 500 / (int)(SettingsOperator.Sessioncfg["beatmapaccuracy"]);
+		PerfectJudge = PerfectJudge / (int)(SettingsOperator.Sessioncfg["beatmapaccuracy"]);
 		GreatJudge = (int)(PerfectJudge*3);
 		MehJudge = (int)(PerfectJudge*6);
 		MissJudge = PerfectJudge * 7;
@@ -84,7 +85,7 @@ public partial class Gameplay : Control
 		perfect.Size = new Vector2(400,PerfectJudge);
 		perfect.Position = new Vector2(0,-PerfectJudge/2);
 		perfect.Color = new Color(0f,0f,0.5f,0.1f);
-		perfect.Visible = false;
+		perfect.Visible = true;
 		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(perfect);
 
 		//Ttiming = GetNode<Label>("Time");
@@ -152,6 +153,12 @@ public partial class Gameplay : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	private static void OnGuiInput(InputEvent inputEvent) {
 		GD.Print(inputEvent);
+	}
+
+
+	public Texture2D NoteSkin {get;set;}
+	public void reloadSkin(){
+		NoteSkin = GD.Load<Texture2D>("res://Skin/Game/note.svg");
 	}
 	public void hitnote(int Keyx,bool hit){
 		if (hit){
@@ -234,15 +241,16 @@ public partial class Gameplay : Control
 			if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && !Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150 && delta/0.001 <4)
 			{
 				foreach (int part in Notebox.Notes){
-					var node = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Sprite2D>(".");
+					var node = new Sprite2D();
+					node.Texture = NoteSkin;
 					Notebox.Nodes.Add(node);
 					Chart.AddChild(node);
-					node.Position = new Vector2(100 * part, notex);
+					node.Position = new Vector2(100 * part + 50, notex);
 				}
 			} else if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150)
 			{
 				foreach (var node in Notebox.Nodes){
-					if ((int)notex+nodeSize > Chart.Size.Y && (int)notex+nodeSize < Chart.Size.Y+MehJudge  && ModsOperator.Mods["auto"]){
+					if ((int)notex+nodeSize > Chart.Size.Y-10 && (int)notex+nodeSize < Chart.Size.Y+MehJudge  && ModsOperator.Mods["auto"]){
 						KeyC[(int)(node.Position.X / 100)] = true;
 					}else if (ModsOperator.Mods["auto"]){
 						KeyC[(int)(node.Position.X / 100)] = false;
@@ -292,7 +300,6 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg["max"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
 			Hittext("Perfect");
-
 			node.Visible = false;
 			return 0;
 		} else if (timing+nodeSize > Chart.Size.Y-GreatJudge/2 && timing+nodeSize < Chart.Size.Y+GreatJudge/2 && keyvalue && visibility){
@@ -307,7 +314,7 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg["combo"]++;
 			node.Visible = false;
 			return 2;
-		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility || (timing+nodeSize > Chart.Size.Y-MissJudge/2 && timing+nodeSize < Chart.Size.Y+MissJudge/2 && keyvalue)){
+		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility || (timing+nodeSize > Chart.Size.Y-MissJudge/2 && timing+nodeSize < Chart.Size.Y+MissJudge/2 && keyvalue && !ModsOperator.Mods["auto"]) ){
 			Hittext("Miss");
 			SettingsOperator.Gameplaycfg["bad"]++;
 			SettingsOperator.Gameplaycfg["combo"] = 0;
