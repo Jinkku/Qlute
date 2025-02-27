@@ -173,7 +173,6 @@ public partial class Gameplay : Control
 		}
 
 		// End Game
-		AudioPlayer.Instance.
 
 		if (SettingsOperator.Gameplaycfg["timetotal"]-SettingsOperator.Gameplaycfg["time"] < -2000)
 		{
