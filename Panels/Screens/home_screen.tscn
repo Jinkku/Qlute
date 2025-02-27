@@ -514,7 +514,6 @@ grow_vertical = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_m6dsd")
 flat = true
 
-[connection signal="resized" from="." to="." method="_on_resized"]
 [connection signal="timeout" from="MenuNotice/Timer" to="MenuNotice/HTTPRequest" method="_on_timer_timeout"]
 [connection signal="request_completed" from="MenuNotice/HTTPRequest" to="MenuNotice/HTTPRequest" method="_on_request_completed"]
 [connection signal="mouse_entered" from="HomeButtonBG/HomeButtons/Play" to="HomeButtonBG/HomeButtons/Play" method="_focus"]

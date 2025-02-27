@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 
 
-public partial class home : Node
+public partial class home : Control
 {
 	public Label SongTitle { get; set; }
 	public Label SongArtist { get; set; }
