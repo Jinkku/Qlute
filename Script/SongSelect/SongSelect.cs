@@ -188,6 +188,7 @@ public partial class SongSelect : Control
 	}
 	private void _Start(){
 		//AudioPlayer.Instance.Stop();
+        Notify.Post("Game still in beta!, no score submissions yet!");
 		GetTree().ChangeSceneToFile("res://Panels/Screens/SongLoadingScreen.tscn");
 		SettingsOperator.loopaudio = false;
 		//
