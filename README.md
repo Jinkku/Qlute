@@ -8,6 +8,7 @@
 # Qlute
 Embrace your Imagination
 
+[![CodeFactor](https://www.codefactor.io/repository/github/jinkku/qlute/badge)](https://www.codefactor.io/repository/github/jinkku/qlute)
 
 # Downloads
 
