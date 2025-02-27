@@ -26,6 +26,8 @@ public partial class SettingsPanel : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+
+		Size = new Vector2(Size.X,GetViewportRect().Size.Y-(GetNode<ColorRect>("..").Position.Y+50));
 	}
 	private void _changed_resolution(int index)
 	{

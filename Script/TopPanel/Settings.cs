@@ -13,7 +13,7 @@ public partial class Settings : Button
 	public Control NotificationPanel {get;set;}
 	public ColorRect TopPanel {get;set;}
 	public Settings Instance {get;set;}
-	private void ready(){
+	public override void _Ready(){
 		Instance = this;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		TopPanel = GetTree().Root.GetNode<ColorRect>("/root/TopPanelOnTop/TopPanel/InfoBar");
@@ -42,26 +42,25 @@ public partial class Settings : Button
 		return (bool)SettingsOperator.Sessioncfg["showaccountpro"];
 	}
 	private void togglesettingspanel(){
-		var _tween = CreateTween();
 		if (!(bool)SettingsOperator.Sessioncfg["settingspanelv"]){
-			SettingsPanel = GD.Load<PackedScene>("res://Panels/Overlays/Settings.tscn").Instantiate().GetNode<Control>(".");
-			if (TopPanel.HasNode("SettingsPanel")){
-				TopPanel.GetNode<Control>("SettingsPanel").QueueFree();
+			if (IsInstanceValid(SettingsPanel)){
+				SettingsPanel.QueueFree();
 			}
+			SettingsPanel = GD.Load<PackedScene>("res://Panels/Overlays/Settings.tscn").Instantiate().GetNode<Control>(".");
 			TopPanel.AddChild(SettingsPanel);
+			var _tween = SettingsPanel.CreateTween();
 			SettingsPanel.Position = new Vector2(-SettingsPanel.Size.X,50);
 			SettingsPanel.Size = new Vector2(SettingsPanel.Size.X,GetViewportRect().Size[1]-SettingsPanel.Position.Y);
 			_tween.TweenProperty(SettingsPanel, "position", new Vector2(0,50), 0.3f)
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
 			_tween.Play();
-		} else {
-			if (TopPanel.HasNode("SettingsPanel")){
+		} else if (IsInstanceValid(SettingsPanel)){
+			var _tween = SettingsPanel.CreateTween();
 			_tween.TweenProperty(SettingsPanel, "position", new Vector2(-SettingsPanel.Size.X,50), 0.3f)
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
 			_tween.TweenCallback(Callable.From(() => queue_free(SettingsPanel)));
-			}
 		}
 		SettingsOperator.Sessioncfg["settingspanelv"] = !(bool)SettingsOperator.Sessioncfg["settingspanelv"];
 	}
@@ -70,11 +69,25 @@ public partial class Settings : Button
 			}
 	private void togglenotificationpanel(){
 		if (!(bool)SettingsOperator.Sessioncfg["notificationpanelv"]){
-		NotificationPanel = GD.Load<PackedScene>("res://Panels/Overlays/NotificationPanel.tscn").Instantiate().GetNode<ColorRect>(".");
-		NotificationPanel.Position = new Vector2(0,50);
-		TopPanel.AddChild(NotificationPanel);
-		} else {
-			NotificationPanel.QueueFree();
+			if (IsInstanceValid(NotificationPanel)){
+				SettingsPanel.QueueFree();
+			}
+			NotificationPanel = GD.Load<PackedScene>("res://Panels/Overlays/NotificationPanel.tscn").Instantiate().GetNode<ColorRect>(".");
+			NotificationPanel.Position = new Vector2(0,50);
+			var tmp = NotificationPanel.Size;
+			TopPanel.AddChild(NotificationPanel);
+			NotificationPanel.Size = new Vector2(tmp[0],GetViewportRect().Size.Y-NotificationPanel.Position.Y);
+			var _tween = NotificationPanel.CreateTween();
+			_tween.TweenProperty(NotificationPanel, "position", new Vector2(GetViewportRect().Size.X-NotificationPanel.Size.X,50), 0.3f)
+					.SetTrans(Tween.TransitionType.Cubic)
+					.SetEase(Tween.EaseType.Out);
+				_tween.Play();
+		} else if (IsInstanceValid(NotificationPanel)){
+			var _tween = NotificationPanel.CreateTween();
+			_tween.TweenProperty(NotificationPanel, "position", new Vector2(GetViewportRect().Size.X,50), 0.3f)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			_tween.TweenCallback(Callable.From(() => queue_free(NotificationPanel)));
 		}
 		SettingsOperator.Sessioncfg["notificationpanelv"] = !(bool)SettingsOperator.Sessioncfg["notificationpanelv"];
 

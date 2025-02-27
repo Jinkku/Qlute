@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://hbkr7peitwa8"]
+[gd_scene load_steps=5 format=3 uid="uid://dd27l5gdskvfu"]
 
-[ext_resource type="Texture2D" uid="uid://b000ela4rhy4h" path="res://Skin/NotificationIcons/warning.svg" id="1_l5pyg"]
-[ext_resource type="Script" path="res://Script/TopPanel/Overlays/NotificationApplet.cs" id="2_2gkms"]
+[ext_resource type="Texture2D" uid="uid://b000ela4rhy4h" path="res://Skin/NotificationIcons/warning.svg" id="1_v7g4m"]
+[ext_resource type="Script" path="res://Script/TopPanel/Overlays/NotificationPanelApplet.cs" id="2_njyq5"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dt3ms"]
 
@@ -24,11 +24,11 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_ux4lk")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_ux4lk")
 theme_override_styles/normal = SubResource("StyleBoxFlat_ux4lk")
 text = "There is a beatmap that needs an update!"
-icon = ExtResource("1_l5pyg")
+icon = ExtResource("1_v7g4m")
 alignment = 2
 text_overrun_behavior = 3
 autowrap_mode = 3
 clip_text = true
-script = ExtResource("2_2gkms")
+script = ExtResource("2_njyq5")
 
 [connection signal="pressed" from="." to="." method="_pressed"]
