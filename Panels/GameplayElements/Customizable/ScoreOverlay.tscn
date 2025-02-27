@@ -6,15 +6,15 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6s3ea"]
 content_margin_left = 10.0
 content_margin_top = 10.0
-bg_color = Color(0.360784, 0.45098, 0.94902, 0.54902)
+bg_color = Color(0.360784, 0.45098, 0.94902, 0.705882)
 skew = Vector2(0.5, 0)
 border_width_right = 25
 border_color = Color(0.163493, 0.238045, 0.640625, 1)
+border_blend = true
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
-corner_detail = 1
 expand_margin_left = 45.0
 expand_margin_right = 25.0
 expand_margin_bottom = 5.0
