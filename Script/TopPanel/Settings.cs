@@ -69,12 +69,25 @@ public partial class Settings : Button
 			Prog.QueueFree();
 			}
 	private void togglenotificationpanel(){
+		var _tween = CreateTween();
 		if (!(bool)SettingsOperator.Sessioncfg["notificationpanelv"]){
 		NotificationPanel = GD.Load<PackedScene>("res://Panels/Overlays/NotificationPanel.tscn").Instantiate().GetNode<ColorRect>(".");
 		NotificationPanel.Position = new Vector2(0,50);
+		var tmp = NotificationPanel.Size;
 		TopPanel.AddChild(NotificationPanel);
+		NotificationPanel.Size = tmp;
+		_tween.TweenProperty(NotificationPanel, "position", new Vector2(NotificationPanel.Size.X-50,50), 0.3f)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			_tween.Play();
+		GD.Print("asaa");
 		} else {
-			NotificationPanel.QueueFree();
+			if (TopPanel.HasNode("NotificationPanel")){
+			_tween.TweenProperty(NotificationPanel, "position", new Vector2(GetViewportRect().Size.X,50), 0.3f)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			_tween.TweenCallback(Callable.From(() => queue_free(NotificationPanel)));
+			}
 		}
 		SettingsOperator.Sessioncfg["notificationpanelv"] = !(bool)SettingsOperator.Sessioncfg["notificationpanelv"];
 

@@ -1,15 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://cwj7c4xk3gg8o"]
-
-[ext_resource type="PackedScene" uid="uid://hbkr7peitwa8" path="res://Panels/Overlays/Notification.tscn" id="2_uqe0o"]
+[gd_scene load_steps=2 format=3 uid="uid://cwj7c4xk3gg8o"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llstv"]
 content_margin_left = 0.0
 content_margin_top = 0.0
-
-[sub_resource type="FontVariation" id="FontVariation_n76qt"]
-variation_opentype = {
-2003265652: 700
-}
 
 [node name="Notifications" type="ColorRect"]
 clip_contents = true
@@ -49,30 +42,3 @@ theme_override_font_sizes/font_size = 48
 theme_override_styles/normal = SubResource("StyleBoxEmpty_llstv")
 text = "Notifications"
 horizontal_alignment = 2
-
-[node name="Section" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
-theme_override_fonts/font = SubResource("FontVariation_n76qt")
-text = "Ongoing"
-horizontal_alignment = 2
-
-[node name="Notification" parent="MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_uqe0o")]
-layout_mode = 2
-
-[node name="Notification2" parent="MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_uqe0o")]
-layout_mode = 2
-text = "Update your software!!"
-
-[node name="Section2" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.469116, 0.953125, 0.574993, 1)
-theme_override_fonts/font = SubResource("FontVariation_n76qt")
-text = "FInished"
-horizontal_alignment = 2
-
-[node name="Notification3" parent="MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_uqe0o")]
-layout_mode = 2
-
-[node name="Notification4" parent="MarginContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_uqe0o")]
-layout_mode = 2
