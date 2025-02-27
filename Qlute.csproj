@@ -7,5 +7,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NVorbis" Version="0.10.5" />
+    <PackageReference Include="realm" Version="20.1.0" />
   </ItemGroup>
 </Project>
