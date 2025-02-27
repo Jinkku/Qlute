@@ -47,7 +47,11 @@ public partial class Gameplay : Control
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		Beatmap_Background = GetNode<TextureRect>("./Beatmap_Background");
 		AudioPlayer.Instance.Stop();
+
+
 		Beatmap_Background.SelfModulate = new Color(1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)));
+		BeatmapBackground.FlashEnable = false;
+		
 		Control P = GetNode<Control>("Playfield");
 		Chart = GetNode<ColorRect>("Playfield/Chart");
 		hittext = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/hittext.tscn").Instantiate().GetNode<Label>(".");
@@ -173,6 +177,7 @@ public partial class Gameplay : Control
 		if (SettingsOperator.Gameplaycfg["timetotal"]-SettingsOperator.Gameplaycfg["time"] < -2000)
 		{
 			SettingsOperator.toppaneltoggle();
+			BeatmapBackground.FlashEnable = true;
 			SettingsOperator.Sessioncfg["localpp"] = (double)SettingsOperator.Sessioncfg["localpp"] + SettingsOperator.Gameplaycfg["pp"];
 			GetTree().ChangeSceneToFile("res://Panels/Screens/ResultsScreen.tscn");
 		}
@@ -210,9 +215,11 @@ public partial class Gameplay : Control
 			Keyx++;
 		}
 		if (Input.IsActionJustPressed("pausemenu")){
+			BeatmapBackground.FlashEnable = true;
 			SettingsOperator.toppaneltoggle();
 			GetTree().ChangeSceneToFile("res://Panels/Screens/song_select.tscn");
 		}else if (Input.IsActionJustPressed("retry")){
+			BeatmapBackground.FlashEnable = true;
 			SettingsOperator.toppaneltoggle();
 			GetTree().ChangeSceneToFile("res://Panels/Screens/SongLoadingScreen.tscn");
 }

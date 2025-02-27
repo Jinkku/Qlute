@@ -21,3 +21,18 @@ texture = ExtResource("1_cnrtj")
 expand_mode = 1
 stretch_mode = 6
 script = ExtResource("2_0i5aa")
+
+[node name="Flash" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.0784314)
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.375
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_flashstart"]
