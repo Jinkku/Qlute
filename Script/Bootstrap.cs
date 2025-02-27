@@ -23,7 +23,7 @@ public partial class Bootstrap : Control
 	}
 	private void _anifin(){
 		SettingsOperator.toppaneltoggle();
-		//GetTree().ChangeSceneToFile("res://Panels/Screens/home_screen.tscn");
+		GetTree().ChangeSceneToFile("res://Panels/Screens/home_screen.tscn");
 	}
 	public void _intro_finished(string animationame){
 		var _tween = Home.CreateTween();
