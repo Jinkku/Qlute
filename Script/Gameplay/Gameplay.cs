@@ -13,8 +13,8 @@ public partial class Gameplay : Control
 {
 	// Called when the node enters the scene tree for the first time.
 	public static SettingsOperator SettingsOperator { get; set; }
-	public static Label Ttiming { get; set; }
-	public static Label Hits { get; set; }
+	//public static Label Ttiming { get; set; }
+	//public static Label Hits { get; set; }
 	public static ColorRect Chart { get; set; }
 	public List<ColorRect> Keys = new List<ColorRect>();
 	public List<Tween> KeyAni = new List<Tween>();
@@ -25,6 +25,7 @@ public partial class Gameplay : Control
 	public int nodeSize = 54;
 	public int GreatJudge {get;set;}
 	public int MehJudge {get;set;}
+	public int MissJudge {get;set;}
 	public ColorRect meh {get;set;}
 	public ColorRect great {get;set;}
 	public ColorRect perfect {get;set;}
@@ -63,6 +64,7 @@ public partial class Gameplay : Control
 		PerfectJudge = 500 / (int)(SettingsOperator.Sessioncfg["beatmapaccuracy"]);
 		GreatJudge = (int)(PerfectJudge*3);
 		MehJudge = (int)(PerfectJudge*6);
+		MissJudge = PerfectJudge * 7;
 
 		meh = new ColorRect();
 		meh.Size = new Vector2(400,MehJudge);
@@ -85,8 +87,8 @@ public partial class Gameplay : Control
 		perfect.Visible = false;
 		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(perfect);
 
-		Ttiming = GetNode<Label>("Time");
-		Hits = GetNode<Label>("Hits");
+		//Ttiming = GetNode<Label>("Time");
+		//Hits = GetNode<Label>("Hits");
 		foreach (int i in Enumerable.Range(1, 4)){
 			var notet = GetNode<ColorRect>("Playfield/KeyBoxes/Key"+i);
 			Keys.Add(notet);;
@@ -200,7 +202,7 @@ public partial class Gameplay : Control
 		int Keyx = 0;
 		//maxc=hits[0]+hits[1]+hits[2]+hits[3]
         //    accuracy=round(((hits[0]+(hits[1]/2)+(hits[2]/3))/(maxc))*100,2)
-		Hits.Text = "Hits:\n" + SettingsOperator.Gameplaycfg["max"] + "\n" + SettingsOperator.Gameplaycfg["great"] + "\n" + SettingsOperator.Gameplaycfg["meh"] + "\n" + SettingsOperator.Gameplaycfg["bad"] + "\n"+"ms:"+(mshitold-mshit)+"ms " + mshitold + " " + mshit + " " + SettingsOperator.Getms();
+		//Hits.Text = "Hits:\n" + SettingsOperator.Gameplaycfg["max"] + "\n" + SettingsOperator.Gameplaycfg["great"] + "\n" + SettingsOperator.Gameplaycfg["meh"] + "\n" + SettingsOperator.Gameplaycfg["bad"] + "\n"+"ms:"+(mshitold-mshit)+"ms " + mshitold + " " + mshit + " " + SettingsOperator.Getms();
 		// Key imputs
 		foreach (ColorRect self in Keys)
 		{
@@ -249,7 +251,7 @@ public partial class Gameplay : Control
 					Ttick++;
 					JudgeResult = checkjudge((int)notex,KeyC[(int)(node.Position.X / 100)],node,node.Visible);
 					if (JudgeResult < 4){
-						mshitold = Chart.Size.Y;
+						mshitold = Chart.Size.Y+5;
 						KeyC[(int)(node.Position.X / 100)] = false;
 						mshit = notex;
 						SettingsOperator.Addms(mshitold-mshit-50);
@@ -267,7 +269,7 @@ public partial class Gameplay : Control
 
 
 		}
-		Ttiming.Text = "Time: " + est + "\n" + Ttick;
+		//Ttiming.Text = "Time: " + est + "\n" + Ttick;
 
 		//
 	}
@@ -305,7 +307,7 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg["combo"]++;
 			node.Visible = false;
 			return 2;
-		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility){
+		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility || (timing+nodeSize > Chart.Size.Y-MissJudge/2 && timing+nodeSize < Chart.Size.Y+MissJudge/2 && keyvalue)){
 			Hittext("Miss");
 			SettingsOperator.Gameplaycfg["bad"]++;
 			SettingsOperator.Gameplaycfg["combo"] = 0;
