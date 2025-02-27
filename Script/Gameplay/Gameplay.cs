@@ -126,10 +126,10 @@ public partial class Gameplay : Control
 				else if (part == 192){part = 1;}
 				else if (part == 320){part = 2;}
 				else if (part == 448){part = 3;}
-				else if (part<=256 & party <=192){part = 0;}
-				else if (part>256 & party <=192){part = 1;}
-				else if (part<=256 & party >192){part = 2;}
-				else if (part>256 & party >192){part = 3;}
+				else if (part<128){part = 0;}
+				else if (part<256){part = 1;}
+				else if (part<384){part = 2;}
+				else if (part<512){part = 3;}
 				if (timen != -timing)
 				{
 					timen = -timing;
