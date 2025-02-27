@@ -38,9 +38,6 @@ public partial class home : Node
 
 
 	}
-	private void _testbutton(){
-		Notify.Post("JerkMaster997 Messaged you!");
-	}
 	private void _play(){
 		GetTree().ChangeSceneToFile("res://Panels/Screens/song_select.tscn");
 	}

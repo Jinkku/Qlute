@@ -32,6 +32,11 @@ public partial class Settings : Button
 		}
 
 	}
+	public override void _Process(double _delta){
+		if (Input.IsActionJustPressed("Settings")){
+			togglesettingspanel();
+		}
+	}
 	private bool chksettingsv(){
 		return (bool)SettingsOperator.Sessioncfg["settingspanelv"];
 	}
