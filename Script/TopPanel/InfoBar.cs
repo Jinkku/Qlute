@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 public partial class InfoBar : ColorRect
 {
@@ -37,6 +38,25 @@ public partial class InfoBar : ColorRect
 	}
 	public override void _Process(double _delta){
 		Loadingicon.Visible = (bool)SettingsOperator.Sessioncfg["loggingin"];
+		foreach (var NotiInfo in NotificationListener.NotificationList){
+			if (!NotiInfo.Finished){
+    	    var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/Notification.tscn").Instantiate().GetNode<Button>(".");
+			NotificationListener.NotificationCards.Add(NotiCard);
+	        AddChild(NotiCard);
+			NotiCard.Position = new Vector2(GetViewportRect().Size.X,60 + ((NotiCard.Size.Y+10) * NotificationListener.Count));
+			NotiCard.Text = NotiInfo.Title;
+			NotiCard.SetMeta("id",NotificationListener.Count);
+			NotiCard.SetMeta("time",NotiInfo.Time);
+			var tween = NotiCard.CreateTween();
+			tween.TweenProperty(NotiCard, "position", new Vector2(GetViewportRect().Size.X-NotiCard.Size.X-10,NotiCard.Position.Y), 0.2f)
+				.SetTrans(Tween.TransitionType.Bounce)
+				.SetEase(Tween.EaseType.Out);			
+			tween.Play();
+			NotiInfo.Finished = true;
+			NotificationListener.Count++;
+			}
+			
+		}
 		
 	}
 }
