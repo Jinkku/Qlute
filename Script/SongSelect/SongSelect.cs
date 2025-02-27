@@ -25,12 +25,15 @@ public partial class SongSelect : Control
 	public PanelContainer ModScreen { get; set; }
 	public Label Diff { get; set; }
 	public ScrollBar scrollBar { get; set; }
+	public PanelContainer Info {get;set;}
 	int startposition = 30;
 	public void _res_resize(){
 		var window_size = GetViewportRect().Size;
 		Control SongPanel = GetNode<Control>("SongPanel");
 		SongPanel.Size = new Vector2(window_size.X/2.5f, window_size.Y-150);
 		SongPanel.Position = new Vector2(window_size.X-(window_size.X/2.5f), 105);
+		Info = GetNode<PanelContainer>("SongDetails/Info");
+		Info.Size = new Vector2(GetViewportRect().Size.X/2.3f,Info.Size.Y);
 	}
 	public void _scrolling(){
 		scrolly = (int)scrollBar.Value;
