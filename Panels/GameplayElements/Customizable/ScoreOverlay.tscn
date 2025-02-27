@@ -70,9 +70,11 @@ clip_text = true
 [node name="pp" type="Label" parent="ScoreBarBack/ScoreInfo/InfoStatus"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("1_jd5hx")
 text = "9,999pp"
 label_settings = SubResource("LabelSettings_0ag8s")
+horizontal_alignment = 2
 clip_text = true
 
 [node name="MarginContainer" type="MarginContainer" parent="ScoreBarBack/ScoreInfo"]
