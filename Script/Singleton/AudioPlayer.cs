@@ -17,6 +17,10 @@ public partial class AudioPlayer : AudioStreamPlayer
         Instance = this;
         Instance.Bus = "Master";
     }
+    public override void _Process(double delta)
+    {
+        if (SettingsOperator.loopaudio){AudioLoop();}
+    }
 
     public static AudioStreamMP3 LoadMP3(string path)
     {
@@ -26,7 +30,12 @@ public partial class AudioPlayer : AudioStreamPlayer
         sound.Data = file.GetBuffer((long)file.GetLength());
         return sound;
     }
-
+	public void AudioLoop(){
+		if (SettingsOperator.Gameplaycfg["timetotal"]-(GetPlaybackPosition()/0.001) < -1000 && SettingsOperator.loopaudio)
+		{
+			AudioPlayer.Instance.Play();
+		}
+	}
 	 public static AudioStreamGenerator LoadOGG(string path)
 	 {
 	//     // Open the Ogg file using System.IO.File
