@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=15 format=3 uid="uid://cu8ap5uak1q6c"]
+[gd_resource type="Theme" load_steps=17 format=3 uid="uid://cu8ap5uak1q6c"]
 
 [ext_resource type="Texture2D" uid="uid://sqcowf508l8v" path="res://Skin/ThemeNC/Checkbutton-s02.svg" id="1_7xnwh"]
 [ext_resource type="Texture2D" uid="uid://dhu2c56vuhuy4" path="res://Skin/ThemeNC/Checkbutton-s01.svg" id="2_75n4a"]
@@ -93,6 +93,12 @@ corner_radius_bottom_left = 10
 shadow_size = 5
 shadow_offset = Vector2(0, 2)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ro3ws"]
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 0.54902)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gd8ak"]
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 0.627451)
+
 [resource]
 CheckButton/icons/checked = ExtResource("1_7xnwh")
 CheckButton/icons/unchecked = ExtResource("2_75n4a")
@@ -109,3 +115,5 @@ PopupMenu/styles/panel = SubResource("StyleBoxFlat_nlk58")
 ProgressBar/styles/background = SubResource("StyleBoxFlat_3kel3")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_jxw2s")
 TooltipPanel/styles/panel = SubResource("StyleBoxFlat_vu2r3")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_ro3ws")
+VScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_gd8ak")
