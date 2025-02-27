@@ -17,11 +17,13 @@ public partial class Bootstrap : Control
 		}
 	    Home = GD.Load<PackedScene>("res://Panels/Screens/home_screen.tscn").Instantiate().GetNode<Control>(".");
 		AddChild(Home);
+		Home.MouseFilter = MouseFilterEnum.Stop;
+		Home.SetProcessInput(false);
 		Home.Modulate = new Color(0f,0f,0f,0f);
 	}
 	private void _anifin(){
 		SettingsOperator.toppaneltoggle();
-		GetTree().ChangeSceneToFile("res://Panels/Screens/home_screen.tscn");
+		//GetTree().ChangeSceneToFile("res://Panels/Screens/home_screen.tscn");
 	}
 	public void _intro_finished(string animationame){
 		var _tween = Home.CreateTween();
