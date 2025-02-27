@@ -21,7 +21,7 @@ public partial class Gameplay : Control
 	public List<bool> KeyC = new List<bool>(
 	);
 	public int JudgeResult = -1;
-	public int PerfectJudge = 750;
+	public int PerfectJudge = 500;
 	public int nodeSize = 54;
 	public int GreatJudge {get;set;}
 	public int MehJudge {get;set;}
@@ -85,7 +85,7 @@ public partial class Gameplay : Control
 		perfect.Size = new Vector2(400,PerfectJudge);
 		perfect.Position = new Vector2(0,-PerfectJudge/2);
 		perfect.Color = new Color(0f,0f,0.5f,0.1f);
-		perfect.Visible = true;
+		perfect.Visible = false;
 		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(perfect);
 
 		//Ttiming = GetNode<Label>("Time");
@@ -250,7 +250,7 @@ public partial class Gameplay : Control
 			} else if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150)
 			{
 				foreach (var node in Notebox.Nodes){
-					if ((int)notex+nodeSize > Chart.Size.Y-10 && (int)notex+nodeSize < Chart.Size.Y+MehJudge  && ModsOperator.Mods["auto"]){
+					if ((int)notex+nodeSize > Chart.Size.Y && (int)notex+nodeSize < Chart.Size.Y+MehJudge  && ModsOperator.Mods["auto"]){
 						KeyC[(int)(node.Position.X / 100)] = true;
 					}else if (ModsOperator.Mods["auto"]){
 						KeyC[(int)(node.Position.X / 100)] = false;
