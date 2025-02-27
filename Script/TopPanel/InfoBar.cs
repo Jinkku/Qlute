@@ -14,10 +14,6 @@ public partial class InfoBar : ColorRect
 		Loadingicon = GetNode<Sprite2D>("AccountButton/Loadingicon");
 		Loadinganimation.Play("loading");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		InfoBar TopPanel = GetNode<InfoBar>(".");
-		if ((bool)SettingsOperator.Sessioncfg["toppanelhide"] != true){
-		AnimationPlayer Ana = GetNode<AnimationPlayer>("%Wabamp");
-		Ana.Play("Bootup");}
 	}
 	private void _Slidepanelstart(string ani){
 		SettingsOperator.Sessioncfg["TopPanelSlideip"] = true;
