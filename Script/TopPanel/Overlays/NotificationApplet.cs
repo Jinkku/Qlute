@@ -29,11 +29,11 @@ public partial class NotificationApplet : Button
 				var noteid = ino;
 				if (NotificationListener.NotificationCards.Count > noteid && IsInstanceValid(NotificationListener.NotificationCards[noteid])){
 				var tempcard = NotificationListener.NotificationCards[ino];
-				var tempTween = tempcard.CreateTween();
-				tempTween.TweenProperty(tempcard, "position", new Vector2(tempcard.Position.X,60 + ((Size.Y+10) * (noteid))), 0.2f)
+				tween = tempcard.CreateTween();
+				tween.TweenProperty(tempcard, "position", new Vector2(tempcard.Position.X,60 + ((Size.Y+10) * (noteid))), 0.2f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
-				tempTween.Play();
+				tween.Play();
 				NotificationListener.NotificationList[noteid].id = noteid - 1;
 				inoid++;
 				tempcard.SetMeta("id",ino);
