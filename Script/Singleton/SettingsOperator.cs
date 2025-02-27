@@ -48,15 +48,20 @@ public partial class SettingsOperator : Node
     // Imaging processing part of the game because godot don't have a way to load images externally i suppose-
     public static Texture2D LoadImage(string path)
     {
-        var image = new Image();
-        image.Load(path);
-
         var imageTexture = new ImageTexture();
-        imageTexture.SetImage(image);
+        var image = new Image();
+        if (FileAccess.FileExists(path)){
+            image.Load(path);
+            imageTexture.SetImage(image);
 
-        // Free the image from memory
-        image.Dispose();
+            // Free the image from memory
+            image.Dispose();
 
+        } else {
+            image.Dispose();
+            Notify.Post("Image could not be loaded, because it doesn't exist!");
+            return null;
+        }
         return imageTexture;
     }
     public static int RndSongID(){
