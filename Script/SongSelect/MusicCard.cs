@@ -46,7 +46,6 @@ public partial class MusicCard : Button
 		}else {
 			Visible = false;
 		}
-		Text = Position.Y.ToString();
 		self.ButtonPressed = SettingsOperator.Sessioncfg["SongID"].ToString().Equals(self.GetMeta("SongID").ToString());
 	}
 }
