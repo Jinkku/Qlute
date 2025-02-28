@@ -238,14 +238,15 @@ public partial class Gameplay : Control
 		var viewportSize = GetViewportRect().Size.Y;
 		foreach (var Notebox in Notes){
 			var notex = Notebox.timing + est + Chart.Size.Y;
-			if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && !Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150 && delta/0.001 <4)
+			if (!Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150 && delta/0.001 <4)
 			{
 				foreach (int part in Notebox.Notes){
 					var node = new Sprite2D();
 					node.Texture = NoteSkin;
 					Notebox.Nodes.Add(node);
 					Chart.AddChild(node);
-					node.Position = new Vector2(100 * part + 50, notex);
+					node.Centered = false;
+					node.Position = new Vector2(100 * part, notex);
 				}
 			} else if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150)
 			{
