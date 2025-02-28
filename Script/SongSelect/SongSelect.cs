@@ -35,33 +35,55 @@ public partial class SongSelect : Control
 		Info = GetNode<PanelContainer>("SongDetails/Info");
 		Info.Size = new Vector2(GetViewportRect().Size.X/2.3f,Info.Size.Y);
 	}
-	public void _scrolling(){
-		scrolly = (int)scrollBar.Value;
-		SongETick = -2;
-		int elementamount = (int)GetViewportRect().Size.Y/83;
-		foreach (int num in Enumerable.Range(0,SongEntry.Count)){
-		((Button)SongEntry[num]).QueueFree();
-		}
-		SongEntry.Clear();
-		var before = Math.Max(0, scrolly - elementamount);
-		var after = Math.Min(SettingsOperator.Beatmaps.Count, scrolly + elementamount);
-		GD.Print(before+" "+after+" "+SettingsOperator.Beatmaps.Count+" "+(scrolly*2));
-		foreach (var song in SettingsOperator.Beatmaps.Skip(before).Take(after - before))
-		{
-			AddSongList(song["Title"].ToString(),
-			song["Artist"].ToString(),
-			song["Mapper"].ToString(),
-			(int)float.Parse(song["levelrating"].ToString()),
-			song["path"].ToString()+song["background"].ToString(),
-			song["rawurl"].ToString(),(float)song["pp"]
-			,(string)song["Version"],song["path"].ToString()+song["audio"].ToString(),
-			new Vector2(0,  (GetViewportRect().Size.Y/2) + (SongETick*83) - (Math.Max(scrolly,elementamount/2) * 83)),
-			before + SongETick + 2
-			);
-			SongETick++;
-			
-		}
+	public void _scrolling()
+{
+    scrolly = (int)scrollBar.Value;
+    SongETick = 0;
+    int elementamount = (int)GetViewportRect().Size.Y / 83;
+    int totalSongs = SettingsOperator.Beatmaps.Count;
+
+    // Adjust scrolling position for centering at min/max
+    if (scrolly == 0)
+    {
+        scrolly = elementamount / 2;  // Center when at the top
+    }
+    else if (scrolly >= totalSongs - elementamount)
+    {
+        scrolly = Math.Max(0, totalSongs - elementamount / 2);  // Center when at the bottom
+    }
+	foreach (Button songt in SongEntry){
+		songt.QueueFree();
 	}
+	SongEntry.Clear();
+
+    // Calculate range of visible songs
+    int before = Math.Max(0, scrolly - elementamount);
+    int after = Math.Min(totalSongs, scrolly + elementamount);
+
+    GD.Print($"Before: {before}, After: {after}, Total: {totalSongs}, Scroll: {scrolly}");
+    for (int i = before; i < after; i++)
+    {
+            var song = SettingsOperator.Beatmaps[before + i];
+			GD.Print(song["Title"]);
+
+            AddSongList(
+                song["Title"].ToString(),
+                song["Artist"].ToString(),
+                song["Mapper"].ToString(),
+                (int)float.Parse(song["levelrating"].ToString()),
+                song["path"].ToString() + song["background"].ToString(),
+                song["rawurl"].ToString(),
+                (float)song["pp"],
+                (string)song["Version"],
+                song["path"].ToString() + song["audio"].ToString(), // cross[diffsec]+(80*id)+(h//2-80)
+                new Vector2(0,-(scrolly * 83) + (83 * SongETick) + (GetViewportRect().Size.Y/2-80)),
+                before + SongETick
+            ); 
+		
+        SongETick++;
+    }
+}
+
 	public void AddSongList(string song,string artist,string mapper,int lv,string background,string path,float pp, string difficulty,string audio,Vector2 pos, int SongID)
 	{
 
@@ -185,10 +207,10 @@ public partial class SongSelect : Control
 
 		}else if (Input.IsActionJustPressed("scrolldown") && scrolly+1 < SettingsOperator.Beatmaps.Count){
 			scrollBar.Value++;
-			_scrolling();
+			Callable.From(_scrolling).CallDeferred();
 		}else if (Input.IsActionJustPressed("scrollup")&& scrolly-1 > -1){
 			scrollBar.Value--;
-			_scrolling();
+			Callable.From(_scrolling).CallDeferred();
 		}
 		//Debugtext.Text = scrolly.ToString();
 	}
