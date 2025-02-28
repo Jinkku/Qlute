@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://dvm81no14tisl"]
+[gd_scene load_steps=7 format=3 uid="uid://dvm81no14tisl"]
 
 [ext_resource type="Script" path="res://Script/Bootstrap.cs" id="1_26srq"]
 [ext_resource type="Texture2D" uid="uid://ba8p7q27num8t" path="res://Skin/System/highlightlogo.png" id="2_abd43"]
+[ext_resource type="Texture2D" uid="uid://b000ela4rhy4h" path="res://Skin/NotificationIcons/warning.svg" id="3_s5vr0"]
 
 [sub_resource type="Animation" id="Animation_v5m8g"]
 resource_name = "Intro"
@@ -112,9 +113,14 @@ layout_mode = 2
 texture = ExtResource("2_abd43")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
-modulate = Color(0, 0, 0, 0)
+modulate = Color(1, 1, 1, 1)
 layout_mode = 2
 alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("3_s5vr0")
+stretch_mode = 3
 
 [node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
