@@ -110,7 +110,6 @@ public partial class SettingsOperator : Node
         return ppvalue;
         }
     public static void Parse_Beatmapfile(string filename){
-        GD.Print("Parsing beatmap file...");
         using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
         var text = file.GetAsText();
         var lines = text.Split("\n");
@@ -194,7 +193,6 @@ public partial class SettingsOperator : Node
             var timingPointLines = lines.SkipWhile(l => !l.StartsWith("[TimingPoints]")).Skip(1);
             foreach (var timingLine in timingPointLines)
             {
-                GD.Print(timingLine);
                 if (string.IsNullOrWhiteSpace(timingLine) || timingLine.StartsWith("["))
                 break;
 
@@ -229,7 +227,6 @@ public partial class SettingsOperator : Node
                 hitob++;
             }
         }
-        GD.Print(accuracy);
 		Beatmaps.Add(new Dictionary<string, object>{
             { "Title", songtitle },
             { "Artist", artist },
