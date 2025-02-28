@@ -117,12 +117,12 @@ modulate = Color(1, 1, 1, 1)
 layout_mode = 2
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="CenterContainer/VBoxContainer"]
+[node name="Warning" type="TextureRect" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 texture = ExtResource("3_s5vr0")
 stretch_mode = 3
 
-[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="Disclaimer" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Disclaimer
