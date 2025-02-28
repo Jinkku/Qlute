@@ -40,6 +40,12 @@ public partial class BeatmapListener : Node
 			Parse_BeatmapDir(beatmapDir);
 			GD.Print("Parsed...");
 		}
+		foreach (string file in Directory.GetFiles(SettingsOperator.downloadsdir, "*.zip")){
+			System.IO.Compression.ZipFile.ExtractToDirectory(file, SettingsOperator.downloadsdir);
+			File.Delete(file);
+			GD.Print("Extracted pack" + file);
+
+		}
 	}
 	public override void _Ready()
 	{
