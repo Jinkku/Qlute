@@ -106,7 +106,7 @@ public partial class Gameplay : Control
 		var part = 0;
 		var timing = 0;
 		var t = "";
-		var timen = 0;
+		var timen = -1;
 		var notel = -1;
         var isHitObjectSection = false;
 		//var note = noteblock.GetNode<Area2D>(".");
@@ -143,6 +143,8 @@ public partial class Gameplay : Control
 					Notes.Add(new NotesEn {timing = timen, Notes = new List<object>(), NotesHit = new List<bool>()});
 					notel++;
 				}
+				GD.Print(notel);
+				GD.Print(part);
 				Notes[notel].Notes.Add(part);
 				Notes[notel].NotesHit.Add(false);
             }
