@@ -39,6 +39,7 @@ public partial class BeatmapListener : Node
 			GD.Print("Parsing " + beatmapDir);
 			Parse_BeatmapDir(beatmapDir);
 			GD.Print("Parsed...");
+			Notify.Post("Imported " + Path.GetFileName(file));
 		}
 		foreach (string file in Directory.GetFiles(SettingsOperator.downloadsdir, "*.zip")){
 			System.IO.Compression.ZipFile.ExtractToDirectory(file, SettingsOperator.downloadsdir);
