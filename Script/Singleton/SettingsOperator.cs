@@ -10,7 +10,7 @@ public partial class SettingsOperator : Node
 	//public string homedir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + "/.qlute";
     public string homedir = OS.GetUserDataDir();
 	public string beatmapsdir => homedir + "/beatmaps";
-    public static float ppbase = 0.072f;
+    public static float ppbase = 0.0072f;
 	public string downloadsdir => homedir + "/downloads";
 	public string replaydir => homedir + "/replays";
 	public string screenshotdir => homedir + "/screenshots";
@@ -104,9 +104,13 @@ public partial class SettingsOperator : Node
             }
         } else{ GD.PrintErr("Can't select a song that don't exist :/");}
     }
-    public static float Get_ppvalue(int hitob){
+    public static float Get_ppvalue(int max, int great, int meh, int bad, double multiplier = 1,int combo =0){
+        bad = Math.Max(1,bad);
         var ppvalue = 0.0f;
-        ppvalue = ppbase * hitob;
+        ppvalue = ppbase * (max + (great/2) + (meh/3));
+        ppvalue /= bad;
+        ppvalue *=(float)multiplier;
+        ppvalue *= combo * ppbase;
         return ppvalue;
         }
     public static void Parse_Beatmapfile(string filename){
@@ -216,7 +220,7 @@ public partial class SettingsOperator : Node
                 // Break if we reach an empty line or another section
                 if (string.IsNullOrWhiteSpace(line) || line.StartsWith("["))
                 {
-                    ppvalue = Get_ppvalue(hitob);
+                    ppvalue = Get_ppvalue(hitob,0,0,0,combo: hitob);
                     isHitObjectSection = !isHitObjectSection;
                     timetotal = notetime;
                     break;

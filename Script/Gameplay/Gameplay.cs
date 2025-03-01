@@ -202,7 +202,7 @@ public partial class Gameplay : Control
 		}
 		SettingsOperator.Gameplaycfg["accuracy"] = (SettingsOperator.Gameplaycfg["max"] + (SettingsOperator.Gameplaycfg["great"]/2) + (SettingsOperator.Gameplaycfg["meh"]/3)) / (SettingsOperator.Gameplaycfg["max"] +SettingsOperator.Gameplaycfg["great"] + SettingsOperator.Gameplaycfg["meh"] + SettingsOperator.Gameplaycfg["bad"]);
 		SettingsOperator.Gameplaycfg["score"] = (SettingsOperator.Gameplaycfg["pp"] / SettingsOperator.Gameplaycfg["maxpp"]) * (1000000*ModsMulti.multiplier);
-		SettingsOperator.Gameplaycfg["pp"] = (SettingsOperator.Gameplaycfg["max"]+(SettingsOperator.Gameplaycfg["great"]/2)+(SettingsOperator.Gameplaycfg["meh"]/3)/(SettingsOperator.Gameplaycfg["bad"]+1)) * (SettingsOperator.ppbase * ModsMulti.multiplier);
+		SettingsOperator.Gameplaycfg["pp"] = SettingsOperator.Get_ppvalue((int)SettingsOperator.Gameplaycfg["max"],(int)SettingsOperator.Gameplaycfg["great"],(int)SettingsOperator.Gameplaycfg["meh"],(int)SettingsOperator.Gameplaycfg["bad"],ModsMulti.multiplier,(int)SettingsOperator.Gameplaycfg["maxcombo"]);
 		SettingsOperator.Gameplaycfg["time"] = (int)est;
 		//float est = AudioPlayer.Instance.GetPlaybackPosition()*1000;
 		int Ttick = 0;
