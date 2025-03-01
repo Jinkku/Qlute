@@ -25,7 +25,6 @@ public partial class Gameplay : Control
 	public int nodeSize = 54;
 	public int GreatJudge {get;set;}
 	public int MehJudge {get;set;}
-	public int MissJudge {get;set;}
 	public ColorRect meh {get;set;}
 	public ColorRect great {get;set;}
 	public ColorRect perfect {get;set;}
@@ -65,7 +64,6 @@ public partial class Gameplay : Control
 		PerfectJudge = PerfectJudge / (int)(SettingsOperator.Sessioncfg["beatmapaccuracy"]);
 		GreatJudge = (int)(PerfectJudge*3);
 		MehJudge = (int)(PerfectJudge*6);
-		MissJudge = PerfectJudge * 7;
 
 		meh = new ColorRect();
 		meh.Size = new Vector2(400,MehJudge);
@@ -106,7 +104,7 @@ public partial class Gameplay : Control
 		var part = 0;
 		var timing = 0;
 		var t = "";
-		var timen = 0;
+		var timen = -1;
 		var notel = -1;
         var isHitObjectSection = false;
 		//var note = noteblock.GetNode<Area2D>(".");
@@ -143,6 +141,8 @@ public partial class Gameplay : Control
 					Notes.Add(new NotesEn {timing = timen, Notes = new List<object>(), NotesHit = new List<bool>()});
 					notel++;
 				}
+				GD.Print(notel);
+				GD.Print(part);
 				Notes[notel].Notes.Add(part);
 				Notes[notel].NotesHit.Add(false);
             }
@@ -315,7 +315,7 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg["combo"]++;
 			node.Visible = false;
 			return 2;
-		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility || (timing+nodeSize > Chart.Size.Y-MissJudge/2 && timing+nodeSize < Chart.Size.Y+MissJudge/2 && keyvalue && !ModsOperator.Mods["auto"]) ){
+		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility ){
 			Hittext("Miss");
 			SettingsOperator.Gameplaycfg["bad"]++;
 			SettingsOperator.Gameplaycfg["combo"] = 0;
