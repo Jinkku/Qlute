@@ -23,10 +23,9 @@ public partial class MusicCard : Button
 // Please fix this god damn it-
 	public void _visible(){
 		if (Visible && Preview.Texture == null){
-		//Preview.Texture = SettingsOperator.LoadImage(self.GetMeta("bg").ToString());
 		}
 		else{
-			Preview.Texture = null;
+			//Preview.Texture = null;
 		}
 	}
 	public void _on_pressed(){

@@ -38,6 +38,7 @@ public partial class SongSelect : Control
 	public void _scrolling(){
 		scrolly = (int)scrollBar.Value;
 		SongETick = 0;
+		startposition = (int)GetViewportRect().Size.Y/2 - 166;
 		foreach (Button self in SongEntry)
 		{
 			var Y = self.Position.Y;
@@ -52,12 +53,12 @@ public partial class SongSelect : Control
 		SongEntry.Add(button);
 		GetNode<Control>("SongPanel").AddChild(button);
 		var childButton = button.GetNode<Button>(".");
-		var SongTitle = button.GetNode<Label>("./SongTitle");
-		var SongArtist = button.GetNode<Label>("./SongArtist");
-		var SongMapper = button.GetNode<Label>("./SongMapper");
-		var TextureRect = button.GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
-		var Rating = button.GetNode<Label>("./PanelContainer/HBoxContainer/LevelRating/Rating");
-		var Version = button.GetNode<Label>("./PanelContainer/HBoxContainer/Difficulty/Version");
+		var SongTitle = button.GetNode<Label>("MarginContainer/VBoxContainer/SongTitle");
+		var SongArtist = button.GetNode<Label>("MarginContainer/VBoxContainer/SongArtist");
+		var SongMapper = button.GetNode<Label>("MarginContainer/VBoxContainer/SongMapper");
+		var TextureRect = button.GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
+		var Rating = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBox/Rating");
+		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBox/Version");
 		childButton.Position = pos;
 		SongTitle.Text = song;
 		SongArtist.Text = artist;

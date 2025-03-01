@@ -1,28 +1,41 @@
-[gd_scene load_steps=12 format=3 uid="uid://b2lw0mmphsddc"]
+[gd_scene load_steps=11 format=3 uid="uid://b2lw0mmphsddc"]
 
 [ext_resource type="Script" path="res://Script/SongSelect/MusicCard.cs" id="1_aa04f"]
 [ext_resource type="StyleBox" uid="uid://drlu38602jgb8" path="res://Skin/System/buttontoggled.tres" id="1_vfwc8"]
 [ext_resource type="StyleBox" uid="uid://fxawsqvq06j4" path="res://Skin/System/buttonidle.tres" id="2_nf3oy"]
 [ext_resource type="StyleBox" uid="uid://cuao4np4v7lo1" path="res://Skin/System/buttonhover.tres" id="2_vxxs3"]
+[ext_resource type="Texture2D" uid="uid://dugxlwc4epe6i" path="res://DefaultWallpaper/a.png" id="5_q6s5x"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i3see"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3w5u3"]
-bg_color = Color(0, 0, 0, 0.568627)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b81cb"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 3.0
+bg_color = Color(0.42, 0.42, 0.42, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y4ldl"]
-content_margin_left = 10.0
-content_margin_right = 10.0
-bg_color = Color(1, 1, 1, 0.176471)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ykgkk"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 3.0
+bg_color = Color(0, 0, 0, 0.54902)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rbgbc"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_05hl1"]
-content_margin_left = 10.0
-content_margin_right = 10.0
-bg_color = Color(1, 1, 1, 0)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_552jq"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 3.0
+bg_color = Color(0, 0, 0, 0.54902)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
@@ -30,16 +43,15 @@ corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a1afo"]
 bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 58
-corner_radius_bottom_left = 58
-corner_detail = 1
-
-[sub_resource type="CanvasTexture" id="CanvasTexture_2pxov"]
+corner_radius_top_left = 15
+corner_radius_bottom_left = 15
 
 [node name="MusicCard" type="Button"]
 custom_minimum_size = Vector2(350, 78)
 anchors_preset = 10
 anchor_right = 1.0
+offset_right = 20.0
+offset_bottom = 78.0
 grow_horizontal = 2
 size_flags_horizontal = 3
 theme_override_styles/focus = SubResource("StyleBoxEmpty_i3see")
@@ -49,88 +61,77 @@ theme_override_styles/normal = ExtResource("2_nf3oy")
 toggle_mode = true
 script = ExtResource("1_aa04f")
 
-[node name="SongTitle" type="Label" parent="."]
-layout_mode = 0
-offset_left = 11.0
-offset_top = 5.0
-offset_right = 125.0
-offset_bottom = 24.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 14
-text = "Mystery Song"
-
-[node name="SongArtist" type="Label" parent="."]
-layout_mode = 0
-offset_left = 11.0
-offset_top = 23.0
-offset_right = 99.0
-offset_bottom = 42.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 12
-text = "idiotiplier"
-
-[node name="SongMapper" type="Label" parent="."]
-layout_mode = 0
-offset_left = 10.0
-offset_top = 37.0
-offset_right = 147.0
-offset_bottom = 56.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 12
-text = "mapped by idiot"
-
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -24.0
 grow_horizontal = 2
 grow_vertical = 0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_3w5u3")
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="SongTitle" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.588235)
+theme_override_font_sizes/font_size = 14
+text = "Mystery Song"
+
+[node name="SongArtist" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.588235)
+theme_override_font_sizes/font_size = 12
+text = "idiotiplier"
+
+[node name="SongMapper" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.588235)
+theme_override_font_sizes/font_size = 12
+text = "mapped by idiot"
+
+[node name="InfoBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="LevelRating" type="PanelContainer" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(44, 25)
+[node name="Ranked" type="Label" parent="MarginContainer/VBoxContainer/InfoBox"]
 layout_mode = 2
-tooltip_text = "1000pp"
-mouse_filter = 1
-theme_override_styles/panel = SubResource("StyleBoxFlat_y4ldl")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_b81cb")
+text = "N/A"
+horizontal_alignment = 1
 
-[node name="Rating" type="Label" parent="PanelContainer/HBoxContainer/LevelRating"]
+[node name="Rating" type="Label" parent="MarginContainer/VBoxContainer/InfoBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rbgbc")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_ykgkk")
 text = "Lv. 69"
 horizontal_alignment = 1
 
-[node name="Difficulty" type="PanelContainer" parent="PanelContainer/HBoxContainer"]
-clip_contents = true
-custom_minimum_size = Vector2(44, 25)
+[node name="Version" type="Label" parent="MarginContainer/VBoxContainer/InfoBox"]
 layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_05hl1")
-
-[node name="Version" type="Label" parent="PanelContainer/HBoxContainer/Difficulty"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rbgbc")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_552jq")
 text = "Difficulty Name"
-clip_text = true
-text_overrun_behavior = 3
 
 [node name="SongBackgroundPreview" type="PanelContainer" parent="."]
+modulate = Color(1, 1, 1, 0.588235)
 clip_children = 1
+z_index = -2
+z_as_relative = false
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.6
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -139,7 +140,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_a1afo")
 [node name="BackgroundPreview" type="TextureRect" parent="SongBackgroundPreview"]
 layout_mode = 2
 mouse_filter = 2
-texture = SubResource("CanvasTexture_2pxov")
+texture = ExtResource("5_q6s5x")
 expand_mode = 1
 stretch_mode = 6
 
