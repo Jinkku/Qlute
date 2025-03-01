@@ -35,56 +35,17 @@ public partial class SongSelect : Control
 		Info = GetNode<PanelContainer>("SongDetails/Info");
 		Info.Size = new Vector2(GetViewportRect().Size.X/2.3f,Info.Size.Y);
 	}
-	public void _scrolling()
-{
-    scrolly = (int)scrollBar.Value;
-    SongETick = 0;
-    int elementamount = (int)GetViewportRect().Size.Y / 83;
-    int totalSongs = SettingsOperator.Beatmaps.Count;
-
-    // Adjust scrolling position for centering at min/max
-    if (scrolly == 0)
-    {
-        scrolly = elementamount / 2;  // Center when at the top
-    }
-    else if (scrolly >= totalSongs - elementamount)
-    {
-        scrolly = Math.Max(0, totalSongs - elementamount / 2);  // Center when at the bottom
-    }
-	foreach (Button songt in SongEntry){
-		songt.QueueFree();
+	public void _scrolling(){
+		scrolly = (int)scrollBar.Value;
+		SongETick = 0;
+		foreach (Button self in SongEntry)
+		{
+			var Y = self.Position.Y;
+			self.Position = new Vector2(0, startposition+(SongETick*83) - (83*scrolly));
+			SongETick++;
+		}
 	}
-	SongEntry.Clear();
-
-    // Calculate range of visible songs
-    int before = Math.Max(0, scrolly - elementamount);
-    int after = Math.Min(totalSongs, scrolly + elementamount);
-
-    GD.Print($"Before: {before}, After: {after}, Total: {totalSongs}, Scroll: {scrolly}");
-    for (int i = before; i < after; i++)
-    {
-            var song = SettingsOperator.Beatmaps[before + i];
-			GD.Print(song["Title"]);
-
-            AddSongList(
-                song["Title"].ToString(),
-                song["Artist"].ToString(),
-                song["Mapper"].ToString(),
-                (int)float.Parse(song["levelrating"].ToString()),
-                song["path"].ToString() + song["background"].ToString(),
-                song["rawurl"].ToString(),
-                (float)song["pp"],
-                (string)song["Version"],
-                song["path"].ToString() + song["audio"].ToString(), // cross[diffsec]+(80*id)+(h//2-80)
-                new Vector2(0,-(scrolly * 83) + (83 * SongETick) + (GetViewportRect().Size.Y/2-80)),
-                before + SongETick
-            ); 
-		
-        SongETick++;
-    }
-}
-
-	public void AddSongList(string song,string artist,string mapper,int lv,string background,string path,float pp, string difficulty,string audio,Vector2 pos, int SongID)
+	public void AddSongList(string song,string artist,string mapper,int lv,string background,string path,float pp, string difficulty,string audio,Vector2 pos)
 	{
 
 		var button = musiccardtemplate.Instantiate();
@@ -97,7 +58,6 @@ public partial class SongSelect : Control
 		var TextureRect = button.GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
 		var Rating = button.GetNode<Label>("./PanelContainer/HBoxContainer/LevelRating/Rating");
 		var Version = button.GetNode<Label>("./PanelContainer/HBoxContainer/Difficulty/Version");
-		childButton.Visible = false;
 		childButton.Position = pos;
 		SongTitle.Text = song;
 		SongArtist.Text = artist;
@@ -107,11 +67,15 @@ public partial class SongSelect : Control
 		childButton.Name = SongETick.ToString();
 		childButton.ClipText = true;
 		childButton.SetMeta("bg", background);
-		childButton.SetMeta("SongID", SongID);
-		//if (background != ImageURL){
-		//	ImageCache = SettingsOperator.LoadImage(background);
-		//}
+		childButton.SetMeta("SongID", SongETick);
+		if (background != ImageURL){
+			ImageCache = SettingsOperator.LoadImage(background);
+		}
 		TextureRect.Texture = ImageCache;
+	}
+	private void _SongScrolldirectionreset(){
+		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
+		_scrolling();
 	}
 	private void _on_random(){
 		SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
@@ -131,6 +95,20 @@ public partial class SongSelect : Control
 		ModScreen = GetNode<PanelContainer>("ModsScreen");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		var timex = DateTime.Now.Second;
+		foreach (var song in SettingsOperator.Beatmaps)
+		{	
+			AddSongList(song["Title"].ToString(),
+			song["Artist"].ToString(),
+			song["Mapper"].ToString(),
+			(int)float.Parse(song["levelrating"].ToString()),
+			song["path"].ToString()+song["background"].ToString(),
+			song["rawurl"].ToString(),(float)song["pp"]
+			,(string)song["Version"],song["path"].ToString()+song["audio"].ToString()
+			, new Vector2(0, startposition + (83*SongETick)));
+			SongETick++;
+		}
+		scrolly = (int)SettingsOperator.Sessioncfg["SongID"];
+		GD.Print("Finished about " + (DateTime.Now.Second-timex) + "s");
 		SongTitle = GetNode<Label>("SongDetails/Info/Plasa/Title");
 		SongArtist = GetNode<Label>("SongDetails/Info/Plasa/Artist");
 		Songpp = GetNode<Label>("SongDetails/Info/Plasa/Points");
@@ -138,12 +116,8 @@ public partial class SongSelect : Control
 		SongLen = GetNode<Label>("SongDetails/Info/Plasa/Length");
 		SongMapper = GetNode<Label>("SongDetails/Info/Plasa/Mapper");
 		SongAccuracy = GetNode<Label>("SongDetails/Info/Plasa/Accuracy");
-		scrolly = (int)SettingsOperator.Sessioncfg["SongID"];
-		GD.Print("Finished about " + (DateTime.Now.Second-timex) + "s");
-		Notify.Post("Finished about " + (DateTime.Now.Second-timex) + "s");
 		_res_resize();
-		_Process(0);
-		_SongScrolldirectionreset();		
+		_SongScrolldirectionreset();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -151,7 +125,6 @@ public partial class SongSelect : Control
 	{
 		if ((bool)SettingsOperator.Sessioncfg["reloaddb"]){
 			SettingsOperator.Sessioncfg["reloaddb"] = false;
-			Notify.Post("Reloaded database");
 			GetTree().ReloadCurrentScene();
 			
 		}
@@ -184,12 +157,13 @@ public partial class SongSelect : Control
 			Diff.Text = "";
 		}
 		if (Input.IsActionJustPressed("Songup")){
-			if ((int)SettingsOperator.Sessioncfg["SongID"]-1 >=0 && (int)SettingsOperator.Sessioncfg["SongID"] != -1){
+			if ((int)SettingsOperator.Sessioncfg["SongID"]-1 >0 && (int)SettingsOperator.Sessioncfg["SongID"] != -1){
 				SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"]-1);
 			} else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1){
 				SettingsOperator.SelectSongID((int)SettingsOperator.Beatmaps.Count-1);
 			}
 			_SongScrolldirectionreset();
+
 		}else if (Input.IsActionJustPressed("Songdown")){
 			if ((int)SettingsOperator.Sessioncfg["SongID"]+1 <(int)SettingsOperator.Beatmaps.Count && (int)SettingsOperator.Sessioncfg["SongID"] != -1){
 				SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"]+1);
@@ -197,6 +171,7 @@ public partial class SongSelect : Control
 				SettingsOperator.SelectSongID(0);
 			}
 			_SongScrolldirectionreset();
+
 		}else if (Input.IsActionJustPressed("Mod")){
 			_Mods_show();
 		}else if (Input.IsActionJustPressed("Random")){
@@ -207,16 +182,16 @@ public partial class SongSelect : Control
 
 		}else if (Input.IsActionJustPressed("scrolldown") && scrolly+1 < SettingsOperator.Beatmaps.Count){
 			scrollBar.Value++;
-			Callable.From(_scrolling).CallDeferred();
+			_scrolling();
 		}else if (Input.IsActionJustPressed("scrollup")&& scrolly-1 > -1){
 			scrollBar.Value--;
-			Callable.From(_scrolling).CallDeferred();
+			_scrolling();
 		}
 		//Debugtext.Text = scrolly.ToString();
 	}
-	private void _SongScrolldirectionreset(){
-		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
-		_scrolling();
+	
+	private void _on_animation_player_animation_finished(){
+
 	}
 	private void _Mods_show(){
 		ModScreen.Visible = !ModScreen.Visible;
