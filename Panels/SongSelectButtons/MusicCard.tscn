@@ -123,7 +123,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_552jq")
 text = "Difficulty Name"
 
 [node name="SongBackgroundPreview" type="PanelContainer" parent="."]
-modulate = Color(1, 1, 1, 0.588235)
+modulate = Color(0.588235, 0.588235, 0.588235, 1)
 clip_children = 1
 z_index = -2
 z_as_relative = false
