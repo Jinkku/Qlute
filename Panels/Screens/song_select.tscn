@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://ckiye2n1ir8qg"]
+[gd_scene load_steps=25 format=3 uid="uid://dvig5omxnd5qs"]
 
 [ext_resource type="Script" path="res://Script/SongSelect/SongSelect.cs" id="1_fin0e"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
@@ -95,16 +95,28 @@ bg_color = Color(0, 0, 0, 1)
 border_color = Color(1, 0.638021, 0.276042, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6f4j3"]
-bg_color = Color(0.269531, 0.269531, 0.269531, 0.47451)
+bg_color = Color(0.313726, 0.313726, 0.313726, 1)
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.235294, 0.235294, 0.235294, 1)
 corner_radius_top_left = 25
+corner_radius_bottom_right = 25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k1b3q"]
-bg_color = Color(0, 0, 0, 0.47451)
+bg_color = Color(0.1875, 0.1875, 0.1875, 1)
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
 corner_radius_top_left = 25
+corner_radius_bottom_right = 25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cv1hb"]
-bg_color = Color(0, 0, 0, 0.47451)
+bg_color = Color(0.270833, 0.270833, 0.270833, 1)
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.140625, 0.140625, 0.140625, 1)
 corner_radius_top_left = 25
+corner_radius_bottom_right = 25
 
 [node name="Song Select" type="Control"]
 layout_mode = 3
@@ -410,7 +422,6 @@ offset_bottom = 64.0
 grow_vertical = 2
 
 [node name="SongPanel" type="Control" parent="."]
-clip_contents = true
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -421,13 +432,16 @@ grow_horizontal = 0
 grow_vertical = 2
 
 [node name="VScrollBar" type="VScrollBar" parent="SongPanel"]
+top_level = true
 z_index = 2
 layout_mode = 1
-anchors_preset = 11
+anchors_preset = -1
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -8.0
+offset_top = 105.0
+offset_bottom = -50.0
 grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 2
@@ -507,11 +521,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -150.0
-offset_top = -86.0
+offset_left = -160.0
+offset_top = -100.0
+offset_right = -10.0
+offset_bottom = -14.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 20
 theme_override_styles/focus = SubResource("StyleBoxEmpty_llhhs")
 theme_override_styles/hover = SubResource("StyleBoxFlat_6f4j3")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_k1b3q")

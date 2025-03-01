@@ -73,6 +73,10 @@ public partial class SongSelect : Control
 		}
 		TextureRect.Texture = ImageCache;
 	}
+	private void _SongScrolldirectionreset(){
+		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
+		_scrolling();
+	}
 	private void _on_random(){
 		SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
 	}
@@ -113,7 +117,7 @@ public partial class SongSelect : Control
 		SongMapper = GetNode<Label>("SongDetails/Info/Plasa/Mapper");
 		SongAccuracy = GetNode<Label>("SongDetails/Info/Plasa/Accuracy");
 		_res_resize();
-		_scrolling();
+		_SongScrolldirectionreset();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -158,6 +162,7 @@ public partial class SongSelect : Control
 			} else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1){
 				SettingsOperator.SelectSongID((int)SettingsOperator.Beatmaps.Count-1);
 			}
+			_SongScrolldirectionreset();
 
 		}else if (Input.IsActionJustPressed("Songdown")){
 			if ((int)SettingsOperator.Sessioncfg["SongID"]+1 <(int)SettingsOperator.Beatmaps.Count && (int)SettingsOperator.Sessioncfg["SongID"] != -1){
@@ -165,11 +170,13 @@ public partial class SongSelect : Control
 			} else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1){
 				SettingsOperator.SelectSongID(0);
 			}
+			_SongScrolldirectionreset();
 
 		}else if (Input.IsActionJustPressed("Mod")){
 			_Mods_show();
 		}else if (Input.IsActionJustPressed("Random")){
 			_on_random();
+			_SongScrolldirectionreset();
 
 		}else if (Input.IsActionJustPressed("Collections")){
 

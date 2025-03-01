@@ -146,7 +146,6 @@ stretch_mode = 6
 [node name="Wait" type="Timer" parent="."]
 wait_time = 0.1
 
-[connection signal="draw" from="." to="." method="_on_draw"]
-[connection signal="hidden" from="." to="." method="_on_hidden"]
 [connection signal="pressed" from="." to="." method="_on_pressed"]
+[connection signal="visibility_changed" from="." to="." method="_visible" flags=3]
 [connection signal="timeout" from="Wait" to="." method="_go"]

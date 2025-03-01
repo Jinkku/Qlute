@@ -21,19 +21,13 @@ public partial class MusicCard : Button
 		Wait = GetNode<Timer>("./Wait");
 	}
 // Please fix this god damn it-
-	public void _on_draw(){
-//		if (waitt<1){
-//			waitt++;
-//			Wait.Start();
-//		}
-	}
-
-	public void _on_hidden(){
-		//TextureRect.Texture = SettingsOperator.LoadImage(background);
-	}
-	private void _go(){
-		Preview.Texture = SettingsOperator.LoadImage(self.GetMeta("background").ToString());
-		Wait.Stop();
+	public void _visible(){
+		if (Visible && Preview.Texture == null){
+		//Preview.Texture = SettingsOperator.LoadImage(self.GetMeta("bg").ToString());
+		}
+		else{
+			Preview.Texture = null;
+		}
 	}
 	public void _on_pressed(){
 		int songID = (int)self.GetMeta("SongID");
