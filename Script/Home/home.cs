@@ -38,6 +38,10 @@ public partial class home : Control
 
 
 	}
+	private void _test(){
+		Notify.Post("Testing Notifications! :D\nYou are gay!!!");
+
+	}
 	private void _play(){
 		GetTree().ChangeSceneToFile("res://Panels/Screens/song_select.tscn");
 	}

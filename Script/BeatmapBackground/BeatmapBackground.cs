@@ -34,7 +34,6 @@ public partial class BeatmapBackground : TextureRect
 	public override void _Process(double _delta)
 	{
 		Timer.WaitTime = 60000 / ((int)SettingsOperator.Sessioncfg["beatmapbpm"]*AudioPlayer.Instance.PitchScale) * 0.001;
-
 		if (!Flash.Visible && FlashEnable){
 			Flash.Visible = true;
 		} else if (Flash.Visible && !FlashEnable){

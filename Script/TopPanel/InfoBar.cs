@@ -36,6 +36,8 @@ public partial class InfoBar : ColorRect
 		Loadingicon.Visible = (bool)SettingsOperator.Sessioncfg["loggingin"];
 		foreach (var NotiInfo in NotificationListener.NotificationList){
 			if (!NotiInfo.Finished){
+				Sample.Instance.Stream = ResourceLoader.Load<AudioStreamWav>("res://Sounds/notification.wav");
+				Sample.Instance.Play();
     	    var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/Notification.tscn").Instantiate().GetNode<Button>(".");
 			NotificationListener.NotificationCards.Add(NotiCard);
 	        AddChild(NotiCard);
@@ -45,7 +47,7 @@ public partial class InfoBar : ColorRect
 			NotiCard.SetMeta("time",NotiInfo.Time);
 			var tween = NotiCard.CreateTween();
 			tween.TweenProperty(NotiCard, "position", new Vector2(GetViewportRect().Size.X-NotiCard.Size.X-10,NotiCard.Position.Y), 0.2f)
-				.SetTrans(Tween.TransitionType.Bounce)
+				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);			
 			tween.Play();
 			NotiInfo.Finished = true;
