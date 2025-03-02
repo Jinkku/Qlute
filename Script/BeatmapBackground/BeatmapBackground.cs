@@ -56,7 +56,6 @@ public partial class BeatmapBackground : TextureRect
 			Texture = (Texture2D)SettingsOperator.Sessioncfg["background"];
 			Size = new Vector2(GetViewportRect().Size[0]+20,GetViewportRect().Size[1]+20);
 			Position = new Vector2(GetViewportRect().Size[0]-5,GetViewportRect().Size[1]-5);
-			GD.Print("[Log] Background Changed");
 		}
 	}
 }
