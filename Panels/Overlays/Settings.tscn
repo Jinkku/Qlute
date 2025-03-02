@@ -1,9 +1,12 @@
-[gd_scene load_steps=15 format=3 uid="uid://d0qmsp3ewrdj4"]
+[gd_scene load_steps=16 format=3 uid="uid://d0qmsp3ewrdj4"]
 
 [ext_resource type="Script" path="res://Script/SettingsPanel/SettingsPanel.cs" id="1_gfh6f"]
 [ext_resource type="Texture2D" uid="uid://cj5ugwjbsax06" path="res://Skin/SettingsIcon/display.png" id="2_r347j"]
 [ext_resource type="Texture2D" uid="uid://c0ap610fbkw4r" path="res://Skin/SettingsIcon/audio.png" id="3_tkltb"]
 [ext_resource type="Texture2D" uid="uid://ccai8irwy3t26" path="res://Skin/SettingsIcon/debug.png" id="4_b8fcs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5b8eh"]
+bg_color = Color(0, 0, 0, 0.392157)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n2spt"]
 
@@ -72,7 +75,7 @@ anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 480.0
 grow_vertical = 2
-color = Color(0.0507813, 0.0507813, 0.0507813, 1)
+color = Color(0.0404297, 0.025, 0.05, 1)
 
 [node name="Panels" type="HBoxContainer" parent="ColorRect"]
 layout_mode = 1
@@ -86,6 +89,7 @@ grow_vertical = 2
 clip_contents = true
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5b8eh")
 
 [node name="Cata" type="VBoxContainer" parent="ColorRect/Panels/Catagories"]
 clip_contents = true

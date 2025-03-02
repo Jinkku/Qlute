@@ -15,7 +15,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 0
 grow_vertical = 2
-color = Color(0.0507813, 0.0507813, 0.0507813, 1)
+color = Color(0.035, 0.025, 0.05, 1)
 script = ExtResource("1_xu62s")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
