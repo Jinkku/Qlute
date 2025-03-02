@@ -131,6 +131,7 @@ theme_override_constants/separation = 15
 
 [node name="Name" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
+mouse_filter = 0
 theme_override_fonts/font = SubResource("FontVariation_tvan6")
 theme_override_font_sizes/font_size = 48
 theme_override_styles/normal = SubResource("StyleBoxEmpty_llstv")
@@ -138,22 +139,26 @@ text = "Settings"
 
 [node name="Section" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
+mouse_filter = 0
 theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
 theme_override_fonts/font = SubResource("FontVariation_n76qt")
 text = "Important Infomation"
 
 [node name="Notice" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
+mouse_filter = 0
 text = "Beta software <3"
 
 [node name="Section2" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
+mouse_filter = 0
 theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
 theme_override_fonts/font = SubResource("FontVariation_n76qt")
 text = "Game-specific Tweaks"
 
 [node name="ScrollSpeedn" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
+mouse_filter = 0
 text = "Scroll Speed"
 
 [node name="ScrollSpeed" type="HSlider" parent="ColorRect/Panels/Scroll/Sections"]
@@ -161,12 +166,14 @@ layout_mode = 2
 
 [node name="Display" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
+mouse_filter = 0
 theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
 theme_override_fonts/font = SubResource("FontVariation_n76qt")
 text = "Display"
 
 [node name="WindowNotice" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
+mouse_filter = 0
 text = "Window mode"
 
 [node name="WindowSelector" type="OptionButton" parent="ColorRect/Panels/Scroll/Sections"]
@@ -199,6 +206,7 @@ text = "Switch to 24-Hour Clock"
 
 [node name="WindowNotice2" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
+mouse_filter = 0
 text = "Background Dim"
 
 [node name="BackgroundDim" type="HSlider" parent="ColorRect/Panels/Scroll/Sections"]
@@ -207,12 +215,14 @@ rounded = true
 
 [node name="Audio" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
+mouse_filter = 0
 theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
 theme_override_fonts/font = SubResource("FontVariation_n76qt")
 text = "Audio"
 
 [node name="AudioNotice" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
+mouse_filter = 0
 text = "Audio device"
 
 [node name="AudioSelector" type="OptionButton" parent="ColorRect/Panels/Scroll/Sections"]
@@ -229,6 +239,7 @@ popup/item_2/id = 2
 
 [node name="AudioNotice2" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
+mouse_filter = 0
 text = "Audio offset - "
 
 [node name="AudioOffset" type="HSlider" parent="ColorRect/Panels/Scroll/Sections"]
@@ -254,21 +265,25 @@ text = "Bypass audio effects"
 
 [node name="Debug" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
+mouse_filter = 0
 theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
 theme_override_fonts/font = SubResource("FontVariation_n76qt")
 text = "Debug"
 
 [node name="GodotEngineVersion" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
+mouse_filter = 0
 
 [node name="GodotRender" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 visible = false
 layout_mode = 2
+mouse_filter = 0
 text = "Using xx render"
 
 [node name="Version2" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 visible = false
 layout_mode = 2
+mouse_filter = 0
 text = "0.0.0 Development Build"
 
 [connection signal="pressed" from="ColorRect/Panels/Catagories/Cata/Display" to="." method="_display"]

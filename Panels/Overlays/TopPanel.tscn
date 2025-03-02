@@ -241,6 +241,16 @@ grow_horizontal = 0
 grow_vertical = 2
 theme_override_constants/separation = 0
 
+[node name="MusicPlayer" type="Button" parent="InfoBar/HBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
+theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
+keep_pressed_outside = true
+icon = ExtResource("5_1kmfn")
+icon_alignment = 1
+
 [node name="Browse" type="Button" parent="InfoBar/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
@@ -294,6 +304,7 @@ icon_alignment = 1
 [connection signal="mouse_entered" from="InfoBar" to="InfoBar" method="_hovered"]
 [connection signal="mouse_exited" from="InfoBar" to="InfoBar" method="_unhover"]
 [connection signal="pressed" from="InfoBar/AccountButton" to="InfoBar/HBoxContainer/Settings" method="_on_AccountButton_pressed"]
+[connection signal="pressed" from="InfoBar/HBoxContainer/MusicPlayer" to="InfoBar" method="_on_browse_pressed"]
 [connection signal="pressed" from="InfoBar/HBoxContainer/Browse" to="InfoBar" method="_on_browse_pressed"]
 [connection signal="pressed" from="InfoBar/HBoxContainer/Settings" to="InfoBar/HBoxContainer/Settings" method="_settings_pressed"]
 [connection signal="ready" from="InfoBar/HBoxContainer/Settings" to="InfoBar/HBoxContainer/Settings" method="ready"]
