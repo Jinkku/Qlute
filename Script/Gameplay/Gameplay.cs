@@ -42,6 +42,7 @@ public partial class Gameplay : Control
 	public Vector2 hittextoldpos {get;set;}
 	public List<NotesEn> Notes = new List<NotesEn>();
 	public TextureRect Beatmap_Background {get;set;}
+	private Control PauseMenu {get;set;}
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -60,6 +61,8 @@ public partial class Gameplay : Control
 		Chart.AddChild(hittext);
 		hittextoldpos = hittext.Position;
 		reloadSkin();
+		PClock = 0;
+
 
 		PerfectJudge = PerfectJudge / (int)(SettingsOperator.Sessioncfg["beatmapaccuracy"]);
 		GreatJudge = (int)(PerfectJudge*3);
@@ -171,14 +174,16 @@ public partial class Gameplay : Control
 		}
 		KeyC[Keyx] = hit;
 		}
+	public long Clock {get;set;}
+	public static long PClock = 0;
 	public override void _Process(double delta)
 	{   
-		long unixTimeMilliseconds = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-		float est = unixTimeMilliseconds-startedtime+float.Parse(SettingsOperator.GetSetting("audiooffset").ToString());
+		Clock =DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - PClock;
+		float est = Clock-startedtime+float.Parse(SettingsOperator.GetSetting("audiooffset").ToString());
 		if (est>=0 && !songstarted){
 			songstarted = true;
 			AudioPlayer.Instance.Play();
-			startedtime = unixTimeMilliseconds;
+			startedtime = Clock;
 		}
 
 		// End Game
@@ -224,9 +229,9 @@ public partial class Gameplay : Control
 			Keyx++;
 		}
 		if (Input.IsActionJustPressed("pausemenu")){
-			BeatmapBackground.FlashEnable = true;
-			SettingsOperator.toppaneltoggle();
-			GetTree().ChangeSceneToFile("res://Panels/Screens/song_select.tscn");
+			PauseMenu = GD.Load<PackedScene>("res://Panels/Screens/PauseMenu.tscn").Instantiate().GetNode<Control>(".");
+			AddChild(PauseMenu);
+			GetTree().Paused = true;
 		}else if (Input.IsActionJustPressed("retry")){
 			BeatmapBackground.FlashEnable = true;
 			SettingsOperator.toppaneltoggle();
