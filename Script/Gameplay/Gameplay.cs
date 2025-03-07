@@ -5,9 +5,9 @@ using System.Linq;
 using System.Reflection.Metadata;
 public class NotesEn {
 	public int timing {get;set;}
-	public List<object> Notes = new List<object>();
-	public List<Sprite2D> Nodes = new List<Sprite2D>();
-	public List<bool> NotesHit = new List<bool>();
+	public int NoteSection {get;set;}
+	public Sprite2D Node {get;set;}
+	public bool hit {get;set;}
 }
 public partial class Gameplay : Control
 {
@@ -42,6 +42,7 @@ public partial class Gameplay : Control
 	private Tween hitnoteani {get;set;}
 	public Vector2 hittextoldpos {get;set;}
 	public List<NotesEn> Notes = new List<NotesEn>();
+	public int Noteindex {get;set;}
 	public TextureRect Beatmap_Background {get;set;}
 	private Control PauseMenu {get;set;}
 	public override void _Ready()
@@ -110,7 +111,6 @@ public partial class Gameplay : Control
 		var timing = 0;
 		var t = "";
 		var timen = -1;
-		var notel = -1;
         var isHitObjectSection = false;
 		//var note = noteblock.GetNode<Area2D>(".");
 		//var notetexture = noteblock.GetNode<Sprite2D>("./Notetext");
@@ -140,14 +140,8 @@ public partial class Gameplay : Control
 				else if (part<256){part = 1;}
 				else if (part<384){part = 2;}
 				else if (part<512){part = 3;}
-				if (timen != -timing)
-				{
-					timen = -timing;
-					Notes.Add(new NotesEn {timing = timen, Notes = new List<object>(), NotesHit = new List<bool>()});
-					notel++;
-				}
-				Notes[notel].Notes.Add(part);
-				Notes[notel].NotesHit.Add(false);
+				timen = -timing;
+				Notes.Add(new NotesEn {timing = timen, NoteSection = part});
             }
         }
 		startedtime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()+5000;
@@ -246,36 +240,36 @@ public partial class Gameplay : Control
 		{
 			viewportSize = GetViewportRect().Size.Y;
 		}
-		foreach (var Notebox in Notes){
-			var notex = Notebox.timing + est + Chart.Size.Y;
-			if (!Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150 && delta/0.001 <4)
-			{
-				foreach (int part in Notebox.Notes){
+		for (int i = Noteindex;i<Notes.Count;i++){
+			var Note = Notes[i];
+			var notex = Note.timing + est + Chart.Size.Y;
+			if (!Note.hit && Note.Node == null){
 					var node = new Sprite2D();
-					node.Texture = NoteSkin;
-					Notebox.Nodes.Add(node);
-					Chart.AddChild(node);
+					node.Position = new Vector2(100 * Note.NoteSection, notex);
+					node.SetMeta("part",Note.NoteSection);
 					node.Centered = false;
-					node.Position = new Vector2(100 * part, notex);
-					node.SetMeta("part",part);
+					node.Texture = NoteSkin;
+					Note.Node = node;
+			}
+			if (notex > -150 && notex < viewportSize+150 && !Note.hit){
+				if (Note.Node != null && !Note.Node.IsInsideTree()){
+					Chart.AddChild(Note.Node);
 				}
-			} else if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150)
-			{
-				foreach (var node in Notebox.Nodes){
-					if ((int)notex+nodeSize > Chart.Size.Y && (int)notex+nodeSize < Chart.Size.Y+MehJudge  && ModsOperator.Mods["auto"]){
-						KeyC[(int)node.GetMeta("part")] = true;
-					}else if (ModsOperator.Mods["auto"]){
-						KeyC[(int)node.GetMeta("part")] = false;
-					}
-					node.Position = new Vector2(node.Position.X, notex);
-					if (ModsOperator.Mods["slice"]){
-						node.SelfModulate = new Color(1f,1f,1f, Math.Min(Chart.Size.Y,node.Position.Y-200)/ Chart.Size.Y );
-					}
+				if (Note.Node != null && (int)notex+nodeSize > Chart.Size.Y && (int)notex+nodeSize < Chart.Size.Y+MehJudge  && ModsOperator.Mods["auto"]){
+					KeyC[(int)Note.Node.GetMeta("part")] = true;
+				}else if (ModsOperator.Mods["auto"]){
+					KeyC[(int)Note.Node.GetMeta("part")] = false;
+				}
+				if (ModsOperator.Mods["slice"] && Note.Node != null){
+					Note.Node.SelfModulate = new Color(1f,1f,1f, Math.Min(Chart.Size.Y,Note.Node.Position.Y-200)/ Chart.Size.Y );
+				}
+				if (Note.Node != null) {
+					Note.Node.Position = new Vector2(Note.Node.Position.X, notex);
 					Ttick++;
-					JudgeResult = checkjudge((int)notex,KeyC[(int)node.GetMeta("part")],node,node.Visible);
+					JudgeResult = checkjudge((int)notex,KeyC[(int)Note.Node.GetMeta("part")],Note.Node,Note.Node.Visible);
 					if (JudgeResult < 4){
 						mshitold = Chart.Size.Y+5;
-						KeyC[(int)(node.Position.X / 100)] = false;
+						KeyC[(int)(Note.Node.Position.X / 100)] = false;
 						mshit = notex;
 						SettingsOperator.Addms(mshitold-mshit-50);
 						var urnote = new ColorRect();
@@ -286,20 +280,13 @@ public partial class Gameplay : Control
 						urani.TweenProperty(urnote, "color", new Color(1f,1f,1f,0f), 1).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 						urani.Play();
 						urani.TweenCallback(Callable.From(urnote.QueueFree));
-
 						SettingsOperator.Gameplaycfg["ms"] = SettingsOperator.Getms();
+						Note.hit = true;
+						Note.Node = null;
+						Noteindex++;
 					}
 				}
-			} else{
-				foreach (var node in Notebox.Nodes){
-					node.QueueFree();
-				}
-				Notebox.Nodes.Clear();
 			}
-
-
-
-
 		}
 		//Ttiming.Text = "Time: " + est + "\n" + Ttick;
 
@@ -323,6 +310,7 @@ public partial class Gameplay : Control
 		if (timing+nodeSize > Chart.Size.Y-PerfectJudge/2 && timing+nodeSize < Chart.Size.Y+PerfectJudge/2 && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["max"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
+			node.QueueFree();
 			Hittext("Perfect");
 			node.Visible = false;
 			return 0;
@@ -330,18 +318,21 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg["great"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
 			Hittext("Great");
+			node.QueueFree();
 			node.Visible = false;
 			return 1;
 		}else if (timing+nodeSize > Chart.Size.Y-MehJudge/2 && timing+nodeSize < Chart.Size.Y+MehJudge/2 && keyvalue && visibility){
 			Hittext("Meh");
 			SettingsOperator.Gameplaycfg["meh"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
+			node.QueueFree();
 			node.Visible = false;
 			return 2;
 		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility ){
 			Hittext("Miss");
 			SettingsOperator.Gameplaycfg["bad"]++;
 			SettingsOperator.Gameplaycfg["combo"] = 0;
+			node.QueueFree();
 			node.Visible = false;
 			return 3;
 		}

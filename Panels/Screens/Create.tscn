@@ -132,6 +132,7 @@ text = "File"
 script = ExtResource("2_pjdex")
 
 [node name="ContextMenu" type="PanelContainer" parent="ToolBar/HBoxContainer/File"]
+visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
