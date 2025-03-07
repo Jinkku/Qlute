@@ -71,6 +71,7 @@ corner_radius_bottom_left = 5
 [node name="SettingsPanel" type="Control"]
 z_index = 3
 z_as_relative = false
+clip_contents = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

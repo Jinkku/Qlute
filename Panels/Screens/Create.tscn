@@ -1,7 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://dnxlc61trat1l"]
+[gd_scene load_steps=24 format=3 uid="uid://dnxlc61trat1l"]
 
 [ext_resource type="Script" uid="uid://cdhm1bqkq60y3" path="res://Script/LevelEditor/Create.cs" id="1_4dycg"]
 [ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="1_s6crp"]
+[ext_resource type="Script" uid="uid://hujhlkgh6dfp" path="res://Script/CreateEditor/ContextMenus.cs" id="2_pjdex"]
+[ext_resource type="Script" uid="uid://cmqncf5p3shyd" path="res://Script/CreateEditor/FileMenu.cs" id="3_5cjqt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jucc0"]
 bg_color = Color(0, 0, 0, 0.568627)
@@ -9,13 +11,41 @@ bg_color = Color(0, 0, 0, 0.568627)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ee5vh"]
 content_margin_left = 25.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1jmck"]
-content_margin_left = 25.0
-content_margin_right = 25.0
-bg_color = Color(0, 0, 0, 0.568627)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l6k4f"]
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_mplow"]
-size = Vector2(0, 0)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l6k4f"]
+bg_color = Color(1, 1, 1, 0.0784314)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pjdex"]
+bg_color = Color(0.247742, 0.386719, 0.247742, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5cjqt"]
+bg_color = Color(1, 1, 1, 0.0392157)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fn0xp"]
+bg_color = Color(0.222656, 0.375, 0.222656, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pjdex"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cxjes"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.0784314)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_255xm"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.156863)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_elvf5"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xm3b"]
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
@@ -37,6 +67,19 @@ content_margin_left = 10.0
 content_margin_right = 20.0
 bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e8jln"]
+bg_color = Color(1, 1, 1, 0.196078)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lwg7d"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(1, 1, 1, 0.235294)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vy1ai"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(1, 1, 1, 0.156863)
+
 [node name="Control" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -55,7 +98,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.147895, 0.244792, 0.150923, 1)
 
-[node name="PanelContainer2" type="PanelContainer" parent="."]
+[node name="ToolBar" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -64,56 +107,121 @@ offset_bottom = 100.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jucc0")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ToolBar"]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="PanelContainer2/HBoxContainer"]
+[node name="Label" type="Label" parent="ToolBar/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ee5vh")
 text = "Create"
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer2/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ToolBar/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
-[node name="OptionButton" type="OptionButton" parent="PanelContainer2/HBoxContainer"]
+[node name="File" type="Button" parent="ToolBar/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_1jmck")
-theme_override_icons/arrow = SubResource("PlaceholderTexture2D_mplow")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l6k4f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_l6k4f")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pjdex")
+theme_override_styles/normal = SubResource("StyleBoxFlat_5cjqt")
+text = "File"
+script = ExtResource("2_pjdex")
 
-[node name="OptionButton2" type="OptionButton" parent="PanelContainer2/HBoxContainer"]
+[node name="ContextMenu" type="PanelContainer" parent="ToolBar/HBoxContainer/File"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_right = 180.0
+offset_bottom = 151.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_fn0xp")
+script = ExtResource("3_5cjqt")
+
+[node name="ContextSections" type="VBoxContainer" parent="ToolBar/HBoxContainer/File/ContextMenu"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_1jmck")
-theme_override_icons/arrow = SubResource("PlaceholderTexture2D_mplow")
 
-[node name="OptionButton3" type="OptionButton" parent="PanelContainer2/HBoxContainer"]
+[node name="New" type="Button" parent="ToolBar/HBoxContainer/File/ContextMenu/ContextSections"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_1jmck")
-theme_override_icons/arrow = SubResource("PlaceholderTexture2D_mplow")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_255xm")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_elvf5")
+text = "New"
+alignment = 0
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="Open" type="Button" parent="ToolBar/HBoxContainer/File/ContextMenu/ContextSections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_255xm")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_elvf5")
+text = "Open/Import"
+alignment = 0
+
+[node name="Save" type="Button" parent="ToolBar/HBoxContainer/File/ContextMenu/ContextSections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_255xm")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_elvf5")
+text = "Save"
+alignment = 0
+
+[node name="SaveAs" type="Button" parent="ToolBar/HBoxContainer/File/ContextMenu/ContextSections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_255xm")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_elvf5")
+text = "Save as new Difficulty"
+alignment = 0
+
+[node name="Export" type="Button" parent="ToolBar/HBoxContainer/File/ContextMenu/ContextSections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_255xm")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_elvf5")
+text = "Export"
+alignment = 0
+
+[node name="Edit" type="Button" parent="ToolBar/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l6k4f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_l6k4f")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pjdex")
+theme_override_styles/normal = SubResource("StyleBoxFlat_5cjqt")
+text = "Edit"
+
+[node name="View" type="Button" parent="ToolBar/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l6k4f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_l6k4f")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pjdex")
+theme_override_styles/normal = SubResource("StyleBoxFlat_5cjqt")
+text = "View"
+
+[node name="Creativity" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_top = 100.0
-offset_right = 50.0
+offset_right = 80.0
 grow_vertical = 2
 
-[node name="BottomBar" type="Control" parent="."]
-z_index = 2
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -100.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 1
-
-[node name="ControlPanel" type="PanelContainer" parent="BottomBar"]
+[node name="ControlPanel" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -124,11 +232,11 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7xm3b")
 
-[node name="Box" type="HBoxContainer" parent="BottomBar/ControlPanel"]
+[node name="Box" type="HBoxContainer" parent="ControlPanel"]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Button" type="Button" parent="BottomBar/ControlPanel/Box"]
+[node name="Button" type="Button" parent="ControlPanel/Box"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_y7e17")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wjbl6")
@@ -137,4 +245,18 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_724hy")
 text = "  Back"
 icon = ExtResource("1_s6crp")
 
-[connection signal="pressed" from="BottomBar/ControlPanel/Box/Button" to="." method="_on_back"]
+[node name="Test" type="Button" parent="ControlPanel/Box"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_font_sizes/font_size = 18
+theme_override_styles/focus = SubResource("StyleBoxEmpty_y7e17")
+theme_override_styles/hover = SubResource("StyleBoxFlat_e8jln")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_lwg7d")
+theme_override_styles/normal = SubResource("StyleBoxFlat_vy1ai")
+text = "Test"
+
+[connection signal="toggled" from="ToolBar/HBoxContainer/File" to="." method="_pressed"]
+[connection signal="toggled" from="ToolBar/HBoxContainer/File/ContextMenu/ContextSections/New" to="ToolBar/HBoxContainer/File/ContextMenu" method="_new"]
+[connection signal="pressed" from="ControlPanel/Box/Button" to="." method="_on_back"]
+[connection signal="pressed" from="ControlPanel/Box/Test" to="." method="_on_back"]
