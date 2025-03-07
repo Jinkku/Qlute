@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://dvm81no14tisl"]
 
-[ext_resource type="Script" path="res://Script/Bootstrap.cs" id="1_26srq"]
+[ext_resource type="Script" uid="uid://dqwx101tkdgo3" path="res://Script/Bootstrap.cs" id="1_26srq"]
 [ext_resource type="Texture2D" uid="uid://ba8p7q27num8t" path="res://Skin/System/highlightlogo.png" id="2_abd43"]
 [ext_resource type="Texture2D" uid="uid://b000ela4rhy4h" path="res://Skin/NotificationIcons/warning.svg" id="3_s5vr0"]
 
@@ -61,8 +61,8 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rpwbx"]
 _data = {
-"Intro": SubResource("Animation_v5m8g"),
-"RESET": SubResource("Animation_s0vrs")
+&"Intro": SubResource("Animation_v5m8g"),
+&"RESET": SubResource("Animation_s0vrs")
 }
 
 [node name="Bootstrap" type="Control"]
@@ -88,17 +88,21 @@ color = Color(0, 0, 0, 1)
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../CenterContainer/logo")
 libraries = {
-"": SubResource("AnimationLibrary_rpwbx")
+&"": SubResource("AnimationLibrary_rpwbx")
 }
 
 [node name="Noticestrip" type="Label" parent="."]
 visible = false
-layout_mode = 0
-offset_left = 10.0
-offset_top = 10.0
-offset_right = 147.0
-offset_bottom = 51.0
-text = "...btw this is a dev build so NO snoopie >:("
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 200
+text = "Loli"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
@@ -113,7 +117,6 @@ layout_mode = 2
 texture = ExtResource("2_abd43")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
-modulate = Color(1, 1, 1, 1)
 layout_mode = 2
 alignment = 1
 

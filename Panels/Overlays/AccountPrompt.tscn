@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://b4ys2qwkqf5m5"]
 
-[ext_resource type="Script" path="res://Script/TopPanel/AccountPrompt.cs" id="1_ppf2d"]
+[ext_resource type="Script" uid="uid://dqgueg320i7t2" path="res://Script/TopPanel/AccountPrompt.cs" id="1_ppf2d"]
 [ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="3_wfy6k"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_golg1"]
@@ -61,6 +61,7 @@ offset_bottom = 3.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_onmcp")
 
 [node name="Notlog" type="MarginContainer" parent="AccPanel"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
@@ -126,7 +127,6 @@ size_flags_horizontal = 3
 text = "Create"
 
 [node name="Log" type="Control" parent="AccPanel"]
-visible = false
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 
@@ -239,3 +239,4 @@ text = "Log out"
 
 [connection signal="draw" from="." to="." method="_on_draw"]
 [connection signal="pressed" from="AccPanel/Notlog/VBoxContainer/HBoxContainer2/Login" to="." method="_on_login_pressed"]
+[connection signal="pressed" from="AccPanel/Log/Logout" to="." method="_logout"]

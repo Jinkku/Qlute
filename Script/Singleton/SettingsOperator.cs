@@ -45,7 +45,6 @@ public partial class SettingsOperator : Node
     public Dictionary<string, object> Configurationbk {get; set;}
 
 
-    // Imaging processing part of the game because godot don't have a way to load images externally i suppose-
     public static Texture2D LoadImage(string path)
     {
         var imageTexture = new ImageTexture();
@@ -81,6 +80,8 @@ public partial class SettingsOperator : Node
             Gameplaycfg["timetotal"] = (int)beatmap["timetotal"];
             Sessioncfg["beatmapmapper"] = beatmap["Mapper"];
             Sessioncfg["beatmapaccuracy"] = (int)beatmap["accuracy"];
+            Sessioncfg["osubeatid"] = (int)beatmap["osubeatid"];
+            Sessioncfg["osubeatidset"] = (int)beatmap["osubeatidset"];
 		    var Texture = LoadImage(beatmap["path"].ToString()+beatmap["background"].ToString());
 		    Sessioncfg["background"] = (Texture2D)Texture;
             Gameplaycfg["maxpp"] = Convert.ToInt32(beatmap["pp"]);
@@ -314,6 +315,8 @@ public partial class SettingsOperator : Node
         { "beatmapartist", null },
         { "beatmapmapper", null },
         { "beatmapbpm", (int)160 },
+        { "osubeatid", 0 },
+        { "osubeatidset", 0 },
         { "beatmapaccuracy", (int)0 },
         { "beatmapdiff", null },
         { "customapi", false},

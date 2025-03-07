@@ -1,9 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://d0qmsp3ewrdj4"]
+[gd_scene load_steps=18 format=3 uid="uid://d0qmsp3ewrdj4"]
 
-[ext_resource type="Script" path="res://Script/SettingsPanel/SettingsPanel.cs" id="1_gfh6f"]
+[ext_resource type="Script" uid="uid://bcpf58suyr63f" path="res://Script/SettingsPanel/SettingsPanel.cs" id="1_gfh6f"]
 [ext_resource type="Texture2D" uid="uid://cj5ugwjbsax06" path="res://Skin/SettingsIcon/display.png" id="2_r347j"]
 [ext_resource type="Texture2D" uid="uid://c0ap610fbkw4r" path="res://Skin/SettingsIcon/audio.png" id="3_tkltb"]
 [ext_resource type="Texture2D" uid="uid://ccai8irwy3t26" path="res://Skin/SettingsIcon/debug.png" id="4_b8fcs"]
+[ext_resource type="Script" uid="uid://clv5506kqlat3" path="res://Script/SettingsPanel/Resolution.cs" id="5_h76q1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5b8eh"]
 bg_color = Color(0, 0, 0, 0.392157)
@@ -38,6 +39,17 @@ content_margin_top = 15.0
 content_margin_right = 8.0
 content_margin_bottom = 15.0
 bg_color = Color(0, 0, 0, 0.588235)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_svam5"]
+content_margin_left = 8.0
+content_margin_top = 15.0
+content_margin_right = 8.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.392157)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -183,10 +195,27 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_32tni")
 theme_override_constants/arrow_margin = 10
 item_count = 3
 popup/item_0/text = "Fullscreen"
+popup/item_0/id = 0
 popup/item_1/text = "Borderless"
 popup/item_1/id = 1
 popup/item_2/text = "Windowed"
 popup/item_2/id = 2
+
+[node name="WindowNoticeRes" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
+layout_mode = 2
+mouse_filter = 0
+text = "Screen resolution"
+
+[node name="Resolution" type="OptionButton" parent="ColorRect/Panels/Scroll/Sections"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_v1adg")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_svam5")
+theme_override_styles/normal = SubResource("StyleBoxFlat_32tni")
+theme_override_constants/arrow_margin = 10
+item_count = 1
+popup/item_0/text = "Default"
+popup/item_0/id = 0
+script = ExtResource("5_h76q1")
 
 [node name="CheckButton2" type="CheckButton" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
@@ -232,6 +261,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_32tni")
 theme_override_constants/arrow_margin = 10
 item_count = 3
 popup/item_0/text = "Audio Device 1"
+popup/item_0/id = 0
 popup/item_1/text = "Dummy Audio 2"
 popup/item_1/id = 1
 popup/item_2/text = "Twiggy NAC 2000"

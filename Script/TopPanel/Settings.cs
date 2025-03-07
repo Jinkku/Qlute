@@ -13,12 +13,20 @@ public partial class Settings : Button
 	public Control NotificationPanel {get;set;}
 	public ColorRect TopPanel {get;set;}
 	public Settings Instance {get;set;}
+	public Label Ranking {get;set;}
+	public Label PlayerName {get;set;}
 	public override void _Ready(){
 		Instance = this;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		TopPanel = GetTree().Root.GetNode<ColorRect>("/root/TopPanelOnTop/TopPanel/InfoBar");
-        Label PlayerName = GetNode<Label>("%UPlayerName");
-		Label Ranking = GetNode<Label>("%Ranking");
+        PlayerName = GetNode<Label>("%UPlayerName");
+		Ranking = GetNode<Label>("%Ranking");
+
+	}
+	public override void _Process(double _delta){
+		if (Input.IsActionJustPressed("Settings")){
+			togglesettingspanel();
+		}
 		string username = SettingsOperator.GetSetting("username")?.ToString();
 		string ranking = SettingsOperator.Sessioncfg["ranknumber"]?.ToString();
 		if (username != null){
@@ -29,12 +37,7 @@ public partial class Settings : Button
 			Ranking.Text = "#" + ranking;
 		} else{
 			PlayerName.Text = "Guest\nLog in here!";
-		}
-
-	}
-	public override void _Process(double _delta){
-		if (Input.IsActionJustPressed("Settings")){
-			togglesettingspanel();
+			Ranking.Visible = false;
 		}
 	}
 	private bool chksettingsv(){

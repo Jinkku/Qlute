@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://bq7vnj4ufmi3q"]
 
-[ext_resource type="Script" path="res://Script/Gameplay/SongProgress.cs" id="1_fvb55"]
+[ext_resource type="Script" uid="uid://covi80vxoi1m7" path="res://Script/Gameplay/SongProgress.cs" id="1_fvb55"]
 [ext_resource type="FontFile" uid="uid://26bmgi83sgtv" path="res://Fonts/score.ttf" id="1_u1xd0"]
-[ext_resource type="Script" path="res://Script/Gameplay/CurrentTime.cs" id="2_s7jbt"]
-[ext_resource type="Script" path="res://Script/Gameplay/TimeLeft.cs" id="3_annr6"]
+[ext_resource type="Script" uid="uid://lrt0fe12jham" path="res://Script/Gameplay/CurrentTime.cs" id="2_s7jbt"]
+[ext_resource type="Script" uid="uid://b5cki5a0hjvn6" path="res://Script/Gameplay/TimeLeft.cs" id="3_annr6"]
 
 [node name="ProgressBar" type="ProgressBar"]
 anchors_preset = 10

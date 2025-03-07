@@ -1,16 +1,16 @@
 [gd_scene load_steps=28 format=3 uid="uid://bwpja5llmgtqo"]
 
-[ext_resource type="Script" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
+[ext_resource type="Script" uid="uid://borvy2xtb1o65" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
 [ext_resource type="Texture2D" uid="uid://bvjgpego4fwun" path="res://Skin/System/settings.png" id="1_vco36"]
 [ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="2_4cvop"]
-[ext_resource type="Script" path="res://Script/TopPanel/Settings.cs" id="2_6umcl"]
+[ext_resource type="Script" uid="uid://ddvycljmp7l70" path="res://Script/TopPanel/Settings.cs" id="2_6umcl"]
 [ext_resource type="Texture2D" uid="uid://m7gp4julb5t0" path="res://Skin/System/loading.png" id="3_do024"]
-[ext_resource type="Script" path="res://Script/TopPanel/Ranking.cs" id="3_ggapr"]
+[ext_resource type="Script" uid="uid://gu4jvlj8sdfj" path="res://Script/TopPanel/Ranking.cs" id="3_ggapr"]
 [ext_resource type="Texture2D" uid="uid://c2l61nwy40vn1" path="res://Skin/System/chat.png" id="4_e4lty"]
-[ext_resource type="Script" path="res://Script/TopPanel/UPlayerName.cs" id="4_v36dv"]
+[ext_resource type="Script" uid="uid://ckunjtbu57684" path="res://Script/TopPanel/UPlayerName.cs" id="4_v36dv"]
 [ext_resource type="Texture2D" uid="uid://die40m3acksoy" path="res://Skin/System/browse.png" id="5_1kmfn"]
 [ext_resource type="Texture2D" uid="uid://dkiv7s0dfykav" path="res://Skin/System/notifications.png" id="5_6ko15"]
-[ext_resource type="Script" path="res://Script/TopPanel/Overlays/Clock.cs" id="7_fe0ly"]
+[ext_resource type="Script" uid="uid://cmb50kh06rh1x" path="res://Script/TopPanel/Overlays/Clock.cs" id="7_fe0ly"]
 
 [sub_resource type="Animation" id="Animation_xvajm"]
 resource_name = "Bootup"
@@ -45,8 +45,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dtwww"]
 _data = {
-"Bootup": SubResource("Animation_xvajm"),
-"RESET": SubResource("Animation_k3xmf")
+&"Bootup": SubResource("Animation_xvajm"),
+&"RESET": SubResource("Animation_k3xmf")
 }
 
 [sub_resource type="Gradient" id="Gradient_n7q28"]
@@ -102,8 +102,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1f8y5"]
 _data = {
-"RESET": SubResource("Animation_1f010"),
-"loading": SubResource("Animation_tk3k2")
+&"RESET": SubResource("Animation_1f010"),
+&"loading": SubResource("Animation_tk3k2")
 }
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_56gsx"]
@@ -131,7 +131,7 @@ mouse_filter = 2
 [node name="Wabamp" type="AnimationPlayer" parent="."]
 unique_name_in_owner = true
 libraries = {
-"": SubResource("AnimationLibrary_dtwww")
+&"": SubResource("AnimationLibrary_dtwww")
 }
 
 [node name="InfoBar" type="ColorRect" parent="."]
@@ -208,7 +208,7 @@ texture = ExtResource("3_do024")
 
 [node name="Loadinganimation" type="AnimationPlayer" parent="InfoBar/AccountButton/Loadingicon"]
 libraries = {
-"": SubResource("AnimationLibrary_1f8y5")
+&"": SubResource("AnimationLibrary_1f8y5")
 }
 
 [node name="Label" type="Label" parent="InfoBar/AccountButton"]

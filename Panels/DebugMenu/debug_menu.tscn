@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://byqa7t8heryyo"]
 
-[ext_resource type="Script" path="res://Script/DebugMenu/DebugMenu.cs" id="1_20h07"]
+[ext_resource type="Script" uid="uid://qln6lt30wjmx" path="res://Script/DebugMenu/DebugMenu.cs" id="1_20h07"]
 
 [node name="DebugMenu" type="PanelContainer"]
 top_level = true

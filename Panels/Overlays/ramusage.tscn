@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c4s2gfxfdt80k"]
 
-[ext_resource type="Script" path="res://Script/Singleton/RamUsage.cs" id="1_app5p"]
+[ext_resource type="Script" uid="uid://dem12g158sh7v" path="res://Script/Singleton/RamUsage.cs" id="1_app5p"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_owqsl"]
 content_margin_left = 10.0

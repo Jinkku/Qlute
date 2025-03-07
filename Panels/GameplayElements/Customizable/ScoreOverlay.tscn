@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://b0f11jnivkb1b"]
 
-[ext_resource type="Script" path="res://Script/Gameplay/ScoreOverlay.cs" id="1_j3lhn"]
+[ext_resource type="Script" uid="uid://flh3ujgshwo6" path="res://Script/Gameplay/ScoreOverlay.cs" id="1_j3lhn"]
 [ext_resource type="FontFile" uid="uid://26bmgi83sgtv" path="res://Fonts/score.ttf" id="1_jd5hx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6s3ea"]

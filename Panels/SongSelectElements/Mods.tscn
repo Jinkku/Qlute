@@ -1,8 +1,8 @@
 [gd_scene load_steps=16 format=3 uid="uid://dpjsc7sxiwkm7"]
 
-[ext_resource type="Script" path="res://Script/Mods/Mods.cs" id="1_7gucc"]
-[ext_resource type="Script" path="res://Script/SongSelect/ModsMulti.cs" id="2_caatv"]
-[ext_resource type="Script" path="res://Script/SongSelect/Modscfg.cs" id="2_cltyr"]
+[ext_resource type="Script" uid="uid://dxbbl1s8m45so" path="res://Script/Mods/Mods.cs" id="1_7gucc"]
+[ext_resource type="Script" uid="uid://bhe0fbn3yi1r4" path="res://Script/SongSelect/ModsMulti.cs" id="2_caatv"]
+[ext_resource type="Script" uid="uid://ddyso8ifkfuv2" path="res://Script/SongSelect/Modscfg.cs" id="2_cltyr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2j6ug"]
 content_margin_left = 5.0

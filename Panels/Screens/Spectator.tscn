@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cb26rp2shqw5l"]
 
-[ext_resource type="Script" path="res://Script/Gameplay/Gameplay.cs" id="1_janu1"]
+[ext_resource type="Script" uid="uid://biavu27wnraf2" path="res://Script/Gameplay/Gameplay.cs" id="1_janu1"]
 [ext_resource type="PackedScene" uid="uid://bmi44rm7jttn" path="res://Panels/Screens/Gameplay.tscn" id="2_dfkyd"]
 
 [node name="Control" type="Control"]

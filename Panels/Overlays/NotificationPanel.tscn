@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cwj7c4xk3gg8o"]
 
-[ext_resource type="Script" path="res://Script/NotificationPanel/NotificationPanel.cs" id="1_xu62s"]
+[ext_resource type="Script" uid="uid://dr1b8krg0kw6k" path="res://Script/NotificationPanel/NotificationPanel.cs" id="1_xu62s"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llstv"]
 content_margin_left = 0.0

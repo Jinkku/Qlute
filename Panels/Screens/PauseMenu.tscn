@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://csm4b7dyp7j72"]
 
-[ext_resource type="Script" path="res://Script/PauseMenu/PauseMenu.cs" id="1_owsqj"]
-[ext_resource type="Script" path="res://Script/Effects/ButtonSlide.cs" id="1_u76eh"]
+[ext_resource type="Script" uid="uid://xlkmudp5v07u" path="res://Script/PauseMenu/PauseMenu.cs" id="1_owsqj"]
+[ext_resource type="Script" uid="uid://jbiw8qocpkpf" path="res://Script/Effects/ButtonSlide.cs" id="1_u76eh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_13ui8"]
 bg_color = Color(0, 0, 0, 0.588235)

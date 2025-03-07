@@ -1,11 +1,11 @@
 [gd_scene load_steps=12 format=3 uid="uid://b2lw0mmphsddc"]
 
-[ext_resource type="Script" path="res://Script/SongSelect/MusicCard.cs" id="1_aa04f"]
+[ext_resource type="Script" uid="uid://dye2ljj2ycrnx" path="res://Script/SongSelect/MusicCard.cs" id="1_aa04f"]
 [ext_resource type="StyleBox" uid="uid://drlu38602jgb8" path="res://Skin/System/buttontoggled.tres" id="1_vfwc8"]
 [ext_resource type="StyleBox" uid="uid://fxawsqvq06j4" path="res://Skin/System/buttonidle.tres" id="2_nf3oy"]
 [ext_resource type="StyleBox" uid="uid://cuao4np4v7lo1" path="res://Skin/System/buttonhover.tres" id="2_vxxs3"]
 [ext_resource type="Texture2D" uid="uid://dugxlwc4epe6i" path="res://DefaultWallpaper/a.png" id="5_q6s5x"]
-[ext_resource type="Script" path="res://Script/SongSelect/RatingCard.cs" id="5_y5yk1"]
+[ext_resource type="Script" uid="uid://buiifhesbwgmp" path="res://Script/SongSelect/RatingCard.cs" id="5_y5yk1"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i3see"]
 

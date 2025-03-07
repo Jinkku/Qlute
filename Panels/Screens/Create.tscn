@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://dnxlc61trat1l"]
 
-[ext_resource type="Script" path="res://Script/LevelEditor/Create.cs" id="1_4dycg"]
+[ext_resource type="Script" uid="uid://cdhm1bqkq60y3" path="res://Script/LevelEditor/Create.cs" id="1_4dycg"]
 [ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="1_s6crp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jucc0"]

@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://dp0inqauwdmyy"]
+
+[node name="UR" type="ColorRect"]
+offset_right = 5.0
+offset_bottom = 200.0
+color = Color(0.265453, 0.542969, 0.207855, 1)
+
+[node name="Late" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = -30.0
+offset_right = 20.0
+offset_bottom = -11.0
+grow_horizontal = 2
+text = "Late"
+horizontal_alignment = 1
+
+[node name="Early" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = 10.0
+offset_right = 20.0
+offset_bottom = 29.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Early"
+horizontal_alignment = 1

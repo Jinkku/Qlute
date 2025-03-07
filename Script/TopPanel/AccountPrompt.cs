@@ -13,6 +13,8 @@ public partial class AccountPrompt : Control
 	public string PasswordHash = null;
 	public Control Log {get;set;}
 	public MarginContainer NotLog {get;set;}
+	public Label Ranking {get;set;}
+	public Label PlayerName {get;set;}
 	public static SettingsOperator SettingsOperator { get; set; }
 	public override void _Process(double _delta){
 		if ((bool)SettingsOperator.Sessioncfg["loggedin"] == true){
@@ -22,8 +24,8 @@ public partial class AccountPrompt : Control
 			Log.Visible = false;
 			NotLog.Visible = true;
 		}
-		Label Ranking = GetNode<Label>("AccPanel/Log/Panel/RankingNumber");
-		Label PlayerName = GetNode<Label>("AccPanel/Log/Panel/UsernameSection/Username"); 
+		Ranking = GetNode<Label>("AccPanel/Log/Panel/RankingNumber");
+		PlayerName = GetNode<Label>("AccPanel/Log/Panel/UsernameSection/Username"); 
 		PlayerName.Text = SettingsOperator.GetSetting("username")?.ToString();
 		Ranking.Text ="#" + SettingsOperator.Sessioncfg["ranknumber"]?.ToString();
 	}
@@ -43,5 +45,13 @@ public partial class AccountPrompt : Control
 		Username = User.Text;
 		Notice.Text = ApiOperator.Login(Username,PasswordHash);
 	}
-
+	private void _logout(){
+		Log.Visible = false;
+		NotLog.Visible = true;
+		SettingsOperator.SetSetting("username",null);
+		SettingsOperator.SetSetting("password",null);
+		SettingsOperator.Sessioncfg["loggedin"] = false;
+		Ranking.Visible = false;
+		PlayerName.Text = "Guest";
+	}
 }

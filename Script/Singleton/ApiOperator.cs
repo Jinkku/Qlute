@@ -10,11 +10,30 @@ public partial class ApiOperator : Node
 	// Called when the node enters the scene tree for the first time.
 	public static HttpRequest LoginApi { get; set; }
 	public static HttpRequest RankingApi { get; set; }
+	public static HttpRequest SubmitApi { get; set; }
 	public static string Username = "Guest";
 	public static string PasswordHash = null;
 	public static SettingsOperator SettingsOperator { get; set; }
 	public static ApiOperator Instance { get; set; }
 	public static string Beatmapapi = "https://catboy.best";
+	public void SubmitScore(){
+		int BeatmapID = (int)SettingsOperator.Sessioncfg["osubeatid"];
+		int BeatmapSetID = (int)SettingsOperator.Sessioncfg["osubeatidset"];
+		double MAX = SettingsOperator.Gameplaycfg["max"];
+		double GREAT = SettingsOperator.Gameplaycfg["great"];
+		double MEH = SettingsOperator.Gameplaycfg["meh"];
+		double BAD = SettingsOperator.Gameplaycfg["bad"];
+		string[] Headers = new string[] {
+			$"BeatmapID: {BeatmapID}",
+			$"BeatmapSetID: {BeatmapSetID}",
+			$"MAX: {MAX}",
+			$"GREAT: {GREAT}",
+			$"MEH: {MEH}",
+			$"BAD: {BAD}"
+		};
+		Notify.Post("Submitting...");
+		SubmitApi.Request(SettingsOperator.GetSetting("api")+"api/submitscore",Headers);
+	}
 	public override void _Ready()
 	{	
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -23,18 +42,24 @@ public partial class ApiOperator : Node
 		PasswordHash = SettingsOperator.GetSetting("password")?.ToString();
 		LoginApi = new HttpRequest();
 		RankingApi = new HttpRequest();
+		SubmitApi = new HttpRequest();
 		LoginApi.Timeout = 3;
 		RankingApi.Timeout = 3;
 		AddChild(RankingApi);
 		AddChild(LoginApi);
+		AddChild(SubmitApi);
 		LoginApi.Connect("request_completed", new Callable(this, nameof(_on_login_api_request_completed)));
 		RankingApi.Connect("request_completed", new Callable(this, nameof(_on_Ranking_request_completed)));
+		SubmitApi.Connect("request_completed",new Callable(this,nameof(_Submitrequest)));
 		if ((Username != null || PasswordHash != null) && (bool)SettingsOperator.Sessioncfg["loggedin"] == false){
 			UPlayerName.Instance.Text = Username;
 			ApiOperator.Login(Username,PasswordHash);
 		}
 	}
 
+	private void _Submitrequest(long result, long responseCode, string[] headers, byte[] body){
+		Notify.Post((string)Encoding.UTF8.GetString(body));
+	}
 	private void _on_Ranking_request_completed(long result, long responseCode, string[] headers, byte[] body){
 		Ranking.Instance.Text = "#" + (string)Encoding.UTF8.GetString(body);
 		Ranking.Instance.Visible = true;
@@ -66,10 +91,11 @@ public partial class ApiOperator : Node
 			UPlayerName.Instance.Text = Username;
 			SettingsOperator.SetSetting("password",PasswordHash);
 			PasswordHash = SettingsOperator.GetSetting("password")?.ToString();
-			if ((bool)SettingsOperator.Sessioncfg["showaccountpro"] == true){
+//			if ((bool)SettingsOperator.Sessioncfg["showaccountpro"] == true){
 			//AniPlayer.Play("Drop out");
 			//AniPlayer.Play("Drop in_Profile");
-			SettingsOperator.Sessioncfg["showaccountpro"] = !(bool)SettingsOperator.Sessioncfg["showaccountpro"];}
+			//SettingsOperator.Sessioncfg["showaccountpro"] = !(bool)SettingsOperator.Sessioncfg["showaccountpro"];
+//			}
 			SettingsOperator.Sessioncfg["loggedin"] = true;
 			return "Logged in!";
 		} else {

@@ -1,13 +1,11 @@
 using Godot;
 using System;
-using System.IO;
 using NVorbis;
 
 public partial class AudioPlayer : AudioStreamPlayer
 {
     public static AudioStreamPlayer Instance;
     private static VorbisReader _vorbisReader;
-    private Stream _audioStream;
     private bool _isPlaying = false;
     public static bool _isogg = false;
     private float _seekPosition = 0.0f;
@@ -36,42 +34,10 @@ public partial class AudioPlayer : AudioStreamPlayer
 			AudioPlayer.Instance.Play();
 		}
 	}
-	 public static AudioStreamGenerator LoadOGG(string path)
+	 public static AudioStreamOggVorbis LoadOGG(string path)
 	 {
-	//     // Open the Ogg file using System.IO.File
-	//     using (var _audioStream = File.OpenRead(path))
-	//     {
-	//         // Create a VorbisReader to decode the Ogg file
-	//         _vorbisReader = new VorbisReader(_audioStream);
-
-	//         // Create the AudioStreamGenerator
-	//         var audioStream = new AudioStreamGenerator();
-	//         audioStream.MixRate = _vorbisReader.SampleRate; // Set sample rate from Vorbis file
-
-	//         // Prepare the buffer for PCM data (stereo, two channels)
-	//         var frameCount = _vorbisReader.TotalSamples * _vorbisReader.Channels;
-	//         var frames = new Vector2[frameCount / 2];
-
-	//         // Read and convert the PCM data (from float to short range)
-	//         var data = new float[frameCount];
-	//         _vorbisReader.ReadSamples(data, 0, data.Length);
-
-	//         // Process the PCM data and populate the frames array
-	//         for (int i = 0, j = 0; i < data.Length; i += 2, j++)
-	//         {
-	//             // Convert the decoded float PCM data to Vector2 (stereo channels)
-	//             frames[j] = new Vector2(data[i] * short.MaxValue, data[i + 1] * short.MaxValue);
-	//         }
-
-	//         // Create the playback instance for the AudioStreamGenerator
-	//         var playback = audioStream.Playback;
-	//         playback.PushBuffer(frames);
-
-	//         // Return the AudioStreamGenerator
-	//         return audioStream;}
-			return null;
+        return AudioStreamOggVorbis.LoadFromFile(path);
 	 }
-
     public static AudioStreamWav LoadWAV(string path)
     {
         _isogg = false;

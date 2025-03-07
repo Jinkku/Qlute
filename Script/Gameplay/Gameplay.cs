@@ -13,6 +13,7 @@ public partial class Gameplay : Control
 {
 	// Called when the node enters the scene tree for the first time.
 	public static SettingsOperator SettingsOperator { get; set; }
+	public static ApiOperator ApiOperator { get; set; }
 	//public static Label Ttiming { get; set; }
 	//public static Label Hits { get; set; }
 	public static ColorRect Chart { get; set; }
@@ -46,6 +47,7 @@ public partial class Gameplay : Control
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
+		ApiOperator = GetNode<ApiOperator>("/root/ApiOperator");
 		Beatmap_Background = GetNode<TextureRect>("./Beatmap_Background");
 		AudioPlayer.Instance.Stop();
 
@@ -144,8 +146,6 @@ public partial class Gameplay : Control
 					Notes.Add(new NotesEn {timing = timen, Notes = new List<object>(), NotesHit = new List<bool>()});
 					notel++;
 				}
-				GD.Print(notel);
-				GD.Print(part);
 				Notes[notel].Notes.Add(part);
 				Notes[notel].NotesHit.Add(false);
             }
@@ -193,6 +193,7 @@ public partial class Gameplay : Control
 			SettingsOperator.toppaneltoggle();
 			BeatmapBackground.FlashEnable = true;
 			SettingsOperator.Sessioncfg["localpp"] = (double)SettingsOperator.Sessioncfg["localpp"] + SettingsOperator.Gameplaycfg["pp"];
+			//ApiOperator.SubmitScore(); Commenting this as this is not finished yet :/
 			GetTree().ChangeSceneToFile("res://Panels/Screens/ResultsScreen.tscn");
 		}
 
@@ -240,7 +241,11 @@ public partial class Gameplay : Control
 		// Gamenotes
 
 
-		var viewportSize = GetViewportRect().Size.Y;
+		var viewportSize = 0f;
+		if (IsInsideTree())
+		{
+			viewportSize = GetViewportRect().Size.Y;
+		}
 		foreach (var Notebox in Notes){
 			var notex = Notebox.timing + est + Chart.Size.Y;
 			if (!Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150 && delta/0.001 <4)
@@ -252,23 +257,36 @@ public partial class Gameplay : Control
 					Chart.AddChild(node);
 					node.Centered = false;
 					node.Position = new Vector2(100 * part, notex);
+					node.SetMeta("part",part);
 				}
 			} else if (Notebox.NotesHit.Any() && Notebox.Notes.Any() && Notebox.Nodes.Any() && notex > -150 && notex < viewportSize+150)
 			{
 				foreach (var node in Notebox.Nodes){
 					if ((int)notex+nodeSize > Chart.Size.Y && (int)notex+nodeSize < Chart.Size.Y+MehJudge  && ModsOperator.Mods["auto"]){
-						KeyC[(int)(node.Position.X / 100)] = true;
+						KeyC[(int)node.GetMeta("part")] = true;
 					}else if (ModsOperator.Mods["auto"]){
-						KeyC[(int)(node.Position.X / 100)] = false;
+						KeyC[(int)node.GetMeta("part")] = false;
 					}
 					node.Position = new Vector2(node.Position.X, notex);
+					if (ModsOperator.Mods["slice"]){
+						node.SelfModulate = new Color(1f,1f,1f, Math.Min(Chart.Size.Y,node.Position.Y-200)/ Chart.Size.Y );
+					}
 					Ttick++;
-					JudgeResult = checkjudge((int)notex,KeyC[(int)(node.Position.X / 100)],node,node.Visible);
+					JudgeResult = checkjudge((int)notex,KeyC[(int)node.GetMeta("part")],node,node.Visible);
 					if (JudgeResult < 4){
 						mshitold = Chart.Size.Y+5;
 						KeyC[(int)(node.Position.X / 100)] = false;
 						mshit = notex;
 						SettingsOperator.Addms(mshitold-mshit-50);
+						var urnote = new ColorRect();
+						urnote.Position = new Vector2(-5,(GetNode<ColorRect>("UR").Size.Y/2)+(((float)(mshitold-mshit-50)/MehJudge))*200);
+						urnote.Size = new Vector2(15,2);
+						GetNode<ColorRect>("UR").AddChild(urnote);
+						var urani = urnote.CreateTween();
+						urani.TweenProperty(urnote, "color", new Color(1f,1f,1f,0f), 1).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+						urani.Play();
+						urani.TweenCallback(Callable.From(urnote.QueueFree));
+
 						SettingsOperator.Gameplaycfg["ms"] = SettingsOperator.Getms();
 					}
 				}
