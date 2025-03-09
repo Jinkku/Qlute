@@ -63,9 +63,9 @@ public partial class ApiOperator : Node
 	}
 
 	private void _Submitrequest(long result, long responseCode, string[] headers, byte[] body){
-		//Notify.Post(Encoding.UTF8.GetString(body));
+		Notify.Post(Encoding.UTF8.GetString(body));
 		Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
-		if ((int)json["rankedmap"] >0 && (int)json["error"] != 0){
+		if ((int)json["rankedmap"] >0 && (int)json["error"] == 0){
 		RankUpdate.Update((int)json["rank"],(int)json["points"]);}
 	}
 	private void _on_Ranking_request_completed(long result, long responseCode, string[] headers, byte[] body){
