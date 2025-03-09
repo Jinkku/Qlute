@@ -30,7 +30,7 @@ public partial class InfoBar : ColorRect
 		Ana.Visible = false;
 	}
 	private void _on_browse_pressed(){
-		GetTree().ChangeSceneToFile("res://Panels/Screens/Browse.tscn");
+		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/Browse.tscn");
 	}
 	public override void _Process(double _delta){
 		Loadingicon.Visible = (bool)SettingsOperator.Sessioncfg["loggingin"];

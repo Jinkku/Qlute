@@ -11,7 +11,7 @@ public partial class MenuNotice : HttpRequest
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 	}
 	private void getnews(){
-		Request(SettingsOperator.GetSetting("api").ToString()+"api/menunotice");
+		Request(SettingsOperator.GetSetting("api").ToString()+"apiv2/menunotice");
 	}
 	private void _on_request_completed(int result, int responseCode, string[] headers, byte[] body)
 	{

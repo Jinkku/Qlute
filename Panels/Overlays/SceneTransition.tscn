@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3 uid="uid://nfab1kwymvmo"]
+
+[ext_resource type="Script" uid="uid://lwyqyfqdvea8" path="res://Script/SceneProps/SceneTransition.cs" id="1_m7k6x"]
+
+[node name="Scene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_m7k6x")
+_time = 0.2
+_transitionType = 7
+
+[node name="Black" type="ColorRect" parent="."]
+z_index = 100
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="StillRender" type="TextureRect" parent="."]
+z_index = 100
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

@@ -44,7 +44,7 @@ public partial class SongOffset : Control
 	}
 	private void _goback(){
 		AudioPlayer.Instance.Play();
-		GetTree().ChangeSceneToFile("res://Panels/Screens/home_screen.tscn");
+		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/home_screen.tscn");
 	}
 	private void _speedchanged( float value){
 		Audio.PitchScale = value;

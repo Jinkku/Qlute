@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://ckunjtbu57684" path="res://Script/TopPanel/UPlayerName.cs" id="4_v36dv"]
 [ext_resource type="Texture2D" uid="uid://die40m3acksoy" path="res://Skin/System/browse.png" id="5_1kmfn"]
 [ext_resource type="Texture2D" uid="uid://dkiv7s0dfykav" path="res://Skin/System/notifications.png" id="5_6ko15"]
+[ext_resource type="Script" uid="uid://bm70a8842a0fp" path="res://Script/TopPanel/RankUpdate.cs" id="6_3trnu"]
 [ext_resource type="Script" uid="uid://cmb50kh06rh1x" path="res://Script/TopPanel/Overlays/Clock.cs" id="7_fe0ly"]
 
 [sub_resource type="Animation" id="Animation_xvajm"]
@@ -116,9 +117,6 @@ content_margin_left = 12.0
 content_margin_right = 12.0
 bg_color = Color(0, 0, 0, 0)
 
-[sub_resource type="FontVariation" id="FontVariation_wtjku"]
-variation_embolden = 1.0
-
 [node name="TopPanel" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -159,6 +157,7 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_gkq3o")
 
 [node name="AccountButton" type="Button" parent="InfoBar"]
+self_modulate = Color(0.5, 0, 0.421875, 1)
 layout_mode = 0
 offset_right = 200.0
 offset_bottom = 50.0
@@ -211,8 +210,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_1f8y5")
 }
 
-[node name="Label" type="Label" parent="InfoBar/AccountButton"]
-visible = false
+[node name="RankUpdate" type="Label" parent="InfoBar/AccountButton"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -226,8 +224,26 @@ offset_bottom = 20.5
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_font_sizes/font_size = 12
+text = "Global Rank
++#2,600"
+vertical_alignment = 1
+script = ExtResource("6_3trnu")
+
+[node name="PerformanceUpdate" type="Label" parent="InfoBar/AccountButton/RankUpdate"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -20.5
+offset_right = 107.0
+offset_bottom = 20.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 12
 text = "Performance
-+ #2,600"
+2,600pp"
 vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="InfoBar"]
@@ -282,7 +298,6 @@ script = ExtResource("2_6umcl")
 [node name="Clock" type="Label" parent="InfoBar/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_wtjku")
 theme_override_font_sizes/font_size = 12
 text = "Time
 Date"

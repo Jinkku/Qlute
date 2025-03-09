@@ -28,7 +28,27 @@ public partial class ModsOperator : Node
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-
+	public static string GetModAlias(){
+		var modalias = "";
+		foreach (var modst in Mods.Keys){
+			if (Mods[modst]){
+				if (modst == "auto"){
+					modalias += "AT";
+				} else if (modst == "dt"){
+					modalias += "DT";
+				} else if (modst == "ht"){
+					modalias += "HT";
+				} else if (modst == "random"){
+					modalias += "RND";
+				} else if (modst == "slice"){
+					modalias += "SL";
+				} else if (modst == "black-out"){
+					modalias += "BT";
+				}
+			}
+		}
+		return modalias;
+	}
     public static Dictionary<string, bool> Mods { get; set; } = new Dictionary<string, bool>
     {
 		{"auto", false},

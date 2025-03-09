@@ -57,7 +57,7 @@ public partial class Browse : Control
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	private void _on_back(){
-		GetTree().ChangeSceneToFile("res://Panels/Screens/home_screen.tscn");
+		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/home_screen.tscn");
 	}
 	public override void _Process(double delta)
 	{

@@ -33,13 +33,13 @@ public partial class SongLoadingScreen : Control
 		if (anistate <1){
 			anistate++;
 		}else if (ani == "Dim"){
-			GetTree().ChangeSceneToFile("res://Panels/Screens/Gameplay.tscn");
+			GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/Gameplay.tscn");
 		}else{
 			Animation.Play("Dim");
 		}
 	}
 	private void _on_back(){
-		GetTree().ChangeSceneToFile("res://Panels/Screens/song_select.tscn");
+		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/song_select.tscn");
 	}
 	private void _Timer_load(){
 		Animation.PlayBackwards("AnimationSongTick");

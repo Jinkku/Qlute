@@ -15,7 +15,7 @@ config/name_localized={
 "ja": "名無し"
 }
 config/description="Your Keys // Your Rhythm"
-config/version="2025.03.03"
+config/version="0.0.0"
 run/main_scene="res://Panels/Screens/bootstrap.tscn"
 run/print_header=false
 config/use_custom_user_dir=true
@@ -30,8 +30,8 @@ config/icon="res://Icons/logo.png"
 
 [autoload]
 
+Scene="*res://Panels/Overlays/SceneTransition.tscn"
 SettingsOperator="*res://Script/Singleton/SettingsOperator.cs"
-SceneSwitch="*res://Script/Singleton/SceneSwitch.cs"
 BeatmapListener="*res://Script/Singleton/BeatmapListener.cs"
 Global="*res://Script/Singleton/Global.cs"
 AudioPlayer="*res://Script/Singleton/AudioPlayer.cs"

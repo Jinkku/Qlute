@@ -39,17 +39,21 @@ public partial class home : Control
 
 	}
 	private void _test(){
-		Notify.Post("Testing Notifications! :D\nYou are gay!!!");
-
+		SettingsOperator.Gameplaycfg["max"] = 1141;
+		SettingsOperator.Gameplaycfg["great"] = 0;
+		SettingsOperator.Gameplaycfg["meh"] = 0;
+		SettingsOperator.Gameplaycfg["bad"] = 0;
+		SettingsOperator.Gameplaycfg["maxcombo"] = 1141;
+		GetNode<ApiOperator>("/root/ApiOperator").SubmitScore();
 	}
 	private void _play(){
-		GetTree().ChangeSceneToFile("res://Panels/Screens/song_select.tscn");
+		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/song_select.tscn");
 	}
 	private void _browse(){
-		GetTree().ChangeSceneToFile("res://Panels/Screens/Browse.tscn");
+		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/Browse.tscn");
 	}
 	private void _create(){
-		GetTree().ChangeSceneToFile("res://Panels/Screens/Create.tscn");
+		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/Create.tscn");
 	}
 	private void _leave(){
 		GetTree().Quit();

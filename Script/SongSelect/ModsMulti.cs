@@ -15,10 +15,10 @@ public partial class ModsMulti : Label
 		{
 			if (mod.Value && mod.Key == "dt")
 			{
-				multiplier+= 0.15;
+				multiplier*= 1.15;
 			}else if (mod.Value && mod.Key == "ht"){
 				multiplier*=0.3;
-			}else if (mod.Value && mod.Key != "auto"){
+			}else if (mod.Value && mod.Key != "auto" && mod.Key != "random"){
 				multiplier+= 0.05;
 			}
 		}

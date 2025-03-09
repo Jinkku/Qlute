@@ -27,22 +27,11 @@ public partial class BeatmapBackground : TextureRect
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		Timer = GetNode<Timer>("Timer");	
 		Flash = GetNode<ColorRect>("Flash");		
-		_Process(0);
+		check_background();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double _delta)
-	{
-		Timer.WaitTime = 60000 / ((int)SettingsOperator.Sessioncfg["beatmapbpm"]*AudioPlayer.Instance.PitchScale) * 0.001;
-		if (!Flash.Visible && FlashEnable){
-			Flash.Visible = true;
-		} else if (Flash.Visible && !FlashEnable){
-			Flash.Visible = false;
-		}
-
-
-
-
+	private void check_background(){
 		Vector2 mousePos = GetViewport().GetMousePosition();
         Vector2 screenSize = GetViewportRect().Size;
 
@@ -56,5 +45,16 @@ public partial class BeatmapBackground : TextureRect
 			Size = new Vector2(GetViewportRect().Size[0]+20,GetViewportRect().Size[1]+20);
 			Position = new Vector2(GetViewportRect().Size[0]-5,GetViewportRect().Size[1]-5);
 		}
+	}
+	public override void _Process(double _delta)
+	{
+		Timer.WaitTime = 60000 / ((int)SettingsOperator.Sessioncfg["beatmapbpm"]*AudioPlayer.Instance.PitchScale) * 0.001;
+		if (!Flash.Visible && FlashEnable){
+			Flash.Visible = true;
+		} else if (Flash.Visible && !FlashEnable){
+			Flash.Visible = false;
+		}
+
+		check_background();
 	}
 }

@@ -45,6 +45,7 @@ public partial class Gameplay : Control
 	public int Noteindex {get;set;}
 	public TextureRect Beatmap_Background {get;set;}
 	private Control PauseMenu {get;set;}
+	private bool Submitted {get;set;}
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -187,8 +188,10 @@ public partial class Gameplay : Control
 			SettingsOperator.toppaneltoggle();
 			BeatmapBackground.FlashEnable = true;
 			SettingsOperator.Sessioncfg["localpp"] = (double)SettingsOperator.Sessioncfg["localpp"] + SettingsOperator.Gameplaycfg["pp"];
-			//ApiOperator.SubmitScore(); Commenting this as this is not finished yet :/
-			GetTree().ChangeSceneToFile("res://Panels/Screens/ResultsScreen.tscn");
+			if (!Submitted){
+			ApiOperator.SubmitScore();
+			Submitted = true;}
+			GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/ResultsScreen.tscn");
 		}
 
 		if (SettingsOperator.Gameplaycfg["combo"] > SettingsOperator.Gameplaycfg["maxcombo"]){
@@ -230,7 +233,7 @@ public partial class Gameplay : Control
 		}else if (Input.IsActionJustPressed("retry")){
 			BeatmapBackground.FlashEnable = true;
 			SettingsOperator.toppaneltoggle();
-			GetTree().ChangeSceneToFile("res://Panels/Screens/SongLoadingScreen.tscn");
+			GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 }
 		// Gamenotes
 

@@ -82,6 +82,8 @@ public partial class SettingsOperator : Node
             Sessioncfg["beatmapaccuracy"] = (int)beatmap["accuracy"];
             Sessioncfg["osubeatid"] = (int)beatmap["osubeatid"];
             Sessioncfg["osubeatidset"] = (int)beatmap["osubeatidset"];
+            GD.Print(beatmap["osubeatid"]);
+            GD.Print(beatmap["osubeatidset"]);
 		    var Texture = LoadImage(beatmap["path"].ToString()+beatmap["background"].ToString());
 		    Sessioncfg["background"] = (Texture2D)Texture;
             Gameplaycfg["maxpp"] = Convert.ToInt32(beatmap["pp"]);
