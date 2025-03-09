@@ -9,6 +9,11 @@ public class NotesEn {
 	public Sprite2D Node {get;set;}
 	public bool hit {get;set;}
 }
+public class KeyL {
+	public ColorRect Node {get;set;}
+	public bool hit {get;set;}
+	public Tween Ani {get;set;}
+}
 public partial class Gameplay : Control
 {
 	// Called when the node enters the scene tree for the first time.
@@ -17,10 +22,7 @@ public partial class Gameplay : Control
 	//public static Label Ttiming { get; set; }
 	//public static Label Hits { get; set; }
 	public static ColorRect Chart { get; set; }
-	public List<ColorRect> Keys = new List<ColorRect>();
-	public List<Tween> KeyAni = new List<Tween>();
-	public List<bool> KeyC = new List<bool>(
-	);
+	public List<KeyL> Keys = new List<KeyL>();
 	public int JudgeResult = -1;
 	public int PerfectJudge = 500;
 	public int nodeSize = 54;
@@ -97,8 +99,7 @@ public partial class Gameplay : Control
 		//Hits = GetNode<Label>("Hits");
 		foreach (int i in Enumerable.Range(1, 4)){
 			var notet = GetNode<ColorRect>("Playfield/KeyBoxes/Key"+i);
-			Keys.Add(notet);;
-			KeyC.Add(false);
+			Keys.Add(new KeyL {Node = notet, hit = false});
 			notet.Color = idlehit;
 		}
 		
@@ -159,15 +160,16 @@ public partial class Gameplay : Control
 		NoteSkin = GD.Load<Texture2D>("res://Skin/Game/note.svg");
 	}
 	public void hitnote(int Keyx,bool hit){
+		var key = Keys[Keyx];
 		if (hit){
-		Keys[Keyx].Color = activehit;
-		if (hitnoteani != null){
-        hitnoteani.Kill();} // Abort the previous animation
-		hitnoteani = Keys[Keyx].CreateTween();
-		hitnoteani.TweenProperty(Keys[Keyx], "color", idlehit, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-		hitnoteani.Play();
+			key.Node.Color = activehit;
+			if (key.Ani != null){
+			key.Ani.Kill();} // Abort the previous animation
+			key.Ani = Keys[Keyx].Node.CreateTween();
+			key.Ani.TweenProperty(Keys[Keyx].Node, "color", idlehit, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+			key.Ani.Play();
 		}
-		KeyC[Keyx] = hit;
+		key.hit = hit;
 		}
 	public long Clock {get;set;}
 	public static long PClock = 0;
@@ -208,22 +210,20 @@ public partial class Gameplay : Control
 		SettingsOperator.Gameplaycfg["time"] = (int)est;
 		//float est = AudioPlayer.Instance.GetPlaybackPosition()*1000;
 		int Ttick = 0;
-		int Keyx = 0;
 		//maxc=hits[0]+hits[1]+hits[2]+hits[3]
         //    accuracy=round(((hits[0]+(hits[1]/2)+(hits[2]/3))/(maxc))*100,2)
 		//Hits.Text = "Hits:\n" + SettingsOperator.Gameplaycfg["max"] + "\n" + SettingsOperator.Gameplaycfg["great"] + "\n" + SettingsOperator.Gameplaycfg["meh"] + "\n" + SettingsOperator.Gameplaycfg["bad"] + "\n"+"ms:"+(mshitold-mshit)+"ms " + mshitold + " " + mshit + " " + SettingsOperator.Getms();
 		// Key imputs
-		foreach (ColorRect self in Keys)
+		for (int i=0;i<4;i++)
 		{
-			if (Input.IsActionJustPressed("Key"+(Keyx+1)) && !ModsOperator.Mods["auto"])
+			if (Input.IsActionJustPressed("Key"+(i+1)) && !ModsOperator.Mods["auto"])
 			{
-				hitnote(Keyx,true);
+				hitnote(i,true);
 			}
-			else if (Input.IsActionJustReleased("Key"+(Keyx+1)) && !ModsOperator.Mods["auto"])
+			else if (Input.IsActionJustReleased("Key"+(i+1)) && !ModsOperator.Mods["auto"])
 			{
-				hitnote(Keyx,false);
+				hitnote(i,false);
 			}
-			Keyx++;
 		}
 		if (Input.IsActionJustPressed("pausemenu")){
 			PauseMenu = GD.Load<PackedScene>("res://Panels/Screens/PauseMenu.tscn").Instantiate().GetNode<Control>(".");
@@ -258,9 +258,9 @@ public partial class Gameplay : Control
 					Chart.AddChild(Note.Node);
 				}
 				if (Note.Node != null && (int)notex+nodeSize > Chart.Size.Y && (int)notex+nodeSize < Chart.Size.Y+MehJudge  && ModsOperator.Mods["auto"]){
-					KeyC[(int)Note.Node.GetMeta("part")] = true;
+					hitnote((int)Note.Node.GetMeta("part"),true);
 				}else if (ModsOperator.Mods["auto"]){
-					KeyC[(int)Note.Node.GetMeta("part")] = false;
+					hitnote((int)Note.Node.GetMeta("part"),false);
 				}
 				if (ModsOperator.Mods["slice"] && Note.Node != null){
 					Note.Node.SelfModulate = new Color(1f,1f,1f, Math.Min(Chart.Size.Y,Note.Node.Position.Y-200)/ Chart.Size.Y );
@@ -268,10 +268,10 @@ public partial class Gameplay : Control
 				if (Note.Node != null) {
 					Note.Node.Position = new Vector2(Note.Node.Position.X, notex);
 					Ttick++;
-					JudgeResult = checkjudge((int)notex,KeyC[(int)Note.Node.GetMeta("part")],Note.Node,Note.Node.Visible);
+					JudgeResult = checkjudge((int)notex,Keys[(int)Note.Node.GetMeta("part")].hit,Note.Node,Note.Node.Visible);
 					if (JudgeResult < 4){
 						mshitold = Chart.Size.Y+5;
-						KeyC[(int)(Note.Node.Position.X / 100)] = false;
+						Keys[(int)Note.Node.GetMeta("part")].hit = false;
 						mshit = notex;
 						SettingsOperator.Addms(mshitold-mshit-50);
 						var urnote = new ColorRect();
@@ -284,9 +284,10 @@ public partial class Gameplay : Control
 						urani.TweenCallback(Callable.From(urnote.QueueFree));
 						SettingsOperator.Gameplaycfg["ms"] = SettingsOperator.Getms();
 						Note.hit = true;
+						Note.Node.Visible = false;
 						Note.Node.QueueFree();
 						Note.Node = null;
-						Noteindex++;
+						//Noteindex++;
 					}
 				}
 			}
