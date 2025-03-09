@@ -13,7 +13,7 @@ public partial class BeatmapListener : Node
 		{
 			//GD.Print(file);
 			SettingsOperator.Parse_Beatmapfile(file);
-			SettingsOperator.Sessioncfg["reloadbdb"] = true;
+			SettingsOperator.Sessioncfg["reloaddb"] = true;
 		}
 	}
 
