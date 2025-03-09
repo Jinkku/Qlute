@@ -45,7 +45,7 @@ public partial class Gameplay : Control
 	public int Noteindex {get;set;}
 	public TextureRect Beatmap_Background {get;set;}
 	private Control PauseMenu {get;set;}
-	private bool Submitted {get;set;}
+	private bool Finished {get;set;}
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -183,14 +183,13 @@ public partial class Gameplay : Control
 
 		// End Game
 
-		if (SettingsOperator.Gameplaycfg["timetotal"]-SettingsOperator.Gameplaycfg["time"] < -2000)
+		if (SettingsOperator.Gameplaycfg["timetotal"]-SettingsOperator.Gameplaycfg["time"] < -2000 && !Finished)
 		{
 			SettingsOperator.toppaneltoggle();
 			BeatmapBackground.FlashEnable = true;
 			SettingsOperator.Sessioncfg["localpp"] = (double)SettingsOperator.Sessioncfg["localpp"] + SettingsOperator.Gameplaycfg["pp"];
-			if (!Submitted){
 			ApiOperator.SubmitScore();
-			Submitted = true;}
+			Finished = true;
 			GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/ResultsScreen.tscn");
 		}
 
@@ -285,6 +284,7 @@ public partial class Gameplay : Control
 						urani.TweenCallback(Callable.From(urnote.QueueFree));
 						SettingsOperator.Gameplaycfg["ms"] = SettingsOperator.Getms();
 						Note.hit = true;
+						Note.Node.QueueFree();
 						Note.Node = null;
 						Noteindex++;
 					}
@@ -313,30 +313,22 @@ public partial class Gameplay : Control
 		if (timing+nodeSize > Chart.Size.Y-PerfectJudge/2 && timing+nodeSize < Chart.Size.Y+PerfectJudge/2 && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["max"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
-			node.QueueFree();
 			Hittext("Perfect");
-			node.Visible = false;
 			return 0;
 		} else if (timing+nodeSize > Chart.Size.Y-GreatJudge/2 && timing+nodeSize < Chart.Size.Y+GreatJudge/2 && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["great"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
 			Hittext("Great");
-			node.QueueFree();
-			node.Visible = false;
 			return 1;
 		}else if (timing+nodeSize > Chart.Size.Y-MehJudge/2 && timing+nodeSize < Chart.Size.Y+MehJudge/2 && keyvalue && visibility){
 			Hittext("Meh");
 			SettingsOperator.Gameplaycfg["meh"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
-			node.QueueFree();
-			node.Visible = false;
 			return 2;
 		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility ){
 			Hittext("Miss");
 			SettingsOperator.Gameplaycfg["bad"]++;
 			SettingsOperator.Gameplaycfg["combo"] = 0;
-			node.QueueFree();
-			node.Visible = false;
 			return 3;
 		}
 		 else{
