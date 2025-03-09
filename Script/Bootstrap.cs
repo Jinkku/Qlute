@@ -28,6 +28,7 @@ public partial class Bootstrap : Control
 		if (SettingsOperator.Beatmaps.Count>0) {
 			SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
 		}
+		SettingsOperator.toppaneltoggle();
 		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/home_screen.tscn");
 		
 	}
