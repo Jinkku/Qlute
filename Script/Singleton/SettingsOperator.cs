@@ -24,6 +24,10 @@ public partial class SettingsOperator : Node
     public static double MiliSecondsFromBeatmap {get;set;}
     public static int MiliSecondsFromBeatmapTimes {get;set;}
 
+    public class DanceCounter {
+        public int time {get;set;}
+        public bool flash {get;set;}
+    }
     public static List<Dictionary<string,object>> Beatmaps = new List<Dictionary<string,object>>();
     public Dictionary<string, object> Configuration { get; set; } = new Dictionary<string, object>
     {
@@ -82,8 +86,6 @@ public partial class SettingsOperator : Node
             Sessioncfg["beatmapaccuracy"] = (int)beatmap["accuracy"];
             Sessioncfg["osubeatid"] = (int)beatmap["osubeatid"];
             Sessioncfg["osubeatidset"] = (int)beatmap["osubeatidset"];
-            GD.Print(beatmap["osubeatid"]);
-            GD.Print(beatmap["osubeatidset"]);
 		    var Texture = LoadImage(beatmap["path"].ToString()+beatmap["background"].ToString());
 		    Sessioncfg["background"] = (Texture2D)Texture;
             Gameplaycfg["maxpp"] = Convert.ToInt32(beatmap["pp"]);
@@ -137,6 +139,7 @@ public partial class SettingsOperator : Node
         string audio = "";
         string rawurl = filename;
         var hitob = 0;
+        List<DanceCounter> dance = [];
         var isHitObjectSection = false;
         string path = filename.Replace(filename.Split("/").Last(),"");
         int keycount = 4;
@@ -198,17 +201,20 @@ public partial class SettingsOperator : Node
             if (line.StartsWith("[TimingPoints]"))
             {
             var timingPointLines = lines.SkipWhile(l => !l.StartsWith("[TimingPoints]")).Skip(1);
+            bool foundbpm = false;
             foreach (var timingLine in timingPointLines)
             {
                 if (string.IsNullOrWhiteSpace(timingLine) || timingLine.StartsWith("["))
                 break;
 
                 var timingParts = timingLine.Split(",");
-                if (timingParts.Length > 1 && float.TryParse(timingParts[1], out float bpmValue))
+                if (timingParts.Length > 1 && float.TryParse(timingParts[1], out float bpmValue) && foundbpm)
                 {
                 bpmValue = 60000 / bpmValue;
                 bpm = (int)bpmValue;
-                break;
+                foundbpm = true;
+                }else if (timingParts.Length > 1 && int.TryParse(timingParts.First(), out int timecount) && int.TryParse(timingParts.Last(), out int flashtime)){
+                    dance.Add(new DanceCounter { time = timecount, flash = flashtime == 1 });
                 }
             }
             }
@@ -246,6 +252,7 @@ public partial class SettingsOperator : Node
             { "beatid", qlbeatid },
             { "beatidset", qlbeatidset },
             { "bpm", bpm },
+            { "dance", dance },
             { "timetotal", (int)timetotal },
             { "levelrating", ppvalue*0.05 },
             { "accuracy", accuracy},

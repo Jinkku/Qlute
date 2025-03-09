@@ -71,9 +71,7 @@ public partial class ApiOperator : Node
 	private void _on_Ranking_request_completed(long result, long responseCode, string[] headers, byte[] body){
 		Ranking.Instance.Text = "#" + (string)Encoding.UTF8.GetString(body);
 		Ranking.Instance.Visible = true;
-		GD.Print("rankup!");
 		string Ranknum = (string)Encoding.UTF8.GetString(body);
-		GD.Print(Ranknum);
 		if (int.TryParse(Ranknum, out int n)){
 			if (n == 0){
 				Ranking.Instance.Visible = false;
