@@ -264,6 +264,8 @@ public partial class Gameplay : Control
 				}
 				if (ModsOperator.Mods["slice"] && Note.Node != null){
 					Note.Node.SelfModulate = new Color(1f,1f,1f, Math.Min(Chart.Size.Y,Note.Node.Position.Y-200)/ Chart.Size.Y );
+				} else if (ModsOperator.Mods["black-out"] && Note.Node != null){
+					Note.Node.SelfModulate = new Color(0f,0f,0f,0f);
 				}
 				if (Note.Node != null) {
 					Note.Node.Position = new Vector2(Note.Node.Position.X, notex);

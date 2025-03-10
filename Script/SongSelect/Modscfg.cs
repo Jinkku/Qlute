@@ -13,10 +13,18 @@ public partial class Modscfg : Button
     }
 	public override void _Process(double _delta)
 	{
+        // This makes it so that if one of the mods don't conflict with one another
         if (ModsOperator.Mods["dt"] && GetMeta("ModName").ToString() == "ht")
         {
             DisabledButton();
         } else if (ModsOperator.Mods["ht"] && GetMeta("ModName").ToString() == "dt"){
+            DisabledButton();
+        } else if (ModsOperator.Mods["slice"] && GetMeta("ModName").ToString() == "black-out")
+        {
+            DisabledButton();
+        } else if (ModsOperator.Mods["black-out"] && GetMeta("ModName").ToString() == "slice"){
+            DisabledButton();
+        } else if (GetMeta("ModName").ToString() == "random"){
             DisabledButton();
         }
         else{
