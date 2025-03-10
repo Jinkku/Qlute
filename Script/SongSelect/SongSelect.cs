@@ -161,7 +161,7 @@ public partial class SongSelect : Control
 			Diff.Text = "";
 		}
 		if (Input.IsActionJustPressed("Songup")){
-			if ((int)SettingsOperator.Sessioncfg["SongID"]-1 >0 && (int)SettingsOperator.Sessioncfg["SongID"] != -1){
+			if ((int)SettingsOperator.Sessioncfg["SongID"]-1 >=0 && (int)SettingsOperator.Sessioncfg["SongID"] != -1){
 				SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"]-1);
 			} else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1){
 				SettingsOperator.SelectSongID((int)SettingsOperator.Beatmaps.Count-1);
