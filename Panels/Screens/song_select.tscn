@@ -488,7 +488,7 @@ offset_right = 206.0
 offset_bottom = 131.5
 
 [connection signal="resized" from="." to="." method="_res_resize"]
-[connection signal="scrolling" from="SongPanel/VScrollBar" to="." method="_scrolling"]
+[connection signal="value_changed" from="SongPanel/VScrollBar" to="." method="_valuechangedscroll"]
 [connection signal="pressed" from="BottomBar/ControlPanel/Box/Button" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="BottomBar/ControlPanel/Box/Mods" to="." method="_Mods_show"]
 [connection signal="pressed" from="BottomBar/ControlPanel/Box/Random" to="." method="_on_random"]

@@ -19,14 +19,42 @@ public partial class SongSelect : Control
 	public Label SongAccuracy { get; set; }
 	public List<object> SongEntry = new List<object>();
 	public int SongETick { get; set; }
-	public int scrolly = 0;
 	public Texture2D ImageCache {get;set;}
 	public string ImageURL {get;set;}
 	public PanelContainer ModScreen { get; set; }
 	public Label Diff { get; set; }
 	public ScrollBar scrollBar { get; set; }
 	public PanelContainer Info {get;set;}
-	int startposition = 30;
+    public Tween scrolltween { get; private set; }
+	private int scrollvelocity {get;set;}
+
+    int startposition = 30;
+	private void _valuechangedscroll(float value){
+		SongETick = 0;
+		startposition = (int)GetViewportRect().Size.Y/2 - 166;
+		foreach (Button self in SongEntry)
+		{
+			var Y = self.Position.Y;
+			self.Position = new Vector2(0, startposition+(SongETick*83) - (83*(float)scrollBar.Value));
+			SongETick++;
+		}
+	}
+
+
+
+	private void scrollmode(int ement = 0, int exactvalue = 0){
+		var value = 0.0;
+		if (scrolltween != null){
+				scrolltween.Kill();
+		}if (ement != 0){
+			value = scrollBar.Value+ement;
+		}else {
+			value = exactvalue;
+		}
+		scrolltween = CreateTween();
+		scrolltween.TweenProperty(scrollBar,"value", value, 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		scrolltween.Play();
+	}
 	public void _res_resize(){
 		var window_size = GetViewportRect().Size;
 		Control SongPanel = GetNode<Control>("SongPanel");
@@ -34,17 +62,6 @@ public partial class SongSelect : Control
 		SongPanel.Position = new Vector2(window_size.X-(window_size.X/2.5f), 105);
 		Info = GetNode<PanelContainer>("SongDetails/Info");
 		Info.Size = new Vector2(GetViewportRect().Size.X/2.3f,Info.Size.Y);
-	}
-	public void _scrolling(){
-		scrolly = (int)scrollBar.Value;
-		SongETick = 0;
-		startposition = (int)GetViewportRect().Size.Y/2 - 166;
-		foreach (Button self in SongEntry)
-		{
-			var Y = self.Position.Y;
-			self.Position = new Vector2(0, startposition+(SongETick*83) - (83*scrolly));
-			SongETick++;
-		}
 	}
 	public void AddSongList(string song,string artist,string mapper,int lv,string background,string path,double pp, string difficulty,string audio,Vector2 pos)
 	{
@@ -76,7 +93,6 @@ public partial class SongSelect : Control
 	}
 	private void _SongScrolldirectionreset(){
 		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
-		_scrolling();
 	}
 	private void _on_random(){
 		SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
@@ -115,7 +131,7 @@ public partial class SongSelect : Control
 			, new Vector2(0, startposition + (83*SongETick)));
 			SongETick++;
 		}
-		scrolly = (int)SettingsOperator.Sessioncfg["SongID"];
+		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
 		GD.Print("Finished about " + (DateTime.Now.Second-timex) + "s");
 		_res_resize();
 		_SongScrolldirectionreset();
@@ -166,7 +182,7 @@ public partial class SongSelect : Control
 			} else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1){
 				SettingsOperator.SelectSongID((int)SettingsOperator.Beatmaps.Count-1);
 			}
-			_SongScrolldirectionreset();
+			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
 
 		}else if (Input.IsActionJustPressed("Songdown")){
 			if ((int)SettingsOperator.Sessioncfg["SongID"]+1 <(int)SettingsOperator.Beatmaps.Count && (int)SettingsOperator.Sessioncfg["SongID"] != -1){
@@ -174,7 +190,7 @@ public partial class SongSelect : Control
 			} else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1){
 				SettingsOperator.SelectSongID(0);
 			}
-			_SongScrolldirectionreset();
+			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
 
 		}else if (Input.IsActionJustPressed("Mod")){
 			_Mods_show();
@@ -184,12 +200,18 @@ public partial class SongSelect : Control
 
 		}else if (Input.IsActionJustPressed("Collections")){
 
-		}else if (Input.IsActionJustPressed("scrolldown") && scrolly+1 < SettingsOperator.Beatmaps.Count){
-			scrollBar.Value++;
-			_scrolling();
-		}else if (Input.IsActionJustPressed("scrollup")&& scrolly-1 > -1){
-			scrollBar.Value--;
-			_scrolling();
+		}else if (Input.IsActionJustPressed("scrolldown") && scrollBar.Value+1 < SettingsOperator.Beatmaps.Count){
+			if (scrollvelocity < 0){
+				scrollvelocity = 0;
+			}
+			scrollvelocity++;
+			scrollmode(1 + scrollvelocity);
+		}else if (Input.IsActionJustPressed("scrollup")&& scrollBar.Value-1 > -1){
+			if (scrollvelocity > 0){
+				scrollvelocity = 0;
+			}
+			scrollvelocity--;
+			scrollmode(-1 + scrollvelocity);
 		}
 		//Debugtext.Text = scrolly.ToString();
 	}
