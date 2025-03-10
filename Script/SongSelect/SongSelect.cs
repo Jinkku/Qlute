@@ -97,12 +97,29 @@ public partial class SongSelect : Control
 	private void _on_random(){
 		SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
 	}
+
+
+	// used later
+	private void startanimation(){
+		var SongDetails = GetNode<TextureRect>("SongDetails");
+		SongDetails.Position = new Vector2(-SongDetails.Size.X,SongDetails.Position.Y);
+		SongDetails.Modulate = new Color(0f,0f,0f,0f);
+		var SongSelectAnimation = CreateTween();
+		SongSelectAnimation.SetParallel(true);
+		SongSelectAnimation.TweenProperty(SongDetails, "position", new Vector2(0,SongDetails.Position.Y), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		SongSelectAnimation.TweenProperty(SongDetails, "modulate", new Color(1f,1f,1f,1f), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		SongSelectAnimation.Play();
+	}
+
 	public override void _Ready()
 	{
 		SettingsOperator.loopaudio = true;
 		scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		SongETick = 0;
+
+
+
 		//Debugtext = new Label();
 		//Debugtext.ZIndex = 1024;
 		//Debugtext.Text = "X3";
@@ -133,22 +150,20 @@ public partial class SongSelect : Control
 		}
 		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
 		GD.Print("Finished about " + (DateTime.Now.Second-timex) + "s");
+
+		
+		
+
 		_res_resize();
 		_SongScrolldirectionreset();
+		checksongpanel();
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double _delta)
-	{
-		if ((bool)SettingsOperator.Sessioncfg["reloaddb"]){
-			SettingsOperator.Sessioncfg["reloaddb"] = false;
-			GetTree().ReloadCurrentScene();
-			
-		}
-		scrollBar.MaxValue = SettingsOperator.Beatmaps.Count;
-		
+	// Manages SongDetails
+
+	private void checksongpanel(){
+		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No song selected.";
 		if ( SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.Sessioncfg["beatmaptitle"] != null){
-		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString();
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
 		Songpp.Text = "+" + (SettingsOperator.Gameplaycfg["maxpp"]*ModsMulti.multiplier).ToString("N0")+"pp";
 		SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
@@ -161,7 +176,6 @@ public partial class SongSelect : Control
 		SongLen.Visible = true;
 		SongBPM.Visible = true;
 		SongAccuracy.Visible = true;}
-		else if (SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.Sessioncfg["beatmaptitle"] == null){}
 		else {
 			SongArtist.Visible = false;
 			Songpp.Visible = false;
@@ -169,13 +183,26 @@ public partial class SongSelect : Control
 			SongAccuracy.Visible = false;
 			SongBPM.Visible = false;
 			SongLen.Visible = false;
-			SongTitle.Text = "No beatmaps selected";
 		}
 		if (SettingsOperator.Sessioncfg["beatmapdiff"] != null){
 		Diff.Text = SettingsOperator.Sessioncfg["beatmapdiff"].ToString();}
 		else {
 			Diff.Text = "";
 		}
+	}
+
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double _delta)
+	{
+		if ((bool)SettingsOperator.Sessioncfg["reloaddb"]){
+			SettingsOperator.Sessioncfg["reloaddb"] = false;
+			GetTree().ReloadCurrentScene();
+			
+		}
+		scrollBar.MaxValue = SettingsOperator.Beatmaps.Count;
+		
+		checksongpanel();
+
 		if (Input.IsActionJustPressed("Songup")){
 			if ((int)SettingsOperator.Sessioncfg["SongID"]-1 >=0 && (int)SettingsOperator.Sessioncfg["SongID"] != -1){
 				SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"]-1);

@@ -365,6 +365,7 @@ offset_bottom = 64.0
 grow_vertical = 2
 
 [node name="SongPanel" type="Control" parent="."]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
