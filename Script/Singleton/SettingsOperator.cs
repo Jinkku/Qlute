@@ -5,12 +5,19 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+
+
+public class DanceCounter {
+        public int time {get;set;}
+        public bool flash {get;set;}
+}
+
 public partial class SettingsOperator : Node
 {	
 	//public string homedir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + "/.qlute";
     public string homedir = OS.GetUserDataDir();
 	public string beatmapsdir => homedir + "/beatmaps";
-    public static float ppbase = 0.0072f;
+    public static float ppbase = 0.06f;
 	public string downloadsdir => homedir + "/downloads";
 	public string replaydir => homedir + "/replays";
 	public string screenshotdir => homedir + "/screenshots";
@@ -24,10 +31,6 @@ public partial class SettingsOperator : Node
     public static double MiliSecondsFromBeatmap {get;set;}
     public static int MiliSecondsFromBeatmapTimes {get;set;}
 
-    public class DanceCounter {
-        public int time {get;set;}
-        public bool flash {get;set;}
-    }
     public static List<Dictionary<string,object>> Beatmaps = new List<Dictionary<string,object>>();
     public Dictionary<string, object> Configuration { get; set; } = new Dictionary<string, object>
     {
@@ -109,14 +112,16 @@ public partial class SettingsOperator : Node
             }
         } else{ GD.PrintErr("Can't select a song that don't exist :/");}
     }
-    public static float Get_ppvalue(int max, int great, int meh, int bad, double multiplier = 1,int combo =0){
-        bad = Math.Max(1,bad);
-        var ppvalue = 0.0f;
-        ppvalue = ppbase * (max + (great/2) + (meh/3));
-        ppvalue /= bad;
+    public static double Get_ppvalue(int max, int great, int meh, int bad, double multiplier = 1,int combo = 0){
+        //bad = Math.Max(1,bad);
+        var ppvalue = 0.0;
+        ppvalue = max * ppbase;
+        ppvalue -= ppbase/2 * great;
+        ppvalue -= ppbase/3 * meh;
+        ppvalue -= ppbase * bad;
+        ppvalue += combo * ppbase;
         ppvalue *=(float)multiplier;
-        ppvalue *= combo * ppbase;
-        return ppvalue;
+        return Math.Max(0,ppvalue);
         }
     public static void Parse_Beatmapfile(string filename){
         using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
@@ -132,7 +137,7 @@ public partial class SettingsOperator : Node
         int osubeatidset = 0;
         int qlbeatid = 0;
         int qlbeatidset = 0;
-        float ppvalue = 0;
+        double ppvalue = 0;
         string mapper = "";
         int notetime = 0;
         string background = "";
@@ -208,13 +213,15 @@ public partial class SettingsOperator : Node
                 break;
 
                 var timingParts = timingLine.Split(",");
-                if (timingParts.Length > 1 && float.TryParse(timingParts[1], out float bpmValue) && foundbpm)
+                if (timingParts.Length > 1 && float.TryParse(timingParts[1], out float bpmValue) && !foundbpm)
                 {
                 bpmValue = 60000 / bpmValue;
                 bpm = (int)bpmValue;
                 foundbpm = true;
-                }else if (timingParts.Length > 1 && int.TryParse(timingParts.First(), out int timecount) && int.TryParse(timingParts.Last(), out int flashtime)){
+                }
+                if (timingParts.Length > 1 && int.TryParse(timingParts.First(), out int timecount) && int.TryParse(timingParts.Last(), out int flashtime)){
                     dance.Add(new DanceCounter { time = timecount, flash = flashtime == 1 });
+                    GD.Print($"{timecount} {flashtime}");
                 }
             }
             }

@@ -98,7 +98,40 @@ anchor_bottom = 1.0
 offset_bottom = -200.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.227451)
+color = Color(0.11, 0.11, 0.11, 0.784314)
+
+[node name="Lights" type="HBoxContainer" parent="Playfield/Chart"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="Light1" type="ColorRect" parent="Playfield/Chart/Lights"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+color = Color(0, 0.859375, 1, 0.0784314)
+
+[node name="Light2" type="ColorRect" parent="Playfield/Chart/Lights"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+color = Color(0, 0.859375, 1, 0.0784314)
+
+[node name="Light3" type="ColorRect" parent="Playfield/Chart/Lights"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+color = Color(0, 0.859375, 1, 0.0784314)
+
+[node name="Light4" type="ColorRect" parent="Playfield/Chart/Lights"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+color = Color(0, 0.859375, 1, 0.0784314)
 
 [node name="Guard" type="ColorRect" parent="Playfield/Chart"]
 custom_minimum_size = Vector2(100, 10)

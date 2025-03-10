@@ -46,7 +46,7 @@ public partial class SongSelect : Control
 			SongETick++;
 		}
 	}
-	public void AddSongList(string song,string artist,string mapper,int lv,string background,string path,float pp, string difficulty,string audio,Vector2 pos)
+	public void AddSongList(string song,string artist,string mapper,int lv,string background,string path,double pp, string difficulty,string audio,Vector2 pos)
 	{
 
 		var button = musiccardtemplate.Instantiate();
@@ -95,6 +95,13 @@ public partial class SongSelect : Control
 		Diff = GetNode<Label>("SongDetails/Info/Plasa/Difficulty");
 		ModScreen = GetNode<PanelContainer>("ModsScreen");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
+		SongTitle = GetNode<Label>("SongDetails/Info/Plasa/Title");
+		SongArtist = GetNode<Label>("SongDetails/Info/Plasa/Artist");
+		Songpp = GetNode<Label>("SongDetails/Info/Plasa/Points");
+		SongBPM = GetNode<Label>("SongDetails/Info/Plasa/BPM");
+		SongLen = GetNode<Label>("SongDetails/Info/Plasa/Length");
+		SongMapper = GetNode<Label>("SongDetails/Info/Plasa/Mapper");
+		SongAccuracy = GetNode<Label>("SongDetails/Info/Plasa/Accuracy");
 		var timex = DateTime.Now.Second;
 		foreach (var song in SettingsOperator.Beatmaps)
 		{	
@@ -103,20 +110,13 @@ public partial class SongSelect : Control
 			song["Mapper"].ToString(),
 			(int)float.Parse(song["levelrating"].ToString()),
 			song["path"].ToString()+song["background"].ToString(),
-			song["rawurl"].ToString(),(float)song["pp"]
+			song["rawurl"].ToString(), (double)song["pp"]
 			,(string)song["Version"],song["path"].ToString()+song["audio"].ToString()
 			, new Vector2(0, startposition + (83*SongETick)));
 			SongETick++;
 		}
 		scrolly = (int)SettingsOperator.Sessioncfg["SongID"];
 		GD.Print("Finished about " + (DateTime.Now.Second-timex) + "s");
-		SongTitle = GetNode<Label>("SongDetails/Info/Plasa/Title");
-		SongArtist = GetNode<Label>("SongDetails/Info/Plasa/Artist");
-		Songpp = GetNode<Label>("SongDetails/Info/Plasa/Points");
-		SongBPM = GetNode<Label>("SongDetails/Info/Plasa/BPM");
-		SongLen = GetNode<Label>("SongDetails/Info/Plasa/Length");
-		SongMapper = GetNode<Label>("SongDetails/Info/Plasa/Mapper");
-		SongAccuracy = GetNode<Label>("SongDetails/Info/Plasa/Accuracy");
 		_res_resize();
 		_SongScrolldirectionreset();
 	}
@@ -130,8 +130,9 @@ public partial class SongSelect : Control
 			
 		}
 		scrollBar.MaxValue = SettingsOperator.Beatmaps.Count;
-		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No song selected";
-		if (SettingsOperator.Sessioncfg["beatmaptitle"] != null){
+		
+		if ( SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.Sessioncfg["beatmaptitle"] != null){
+		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString();
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
 		Songpp.Text = "+" + (SettingsOperator.Gameplaycfg["maxpp"]*ModsMulti.multiplier).ToString("N0")+"pp";
 		SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
@@ -144,6 +145,7 @@ public partial class SongSelect : Control
 		SongLen.Visible = true;
 		SongBPM.Visible = true;
 		SongAccuracy.Visible = true;}
+		else if (SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.Sessioncfg["beatmaptitle"] == null){}
 		else {
 			SongArtist.Visible = false;
 			Songpp.Visible = false;
@@ -151,6 +153,7 @@ public partial class SongSelect : Control
 			SongAccuracy.Visible = false;
 			SongBPM.Visible = false;
 			SongLen.Visible = false;
+			SongTitle.Text = "No beatmaps selected";
 		}
 		if (SettingsOperator.Sessioncfg["beatmapdiff"] != null){
 		Diff.Text = SettingsOperator.Sessioncfg["beatmapdiff"].ToString();}

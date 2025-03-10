@@ -10,7 +10,7 @@ public partial class ButtonClickedpp : Button
         var lines = text.Split("\n");
         Notify.Post("Clicked "+ GetMeta("SongID"));
         var isHitObjectSection = false;
-        var ppvalue = 0f;
+        double ppvalue = 0;
         int hitob = 0;
         var skip = timetotal / 16;
         var skipid = 0;
@@ -40,7 +40,7 @@ public partial class ButtonClickedpp : Button
                 }
                 ppvalue = SettingsOperator.Get_ppvalue(hitob,0,0,0,combo: hitob);
                 ((Label)Main.PostMarks[skipid]).Text = ppvalue.ToString("N0") + "pp";
-                ((ColorRect)Main.GraphBars[skipid]).Size = new Vector2(10,ppvalue/10);
+                ((ColorRect)Main.GraphBars[skipid]).Size = new Vector2(10,(float)ppvalue/10);
             }}
 
     }

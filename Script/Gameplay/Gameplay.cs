@@ -11,6 +11,7 @@ public class NotesEn {
 }
 public class KeyL {
 	public ColorRect Node {get;set;}
+	public ColorRect Beam {get;set;}
 	public bool hit {get;set;}
 	public Tween Ani {get;set;}
 }
@@ -48,6 +49,12 @@ public partial class Gameplay : Control
 	public TextureRect Beatmap_Background {get;set;}
 	private Control PauseMenu {get;set;}
 	private bool Finished {get;set;}
+	private int score {get;set;}
+	private int newscore {get;set;}
+	private Tween scoretween {get;set;}
+	private IEnumerable<DanceCounter> dance {get;set;}
+	private int DanceIndex {get;set;}
+	private Label debugtext {get;set;}
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -64,11 +71,15 @@ public partial class Gameplay : Control
 		hittext = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/hittext.tscn").Instantiate().GetNode<Label>(".");
 		hittextinit = true;
 		hittext.Modulate = new Color(1f,1f,1f,0f);
+		hittext.ZIndex = 1024;
 		Chart.AddChild(hittext);
 		hittextoldpos = hittext.Position;
 		reloadSkin();
 		PClock = 0;
 
+		debugtext = new Label();
+		AddChild(debugtext);
+		debugtext.Position = new Vector2(100,300);
 
 		PerfectJudge = PerfectJudge / (int)(SettingsOperator.Sessioncfg["beatmapaccuracy"]);
 		GreatJudge = (int)(PerfectJudge*3);
@@ -99,7 +110,7 @@ public partial class Gameplay : Control
 		//Hits = GetNode<Label>("Hits");
 		foreach (int i in Enumerable.Range(1, 4)){
 			var notet = GetNode<ColorRect>("Playfield/KeyBoxes/Key"+i);
-			Keys.Add(new KeyL {Node = notet, hit = false});
+			Keys.Add(new KeyL {Node = notet, hit = false, Beam = GetNode<ColorRect>($"Playfield/Chart/Lights/Light{i}")});
 			notet.Color = idlehit;
 		}
 		
@@ -117,6 +128,7 @@ public partial class Gameplay : Control
 		//var note = noteblock.GetNode<Area2D>(".");
 		//var notetexture = noteblock.GetNode<Sprite2D>("./Notetext");
 		//notetexture.Texture = GD.Load<Texture2D>("res://Skin/Game/note.svg");
+		dance = (IEnumerable<DanceCounter>)SettingsOperator.Beatmaps[(int)SettingsOperator.Sessioncfg["SongID"]]["dance"];
         foreach (string line in lines)
         {
             if (line.Trim() == "[HitObjects]")
@@ -133,7 +145,6 @@ public partial class Gameplay : Control
 				t=line;
 				timing = Convert.ToInt32(line.Split(",")[2]);
 				part = Convert.ToInt32(line.Split(",")[0]);
-				var party = Convert.ToInt32(line.Split(",")[1]); // if converting
 				if (part == 64){part = 0;}
 				else if (part == 192){part = 1;}
 				else if (part == 320){part = 2;}
@@ -163,10 +174,12 @@ public partial class Gameplay : Control
 		var key = Keys[Keyx];
 		if (hit){
 			key.Node.Color = activehit;
+			key.Beam.Modulate = new Color(1f,1f,1f,1f);
 			if (key.Ani != null){
 			key.Ani.Kill();} // Abort the previous animation
 			key.Ani = Keys[Keyx].Node.CreateTween();
-			key.Ani.TweenProperty(Keys[Keyx].Node, "color", idlehit, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+			key.Ani.Parallel().TweenProperty(Keys[Keyx].Node, "color", idlehit, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+			key.Ani.Parallel().TweenProperty(Keys[Keyx].Beam, "modulate", new Color(0f,0f,0f,0f), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			key.Ani.Play();
 		}
 		key.hit = hit;
@@ -205,7 +218,7 @@ public partial class Gameplay : Control
 			est = est * AudioPlayer.Instance.PitchScale;
 		}
 		SettingsOperator.Gameplaycfg["accuracy"] = (SettingsOperator.Gameplaycfg["max"] + (SettingsOperator.Gameplaycfg["great"]/2) + (SettingsOperator.Gameplaycfg["meh"]/3)) / (SettingsOperator.Gameplaycfg["max"] +SettingsOperator.Gameplaycfg["great"] + SettingsOperator.Gameplaycfg["meh"] + SettingsOperator.Gameplaycfg["bad"]);
-		SettingsOperator.Gameplaycfg["score"] = (SettingsOperator.Gameplaycfg["pp"] / SettingsOperator.Gameplaycfg["maxpp"]) * (1000000*ModsMulti.multiplier);
+		SettingsOperator.Gameplaycfg["score"] = score;
 		SettingsOperator.Gameplaycfg["pp"] = SettingsOperator.Get_ppvalue((int)SettingsOperator.Gameplaycfg["max"],(int)SettingsOperator.Gameplaycfg["great"],(int)SettingsOperator.Gameplaycfg["meh"],(int)SettingsOperator.Gameplaycfg["bad"],ModsMulti.multiplier,(int)SettingsOperator.Gameplaycfg["maxcombo"]);
 		SettingsOperator.Gameplaycfg["time"] = (int)est;
 		//float est = AudioPlayer.Instance.GetPlaybackPosition()*1000;
@@ -233,7 +246,15 @@ public partial class Gameplay : Control
 			BeatmapBackground.FlashEnable = true;
 			SettingsOperator.toppaneltoggle();
 			GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
-}
+		}
+		//debugtext.Text = $"est: {est}\nDanceIndex:{DanceIndex}\nTimeindex:{dance.ElementAt(DanceIndex).time}";
+		if ((int)est > dance.ElementAt(DanceIndex).time){
+			BeatmapBackground.FlashEnable = dance.ElementAt(DanceIndex).flash;
+			if (DanceIndex + 1 < dance.Count()){
+			DanceIndex++;}
+		}
+
+
 		// Gamenotes
 
 
@@ -285,6 +306,13 @@ public partial class Gameplay : Control
 						urani.Play();
 						urani.TweenCallback(Callable.From(urnote.QueueFree));
 						SettingsOperator.Gameplaycfg["ms"] = SettingsOperator.Getms();
+						newscore= (int)(SettingsOperator.Gameplaycfg["pp"] / SettingsOperator.Gameplaycfg["maxpp"] * (1000000*ModsMulti.multiplier));
+						if (scoretween != null){
+							scoretween.Kill();
+						}
+						scoretween = CreateTween();
+						scoretween.TweenProperty(this,"score", newscore, 0.3f);
+						scoretween.Play();
 						Note.hit = true;
 						Note.Node.Visible = false;
 						Note.Node.QueueFree();
@@ -298,8 +326,8 @@ public partial class Gameplay : Control
 
 		//
 	}
-	public void Hittext(string word){
-		hittext.Modulate = new Color(1f,1f,1f,1f);
+	public void Hittext(string word,Color wordcolor){
+		hittext.Modulate = wordcolor;
 		hittext.Position = new Vector2(hittextoldpos.X,hittextoldpos.Y-10);
 		//tween.TweenProperty(hittext, "position", new Vector2(hittext.Position.X,hittext.Position.Y+10), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		if (hittextani != null && hittextani.IsRunning()) {
@@ -307,7 +335,7 @@ public partial class Gameplay : Control
 		}
 
 		hittextani = hittext.CreateTween();
-		hittextani.Parallel().TweenProperty(hittext, "modulate", new Color(1f,1f,1f,0f), 0.5).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		hittextani.Parallel().TweenProperty(hittext, "modulate", new Color(0f,0f,0f,0f), 0.5).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		hittextani.Parallel().TweenProperty(hittext, "position", hittextoldpos, 0.5).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		hittextani.Play();
 		hittext.Text = word;
@@ -316,20 +344,20 @@ public partial class Gameplay : Control
 		if (timing+nodeSize > Chart.Size.Y-PerfectJudge/2 && timing+nodeSize < Chart.Size.Y+PerfectJudge/2 && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["max"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
-			Hittext("Perfect");
+			Hittext("Perfect", new Color(0f,0.71f,1f));
 			return 0;
 		} else if (timing+nodeSize > Chart.Size.Y-GreatJudge/2 && timing+nodeSize < Chart.Size.Y+GreatJudge/2 && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["great"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
-			Hittext("Great");
+			Hittext("Great", new Color(0f,1f,0.03f));
 			return 1;
 		}else if (timing+nodeSize > Chart.Size.Y-MehJudge/2 && timing+nodeSize < Chart.Size.Y+MehJudge/2 && keyvalue && visibility){
-			Hittext("Meh");
+			Hittext("Meh", new Color(1f,0.66f,0f));
 			SettingsOperator.Gameplaycfg["meh"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
 			return 2;
 		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility ){
-			Hittext("Miss");
+			Hittext("Miss", new Color(1f,0.28f,0f));
 			SettingsOperator.Gameplaycfg["bad"]++;
 			SettingsOperator.Gameplaycfg["combo"] = 0;
 			return 3;
