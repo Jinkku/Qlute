@@ -10,7 +10,7 @@ public class NotesEn {
 	public bool hit {get;set;}
 }
 public class KeyL {
-	public ColorRect Node {get;set;}
+	public PanelContainer Node {get;set;}
 	public ColorRect Beam {get;set;}
 	public bool hit {get;set;}
 	public Tween Ani {get;set;}
@@ -109,14 +109,13 @@ public partial class Gameplay : Control
 		//Ttiming = GetNode<Label>("Time");
 		//Hits = GetNode<Label>("Hits");
 		foreach (int i in Enumerable.Range(1, 4)){
-			var notet = GetNode<ColorRect>("Playfield/KeyBoxes/Key"+i);
+			var notet = GetNode<PanelContainer>("Playfield/KeyBoxes/Key"+i);
 			Keys.Add(new KeyL {Node = notet, hit = false, Beam = GetNode<ColorRect>($"Playfield/Chart/Lights/Light{i}")});
-			notet.Color = idlehit;
+			notet.Modulate = idlehit;
 		}
 		
 		SettingsOperator.ResetScore();
 		SettingsOperator.Resetms();
-		noteblock = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Sprite2D>(".");
         using var file = FileAccess.Open(SettingsOperator.Sessioncfg["beatmapurl"].ToString(), FileAccess.ModeFlags.Read);
         var text = file.GetAsText();
         var lines = text.Split("\n");
@@ -166,19 +165,21 @@ public partial class Gameplay : Control
 	}
 
 
-	public Texture2D NoteSkin {get;set;}
+	public Texture2D NoteSkinBack {get;set;}
+	public Texture2D NoteSkinFore {get;set;}
 	public void reloadSkin(){
-		NoteSkin = GD.Load<Texture2D>("res://Skin/Game/note.svg");
+		NoteSkinBack = GD.Load<Texture2D>("res://Skin/Game/Backgroundnote.svg");
+		NoteSkinFore = GD.Load<Texture2D>("res://Skin/Game/Foregroundnote.svg");
 	}
 	public void hitnote(int Keyx,bool hit){
 		var key = Keys[Keyx];
 		if (hit){
-			key.Node.Color = activehit;
+			key.Node.Modulate = activehit;
 			key.Beam.Modulate = new Color(1f,1f,1f,1f);
 			if (key.Ani != null){
 			key.Ani.Kill();} // Abort the previous animation
 			key.Ani = Keys[Keyx].Node.CreateTween();
-			key.Ani.Parallel().TweenProperty(Keys[Keyx].Node, "color", idlehit, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+			key.Ani.Parallel().TweenProperty(Keys[Keyx].Node, "modulate", idlehit, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			key.Ani.Parallel().TweenProperty(Keys[Keyx].Beam, "modulate", new Color(0f,0f,0f,0f), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			key.Ani.Play();
 		}
@@ -271,12 +272,17 @@ public partial class Gameplay : Control
 					node.Position = new Vector2(100 * Note.NoteSection, notex);
 					node.SetMeta("part",Note.NoteSection);
 					node.Centered = false;
-					node.Texture = NoteSkin;
+					node.SelfModulate = new Color(0.39f,0.19f,0.65f);
+					node.Texture = NoteSkinBack;
 					Note.Node = node;
 			}
 			if (notex > -150 && notex < viewportSize+150 && !Note.hit){
 				if (Note.Node != null && !Note.Node.IsInsideTree()){
 					Chart.AddChild(Note.Node);
+					var SkinFore = new Sprite2D();
+					SkinFore.Centered = false;
+					SkinFore.Texture = NoteSkinFore;
+					Note.Node.AddChild(SkinFore);
 				}
 				if (Note.Node != null && (int)notex+nodeSize > Chart.Size.Y && (int)notex+nodeSize < Chart.Size.Y+MehJudge  && ModsOperator.Mods["auto"]){
 					hitnote((int)Note.Node.GetMeta("part"),true);
