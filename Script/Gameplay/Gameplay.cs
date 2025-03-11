@@ -22,7 +22,7 @@ public partial class Gameplay : Control
 	public static ApiOperator ApiOperator { get; set; }
 	//public static Label Ttiming { get; set; }
 	//public static Label Hits { get; set; }
-	public static ColorRect Chart { get; set; }
+	public HBoxContainer Chart { get; set; }
 	public List<KeyL> Keys = new List<KeyL>();
 	public int JudgeResult = -1;
 	public int PerfectJudge = 500;
@@ -32,8 +32,6 @@ public partial class Gameplay : Control
 	public ColorRect meh {get;set;}
 	public ColorRect great {get;set;}
 	public ColorRect perfect {get;set;}
-	public Color activehit = new Color(0.32f,0.42f,0.74f);
-	public Color idlehit = new Color(0.5f,0.5f,0.5f);
 	public double mshit {get;set;}
 	public double mshitold {get;set;}
 	public long startedtime {get ;set; }
@@ -67,12 +65,12 @@ public partial class Gameplay : Control
 		BeatmapBackground.FlashEnable = false;
 		
 		Control P = GetNode<Control>("Playfield");
-		Chart = GetNode<ColorRect>("Playfield/Chart");
+		Chart = GetNode<HBoxContainer>("Playfield/ChartSections");
 		hittext = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/hittext.tscn").Instantiate().GetNode<Label>(".");
 		hittextinit = true;
 		hittext.Modulate = new Color(1f,1f,1f,0f);
 		hittext.ZIndex = 1024;
-		Chart.AddChild(hittext);
+		GetNode<Control>("Playfield").AddChild(hittext);
 		hittextoldpos = hittext.Position;
 		reloadSkin();
 		PClock = 0;
@@ -82,7 +80,7 @@ public partial class Gameplay : Control
 		debugtext.Position = new Vector2(100,300);
 
 		PerfectJudge = PerfectJudge / (int)(SettingsOperator.Sessioncfg["beatmapaccuracy"]);
-		GreatJudge = (int)(PerfectJudge*3);
+		GreatJudge = (int)(PerfectJudge*4);
 		MehJudge = (int)(PerfectJudge*6);
 
 		meh = new ColorRect();
@@ -90,27 +88,27 @@ public partial class Gameplay : Control
 		meh.Position = new Vector2(0,-MehJudge/2);
 		meh.Color = new Color(0.5f,0f,0f,0.1f);
 		meh.Visible = false;
-		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(meh);
+		GetNode<ColorRect>("Playfield/Guard").AddChild(meh);
 
 		great = new ColorRect();
 		great.Size = new Vector2(400,GreatJudge);
 		great.Position = new Vector2(0,-GreatJudge/2);
 		great.Color = new Color(0f,0.5f,0f,0.1f);
 		great.Visible = false;
-		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(great);
+		GetNode<ColorRect>("Playfield/Guard").AddChild(great);
 		
 		perfect = new ColorRect();
-		perfect.Size = new Vector2(400,PerfectJudge);
-		perfect.Position = new Vector2(0,-PerfectJudge/2);
+		perfect.Size = new Vector2(400,PerfectJudge+(PerfectJudge/2));
+		perfect.Position = new Vector2(0,-PerfectJudge);
 		perfect.Color = new Color(0f,0f,0.5f,0.1f);
 		perfect.Visible = false;
-		GetNode<ColorRect>("Playfield/Chart/Guard").AddChild(perfect);
+		GetNode<ColorRect>("Playfield/Guard").AddChild(perfect);
 
 		//Ttiming = GetNode<Label>("Time");
 		//Hits = GetNode<Label>("Hits");
 		foreach (int i in Enumerable.Range(1, 4)){
 			var notet = GetNode<PanelContainer>("Playfield/KeyBoxes/Key"+i);
-			Keys.Add(new KeyL {Node = notet, hit = false, Beam = GetNode<ColorRect>($"Playfield/Chart/Lights/Light{i}")});
+			Keys.Add(new KeyL {Node = notet, hit = false, Beam = GetNode<ColorRect>($"Playfield/ChartSections/Section{i}")});
 			notet.Modulate = idlehit;
 		}
 		
@@ -167,6 +165,10 @@ public partial class Gameplay : Control
 
 	public Texture2D NoteSkinBack {get;set;}
 	public Texture2D NoteSkinFore {get;set;}
+	public Color chartclear = new Color(0.03f,0.03f,0.03f,0.78f);
+	public Color chartbeam = new Color(0.20f,0.0f,0.20f,0.78f);
+	public Color activehit = new Color(0.20f,0.0f,0.20f);
+	public Color idlehit = new Color(0.03f,0.03f,0.03f);
 	public void reloadSkin(){
 		NoteSkinBack = GD.Load<Texture2D>("res://Skin/Game/Backgroundnote.svg");
 		NoteSkinFore = GD.Load<Texture2D>("res://Skin/Game/Foregroundnote.svg");
@@ -175,12 +177,12 @@ public partial class Gameplay : Control
 		var key = Keys[Keyx];
 		if (hit){
 			key.Node.Modulate = activehit;
-			key.Beam.Modulate = new Color(1f,1f,1f,1f);
+			key.Beam.Color = chartbeam;
 			if (key.Ani != null){
 			key.Ani.Kill();} // Abort the previous animation
 			key.Ani = Keys[Keyx].Node.CreateTween();
 			key.Ani.Parallel().TweenProperty(Keys[Keyx].Node, "modulate", idlehit, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-			key.Ani.Parallel().TweenProperty(Keys[Keyx].Beam, "modulate", new Color(0f,0f,0f,0f), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+			key.Ani.Parallel().TweenProperty(Keys[Keyx].Beam, "color", chartclear, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			key.Ani.Play();
 		}
 		key.hit = hit;
@@ -269,7 +271,7 @@ public partial class Gameplay : Control
 			var notex = Note.timing + est + Chart.Size.Y;
 			if (!Note.hit && Note.Node == null){
 					var node = new Sprite2D();
-					node.Position = new Vector2(100 * Note.NoteSection, notex);
+					node.Position = new Vector2(0, notex);
 					node.SetMeta("part",Note.NoteSection);
 					node.Centered = false;
 					node.SelfModulate = new Color(0.39f,0.19f,0.65f);
@@ -278,7 +280,7 @@ public partial class Gameplay : Control
 			}
 			if (notex > -150 && notex < viewportSize+150 && !Note.hit){
 				if (Note.Node != null && !Note.Node.IsInsideTree()){
-					Chart.AddChild(Note.Node);
+					GetNode<ColorRect>($"Playfield/ChartSections/Section{(int)Note.Node.GetMeta("part")+1}").AddChild(Note.Node);
 					var SkinFore = new Sprite2D();
 					SkinFore.Centered = false;
 					SkinFore.Texture = NoteSkinFore;
@@ -347,7 +349,7 @@ public partial class Gameplay : Control
 		hittext.Text = word;
 	}
 	public int checkjudge(int timing,bool keyvalue, Sprite2D node,bool visibility){
-		if (timing+nodeSize > Chart.Size.Y-PerfectJudge/2 && timing+nodeSize < Chart.Size.Y+PerfectJudge/2 && keyvalue && visibility){
+		if (timing+nodeSize > Chart.Size.Y-PerfectJudge && timing+nodeSize < Chart.Size.Y+PerfectJudge/2 && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["max"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
 			Hittext("Perfect", new Color(0f,0.71f,1f));

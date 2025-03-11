@@ -11,6 +11,8 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dhhkq"]
 bg_color = Color(1, 1, 1, 1)
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [node name="Gameplay" type="Control"]
 process_mode = 1
@@ -72,36 +74,38 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -6.0
 offset_top = -200.0
+offset_right = 6.0
+offset_bottom = -50.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 0
 
 [node name="Key1" type="PanelContainer" parent="Playfield/KeyBoxes"]
-modulate = Color(0, 0, 0, 0.588235)
+modulate = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_dhhkq")
 
 [node name="Key2" type="PanelContainer" parent="Playfield/KeyBoxes"]
-modulate = Color(0, 0, 0, 0.588235)
+modulate = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_dhhkq")
 
 [node name="Key3" type="PanelContainer" parent="Playfield/KeyBoxes"]
-modulate = Color(0, 0, 0, 0.588235)
+modulate = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_dhhkq")
 
 [node name="Key4" type="PanelContainer" parent="Playfield/KeyBoxes"]
-modulate = Color(0, 0, 0, 0.588235)
+modulate = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_dhhkq")
 
-[node name="Chart" type="ColorRect" parent="Playfield"]
+[node name="ChartSections" type="HBoxContainer" parent="Playfield"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -109,53 +113,42 @@ anchor_bottom = 1.0
 offset_bottom = -200.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.11, 0.11, 0.11, 0.784314)
 
-[node name="Lights" type="HBoxContainer" parent="Playfield/Chart"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 0
-
-[node name="Light1" type="ColorRect" parent="Playfield/Chart/Lights"]
-modulate = Color(1, 1, 1, 0)
+[node name="Section1" type="ColorRect" parent="Playfield/ChartSections"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-color = Color(0, 0.859375, 1, 0.0784314)
+color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
 
-[node name="Light2" type="ColorRect" parent="Playfield/Chart/Lights"]
-modulate = Color(1, 1, 1, 0)
+[node name="Section2" type="ColorRect" parent="Playfield/ChartSections"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-color = Color(0, 0.859375, 1, 0.0784314)
+color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
 
-[node name="Light3" type="ColorRect" parent="Playfield/Chart/Lights"]
-modulate = Color(1, 1, 1, 0)
+[node name="Section3" type="ColorRect" parent="Playfield/ChartSections"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-color = Color(0, 0.859375, 1, 0.0784314)
+color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
 
-[node name="Light4" type="ColorRect" parent="Playfield/Chart/Lights"]
-modulate = Color(1, 1, 1, 0)
+[node name="Section4" type="ColorRect" parent="Playfield/ChartSections"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-color = Color(0, 0.859375, 1, 0.0784314)
+color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
 
-[node name="Guard" type="ColorRect" parent="Playfield/Chart"]
+[node name="Guard" type="ColorRect" parent="Playfield"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -5.0
+offset_left = -6.0
+offset_top = -205.0
+offset_right = 6.0
+offset_bottom = -200.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="Combo" type="Label" parent="Playfield/Chart"]
+[node name="Combo" type="Label" parent="."]
 z_index = 1000
 layout_mode = 1
 anchors_preset = 8
@@ -164,9 +157,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -42.0
-offset_top = -110.0
+offset_top = -213.5
 offset_right = 42.0
-offset_bottom = -55.0
+offset_bottom = -151.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("4_caoy2")
