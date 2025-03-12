@@ -10,6 +10,8 @@ public partial class SettingsPanel : Control
 	public Button OffsetButton { get; set; }
 	public HSlider OffsetSlider { get; set; }
 	public Label OffsetTicker { get; set; }
+	public Label ScrollSpeedt { get; set; }
+	public HSlider ScrollSpeed { get; set; }
 	public ScrollContainer Scrolls { get; set; }
 	public override void _Ready(){
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -18,12 +20,16 @@ public partial class SettingsPanel : Control
 		BackgroundDim = GetNode<HSlider>("ColorRect/Panels/Scroll/Sections/BackgroundDim");
 		OffsetButton = GetNode<Button>("ColorRect/Panels/Scroll/Sections/AudioOffsetAuto");
 		OffsetSlider = GetNode<HSlider>("ColorRect/Panels/Scroll/Sections/AudioOffset");
+		ScrollSpeed = GetNode<HSlider>("ColorRect/Panels/Scroll/Sections/ScrollSpeed");
 		OffsetTicker = GetNode<Label>("ColorRect/Panels/Scroll/Sections/AudioNotice2");
 		Scrolls = GetNode<ScrollContainer>("ColorRect/Panels/Scroll");
+		ScrollSpeedt = GetNode<Label>("ColorRect/Panels/Scroll/Sections/ScrollSpeedn");
 		GetNode<Label>("ColorRect/Panels/Scroll/Sections/GodotEngineVersion").Text = $"Godot Version {Engine.GetVersionInfo()["major"]}.{Engine.GetVersionInfo()["minor"]}";
 		BackgroundDim.Value = SettingsOperator.backgrounddim;
-		OffsetButton.Text = "Set offset by last played song (" + SettingsOperator.Getms() + "ms)";
-		var offset = SettingsOperator.GetSetting("audiooffset") != null ? float.Parse(SettingsOperator.GetSetting("audiooffset").ToString()) : 0;
+		OffsetButton.Text = "Set offset by last played song (" + SettingsOperator.Getms().ToString("0.00") + "ms)";
+		var offset = SettingsOperator.GetSetting("audiooffset") != null ? 11485 / float.Parse(SettingsOperator.GetSetting("audiooffset").ToString()) : 0;
+		ScrollSpeedt.Text = $"Scroll Speed ({(11485 / (SettingsOperator.GetSetting("scrollspeed") != null ? int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString()) : 1346)).ToString()})";
+		ScrollSpeed.Value = 11485 / (SettingsOperator.GetSetting("scrollspeed") != null ? int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString()) : 1346);
 		OffsetSlider.Value = 200-offset;
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -66,5 +72,10 @@ public partial class SettingsPanel : Control
 	{
 		SettingsOperator.SetSetting("backgrounddim",BackgroundDim.Value.ToString());
 		
+	}
+	private void _scroll_speed(float value){
+		SettingsOperator.SetSetting("scrollspeed",(int)(11485/value));
+		ScrollSpeedt.Text = $"Scroll Speed ({value.ToString("0")})";
+
 	}
 }

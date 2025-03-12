@@ -172,10 +172,11 @@ text = "Game-specific Tweaks"
 [node name="ScrollSpeedn" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
 mouse_filter = 0
-text = "Scroll Speed"
+text = "Scroll Speed (0)"
 
 [node name="ScrollSpeed" type="HSlider" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
+max_value = 25.0
 
 [node name="Display" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
@@ -320,6 +321,7 @@ text = "0.0.0 Development Build"
 [connection signal="pressed" from="ColorRect/Panels/Catagories/Cata/Display" to="." method="_display"]
 [connection signal="pressed" from="ColorRect/Panels/Catagories/Cata/Audio" to="." method="_audio"]
 [connection signal="pressed" from="ColorRect/Panels/Catagories/Cata/Debug" to="." method="_debug"]
+[connection signal="value_changed" from="ColorRect/Panels/Scroll/Sections/ScrollSpeed" to="." method="_scroll_speed"]
 [connection signal="item_selected" from="ColorRect/Panels/Scroll/Sections/WindowSelector" to="." method="_changed_resolution"]
 [connection signal="drag_ended" from="ColorRect/Panels/Scroll/Sections/BackgroundDim" to="." method="_backgrounddim_ended"]
 [connection signal="value_changed" from="ColorRect/Panels/Scroll/Sections/BackgroundDim" to="." method="_backgrounddim_started"]

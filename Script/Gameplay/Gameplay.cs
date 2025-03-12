@@ -43,7 +43,7 @@ public partial class Gameplay : Control
 	private Tween hitnoteani {get;set;}
 	public Vector2 hittextoldpos {get;set;}
 	public List<NotesEn> Notes = new List<NotesEn>();
-	public int Noteindex {get;set;}
+	public int Noteindex = 1;
 	public TextureRect Beatmap_Background {get;set;}
 	private Control PauseMenu {get;set;}
 	private bool Finished {get;set;}
@@ -189,6 +189,9 @@ public partial class Gameplay : Control
 		}
 	public long Clock {get;set;}
 	public static long PClock = 0;
+
+	public const float MAX_TIME_RANGE = 11485;
+    public static float ComputeScrollTime(float scrollSpeed) => MAX_TIME_RANGE / scrollSpeed;
 	public override void _Process(double delta)
 	{   
 		Clock =DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - PClock;
@@ -260,18 +263,24 @@ public partial class Gameplay : Control
 
 		// Gamenotes
 
-
 		var viewportSize = 0f;
 		if (IsInsideTree())
 		{
 			viewportSize = GetViewportRect().Size.Y;
 		}
-		for (int i = Noteindex;i<Notes.Count;i++){
+		var timepart = 0;
+		//var scrollspeed = ComputeScrollTime(int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString())); // Scroll speed for the notes
+		var scrollspeed = 1;
+
+		for (int i = 0;i<Notes.Count;i++){
 			var Note = Notes[i];
 			var notex = Note.timing + est + Chart.Size.Y;
+			if (timepart != Note.timing){
+				Noteindex++;
+				timepart = Note.timing;
+			}
 			if (!Note.hit && Note.Node == null){
 					var node = new Sprite2D();
-					node.Position = new Vector2(0, notex);
 					node.SetMeta("part",Note.NoteSection);
 					node.Centered = false;
 					node.SelfModulate = new Color(0.39f,0.19f,0.65f);
@@ -297,7 +306,7 @@ public partial class Gameplay : Control
 					Note.Node.SelfModulate = new Color(0f,0f,0f,0f);
 				}
 				if (Note.Node != null) {
-					Note.Node.Position = new Vector2(Note.Node.Position.X, notex);
+					Note.Node.Position = new Vector2(0, notex * scrollspeed - (Chart.Size.Y * (scrollspeed-1)));
 					Ttick++;
 					JudgeResult = checkjudge((int)notex,Keys[(int)Note.Node.GetMeta("part")].hit,Note.Node,Note.Node.Visible);
 					if (JudgeResult < 4){
@@ -325,7 +334,6 @@ public partial class Gameplay : Control
 						Note.Node.Visible = false;
 						Note.Node.QueueFree();
 						Note.Node = null;
-						//Noteindex++;
 					}
 				}
 			}

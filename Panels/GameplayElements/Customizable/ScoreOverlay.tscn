@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://b0f11jnivkb1b"]
+[gd_scene load_steps=7 format=3 uid="uid://b0f11jnivkb1b"]
 
 [ext_resource type="Script" uid="uid://flh3ujgshwo6" path="res://Script/Gameplay/ScoreOverlay.cs" id="1_j3lhn"]
 [ext_resource type="FontFile" uid="uid://26bmgi83sgtv" path="res://Fonts/score.ttf" id="1_jd5hx"]
+[ext_resource type="Script" uid="uid://ciyf4fe8ewa6e" path="res://Script/Gameplay/HealthBar.cs" id="3_3t7bm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6s3ea"]
 content_margin_left = 10.0
@@ -86,3 +87,4 @@ custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 value = 100.0
 show_percentage = false
+script = ExtResource("3_3t7bm")

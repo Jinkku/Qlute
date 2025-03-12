@@ -27,6 +27,7 @@ public partial class SettingsOperator : Node
     public static bool loopaudio = false;
     public static bool jukebox = false;
     public int backgrounddim {get;set;}
+    public int scrollspeed {get;set;}
     public static double AllMiliSecondsFromBeatmap {get;set;}
     public static double MiliSecondsFromBeatmap {get;set;}
     public static int MiliSecondsFromBeatmapTimes {get;set;}
@@ -46,6 +47,7 @@ public partial class SettingsOperator : Node
 		{ "api", "https://qlute.pxki.us.to/" },
 		{ "client-id", null },
         { "client-secret", null },
+        { "scrollspeed", (int)1346 }, // 11485 ms max
 		{ "teststrip", "Ya" },
 
     };
@@ -339,7 +341,6 @@ public partial class SettingsOperator : Node
         { "multiplier" , 1.0f},
         { "fps" , 0},
         { "ms" , 0.0f},
-        { "scrollspeed", (int)1346 },
         { "background" , null},
 		{ "client-id", null },
         { "client-secret", null },

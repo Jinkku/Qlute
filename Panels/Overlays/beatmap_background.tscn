@@ -29,7 +29,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 1, 1, 0.0784314)
+color = Color(1, 1, 1, 0.101961)
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.375
