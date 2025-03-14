@@ -1,4 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://b2pypl6ci4s6g"]
+[gd_scene load_steps=13 format=3 uid="uid://b2pypl6ci4s6g"]
+
+[ext_resource type="Script" uid="uid://da5wukscc4c75" path="res://Script/Browse/CardFunctions.cs" id="1_pttee"]
+[ext_resource type="Texture2D" uid="uid://bx4ufaujlqpm8" path="res://Skin/System/download.png" id="2_tgpg0"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i3see"]
 
@@ -25,8 +28,15 @@ corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3w5u3"]
 bg_color = Color(0, 0, 0, 0.568627)
-corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pttee"]
+bg_color = Color(0.46875, 0.46875, 0.46875, 0.392157)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tgpg0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a1afo"]
 bg_color = Color(1, 1, 1, 1)
@@ -35,11 +45,11 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="Gradient" id="Gradient_ubvrx"]
-colors = PackedColorArray(0.0625, 0, 1, 1, 1, 0, 0, 1)
+[sub_resource type="Gradient" id="Gradient_tgpg0"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_les1g"]
-gradient = SubResource("Gradient_ubvrx")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wsj5f"]
+gradient = SubResource("Gradient_tgpg0")
 
 [node name="MusicCard" type="Button"]
 clip_contents = true
@@ -51,12 +61,13 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_i3see")
 theme_override_styles/hover = SubResource("StyleBoxFlat_qbp1l")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_2hi8s")
 theme_override_styles/normal = SubResource("StyleBoxFlat_cufpe")
+script = ExtResource("1_pttee")
 
 [node name="SongTitle" type="Label" parent="."]
 layout_mode = 0
 offset_left = 121.0
 offset_top = 7.0
-offset_right = 384.0
+offset_right = 351.0
 offset_bottom = 26.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
 text = "Mystery Song"
@@ -67,7 +78,7 @@ text_overrun_behavior = 3
 layout_mode = 0
 offset_left = 121.0
 offset_top = 28.0
-offset_right = 384.0
+offset_right = 351.0
 offset_bottom = 47.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
 text = "idiotiplier"
@@ -78,7 +89,7 @@ text_overrun_behavior = 3
 layout_mode = 0
 offset_left = 121.0
 offset_top = 49.0
-offset_right = 384.0
+offset_right = 351.0
 offset_bottom = 68.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
 text = "mapped by idiot"
@@ -94,6 +105,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = -40.0
+offset_right = -40.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
@@ -101,11 +113,39 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_3w5u3")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 115
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 5
+
+[node name="DownloadBar" type="PanelContainer" parent="."]
+clip_children = 2
+z_index = 1
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pttee")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DownloadBar"]
+layout_mode = 2
+alignment = 1
+
+[node name="Button" type="Button" parent="DownloadBar/VBoxContainer"]
+z_index = 1
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tgpg0")
+icon = ExtResource("2_tgpg0")
+icon_alignment = 1
 
 [node name="SongBackgroundPreview" type="PanelContainer" parent="."]
 clip_children = 2
@@ -124,8 +164,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_a1afo")
 [node name="BackgroundPreview" type="TextureRect" parent="SongBackgroundPreview"]
 layout_mode = 2
 mouse_filter = 2
-texture = SubResource("GradientTexture1D_les1g")
+texture = SubResource("GradientTexture2D_wsj5f")
 expand_mode = 1
+stretch_mode = 6
 
 [connection signal="draw" from="." to="." method="_on_draw"]
 [connection signal="hidden" from="." to="." method="_on_hidden"]
