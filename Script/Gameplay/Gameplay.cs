@@ -172,6 +172,7 @@ public partial class Gameplay : Control
 	public void reloadSkin(){
 		NoteSkinBack = GD.Load<Texture2D>("res://Skin/Game/Backgroundnote.svg");
 		NoteSkinFore = GD.Load<Texture2D>("res://Skin/Game/Foregroundnote.svg");
+		nodeSize = (int)NoteSkinBack.GetSize().Y;
 	}
 	public void hitnote(int Keyx,bool hit){
 		var key = Keys[Keyx];

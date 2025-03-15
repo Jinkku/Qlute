@@ -29,9 +29,15 @@ public partial class SongSelect : Control
 	private int scrollvelocity {get;set;}
 
     int startposition = 30;
+	int scrolloldvalue {get;set;}
 	private void _valuechangedscroll(float value){
 		SongETick = 0;
 		startposition = (int)GetViewportRect().Size.Y/2 - 166;
+//		if (scrolloldvalue != (int)value){
+//			scrolloldvalue = (int)value;
+//			AddSongList((int)value);
+//
+//		}
 		foreach (Button self in SongEntry)
 		{
 			var Y = self.Position.Y;
@@ -63,12 +69,13 @@ public partial class SongSelect : Control
 		Info = GetNode<PanelContainer>("SongDetails/Info");
 		Info.Size = new Vector2(GetViewportRect().Size.X/2.3f,Info.Size.Y);
 	}
-	public void AddSongList(string song,string artist,string mapper,int lv,string background,string path,double pp, string difficulty,string audio,Vector2 pos)
+	public void AddSongList(int id)
 	{
-
+		
 		var button = musiccardtemplate.Instantiate();
-		SongEntry.Add(button);
 		GetNode<Control>("SongPanel").AddChild(button);
+		SongEntry.Add(button);
+		var background = SettingsOperator.Beatmaps[id]["path"].ToString()+SettingsOperator.Beatmaps[id]["background"].ToString();
 		var childButton = button.GetNode<Button>(".");
 		var SongTitle = button.GetNode<Label>("MarginContainer/VBoxContainer/SongTitle");
 		var SongArtist = button.GetNode<Label>("MarginContainer/VBoxContainer/SongArtist");
@@ -76,23 +83,20 @@ public partial class SongSelect : Control
 		var TextureRect = button.GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
 		var Rating = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBox/Rating");
 		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBox/Version");
-		childButton.Position = pos;
-		SongTitle.Text = song;
-		SongArtist.Text = artist;
-		SongMapper.Text = "Created by " + mapper;
-		Version.Text = difficulty;
-		Rating.Text = "Lv. "+lv.ToString("0");
-		childButton.Name = SongETick.ToString();
+		childButton.Position = new Vector2(0, startposition + (83*id));
+		SongTitle.Text = SettingsOperator.Beatmaps[id]["Title"].ToString();
+		SongArtist.Text = SettingsOperator.Beatmaps[id]["Artist"].ToString();
+		SongMapper.Text = "Created by " + SettingsOperator.Beatmaps[id]["Mapper"].ToString();
+		Version.Text = SettingsOperator.Beatmaps[id]["Version"].ToString();
+		Rating.Text = "Lv. " + float.Parse(SettingsOperator.Beatmaps[id]["levelrating"].ToString()).ToString("0");
+		childButton.Name = id.ToString();
 		childButton.ClipText = true;
 		childButton.SetMeta("bg", background);
-		childButton.SetMeta("SongID", SongETick);
+		childButton.SetMeta("SongID", id);
 		if (background != ImageURL){
 			ImageCache = SettingsOperator.LoadImage(background);
 		}
 		TextureRect.Texture = ImageCache;
-	}
-	private void _SongScrolldirectionreset(){
-		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
 	}
 	private void _on_random(){
 		SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
@@ -136,26 +140,18 @@ public partial class SongSelect : Control
 		SongMapper = GetNode<Label>("SongDetails/Info/Plasa/Mapper");
 		SongAccuracy = GetNode<Label>("SongDetails/Info/Plasa/Accuracy");
 		var timex = DateTime.Now.Second;
-		foreach (var song in SettingsOperator.Beatmaps)
-		{	
-			AddSongList(song["Title"].ToString(),
-			song["Artist"].ToString(),
-			song["Mapper"].ToString(),
-			(int)float.Parse(song["levelrating"].ToString()),
-			song["path"].ToString()+song["background"].ToString(),
-			song["rawurl"].ToString(), (double)song["pp"]
-			,(string)song["Version"],song["path"].ToString()+song["audio"].ToString()
-			, new Vector2(0, startposition + (83*SongETick)));
-			SongETick++;
-		}
 		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
 		GD.Print("Finished about " + (DateTime.Now.Second-timex) + "s");
 
 		
+		for(int i = 0; i < SettingsOperator.Beatmaps.Count();i++)
+		{	
+			AddSongList(i);
+		}
 		
 
 		_res_resize();
-		_SongScrolldirectionreset();
+		scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
 		checksongpanel();
 	}
 
@@ -223,7 +219,7 @@ public partial class SongSelect : Control
 			_Mods_show();
 		}else if (Input.IsActionJustPressed("Random")){
 			_on_random();
-			_SongScrolldirectionreset();
+			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
 
 		}else if (Input.IsActionJustPressed("Collections")){
 

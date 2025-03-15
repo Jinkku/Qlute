@@ -147,6 +147,15 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_tgpg0")
 icon = ExtResource("2_tgpg0")
 icon_alignment = 1
 
+[node name="Button2" type="Button" parent="DownloadBar/VBoxContainer"]
+visible = false
+z_index = 1
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tgpg0")
+text = "fav"
+icon = ExtResource("2_tgpg0")
+icon_alignment = 1
+
 [node name="SongBackgroundPreview" type="PanelContainer" parent="."]
 clip_children = 2
 z_index = 1

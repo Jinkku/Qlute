@@ -69,7 +69,7 @@ DownloadImage(string path, Action<ImageTexture> callback)
         GD.PrintErr("Error downloading or processing image: " + e.Message);
     }
 }
-	private async void _BrowseAPI_finished(long result, long responseCode, string[] headers, byte[] body){
+	private void _BrowseAPI_finished(long result, long responseCode, string[] headers, byte[] body){
 		string BrowseEntries = (string)Encoding.UTF8.GetString(body);
 		List<BrowseCatalogLegend> items = JsonSerializer.Deserialize<List<BrowseCatalogLegend>>(BrowseEntries);
 		try{
