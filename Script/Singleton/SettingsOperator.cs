@@ -89,6 +89,7 @@ public partial class SettingsOperator : Node
             Gameplaycfg["timetotal"] = (int)beatmap["timetotal"];
             Sessioncfg["beatmapmapper"] = beatmap["Mapper"];
             Sessioncfg["beatmapaccuracy"] = (int)beatmap["accuracy"];
+            Sessioncfg["levelrating"] = (double)beatmap["levelrating"];
             Sessioncfg["osubeatid"] = (int)beatmap["osubeatid"];
             Sessioncfg["osubeatidset"] = (int)beatmap["osubeatidset"];
 		    var Texture = LoadImage(beatmap["path"].ToString()+beatmap["background"].ToString());

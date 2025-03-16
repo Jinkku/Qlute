@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bla4qqlg1shra"]
+[gd_scene load_steps=18 format=3 uid="uid://bla4qqlg1shra"]
 
 [ext_resource type="Script" uid="uid://dtqpa0tsirnjp" path="res://Script/SongLoadingScreen/SongLoadingScreen.cs" id="1_2kt4t"]
 [ext_resource type="Texture2D" uid="uid://dugxlwc4epe6i" path="res://DefaultWallpaper/a.png" id="1_4pmu1"]
@@ -12,42 +12,14 @@ length = 2.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Centerish/Infoscreen/Previewimage:custom_minimum_size")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.533333, 0.566667, 0.6, 0.633333, 0.666667, 0.7, 0.733333, 0.766667, 0.8, 0.833333, 0.866667, 0.9, 0.933333, 0.966667, 1, 1.03333, 1.06667, 1.1, 1.13333),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(100, 0), Vector2(100, 0.137174), Vector2(100, 1.09739), Vector2(100, 3.7037), Vector2(100, 8.77915), Vector2(100, 17.1468), Vector2(100, 29.6296), Vector2(100, 47.0507), Vector2(100, 70.2332), Vector2(100, 100), Vector2(100, 129.767), Vector2(100, 152.949), Vector2(100, 170.37), Vector2(100, 182.853), Vector2(100, 191.221), Vector2(100, 196.296), Vector2(100, 198.903), Vector2(100, 199.863), Vector2(100, 200)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Centerish/Infoscreen:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_xfkn3"]
-resource_name = "Dim"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Flash:self_modulate")
+tracks/0/path = NodePath("InfoBox:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1)]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_mobq1"]
@@ -55,22 +27,10 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Centerish/Infoscreen/Previewimage:custom_minimum_size")
+tracks/0/path = NodePath("InfoBox:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(100, 200)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Centerish/Infoscreen:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -80,7 +40,6 @@ tracks/1/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_vcna2"]
 _data = {
 &"AnimationSongTick": SubResource("Animation_wuxwg"),
-&"Dim": SubResource("Animation_xfkn3"),
 &"RESET": SubResource("Animation_mobq1")
 }
 
@@ -91,12 +50,22 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4rpdu"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_28gti"]
+content_margin_left = 15.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ukgnb"]
+content_margin_left = 15.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5hbj0"]
+content_margin_left = 15.0
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cviis"]
 content_margin_left = 5.0
 content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
-skew = Vector2(0.5, 0)
+bg_color = Color(0, 0, 0, 0.196078)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -134,7 +103,7 @@ one_shot = true
 
 [node name="Wafuk" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_vcna2")
+&"": SubResource("AnimationLibrary_vcna2")
 }
 
 [node name="BeatmapBackground" parent="." instance=ExtResource("1_635sp")]
@@ -145,97 +114,84 @@ offset_top = 0.0
 offset_right = 0.0
 offset_bottom = 0.0
 
-[node name="Centerish" type="CenterContainer" parent="."]
+[node name="InfoBox" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -200.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 60
 
-[node name="Infoscreen" type="VBoxContainer" parent="Centerish"]
+[node name="H" type="HBoxContainer" parent="InfoBox"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="Centerish/Infoscreen"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Sweet Dreams"
-horizontal_alignment = 1
-
-[node name="Artist" type="Label" parent="Centerish/Infoscreen"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "Tokana Nanashi"
-horizontal_alignment = 1
-
-[node name="S p l i t4" type="MarginContainer" parent="Centerish/Infoscreen"]
-layout_mode = 2
-theme_override_constants/margin_bottom = 10
-
-[node name="Previewimage" type="PanelContainer" parent="Centerish/Infoscreen"]
+[node name="Previewimage" type="PanelContainer" parent="InfoBox/H"]
 clip_children = 2
 custom_minimum_size = Vector2(100, 200)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wvjpw")
 
-[node name="TextureRect" type="TextureRect" parent="Centerish/Infoscreen/Previewimage"]
+[node name="TextureRect" type="TextureRect" parent="InfoBox/H/Previewimage"]
 layout_mode = 2
 texture = ExtResource("1_4pmu1")
 expand_mode = 2
 stretch_mode = 6
 script = ExtResource("2_yjtgo")
 
-[node name="Control" type="Control" parent="Centerish/Infoscreen"]
-custom_minimum_size = Vector2(0, 36)
+[node name="Box" type="VBoxContainer" parent="InfoBox/H"]
 layout_mode = 2
+alignment = 1
 
-[node name="LevelPanel" type="PanelContainer" parent="Centerish/Infoscreen/Control"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -27.5
-offset_top = -14.5
-offset_right = 27.5
-offset_bottom = 14.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_4rpdu")
-
-[node name="Level" type="Label" parent="Centerish/Infoscreen/Control/LevelPanel"]
+[node name="Title" type="Label" parent="InfoBox/H/Box"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Lv. 1"
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_28gti")
+text = "Sweet Dreams"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Centerish/Infoscreen/Control"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Difficulty" type="Label" parent="Centerish/Infoscreen"]
+[node name="Artist" type="Label" parent="InfoBox/H/Box"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxEmpty_28gti")
+text = "Tokana Nanashi"
+
+[node name="Difficulty" type="Label" parent="InfoBox/H/Box"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxEmpty_28gti")
 text = "Love me like you take me away~"
-horizontal_alignment = 1
 
-[node name="S p l i t2" type="MarginContainer" parent="Centerish/Infoscreen"]
-layout_mode = 2
-theme_override_constants/margin_bottom = 35
-
-[node name="Source" type="Label" parent="Centerish/Infoscreen"]
+[node name="Source" type="Label" parent="InfoBox/H/Box"]
+visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ukgnb")
 text = "Source: MAKA PIE?!"
-horizontal_alignment = 1
 
-[node name="Creator" type="Label" parent="Centerish/Infoscreen"]
+[node name="Creator" type="Label" parent="InfoBox/H/Box"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ukgnb")
 text = "Creator: dummy"
-horizontal_alignment = 1
+
+[node name="Infos" type="PanelContainer" parent="InfoBox/H/Box"]
+custom_minimum_size = Vector2(0, 19)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5hbj0")
+
+[node name="Sections" type="HBoxContainer" parent="InfoBox/H/Box/Infos"]
+layout_mode = 2
+
+[node name="Level" type="Label" parent="InfoBox/H/Box/Infos/Sections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_cviis")
+text = "Lv. 42"
 
 [node name="BackButton" type="Button" parent="."]
 custom_minimum_size = Vector2(0, 50)
@@ -252,17 +208,6 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_0hfqi")
 theme_override_styles/normal = SubResource("StyleBoxFlat_jr6c1")
 text = "  Back"
 icon = ExtResource("2_h8mlh")
-
-[node name="Flash" type="ColorRect" parent="."]
-self_modulate = Color(0, 0, 0, 0)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0, 0, 0, 1)
 
 [connection signal="timeout" from="Timer" to="." method="_Timer_load"]
 [connection signal="animation_finished" from="Wafuk" to="." method="_Animationf"]
