@@ -87,21 +87,21 @@ public partial class Gameplay : Control
 		meh.Size = new Vector2(400,MehJudge);
 		meh.Position = new Vector2(0,-MehJudge/2);
 		meh.Color = new Color(0.5f,0f,0f,0.1f);
-		meh.Visible = false;
+		meh.Visible = true;
 		GetNode<ColorRect>("Playfield/Guard").AddChild(meh);
 
 		great = new ColorRect();
 		great.Size = new Vector2(400,GreatJudge);
 		great.Position = new Vector2(0,-GreatJudge/2);
 		great.Color = new Color(0f,0.5f,0f,0.1f);
-		great.Visible = false;
+		great.Visible = true;
 		GetNode<ColorRect>("Playfield/Guard").AddChild(great);
 		
 		perfect = new ColorRect();
-		perfect.Size = new Vector2(400,PerfectJudge+(PerfectJudge/2));
+		perfect.Size = new Vector2(400,PerfectJudge*2);
 		perfect.Position = new Vector2(0,-PerfectJudge);
 		perfect.Color = new Color(0f,0f,0.5f,0.1f);
-		perfect.Visible = false;
+		perfect.Visible = true;
 		GetNode<ColorRect>("Playfield/Guard").AddChild(perfect);
 
 		//Ttiming = GetNode<Label>("Time");
@@ -358,7 +358,7 @@ public partial class Gameplay : Control
 		hittext.Text = word;
 	}
 	public int checkjudge(int timing,bool keyvalue, Sprite2D node,bool visibility){
-		if (timing+nodeSize > Chart.Size.Y-PerfectJudge && timing+nodeSize < Chart.Size.Y+PerfectJudge/2 && keyvalue && visibility){
+		if (timing+nodeSize > Chart.Size.Y-PerfectJudge && timing+nodeSize < Chart.Size.Y+PerfectJudge && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["max"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
 			Hittext("Perfect", new Color(0f,0.71f,1f));

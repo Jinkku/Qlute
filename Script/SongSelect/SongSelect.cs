@@ -27,6 +27,7 @@ public partial class SongSelect : Control
 	public PanelContainer Info {get;set;}
     public Tween scrolltween { get; private set; }
 	private int scrollvelocity {get;set;}
+	public Label RankedStatus {get;set;}
 
     int startposition = 30;
 	int scrolloldvalue {get;set;}
@@ -119,6 +120,7 @@ public partial class SongSelect : Control
 	{
 		SettingsOperator.loopaudio = true;
 		scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
+		RankedStatus = GetNode<Label>("SongDetails/Info/Plasa/RankedStatus");
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		SongETick = 0;
 

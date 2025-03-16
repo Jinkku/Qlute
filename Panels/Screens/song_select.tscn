@@ -27,7 +27,7 @@ shadow_size = 12
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5vans"]
 content_margin_left = 20.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a1x7w"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7pw6v"]
 content_margin_left = 5.0
 content_margin_top = 5.0
 content_margin_right = 5.0
@@ -335,7 +335,7 @@ grow_vertical = 0
 tooltip_text = "Open in browser"
 icon = ExtResource("3_javs2")
 
-[node name="Label" type="Label" parent="SongDetails/Info/Plasa"]
+[node name="RankedStatus" type="Label" parent="SongDetails/Info/Plasa"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -346,7 +346,7 @@ offset_right = 27.0
 offset_bottom = 29.0
 grow_horizontal = 0
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_a1x7w")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7pw6v")
 text = "Unranked"
 horizontal_alignment = 1
 vertical_alignment = 1
