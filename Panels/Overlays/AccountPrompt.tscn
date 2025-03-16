@@ -195,13 +195,39 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = -34.0
-offset_right = 153.0
-offset_bottom = -6.0
+offset_left = 9.0
+offset_top = -31.0
+offset_right = 152.0
+offset_bottom = -3.0
 grow_vertical = 0
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 18
 text = "#999,999,999"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="PerformanceNotice" type="Label" parent="AccPanel/Log/Panel"]
+layout_mode = 0
+offset_left = 163.0
+offset_top = 66.0
+offset_right = 270.0
+offset_bottom = 94.0
+theme_override_font_sizes/font_size = 16
+text = "Performance"
+horizontal_alignment = 2
+
+[node name="PerformanceNumber" type="Label" parent="AccPanel/Log/Panel"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 156.0
+offset_top = -31.0
+offset_right = 270.0
+offset_bottom = -3.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 18
+text = "99,523pp"
+horizontal_alignment = 2
 clip_text = true
 text_overrun_behavior = 3
 

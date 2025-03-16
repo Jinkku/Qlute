@@ -9,7 +9,7 @@ public partial class ApiOperator : Node
 {
 	// Called when the node enters the scene tree for the first time.
 	public static HttpRequest LoginApi { get; set; }
-	public static HttpRequest RankingApi { get; set; }
+	public static HttpRequest InfoApi { get; set; }
 	public static HttpRequest SubmitApi { get; set; }
 	public static string Username = "Guest";
 	public static string PasswordHash = null;
@@ -24,12 +24,14 @@ public partial class ApiOperator : Node
 		double MEH = SettingsOperator.Gameplaycfg["meh"];
 		double BAD = SettingsOperator.Gameplaycfg["bad"];
 		double COMBO = SettingsOperator.Gameplaycfg["maxcombo"];
+		double timetotal = SettingsOperator.Gameplaycfg["timetotal"] * 0.001;
 		string[] Headers = new string[] {
 			$"BeatmapID: {BeatmapID}",
 			$"BeatmapSetID: {BeatmapSetID}",
 			$"USERNAME: {SettingsOperator.GetSetting("username")}",
 			$"PASSWORD: {SettingsOperator.GetSetting("password")}",
 			$"MAX: {MAX}",
+			$"TAKEN: {timetotal}",
 			$"GREAT: {GREAT}",
 			$"MEH: {MEH}",
 			$"BAD: {BAD}",
@@ -46,15 +48,15 @@ public partial class ApiOperator : Node
 		Username = SettingsOperator.GetSetting("username")?.ToString();
 		PasswordHash = SettingsOperator.GetSetting("password")?.ToString();
 		LoginApi = new HttpRequest();
-		RankingApi = new HttpRequest();
+		InfoApi = new HttpRequest();
 		SubmitApi = new HttpRequest();
 		LoginApi.Timeout = 3;
-		RankingApi.Timeout = 3;
-		AddChild(RankingApi);
+		InfoApi.Timeout = 3;
+		AddChild(InfoApi);
 		AddChild(LoginApi);
 		AddChild(SubmitApi);
 		LoginApi.Connect("request_completed", new Callable(this, nameof(_on_login_api_request_completed)));
-		RankingApi.Connect("request_completed", new Callable(this, nameof(_on_Ranking_request_completed)));
+		InfoApi.Connect("request_completed", new Callable(this, nameof(_on_info_request_completed)));
 		SubmitApi.Connect("request_completed",new Callable(this,nameof(_Submitrequest)));
 		if ((Username != null || PasswordHash != null) && (bool)SettingsOperator.Sessioncfg["loggedin"] == false){
 			UPlayerName.Instance.Text = Username;
@@ -63,15 +65,16 @@ public partial class ApiOperator : Node
 	}
 
 	private void _Submitrequest(long result, long responseCode, string[] headers, byte[] body){
-		Notify.Post(Encoding.UTF8.GetString(body));
 		Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
 		if ((int)json["rankedmap"] >0 && (int)json["error"] == 0){
 		RankUpdate.Update((int)json["rank"],(int)json["points"]);}
 	}
-	private void _on_Ranking_request_completed(long result, long responseCode, string[] headers, byte[] body){
-		Ranking.Instance.Text = "#" + (string)Encoding.UTF8.GetString(body);
+	private void _on_info_request_completed(long result, long responseCode, string[] headers, byte[] body){
+		Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
+		
+		Ranking.Instance.Text = "#" + json["rank"].AsInt32().ToString("N0");
 		Ranking.Instance.Visible = true;
-		string Ranknum = (string)Encoding.UTF8.GetString(body);
+		string Ranknum = json["rank"].AsInt32().ToString("N0");
 		if (int.TryParse(Ranknum, out int n)){
 			if (n == 0){
 				Ranking.Instance.Visible = false;
@@ -79,20 +82,21 @@ public partial class ApiOperator : Node
 			Ranking.Instance.Text = "#" + n.ToString("N0");}
 		}
 		SettingsOperator.Sessioncfg["ranknumber"] = n;
+		SettingsOperator.ranked_points = json["points"].AsInt32();
 		
 
 	
 	}
-	public void Check_Rank(string Username){
+	public void Check_Info(string Username){
 		GD.Print("Using Profile: "+ Username);
-		RankingApi.Request(SettingsOperator.GetSetting("api") + "apiv2/getstat/rank",new string[]{$"USERNAME: {Username}"});}
+		InfoApi.Request(SettingsOperator.GetSetting("api") + "apiv2/getstat/full",new string[]{$"USERNAME: {Username}"});}
 	
 	private string _on_login_api_request_completed(long result, long responseCode, string[] headers, byte[] body){
 		Notify.Post(Encoding.UTF8.GetString(body));
 		Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
 		SettingsOperator.Sessioncfg["loggingin"] = false;
 		if ((bool)json["success"] && responseCode == 200) {
-			Check_Rank(Username);
+			Check_Info(Username);
 			SettingsOperator.SetSetting("username",Username);
 			Username = SettingsOperator.GetSetting("username")?.ToString();
 			UPlayerName.Instance.Text = Username;

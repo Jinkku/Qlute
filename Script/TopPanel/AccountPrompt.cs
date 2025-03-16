@@ -14,6 +14,7 @@ public partial class AccountPrompt : Control
 	public Control Log {get;set;}
 	public MarginContainer NotLog {get;set;}
 	public Label Ranking {get;set;}
+	public Label PerformanceNumber {get;set;}
 	public Label PlayerName {get;set;}
 	public static SettingsOperator SettingsOperator { get; set; }
 	public override void _Process(double _delta){
@@ -25,9 +26,11 @@ public partial class AccountPrompt : Control
 			NotLog.Visible = true;
 		}
 		Ranking = GetNode<Label>("AccPanel/Log/Panel/RankingNumber");
+		PerformanceNumber = GetNode<Label>("AccPanel/Log/Panel/PerformanceNumber");
 		PlayerName = GetNode<Label>("AccPanel/Log/Panel/UsernameSection/Username"); 
 		PlayerName.Text = SettingsOperator.GetSetting("username")?.ToString();
 		Ranking.Text ="#" + SettingsOperator.Sessioncfg["ranknumber"]?.ToString();
+		PerformanceNumber.Text =$"{SettingsOperator.ranked_points.ToString("N0")}pp";
 	}
 	public override void _Ready()
 	{

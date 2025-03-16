@@ -311,7 +311,7 @@ public partial class SettingsOperator : Node
         {"meh", 0},
         {"bad", 0},
     };
-
+    public static int ranked_points {get;set;}
     public static Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
     {
         { "TopPanelSlideip", false },

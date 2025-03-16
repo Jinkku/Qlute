@@ -31,9 +31,20 @@ public partial class RankUpdate : Label
 		}
 	}
 	public static void Update(int rank,int pp){
-		
-		PointsUpdate.Text = "Performance\n+" +pp.ToString("N0") + "pp";
-		RankUpdateT.Text = "Global Rank\n#" + rank.ToString("N0");
+		string arank = "";
+		string app = "";
+		int ranknow = rank - (int)SettingsOperator.Sessioncfg["ranknumber"];
+		int ppnow = pp - SettingsOperator.ranked_points;
+		if (ranknow > 0){
+			arank = "+";
+		}
+		if (ppnow > 0){
+			app = "+";
+		}
+		PointsUpdate.Text =$"{pp.ToString("N0")}pp\n{app}" + ppnow.ToString("N0") + "pp";
+		RankUpdateT.Text = $"#{rank.ToString("N0")}\n{arank}" + ranknow.ToString("N0");
+		SettingsOperator.Sessioncfg["ranknumber"] = rank;
+		SettingsOperator.ranked_points = pp;
 		Updated = true;
 	}
 }

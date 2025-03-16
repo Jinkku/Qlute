@@ -254,7 +254,7 @@ public partial class Gameplay : Control
 			SettingsOperator.toppaneltoggle();
 			GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 		}
-		//debugtext.Text = $"est: {est}\nDanceIndex:{DanceIndex}\nTimeindex:{dance.ElementAt(DanceIndex).time}";
+		debugtext.Text = $"est: {est}\nDanceIndex:{DanceIndex}\nTimeindex:{dance.ElementAt(DanceIndex).time}";
 		if ((int)est > dance.ElementAt(DanceIndex).time){
 			BeatmapBackground.FlashEnable = dance.ElementAt(DanceIndex).flash;
 			if (DanceIndex + 1 < dance.Count()){
@@ -284,7 +284,7 @@ public partial class Gameplay : Control
 					var node = new Sprite2D();
 					node.SetMeta("part",Note.NoteSection);
 					node.Centered = false;
-					node.SelfModulate = new Color(0.39f,0.19f,0.65f);
+					node.SelfModulate = new Color(0.83f,0f,1f);
 					node.Texture = NoteSkinBack;
 					Note.Node = node;
 			}

@@ -220,13 +220,13 @@ anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = 10.0
 offset_top = -20.5
-offset_right = 117.0
+offset_right = 90.0
 offset_bottom = 20.5
 grow_horizontal = 0
 grow_vertical = 2
-theme_override_font_sizes/font_size = 12
-text = "Global Rank
-+#2,600"
+theme_override_font_sizes/font_size = 10
+text = "+#999,999,999
+3"
 vertical_alignment = 1
 script = ExtResource("6_3trnu")
 
@@ -242,9 +242,9 @@ offset_right = 107.0
 offset_bottom = 20.5
 grow_horizontal = 0
 grow_vertical = 2
-theme_override_font_sizes/font_size = 12
-text = "Performance
-2,600pp"
+theme_override_font_sizes/font_size = 10
+text = "99,999pp
+-20"
 vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="InfoBar"]
