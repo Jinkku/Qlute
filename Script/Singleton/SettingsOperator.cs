@@ -223,7 +223,6 @@ public partial class SettingsOperator : Node
                 }
                 if (timingParts.Length > 1 && int.TryParse(timingParts.First(), out int timecount) && int.TryParse(timingParts.Last(), out int flashtime)){
                     dance.Add(new DanceCounter { time = timecount, flash = flashtime == 1 });
-                    GD.Print($"{timecount} {flashtime}");
                 }
             }
             }
