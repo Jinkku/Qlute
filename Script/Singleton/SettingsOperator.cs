@@ -17,7 +17,7 @@ public partial class SettingsOperator : Node
 	//public string homedir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + "/.qlute";
     public string homedir = OS.GetUserDataDir();
 	public string beatmapsdir => homedir + "/beatmaps";
-    public static float ppbase = 0.06f;
+    public static float ppbase = 0.035f;
 	public string downloadsdir => homedir + "/downloads";
 	public string replaydir => homedir + "/replays";
 	public string screenshotdir => homedir + "/screenshots";
@@ -142,6 +142,7 @@ public partial class SettingsOperator : Node
         int qlbeatidset = 0;
         double ppvalue = 0;
         string mapper = "";
+        double levelrating = 0;
         int notetime = 0;
         string background = "";
         string audio = "";
@@ -240,6 +241,7 @@ public partial class SettingsOperator : Node
                 {
                     ppvalue = Get_ppvalue(hitob,0,0,0,combo: hitob);
                     isHitObjectSection = !isHitObjectSection;
+                    levelrating = hitob * 0.005;
                     timetotal = notetime;
                     break;
                 }
@@ -263,7 +265,7 @@ public partial class SettingsOperator : Node
             { "bpm", bpm },
             { "dance", dance },
             { "timetotal", (int)timetotal },
-            { "levelrating", ppvalue*0.05 },
+            { "levelrating", levelrating },
             { "accuracy", accuracy},
             { "background", background },
             { "audio", audio },
