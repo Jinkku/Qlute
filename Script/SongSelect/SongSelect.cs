@@ -28,38 +28,26 @@ public partial class SongSelect : Control
     public Tween scrolltween { get; private set; }
 	private int scrollvelocity {get;set;}
 	public Label RankedStatus {get;set;}
+	private bool AnimationSong {get;set;}
+	private int SongLoaded {get;set;}
 
     int startposition = 30;
 	int scrolloldvalue {get;set;}
 	private void _valuechangedscroll(float value){
 		SongETick = 0;
 		startposition = (int)GetViewportRect().Size.Y/2 - 166;
-//		if (scrolloldvalue != (int)value){
-//			scrolloldvalue = (int)value;
-//			AddSongList((int)value);
-//
-//		}
-		foreach (Button self in SongEntry)
-		{
-			var Y = self.Position.Y;
-			self.Position = new Vector2(0, startposition+(SongETick*83) - (83*(float)scrollBar.Value));
-			SongETick++;
-		}
+		Debugtext.Text = $"{value.ToString()}/{SongLoaded.ToString()}";
+		ScrollSongs();
 	}
 
 
 
-	private void scrollmode(int ement = 0, int exactvalue = 0){
-		var value = 0.0;
-		if (scrolltween != null){
-				scrolltween.Kill();
-		}if (ement != 0){
-			value = scrollBar.Value+ement;
-		}else {
-			value = exactvalue;
-		}
+	private void scrollmode(int ement = 0, int exactvalue = 0)
+	{
+		double value = ement != 0 ? scrollBar.Value + ement : exactvalue;
+		scrolltween?.Kill();
 		scrolltween = CreateTween();
-		scrolltween.TweenProperty(scrollBar,"value", value, 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		scrolltween.TweenProperty(scrollBar, "value", value, 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		scrolltween.Play();
 	}
 	public void _res_resize(){
@@ -125,12 +113,11 @@ public partial class SongSelect : Control
 		SongETick = 0;
 
 
-
-		//Debugtext = new Label();
-		//Debugtext.ZIndex = 1024;
-		//Debugtext.Text = "X3";
-		//Debugtext.Position = new Vector2(100,100);
-		//AddChild(Debugtext);
+		Debugtext = new Label();
+		Debugtext.ZIndex = 1024;
+		Debugtext.Text = "X3";
+		Debugtext.Position = new Vector2(100,100);
+		AddChild(Debugtext);
 		Diff = GetNode<Label>("SongDetails/Info/Plasa/Difficulty");
 		ModScreen = GetNode<PanelContainer>("ModsScreen");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -141,52 +128,100 @@ public partial class SongSelect : Control
 		SongLen = GetNode<Label>("SongDetails/Info/Plasa/Length");
 		SongMapper = GetNode<Label>("SongDetails/Info/Plasa/Mapper");
 		SongAccuracy = GetNode<Label>("SongDetails/Info/Plasa/Accuracy");
-		var timex = DateTime.Now.Second;
+		var timex = DateTime.Now.Millisecond;
 		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
-		GD.Print("Finished about " + (DateTime.Now.Second-timex) + "s");
 
 		
-		for(int i = 0; i < SettingsOperator.Beatmaps.Count();i++)
-		{	
-			AddSongList(i);
-		}
+//		for(int i = 0; i < SettingsOperator.Beatmaps.Count();i++)
+//		{	
+//			AddSongList(i);
+//		}
+		GD.Print("Finished about " + (DateTime.Now.Millisecond-timex) + "ms");
 		
 
 		_res_resize();
-		scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
 		checksongpanel();
+		GD.Print((int)SettingsOperator.Sessioncfg["SongID"]);
 	}
+	// M
+	private void ScrollSongs()
+	{
+			// Calculate visible range with larger buffer to reduce flickering
+			float viewportHeight = GetViewportRect().Size.Y;
+			int visibleItemCount = (int)(viewportHeight / 83) + 4; // Increased buffer items
+			int startIndex = Math.Max(0, (int)scrollBar.Value - 2);
+			int endIndex = Math.Min(SettingsOperator.Beatmaps.Count, startIndex + visibleItemCount);
 
+			// Remove items outside visible range
+			for (int i = SongEntry.Count - 1; i >= 0; i--)
+			{
+				if (SongEntry[i] is Button button)
+				{
+					int buttonIndex = int.Parse(button.Name);
+					if (buttonIndex < startIndex || buttonIndex >= endIndex)
+					{
+						button.QueueFree();
+						SongEntry.RemoveAt(i);
+					}
+				}
+			}
+
+			// Add missing visible items
+			for (int i = startIndex; i < endIndex; i++)
+			{
+				if (!SongEntry.Any(entry => entry is Button btn && btn.Name == i.ToString()))
+				{
+					AddSongList(i);
+				}
+				// Update positions of existing entries
+				if (SongEntry.FirstOrDefault(e => e is Button btn && btn.Name == i.ToString()) is Button entry)
+				{
+					entry.ZIndex = 0; // Ensure proper layering
+					entry.Position = new Vector2(0, startposition + (83 * i) - (83 * (float)scrollBar.Value));
+				}
+			}
+	}
 	// Manages SongDetails
 
-	private void checksongpanel(){
+	private void checksongpanel()
+	{
 		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No song selected.";
-		if ( SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.Sessioncfg["beatmaptitle"] != null){
-		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
-		Songpp.Text = "+" + (SettingsOperator.Gameplaycfg["maxpp"]*ModsMulti.multiplier).ToString("N0")+"pp";
-		SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
-		SongBPM.Text = "BPM - " + ((int)SettingsOperator.Sessioncfg["beatmapbpm"]*AudioPlayer.Instance.PitchScale).ToString("N0") ?? "";
-		SongLen.Text = TimeSpan.FromMilliseconds(SettingsOperator.Gameplaycfg["timetotal"]/AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00";
-		SongAccuracy.Text = "Accuracy Lv. " + ((int)SettingsOperator.Sessioncfg["beatmapaccuracy"]).ToString("00") ?? "Accuracy Lv. 00";
-		SongArtist.Visible = true;
-		Songpp.Visible = true;
-		SongMapper.Visible = true;
-		SongLen.Visible = true;
-		SongBPM.Visible = true;
-		SongAccuracy.Visible = true;}
-		else {
-			SongArtist.Visible = false;
-			Songpp.Visible = false;
-			SongMapper.Visible = false;
-			SongAccuracy.Visible = false;
-			SongBPM.Visible = false;
-			SongLen.Visible = false;
+		if (SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.Sessioncfg["beatmaptitle"] != null)
+		{
+			// Update song details
+			SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
+			Songpp.Text = "+" + (SettingsOperator.Gameplaycfg["maxpp"]*ModsMulti.multiplier).ToString("N0")+"pp";
+			SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
+			SongBPM.Text = "BPM - " + ((int)SettingsOperator.Sessioncfg["beatmapbpm"]*AudioPlayer.Instance.PitchScale).ToString("N0") ?? "";
+			SongLen.Text = TimeSpan.FromMilliseconds(SettingsOperator.Gameplaycfg["timetotal"]/AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00";
+			SongAccuracy.Text = "Accuracy Lv. " + ((int)SettingsOperator.Sessioncfg["beatmapaccuracy"]).ToString("00") ?? "Accuracy Lv. 00";
+
+
+			SetControlsVisibility(true);
 		}
-		if (SettingsOperator.Sessioncfg["beatmapdiff"] != null){
-		Diff.Text = SettingsOperator.Sessioncfg["beatmapdiff"].ToString();}
-		else {
+		else
+		{
+			SetControlsVisibility(false);
+		}
+
+		if (SettingsOperator.Sessioncfg["beatmapdiff"] != null)
+		{
+			Diff.Text = SettingsOperator.Sessioncfg["beatmapdiff"].ToString();
+		}
+		else
+		{
 			Diff.Text = "";
 		}
+	}
+
+	private void SetControlsVisibility(bool visible)
+	{
+		SongArtist.Visible = visible;
+		Songpp.Visible = visible;
+		SongMapper.Visible = visible;
+		SongLen.Visible = visible;
+		SongBPM.Visible = visible;
+		SongAccuracy.Visible = visible;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -199,6 +234,11 @@ public partial class SongSelect : Control
 		}
 		scrollBar.MaxValue = SettingsOperator.Beatmaps.Count;
 		
+		if (!AnimationSong){
+			AnimationSong = !AnimationSong;
+			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
+		}
+		ScrollSongs();
 		checksongpanel();
 
 		if (Input.IsActionJustPressed("Songup")){
@@ -229,13 +269,13 @@ public partial class SongSelect : Control
 			if (scrollvelocity < 0){
 				scrollvelocity = 0;
 			}
-			scrollvelocity++;
+			scrollvelocity = Math.Min(scrollvelocity + 1,2);
 			scrollmode(1 + scrollvelocity);
 		}else if (Input.IsActionJustPressed("scrollup")&& scrollBar.Value-1 > -1){
 			if (scrollvelocity > 0){
 				scrollvelocity = 0;
 			}
-			scrollvelocity--;
+			scrollvelocity = Math.Max(scrollvelocity - 1,-2);
 			scrollmode(-1 + scrollvelocity);
 		}
 		//Debugtext.Text = scrolly.ToString();
