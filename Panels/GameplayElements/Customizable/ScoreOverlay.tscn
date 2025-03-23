@@ -85,6 +85,5 @@ theme_override_constants/margin_bottom = 5
 [node name="HealthBar" type="ProgressBar" parent="ScoreBarBack/ScoreInfo"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
-value = 100.0
 show_percentage = false
 script = ExtResource("3_3t7bm")

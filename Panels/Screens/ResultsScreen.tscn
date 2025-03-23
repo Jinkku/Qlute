@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://oru46ou3jfjl"]
+[gd_scene load_steps=14 format=3 uid="uid://oru46ou3jfjl"]
 
 [ext_resource type="Script" uid="uid://bj6kjjp2yikxr" path="res://Script/ResultsScreen/ResultsScreen.cs" id="1_e0sg4"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="1_xhck8"]
@@ -28,8 +28,12 @@ variation_opentype = {
 2003265652: 700
 }
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5cm84"]
+content_margin_top = 5.0
+content_margin_right = 0.0
+content_margin_bottom = 5.0
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vqons"]
-content_margin_top = 10.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fvdrv"]
 content_margin_left = 5.0
@@ -124,9 +128,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -250.0
-offset_top = -216.5
+offset_top = -250.0
 offset_right = 250.0
-offset_bottom = 216.5
+offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wqbwm")
@@ -147,6 +151,13 @@ layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_csg6c")
 theme_override_font_sizes/font_size = 32
 text = "SS"
+horizontal_alignment = 1
+
+[node name="Score" type="Label" parent="AlertBox/Box"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5cm84")
+text = "000,000,000"
 horizontal_alignment = 1
 
 [node name="Title" type="Label" parent="AlertBox/Box"]
@@ -338,44 +349,6 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0ms"
 horizontal_alignment = 1
 
-[node name="PH" type="PanelContainer" parent="AlertBox/Box/Info"]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
-
-[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/PH"]
-layout_mode = 2
-
-[node name="Name" type="Label" parent="AlertBox/Box/Info/PH/VC"]
-layout_mode = 2
-text = "Total pp"
-horizontal_alignment = 1
-
-[node name="Text" type="Label" parent="AlertBox/Box/Info/PH/VC"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
-text = "0"
-horizontal_alignment = 1
-
-[node name="PH2" type="PanelContainer" parent="AlertBox/Box/Info"]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
-
-[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/PH2"]
-layout_mode = 2
-
-[node name="Name" type="Label" parent="AlertBox/Box/Info/PH2/VC"]
-layout_mode = 2
-horizontal_alignment = 1
-
-[node name="Text" type="Label" parent="AlertBox/Box/Info/PH2/VC"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
-horizontal_alignment = 1
-
 [node name="Options" type="HBoxContainer" parent="AlertBox/Box"]
 layout_mode = 2
 size_flags_vertical = 10
@@ -411,17 +384,6 @@ text = "+"
 [node name="space" type="MarginContainer" parent="AlertBox/Box"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 15
-
-[node name="Flash" type="ColorRect" parent="."]
-self_modulate = Color(0, 0, 0, 0)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0, 0, 0, 1)
 
 [connection signal="pressed" from="AlertBox/Box/Options/Retry" to="." method="_retry"]
 [connection signal="pressed" from="AlertBox/Box/Options/Continue" to="." method="_continue"]

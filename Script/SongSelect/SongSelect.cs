@@ -108,7 +108,7 @@ public partial class SongSelect : Control
 	{
 		SettingsOperator.loopaudio = true;
 		scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
-		RankedStatus = GetNode<Label>("SongDetails/Info/Plasa/RankedStatus");
+		RankedStatus = GetNode<Label>("SongDetails/RankedStatus");
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		SongETick = 0;
 
@@ -118,15 +118,15 @@ public partial class SongSelect : Control
 		Debugtext.Text = "X3";
 		Debugtext.Position = new Vector2(100,100);
 		AddChild(Debugtext);
-		Diff = GetNode<Label>("SongDetails/Info/Plasa/Difficulty");
+		Diff = GetNode<Label>("SongDetails/Difficulty");
 		ModScreen = GetNode<PanelContainer>("ModsScreen");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		SongTitle = GetNode<Label>("SongDetails/Info/Plasa/Title");
-		SongArtist = GetNode<Label>("SongDetails/Info/Plasa/Artist");
-		Songpp = GetNode<Label>("SongDetails/Info/Plasa/Points");
-		SongBPM = GetNode<Label>("SongDetails/Info/Plasa/BPM");
-		SongLen = GetNode<Label>("SongDetails/Info/Plasa/Length");
-		SongMapper = GetNode<Label>("SongDetails/Info/Plasa/Mapper");
+		SongTitle = GetNode<Label>("SongControl/HBoxContainer/Title");
+		SongArtist = GetNode<Label>("SongDetails/Artist");
+		Songpp = GetNode<Label>("SongDetails/Points");
+		SongBPM = GetNode<Label>("SongDetails/BPM");
+		SongLen = GetNode<Label>("SongDetails/Length");
+		SongMapper = GetNode<Label>("SongDetails/Mapper");
 		SongAccuracy = GetNode<Label>("SongDetails/Info/Plasa/Accuracy");
 		var timex = DateTime.Now.Millisecond;
 		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];

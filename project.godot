@@ -46,6 +46,8 @@ Sample="*res://Script/Singleton/Sample.cs"
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/size/mode=4
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 window/vsync/vsync_mode=0
 
 [dotnet]
@@ -156,7 +158,9 @@ locale/locale_filter_mode=0
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=3
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)
+anti_aliasing/quality/screen_space_aa=1

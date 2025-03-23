@@ -13,7 +13,7 @@ public partial class ResultsScreen : Control
 	public Label Meh { get; set; }
 	public Label Bad { get; set; }
 	public Label pp { get; set; }
-	public Label Totalpp { get; set; }
+	public Label Score { get; set; }
 	public Label Combo { get; set; }
 	public Label Accuracy { get; set; }
 	public Label Avgms { get; set; }
@@ -28,7 +28,7 @@ public partial class ResultsScreen : Control
 		SongDiff = GetNode<Label>("AlertBox/Box/Difficulty");
 		SongMapper = GetNode<Label>("AlertBox/Box/Creator");
 		pp = GetNode<Label>("AlertBox/Box/Info/pp/VC/Text");
-		Totalpp = GetNode<Label>("AlertBox/Box/Info/PH/VC/Text");
+		Score = GetNode<Label>("AlertBox/Box/Score");
 		Max = GetNode<Label>("AlertBox/Box/Info/MAX/VC/Text");
 		Great = GetNode<Label>("AlertBox/Box/Info/GREAT/VC/Text");
 		Meh = GetNode<Label>("AlertBox/Box/Info/MEH/VC/Text");
@@ -47,9 +47,9 @@ public partial class ResultsScreen : Control
 		Meh.Text = SettingsOperator.Gameplaycfg["meh"].ToString("N0");
 		Bad.Text = SettingsOperator.Gameplaycfg["bad"].ToString("N0");
 		pp.Text = SettingsOperator.Gameplaycfg["pp"].ToString("N0")+"/"+(SettingsOperator.Gameplaycfg["maxpp"]*ModsMulti.multiplier).ToString("N0");
-		Totalpp.Text = ((double)SettingsOperator.Sessioncfg["localpp"]).ToString("N0");
 		Combo.Text = ((double)SettingsOperator.Gameplaycfg["maxcombo"]).ToString("N0");
 		Avgms.Text = ((double)SettingsOperator.Gameplaycfg["ms"]).ToString("N0")+"ms";
+		Score.Text = SettingsOperator.Gameplaycfg["score"].ToString("0,000,000");
 		var Acc = SettingsOperator.Gameplaycfg["accuracy"];
 		Accuracy.Text = Acc.ToString("P0");
 		if (Acc>0.95){

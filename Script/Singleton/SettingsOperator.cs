@@ -31,7 +31,6 @@ public partial class SettingsOperator : Node
     public static double AllMiliSecondsFromBeatmap {get;set;}
     public static double MiliSecondsFromBeatmap {get;set;}
     public static int MiliSecondsFromBeatmapTimes {get;set;}
-
     public static List<Dictionary<string,object>> Beatmaps = new List<Dictionary<string,object>>();
     public Dictionary<string, object> Configuration { get; set; } = new Dictionary<string, object>
     {
@@ -56,21 +55,22 @@ public partial class SettingsOperator : Node
 
     public static Texture2D LoadImage(string path)
     {
-        var imageTexture = new ImageTexture();
-        var image = new Image();
-        if (FileAccess.FileExists(path)){
-            image.Load(path);
-            imageTexture.SetImage(image);
-
-            // Free the image from memory
-            image.Dispose();
-
-        } else {
-            image.Dispose();
+        if (!FileAccess.FileExists(path))
+        {
             Notify.Post("Image could not be loaded, because it doesn't exist!");
             return null;
         }
-        return imageTexture;
+
+        try
+        {
+            using var image = Image.LoadFromFile(path);
+            return ImageTexture.CreateFromImage(image);
+        }
+        catch (Exception)
+        {
+            Notify.Post("Failed to load image!");
+            return null;
+        }
     }
     public static int RndSongID(){
         int id = new Random().Next(0, Beatmaps.Count);

@@ -1,7 +1,8 @@
-[gd_scene load_steps=23 format=3 uid="uid://dvig5omxnd5qs"]
+[gd_scene load_steps=24 format=3 uid="uid://dvig5omxnd5qs"]
 
 [ext_resource type="Script" uid="uid://bqj04u64e106v" path="res://Script/SongSelect/SongSelect.cs" id="1_fin0e"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
+[ext_resource type="Texture2D" uid="uid://m656ody0d2o" path="res://Skin/System/SongSelectPanel.svg" id="3_fwx5n"]
 [ext_resource type="Texture2D" uid="uid://by5dgss2ux7gu" path="res://Skin/System/external.svg" id="3_javs2"]
 [ext_resource type="PackedScene" uid="uid://dpjsc7sxiwkm7" path="res://Panels/SongSelectElements/Mods.tscn" id="6_4xos4"]
 [ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="6_wb004"]
@@ -10,6 +11,18 @@
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
 border_color = Color(0.265625, 0.63855, 1, 1)
 expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5vans"]
+content_margin_left = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7pw6v"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.557292, 0.12481, 0.12481, 1)
+corner_radius_top_left = 15
+corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tc17c"]
 bg_color = Color(0, 0, 0, 1)
@@ -23,21 +36,6 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_detail = 14
 shadow_size = 12
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5vans"]
-content_margin_left = 20.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7pw6v"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(0.557292, 0.12481, 0.12481, 1)
-skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ombo5"]
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
@@ -124,16 +122,6 @@ self_modulate = Color(0.54902, 0.54902, 0.54902, 1)
 z_index = -5
 layout_mode = 1
 
-[node name="Patch" type="ColorRect" parent="."]
-visible = false
-z_index = 2
-layout_mode = 0
-offset_left = 420.0
-offset_top = 100.0
-offset_right = 460.0
-offset_bottom = 105.0
-color = Color(0.266667, 0.639216, 1, 1)
-
 [node name="SongControl" type="PanelContainer" parent="."]
 z_index = 1
 layout_mode = 1
@@ -149,9 +137,19 @@ size_flags_vertical = 8
 mouse_filter = 0
 alignment = 2
 
-[node name="Margin" type="MarginContainer" parent="SongControl/HBoxContainer"]
+[node name="Title" type="Label" parent="SongControl/HBoxContainer"]
+z_index = 1
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.429688, 0.848511, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5vans")
+text = "Amazing Songs"
+text_overrun_behavior = 3
+
+[node name="Margin" type="MarginContainer" parent="SongControl/HBoxContainer"]
+layout_mode = 2
 theme_override_constants/margin_bottom = 5
 
 [node name="MarginContainer" type="MarginContainer" parent="SongControl/HBoxContainer/Margin"]
@@ -169,12 +167,138 @@ placeholder_text = "Search Box for Songs"
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 320.0
+offset_top = 100.0
+offset_right = 400.0
 grow_vertical = 2
 size_flags_vertical = 3
+texture = ExtResource("3_fwx5n")
 expand_mode = 1
 
+[node name="Artist" type="Label" parent="SongDetails"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 23.0
+offset_right = 230.0
+offset_bottom = 51.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 14
+text = "Artist Name"
+text_overrun_behavior = 3
+
+[node name="Difficulty" type="Label" parent="SongDetails"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 44.0
+offset_right = -124.0
+offset_bottom = 72.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 14
+text = "Difficulty Name"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Mapper" type="Label" parent="SongDetails"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 84.0
+offset_right = -121.0
+offset_bottom = 112.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 14
+text = "mapped by idiotplier"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Points" type="Label" parent="SongDetails"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -46.0
+offset_top = 64.0
+offset_right = -10.0
+offset_bottom = 81.0
+grow_horizontal = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 14
+text = "+0pp"
+horizontal_alignment = 2
+
+[node name="Length" type="Label" parent="SongDetails"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -140.0
+offset_top = 84.0
+offset_right = -11.0
+offset_bottom = 112.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 14
+text = "00:00"
+horizontal_alignment = 2
+
+[node name="BPM" type="Label" parent="SongDetails"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 64.0
+offset_right = 158.0
+offset_bottom = 92.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 14
+text = "BPM: 0"
+clip_text = true
+
+[node name="RankedStatus" type="Label" parent="SongDetails"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -72.0
+offset_top = 20.0
+offset_bottom = 44.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_7pw6v")
+text = "Unranked"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="SongDetails"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 125.0
+offset_right = -40.0
+offset_bottom = 151.0
+theme_override_font_sizes/font_size = 12
+item_count = 2
+popup/item_0/text = "Local"
+popup/item_0/id = 0
+popup/item_1/text = "Global"
+popup/item_1/id = 1
+
+[node name="Button" type="Button" parent="SongDetails"]
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -36.0
+offset_top = 125.0
+offset_right = -10.0
+offset_bottom = 151.0
+grow_horizontal = 0
+tooltip_text = "Open in browser"
+icon = ExtResource("3_javs2")
+
 [node name="Info" type="PanelContainer" parent="SongDetails"]
+visible = false
 z_index = 1
 layout_mode = 1
 anchors_preset = 10
@@ -188,53 +312,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_tc17c")
 
 [node name="Plasa" type="Control" parent="SongDetails/Info"]
 layout_mode = 2
-
-[node name="Title" type="Label" parent="SongDetails/Info/Plasa"]
-z_index = 1
-clip_contents = true
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-offset_left = 50.0
-offset_top = 7.0
-offset_right = -53.0
-offset_bottom = 35.0
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxEmpty_5vans")
-text = "Amazing Songs"
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="Points" type="Label" parent="SongDetails/Info/Plasa"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -160.0
-offset_top = 103.0
-offset_right = -31.0
-offset_bottom = 131.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 14
-text = "+0pp"
-horizontal_alignment = 2
-
-[node name="Length" type="Label" parent="SongDetails/Info/Plasa"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -147.0
-offset_top = 79.0
-offset_right = -18.0
-offset_bottom = 107.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 14
-text = "00:00"
-horizontal_alignment = 2
 
 [node name="Accuracy" type="Label" parent="SongDetails/Info/Plasa"]
 layout_mode = 1
@@ -250,106 +327,6 @@ theme_override_font_sizes/font_size = 14
 text = "Accuracy Lv. 00"
 horizontal_alignment = 2
 clip_text = true
-
-[node name="BPM" type="Label" parent="SongDetails/Info/Plasa"]
-layout_mode = 0
-offset_left = 71.0
-offset_top = 103.0
-offset_right = 219.0
-offset_bottom = 131.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 14
-text = "BPM: 0"
-clip_text = true
-
-[node name="Artist" type="Label" parent="SongDetails/Info/Plasa"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-offset_left = 71.0
-offset_top = 38.0
-offset_right = -119.0
-offset_bottom = 66.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 14
-text = "Artist Name"
-text_overrun_behavior = 3
-
-[node name="Difficulty" type="Label" parent="SongDetails/Info/Plasa"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-offset_left = 71.0
-offset_top = 59.0
-offset_right = -63.0
-offset_bottom = 87.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 14
-text = "Difficulty Name"
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="Mapper" type="Label" parent="SongDetails/Info/Plasa"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-offset_left = 71.0
-offset_top = 79.0
-offset_right = -60.0
-offset_bottom = 107.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 14
-text = "mapped by idiotplier"
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="OptionButton" type="OptionButton" parent="SongDetails/Info/Plasa"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-offset_left = 72.0
-offset_top = 126.0
-offset_right = -85.0
-offset_bottom = 152.0
-theme_override_font_sizes/font_size = 12
-item_count = 2
-popup/item_0/text = "Local"
-popup/item_0/id = 0
-popup/item_1/text = "Global"
-popup/item_1/id = 1
-
-[node name="Button" type="Button" parent="SongDetails/Info/Plasa"]
-custom_minimum_size = Vector2(22, 22)
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -76.0
-offset_top = -36.0
-offset_right = -50.0
-offset_bottom = -10.0
-grow_horizontal = 0
-grow_vertical = 0
-tooltip_text = "Open in browser"
-icon = ExtResource("3_javs2")
-
-[node name="RankedStatus" type="Label" parent="SongDetails/Info/Plasa"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -29.0
-offset_top = 5.0
-offset_right = 27.0
-offset_bottom = 29.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_7pw6v")
-text = "Unranked"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="PanelContainer" type="PanelContainer" parent="SongDetails"]
 visible = false
