@@ -290,9 +290,24 @@ public partial class SongSelect : Control
 	private void _Start(){
 		//AudioPlayer.Instance.Stop();
         Notify.Post("Game still in beta!, no score submissions yet!");
-		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
+		//GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
+		var SongDetails = GetNode<TextureRect>("SongDetails");
+		var SongPanel = GetNode<Control>("SongPanel");
+		var BottomBar = GetNode<Control>("BottomBar");
+		var SongControl = GetNode<PanelContainer>("SongControl");
+		var LoadScreen = GD.Load<PackedScene>("res://Panels/Screens/SongLoadingScreen.tscn").Instantiate().GetNode<Control>(".");
+		LoadScreen.Modulate = new Color(0,0,0,0);
+		GetTree().CurrentScene.AddChild(LoadScreen);
+		var Ani = CreateTween();
+		Ani.SetParallel(true);
+		Ani.TweenProperty(SongDetails, "position", new Vector2(-SongDetails.Size.X,SongDetails.Position.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		Ani.TweenProperty(SongPanel, "position", new Vector2(SongPanel.Position.X+SongPanel.Size.X,SongPanel.Position.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		Ani.TweenProperty(SongPanel, "modulate", new Color(0,0,0,0), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		Ani.TweenProperty(BottomBar, "position", new Vector2(SongPanel.Position.X,BottomBar.Position.Y+BottomBar.Size.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		Ani.TweenProperty(SongControl, "position", new Vector2(SongControl.Position.X,-SongControl.Size.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		Ani.TweenProperty(LoadScreen, "modulate", new Color(1,1,1,1), 0.5f).SetTrans(Tween.TransitionType.Linear);
+		Ani.Play();
 		SettingsOperator.loopaudio = false;
-		//
 	}
 	private void _on_back_pressed(){
 		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/home_screen.tscn");
