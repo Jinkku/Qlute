@@ -25,6 +25,7 @@ font = SubResource("FontVariation_5gjgc")
 font_size = 12
 
 [node name="FPSCounter" type="PanelContainer"]
+process_mode = 3
 z_index = 1000
 anchors_preset = 3
 anchor_left = 1.0

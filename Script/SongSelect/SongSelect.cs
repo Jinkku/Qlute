@@ -288,9 +288,6 @@ public partial class SongSelect : Control
 		ModScreen.Visible = !ModScreen.Visible;
 	}
 	private void _Start(){
-		//AudioPlayer.Instance.Stop();
-        Notify.Post("Game still in beta!, no score submissions yet!");
-		//GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 		var SongDetails = GetNode<TextureRect>("SongDetails");
 		var SongPanel = GetNode<Control>("SongPanel");
 		var BottomBar = GetNode<Control>("BottomBar");

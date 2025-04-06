@@ -53,6 +53,14 @@ public partial class Gameplay : Control
 	private IEnumerable<DanceCounter> dance {get;set;}
 	private int DanceIndex {get;set;}
 	private Label debugtext {get;set;}
+	public static bool Dead {get;set;}
+
+	private void ShowPauseMenu(){
+		PauseMenu = GD.Load<PackedScene>("res://Panels/Screens/PauseMenu.tscn").Instantiate().GetNode<Control>(".");
+		PauseMenu.ZIndex = 200;
+		AddChild(PauseMenu);
+		GetTree().Paused = true;
+	}
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -60,16 +68,18 @@ public partial class Gameplay : Control
 		Beatmap_Background = GetNode<TextureRect>("./Beatmap_Background");
 		AudioPlayer.Instance.Stop();
 
-
+		Dead = false;
 		Beatmap_Background.SelfModulate = new Color(1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)));
 		BeatmapBackground.FlashEnable = false;
 		
+
+		HealthBar.Reset();
 		Control P = GetNode<Control>("Playfield");
 		Chart = GetNode<HBoxContainer>("Playfield/ChartSections");
 		hittext = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/hittext.tscn").Instantiate().GetNode<Label>(".");
 		hittextinit = true;
 		hittext.Modulate = new Color(1f,1f,1f,0f);
-		hittext.ZIndex = 1024;
+		hittext.ZIndex = 100;
 		GetNode<Control>("Playfield").AddChild(hittext);
 		hittextoldpos = hittext.Position;
 		reloadSkin();
@@ -203,6 +213,14 @@ public partial class Gameplay : Control
 			startedtime = Clock;
 		}
 
+		// DEATH
+
+		if (HealthBar.Health == 0 && !Dead) {
+			Dead = !Dead;
+			ShowPauseMenu();
+		}
+
+
 		// End Game
 
 		if (SettingsOperator.Gameplaycfg["timetotal"]-SettingsOperator.Gameplaycfg["time"] < -2000 && !Finished)
@@ -246,9 +264,7 @@ public partial class Gameplay : Control
 			}
 		}
 		if (Input.IsActionJustPressed("pausemenu")){
-			PauseMenu = GD.Load<PackedScene>("res://Panels/Screens/PauseMenu.tscn").Instantiate().GetNode<Control>(".");
-			AddChild(PauseMenu);
-			GetTree().Paused = true;
+			ShowPauseMenu();
 		}else if (Input.IsActionJustPressed("retry")){
 			BeatmapBackground.FlashEnable = true;
 			SettingsOperator.toppaneltoggle();
@@ -362,21 +378,25 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg["max"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
 			Hittext("Perfect", new Color(0f,0.71f,1f));
+			HealthBar.Heal(5);
 			return 0;
 		} else if (timing+nodeSize > Chart.Size.Y-GreatJudge/2 && timing+nodeSize < Chart.Size.Y+GreatJudge/2 && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["great"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
 			Hittext("Great", new Color(0f,1f,0.03f));
+			HealthBar.Heal(3);
 			return 1;
 		}else if (timing+nodeSize > Chart.Size.Y-MehJudge/2 && timing+nodeSize < Chart.Size.Y+MehJudge/2 && keyvalue && visibility){
 			Hittext("Meh", new Color(1f,0.66f,0f));
 			SettingsOperator.Gameplaycfg["meh"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
+			HealthBar.Heal(1);
 			return 2;
 		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility ){
 			Hittext("Miss", new Color(1f,0.28f,0f));
 			SettingsOperator.Gameplaycfg["bad"]++;
 			SettingsOperator.Gameplaycfg["combo"] = 0;
+			HealthBar.Damage(5);
 			return 3;
 		}
 		 else{

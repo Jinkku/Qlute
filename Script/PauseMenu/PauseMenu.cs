@@ -8,6 +8,11 @@ public partial class PauseMenu : Control
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
+		if (Gameplay.Dead){
+			GetNode<Button>("PanelContainer/VBoxContainer/Continue").Visible = false;
+			GetNode<Label>("PauseLabel/Text").Visible = true;
+			GetNode<Label>("PauseLabel").Text = "Game Over";
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
