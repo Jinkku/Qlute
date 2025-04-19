@@ -59,16 +59,31 @@ public partial class Settings : Button
 			var _tween = SettingsPanel.CreateTween();
 			SettingsPanel.Position = new Vector2(-SettingsPanel.Size.X,50);
 			SettingsPanel.Size = new Vector2(SettingsPanel.Size.X,GetViewportRect().Size[1]-SettingsPanel.Position.Y);
+			SettingsPanel.MouseFilter = Control.MouseFilterEnum.Ignore;
+			_tween.SetParallel(true);
 			_tween.TweenProperty(SettingsPanel, "position", new Vector2(0,50), 0.3f)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			_tween.TweenProperty(GetTree().CurrentScene, "position", new Vector2(50,0), 0.3f)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			_tween.TweenProperty(GetTree().CurrentScene, "modulate", new Color(0.5f,0.5f,0.5f,1f), 0.3f)
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
 			_tween.Play();
 		} else if (IsInstanceValid(SettingsPanel)){
 			var _tween = SettingsPanel.CreateTween();
+			_tween.SetParallel(true);
 			_tween.TweenProperty(SettingsPanel, "position", new Vector2(-SettingsPanel.Size.X,50), 0.3f)
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
-			_tween.TweenCallback(Callable.From(() => queue_free(SettingsPanel)));
+			_tween.TweenProperty(GetTree().CurrentScene, "position", new Vector2(0,0), 0.3f)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			_tween.TweenProperty(GetTree().CurrentScene, "modulate", new Color(1f,1f,1f,1f), 0.3f)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			_tween.Play();
 		}
 		SettingsOperator.Sessioncfg["settingspanelv"] = !(bool)SettingsOperator.Sessioncfg["settingspanelv"];
 	}
