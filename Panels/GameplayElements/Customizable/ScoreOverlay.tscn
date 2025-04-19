@@ -9,9 +9,6 @@ content_margin_left = 10.0
 content_margin_top = 10.0
 bg_color = Color(1, 1, 1, 0.705882)
 skew = Vector2(0.5, 0)
-border_width_right = 25
-border_color = Color(0, 0, 0, 1)
-border_blend = true
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -43,7 +40,7 @@ grow_vertical = 2
 script = ExtResource("1_j3lhn")
 
 [node name="ScoreBarBack" type="PanelContainer" parent="."]
-self_modulate = Color(1, 1, 1, 0.568627)
+self_modulate = Color(1, 1, 1, 0.392157)
 layout_mode = 1
 offset_right = 359.0
 offset_bottom = 100.0
