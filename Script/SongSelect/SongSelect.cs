@@ -17,11 +17,14 @@ public partial class SongSelect : Control
 	public Label SongBPM { get; set; }
 	public Label SongLen { get; set; }
 	public Label SongAccuracy { get; set; }
+	public Button StartButton { get; set; }
 	public List<object> SongEntry = new List<object>();
 	public int SongETick { get; set; }
 	public Texture2D ImageCache {get;set;}
 	public string ImageURL {get;set;}
-	public PanelContainer ModScreen { get; set; }
+	public Control ModScreen { get; set; }
+	public Tween ModScreen_Tween { get; set; }
+	public ColorRect Blocker { get; set; }
 	public Label Diff { get; set; }
 	public ScrollBar scrollBar { get; set; }
 	public PanelContainer Info {get;set;}
@@ -36,7 +39,7 @@ public partial class SongSelect : Control
 	private void _valuechangedscroll(float value){
 		SongETick = 0;
 		startposition = (int)GetViewportRect().Size.Y/2 - 166;
-		Debugtext.Text = $"{value.ToString()}/{SongLoaded.ToString()}";
+		//Debugtext.Text = $"{value.ToString()}/{SongLoaded.ToString()}";
 		ScrollSongs();
 	}
 
@@ -113,13 +116,14 @@ public partial class SongSelect : Control
 		SongETick = 0;
 
 
-		Debugtext = new Label();
-		Debugtext.ZIndex = 1024;
-		Debugtext.Text = "X3";
-		Debugtext.Position = new Vector2(100,100);
-		AddChild(Debugtext);
+		//Debugtext = new Label();
+		//Debugtext.ZIndex = 1024;
+		//Debugtext.Text = "X3";
+		//Debugtext.Position = new Vector2(100,100);
+		//AddChild(Debugtext);
 		Diff = GetNode<Label>("SongDetails/Difficulty");
-		ModScreen = GetNode<PanelContainer>("ModsScreen");
+		ModScreen = GetNode<Control>("ModsScreen");
+		Blocker = GetNode<ColorRect>("Blocker");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SongTitle = GetNode<Label>("SongControl/HBoxContainer/Title");
 		SongArtist = GetNode<Label>("SongDetails/Artist");
@@ -127,23 +131,34 @@ public partial class SongSelect : Control
 		SongBPM = GetNode<Label>("SongDetails/BPM");
 		SongLen = GetNode<Label>("SongDetails/Length");
 		SongMapper = GetNode<Label>("SongDetails/Mapper");
+		StartButton = GetNode<Button>("BottomBar/Start");
 		SongAccuracy = GetNode<Label>("SongDetails/Info/Plasa/Accuracy");
-		var timex = DateTime.Now.Millisecond;
 		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
 
 		
-//		for(int i = 0; i < SettingsOperator.Beatmaps.Count();i++)
-//		{	
-//			AddSongList(i);
-//		}
-		GD.Print("Finished about " + (DateTime.Now.Millisecond-timex) + "ms");
+		check_modscreen();
 		
 
 		_res_resize();
 		checksongpanel();
-		GD.Print((int)SettingsOperator.Sessioncfg["SongID"]);
 	}
-	// M
+	// Animation for Start Button DUH
+
+	public Tween StartTween {get;set;}
+	private Color idlestartcolour = new Color(0.5f,0.5f,0.5f,0.5f);
+	private Color focuscolour = new Color(0.270f, 0.549f, 1f);
+	private void _start_focus(){
+		StartTween?.Kill();
+		StartTween = StartButton.CreateTween();
+		StartTween.TweenProperty(StartButton, "self_modulate", focuscolour, 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		StartTween.Play();
+	}
+	private void _start_unfocus(){
+		StartTween?.Kill();
+		StartTween = StartButton.CreateTween();
+		StartTween.TweenProperty(StartButton, "self_modulate", idlestartcolour, 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		StartTween.Play();
+	}
 	private void ScrollSongs()
 	{
 			// Calculate visible range with larger buffer to reduce flickering
@@ -223,7 +238,11 @@ public partial class SongSelect : Control
 		SongBPM.Visible = visible;
 		SongAccuracy.Visible = visible;
 	}
-
+	public void check_modscreen(){
+		if (!ModsScreenActive){
+			ModScreen.Position = new Vector2(0,GetViewportRect().Size.Y);
+		}
+	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
@@ -232,6 +251,7 @@ public partial class SongSelect : Control
 			GetTree().ReloadCurrentScene();
 			
 		}
+		check_modscreen();
 		scrollBar.MaxValue = SettingsOperator.Beatmaps.Count;
 		
 		if (!AnimationSong){
@@ -281,11 +301,31 @@ public partial class SongSelect : Control
 		//Debugtext.Text = scrolly.ToString();
 	}
 	
-	private void _on_animation_player_animation_finished(){
-
+	private void _modfin(){
+		Blocker.Visible = false;
+		ModsScreenActive = false;
 	}
+	private bool ModsScreenActive = false;
 	private void _Mods_show(){
-		ModScreen.Visible = !ModScreen.Visible;
+		//ModScreen.Visible = !ModScreen.Visible;
+		ModScreen_Tween?.Kill();
+		ModScreen_Tween = ModScreen.CreateTween();
+		var colour = new Color(1f,1f,1f,1f);
+		var pos = new Vector2(0,0);
+		if (ModsScreenActive) {
+			colour = new Color(0f,0f,0f,0f);
+			pos = new Vector2(0,GetViewportRect().Size.Y);
+			ModScreen_Tween.Connect("finished",new Callable(this,nameof(_modfin)));
+		}else {
+			ModsScreenActive = true;
+			Blocker.Visible = true;
+			Blocker.SelfModulate = new Color(0f,0f,0f,0f);
+			ModScreen.Position = new Vector2(0,GetViewportRect().Size.Y);
+		}
+		ModScreen_Tween.SetParallel(true);
+		ModScreen_Tween.TweenProperty(Blocker, "self_modulate", colour , 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		ModScreen_Tween.TweenProperty(ModScreen, "position", pos , 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		ModScreen_Tween.Play();
 	}
 	private void _Start(){
 		var SongDetails = GetNode<TextureRect>("SongDetails");
@@ -300,7 +340,7 @@ public partial class SongSelect : Control
 		Ani.TweenProperty(SongDetails, "position", new Vector2(-SongDetails.Size.X,SongDetails.Position.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		Ani.TweenProperty(SongPanel, "position", new Vector2(SongPanel.Position.X+SongPanel.Size.X,SongPanel.Position.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		Ani.TweenProperty(SongPanel, "modulate", new Color(0,0,0,0), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-		Ani.TweenProperty(BottomBar, "position", new Vector2(SongPanel.Position.X,BottomBar.Position.Y+BottomBar.Size.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		Ani.TweenProperty(BottomBar, "position", new Vector2(BottomBar.Position.X,BottomBar.Position.Y+BottomBar.Size.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		Ani.TweenProperty(SongControl, "position", new Vector2(SongControl.Position.X,-SongControl.Size.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		Ani.TweenProperty(LoadScreen, "modulate", new Color(1,1,1,1), 0.5f).SetTrans(Tween.TransitionType.Linear);
 		Ani.Play();
