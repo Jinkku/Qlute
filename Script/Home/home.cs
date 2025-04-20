@@ -56,7 +56,18 @@ public partial class home : Control
 		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/Create.tscn");
 	}
 	private void _leave(){
-		GetTree().Quit();
+		var tween = CreateTween();
+		tween.SetParallel(true);
+		tween.TweenProperty(this, "modulate", new Color(0f,0f,0f,0f), 1f)
+			.SetTrans(Tween.TransitionType.Linear)
+			.SetEase(Tween.EaseType.Out);
+		tween.TweenProperty(AudioPlayer.Instance, "volume_db", -80f, 1f)
+			.SetTrans(Tween.TransitionType.Linear)
+			.SetEase(Tween.EaseType.Out);
+		tween.Connect("finished",new Callable(this,nameof(_leavesignal)));
 		}
+	private void _leavesignal(){
+		GetTree().Quit();
+	}
 	
 }
