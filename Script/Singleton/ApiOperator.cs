@@ -92,8 +92,10 @@ public partial class ApiOperator : Node
 		InfoApi.Request(SettingsOperator.GetSetting("api") + "apiv2/getstat/full",new string[]{$"USERNAME: {Username}"});}
 	
 	private string _on_login_api_request_completed(long result, long responseCode, string[] headers, byte[] body){
-		Notify.Post(Encoding.UTF8.GetString(body));
 		Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
+		if (json["notification"].ToString() != ""){
+			Notify.Post(json["notification"].ToString());
+		}
 		SettingsOperator.Sessioncfg["loggingin"] = false;
 		if ((bool)json["success"] && responseCode == 200) {
 			Check_Info(Username);
