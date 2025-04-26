@@ -30,9 +30,3 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0.0509804)
-
-[node name="Timer" type="Timer" parent="."]
-wait_time = 0.375
-autostart = true
-
-[connection signal="timeout" from="Timer" to="." method="_flashstart"]

@@ -56,6 +56,7 @@ public partial class Settings : Button
 			}
 			SettingsPanel = GD.Load<PackedScene>("res://Panels/Overlays/Settings.tscn").Instantiate().GetNode<Control>(".");
 			TopPanel.AddChild(SettingsPanel);
+			GetTree().CurrentScene.GetNode(".").SetProcessInput(false);
 			var _tween = SettingsPanel.CreateTween();
 			SettingsPanel.Position = new Vector2(-SettingsPanel.Size.X,50);
 			SettingsPanel.Size = new Vector2(SettingsPanel.Size.X,GetViewportRect().Size[1]-SettingsPanel.Position.Y);
@@ -73,6 +74,7 @@ public partial class Settings : Button
 			_tween.Play();
 		} else if (IsInstanceValid(SettingsPanel)){
 			var _tween = SettingsPanel.CreateTween();
+			GetTree().CurrentScene.GetNode(".").SetProcessInput(true);
 			_tween.SetParallel(true);
 			_tween.TweenProperty(SettingsPanel, "position", new Vector2(-SettingsPanel.Size.X,50), 0.3f)
 				.SetTrans(Tween.TransitionType.Cubic)
