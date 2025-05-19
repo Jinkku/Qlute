@@ -92,23 +92,39 @@ public partial class ApiOperator : Node
 		InfoApi.Request(SettingsOperator.GetSetting("api") + "apiv2/getstat/full",new string[]{$"USERNAME: {Username}"});}
 	
 	private string _on_login_api_request_completed(long result, long responseCode, string[] headers, byte[] body){
-		Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
-		if (json["notification"].ToString() != ""){
-			Notify.Post(json["notification"].ToString());
+		GD.Print("Login API Response: " + body.ToString());
+		try
+		{
+			Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
+			if (json["notification"].ToString() != "")
+			{
+				Notify.Post(json["notification"].ToString());
+			}
+			SettingsOperator.Sessioncfg["loggingin"] = false;
+			if ((bool)json["success"] && responseCode == 200)
+			{
+				Check_Info(Username);
+				SettingsOperator.SetSetting("username", Username);
+				Username = SettingsOperator.GetSetting("username")?.ToString();
+				UPlayerName.Instance.Text = Username;
+				SettingsOperator.SetSetting("password", PasswordHash);
+				PasswordHash = SettingsOperator.GetSetting("password")?.ToString();
+				//			}
+				SettingsOperator.Sessioncfg["loggedin"] = true;
+				return "Logged in!";
+			}
+			else
+			{
+				return "Incorrect Credentials";
+			}
 		}
-		SettingsOperator.Sessioncfg["loggingin"] = false;
-		if ((bool)json["success"] && responseCode == 200) {
-			Check_Info(Username);
-			SettingsOperator.SetSetting("username",Username);
-			Username = SettingsOperator.GetSetting("username")?.ToString();
-			UPlayerName.Instance.Text = Username;
-			SettingsOperator.SetSetting("password",PasswordHash);
-			PasswordHash = SettingsOperator.GetSetting("password")?.ToString();
-//			}
-			SettingsOperator.Sessioncfg["loggedin"] = true;
-			return "Logged in!";
-		} else {
-			return "Incorrect Credentials";
+		catch (Exception e)
+		{
+			GD.PrintErr("Error parsing JSON: " + e.Message);
+			Notify.Post("Error parsing JSON: " + e.Message);
+			SettingsOperator.Sessioncfg["loggingin"] = false;
+			SettingsOperator.Sessioncfg["loggedin"] = false;
+			return "Error parsing JSON";
 		}
 	}
 	public static string ComputeSha256Hash(string rawData)
