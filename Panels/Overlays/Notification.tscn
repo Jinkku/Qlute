@@ -13,6 +13,7 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+shadow_size = 5
 
 [node name="Notification" type="Button"]
 z_index = 1
