@@ -18,7 +18,7 @@ For now just compile from source
 
 ## Compiling the game
 Requirements:
-- Have Godot 4.4 Installed
+- Have Godot 4.4+ Installed
 - Dotnet 8.0 is recommended
 - git binary for cloning and syncing the repository
 
