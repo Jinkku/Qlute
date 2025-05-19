@@ -4,7 +4,8 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llstv"]
 content_margin_left = 0.0
-content_margin_top = 0.0
+content_margin_top = 10.0
+content_margin_right = 15.0
 
 [node name="Notifications" type="ColorRect"]
 clip_contents = true
