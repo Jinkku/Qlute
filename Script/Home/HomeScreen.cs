@@ -38,13 +38,9 @@ public partial class HomeScreen : Control
 
 
 	}
-	private void _test(){
-		SettingsOperator.Gameplaycfg["max"] = 1141;
-		SettingsOperator.Gameplaycfg["great"] = 0;
-		SettingsOperator.Gameplaycfg["meh"] = 0;
-		SettingsOperator.Gameplaycfg["bad"] = 0;
-		SettingsOperator.Gameplaycfg["maxcombo"] = 1141;
-		GetNode<ApiOperator>("/root/ApiOperator").SubmitScore();
+	private void _test()
+	{
+		Notify.Post("Hai Hai! ;w;");
 	}
 	private void _play(){
 		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/song_select.tscn");

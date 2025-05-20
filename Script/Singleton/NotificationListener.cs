@@ -6,6 +6,7 @@ using System.Collections.Generic;
 static class Notify
 {
     public static void Post(string text){
+        GD.Print(NotificationListener.NotificationList.Count);
         NotificationListener.NotificationList.Add(new NotificationLegend{
         Time = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         Title = text,

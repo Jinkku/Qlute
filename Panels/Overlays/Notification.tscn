@@ -33,4 +33,5 @@ autowrap_mode = 3
 clip_text = true
 script = ExtResource("2_2gkms")
 
-[connection signal="pressed" from="." to="." method="_pressed"]
+[connection signal="pressed" from="." to="." method="_remove"]
+[connection signal="pressed" from="." to="." method="_pressed" binds= [false]]

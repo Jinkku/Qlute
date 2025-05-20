@@ -9,6 +9,7 @@ public partial class NotificationPanel : ColorRect
 		foreach (var NotiInfo in NotificationListener.NotificationList){
     	    var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/NotificationApplet.tscn").Instantiate().GetNode<Button>(".");
 			GetNode<VBoxContainer>("MarginContainer/ScrollContainer/VBoxContainer").AddChild(NotiCard);
+			NotiCard.SetMeta("id", Math.Max(0,(int)NotiInfo.id));
 			NotiCard.Text = NotiInfo.Title;
 		}
 
