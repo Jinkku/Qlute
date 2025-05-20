@@ -1,7 +1,77 @@
-[gd_scene load_steps=8 format=3 uid="uid://1eecnwds7hxx"]
+[gd_scene load_steps=15 format=3 uid="uid://1eecnwds7hxx"]
 
 [ext_resource type="Script" uid="uid://gl6ndgfj1mc8" path="res://Script/Browse/Browse.cs" id="1_gq7gs"]
 [ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="2_gtswx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gt3n2"]
+content_margin_left = 25.0
+content_margin_top = 25.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_287m4"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(0.176471, 0.176471, 0.176471, 0.392157)
+skew = Vector2(0.5, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gt3n2"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.196078)
+skew = Vector2(0.5, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_287m4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vgk5y"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
+bg_color = Color(0.269531, 0.269531, 0.269531, 0.392157)
+skew = Vector2(0.5, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rkh30"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
+bg_color = Color(0.496094, 0.496094, 0.496094, 0.392157)
+skew = Vector2(0.5, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npcsy"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.392157)
+skew = Vector2(0.5, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_61puy"]
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
@@ -40,27 +110,132 @@ offset_bottom = 200.0
 grow_horizontal = 2
 color = Color(0.261989, 0.2211, 0.273438, 1)
 
-[node name="Label" type="Label" parent="Header"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Header"]
 layout_mode = 1
-offset_left = 20.0
-offset_top = 60.0
-offset_right = 137.0
-offset_bottom = 97.0
-theme_override_font_sizes/font_size = 32
-text = "Browse"
-
-[node name="SearchBox" type="LineEdit" parent="Header"]
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 10.0
-offset_top = 10.0
-offset_right = -10.0
-offset_bottom = 50.0
+anchor_bottom = 1.0
+offset_top = 50.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Title" type="Label" parent="Header/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_gt3n2")
+text = "Browse"
+
+[node name="MarginContainer" type="MarginContainer" parent="Header/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 10
+
+[node name="SearchBox" type="LineEdit" parent="Header/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_287m4")
+theme_override_styles/normal = SubResource("StyleBoxFlat_gt3n2")
+text = "Dipshit"
+placeholder_text = "Search here"
+
+[node name="SearchFilters" type="MarginContainer" parent="Header/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 10
+
+[node name="Tabs" type="HBoxContainer" parent="Header/VBoxContainer/SearchFilters"]
+layout_mode = 2
+
+[node name="RankButton" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_287m4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_vgk5y")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rkh30")
+theme_override_styles/normal = SubResource("StyleBoxFlat_npcsy")
+selected = 0
+item_count = 3
+popup/item_0/text = "Ranked"
+popup/item_0/id = 0
+popup/item_1/text = "Special"
+popup/item_1/id = 1
+popup/item_2/text = "Unranked"
+popup/item_2/id = 2
+
+[node name="Genre" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_287m4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_vgk5y")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rkh30")
+theme_override_styles/normal = SubResource("StyleBoxFlat_npcsy")
+selected = 0
+item_count = 14
+popup/item_0/text = "Any"
+popup/item_0/id = 0
+popup/item_1/text = "Unknown"
+popup/item_1/id = 1
+popup/item_2/text = "Video Game"
+popup/item_2/id = 2
+popup/item_3/text = "Anime"
+popup/item_3/id = 3
+popup/item_4/text = "Rock"
+popup/item_4/id = 4
+popup/item_5/text = "Pop"
+popup/item_5/id = 5
+popup/item_6/text = "Other"
+popup/item_6/id = 6
+popup/item_7/text = "Novelty"
+popup/item_7/id = 7
+popup/item_8/text = "Hip Hop"
+popup/item_8/id = 8
+popup/item_9/text = "Electronic"
+popup/item_9/id = 9
+popup/item_10/text = "Metal"
+popup/item_10/id = 10
+popup/item_11/text = "Classical"
+popup/item_11/id = 11
+popup/item_12/text = "Folk"
+popup/item_12/id = 12
+popup/item_13/text = "Jazz"
+popup/item_13/id = 13
+
+[node name="Language" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_287m4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_vgk5y")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rkh30")
+theme_override_styles/normal = SubResource("StyleBoxFlat_npcsy")
+selected = 0
+item_count = 14
+popup/item_0/text = "Any"
+popup/item_0/id = 0
+popup/item_1/text = "English"
+popup/item_1/id = 1
+popup/item_2/text = "Chinese"
+popup/item_2/id = 2
+popup/item_3/text = "French"
+popup/item_3/id = 3
+popup/item_4/text = "German"
+popup/item_4/id = 4
+popup/item_5/text = "Italian"
+popup/item_5/id = 5
+popup/item_6/text = "Japanese"
+popup/item_6/id = 6
+popup/item_7/text = "Korean"
+popup/item_7/id = 7
+popup/item_8/text = "Spanish"
+popup/item_8/id = 8
+popup/item_9/text = "Swedish"
+popup/item_9/id = 9
+popup/item_10/text = "Russian"
+popup/item_10/id = 10
+popup/item_11/text = "Polish"
+popup/item_11/id = 11
+popup/item_12/text = "Instrumental"
+popup/item_12/id = 12
+popup/item_13/text = "Unknown"
+popup/item_13/id = 13
 
 [node name="BeatmapSec" type="ColorRect" parent="."]
 layout_mode = 1
@@ -133,4 +308,5 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_v4oe2")
 text = "  Back"
 icon = ExtResource("2_gtswx")
 
+[connection signal="text_submitted" from="Header/VBoxContainer/MarginContainer/SearchBox" to="." method="_submit"]
 [connection signal="pressed" from="BottomBar/ControlPanel/Box/Button" to="." method="_on_back"]
