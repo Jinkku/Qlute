@@ -472,51 +472,6 @@ mouse_filter = 2
 texture = ExtResource("11_ioq3m")
 expand_mode = 1
 
-[node name="Leave3" type="Button" parent="HomeButtonBG/HomeButtons"]
-self_modulate = Color(1, 0.442708, 0.442708, 1)
-custom_minimum_size = Vector2(154, 95)
-layout_mode = 2
-theme_override_constants/icon_max_width = 32
-theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
-theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
-theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
-icon_alignment = 1
-script = ExtResource("8_qhwge")
-
-[node name="Label" type="Label" parent="HomeButtonBG/HomeButtons/Leave3"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -54.0
-offset_top = -25.0
-offset_right = 18.0
-offset_bottom = 3.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 14
-text = "Test bitchhh"
-horizontal_alignment = 1
-
-[node name="Pic" type="TextureRect" parent="HomeButtonBG/HomeButtons/Leave3/Label"]
-texture_filter = 2
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -15.0
-offset_top = -40.0
-offset_right = 15.0
-offset_bottom = -10.0
-grow_horizontal = 2
-mouse_filter = 2
-texture = ExtResource("11_ioq3m")
-expand_mode = 1
-
 [node name="Leave2" type="Button" parent="HomeButtonBG/HomeButtons"]
 visible = false
 self_modulate = Color(1, 0.442708, 0.442708, 1)
@@ -636,9 +591,6 @@ script = ExtResource("14_1vpa7")
 [connection signal="mouse_entered" from="HomeButtonBG/HomeButtons/Leave" to="HomeButtonBG/HomeButtons/Leave" method="_focus"]
 [connection signal="mouse_exited" from="HomeButtonBG/HomeButtons/Leave" to="HomeButtonBG/HomeButtons/Leave" method="_unfocus"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Leave" to="." method="_leave"]
-[connection signal="mouse_entered" from="HomeButtonBG/HomeButtons/Leave3" to="HomeButtonBG/HomeButtons/Leave3" method="_focus"]
-[connection signal="mouse_exited" from="HomeButtonBG/HomeButtons/Leave3" to="HomeButtonBG/HomeButtons/Leave3" method="_unfocus"]
-[connection signal="pressed" from="HomeButtonBG/HomeButtons/Leave3" to="." method="_test"]
 [connection signal="mouse_entered" from="HomeButtonBG/HomeButtons/Leave2" to="HomeButtonBG/HomeButtons/Leave2" method="_focus"]
 [connection signal="mouse_exited" from="HomeButtonBG/HomeButtons/Leave2" to="HomeButtonBG/HomeButtons/Leave2" method="_unfocus"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Leave2" to="." method="_test"]
