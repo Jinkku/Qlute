@@ -136,7 +136,6 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_287m4")
 theme_override_styles/normal = SubResource("StyleBoxFlat_gt3n2")
-text = "Dipshit"
 placeholder_text = "Search here"
 
 [node name="SearchFilters" type="MarginContainer" parent="Header/VBoxContainer"]
