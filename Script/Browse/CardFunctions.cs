@@ -32,7 +32,7 @@ public partial class CardFunctions : Button
     }
 
     // Use focus for animation for the card
-    private Tween _focus_animation;
+    private  Tween _focus_animation;
     private void AnimationButton(Color colour)
     {
         if (_focus_animation != null)

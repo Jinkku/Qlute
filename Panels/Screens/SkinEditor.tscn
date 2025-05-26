@@ -1,0 +1,510 @@
+[gd_scene load_steps=29 format=3 uid="uid://beeu7jswbwsts"]
+
+[ext_resource type="Script" uid="uid://do76anrqegieu" path="res://Script/SkinEditor/SkinEditor.cs" id="1_wk53w"]
+[ext_resource type="Texture2D" uid="uid://b6hfhv5kwa3oi" path="res://Skin/System/heart.png" id="2_imael"]
+[ext_resource type="Script" uid="uid://hujhlkgh6dfp" path="res://Script/CreateEditor/ContextMenus.cs" id="2_wk53w"]
+[ext_resource type="Script" uid="uid://cmqncf5p3shyd" path="res://Script/CreateEditor/FileMenu.cs" id="3_imael"]
+[ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="4_ujy7e"]
+[ext_resource type="Script" uid="uid://in2a2x0qr1nm" path="res://Script/SkinEditor/ScreenElementButton.cs" id="5_imael"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wk53w"]
+bg_color = Color(0.0784314, 0.0980392, 0.129412, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ujy7e"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yvt2e"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.196078)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q65qw"]
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jucc0"]
+bg_color = Color(0.0790558, 0.0977497, 0.128906, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ee5vh"]
+content_margin_left = 25.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l6k4f"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l6k4f"]
+bg_color = Color(1, 1, 1, 0.0784314)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pjdex"]
+bg_color = Color(0.247742, 0.386719, 0.247742, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5cjqt"]
+bg_color = Color(1, 1, 1, 0.0392157)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gv4va"]
+bg_color = Color(0.222656, 0.296448, 0.375, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pjdex"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cxjes"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.0784314)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_255xm"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.156863)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_elvf5"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yvt2e"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_imael"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xm3b"]
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y7e17"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wjbl6"]
+content_margin_left = 10.0
+content_margin_right = 20.0
+bg_color = Color(0.92549, 0.294118, 0.180392, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ul0k5"]
+content_margin_left = 10.0
+content_margin_right = 20.0
+bg_color = Color(0.666667, 0.222387, 0.142361, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_724hy"]
+content_margin_left = 10.0
+content_margin_right = 20.0
+bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
+
+[node name="Skin Editor" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_wk53w")
+
+[node name="Creativity" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = 150.0
+offset_right = 222.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wk53w")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Creativity"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ujy7e")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Creativity/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SkinElement" type="Button" parent="Creativity/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(100, 200)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yvt2e")
+
+[node name="Label" type="Label" parent="Creativity/ScrollContainer/VBoxContainer/SkinElement"]
+layout_mode = 2
+offset_left = 5.0
+offset_top = 90.0
+offset_right = 187.0
+offset_bottom = 109.0
+text = "Test Skin"
+horizontal_alignment = 1
+
+[node name="SkinText" type="Label" parent="Creativity/ScrollContainer/VBoxContainer/SkinElement"]
+layout_mode = 2
+offset_left = 5.0
+offset_top = 166.0
+offset_right = 187.0
+offset_bottom = 195.0
+size_flags_vertical = 8
+theme_override_styles/normal = SubResource("StyleBoxEmpty_q65qw")
+text = "Dummy Skin Element"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="SkinElement2" type="Button" parent="Creativity/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(100, 200)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yvt2e")
+
+[node name="Label" type="TextureRect" parent="Creativity/ScrollContainer/VBoxContainer/SkinElement2"]
+layout_mode = 1
+offset_left = 5.0
+offset_top = 90.0
+offset_right = 187.0
+offset_bottom = 109.0
+texture = ExtResource("2_imael")
+stretch_mode = 3
+
+[node name="SkinText" type="Label" parent="Creativity/ScrollContainer/VBoxContainer/SkinElement2"]
+layout_mode = 2
+offset_left = 5.0
+offset_top = 166.0
+offset_right = 187.0
+offset_bottom = 195.0
+size_flags_vertical = 8
+theme_override_styles/normal = SubResource("StyleBoxEmpty_q65qw")
+text = "Dummy Skin Image"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="ToolBar" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 50.0
+offset_bottom = 150.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jucc0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ToolBar"]
+layout_mode = 2
+
+[node name="PartA" type="HBoxContainer" parent="ToolBar/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartA"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ee5vh")
+text = "Skin Editor"
+
+[node name="MarginContainer" type="MarginContainer" parent="ToolBar/VBoxContainer/PartA"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="File" type="Button" parent="ToolBar/VBoxContainer/PartA"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l6k4f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_l6k4f")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pjdex")
+theme_override_styles/normal = SubResource("StyleBoxFlat_5cjqt")
+text = "File"
+script = ExtResource("2_wk53w")
+
+[node name="ContextMenu" type="PanelContainer" parent="ToolBar/VBoxContainer/PartA/File"]
+visible = false
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_right = 180.0
+offset_bottom = 151.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_gv4va")
+script = ExtResource("3_imael")
+
+[node name="ContextSections" type="VBoxContainer" parent="ToolBar/VBoxContainer/PartA/File/ContextMenu"]
+layout_mode = 2
+
+[node name="New" type="Button" parent="ToolBar/VBoxContainer/PartA/File/ContextMenu/ContextSections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_255xm")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_elvf5")
+text = "New"
+alignment = 0
+
+[node name="Import" type="Button" parent="ToolBar/VBoxContainer/PartA/File/ContextMenu/ContextSections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_255xm")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_elvf5")
+text = "Import"
+alignment = 0
+
+[node name="Save" type="Button" parent="ToolBar/VBoxContainer/PartA/File/ContextMenu/ContextSections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_255xm")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_elvf5")
+text = "Save"
+alignment = 0
+
+[node name="SaveAs" type="Button" parent="ToolBar/VBoxContainer/PartA/File/ContextMenu/ContextSections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_255xm")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_elvf5")
+text = "Save as new Skin"
+alignment = 0
+
+[node name="Export" type="Button" parent="ToolBar/VBoxContainer/PartA/File/ContextMenu/ContextSections"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_255xm")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_elvf5")
+text = "Export"
+alignment = 0
+
+[node name="Edit" type="Button" parent="ToolBar/VBoxContainer/PartA"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l6k4f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_l6k4f")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pjdex")
+theme_override_styles/normal = SubResource("StyleBoxFlat_5cjqt")
+text = "Edit"
+
+[node name="View" type="Button" parent="ToolBar/VBoxContainer/PartA"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l6k4f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_l6k4f")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pjdex")
+theme_override_styles/normal = SubResource("StyleBoxFlat_5cjqt")
+text = "View"
+
+[node name="PartB" type="HBoxContainer" parent="ToolBar/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ee5vh")
+text = "Skin Elements"
+
+[node name="ScreensParts" type="MarginContainer" parent="ToolBar/VBoxContainer/PartB"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Screens" type="HBoxContainer" parent="ToolBar/VBoxContainer/PartB/ScreensParts"]
+layout_mode = 2
+
+[node name="HomeScreen" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
+self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yvt2e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_imael")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_imael")
+theme_override_styles/normal = SubResource("StyleBoxFlat_imael")
+script = ExtResource("5_imael")
+
+[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Home Screen"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SongSelect" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
+self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yvt2e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_imael")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_imael")
+theme_override_styles/normal = SubResource("StyleBoxFlat_imael")
+script = ExtResource("5_imael")
+
+[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Song Select"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Gameplay" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
+self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yvt2e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_imael")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_imael")
+theme_override_styles/normal = SubResource("StyleBoxFlat_imael")
+script = ExtResource("5_imael")
+
+[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Gameplay"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GamePause" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
+self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yvt2e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_imael")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_imael")
+theme_override_styles/normal = SubResource("StyleBoxFlat_imael")
+script = ExtResource("5_imael")
+
+[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Pause Screen"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GameOver" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
+self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yvt2e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_imael")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_imael")
+theme_override_styles/normal = SubResource("StyleBoxFlat_imael")
+script = ExtResource("5_imael")
+
+[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Fail Screen"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Results Screen" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
+self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yvt2e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_imael")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_imael")
+theme_override_styles/normal = SubResource("StyleBoxFlat_imael")
+script = ExtResource("5_imael")
+
+[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Results Screen"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ControlPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_7xm3b")
+
+[node name="Box" type="HBoxContainer" parent="ControlPanel"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Button" type="Button" parent="ControlPanel/Box"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_y7e17")
+theme_override_styles/hover = SubResource("StyleBoxFlat_wjbl6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ul0k5")
+theme_override_styles/normal = SubResource("StyleBoxFlat_724hy")
+text = "  Back"
+icon = ExtResource("4_ujy7e")
+
+[connection signal="toggled" from="ToolBar/VBoxContainer/PartA/File" to="." method="_pressed"]
+[connection signal="toggled" from="ToolBar/VBoxContainer/PartA/File/ContextMenu/ContextSections/New" to="ToolBar/VBoxContainer/PartA/File/ContextMenu" method="_new"]
+[connection signal="button_down" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" method="_highlight"]
+[connection signal="button_up" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" method="_focus"]
+[connection signal="mouse_entered" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" method="_focus"]
+[connection signal="mouse_exited" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" method="_unfocus"]
+[connection signal="pressed" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" method="_element"]
+[connection signal="button_down" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" method="_highlight"]
+[connection signal="button_up" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" method="_focus"]
+[connection signal="mouse_entered" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" method="_focus"]
+[connection signal="mouse_exited" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" method="_unfocus"]
+[connection signal="pressed" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" method="_element"]
+[connection signal="button_down" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" method="_highlight"]
+[connection signal="button_up" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" method="_focus"]
+[connection signal="mouse_entered" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" method="_focus"]
+[connection signal="mouse_exited" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" method="_unfocus"]
+[connection signal="pressed" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" method="_element"]
+[connection signal="button_down" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" method="_highlight"]
+[connection signal="button_up" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" method="_focus"]
+[connection signal="mouse_entered" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" method="_focus"]
+[connection signal="mouse_exited" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" method="_unfocus"]
+[connection signal="pressed" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" method="_element"]
+[connection signal="button_down" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" method="_highlight"]
+[connection signal="button_up" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" method="_focus"]
+[connection signal="mouse_entered" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" method="_focus"]
+[connection signal="mouse_exited" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" method="_unfocus"]
+[connection signal="pressed" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" method="_element"]
+[connection signal="button_down" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" method="_highlight"]
+[connection signal="button_up" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" method="_focus"]
+[connection signal="mouse_entered" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" method="_focus"]
+[connection signal="mouse_exited" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" method="_unfocus"]
+[connection signal="pressed" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" method="_element"]
+[connection signal="pressed" from="ControlPanel/Box/Button" to="." method="_on_back"]
