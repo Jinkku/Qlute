@@ -15,15 +15,15 @@ public class DanceCounter {
 public partial class SettingsOperator : Node
 {	
 	//public string homedir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + "/.qlute";
-    public string homedir = OS.GetUserDataDir();
-	public string beatmapsdir => homedir + "/beatmaps";
+    public static string homedir = OS.GetUserDataDir();
+	public static string beatmapsdir => homedir + "/beatmaps";
     public static float ppbase = 0.035f;
-	public string downloadsdir => homedir + "/downloads";
-	public string replaydir => homedir + "/replays";
-	public string screenshotdir => homedir + "/screenshots";
-	public string skinsdir => homedir + "/skins";
-    public string settingsfile => homedir + "/settings.cfg";
-    public string Qlutedb => homedir + "/qlute.db";
+	public static string downloadsdir => homedir + "/downloads";
+	public static string replaydir => homedir + "/replays";
+	public static string screenshotdir => homedir + "/screenshots";
+	public static string skinsdir => homedir + "/skins";
+    public static string settingsfile => homedir + "/settings.cfg";
+    public static string Qlutedb => homedir + "/qlute.db";
     public static bool loopaudio = false;
     public static bool jukebox = false;
     public int backgrounddim {get;set;}

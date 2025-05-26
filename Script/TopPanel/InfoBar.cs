@@ -5,9 +5,9 @@ using System.Linq;
 public partial class InfoBar : ColorRect
 {
 	
-	public static SettingsOperator SettingsOperator { get; set; }
-	public static AnimationPlayer Loadinganimation {get ; set; }
-	public static Sprite2D Loadingicon {get ; set; }
+	public SettingsOperator SettingsOperator { get; set; }
+	public AnimationPlayer Loadinganimation {get ; set; }
+	public Sprite2D Loadingicon {get ; set; }
 	public override void _Ready()
 	{
 		Loadinganimation = GetNode<AnimationPlayer>("AccountButton/Loadingicon/Loadinganimation");

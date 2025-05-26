@@ -1,27 +1,14 @@
-[gd_scene load_steps=17 format=3 uid="uid://b2pypl6ci4s6g"]
+[gd_scene load_steps=16 format=3 uid="uid://b2pypl6ci4s6g"]
 
 [ext_resource type="Script" uid="uid://da5wukscc4c75" path="res://Script/Browse/CardFunctions.cs" id="1_pttee"]
 [ext_resource type="Texture2D" uid="uid://bx4ufaujlqpm8" path="res://Skin/System/download.png" id="2_tgpg0"]
+[ext_resource type="Script" uid="uid://cdcldgnst0tvx" path="res://Script/Browse/DownloadProcess.cs" id="3_i800q"]
 [ext_resource type="Texture2D" uid="uid://b6hfhv5kwa3oi" path="res://Skin/System/heart.png" id="3_wsj5f"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i3see"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qbp1l"]
-bg_color = Color(0.442708, 0.442708, 0.442708, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2hi8s"]
-bg_color = Color(0.34375, 0.34375, 0.34375, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cufpe"]
-bg_color = Color(0.196078, 0.196078, 0.196078, 1)
+bg_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
@@ -81,14 +68,15 @@ colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1)
 gradient = SubResource("Gradient_tgpg0")
 
 [node name="MusicCard" type="Button"]
+modulate = Color(1, 1, 1, 0)
 clip_contents = true
 custom_minimum_size = Vector2(400, 115)
 offset_right = 350.0
 offset_bottom = 115.0
 size_flags_horizontal = 3
 theme_override_styles/focus = SubResource("StyleBoxEmpty_i3see")
-theme_override_styles/hover = SubResource("StyleBoxFlat_qbp1l")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_2hi8s")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cufpe")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cufpe")
 theme_override_styles/normal = SubResource("StyleBoxFlat_cufpe")
 script = ExtResource("1_pttee")
 
@@ -173,16 +161,19 @@ alignment = 1
 [node name="Download" type="Button" parent="DownloadBar/VBoxContainer"]
 z_index = 1
 layout_mode = 2
+mouse_filter = 1
 theme_override_styles/focus = SubResource("StyleBoxEmpty_wsj5f")
 theme_override_styles/hover = SubResource("StyleBoxFlat_i800q")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bwdvf")
 theme_override_styles/normal = SubResource("StyleBoxFlat_pjk7l")
 icon = ExtResource("2_tgpg0")
 icon_alignment = 1
+script = ExtResource("3_i800q")
 
 [node name="Favorite" type="Button" parent="DownloadBar/VBoxContainer"]
 z_index = 1
 layout_mode = 2
+mouse_filter = 1
 theme_override_styles/focus = SubResource("StyleBoxEmpty_wsj5f")
 theme_override_styles/hover = SubResource("StyleBoxFlat_i800q")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bwdvf")
@@ -213,6 +204,13 @@ stretch_mode = 6
 
 [connection signal="draw" from="." to="." method="_on_draw"]
 [connection signal="hidden" from="." to="." method="_on_hidden"]
+[connection signal="mouse_entered" from="." to="." method="_focus"]
+[connection signal="mouse_exited" from="." to="." method="_unfocus"]
 [connection signal="pressed" from="." to="." method="_on_pressed"]
-[connection signal="pressed" from="DownloadBar/VBoxContainer/Download" to="." method="_download"]
+[connection signal="mouse_entered" from="DownloadBar/VBoxContainer/Download" to="." method="_buttoncard"]
+[connection signal="mouse_exited" from="DownloadBar/VBoxContainer/Download" to="." method="_buttoncardup"]
+[connection signal="pressed" from="DownloadBar/VBoxContainer/Download" to="." method="_setid"]
+[connection signal="pressed" from="DownloadBar/VBoxContainer/Download" to="DownloadBar/VBoxContainer/Download" method="_download"]
+[connection signal="mouse_entered" from="DownloadBar/VBoxContainer/Favorite" to="." method="_buttoncard"]
+[connection signal="mouse_exited" from="DownloadBar/VBoxContainer/Favorite" to="." method="_buttoncardup"]
 [connection signal="pressed" from="DownloadBar/VBoxContainer/Favorite" to="." method="_favorite"]

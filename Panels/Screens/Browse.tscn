@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://1eecnwds7hxx"]
+[gd_scene load_steps=19 format=3 uid="uid://1eecnwds7hxx"]
 
 [ext_resource type="Script" uid="uid://gl6ndgfj1mc8" path="res://Script/Browse/Browse.cs" id="1_gq7gs"]
 [ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="2_gtswx"]
+[ext_resource type="Texture2D" uid="uid://cx112orgceagu" path="res://Skin/System/loading.svg" id="3_287m4"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gt3n2"]
 content_margin_left = 25.0
@@ -93,7 +94,45 @@ content_margin_left = 10.0
 content_margin_right = 20.0
 bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
 
-[node name="Control" type="Control"]
+[sub_resource type="Animation" id="Animation_1f010"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_tk3k2"]
+resource_name = "loading"
+length = 0.5
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0166667, 0.0333333, 0.05, 0.0666667, 0.0833333, 0.1, 0.116667, 0.133333, 0.15, 0.166667, 0.183333, 0.2, 0.216667, 0.233333, 0.25, 0.266667, 0.283333, 0.3, 0.316667, 0.333333, 0.35, 0.366667, 0.383333, 0.4, 0.416667, 0.433333, 0.45, 0.466667, 0.483333, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.607609, 1.17472, 1.70275, 2.19307, 2.64709, 3.0662, 3.4518, 3.80529, 4.12806, 4.4215, 4.68703, 4.92602, 5.13988, 5.33001, 5.49779, 5.64463, 5.77192, 5.88107, 5.97345, 6.05048, 6.11354, 6.16404, 6.20337, 6.23292, 6.2541, 6.2683, 6.27691, 6.28133, 6.28296, 6.28319]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1f8y5"]
+_data = {
+&"RESET": SubResource("Animation_1f010"),
+&"loading": SubResource("Animation_tk3k2")
+}
+
+[node name="BrowseCatalog" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -272,7 +311,6 @@ layout_mode = 2
 columns = 3
 
 [node name="BottomBar" type="Control" parent="."]
-z_index = 2
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -299,6 +337,7 @@ layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="Button" type="Button" parent="BottomBar/ControlPanel/Box"]
+custom_minimum_size = Vector2(108, 50)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_82bl1")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ftq75")
@@ -307,5 +346,17 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_v4oe2")
 text = "  Back"
 icon = ExtResource("2_gtswx")
 
+[node name="Loadingicon" type="Sprite2D" parent="."]
+z_index = 5
+texture_filter = 1
+position = Vector2(175, 25)
+texture = ExtResource("3_287m4")
+
+[node name="Loadinganimation" type="AnimationPlayer" parent="Loadingicon"]
+libraries = {
+&"": SubResource("AnimationLibrary_1f8y5")
+}
+
 [connection signal="text_submitted" from="Header/VBoxContainer/MarginContainer/SearchBox" to="." method="_submit"]
+[connection signal="item_selected" from="Header/VBoxContainer/SearchFilters/Tabs/RankButton" to="." method="_rankchanged"]
 [connection signal="pressed" from="BottomBar/ControlPanel/Box/Button" to="." method="_on_back"]

@@ -204,171 +204,211 @@ public partial class Gameplay : Control
 	public const float MAX_TIME_RANGE = 11485;
     public static float ComputeScrollTime(float scrollSpeed) => MAX_TIME_RANGE / scrollSpeed;
 	public override void _Process(double delta)
-	{   
-		Clock =DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - PClock;
-		float est = Clock-startedtime+float.Parse(SettingsOperator.GetSetting("audiooffset").ToString());
-		if (est>=0 && !songstarted){
-			songstarted = true;
-			AudioPlayer.Instance.Play();
-			startedtime = Clock;
-		}
-
-		// DEATH
-
-		if (HealthBar.Health == 0 && !Dead) {
-			Dead = !Dead;
-			ShowPauseMenu();
-		}
-
-
-		// End Game
-
-		if (SettingsOperator.Gameplaycfg["timetotal"]-SettingsOperator.Gameplaycfg["time"] < -2000 && !Finished)
+	{
+		try
 		{
-			SettingsOperator.toppaneltoggle();
-			BeatmapBackground.FlashEnable = true;
-			SettingsOperator.Sessioncfg["localpp"] = (double)SettingsOperator.Sessioncfg["localpp"] + SettingsOperator.Gameplaycfg["pp"];
-			ApiOperator.SubmitScore();
-			Finished = true;
-			GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/ResultsScreen.tscn");
-		}
 
-		if (SettingsOperator.Gameplaycfg["combo"] > SettingsOperator.Gameplaycfg["maxcombo"]){
-			SettingsOperator.Gameplaycfg["maxcombo"] = SettingsOperator.Gameplaycfg["combo"];
-		}
-
-		
-		Beatmap_Background.SelfModulate = new Color(1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)));
-		if (AudioPlayer.Instance.PitchScale != 1.0f){
-			est = est * AudioPlayer.Instance.PitchScale;
-		}
-		SettingsOperator.Gameplaycfg["accuracy"] = (SettingsOperator.Gameplaycfg["max"] + (SettingsOperator.Gameplaycfg["great"]/2) + (SettingsOperator.Gameplaycfg["meh"]/3)) / (SettingsOperator.Gameplaycfg["max"] +SettingsOperator.Gameplaycfg["great"] + SettingsOperator.Gameplaycfg["meh"] + SettingsOperator.Gameplaycfg["bad"]);
-		SettingsOperator.Gameplaycfg["score"] = score;
-		SettingsOperator.Gameplaycfg["pp"] = SettingsOperator.Get_ppvalue((int)SettingsOperator.Gameplaycfg["max"],(int)SettingsOperator.Gameplaycfg["great"],(int)SettingsOperator.Gameplaycfg["meh"],(int)SettingsOperator.Gameplaycfg["bad"],ModsMulti.multiplier,(int)SettingsOperator.Gameplaycfg["maxcombo"]);
-		SettingsOperator.Gameplaycfg["time"] = (int)est;
-		//float est = AudioPlayer.Instance.GetPlaybackPosition()*1000;
-		int Ttick = 0;
-		//maxc=hits[0]+hits[1]+hits[2]+hits[3]
-        //    accuracy=round(((hits[0]+(hits[1]/2)+(hits[2]/3))/(maxc))*100,2)
-		//Hits.Text = "Hits:\n" + SettingsOperator.Gameplaycfg["max"] + "\n" + SettingsOperator.Gameplaycfg["great"] + "\n" + SettingsOperator.Gameplaycfg["meh"] + "\n" + SettingsOperator.Gameplaycfg["bad"] + "\n"+"ms:"+(mshitold-mshit)+"ms " + mshitold + " " + mshit + " " + SettingsOperator.Getms();
-		// Key imputs
-		for (int i=0;i<4;i++)
-		{
-			if (Input.IsActionJustPressed("Key"+(i+1)) && !ModsOperator.Mods["auto"])
+			Clock = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - PClock;
+			float est = Clock - startedtime + float.Parse(SettingsOperator.GetSetting("audiooffset").ToString());
+			if (est >= 0 && !songstarted)
 			{
-				hitnote(i,true);
+				songstarted = true;
+				AudioPlayer.Instance.Play();
+				startedtime = Clock;
 			}
-			else if (Input.IsActionJustReleased("Key"+(i+1)) && !ModsOperator.Mods["auto"])
+
+			// DEATH
+
+			if (HealthBar.Health == 0 && !Dead)
 			{
-				hitnote(i,false);
+				Dead = !Dead;
+				ShowPauseMenu();
 			}
-		}
-		if (Input.IsActionJustPressed("pausemenu")){
-			ShowPauseMenu();
-		}else if (Input.IsActionJustPressed("retry")){
-			BeatmapBackground.FlashEnable = true;
-			SettingsOperator.toppaneltoggle();
-			GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
-		}
-		//debugtext.Text = $"est: {est}\nDanceIndex:{DanceIndex}\nTimeindex:{dance.ElementAt(DanceIndex).time}";
-		if ((int)est > dance.ElementAt(DanceIndex).time){
-			BeatmapBackground.FlashEnable = dance.ElementAt(DanceIndex).flash;
-			if (DanceIndex + 1 < dance.Count()){
-			DanceIndex++;}
-		}
 
 
-		// Gamenotes
+			// End Game
 
-		var viewportSize = 0f;
-		if (IsInsideTree())
-		{
-			viewportSize = GetViewportRect().Size.Y;
-		}
-		var timepart = 0;
-		//var scrollspeed = ComputeScrollTime(int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString())); // Scroll speed for the notes
-		var scrollspeed = 1;
-
-		for (int i = 0;i<Notes.Count;i++){
-			var Note = Notes[i];
-			var notex = Note.timing + est + Chart.Size.Y;
-			if (timepart != Note.timing){
-				Noteindex++;
-				timepart = Note.timing;
+			if (SettingsOperator.Gameplaycfg["timetotal"] - SettingsOperator.Gameplaycfg["time"] < -2000 && !Finished)
+			{
+				SettingsOperator.toppaneltoggle();
+				BeatmapBackground.FlashEnable = true;
+				SettingsOperator.Sessioncfg["localpp"] = (double)SettingsOperator.Sessioncfg["localpp"] + SettingsOperator.Gameplaycfg["pp"];
+				ApiOperator.SubmitScore();
+				Finished = true;
+				GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/ResultsScreen.tscn");
 			}
-			if (!Note.hit && Note.Node == null){
+
+			if (SettingsOperator.Gameplaycfg["combo"] > SettingsOperator.Gameplaycfg["maxcombo"])
+			{
+				SettingsOperator.Gameplaycfg["maxcombo"] = SettingsOperator.Gameplaycfg["combo"];
+			}
+
+
+			Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)));
+			if (AudioPlayer.Instance.PitchScale != 1.0f)
+			{
+				est = est * AudioPlayer.Instance.PitchScale;
+			}
+			SettingsOperator.Gameplaycfg["accuracy"] = (SettingsOperator.Gameplaycfg["max"] + (SettingsOperator.Gameplaycfg["great"] / 2) + (SettingsOperator.Gameplaycfg["meh"] / 3)) / (SettingsOperator.Gameplaycfg["max"] + SettingsOperator.Gameplaycfg["great"] + SettingsOperator.Gameplaycfg["meh"] + SettingsOperator.Gameplaycfg["bad"]);
+			SettingsOperator.Gameplaycfg["score"] = score;
+			SettingsOperator.Gameplaycfg["pp"] = SettingsOperator.Get_ppvalue((int)SettingsOperator.Gameplaycfg["max"], (int)SettingsOperator.Gameplaycfg["great"], (int)SettingsOperator.Gameplaycfg["meh"], (int)SettingsOperator.Gameplaycfg["bad"], ModsMulti.multiplier, (int)SettingsOperator.Gameplaycfg["maxcombo"]);
+			SettingsOperator.Gameplaycfg["time"] = (int)est;
+			//float est = AudioPlayer.Instance.GetPlaybackPosition()*1000;
+			int Ttick = 0;
+			//maxc=hits[0]+hits[1]+hits[2]+hits[3]
+			//    accuracy=round(((hits[0]+(hits[1]/2)+(hits[2]/3))/(maxc))*100,2)
+			//Hits.Text = "Hits:\n" + SettingsOperator.Gameplaycfg["max"] + "\n" + SettingsOperator.Gameplaycfg["great"] + "\n" + SettingsOperator.Gameplaycfg["meh"] + "\n" + SettingsOperator.Gameplaycfg["bad"] + "\n"+"ms:"+(mshitold-mshit)+"ms " + mshitold + " " + mshit + " " + SettingsOperator.Getms();
+			// Key imputs
+			for (int i = 0; i < 4; i++)
+			{
+				if (Input.IsActionJustPressed("Key" + (i + 1)) && !ModsOperator.Mods["auto"])
+				{
+					hitnote(i, true);
+				}
+				else if (Input.IsActionJustReleased("Key" + (i + 1)) && !ModsOperator.Mods["auto"])
+				{
+					hitnote(i, false);
+				}
+			}
+			if (Input.IsActionJustPressed("pausemenu"))
+			{
+				ShowPauseMenu();
+			}
+			else if (Input.IsActionJustPressed("retry"))
+			{
+				BeatmapBackground.FlashEnable = true;
+				SettingsOperator.toppaneltoggle();
+				GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
+			}
+			//debugtext.Text = $"est: {est}\nDanceIndex:{DanceIndex}\nTimeindex:{dance.ElementAt(DanceIndex).time}";
+			if ((int)est > dance.ElementAt(DanceIndex).time)
+			{
+				BeatmapBackground.FlashEnable = dance.ElementAt(DanceIndex).flash;
+				if (DanceIndex + 1 < dance.Count())
+				{
+					DanceIndex++;
+				}
+			}
+
+
+			// Gamenotes
+
+			var viewportSize = 0f;
+			if (IsInsideTree())
+			{
+				viewportSize = GetViewportRect().Size.Y;
+			}
+			var timepart = 0;
+			//var scrollspeed = ComputeScrollTime(int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString())); // Scroll speed for the notes
+			var scrollspeed = 1;
+
+			for (int i = 0; i < Notes.Count; i++)
+			{
+				var Note = Notes[i];
+				var notex = Note.timing + est + Chart.Size.Y;
+				if (timepart != Note.timing)
+				{
+					Noteindex++;
+					timepart = Note.timing;
+				}
+				if (!Note.hit && Note.Node == null)
+				{
 					var node = new Sprite2D();
-					node.SetMeta("part",Note.NoteSection);
+					node.SetMeta("part", Note.NoteSection);
 					node.Centered = false;
-					node.SelfModulate = new Color(0.83f,0f,1f);
+					node.SelfModulate = new Color(0.83f, 0f, 1f);
 					node.Texture = NoteSkinBack;
 					Note.Node = node;
-			}
-			if (notex > -150 && notex < viewportSize+150 && !Note.hit){
-				if (Note.Node != null && !Note.Node.IsInsideTree()){
-					GetNode<ColorRect>($"Playfield/ChartSections/Section{(int)Note.Node.GetMeta("part")+1}").AddChild(Note.Node);
-					var SkinFore = new Sprite2D();
-					SkinFore.Centered = false;
-					SkinFore.Texture = NoteSkinFore;
-					Note.Node.AddChild(SkinFore);
 				}
-				if (Note.Node != null && (int)notex+nodeSize > Chart.Size.Y && (int)notex+nodeSize < Chart.Size.Y+MehJudge  && ModsOperator.Mods["auto"]){
-					hitnote((int)Note.Node.GetMeta("part"),true);
-				}else if (ModsOperator.Mods["auto"]){
-					hitnote((int)Note.Node.GetMeta("part"),false);
-				}
-				if (ModsOperator.Mods["slice"] && Note.Node != null){
-					Note.Node.SelfModulate = new Color(1f,1f,1f, Math.Min(Chart.Size.Y,Note.Node.Position.Y-200)/ Chart.Size.Y );
-				} else if (ModsOperator.Mods["black-out"] && Note.Node != null){
-					Note.Node.SelfModulate = new Color(0f,0f,0f,0f);
-				}
-				if (Note.Node != null) {
-					Note.Node.Position = new Vector2(0, notex * scrollspeed - (Chart.Size.Y * (scrollspeed-1)));
-					Ttick++;
-					JudgeResult = checkjudge((int)notex,Keys[(int)Note.Node.GetMeta("part")].hit,Note.Node,Note.Node.Visible);
-					if (JudgeResult < 4){
-						mshitold = Chart.Size.Y+5;
-						Keys[(int)Note.Node.GetMeta("part")].hit = false;
-						mshit = notex;
-						SettingsOperator.Addms(mshitold-mshit-50);
-						var urnote = new ColorRect();
-						urnote.Position = new Vector2(-5,(GetNode<ColorRect>("UR").Size.Y/2)+(((float)(mshitold-mshit-50)/MehJudge))*200);
-						urnote.Size = new Vector2(15,2);
-						GetNode<ColorRect>("UR").AddChild(urnote);
-						var urani = urnote.CreateTween();
-						urani.TweenProperty(urnote, "color", new Color(1f,1f,1f,0f), 1).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-						urani.Play();
-						urani.TweenCallback(Callable.From(urnote.QueueFree));
-						SettingsOperator.Gameplaycfg["ms"] = SettingsOperator.Getms();
-						newscore= (int)(SettingsOperator.Gameplaycfg["pp"] / SettingsOperator.Gameplaycfg["maxpp"] * (1000000*ModsMulti.multiplier));
-						if (scoretween != null){
-							scoretween.Kill();
+				if (notex > -150 && notex < viewportSize + 150 && !Note.hit)
+				{
+					if (Note.Node != null && !Note.Node.IsInsideTree())
+					{
+						GetNode<ColorRect>($"Playfield/ChartSections/Section{(int)Note.Node.GetMeta("part") + 1}").AddChild(Note.Node);
+						var SkinFore = new Sprite2D();
+						SkinFore.Centered = false;
+						SkinFore.Texture = NoteSkinFore;
+						Note.Node.AddChild(SkinFore);
+					}
+					if (Note.Node != null && (int)notex + nodeSize > Chart.Size.Y && (int)notex + nodeSize < Chart.Size.Y + MehJudge && ModsOperator.Mods["auto"])
+					{
+						hitnote((int)Note.Node.GetMeta("part"), true);
+					}
+					else if (ModsOperator.Mods["auto"])
+					{
+						hitnote((int)Note.Node.GetMeta("part"), false);
+					}
+					if (ModsOperator.Mods["slice"] && Note.Node != null)
+					{
+						Note.Node.SelfModulate = new Color(1f, 1f, 1f, Math.Min(Chart.Size.Y, Note.Node.Position.Y - 200) / Chart.Size.Y);
+					}
+					else if (ModsOperator.Mods["black-out"] && Note.Node != null)
+					{
+						Note.Node.SelfModulate = new Color(0f, 0f, 0f, 0f);
+					}
+					if (Note.Node != null)
+					{
+						Note.Node.Position = new Vector2(0, notex * scrollspeed - (Chart.Size.Y * (scrollspeed - 1)));
+						Ttick++;
+						JudgeResult = checkjudge((int)notex, Keys[(int)Note.Node.GetMeta("part")].hit, Note.Node, Note.Node.Visible);
+						if (JudgeResult < 4)
+						{
+							mshitold = Chart.Size.Y + 5;
+							Keys[(int)Note.Node.GetMeta("part")].hit = false;
+							mshit = notex;
+							SettingsOperator.Addms(mshitold - mshit - 50);
+							var urnote = new ColorRect();
+							urnote.Position = new Vector2(-5, (GetNode<ColorRect>("UR").Size.Y / 2) + (((float)(mshitold - mshit - 50) / MehJudge)) * 200);
+							urnote.Size = new Vector2(15, 2);
+							GetNode<ColorRect>("UR").AddChild(urnote);
+							var urani = urnote.CreateTween();
+							urani.TweenProperty(urnote, "color", new Color(1f, 1f, 1f, 0f), 1).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+							urani.Play();
+							urani.TweenCallback(Callable.From(urnote.QueueFree));
+							SettingsOperator.Gameplaycfg["ms"] = SettingsOperator.Getms();
+							newscore = (int)(SettingsOperator.Gameplaycfg["pp"] / SettingsOperator.Gameplaycfg["maxpp"] * (1000000 * ModsMulti.multiplier));
+							if (scoretween != null)
+							{
+								scoretween.Kill();
+							}
+							scoretween = CreateTween();
+							scoretween.TweenProperty(this, "score", newscore, 0.3f);
+							scoretween.Play();
+							Note.hit = true;
+							Note.Node.Visible = false;
+							Note.Node.QueueFree();
+							Note.Node = null;
 						}
-						scoretween = CreateTween();
-						scoretween.TweenProperty(this,"score", newscore, 0.3f);
-						scoretween.Play();
-						Note.hit = true;
-						Note.Node.Visible = false;
-						Note.Node.QueueFree();
-						Note.Node = null;
 					}
 				}
 			}
 		}
-		//Ttiming.Text = "Time: " + est + "\n" + Ttick;
-
-		//
+		catch (Exception e)
+		{
+			if (erroredout == false)
+			{
+				erroredout = true;
+				GD.PrintErr(e);
+				Notify.Post("Can't play the bestmap because\n" + e.Message);
+				SettingsOperator.toppaneltoggle();
+				BeatmapBackground.FlashEnable = true;
+				GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/song_select.tscn");
+			}
+		}
 	}
-	public void Hittext(string word,Color wordcolor){
+	private bool erroredout = false;
+	public void Hittext(string word, Color wordcolor)
+	{
 		hittext.Modulate = wordcolor;
-		hittext.Position = new Vector2(hittextoldpos.X,hittextoldpos.Y-10);
+		hittext.Position = new Vector2(hittextoldpos.X, hittextoldpos.Y - 10);
 		//tween.TweenProperty(hittext, "position", new Vector2(hittext.Position.X,hittext.Position.Y+10), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-		if (hittextani != null && hittextani.IsRunning()) {
+		if (hittextani != null && hittextani.IsRunning())
+		{
 			hittextani.Stop();
 		}
 
 		hittextani = hittext.CreateTween();
-		hittextani.Parallel().TweenProperty(hittext, "modulate", new Color(0f,0f,0f,0f), 0.5).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		hittextani.Parallel().TweenProperty(hittext, "modulate", new Color(0f, 0f, 0f, 0f), 0.5).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		hittextani.Parallel().TweenProperty(hittext, "position", hittextoldpos, 0.5).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		hittextani.Play();
 		hittext.Text = word;
