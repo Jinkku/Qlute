@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b2pypl6ci4s6g"]
+[gd_scene load_steps=19 format=3 uid="uid://b2pypl6ci4s6g"]
 
 [ext_resource type="Script" uid="uid://da5wukscc4c75" path="res://Script/Browse/CardFunctions.cs" id="1_pttee"]
 [ext_resource type="Texture2D" uid="uid://bx4ufaujlqpm8" path="res://Skin/System/download.png" id="2_tgpg0"]
@@ -15,8 +15,27 @@ corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3w5u3"]
-bg_color = Color(0, 0, 0, 0.568627)
+bg_color = Color(0, 0, 0, 0.392157)
 corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ilrch"]
+content_margin_left = 10.0
+content_margin_top = 0.0
+content_margin_right = 10.0
+content_margin_bottom = 0.0
+bg_color = Color(0.785156, 0.785156, 0.785156, 1)
+skew = Vector2(0.5, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="FontVariation" id="FontVariation_i800q"]
+variation_embolden = 1.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_bwdvf"]
+font = SubResource("FontVariation_i800q")
+font_size = 14
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pttee"]
 content_margin_left = 5.0
@@ -68,7 +87,7 @@ colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1)
 gradient = SubResource("Gradient_tgpg0")
 
 [node name="MusicCard" type="Button"]
-modulate = Color(1, 1, 1, 0)
+self_modulate = Color(1, 1, 1, 0.541176)
 clip_contents = true
 custom_minimum_size = Vector2(400, 115)
 offset_right = 350.0
@@ -113,8 +132,7 @@ text = "mapped by idiot"
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
-clip_children = 2
+[node name="InfoBar-Base" type="PanelContainer" parent="."]
 z_index = 1
 layout_mode = 1
 anchors_preset = 12
@@ -125,21 +143,62 @@ offset_top = -40.0
 offset_right = -40.0
 grow_horizontal = 2
 grow_vertical = 0
-mouse_filter = 2
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_3w5u3")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="InfoBar-Space" type="MarginContainer" parent="InfoBar-Base"]
 layout_mode = 2
-mouse_filter = 2
 theme_override_constants/margin_left = 115
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="Ratings" type="HBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="InfoBar" type="HBoxContainer" parent="InfoBar-Base/InfoBar-Space"]
 layout_mode = 2
-mouse_filter = 2
 theme_override_constants/separation = 5
 
+[node name="RankColor" type="PanelContainer" parent="InfoBar-Base/InfoBar-Space/InfoBar"]
+self_modulate = Color(0.171234, 0.707031, 0, 1)
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_ilrch")
+
+[node name="RankText" type="Label" parent="InfoBar-Base/InfoBar-Space/InfoBar/RankColor"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "Ranked"
+label_settings = SubResource("LabelSettings_bwdvf")
+
+[node name="LvStartColor" type="PanelContainer" parent="InfoBar-Base/InfoBar-Space/InfoBar"]
+self_modulate = Color(0.679688, 0.679688, 0.679688, 1)
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_ilrch")
+
+[node name="LvStartText" type="Label" parent="InfoBar-Base/InfoBar-Space/InfoBar/LvStartColor"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "Lv. 2"
+label_settings = SubResource("LabelSettings_bwdvf")
+
+[node name="LvEndColor" type="PanelContainer" parent="InfoBar-Base/InfoBar-Space/InfoBar"]
+self_modulate = Color(0.679688, 0.679688, 0.679688, 1)
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_ilrch")
+
+[node name="LvEndText" type="Label" parent="InfoBar-Base/InfoBar-Space/InfoBar/LvEndColor"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "Lv. 37"
+label_settings = SubResource("LabelSettings_bwdvf")
+
 [node name="DownloadBar" type="PanelContainer" parent="."]
-clip_children = 2
 z_index = 1
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 1

@@ -7,12 +7,21 @@ using System.Net.Http;
 using System.Text;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 public class CatalogCardLegend {
 	public string cover { get; set; }
 	public string card { get; set; }
 	public string list { get; set; }
 	public string slimcover { get; set; }
+}
+public class CatalogBeatmapInfoLegend {
+	public int id { get; set; }
+	public double difficulty_rating { get; set; }
+	public int count_circles { get; set; }
+	public int count_sliders { get; set; }
+	public int? max_combo { get; set; }
+	public int ranked { get; set; }
 }
 public class BrowseCatalogLegend {
 	public int id { get; set; }
@@ -21,6 +30,7 @@ public class BrowseCatalogLegend {
 	public string creator { get; set; }
 	public string source { get; set; }
 	public CatalogCardLegend covers { get; set; }
+	public List<CatalogBeatmapInfoLegend> beatmaps { get; set; }
 }
 public partial class Browse : Control
 {
@@ -45,8 +55,19 @@ public partial class Browse : Control
 	}
 	private string _searchText { get; set; }
 	private int _ranktype { get; set; }
+	private double timetext { get; set; }
+	private double timetextnow { get; set; }
+	private bool textchanging { get; set; }
+	
+	private void _textchanged(string searchText)
+	{
+		textchanging = true;
+		timetext = Extras.GetMilliseconds();
+		_searchText = searchText;
+	}
 	private void _submit(string searchText)
 	{
+		textchanging = false;
 		_searchText = searchText;
 		StartBrowse();
 	}
@@ -54,6 +75,35 @@ public partial class Browse : Control
 	{
 		_ranktype = rank;
 		StartBrowse();
+	}
+
+	private string ConvertTypetoRank(int rank)
+	{
+		switch (rank)
+		{
+			case 1:
+				return "Ranked";
+			case 4:
+				return "Special";
+			case 0:
+				return "Unranked";
+			default:
+				return "Unknown";
+		}
+	}
+	private Color ConvertTypetoColor(int rank)
+	{
+		switch (rank)
+		{
+			case 1:
+				return  new Color(0.2f, 0.8f, 0.2f, 1f); // Green for Ranked
+			case 4:
+				return new Color(0.8f, 0.8f, 0.2f, 1f); // Yellow for Special
+			case 0:
+				return new Color(0.8f, 0.2f, 0.2f, 1f); // Red for Unranked
+			default:
+				return new Color(0.5f, 0.5f, 0.5f, 1f); // Gray for Unknown
+		}
 	}
 	public void StartBrowse()
 	{
@@ -85,6 +135,7 @@ public partial class Browse : Control
 		Blank.AnchorTop = 0;
 		Blank.AnchorRight = 1;
 		Blank.AnchorBottom = 1;
+		Blank.ZIndex = 4; // Ensure it is on top of everything
 		Blank.Modulate = new Color(0, 0, 0, 0f);
 		Blank.Name = "Blanko-Chan";
 		AddChild(Blank);
@@ -165,8 +216,15 @@ public static async Task
 				Element.GetNode<Label>("SongTitle").Text = line.title;
 				Element.GetNode<Label>("SongArtist").Text = line.artist;
 				Element.GetNode<Label>("SongMapper").Text = "mapped by " + line.creator;
+				Element.GetNode<PanelContainer>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor").SelfModulate = ConvertTypetoColor(line.beatmaps.First().ranked);
+				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor/RankText").Text = ConvertTypetoRank(line.beatmaps.First().ranked);
+				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor/RankText").TooltipText = line.beatmaps.First().difficulty_rating.ToString("0.00");
+				
+				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvStartColor/LvStartText").Text = "Lv. " + ((line.beatmaps.First().count_circles + line.beatmaps.First().count_sliders) * SettingsOperator.ppbase).ToString("0");
+				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvEndColor/LvEndText").Text = "Lv. " + ((line.beatmaps.Last().count_circles + line.beatmaps.Last().count_sliders) * SettingsOperator.ppbase).ToString("0");;
 				Element.SetMeta("pic", line.covers.card);
 				Element.SetMeta("beatmap", line.id);
+				Element.Modulate = new Color(1f, 1f, 1f, 0f);
 				GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps").AddChild(Element);
 			}
 		}
@@ -184,6 +242,11 @@ public static async Task
 		var waba = (int)(GetViewportRect().Size.X/CardSizeX);
 		if (waba <1){
 			waba = 1;
+		}
+		if (Extras.GetMilliseconds() - timetext > 500 && textchanging)
+		{
+			textchanging = false;
+			_submit(_searchText);
 		}
 		GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps").Columns = waba;
 	}

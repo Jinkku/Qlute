@@ -22,7 +22,6 @@ public partial class BeatmapBackground : TextureRect
 	}
 	public override void _Ready()
 	{
-		GD.Print(Extras.GetMilliseconds());
 		FlashEnable = true;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		Flash = GetNode<ColorRect>("Flash");		

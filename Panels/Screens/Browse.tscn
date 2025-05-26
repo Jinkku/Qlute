@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://1eecnwds7hxx"]
+[gd_scene load_steps=20 format=3 uid="uid://1eecnwds7hxx"]
 
 [ext_resource type="Script" uid="uid://gl6ndgfj1mc8" path="res://Script/Browse/Browse.cs" id="1_gq7gs"]
 [ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="2_gtswx"]
@@ -73,6 +73,9 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vgk5y"]
+content_margin_left = 15.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_61puy"]
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
@@ -202,6 +205,7 @@ popup/item_2/text = "Unranked"
 popup/item_2/id = 2
 
 [node name="Genre" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs"]
+visible = false
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_287m4")
 theme_override_styles/hover = SubResource("StyleBoxFlat_vgk5y")
@@ -239,6 +243,7 @@ popup/item_13/text = "Jazz"
 popup/item_13/id = 13
 
 [node name="Language" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs"]
+visible = false
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_287m4")
 theme_override_styles/hover = SubResource("StyleBoxFlat_vgk5y")
@@ -274,6 +279,12 @@ popup/item_12/text = "Instrumental"
 popup/item_12/id = 12
 popup/item_13/text = "Unknown"
 popup/item_13/id = 13
+
+[node name="Label" type="Label" parent="Header/VBoxContainer/SearchFilters/Tabs"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.992188, 1, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_vgk5y")
+text = "Note: More options are coming soon!"
 
 [node name="BeatmapSec" type="ColorRect" parent="."]
 layout_mode = 1
@@ -357,6 +368,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_1f8y5")
 }
 
+[connection signal="text_changed" from="Header/VBoxContainer/MarginContainer/SearchBox" to="." method="_textchanged"]
 [connection signal="text_submitted" from="Header/VBoxContainer/MarginContainer/SearchBox" to="." method="_submit"]
 [connection signal="item_selected" from="Header/VBoxContainer/SearchFilters/Tabs/RankButton" to="." method="_rankchanged"]
 [connection signal="pressed" from="BottomBar/ControlPanel/Box/Button" to="." method="_on_back"]
