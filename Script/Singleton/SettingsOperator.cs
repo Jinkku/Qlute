@@ -16,6 +16,7 @@ public partial class SettingsOperator : Node
 {	
 	//public string homedir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + "/.qlute";
     public static string homedir = OS.GetUserDataDir();
+	public static string tempdir => homedir + "/temp";
 	public static string beatmapsdir => homedir + "/beatmaps";
     public static float ppbase = 0.035f;
 	public static string downloadsdir => homedir + "/downloads";

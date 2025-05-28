@@ -29,6 +29,7 @@ public class BrowseCatalogLegend {
 	public string title { get; set; }
 	public string creator { get; set; }
 	public string source { get; set; }
+	public string preview_url { get; set; }
 	public CatalogCardLegend covers { get; set; }
 	public List<CatalogBeatmapInfoLegend> beatmaps { get; set; }
 }
@@ -224,6 +225,7 @@ public static async Task
 				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvEndColor/LvEndText").Text = "Lv. " + ((line.beatmaps.Last().count_circles + line.beatmaps.Last().count_sliders) * SettingsOperator.ppbase).ToString("0");;
 				Element.SetMeta("pic", line.covers.card);
 				Element.SetMeta("beatmap", line.id);
+				Element.GetNode<TextureButton>("SongBackgroundPreview/Playbutton").SetMeta("preview_url", "https:" + line.preview_url);
 				Element.Modulate = new Color(1f, 1f, 1f, 0f);
 				GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps").AddChild(Element);
 			}

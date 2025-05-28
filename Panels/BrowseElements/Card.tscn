@@ -1,9 +1,12 @@
-[gd_scene load_steps=19 format=3 uid="uid://b2pypl6ci4s6g"]
+[gd_scene load_steps=22 format=3 uid="uid://b2pypl6ci4s6g"]
 
 [ext_resource type="Script" uid="uid://da5wukscc4c75" path="res://Script/Browse/CardFunctions.cs" id="1_pttee"]
 [ext_resource type="Texture2D" uid="uid://bx4ufaujlqpm8" path="res://Skin/System/download.png" id="2_tgpg0"]
 [ext_resource type="Script" uid="uid://cdcldgnst0tvx" path="res://Script/Browse/DownloadProcess.cs" id="3_i800q"]
 [ext_resource type="Texture2D" uid="uid://b6hfhv5kwa3oi" path="res://Skin/System/heart.png" id="3_wsj5f"]
+[ext_resource type="Texture2D" uid="uid://cix7tpqhp0qkf" path="res://Skin/System/Browse/playidle.png" id="5_ilrch"]
+[ext_resource type="Texture2D" uid="uid://q500uwy2anai" path="res://Skin/System/Browse/playing.png" id="6_c4wxm"]
+[ext_resource type="Script" uid="uid://dwam3ny8h332d" path="res://Script/Browse/MusicPreview.cs" id="7_1lgpj"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i3see"]
 
@@ -261,6 +264,15 @@ texture = SubResource("GradientTexture2D_wsj5f")
 expand_mode = 1
 stretch_mode = 6
 
+[node name="Playbutton" type="TextureButton" parent="SongBackgroundPreview"]
+texture_filter = 2
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("5_ilrch")
+texture_pressed = ExtResource("6_c4wxm")
+stretch_mode = 3
+script = ExtResource("7_1lgpj")
+
 [connection signal="draw" from="." to="." method="_on_draw"]
 [connection signal="hidden" from="." to="." method="_on_hidden"]
 [connection signal="mouse_entered" from="." to="." method="_focus"]
@@ -273,3 +285,7 @@ stretch_mode = 6
 [connection signal="mouse_entered" from="DownloadBar/VBoxContainer/Favorite" to="." method="_buttoncard"]
 [connection signal="mouse_exited" from="DownloadBar/VBoxContainer/Favorite" to="." method="_buttoncardup"]
 [connection signal="pressed" from="DownloadBar/VBoxContainer/Favorite" to="." method="_favorite"]
+[connection signal="button_down" from="SongBackgroundPreview/Playbutton" to="SongBackgroundPreview/Playbutton" method="_highlight"]
+[connection signal="mouse_entered" from="SongBackgroundPreview/Playbutton" to="SongBackgroundPreview/Playbutton" method="_focus"]
+[connection signal="mouse_exited" from="SongBackgroundPreview/Playbutton" to="SongBackgroundPreview/Playbutton" method="_unfocus"]
+[connection signal="pressed" from="SongBackgroundPreview/Playbutton" to="SongBackgroundPreview/Playbutton" method="_pressed"]

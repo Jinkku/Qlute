@@ -52,7 +52,7 @@ public partial class BeatmapListener : Node
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		GD.Print(SettingsOperator.beatmapsdir);
-		string[] directories = { SettingsOperator.homedir, SettingsOperator.beatmapsdir, SettingsOperator.downloadsdir, SettingsOperator.replaydir, SettingsOperator.screenshotdir, SettingsOperator.skinsdir };
+		string[] directories = { SettingsOperator.homedir,SettingsOperator.tempdir, SettingsOperator.beatmapsdir, SettingsOperator.downloadsdir, SettingsOperator.replaydir, SettingsOperator.screenshotdir, SettingsOperator.skinsdir };
 		foreach (string tmp in directories)
 		{
 			if (Directory.Exists(tmp))
@@ -76,10 +76,6 @@ public partial class BeatmapListener : Node
 
 
 		}
-
-		//		foreach (string Dir in SettingsOperator.BeatmapsURLs){
-		//			GD.Print("Scratching..." + Dir);
-		//		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
