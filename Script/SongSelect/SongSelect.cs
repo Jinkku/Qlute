@@ -34,9 +34,9 @@ public partial class SongSelect : Control
 	private bool AnimationSong {get;set;}
 	private int SongLoaded {get;set;}
 
-    int startposition = 30;
+    int startposition = 0;
 	int scrolloldvalue {get;set;}
-	private void _valuechangedscroll(float value){
+	private void _valuechangedscroll(float value){ // Part of the loading Beatmaps
 		SongETick = 0;
 		startposition = (int)GetViewportRect().Size.Y/2 - 166;
 		//Debugtext.Text = $"{value.ToString()}/{SongLoaded.ToString()}";
@@ -114,6 +114,7 @@ public partial class SongSelect : Control
 		RankedStatus = GetNode<Label>("SongDetails/RankedStatus");
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		SongETick = 0;
+		startposition = (int)GetViewportRect().Size.Y/2 - 166;
 
 
 		//Debugtext = new Label();
@@ -163,9 +164,9 @@ public partial class SongSelect : Control
 	{
 			// Calculate visible range with larger buffer to reduce flickering
 			float viewportHeight = GetViewportRect().Size.Y;
-			int visibleItemCount = (int)(viewportHeight / 83) + 4; // Increased buffer items
-			int startIndex = Math.Max(0, (int)scrollBar.Value - 2);
-			int endIndex = Math.Min(SettingsOperator.Beatmaps.Count, startIndex + visibleItemCount);
+			int visibleItemCount = (int)(viewportHeight / 83); // Increased buffer items
+			int startIndex = Math.Max(0, (int)scrollBar.Value - visibleItemCount / 2 - 1);
+			int endIndex = Math.Min(SettingsOperator.Beatmaps.Count, startIndex + visibleItemCount + 1);
 
 			// Remove items outside visible range
 			for (int i = SongEntry.Count - 1; i >= 0; i--)
@@ -328,6 +329,9 @@ public partial class SongSelect : Control
 		ModScreen_Tween.Play();
 	}
 	private void _Start(){
+		if (ModsScreenActive){
+			_Mods_show();
+		}
 		var SongDetails = GetNode<TextureRect>("SongDetails");
 		var SongPanel = GetNode<Control>("SongPanel");
 		var BottomBar = GetNode<Control>("BottomBar");
