@@ -18,7 +18,6 @@ public partial class FpsCounter : PanelContainer
 		FPS = GetNode<Label>("./FPS");
 		Latency = GetNode<Label>("./Latency");
 		LatencyL = new List<double>();
-		_refresh();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -52,6 +51,7 @@ public partial class FpsCounter : PanelContainer
 	public override void _Process(double delta)
 	{
 		deltam = delta;
+		Visible = Check.CheckBoolValue(SettingsOperator.GetSetting("showfps").ToString());
 		_refresh();
 	}
 }

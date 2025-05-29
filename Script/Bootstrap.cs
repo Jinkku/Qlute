@@ -4,7 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 
 public partial class Bootstrap : Control
 {
-	public static SettingsOperator SettingsOperator { get; set; }
+	public  SettingsOperator SettingsOperator { get; set; }
 	public Control Home {get;set;}
 	public override void _Ready()
 	{		

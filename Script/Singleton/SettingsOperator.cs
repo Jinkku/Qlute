@@ -48,6 +48,7 @@ public partial class SettingsOperator : Node
 		{ "client-id", null },
         { "client-secret", null },
         { "scrollspeed", (int)1346 }, // 11485 ms max
+		{ "showfps", false },
 		{ "teststrip", "Ya" },
 
     };

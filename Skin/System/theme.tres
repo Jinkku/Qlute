@@ -1,9 +1,11 @@
-[gd_resource type="Theme" load_steps=17 format=3 uid="uid://cu8ap5uak1q6c"]
+[gd_resource type="Theme" load_steps=18 format=3 uid="uid://cu8ap5uak1q6c"]
 
 [ext_resource type="Texture2D" uid="uid://sqcowf508l8v" path="res://Skin/ThemeNC/Checkbutton-s02.svg" id="1_7xnwh"]
 [ext_resource type="Texture2D" uid="uid://dhu2c56vuhuy4" path="res://Skin/ThemeNC/Checkbutton-s01.svg" id="2_75n4a"]
 [ext_resource type="Texture2D" uid="uid://be6np52laybgk" path="res://Skin/ThemeNC/Sliderbutton-s01.svg" id="3_gw3td"]
 [ext_resource type="Texture2D" uid="uid://dvb8ihm6wvypf" path="res://Skin/ThemeNC/Sliderbutton-s02.svg" id="4_m3gsb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jbbqx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i37xy"]
 bg_color = Color(0.552941, 0.490196, 0.780392, 1)
@@ -102,7 +104,8 @@ bg_color = Color(0.0784314, 0.0784314, 0.0784314, 0.627451)
 [resource]
 CheckButton/icons/checked = ExtResource("1_7xnwh")
 CheckButton/icons/unchecked = ExtResource("2_75n4a")
-CheckButton/styles/hover = null
+CheckButton/styles/focus = null
+CheckButton/styles/hover = SubResource("StyleBoxEmpty_jbbqx")
 HSlider/icons/grabber = ExtResource("3_gw3td")
 HSlider/icons/grabber_highlight = ExtResource("4_m3gsb")
 HSlider/styles/grabber_area = SubResource("StyleBoxFlat_i37xy")
