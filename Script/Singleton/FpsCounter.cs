@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 
 public partial class FpsCounter : PanelContainer
@@ -8,6 +9,7 @@ public partial class FpsCounter : PanelContainer
 	public float wait = 0;
 	Label Latency { get; set; }
 	Label FPS { get; set; }
+	List<double> LatencyL { get; set; }
 	public double deltam {get; set;}
 	public static SettingsOperator SettingsOperator { get; set; }
 	public PanelContainer RamUsage { get; set; }
@@ -15,15 +17,30 @@ public partial class FpsCounter : PanelContainer
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		FPS = GetNode<Label>("./FPS");
 		Latency = GetNode<Label>("./Latency");
+		LatencyL = new List<double>();
 		_refresh();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public void _refresh(){
 		var lat = deltam/0.001;
-		FPS.Text =(1/deltam).ToString("0")+ "fps\n ";
+		if (LatencyL.Count > 1000)
+		{
+			LatencyL.RemoveAt(0);
+		}
+		else
+		{
+			LatencyL.Add(lat);
+		}
+		var sum = 0.0;
+		foreach (var l in LatencyL)
+		{
+			sum += l;
+		}
+		lat = sum / LatencyL.Count;
+		if (lat < 0.001) lat = 0.001; // Prevent division by zero or too low values
+		FPS.Text = (1 / (lat * 0.001)).ToString("0")+ "fps\n ";
 		Latency.Text = " \n" + lat.ToString("0.00")+ "ms";
-
 	}
 	private void _on_mouse_entered(){
 		RamUsage = GD.Load<PackedScene>("res://Panels/Overlays/ramusage.tscn").Instantiate().GetNode<PanelContainer>(".");
@@ -35,5 +52,6 @@ public partial class FpsCounter : PanelContainer
 	public override void _Process(double delta)
 	{
 		deltam = delta;
+		_refresh();
 	}
 }
