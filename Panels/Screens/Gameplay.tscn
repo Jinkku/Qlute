@@ -7,12 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://bq7vnj4ufmi3q" path="res://Panels/GameplayElements/Customizable/SongProgress.tscn" id="4_alds2"]
 [ext_resource type="FontFile" uid="uid://26bmgi83sgtv" path="res://Fonts/score.ttf" id="4_caoy2"]
 [ext_resource type="Script" uid="uid://cud76jctgrcxo" path="res://Script/Gameplay/Comboa.cs" id="5_c1nfy"]
+[ext_resource type="PackedScene" uid="uid://chb8dgjfmmjgt" path="res://Panels/GameplayElements/Customizable/Playfield.tscn" id="5_j387h"]
 [ext_resource type="PackedScene" uid="uid://dp0inqauwdmyy" path="res://Panels/GameplayElements/Customizable/unstablerate.tscn" id="8_acwn2"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dhhkq"]
-bg_color = Color(1, 1, 1, 1)
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
 
 [node name="Gameplay" type="Control"]
 process_mode = 1
@@ -57,96 +53,8 @@ text = "0
 0
 0"
 
-[node name="Playfield" type="Control" parent="."]
+[node name="Playfield" parent="." instance=ExtResource("5_j387h")]
 layout_mode = 1
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -200.0
-offset_right = 200.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="KeyBoxes" type="HBoxContainer" parent="Playfield"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -6.0
-offset_top = -200.0
-offset_right = 6.0
-offset_bottom = -50.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="Key1" type="PanelContainer" parent="Playfield/KeyBoxes"]
-modulate = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_dhhkq")
-
-[node name="Key2" type="PanelContainer" parent="Playfield/KeyBoxes"]
-modulate = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_dhhkq")
-
-[node name="Key3" type="PanelContainer" parent="Playfield/KeyBoxes"]
-modulate = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_dhhkq")
-
-[node name="Key4" type="PanelContainer" parent="Playfield/KeyBoxes"]
-modulate = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_dhhkq")
-
-[node name="ChartSections" type="HBoxContainer" parent="Playfield"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = -200.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Section1" type="ColorRect" parent="Playfield/ChartSections"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
-
-[node name="Section2" type="ColorRect" parent="Playfield/ChartSections"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
-
-[node name="Section3" type="ColorRect" parent="Playfield/ChartSections"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
-
-[node name="Section4" type="ColorRect" parent="Playfield/ChartSections"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
-
-[node name="Guard" type="ColorRect" parent="Playfield"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -6.0
-offset_top = -205.0
-offset_right = 6.0
-offset_bottom = -200.0
-grow_horizontal = 2
-grow_vertical = 0
 
 [node name="Combo" type="Label" parent="."]
 z_index = 1000
