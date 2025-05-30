@@ -16,7 +16,6 @@ public partial class SongSelect : Control
 	public Label Debugtext { get; set; }
 	public Label SongBPM { get; set; }
 	public Label SongLen { get; set; }
-	public Label SongAccuracy { get; set; }
 	public Button StartButton { get; set; }
 	public List<object> SongEntry = new List<object>();
 	public int SongETick { get; set; }
@@ -58,8 +57,6 @@ public partial class SongSelect : Control
 		Control SongPanel = GetNode<Control>("SongPanel");
 		SongPanel.Size = new Vector2(window_size.X/2.5f, window_size.Y-150);
 		SongPanel.Position = new Vector2(window_size.X-(window_size.X/2.5f), 105);
-		Info = GetNode<PanelContainer>("SongDetails/Info");
-		Info.Size = new Vector2(GetViewportRect().Size.X/2.3f,Info.Size.Y);
 	}
 	public void AddSongList(int id)
 	{
@@ -111,7 +108,7 @@ public partial class SongSelect : Control
 	{
 		SettingsOperator.loopaudio = true;
 		scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
-		RankedStatus = GetNode<Label>("SongDetails/RankedStatus");
+		RankedStatus = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box1/RankedStatus");
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		SongETick = 0;
 		startposition = (int)GetViewportRect().Size.Y/2 - 166;
@@ -122,18 +119,18 @@ public partial class SongSelect : Control
 		//Debugtext.Text = "X3";
 		//Debugtext.Position = new Vector2(100,100);
 		//AddChild(Debugtext);
-		Diff = GetNode<Label>("SongDetails/Difficulty");
+		Diff = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Difficulty");
 		ModScreen = GetNode<Control>("ModsScreen");
+		ModScreen.Visible = true;
 		Blocker = GetNode<ColorRect>("Blocker");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		SongTitle = GetNode<Label>("SongControl/HBoxContainer/Title");
-		SongArtist = GetNode<Label>("SongDetails/Artist");
-		Songpp = GetNode<Label>("SongDetails/Points");
-		SongBPM = GetNode<Label>("SongDetails/BPM");
-		SongLen = GetNode<Label>("SongDetails/Length");
-		SongMapper = GetNode<Label>("SongDetails/Mapper");
+		SongTitle = GetNode<Label>("SongControl/AmazingPillar/Title");
+		SongArtist = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box1/Artist");
+		Songpp = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box2/Points");
+		SongBPM = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box3/BPM");
+		SongLen = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box3/Length");
+		SongMapper = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box2/Mapper");
 		StartButton = GetNode<Button>("BottomBar/Start");
-		SongAccuracy = GetNode<Label>("SongDetails/Info/Plasa/Accuracy");
 		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
 
 		
@@ -210,7 +207,6 @@ public partial class SongSelect : Control
 			SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
 			SongBPM.Text = "BPM - " + ((int)SettingsOperator.Sessioncfg["beatmapbpm"]*AudioPlayer.Instance.PitchScale).ToString("N0") ?? "";
 			SongLen.Text = TimeSpan.FromMilliseconds(SettingsOperator.Gameplaycfg["timetotal"]/AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00";
-			SongAccuracy.Text = "Accuracy Lv. " + ((int)SettingsOperator.Sessioncfg["beatmapaccuracy"]).ToString("00") ?? "Accuracy Lv. 00";
 
 
 			SetControlsVisibility(true);
@@ -237,7 +233,6 @@ public partial class SongSelect : Control
 		SongMapper.Visible = visible;
 		SongLen.Visible = visible;
 		SongBPM.Visible = visible;
-		SongAccuracy.Visible = visible;
 	}
 	public void check_modscreen(){
 		if (!ModsScreenActive){
@@ -308,8 +303,9 @@ public partial class SongSelect : Control
 	}
 	private bool ModsScreenActive = false;
 	private void _Mods_show(){
-		//ModScreen.Visible = !ModScreen.Visible;
-		ModScreen_Tween?.Kill();
+		if (ModScreen_Tween != null){
+			ModScreen_Tween.Kill();
+		}
 		ModScreen_Tween = ModScreen.CreateTween();
 		var colour = new Color(1f,1f,1f,1f);
 		var pos = new Vector2(0,0);

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://b8wmh5ui3lgly"]
+[gd_scene load_steps=8 format=3 uid="uid://b8wmh5ui3lgly"]
 
 [ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="1_kgn3a"]
 
@@ -20,24 +20,20 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t4qfi"]
-bg_color = Color(0.285645, 0.529816, 0.84375, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6nid0"]
 
-[sub_resource type="FontVariation" id="FontVariation_g8nbp"]
-variation_opentype = {
-2003265652: 700
-}
-variation_embolden = 1.0
+[sub_resource type="Gradient" id="Gradient_ysfsi"]
+colors = PackedColorArray(0.257812, 0.257812, 0.257812, 1, 0.808594, 0.808594, 0.808594, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_sbnv6"]
-font = SubResource("FontVariation_g8nbp")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wkrig"]
+gradient = SubResource("Gradient_ysfsi")
+fill_from = Vector2(0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vt3mq"]
+content_margin_top = 3.0
 
 [node name="Button" type="Button"]
-custom_minimum_size = Vector2(350, 50)
+custom_minimum_size = Vector2(350, 70)
 offset_right = 8.0
 offset_bottom = 8.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_aqjbx")
@@ -52,7 +48,7 @@ grow_vertical = 2
 
 [node name="Profile" type="PanelContainer" parent="HBoxContainer"]
 clip_children = 1
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(70, 70)
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_d0w7j")
@@ -62,22 +58,49 @@ layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("1_kgn3a")
 expand_mode = 1
-stretch_mode = 6
+stretch_mode = 4
 
-[node name="Username" type="Label" parent="HBoxContainer"]
+[node name="VSeparator2" type="VSeparator" parent="HBoxContainer"]
 layout_mode = 2
-text = "aquapoki
-#1"
+theme_override_styles/separator = SubResource("StyleBoxEmpty_6nid0")
 
-[node name="SongBackgroundPreview2" type="PanelContainer" parent="HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+[node name="UserInfo" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Username" type="Label" parent="HBoxContainer/UserInfo"]
+layout_mode = 2
+text = "aquapoki"
+
+[node name="Rank" type="Label" parent="HBoxContainer/UserInfo"]
+layout_mode = 2
+text = "#1"
+
+[node name="Rank2" type="Label" parent="HBoxContainer/UserInfo"]
+layout_mode = 2
+text = "scored on 2025/05/30"
+
+[node name="Medal" type="PanelContainer" parent="HBoxContainer"]
+clip_children = 2
+custom_minimum_size = Vector2(50, 25)
 layout_mode = 2
 size_flags_horizontal = 10
+size_flags_vertical = 4
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_t4qfi")
+theme_override_styles/panel = SubResource("StyleBoxFlat_d0w7j")
 
-[node name="Label" type="Label" parent="HBoxContainer/SongBackgroundPreview2"]
+[node name="Shading" type="TextureRect" parent="HBoxContainer/Medal"]
 layout_mode = 2
+texture = SubResource("GradientTexture2D_wkrig")
+expand_mode = 1
+
+[node name="Rank" type="Label" parent="HBoxContainer/Medal"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_vt3mq")
 text = "SS"
-label_settings = SubResource("LabelSettings_sbnv6")
 horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_6nid0")

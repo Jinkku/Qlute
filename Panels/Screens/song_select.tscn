@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dvig5omxnd5qs"]
+[gd_scene load_steps=21 format=3 uid="uid://dvig5omxnd5qs"]
 
 [ext_resource type="Script" uid="uid://bqj04u64e106v" path="res://Script/SongSelect/SongSelect.cs" id="1_fin0e"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
@@ -13,7 +13,7 @@ border_color = Color(0.265625, 0.63855, 1, 1)
 expand_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5vans"]
-content_margin_left = 10.0
+content_margin_left = 15.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7pw6v"]
 content_margin_left = 5.0
@@ -22,20 +22,9 @@ content_margin_right = 5.0
 content_margin_bottom = 5.0
 bg_color = Color(0.557292, 0.12481, 0.12481, 1)
 corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tc17c"]
-bg_color = Color(0, 0, 0, 1)
-skew = Vector2(0.5, 0)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.266667, 0.639216, 1, 1)
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_detail = 14
-shadow_size = 12
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ombo5"]
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
@@ -111,13 +100,13 @@ offset_bottom = 100.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ixo7g")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="SongControl"]
+[node name="AmazingPillar" type="HBoxContainer" parent="SongControl"]
 layout_mode = 2
 size_flags_vertical = 8
 mouse_filter = 0
 alignment = 2
 
-[node name="Title" type="Label" parent="SongControl/HBoxContainer"]
+[node name="Title" type="Label" parent="SongControl/AmazingPillar"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.429688, 0.848511, 1, 1)
@@ -127,20 +116,20 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_5vans")
 text = "Amazing Songs"
 text_overrun_behavior = 3
 
-[node name="Margin" type="MarginContainer" parent="SongControl/HBoxContainer"]
+[node name="Margin" type="MarginContainer" parent="SongControl/AmazingPillar"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 5
 
-[node name="MarginContainer" type="MarginContainer" parent="SongControl/HBoxContainer/Margin"]
+[node name="MarginContainer" type="MarginContainer" parent="SongControl/AmazingPillar/Margin"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 2
 
-[node name="Beatmapsearch" type="LineEdit" parent="SongControl/HBoxContainer/Margin/MarginContainer"]
+[node name="Beatmapsearch" type="LineEdit" parent="SongControl/AmazingPillar/Margin/MarginContainer"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-placeholder_text = "Search Box for Songs"
+placeholder_text = "search....."
 
 [node name="SongDetails" type="TextureRect" parent="."]
 layout_mode = 1
@@ -153,108 +142,94 @@ size_flags_vertical = 3
 texture = ExtResource("3_fwx5n")
 expand_mode = 1
 
-[node name="Artist" type="Label" parent="SongDetails"]
-layout_mode = 0
-offset_left = 10.0
-offset_top = 23.0
-offset_right = 230.0
-offset_bottom = 51.0
+[node name="SongPanelInfoSpacer" type="MarginContainer" parent="SongDetails"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="SongPanelInfo" type="VBoxContainer" parent="SongDetails/SongPanelInfoSpacer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Box1" type="HBoxContainer" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo"]
+layout_mode = 2
+
+[node name="Artist" type="Label" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box1"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
 theme_override_font_sizes/font_size = 14
 text = "Artist Name"
 text_overrun_behavior = 3
 
-[node name="Difficulty" type="Label" parent="SongDetails"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-offset_left = 10.0
-offset_top = 44.0
-offset_right = -124.0
-offset_bottom = 72.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 14
-text = "Difficulty Name"
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="Mapper" type="Label" parent="SongDetails"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-offset_left = 10.0
-offset_top = 84.0
-offset_right = -121.0
-offset_bottom = 112.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 14
-text = "mapped by idiotplier"
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="Points" type="Label" parent="SongDetails"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -46.0
-offset_top = 64.0
-offset_right = -10.0
-offset_bottom = 81.0
-grow_horizontal = 0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 14
-text = "+0pp"
-horizontal_alignment = 2
-
-[node name="Length" type="Label" parent="SongDetails"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -140.0
-offset_top = 84.0
-offset_right = -11.0
-offset_bottom = 112.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 14
-text = "00:00"
-horizontal_alignment = 2
-
-[node name="BPM" type="Label" parent="SongDetails"]
-layout_mode = 0
-offset_left = 10.0
-offset_top = 64.0
-offset_right = 158.0
-offset_bottom = 92.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 14
-text = "BPM: 0"
-clip_text = true
-
-[node name="RankedStatus" type="Label" parent="SongDetails"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -72.0
-offset_top = 20.0
-offset_bottom = 44.0
-grow_horizontal = 0
+[node name="RankedStatus" type="Label" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box1"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_7pw6v")
 text = "Unranked"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="OptionButton" type="OptionButton" parent="SongDetails"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-offset_left = 10.0
-offset_top = 125.0
-offset_right = -40.0
-offset_bottom = 151.0
+[node name="Difficulty" type="Label" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 14
+text = "Difficulty Name"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Box2" type="HBoxContainer" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo"]
+layout_mode = 2
+
+[node name="Mapper" type="Label" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 14
+text = "mapped by idiotplier"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Points" type="Label" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 14
+text = "+0pp"
+horizontal_alignment = 2
+
+[node name="Box3" type="HBoxContainer" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo"]
+layout_mode = 2
+
+[node name="BPM" type="Label" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 14
+text = "BPM: 0"
+clip_text = true
+
+[node name="Length" type="Label" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 14
+text = "00:00"
+horizontal_alignment = 2
+
+[node name="Box4" type="HBoxContainer" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo"]
+layout_mode = 2
+
+[node name="Leaderboards" type="OptionButton" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box4"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 item_count = 2
 popup/item_0/text = "Local"
@@ -262,63 +237,11 @@ popup/item_0/id = 0
 popup/item_1/text = "Global"
 popup/item_1/id = 1
 
-[node name="Button" type="Button" parent="SongDetails"]
+[node name="OpenExternal" type="Button" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box4"]
 custom_minimum_size = Vector2(22, 22)
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -36.0
-offset_top = 125.0
-offset_right = -10.0
-offset_bottom = 151.0
-grow_horizontal = 0
+layout_mode = 2
 tooltip_text = "Open in browser"
 icon = ExtResource("3_javs2")
-
-[node name="Info" type="PanelContainer" parent="SongDetails"]
-visible = false
-z_index = 1
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = -50.0
-offset_top = 70.0
-offset_right = 90.0
-offset_bottom = 240.0
-grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_tc17c")
-
-[node name="Plasa" type="Control" parent="SongDetails/Info"]
-layout_mode = 2
-
-[node name="Accuracy" type="Label" parent="SongDetails/Info/Plasa"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -114.0
-offset_top = 40.0
-offset_right = 2.0
-offset_bottom = 59.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 14
-text = "Accuracy Lv. 00"
-horizontal_alignment = 2
-clip_text = true
-
-[node name="PanelContainer" type="PanelContainer" parent="SongDetails"]
-visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.05
-anchor_top = 0.3
-anchor_right = 0.95
-anchor_bottom = 0.8
-offset_top = 24.0
-offset_right = 62.0
-offset_bottom = 64.0
-grow_vertical = 2
 
 [node name="SongPanel" type="Control" parent="."]
 layout_mode = 1
@@ -462,6 +385,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ModsScreen" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
