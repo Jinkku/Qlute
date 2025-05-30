@@ -1,12 +1,14 @@
-[gd_scene load_steps=7 format=3 uid="uid://dvm81no14tisl"]
+[gd_scene load_steps=9 format=3 uid="uid://dvm81no14tisl"]
 
 [ext_resource type="Script" uid="uid://dqwx101tkdgo3" path="res://Script/Bootstrap.cs" id="1_26srq"]
 [ext_resource type="Texture2D" uid="uid://ba8p7q27num8t" path="res://Skin/System/highlightlogo.png" id="2_abd43"]
+[ext_resource type="AudioStream" uid="uid://dslgn8830dspf" path="res://Sounds/jingle.mp3" id="2_yphwi"]
 [ext_resource type="Texture2D" uid="uid://b000ela4rhy4h" path="res://Skin/NotificationIcons/warning.svg" id="3_s5vr0"]
+[ext_resource type="Texture2D" uid="uid://dswumgvij18fg" path="res://Skin/System/Browse/Heart2x.png" id="4_8teab"]
 
 [sub_resource type="Animation" id="Animation_v5m8g"]
 resource_name = "Intro"
-length = 4.0
+length = 7.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -14,7 +16,7 @@ tracks/0/path = NodePath(".:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(2.53333, 2.8),
+"times": PackedFloat32Array(5.66666, 5.93333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1)]
@@ -22,15 +24,54 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../VBoxContainer:modulate")
+tracks/1/path = NodePath("../DisclaimerEpilepsy:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
+"times": PackedFloat32Array(3.13333, 3.63333, 5.16666, 5.66666),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(0, 0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../ExperimentalDisclaimer:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.5, 2.03333, 2.53333),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(0, 0, 0, 0)]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../ExperimentalDisclaimer/Expeeee/RotatingBox/HeartHeartHeart:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.0333333, 0.5, 0.666667, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.610865, -0.610865, 0.0]
+}
+tracks/4/type = "audio"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../ExperimentalDisclaimer/Expeeee/Jingle")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("2_yphwi")
+}],
+"times": PackedFloat32Array(0.533333)
+}
+tracks/4/use_blend = true
 
 [sub_resource type="Animation" id="Animation_s0vrs"]
 length = 0.001
@@ -49,7 +90,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../VBoxContainer:self_modulate")
+tracks/1/path = NodePath("../DisclaimerEpilepsy:self_modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -57,6 +98,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../ExperimentalDisclaimer/Expeeee/RotatingBox/HeartHeartHeart:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rpwbx"]
@@ -116,23 +169,68 @@ grow_vertical = 2
 layout_mode = 2
 texture = ExtResource("2_abd43")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+[node name="DisclaimerEpilepsy" type="VBoxContainer" parent="CenterContainer"]
 modulate = Color(0, 0, 0, 0)
 layout_mode = 2
 alignment = 1
 
-[node name="Warning" type="TextureRect" parent="CenterContainer/VBoxContainer"]
+[node name="Warning" type="TextureRect" parent="CenterContainer/DisclaimerEpilepsy"]
 layout_mode = 2
 texture = ExtResource("3_s5vr0")
 stretch_mode = 3
 
-[node name="Disclaimer" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="DisclaimerText" type="Label" parent="CenterContainer/DisclaimerEpilepsy"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
 text = "Disclaimer
 This game can have rapidly changing colours
 Please take caution if you are affected by epilepsy "
 horizontal_alignment = 1
+
+[node name="ExperimentalDisclaimer" type="Control" parent="CenterContainer"]
+modulate = Color(0.378861, 0.378861, 0.378861, 0.378861)
+layout_mode = 2
+
+[node name="Expeeee" type="VBoxContainer" parent="CenterContainer/ExperimentalDisclaimer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -719.5
+offset_top = -57.5
+offset_right = 719.5
+offset_bottom = 57.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Jingle" type="AudioStreamPlayer" parent="CenterContainer/ExperimentalDisclaimer/Expeeee"]
+
+[node name="RotatingBox" type="Control" parent="CenterContainer/ExperimentalDisclaimer/Expeeee"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HeartHeartHeart" type="Sprite2D" parent="CenterContainer/ExperimentalDisclaimer/Expeeee/RotatingBox"]
+texture = ExtResource("4_8teab")
+
+[node name="ExperimentalTitle" type="Label" parent="CenterContainer/ExperimentalDisclaimer/Expeeee"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.820312, 0, 1)
+theme_override_font_sizes/font_size = 18
+text = "!! Experimental Build !!"
+horizontal_alignment = 1
+
+[node name="ExperimentalDesc" type="Label" parent="CenterContainer/ExperimentalDisclaimer/Expeeee"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Qlute is still in its experimental stage, you will run into some bugs and glitches
+so totally normal! for now...
+
+Feel free to contribute, give feedback, or just vibe with us. <3"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 3.0
