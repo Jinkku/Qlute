@@ -324,8 +324,8 @@ public partial class SongSelect : Control
 			ModScreen.Position = new Vector2(0,GetViewportRect().Size.Y);
 		}
 		ModScreen_Tween.SetParallel(true);
-		ModScreen_Tween.TweenProperty(Blocker, "self_modulate", colour , 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-		ModScreen_Tween.TweenProperty(ModScreen, "position", pos , 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		ModScreen_Tween.TweenProperty(Blocker, "self_modulate", colour , 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		ModScreen_Tween.TweenProperty(ModScreen, "position", pos , 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		ModScreen_Tween.Play();
 	}
 	private void _Start(){
