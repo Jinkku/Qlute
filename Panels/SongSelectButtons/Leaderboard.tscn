@@ -1,6 +1,30 @@
-[gd_scene load_steps=8 format=3 uid="uid://b8wmh5ui3lgly"]
+[gd_scene load_steps=14 format=3 uid="uid://b8wmh5ui3lgly"]
 
 [ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="1_kgn3a"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ysfsi"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6nid0"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.248337, 0.371101, 0.605469, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wkrig"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.265732, 0.489994, 0.839844, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aqjbx"]
 content_margin_left = 10.0
@@ -13,8 +37,14 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d0w7j"]
-bg_color = Color(1, 1, 1, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wkrig"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ysfsi"]
+bg_color = Color(0.5, 0.5, 0.5, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -22,21 +52,47 @@ corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6nid0"]
 
-[sub_resource type="Gradient" id="Gradient_ysfsi"]
-colors = PackedColorArray(0.257812, 0.257812, 0.257812, 1, 0.808594, 0.808594, 0.808594, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wbm6w"]
+content_margin_top = 5.0
+content_margin_bottom = 5.0
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_wkrig"]
-gradient = SubResource("Gradient_ysfsi")
-fill_from = Vector2(0, 1)
+[sub_resource type="LabelSettings" id="LabelSettings_1bkjm"]
+line_spacing = 0.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d0w7j"]
+bg_color = Color(0.5, 0.5, 0.5, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y1q14"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vt3mq"]
 content_margin_top = 3.0
 
-[node name="Button" type="Button"]
-custom_minimum_size = Vector2(350, 70)
+[node name="Leaderboard" type="Button"]
+custom_minimum_size = Vector2(350, 60)
 offset_right = 8.0
 offset_bottom = 8.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ysfsi")
+theme_override_styles/hover = SubResource("StyleBoxFlat_6nid0")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_wkrig")
 theme_override_styles/normal = SubResource("StyleBoxFlat_aqjbx")
+
+[node name="created" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 360.0
+offset_top = -9.5
+offset_right = 400.0
+offset_bottom = 9.5
+grow_horizontal = 0
+grow_vertical = 2
+text = "299d"
+vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -46,12 +102,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Rank" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_wkrig")
+text = "#1"
+horizontal_alignment = 1
+
 [node name="Profile" type="PanelContainer" parent="HBoxContainer"]
 clip_children = 1
-custom_minimum_size = Vector2(70, 70)
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_d0w7j")
+theme_override_styles/panel = SubResource("StyleBoxFlat_ysfsi")
 
 [node name="Picture" type="TextureRect" parent="HBoxContainer/Profile"]
 layout_mode = 2
@@ -66,21 +128,39 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_6nid0")
 
 [node name="UserInfo" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 0
 alignment = 1
 
 [node name="Username" type="Label" parent="HBoxContainer/UserInfo"]
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_wbm6w")
 text = "aquapoki"
+label_settings = SubResource("LabelSettings_1bkjm")
+vertical_alignment = 1
 
-[node name="Rank" type="Label" parent="HBoxContainer/UserInfo"]
+[node name="Mods" type="HBoxContainer" parent="HBoxContainer/UserInfo"]
 layout_mode = 2
-text = "#1"
+size_flags_vertical = 2
 
-[node name="Rank2" type="Label" parent="HBoxContainer/UserInfo"]
+[node name="Medal" type="PanelContainer" parent="HBoxContainer/UserInfo/Mods"]
+visible = false
+clip_children = 2
+custom_minimum_size = Vector2(50, 25)
 layout_mode = 2
-text = "scored on 2025/05/30"
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_d0w7j")
+
+[node name="Rank" type="Label" parent="HBoxContainer/UserInfo/Mods/Medal"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxEmpty_y1q14")
+text = "DT"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Medal" type="PanelContainer" parent="HBoxContainer"]
+self_modulate = Color(0, 0.695312, 1, 1)
 clip_children = 2
 custom_minimum_size = Vector2(50, 25)
 layout_mode = 2
@@ -88,11 +168,6 @@ size_flags_horizontal = 10
 size_flags_vertical = 4
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_d0w7j")
-
-[node name="Shading" type="TextureRect" parent="HBoxContainer/Medal"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_wkrig")
-expand_mode = 1
 
 [node name="Rank" type="Label" parent="HBoxContainer/Medal"]
 layout_mode = 2
