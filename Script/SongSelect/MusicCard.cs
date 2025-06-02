@@ -18,6 +18,13 @@ public partial class MusicCard : Button
 		self = GetNode<Button>(".");
 		Cover = GetTree().Root.GetNode<TextureRect>("Song Select/BeatmapBackground");
 		Preview = GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
+
+		// Check if "SongID" metadata exists, if not, set it to 0
+		if (!self.HasMeta("SongID"))
+		{
+			self.SetMeta("SongID", 0);
+		}
+
 		if (Checkid())
 		{
 			SelfModulate = toggledcolour;
