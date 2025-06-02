@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://dqwx101tkdgo3" path="res://Script/Bootstrap.cs" id="1_26srq"]
 [ext_resource type="Texture2D" uid="uid://ba8p7q27num8t" path="res://Skin/System/highlightlogo.png" id="2_abd43"]
 [ext_resource type="AudioStream" uid="uid://dslgn8830dspf" path="res://Sounds/jingle.mp3" id="2_yphwi"]
-[ext_resource type="Texture2D" uid="uid://b000ela4rhy4h" path="res://Skin/NotificationIcons/warning.svg" id="3_s5vr0"]
 [ext_resource type="Texture2D" uid="uid://dswumgvij18fg" path="res://Skin/System/Browse/Heart2x.png" id="4_8teab"]
+[ext_resource type="Texture2D" uid="uid://6wek04j8vw17" path="res://Skin/System/Intro/alert.png" id="4_yphwi"]
 
 [sub_resource type="Animation" id="Animation_v5m8g"]
 resource_name = "Intro"
@@ -170,24 +170,25 @@ layout_mode = 2
 texture = ExtResource("2_abd43")
 
 [node name="DisclaimerEpilepsy" type="VBoxContainer" parent="CenterContainer"]
-modulate = Color(0, 0, 0, 0)
 layout_mode = 2
 alignment = 1
 
 [node name="Warning" type="TextureRect" parent="CenterContainer/DisclaimerEpilepsy"]
 layout_mode = 2
-texture = ExtResource("3_s5vr0")
-stretch_mode = 3
+size_flags_horizontal = 4
+texture = ExtResource("4_yphwi")
+stretch_mode = 2
 
 [node name="DisclaimerText" type="Label" parent="CenterContainer/DisclaimerEpilepsy"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 16
 text = "Disclaimer
 This game can have rapidly changing colours
 Please take caution if you are affected by epilepsy "
 horizontal_alignment = 1
 
 [node name="ExperimentalDisclaimer" type="Control" parent="CenterContainer"]
-modulate = Color(0.378861, 0.378861, 0.378861, 0.378861)
+modulate = Color(0, 0, 0, 0)
 layout_mode = 2
 
 [node name="Expeeee" type="VBoxContainer" parent="CenterContainer/ExperimentalDisclaimer"]
