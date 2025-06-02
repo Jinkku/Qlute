@@ -18,7 +18,6 @@ public partial class MusicCard : Button
 		self = GetNode<Button>(".");
 		Cover = GetTree().Root.GetNode<TextureRect>("Song Select/BeatmapBackground");
 		Preview = GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
-		Wait = GetNode<Timer>("./Wait");
 		if (Checkid())
 		{
 			SelfModulate = toggledcolour;
