@@ -320,7 +320,6 @@ public partial class SongSelect : Control
 			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
 			MusicCard.Connection_Button = false;
 		}
-		//Debugtext.Text = scrolly.ToString();
 	}
 	
 	private void _modfin(){

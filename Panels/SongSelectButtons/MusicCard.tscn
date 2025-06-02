@@ -7,12 +7,17 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i3see"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b81cb"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a1afo"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5o4qg"]
 content_margin_left = 5.0
 content_margin_top = 3.0
 content_margin_right = 5.0
 content_margin_bottom = 3.0
-bg_color = Color(0.42, 0.42, 0.42, 1)
+bg_color = Color(0, 0, 0, 1)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
@@ -40,11 +45,6 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a1afo"]
-bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 15
-corner_radius_bottom_left = 15
-
 [node name="MusicCard" type="Button"]
 custom_minimum_size = Vector2(350, 78)
 anchors_preset = 10
@@ -60,6 +60,27 @@ theme_override_styles/pressed = ExtResource("2_nf3oy")
 theme_override_styles/normal = ExtResource("2_nf3oy")
 toggle_mode = true
 script = ExtResource("1_aa04f")
+
+[node name="SongBackgroundPreview" type="PanelContainer" parent="."]
+modulate = Color(0.901961, 0.901961, 0.901961, 1)
+clip_children = 1
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_a1afo")
+
+[node name="BackgroundPreview" type="TextureRect" parent="SongBackgroundPreview"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("5_q6s5x")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -102,12 +123,14 @@ text = "mapped by idiot"
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="Ranked" type="Label" parent="MarginContainer/VBoxContainer/InfoBox"]
+[node name="Ranked" type="PanelContainer" parent="MarginContainer/VBoxContainer/InfoBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5o4qg")
+
+[node name="RankText" type="Label" parent="MarginContainer/VBoxContainer/InfoBox/Ranked"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
-theme_override_styles/normal = SubResource("StyleBoxFlat_b81cb")
-text = "N/A"
-horizontal_alignment = 1
+text = "Unknown"
 
 [node name="Rating" type="Label" parent="MarginContainer/VBoxContainer/InfoBox"]
 layout_mode = 2
@@ -123,34 +146,8 @@ theme_override_font_sizes/font_size = 10
 theme_override_styles/normal = SubResource("StyleBoxFlat_552jq")
 text = "Difficulty Name"
 
-[node name="SongBackgroundPreview" type="PanelContainer" parent="."]
-modulate = Color(0.588235, 0.588235, 0.588235, 1)
-clip_children = 1
-z_index = -2
-z_as_relative = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = -20.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_a1afo")
-
-[node name="BackgroundPreview" type="TextureRect" parent="SongBackgroundPreview"]
-layout_mode = 2
-mouse_filter = 2
-texture = ExtResource("5_q6s5x")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Wait" type="Timer" parent="."]
-wait_time = 0.1
-
 [connection signal="button_down" from="." to="." method="_highlight"]
 [connection signal="button_up" from="." to="." method="_focus"]
 [connection signal="mouse_entered" from="." to="." method="_focus"]
 [connection signal="mouse_exited" from="." to="." method="_unfocus"]
 [connection signal="pressed" from="." to="." method="_on_pressed"]
-[connection signal="timeout" from="Wait" to="." method="_go"]
