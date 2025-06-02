@@ -257,42 +257,68 @@ public partial class SongSelect : Control
 		ScrollSongs();
 		checksongpanel();
 
-		if (Input.IsActionJustPressed("Songup")){
-			if ((int)SettingsOperator.Sessioncfg["SongID"]-1 >=0 && (int)SettingsOperator.Sessioncfg["SongID"] != -1){
-				SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"]-1);
-			} else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1){
-				SettingsOperator.SelectSongID((int)SettingsOperator.Beatmaps.Count-1);
+		if (Input.IsActionJustPressed("Songup"))
+		{
+			if ((int)SettingsOperator.Sessioncfg["SongID"] - 1 >= 0 && (int)SettingsOperator.Sessioncfg["SongID"] != -1)
+			{
+				SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"] - 1);
+			}
+			else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1)
+			{
+				SettingsOperator.SelectSongID((int)SettingsOperator.Beatmaps.Count - 1);
 			}
 			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
 
-		}else if (Input.IsActionJustPressed("Songdown")){
-			if ((int)SettingsOperator.Sessioncfg["SongID"]+1 <(int)SettingsOperator.Beatmaps.Count && (int)SettingsOperator.Sessioncfg["SongID"] != -1){
-				SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"]+1);
-			} else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1){
+		}
+		else if (Input.IsActionJustPressed("Songdown"))
+		{
+			if ((int)SettingsOperator.Sessioncfg["SongID"] + 1 < (int)SettingsOperator.Beatmaps.Count && (int)SettingsOperator.Sessioncfg["SongID"] != -1)
+			{
+				SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"] + 1);
+			}
+			else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1)
+			{
 				SettingsOperator.SelectSongID(0);
 			}
 			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
 
-		}else if (Input.IsActionJustPressed("Mod")){
+		}
+		else if (Input.IsActionJustPressed("Mod"))
+		{
 			_Mods_show();
-		}else if (Input.IsActionJustPressed("Random")){
+		}
+		else if (Input.IsActionJustPressed("Random"))
+		{
 			_on_random();
 			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
 
-		}else if (Input.IsActionJustPressed("Collections")){
+		}
+		else if (Input.IsActionJustPressed("Collections"))
+		{
 
-		}else if (Input.IsActionJustPressed("scrolldown") && scrollBar.Value+1 < SettingsOperator.Beatmaps.Count){
-			if (scrollvelocity < 0){
+		}
+		else if (Input.IsActionJustPressed("scrolldown") && scrollBar.Value + 1 < SettingsOperator.Beatmaps.Count && SongPanelAccess)
+		{
+			if (scrollvelocity < 0)
+			{
 				scrollvelocity = 0;
 			}
-			scrollvelocity = Math.Min(scrollvelocity + 1,2);
+			scrollvelocity = Math.Min(scrollvelocity + 1, 2);
 			scrollmode(1 + scrollvelocity);
-		}else if (Input.IsActionJustPressed("scrollup")&& scrollBar.Value-1 > -1){
-			if (scrollvelocity > 0){
+		}
+		else if (Input.IsActionJustPressed("scrollup") && scrollBar.Value - 1 > -1 && SongPanelAccess)
+		{
+			if (scrollvelocity > 0)
+			{
 				scrollvelocity = 0;
 			}
-			scrollvelocity = Math.Max(scrollvelocity - 1,-2);
+			scrollvelocity = Math.Max(scrollvelocity - 1, -2);
 			scrollmode(-1 + scrollvelocity);
+		}
+		else if (MusicCard.Connection_Button)
+		{
+			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
+			MusicCard.Connection_Button = false;
 		}
 		//Debugtext.Text = scrolly.ToString();
 	}
@@ -302,6 +328,17 @@ public partial class SongSelect : Control
 		ModsScreenActive = false;
 	}
 	private bool ModsScreenActive = false;
+	private bool SongPanelAccess = false;
+	private void _songenter()
+	{
+		SongPanelAccess = true;
+		GD.Print("SongPanelAccess: " + SongPanelAccess);
+	}
+	private void _songexit()
+	{
+		SongPanelAccess = false;
+		GD.Print("SongPanelAccess: " + SongPanelAccess);
+	 }
 	private void _Mods_show(){
 		if (ModScreen_Tween != null){
 			ModScreen_Tween.Kill();

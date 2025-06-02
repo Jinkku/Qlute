@@ -19,26 +19,79 @@ public partial class MusicCard : Button
 		Cover = GetTree().Root.GetNode<TextureRect>("Song Select/BeatmapBackground");
 		Preview = GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
 		Wait = GetNode<Timer>("./Wait");
-	}
-// Please fix this god damn it-
-	public void _visible(){
-		if (Visible && Preview.Texture == null){
+		if (Checkid())
+		{
+			SelfModulate = toggledcolour;
 		}
-		else{
-			//Preview.Texture = null;
+		else
+		{
+			SelfModulate = Idlecolour;
 		}
 	}
-	public void _on_pressed(){
+    private  Tween _focus_animation;
+    private void AnimationButton(Color colour)
+    {
+        if (_focus_animation != null)
+        {
+            _focus_animation.Kill();
+        }
+        _focus_animation = CreateTween();
+        _focus_animation.TweenProperty(this, "self_modulate", colour, 0.2f)
+            .SetTrans(Tween.TransitionType.Cubic)
+            .SetEase(Tween.EaseType.Out);
+        _focus_animation.Play();
+    }
+	private Color Idlecolour = new Color(0.20f, 0.20f, 0.20f, 1f); // Colour when idle
+	private Color Focuscolour = new Color(1f, 1f, 1f, 1f); // Colour when focused
+	private Color highlightcolour = new Color(0.19f, 0.37f, 0.65f, 1f); // Colour when highlighted	
+	private Color toggledcolour = new Color(0.09f, 0.38f, 0.85f, 1f); // Colour when toggled	
+	private void _highlight()
+	{
+		AnimationButton(highlightcolour);
+	}
+	private void _focus()
+	{
+        AnimationButton(Focuscolour);
+	}private void _unfocus()
+	{
+		if (Checkid())
+		{
+			AnimationButton(toggledcolour);
+		}
+		else
+		{
+			AnimationButton(Idlecolour);
+		}
+	}
+	public void _on_pressed()
+	{
 		int songID = (int)self.GetMeta("SongID");
+		Connection_Button = true;
 		SettingsOperator.SelectSongID(songID);
+	}
+	private bool Accessed = false;
+	public static bool Connection_Button = false;
+	public bool Checkid()
+	{
+		return SettingsOperator.Sessioncfg["SongID"].ToString().Equals(self.GetMeta("SongID").ToString());
 	}
 	public override void _Process(double _delta)
 	{
-		if (Position.Y > -100 && Position.Y < GetViewportRect().Size.Y-200){
-			Visible = true;
-		}else {
-			Visible = false;
+		if (ButtonPressed != Checkid())
+		{
+			ButtonPressed = Checkid();
+			Accessed = true;
+
 		}
-		self.ButtonPressed = SettingsOperator.Sessioncfg["SongID"].ToString().Equals(self.GetMeta("SongID").ToString());
+		if (ButtonPressed == true && Accessed)
+		{
+			AnimationButton(toggledcolour);
+			Accessed = false;
+		}
+		else if (ButtonPressed == false && Accessed)
+		{
+			AnimationButton(Idlecolour);
+			Accessed = false;
+		}
 	}
 }

@@ -1,9 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://b2lw0mmphsddc"]
+[gd_scene load_steps=10 format=3 uid="uid://b2lw0mmphsddc"]
 
 [ext_resource type="Script" uid="uid://dye2ljj2ycrnx" path="res://Script/SongSelect/MusicCard.cs" id="1_aa04f"]
-[ext_resource type="StyleBox" uid="uid://drlu38602jgb8" path="res://Skin/System/buttontoggled.tres" id="1_vfwc8"]
 [ext_resource type="StyleBox" uid="uid://fxawsqvq06j4" path="res://Skin/System/buttonidle.tres" id="2_nf3oy"]
-[ext_resource type="StyleBox" uid="uid://cuao4np4v7lo1" path="res://Skin/System/buttonhover.tres" id="2_vxxs3"]
 [ext_resource type="Texture2D" uid="uid://dugxlwc4epe6i" path="res://DefaultWallpaper/a.png" id="5_q6s5x"]
 [ext_resource type="Script" uid="uid://buiifhesbwgmp" path="res://Script/SongSelect/RatingCard.cs" id="5_y5yk1"]
 
@@ -55,9 +53,10 @@ offset_right = 20.0
 offset_bottom = 78.0
 grow_horizontal = 2
 size_flags_horizontal = 3
+mouse_filter = 1
 theme_override_styles/focus = SubResource("StyleBoxEmpty_i3see")
-theme_override_styles/hover = ExtResource("2_vxxs3")
-theme_override_styles/pressed = ExtResource("1_vfwc8")
+theme_override_styles/hover = ExtResource("2_nf3oy")
+theme_override_styles/pressed = ExtResource("2_nf3oy")
 theme_override_styles/normal = ExtResource("2_nf3oy")
 toggle_mode = true
 script = ExtResource("1_aa04f")
@@ -149,5 +148,9 @@ stretch_mode = 6
 [node name="Wait" type="Timer" parent="."]
 wait_time = 0.1
 
+[connection signal="button_down" from="." to="." method="_highlight"]
+[connection signal="button_up" from="." to="." method="_focus"]
+[connection signal="mouse_entered" from="." to="." method="_focus"]
+[connection signal="mouse_exited" from="." to="." method="_unfocus"]
 [connection signal="pressed" from="." to="." method="_on_pressed"]
 [connection signal="timeout" from="Wait" to="." method="_go"]
