@@ -543,7 +543,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("6_xu4tp")
 expand_mode = 1
-stretch_mode = 4
+stretch_mode = 5
 
 [node name="Label" type="Label" parent="IntroPending"]
 layout_mode = 1
