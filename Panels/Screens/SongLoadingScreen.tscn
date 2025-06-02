@@ -1,10 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://bla4qqlg1shra"]
+[gd_scene load_steps=19 format=3 uid="uid://bla4qqlg1shra"]
 
 [ext_resource type="Script" uid="uid://dtqpa0tsirnjp" path="res://Script/SongLoadingScreen/SongLoadingScreen.cs" id="1_2kt4t"]
 [ext_resource type="Texture2D" uid="uid://dugxlwc4epe6i" path="res://DefaultWallpaper/a.png" id="1_4pmu1"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="1_635sp"]
 [ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="2_h8mlh"]
 [ext_resource type="Script" uid="uid://c3epg1qy8dum3" path="res://Script/SongLoadingScreen/ImageScript.cs" id="2_yjtgo"]
+[ext_resource type="PackedScene" uid="uid://djrsc8oxuw7h6" path="res://Panels/Overlays/DisclaimerInfo.tscn" id="6_ukgnb"]
 
 [sub_resource type="Animation" id="Animation_wuxwg"]
 resource_name = "AnimationSongTick"
@@ -208,6 +209,13 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_0hfqi")
 theme_override_styles/normal = SubResource("StyleBoxFlat_jr6c1")
 text = "  Back"
 icon = ExtResource("2_h8mlh")
+
+[node name="DisclaimerInfo" parent="." instance=ExtResource("6_ukgnb")]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 420.0
+offset_bottom = 124.0
 
 [connection signal="timeout" from="Timer" to="." method="_Timer_load"]
 [connection signal="animation_finished" from="Wafuk" to="." method="_Animationf"]
