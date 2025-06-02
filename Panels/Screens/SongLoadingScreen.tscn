@@ -211,6 +211,7 @@ text = "  Back"
 icon = ExtResource("2_h8mlh")
 
 [node name="DisclaimerInfo" parent="." instance=ExtResource("6_ukgnb")]
+visible = false
 layout_mode = 0
 offset_left = 20.0
 offset_top = 20.0
