@@ -1,27 +1,28 @@
-[gd_scene load_steps=14 format=3 uid="uid://oru46ou3jfjl"]
+[gd_scene load_steps=17 format=3 uid="uid://oru46ou3jfjl"]
 
 [ext_resource type="Script" uid="uid://bj6kjjp2yikxr" path="res://Script/ResultsScreen/ResultsScreen.cs" id="1_e0sg4"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="1_xhck8"]
+[ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="3_1di71"]
+[ext_resource type="Texture2D" uid="uid://bryjqoryjlktq" path="res://Skin/System/ResultsScreen/foregroundrank.png" id="3_3q470"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqbwm"]
-content_margin_left = 10.0
+content_margin_left = 0.0
 content_margin_top = 10.0
-content_margin_right = 10.0
+content_margin_right = 0.0
 content_margin_bottom = 10.0
-bg_color = Color(0.242188, 0.242188, 0.242188, 1)
-corner_radius_top_left = 25
-corner_radius_top_right = 25
-corner_radius_bottom_right = 25
-corner_radius_bottom_left = 25
+bg_color = Color(0.220413, 0.26426, 0.527344, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 shadow_size = 24
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_53ywu"]
-bg_color = Color(1, 1, 1, 0.568627)
-skew = Vector2(0.3, 0)
-corner_radius_top_left = 25
-corner_radius_top_right = 25
-corner_radius_bottom_right = 25
-corner_radius_bottom_left = 25
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m0l06"]
+bg_color = Color(0.5, 0.5, 0.5, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="FontVariation" id="FontVariation_csg6c"]
 variation_opentype = {
@@ -57,6 +58,13 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1di71"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.196078)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c82el"]
 bg_color = Color(1, 1, 1, 0.0980392)
 corner_radius_top_left = 5
@@ -65,9 +73,9 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uquna"]
-content_margin_left = 5.0
+content_margin_left = 10.0
 content_margin_top = 10.0
-content_margin_right = 5.0
+content_margin_right = 10.0
 content_margin_bottom = 10.0
 bg_color = Color(0.427451, 0.643137, 0.992157, 1)
 corner_radius_top_left = 5
@@ -79,9 +87,9 @@ shadow_size = 1
 shadow_offset = Vector2(0, 4)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f25vf"]
-content_margin_left = 5.0
+content_margin_left = 10.0
 content_margin_top = 10.0
-content_margin_right = 5.0
+content_margin_right = 10.0
 content_margin_bottom = 10.0
 bg_color = Color(0.307617, 0.729167, 0.478872, 1)
 corner_radius_top_left = 5
@@ -93,9 +101,9 @@ shadow_size = 1
 shadow_offset = Vector2(0, 4)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rvt4u"]
-content_margin_left = 5.0
+content_margin_left = 10.0
 content_margin_top = 10.0
-content_margin_right = 5.0
+content_margin_right = 10.0
 content_margin_bottom = 10.0
 bg_color = Color(0.307617, 0.478872, 0.729167, 1)
 corner_radius_top_left = 5
@@ -139,15 +147,39 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_wqbwm")
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Accuracy" type="PanelContainer" parent="AlertBox/Box"]
+[node name="Profile" type="PanelContainer" parent="AlertBox/Box"]
+clip_children = 1
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_m0l06")
+
+[node name="Picture" type="TextureRect" parent="AlertBox/Box/Profile"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("3_1di71")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Username" type="Label" parent="AlertBox/Box"]
+layout_mode = 2
+text = "played by aquapoki"
+horizontal_alignment = 1
+
+[node name="Accuracy" type="TextureRect" parent="AlertBox/Box"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_53ywu")
+texture = ExtResource("3_3q470")
 
 [node name="Medal" type="Label" parent="AlertBox/Box/Accuracy"]
 layout_mode = 2
+offset_top = 31.0
+offset_right = 100.0
+offset_bottom = 68.0
 theme_override_fonts/font = SubResource("FontVariation_csg6c")
 theme_override_font_sizes/font_size = 32
 text = "SS"
@@ -157,7 +189,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxEmpty_5cm84")
-text = "000,000,000"
+text = "0,000,000"
 horizontal_alignment = 1
 
 [node name="Title" type="Label" parent="AlertBox/Box"]
@@ -349,12 +381,80 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0ms"
 horizontal_alignment = 1
 
+[node name="TScore" type="PanelContainer" parent="AlertBox/Box/Info"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
+
+[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/TScore"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="AlertBox/Box/Info/TScore/VC"]
+layout_mode = 2
+text = "new rank"
+horizontal_alignment = 1
+
+[node name="Text" type="Label" parent="AlertBox/Box/Info/TScore/VC"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
+text = "#0"
+horizontal_alignment = 1
+
+[node name="TPP" type="PanelContainer" parent="AlertBox/Box/Info"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
+
+[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/TPP"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="AlertBox/Box/Info/TPP/VC"]
+layout_mode = 2
+text = "new pp"
+horizontal_alignment = 1
+
+[node name="Text" type="Label" parent="AlertBox/Box/Info/TPP/VC"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
+text = "0pp"
+horizontal_alignment = 1
+
 [node name="Options" type="HBoxContainer" parent="AlertBox/Box"]
 layout_mode = 2
 size_flags_vertical = 10
 alignment = 1
 
-[node name="Retry" type="Button" parent="AlertBox/Box/Options"]
+[node name="space" type="MarginContainer" parent="AlertBox/Box"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 15
+
+[node name="PlayerButtons" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_1di71")
+
+[node name="Options" type="HBoxContainer" parent="PlayerButtons"]
+layout_mode = 2
+alignment = 1
+
+[node name="Replay" type="Button" parent="PlayerButtons/Options"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uquna")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_f25vf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_rvt4u")
+text = "Replay"
+
+[node name="Retry" type="Button" parent="PlayerButtons/Options"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
@@ -363,7 +463,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_f25vf")
 theme_override_styles/normal = SubResource("StyleBoxFlat_rvt4u")
 text = "Retry"
 
-[node name="Continue" type="Button" parent="AlertBox/Box/Options"]
+[node name="Continue" type="Button" parent="PlayerButtons/Options"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
@@ -372,7 +472,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_f25vf")
 theme_override_styles/normal = SubResource("StyleBoxFlat_rvt4u")
 text = "Continue"
 
-[node name="AddCollection" type="Button" parent="AlertBox/Box/Options"]
+[node name="AddCollection" type="Button" parent="PlayerButtons/Options"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
@@ -381,10 +481,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_f25vf")
 theme_override_styles/normal = SubResource("StyleBoxFlat_rvt4u")
 text = "+"
 
-[node name="space" type="MarginContainer" parent="AlertBox/Box"]
-layout_mode = 2
-theme_override_constants/margin_bottom = 15
-
-[connection signal="pressed" from="AlertBox/Box/Options/Retry" to="." method="_retry"]
-[connection signal="pressed" from="AlertBox/Box/Options/Continue" to="." method="_continue"]
-[connection signal="pressed" from="AlertBox/Box/Options/AddCollection" to="." method="_continue"]
+[connection signal="pressed" from="PlayerButtons/Options/Replay" to="." method="_continue"]
+[connection signal="pressed" from="PlayerButtons/Options/Retry" to="." method="_retry"]
+[connection signal="pressed" from="PlayerButtons/Options/Continue" to="." method="_continue"]
+[connection signal="pressed" from="PlayerButtons/Options/AddCollection" to="." method="_continue"]

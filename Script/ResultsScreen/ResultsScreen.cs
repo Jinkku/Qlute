@@ -36,8 +36,8 @@ public partial class ResultsScreen : Control
 		Accuracy = GetNode<Label>("AlertBox/Box/Info/Accuracy/VC/Text");
 		Combo = GetNode<Label>("AlertBox/Box/Info/Combo/VC/Text");
 		Avgms = GetNode<Label>("AlertBox/Box/Info/AvgHit/VC/Text");
-		AccuracyPanel = GetNode<PanelContainer>("AlertBox/Box/Accuracy");
-		AccuracyMedal = GetNode<Label>("AlertBox/Box/Accuracy/Medal");
+		AccuracyPanel = GetNode<PanelContainer>("AlertBox/Box/Rank");
+		AccuracyMedal = GetNode<Label>("AlertBox/Box/Rank/Medal");
 		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No Beatmaps Selected";
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "Please select a Beatmap!";
 		SongMapper.Text = "Creator: " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString();
@@ -52,22 +52,32 @@ public partial class ResultsScreen : Control
 		Score.Text = SettingsOperator.Gameplaycfg["score"].ToString("0,000,000");
 		var Acc = SettingsOperator.Gameplaycfg["accuracy"];
 		Accuracy.Text = Acc.ToString("P0");
-		if (Acc>0.95){
+		if (Acc > 0.95)
+		{
 			AccM = "S";
-			AccuracyPanel.SelfModulate = new Color(0.73f, 0.96f, 1.38f);
-		}else if (Acc>0.90){
-			AccM = "A";
-			AccuracyPanel.SelfModulate = new Color(0.84f, 1.38f, 0.74f);
-		}else if (Acc>0.80){
-			AccM = "B";
-			AccuracyPanel.SelfModulate = new Color(1.38f, 1.07f, 0.73f);
-		}else if (Acc>0.70){
-			AccM = "C";
-			AccuracyPanel.SelfModulate = new Color(1.54f, 1.61f, 0.56f);
-		}else {
-			AccM = "D";
-			AccuracyPanel.SelfModulate = new Color(0.163f, 0.88f, 0.55f);
+			AccuracyPanel.SelfModulate = new Color(0.23f, 0.47f, 0.83f); // #3b78d3 (Blue)
 		}
+		else if (Acc > 0.90)
+		{
+			AccM = "A";
+			AccuracyPanel.SelfModulate = new Color(0.40f, 0.73f, 0.19f); // #67b930 (Green)
+		}
+		else if (Acc > 0.80)
+		{
+			AccM = "B";
+			AccuracyPanel.SelfModulate = new Color(0.77f, 0.76f, 0.13f); // #c5c220 (Gold)
+		}
+		else if (Acc > 0.70)
+		{
+			AccM = "C";
+			AccuracyPanel.SelfModulate = new Color(0.83f, 0.44f, 0.13f); // #d47037 (Orange)
+		}
+		else
+		{
+			AccM = "D";
+			AccuracyPanel.SelfModulate = new Color(0.83f, 0.22f, 0.22f); // #d43737 (Red)
+		}
+		// Set the Rank medal text
 		AccuracyMedal.Text = AccM;
 
 	}
