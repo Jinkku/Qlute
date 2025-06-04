@@ -1,0 +1,151 @@
+[gd_scene load_steps=9 format=3 uid="uid://dk7xg5s8rl7nm"]
+
+[ext_resource type="Script" uid="uid://co734v8nma0jo" path="res://Script/Gameplay/LeaderboardGameplay.cs" id="1_a5nx3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7vqku"]
+bg_color = Color(0.734375, 0.734375, 0.734375, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6nid0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3dbic"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.313726)
+skew = Vector2(0.5, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wbm6w"]
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_1bkjm"]
+line_spacing = 0.0
+font_size = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dltue"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.313726)
+skew = Vector2(0.5, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1bkjm"]
+
+[node name="Leaderboard" type="PanelContainer"]
+custom_minimum_size = Vector2(300, 60)
+offset_right = 300.0
+offset_bottom = 60.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_7vqku")
+script = ExtResource("1_a5nx3")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="VSeparator3" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_6nid0")
+
+[node name="Rank" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_3dbic")
+text = "#1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VSeparator2" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_6nid0")
+
+[node name="UserInfo" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Username" type="Label" parent="HBoxContainer/UserInfo"]
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_styles/normal = SubResource("StyleBoxEmpty_wbm6w")
+text = "aquapoki"
+label_settings = SubResource("LabelSettings_1bkjm")
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="PlayScore" type="HBoxContainer" parent="HBoxContainer/UserInfo"]
+layout_mode = 2
+
+[node name="Score" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_dltue")
+text = "1,000,000"
+vertical_alignment = 1
+
+[node name="Combo" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_dltue")
+text = "0x"
+vertical_alignment = 1
+
+[node name="MAX" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.394531, 0.687805, 1, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_dltue")
+text = "0"
+vertical_alignment = 1
+
+[node name="GREAT" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.563995, 1, 0.386719, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_dltue")
+text = "0"
+vertical_alignment = 1
+
+[node name="MEH" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(1, 0.820312, 0, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_dltue")
+text = "0"
+vertical_alignment = 1
+
+[node name="BAD" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(1, 0.503906, 0.503906, 1)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_dltue")
+text = "0"
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/UserInfo"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_1bkjm")
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_6nid0")

@@ -54,7 +54,7 @@ public partial class Browse : Control
 		BrowseApi.Connect("request_completed", new Callable(this, nameof(_BrowseAPI_finished)));
 		StartBrowse();
 	}
-	private string _searchText { get; set; }
+	private string _searchText { get; set; } = "";
 	private int _ranktype { get; set; }
 	private double timetext { get; set; }
 	private double timetextnow { get; set; }
@@ -154,7 +154,13 @@ public partial class Browse : Control
 		Loadingicon.Position = new Vector2(GetViewportRect().Size.X / 2 - Loadingicon.Texture.GetSize().X / 2, GetViewportRect().Size.Y / 2 - Loadingicon.Texture.GetSize().Y / 2); // Get size of the Loading Icon and center it
 		Loadingicon.Visible = true;
 		Loadinganimation.Play("loading");
-		BrowseApi.Request(ApiOperator.Beatmapapi + "/api/v2/search?query=" + _searchText + "&status=" + ranktype + "&mode=3");
+		var uritext = "";
+		if (_searchText != "")
+		{
+			uritext = Uri.EscapeDataString(_searchText);
+		}
+		GD.Print("Looking up with: " + ApiOperator.Beatmapapi + "/api/v2/search?query=" + uritext + "&status=" + ranktype + "&mode=3");
+		BrowseApi.Request(ApiOperator.Beatmapapi + "/api/v2/search?query=" + uritext + "&status=" + ranktype + "&mode=3");
 	}
 
 public static async Task

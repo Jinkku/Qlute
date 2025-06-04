@@ -1,6 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://b8wmh5ui3lgly"]
+[gd_scene load_steps=17 format=3 uid="uid://b8wmh5ui3lgly"]
 
 [ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="1_kgn3a"]
+[ext_resource type="Script" uid="uid://bp6h74gm3lwau" path="res://Script/SongSelect/Leaderboard.cs" id="1_ysfsi"]
+[ext_resource type="Script" uid="uid://r1nchdkq185" path="res://Script/SongSelect/LeaderboardRank.cs" id="2_wkrig"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ysfsi"]
 
@@ -58,6 +60,20 @@ content_margin_bottom = 5.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_1bkjm"]
 line_spacing = 0.0
+font_size = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vt3mq"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.313726)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1bkjm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d0w7j"]
 bg_color = Color(0.5, 0.5, 0.5, 1)
@@ -65,8 +81,6 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y1q14"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vt3mq"]
 content_margin_top = 3.0
@@ -79,6 +93,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_ysfsi")
 theme_override_styles/hover = SubResource("StyleBoxFlat_6nid0")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wkrig")
 theme_override_styles/normal = SubResource("StyleBoxFlat_aqjbx")
+script = ExtResource("1_ysfsi")
 
 [node name="created" type="Label" parent="."]
 layout_mode = 1
@@ -107,6 +122,7 @@ layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_wkrig")
 text = "#1"
 horizontal_alignment = 1
+script = ExtResource("2_wkrig")
 
 [node name="Profile" type="PanelContainer" parent="HBoxContainer"]
 clip_children = 1
@@ -128,36 +144,42 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_6nid0")
 
 [node name="UserInfo" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 0
 alignment = 1
 
 [node name="Username" type="Label" parent="HBoxContainer/UserInfo"]
 layout_mode = 2
+size_flags_vertical = 6
 theme_override_styles/normal = SubResource("StyleBoxEmpty_wbm6w")
 text = "aquapoki"
 label_settings = SubResource("LabelSettings_1bkjm")
 vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
 
-[node name="Mods" type="HBoxContainer" parent="HBoxContainer/UserInfo"]
+[node name="PlayScore" type="HBoxContainer" parent="HBoxContainer/UserInfo"]
 layout_mode = 2
-size_flags_vertical = 2
 
-[node name="Medal" type="PanelContainer" parent="HBoxContainer/UserInfo/Mods"]
-visible = false
-clip_children = 2
-custom_minimum_size = Vector2(50, 25)
+[node name="Score" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
 layout_mode = 2
-size_flags_horizontal = 8
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_d0w7j")
-
-[node name="Rank" type="Label" parent="HBoxContainer/UserInfo/Mods/Medal"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-theme_override_styles/normal = SubResource("StyleBoxEmpty_y1q14")
-text = "DT"
-horizontal_alignment = 1
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_vt3mq")
+text = "1,000,000"
+label_settings = SubResource("LabelSettings_1bkjm")
 vertical_alignment = 1
+
+[node name="Combo" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_vt3mq")
+text = "0x"
+label_settings = SubResource("LabelSettings_1bkjm")
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/UserInfo"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_1bkjm")
 
 [node name="Medal" type="PanelContainer" parent="HBoxContainer"]
 self_modulate = Color(0, 0.695312, 1, 1)
@@ -179,3 +201,5 @@ vertical_alignment = 1
 [node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
 layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxEmpty_6nid0")
+
+[connection signal="pressed" from="." to="." method="_stats"]

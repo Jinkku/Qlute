@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
 [ext_resource type="Texture2D" uid="uid://m656ody0d2o" path="res://Skin/System/SongSelectPanel.svg" id="3_fwx5n"]
 [ext_resource type="Texture2D" uid="uid://by5dgss2ux7gu" path="res://Skin/System/external.svg" id="3_javs2"]
-[ext_resource type="PackedScene" uid="uid://b8wmh5ui3lgly" path="res://Panels/SongSelectButtons/Leaderboard.tscn" id="5_ndd6a"]
+[ext_resource type="Script" uid="uid://d1r50u4kxwpbl" path="res://Script/SongSelect/LeaderboardInfo.cs" id="5_ndd6a"]
 [ext_resource type="PackedScene" uid="uid://dpjsc7sxiwkm7" path="res://Panels/SongSelectElements/Mods.tscn" id="6_4xos4"]
 [ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="6_wb004"]
 
@@ -138,6 +138,7 @@ anchors_preset = 9
 anchor_bottom = 1.0
 offset_top = 100.0
 offset_right = 410.0
+offset_bottom = -50.0
 grow_vertical = 2
 size_flags_vertical = 3
 texture = ExtResource("3_fwx5n")
@@ -244,43 +245,32 @@ layout_mode = 2
 tooltip_text = "Open in browser"
 icon = ExtResource("3_javs2")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo"]
-visible = false
+[node name="LI" type="Control" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo"]
+custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Leaderboard" type="VBoxContainer" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/ScrollContainer"]
+[node name="LeaderboardInfo" type="ScrollContainer" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/LI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+script = ExtResource("5_ndd6a")
+
+[node name="Leaderboard" type="VBoxContainer" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/LI/LeaderboardInfo"]
 layout_mode = 2
 
-[node name="Leaderboard" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/ScrollContainer/Leaderboard" instance=ExtResource("5_ndd6a")]
+[node name="NoBeatmap" type="Label" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/LI/LeaderboardInfo"]
+visible = false
 layout_mode = 2
-
-[node name="Leaderboard2" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/ScrollContainer/Leaderboard" instance=ExtResource("5_ndd6a")]
-layout_mode = 2
-
-[node name="Leaderboard3" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/ScrollContainer/Leaderboard" instance=ExtResource("5_ndd6a")]
-layout_mode = 2
-
-[node name="Leaderboard4" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/ScrollContainer/Leaderboard" instance=ExtResource("5_ndd6a")]
-layout_mode = 2
-
-[node name="Leaderboard5" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/ScrollContainer/Leaderboard" instance=ExtResource("5_ndd6a")]
-layout_mode = 2
-
-[node name="Leaderboard6" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/ScrollContainer/Leaderboard" instance=ExtResource("5_ndd6a")]
-layout_mode = 2
-
-[node name="Leaderboard7" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/ScrollContainer/Leaderboard" instance=ExtResource("5_ndd6a")]
-layout_mode = 2
-
-[node name="Leaderboard8" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/ScrollContainer/Leaderboard" instance=ExtResource("5_ndd6a")]
-layout_mode = 2
-
-[node name="Leaderboard9" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/ScrollContainer/Leaderboard" instance=ExtResource("5_ndd6a")]
-layout_mode = 2
-
-[node name="Leaderboard10" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/ScrollContainer/Leaderboard" instance=ExtResource("5_ndd6a")]
-layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "No scores set on this beatmap!"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="SongPanel" type="Control" parent="."]
 layout_mode = 1

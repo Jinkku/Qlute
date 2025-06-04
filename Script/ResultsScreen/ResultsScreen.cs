@@ -18,7 +18,7 @@ public partial class ResultsScreen : Control
 	public Label Accuracy { get; set; }
 	public Label Avgms { get; set; }
 	public Label AccuracyMedal { get; set; }
-	public PanelContainer AccuracyPanel { get; set; }
+	public TextureRect AccuracyPanel { get; set; }
 	public string AccM {get;set;}
 	public override void _Ready()
 	{
@@ -36,7 +36,7 @@ public partial class ResultsScreen : Control
 		Accuracy = GetNode<Label>("AlertBox/Box/Info/Accuracy/VC/Text");
 		Combo = GetNode<Label>("AlertBox/Box/Info/Combo/VC/Text");
 		Avgms = GetNode<Label>("AlertBox/Box/Info/AvgHit/VC/Text");
-		AccuracyPanel = GetNode<PanelContainer>("AlertBox/Box/Rank");
+		AccuracyPanel = GetNode<TextureRect>("AlertBox/Box/Rank");
 		AccuracyMedal = GetNode<Label>("AlertBox/Box/Rank/Medal");
 		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No Beatmaps Selected";
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "Please select a Beatmap!";
@@ -75,7 +75,7 @@ public partial class ResultsScreen : Control
 		else
 		{
 			AccM = "D";
-			AccuracyPanel.SelfModulate = new Color(0.83f, 0.22f, 0.22f); // #d43737 (Red)
+			AccuracyPanel.SelfModulate = new Color(0.83f, 0.22f, 0.22f); //#d43737 (Red)
 		}
 		// Set the Rank medal text
 		AccuracyMedal.Text = AccM;

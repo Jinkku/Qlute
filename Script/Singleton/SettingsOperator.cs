@@ -78,9 +78,14 @@ public partial class SettingsOperator : Node
         int id = new Random().Next(0, Beatmaps.Count);
         return id;
     }
-    public void SelectSongID(int id){
-        if(Beatmaps.ElementAt(id) != null)
+    public static bool Start_reloadLeaderboard {get; set; } = false;
+    public void SelectSongID(int id)
+    {
+        if (Beatmaps.ElementAt(id) != null)
         {
+            ApiOperator.LeaderboardStatus = 0; // Reset leaderboard status
+            ApiOperator.LeaderboardList.Clear(); // Clear the leaderboard list
+            Start_reloadLeaderboard = true;
             var beatmap = Beatmaps[id];
             Sessioncfg["SongID"] = id;
             Sessioncfg["beatmapurl"] = beatmap["rawurl"];
@@ -94,18 +99,23 @@ public partial class SettingsOperator : Node
             Sessioncfg["levelrating"] = (double)beatmap["levelrating"];
             Sessioncfg["osubeatid"] = (int)beatmap["osubeatid"];
             Sessioncfg["osubeatidset"] = (int)beatmap["osubeatidset"];
-		    var Texture = LoadImage(beatmap["path"].ToString()+beatmap["background"].ToString());
-		    Sessioncfg["background"] = (Texture2D)Texture;
+            var Texture = LoadImage(beatmap["path"].ToString() + beatmap["background"].ToString());
+            Sessioncfg["background"] = (Texture2D)Texture;
             Gameplaycfg["maxpp"] = Convert.ToInt32(beatmap["pp"]);
-		    string audioPath = beatmap["path"]+ "" +beatmap["audio"];
+            string audioPath = beatmap["path"] + "" + beatmap["audio"];
             if (System.IO.File.Exists(audioPath))
             {
                 AudioStream filestream = null;
-                if (audioPath.EndsWith(".mp3")){
+                if (audioPath.EndsWith(".mp3"))
+                {
                     filestream = AudioPlayer.LoadMP3(audioPath);
-                } else if (audioPath.EndsWith(".wav")){
+                }
+                else if (audioPath.EndsWith(".wav"))
+                {
                     filestream = AudioPlayer.LoadWAV(audioPath);
-                } else if (audioPath.EndsWith(".ogg")){
+                }
+                else if (audioPath.EndsWith(".ogg"))
+                {
                     filestream = AudioPlayer.LoadOGG(audioPath);
                 }
                 AudioPlayer.Instance.Stream = filestream;
@@ -115,7 +125,8 @@ public partial class SettingsOperator : Node
             {
                 GD.PrintErr("Audio file not found: " + audioPath);
             }
-        } else{ GD.PrintErr("Can't select a song that don't exist :/");}
+        }
+        else { GD.PrintErr("Can't select a song that don't exist :/"); }
     }
     public static double Get_ppvalue(int max, int great, int meh, int bad, double multiplier = 1,int combo = 0){
         //bad = Math.Max(1,bad);
@@ -287,6 +298,7 @@ public partial class SettingsOperator : Node
         Gameplaycfg["combo"] = 0;
         Gameplaycfg["maxcombo"] = 0;
         Gameplaycfg["avgms"] = 0;
+        Gameplaycfg["ms"] = 0;
     }
     public static void Addms(double ms){
         AllMiliSecondsFromBeatmap += ms;
@@ -311,6 +323,7 @@ public partial class SettingsOperator : Node
         {"maxcombo",0},
         {"max", 0},
         {"avgms", 0},
+        {"ms", 0},
         {"great", 0},
         {"meh", 0},
         {"bad", 0},

@@ -55,6 +55,9 @@ public partial class SongSelect : Control
 	public void _res_resize(){
 		var window_size = GetViewportRect().Size;
 		Control SongPanel = GetNode<Control>("SongPanel");
+		Control SongDetails = GetNode<Control>("SongDetails");
+		SongDetails.Size = new Vector2(SongDetails.Size.X, window_size.Y-100-50);
+		SongDetails.Position = new Vector2(0, 100);
 		SongPanel.Size = new Vector2(window_size.X/2.5f, window_size.Y-150);
 		SongPanel.Position = new Vector2(window_size.X-(window_size.X/2.5f), 105);
 	}
@@ -239,18 +242,38 @@ public partial class SongSelect : Control
 			ModScreen.Position = new Vector2(0,GetViewportRect().Size.Y);
 		}
 	}
+
+	private void _reloadLeaderboard()
+	{
+		if (SettingsOperator.Sessioncfg["osubeatid"] != null)
+		{
+			ApiOperator.ReloadLeaderboard((int)SettingsOperator.Sessioncfg["osubeatid"]);
+		}
+		else
+		{
+			GD.PrintErr("No osubeatid found in Sessioncfg, cannot reload leaderboard.");
+		}
+	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
-		if ((bool)SettingsOperator.Sessioncfg["reloaddb"]){
+		if (SettingsOperator.Start_reloadLeaderboard && ApiOperator.LeaderboardStatus == 0 && SettingsOperator.Beatmaps.Count > 0)
+		{
+			SettingsOperator.Start_reloadLeaderboard = false;
+			GD.Print("Loading Leaderboard for: " + SettingsOperator.Sessioncfg["osubeatid"]);
+			_reloadLeaderboard();
+		}
+		if ((bool)SettingsOperator.Sessioncfg["reloaddb"])
+		{
 			SettingsOperator.Sessioncfg["reloaddb"] = false;
 			GetTree().ReloadCurrentScene();
-			
+
 		}
 		check_modscreen();
 		scrollBar.MaxValue = SettingsOperator.Beatmaps.Count;
-		
-		if (!AnimationSong){
+
+		if (!AnimationSong)
+		{
 			AnimationSong = !AnimationSong;
 			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
 		}

@@ -168,14 +168,14 @@ layout_mode = 2
 text = "played by aquapoki"
 horizontal_alignment = 1
 
-[node name="Accuracy" type="TextureRect" parent="AlertBox/Box"]
+[node name="Rank" type="TextureRect" parent="AlertBox/Box"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 texture = ExtResource("3_3q470")
 
-[node name="Medal" type="Label" parent="AlertBox/Box/Accuracy"]
+[node name="Medal" type="Label" parent="AlertBox/Box/Rank"]
 layout_mode = 2
 offset_top = 31.0
 offset_right = 100.0
