@@ -13,8 +13,8 @@ dest_files=["res://.godot/imported/score.ttf-75d0895ed03c6647407b4e9993c4c334.fo
 [params]
 
 Rendering=null
-antialiasing=1
-generate_mipmaps=true
+antialiasing=2
+generate_mipmaps=false
 disable_embedded_bitmaps=true
 multichannel_signed_distance_field=false
 msdf_pixel_range=8
