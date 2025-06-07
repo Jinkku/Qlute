@@ -2,13 +2,15 @@
   <img width="231" alt="Qlute Logo" src="https://github.com/Jinkku/Qlute/blob/master/Skin/System/mainmenulogo.png?raw=true">
 </p>
 
-> [!IMPORTANT]
-> Game still in beta, expect bugs and issues.
+> [!WARNING]
+> (｡•́︿•̀｡) **This game is still in beta!**  
+> Please be patient~ There might be bugs and issues crawling around 🐞💔  
+> We’re working hard to squish them! (ง •̀_•́)ง
 
 # Qlute
 Embrace your Imagination
 
-[![CodeFactor](https://www.codefactor.io/repository/github/jinkku/qlute/badge)](https://www.codefactor.io/repository/github/jinkku/qlute)
+[![CodeFactor](https://www.codefactor.io/repository/github/jinkkuu/qlute/badge)](https://www.codefactor.io/repository/github/jinkkuu/qlute)
 
 # Downloads
 
@@ -24,7 +26,7 @@ Requirements:
 
 Preparation:
 
-Paste this command  ```git clone https://github.com/Jinkku/Qlute``` then it should sync with this repo.
+Paste this command  ```git clone https://github.com/Jinkkuu/Qlute``` then it should sync with this repo.
 
 Then open up Godot 4.4 and import it to the game engine.
 
