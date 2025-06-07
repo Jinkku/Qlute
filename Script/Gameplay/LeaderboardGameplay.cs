@@ -38,6 +38,13 @@ public partial class LeaderboardGameplay : PanelContainer
 		Bad = GetNode<Label>("HBoxContainer/UserInfo/PlayScore/BAD");
 		Rank = GetNode<Label>("HBoxContainer/Rank");
 
+		refresh_info();
+	}
+
+	// Refreshes the leaderboard information.
+
+	private void refresh_info()
+	{
 		if (!HasMeta("username"))
 		{
 			Username.Text = "Unknown";
@@ -100,13 +107,17 @@ public partial class LeaderboardGameplay : PanelContainer
 		{
 			Bad.Text = GetMeta("bad").ToString();
 		}
+		refresh_rank();
+	}
+	private void refresh_rank()
+	{
 		if (!HasMeta("rank"))
 		{
-			Bad.Text = "#?";
+			Rank.Text = "0";
 		}
 		else
 		{
-			Bad.Text = "#" + GetMeta("rank").ToString();
+			Rank.Text = "#" + GetMeta("rank").ToString();
 		}
 	}
 
@@ -121,6 +132,12 @@ public partial class LeaderboardGameplay : PanelContainer
 			Great.Text = SettingsOperator.Gameplaycfg["great"].ToString();
 			Meh.Text = SettingsOperator.Gameplaycfg["meh"].ToString();
 			Bad.Text = SettingsOperator.Gameplaycfg["bad"].ToString();
+			refresh_rank();
+		}
+		else
+		{
+			refresh_info();
+
 		}
 	}
 }

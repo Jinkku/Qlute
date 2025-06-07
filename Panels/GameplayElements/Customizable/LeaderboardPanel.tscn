@@ -6,19 +6,12 @@
 
 [node name="Leaderboard" type="PanelContainer"]
 clip_contents = true
+custom_minimum_size = Vector2(300, 320)
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_eo7hg")
 script = ExtResource("1_t8lab")
 
-[node name="LeaderboardScroll" type="ScrollContainer" parent="."]
-custom_minimum_size = Vector2(300, 320)
+[node name="ControlLead" type="Control" parent="."]
 layout_mode = 2
-mouse_filter = 2
-horizontal_scroll_mode = 3
-vertical_scroll_mode = 3
-
-[node name="Legend" type="VBoxContainer" parent="LeaderboardScroll"]
-layout_mode = 2
-mouse_filter = 2

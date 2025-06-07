@@ -1,0 +1,60 @@
+[gd_scene load_steps=4 format=3 uid="uid://bff87daln02bt"]
+
+[ext_resource type="PackedScene" uid="uid://bj38y6tgytge3" path="res://Panels/GameplayElements/Customizable/LeaderboardPanel.tscn" id="1_bpd3a"]
+[ext_resource type="Script" uid="uid://byea0sgpf65mm" path="res://Script/TestMenu/LeaderboardTest.cs" id="1_lis1s"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lis1s"]
+
+[node name="ColorRect" type="ColorRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.0859375, 1, 1)
+script = ExtResource("1_lis1s")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 188.0
+offset_right = 361.0
+offset_bottom = 215.0
+text = "Click this button if Leaderboard is reset"
+
+[node name="HSlider" type="HSlider" parent="."]
+layout_mode = 2
+offset_left = 41.0
+offset_top = 98.0
+offset_right = 341.0
+offset_bottom = 117.0
+max_value = 1e+06
+
+[node name="Leaderboard" parent="." instance=ExtResource("1_bpd3a")]
+layout_mode = 0
+offset_left = 373.0
+offset_top = 54.0
+offset_right = 673.0
+offset_bottom = 374.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_lis1s")
+
+[node name="info" type="Label" parent="."]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 244.0
+offset_right = 339.0
+offset_bottom = 285.0
+text = "Score changer~
+(should make the card go up if works)"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 122.0
+offset_right = 350.0
+offset_bottom = 163.0
+text = "Score changer~
+(should make the card go up if works)"
+
+[connection signal="pressed" from="Button" to="." method="_reset"]
+[connection signal="value_changed" from="HSlider" to="." method="_changed"]
