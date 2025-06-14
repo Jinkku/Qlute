@@ -406,6 +406,6 @@ public partial class SongSelect : Control
 		SettingsOperator.loopaudio = false;
 	}
 	private void _on_back_pressed(){
-		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/home_screen.tscn");
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
 	}
 }

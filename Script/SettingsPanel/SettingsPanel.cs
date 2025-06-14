@@ -57,7 +57,7 @@ public partial class SettingsPanel : Control
 		OffsetTicker.Text = "Audio offset - "+ (OffsetSlider.Value-200).ToString("0") +"ms";
 	}
 	private void _aow(){
-		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/AudioOffset.tscn");
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/AudioOffset.tscn");
 	}private void _aoautoset(){
 		SettingsOperator.SetSetting("audiooffset",SettingsOperator.Getms());
 		OffsetSlider.Value = 200+SettingsOperator.Getms();

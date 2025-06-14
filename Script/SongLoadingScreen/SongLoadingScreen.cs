@@ -37,11 +37,11 @@ public partial class SongLoadingScreen : Control
 		if (anistate <1){
 			anistate++;
 		}else{
-			GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/Gameplay.tscn");
+			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Gameplay.tscn");
 		}
 	}
 	private void _on_back(){
-		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/song_select.tscn");
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 	}
 	private void _Timer_load(){
 		Animation.PlayBackwards("AnimationSongTick");

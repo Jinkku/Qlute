@@ -43,13 +43,13 @@ public partial class HomeScreen : Control
 		Notify.Post("Hai Hai! ;w;");
 	}
 	private void _play(){
-		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/song_select.tscn");
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 	}
 	private void _browse(){
-		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/Browse.tscn");
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Browse.tscn");
 	}
 	private void _create(){
-		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/Create.tscn");
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
 	}
 	private void _leave(){
 		var tween = CreateTween();

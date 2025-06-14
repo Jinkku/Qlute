@@ -243,7 +243,7 @@ public static async Task
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	private void _on_back(){
-		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/home_screen.tscn");
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
 	}
 	public override void _Process(double delta)
 	{

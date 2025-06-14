@@ -82,10 +82,10 @@ public partial class ResultsScreen : Control
 
 	}
 	public void _retry(){
-		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 	}
 	public void _continue(){
-		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/song_select.tscn");
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 		AudioPlayer.Instance.Play();
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

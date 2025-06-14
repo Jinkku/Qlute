@@ -367,11 +367,13 @@ public partial class SettingsOperator : Node
 		Sessioncfg["toppanelhide"] = !(bool)Sessioncfg["toppanelhide"];
 		AnimationPlayer Ana = GetTree().Root.GetNode<AnimationPlayer>("TopPanelOnTop/TopPanel/Wabamp");
 		if (((bool)Sessioncfg["toppanelhide"] == true)) Ana.PlayBackwards("Bootup"); else Ana.Play("Bootup");}
+    public static float TopPanelPosition { get; set; } = 0.0f;
 
     public override void _Process(double _delta)
-	{
-
-		if (Input.IsActionJustPressed("Hide Panel")){
+    {
+        TopPanelPosition = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/TopPanel/InfoBar").Position.Y + 50;
+        if (Input.IsActionJustPressed("Hide Panel"))
+        {
             toppaneltoggle();
         }
     }

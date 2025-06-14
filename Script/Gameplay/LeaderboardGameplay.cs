@@ -25,7 +25,7 @@ public partial class LeaderboardGameplay : PanelContainer
 		SettingsOperator.Gameplaycfg["score"] = (int)GetMeta("score");
 		SettingsOperator.Gameplaycfg["pp"] = (double)GetMeta("points");
 		SettingsOperator.Gameplaycfg["accuracy"] = (SettingsOperator.Gameplaycfg["max"] + (SettingsOperator.Gameplaycfg["great"] / 2) + (SettingsOperator.Gameplaycfg["meh"] / 3)) / (SettingsOperator.Gameplaycfg["max"] + SettingsOperator.Gameplaycfg["great"] + SettingsOperator.Gameplaycfg["meh"] + SettingsOperator.Gameplaycfg["bad"]);
-		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/ResultsScreen.tscn");
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultsScreen.tscn");
 	}
 	public override void _Ready()
 	{

@@ -30,7 +30,7 @@ config/icon="res://Icons/logo.png"
 
 [autoload]
 
-Scene="*res://Panels/Overlays/SceneTransition.tscn"
+Transition="*res://Panels/Overlays/SceneTransition.tscn"
 SettingsOperator="*res://Script/Singleton/SettingsOperator.cs"
 BeatmapListener="*res://Script/Singleton/BeatmapListener.cs"
 Global="*res://Script/Singleton/Global.cs"

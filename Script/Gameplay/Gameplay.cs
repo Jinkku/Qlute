@@ -235,7 +235,7 @@ public partial class Gameplay : Control
 				SettingsOperator.Sessioncfg["localpp"] = (double)SettingsOperator.Sessioncfg["localpp"] + SettingsOperator.Gameplaycfg["pp"];
 				ApiOperator.SubmitScore();
 				Finished = true;
-				GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/ResultsScreen.tscn");
+				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultsScreen.tscn");
 			}
 
 			if (SettingsOperator.Gameplaycfg["combo"] > SettingsOperator.Gameplaycfg["maxcombo"])
@@ -278,7 +278,7 @@ public partial class Gameplay : Control
 			{
 				BeatmapBackground.FlashEnable = true;
 				SettingsOperator.toppaneltoggle();
-				GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
+				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 			}
 			//debugtext.Text = $"est: {est}\nDanceIndex:{DanceIndex}\nTimeindex:{dance.ElementAt(DanceIndex).time}";
 			if ((int)est > dance.ElementAt(DanceIndex).time)
@@ -392,7 +392,7 @@ public partial class Gameplay : Control
 				Notify.Post("Can't play the bestmap because\n" + e.Message);
 				SettingsOperator.toppaneltoggle();
 				BeatmapBackground.FlashEnable = true;
-				GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/song_select.tscn");
+				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 			}
 		}
 	}

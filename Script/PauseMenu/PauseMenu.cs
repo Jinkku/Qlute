@@ -25,7 +25,7 @@ public partial class PauseMenu : Control
 			GetTree().Paused = false;
 			BeatmapBackground.FlashEnable = true;
 			SettingsOperator.toppaneltoggle();
-			GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
+			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 	}
 	public override void _Process(double delta)
 	{
@@ -39,6 +39,6 @@ public partial class PauseMenu : Control
 			GetTree().Paused = false;
 			BeatmapBackground.FlashEnable = true;
 			SettingsOperator.toppaneltoggle();
-			GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/song_select.tscn");
+			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 	}
 }

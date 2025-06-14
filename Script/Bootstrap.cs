@@ -18,7 +18,7 @@ public partial class Bootstrap : Control
 			SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
 		}
 		SettingsOperator.toppaneltoggle();
-		GetNode<SceneTransition>("/root/Scene").Switch("res://Panels/Screens/home_screen.tscn");
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
 		
 	}
 }
