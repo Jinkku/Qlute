@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://hujhlkgh6dfp" path="res://Script/CreateEditor/ContextMenus.cs" id="2_wk53w"]
 [ext_resource type="Script" uid="uid://cmqncf5p3shyd" path="res://Script/CreateEditor/FileMenu.cs" id="3_imael"]
 [ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="4_ujy7e"]
-[ext_resource type="Script" uid="uid://in2a2x0qr1nm" path="res://Script/SkinEditor/ScreenElementButton.cs" id="5_imael"]
+[ext_resource type="Script" uid="uid://blbe3d2880su3" path="res://Script/Effects/ScreenElementButton.cs" id="5_imael"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wk53w"]
 bg_color = Color(0.0784314, 0.0980392, 0.129412, 1)
