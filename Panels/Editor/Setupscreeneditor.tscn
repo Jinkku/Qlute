@@ -1,0 +1,159 @@
+[gd_scene load_steps=11 format=3 uid="uid://s2b1hbknhsc2"]
+
+[ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="1_lw0j6"]
+[ext_resource type="Script" uid="uid://btqxyd2k7w5jj" path="res://Script/LevelEditor/SetupScreenEditor.cs" id="1_njyxv"]
+[ext_resource type="Script" uid="uid://blbe3d2880su3" path="res://Script/Effects/ScreenElementButton.cs" id="3_6ukjg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6ukjg"]
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_napsa"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_312qs"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+corner_radius_top_right = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wb85x"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g88nb"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yr25w"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_njyxv"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+corner_radius_top_left = 35
+corner_radius_top_right = 35
+corner_radius_bottom_right = 35
+corner_radius_bottom_left = 35
+
+[node name="SetupScreenEditor" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_njyxv")
+
+[node name="ControlPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_6ukjg")
+
+[node name="Box" type="HBoxContainer" parent="ControlPanel"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="BackButton" type="Button" parent="ControlPanel/Box"]
+custom_minimum_size = Vector2(108, 50)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_napsa")
+theme_override_styles/hover = SubResource("StyleBoxFlat_312qs")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_312qs")
+theme_override_styles/normal = SubResource("StyleBoxFlat_312qs")
+script = ExtResource("3_6ukjg")
+metadata/unfocus = Color(0.494118, 0, 0, 1)
+metadata/highlight = Color(0.746094, 0.265213, 0.265213, 1)
+metadata/focus = Color(0.690196, 0.0862745, 0.0862745, 1)
+
+[node name="Label" type="Label" parent="ControlPanel/Box/BackButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_right = -18.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Back"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="ControlPanel/Box/BackButton"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 50.0
+grow_vertical = 2
+texture = ExtResource("1_lw0j6")
+stretch_mode = 3
+
+[node name="Next" type="Button" parent="ControlPanel/Box"]
+custom_minimum_size = Vector2(108, 50)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_styles/focus = SubResource("StyleBoxEmpty_napsa")
+theme_override_styles/hover = SubResource("StyleBoxFlat_wb85x")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_g88nb")
+theme_override_styles/normal = SubResource("StyleBoxFlat_yr25w")
+script = ExtResource("3_6ukjg")
+
+[node name="Label" type="Label" parent="ControlPanel/Box/Next"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Next"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -250.0
+offset_right = 250.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_njyxv")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Setup Screen"
+horizontal_alignment = 1
+
+[connection signal="button_down" from="ControlPanel/Box/BackButton" to="ControlPanel/Box/BackButton" method="_highlight"]
+[connection signal="button_up" from="ControlPanel/Box/BackButton" to="ControlPanel/Box/BackButton" method="_focus"]
+[connection signal="mouse_entered" from="ControlPanel/Box/BackButton" to="ControlPanel/Box/BackButton" method="_focus"]
+[connection signal="mouse_exited" from="ControlPanel/Box/BackButton" to="ControlPanel/Box/BackButton" method="_unfocus"]
+[connection signal="pressed" from="ControlPanel/Box/BackButton" to="." method="_back"]
+[connection signal="button_down" from="ControlPanel/Box/Next" to="ControlPanel/Box/Next" method="_highlight"]
+[connection signal="button_up" from="ControlPanel/Box/Next" to="ControlPanel/Box/Next" method="_focus"]
+[connection signal="mouse_entered" from="ControlPanel/Box/Next" to="ControlPanel/Box/Next" method="_focus"]
+[connection signal="mouse_exited" from="ControlPanel/Box/Next" to="ControlPanel/Box/Next" method="_unfocus"]
+[connection signal="pressed" from="ControlPanel/Box/Next" to="." method="_Next"]
