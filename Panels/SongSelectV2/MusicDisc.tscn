@@ -1,0 +1,34 @@
+[gd_scene load_steps=4 format=3 uid="uid://bqi4o1ni3qevq"]
+
+[ext_resource type="Texture2D" uid="uid://be804jmg1kj4h" path="res://Skin/System/SongSelect/discmask.png" id="1_pegod"]
+[ext_resource type="Texture2D" uid="uid://dugxlwc4epe6i" path="res://DefaultWallpaper/a.png" id="2_htw45"]
+[ext_resource type="Texture2D" uid="uid://i2jlotond2vr" path="res://Skin/System/SongSelect/outterdisc.png" id="3_vuqrs"]
+
+[node name="Disc" type="TextureButton"]
+clip_children = 2
+custom_minimum_size = Vector2(400, 400)
+offset_right = 40.0
+offset_bottom = 40.0
+texture_normal = ExtResource("1_pegod")
+stretch_mode = 0
+
+[node name="AlbumArt" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_htw45")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="RingDisc" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_vuqrs")
+stretch_mode = 3
