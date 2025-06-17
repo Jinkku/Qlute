@@ -13,7 +13,7 @@ public partial class HomeScreen : Control
 	public Label SongArtist { get; set; }
 	public static SettingsOperator SettingsOperator { get; set; }
 	public override void _Ready()
-	{	
+	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SettingsOperator.loopaudio = false;
 		SongTitle = GetNode<Label>("./Titlesong");
@@ -22,13 +22,14 @@ public partial class HomeScreen : Control
 		//ani.Play("Flash");
 		_Process(0);
 	}
+
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No song selected";
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
 
-		if (SettingsOperator.Gameplaycfg["timetotal"]-(AudioPlayer.Instance.GetPlaybackPosition()*1000) < -1000 && SettingsOperator.Beatmaps.Count>0)
+		if (SettingsOperator.Gameplaycfg["timetotal"] - (AudioPlayer.Instance.GetPlaybackPosition() * 1000) < -1000 && SettingsOperator.Beatmaps.Count > 0)
 		{
 
 			SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
@@ -42,8 +43,10 @@ public partial class HomeScreen : Control
 	{
 		Notify.Post("Hai Hai! ;w;");
 	}
-	private void _play(){
-		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
+	private void _play()
+	{
+		if (Input.IsActionPressed("TestMode")) GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongSelectV2.tscn");
+		else GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 	}
 	private void _browse(){
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Browse.tscn");

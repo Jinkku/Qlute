@@ -1,0 +1,114 @@
+[gd_scene load_steps=9 format=3 uid="uid://c2ouvq16jls8u"]
+
+[ext_resource type="Script" uid="uid://blbe3d2880su3" path="res://Script/Effects/ScreenElementButton.cs" id="1_n1f57"]
+[ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="2_eljtg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_amdr4"]
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qtebl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i2qhk"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+corner_radius_top_right = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lrmyl"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ifhjv"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_do4l5"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[node name="ControlPanel" type="PanelContainer"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_amdr4")
+
+[node name="Box" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="BackButton" type="Button" parent="Box"]
+custom_minimum_size = Vector2(108, 50)
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qtebl")
+theme_override_styles/hover = SubResource("StyleBoxFlat_i2qhk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_i2qhk")
+theme_override_styles/normal = SubResource("StyleBoxFlat_i2qhk")
+script = ExtResource("1_n1f57")
+metadata/unfocus = Color(0.494118, 0, 0, 1)
+metadata/highlight = Color(0.746094, 0.265213, 0.265213, 1)
+metadata/focus = Color(0.690196, 0.0862745, 0.0862745, 1)
+
+[node name="Label" type="Label" parent="Box/BackButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_right = -18.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Back"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Box/BackButton"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 50.0
+grow_vertical = 2
+texture = ExtResource("2_eljtg")
+stretch_mode = 3
+
+[node name="Next" type="Button" parent="Box"]
+visible = false
+custom_minimum_size = Vector2(108, 50)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qtebl")
+theme_override_styles/hover = SubResource("StyleBoxFlat_lrmyl")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ifhjv")
+theme_override_styles/normal = SubResource("StyleBoxFlat_do4l5")
+script = ExtResource("1_n1f57")
+
+[node name="Label" type="Label" parent="Box/Next"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Next"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="button_down" from="Box/BackButton" to="Box/BackButton" method="_highlight"]
+[connection signal="button_up" from="Box/BackButton" to="Box/BackButton" method="_focus"]
+[connection signal="mouse_entered" from="Box/BackButton" to="Box/BackButton" method="_focus"]
+[connection signal="mouse_exited" from="Box/BackButton" to="Box/BackButton" method="_unfocus"]
+[connection signal="button_down" from="Box/Next" to="Box/Next" method="_highlight"]
+[connection signal="button_up" from="Box/Next" to="Box/Next" method="_focus"]
+[connection signal="mouse_entered" from="Box/Next" to="Box/Next" method="_focus"]
+[connection signal="mouse_exited" from="Box/Next" to="Box/Next" method="_unfocus"]
