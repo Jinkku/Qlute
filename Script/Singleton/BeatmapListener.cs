@@ -1,7 +1,31 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
+
+public class BeatmapLegend
+{
+	public string Title { get; set; }
+	public string Artist { get; set; }
+	public string Mapper { get; set; }
+	public int KeyCount { get; set; }
+	public string Version { get; set; }
+	public double pp { get; set; }
+	public int Osubeatid { get; set; }
+	public int Osubeatidset { get; set; }
+	public int Beatid { get; set; }
+	public int Beatidset { get; set; }
+	public double Bpm { get; set; }
+	public List<DanceCounter> Dance { get; set; }
+	public int Timetotal { get; set; }
+	public double Levelrating { get; set; }
+	public double Accuracy { get; set; }
+	public string Background { get; set; }
+	public string Audio { get; set; }
+	public string Rawurl { get; set; }
+	public string Rath { get; set; }
+}
 public partial class BeatmapListener : Node
 {
 	public static SettingsOperator SettingsOperator { get; set; }
