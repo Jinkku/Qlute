@@ -1,14 +1,14 @@
 using Godot;
 using System;
 
-public partial class SongList : Control
+public partial class SongBoomBox : HBoxContainer
 {
 	private int _resizePos = 0;
 	private void _AdjustPos()
 	{
 		Position = new Vector2(
 			0,
-			_resizePos / 2 - 40 + SettingsOperator.TopPanelPosition
+			50 + SettingsOperator.TopPanelPosition
 		);
 	}
 	// Set the resize pos for Pos func
