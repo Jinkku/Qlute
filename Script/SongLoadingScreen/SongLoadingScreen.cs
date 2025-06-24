@@ -29,8 +29,7 @@ public partial class SongLoadingScreen : Control
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "Please select a Beatmap!";
 		SongMapper.Text = "Creator: " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString();
 		SongDiff.Text = SettingsOperator.Sessioncfg["beatmapdiff"]?.ToString();
-		int rating = (int)((double)SettingsOperator.Sessioncfg["levelrating"]);
-		SongRating.Text = "Lv. " + rating.ToString("N0");
+		SongRating.Text = "Lv. " + ((Single)SettingsOperator.Sessioncfg["levelrating"]).ToString("N0");
 	}
 	private void _Animationf(string ani){
 		ArtificialLoad.Start();
