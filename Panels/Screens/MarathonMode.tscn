@@ -275,10 +275,34 @@ popup/item_3/id = 3
 popup/item_4/text = "Lv. 24 - 48 (Expert+)"
 popup/item_4/id = 4
 
+[node name="Settings" type="PanelContainer" parent="Panel/HBoxContainer/Settings/SettingsPill"]
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_tn84w")
+
+[node name="SettingsPill" type="VBoxContainer" parent="Panel/HBoxContainer/Settings/SettingsPill/Settings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/HBoxContainer/Settings/SettingsPill/Settings/SettingsPill"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_q6ute")
+text = "Introducing...."
+horizontal_alignment = 1
+
+[node name="Artist" type="ScrollContainer" parent="Panel/HBoxContainer/Settings/SettingsPill/Settings/SettingsPill"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="List" type="VBoxContainer" parent="Panel/HBoxContainer/Settings/SettingsPill/Settings/SettingsPill/Artist"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="Play" type="Button" parent="Panel/HBoxContainer/Settings/SettingsPill"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-size_flags_vertical = 10
+size_flags_vertical = 8
 theme_override_styles/focus = SubResource("StyleBoxFlat_ie42o")
 theme_override_styles/hover = SubResource("StyleBoxFlat_uhtcx")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_b1o62")

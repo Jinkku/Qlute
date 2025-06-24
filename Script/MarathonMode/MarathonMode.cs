@@ -7,6 +7,7 @@ public partial class MarathonMode : ColorRect
     private Label Duration { get; set; }
     private Label Points { get; set; }
     private Label SongCount { get; set; }
+    private VBoxContainer ArtistContainer { get; set; }
     private int DiffCount { get; set; } = 0;
     private void _changedmode(int value)
     {
@@ -19,6 +20,7 @@ public partial class MarathonMode : ColorRect
         double PointsTotal = 0;
         int SongCountTotal = 0;
         int Mini = 0;
+        float per = 1f;
         int Max = 3;
         if (DiffCount == 0)
         {
@@ -44,13 +46,25 @@ public partial class MarathonMode : ColorRect
             Mini = 24;
             Max = 48;
         }
+        foreach (Node child in ArtistContainer.GetChildren()) // Remove all children from the ArtistContainer
+        {
+            child.QueueFree();
+        }
+
+
         foreach (BeatmapLegend beatmap in SettingsOperator.Beatmaps)
         {
             if (beatmap.Levelrating >= Mini && beatmap.Levelrating <= Max)
             {
                 Dur += beatmap.Timetotal;
-                PointsTotal += beatmap.pp;
+                PointsTotal += Math.Max(0, beatmap.pp * per);
+                per -= 0.2f; // Decrease the multiplier for each song
                 SongCountTotal++;
+                Label artistLabel = new Label
+                {
+                    Text = $"{beatmap.Artist} - {beatmap.Title} [{beatmap.Version}]",
+                };
+                ArtistContainer.AddChild(artistLabel);
             }
         }
         Duration.Text = "Duration:" + TimeSpan.FromMilliseconds(Dur / AudioPlayer.Instance.PitchScale).ToString(@"hh\:mm\:ss") ?? "00:00:00";
@@ -62,6 +76,7 @@ public partial class MarathonMode : ColorRect
         Duration = GetNode<Label>("Panel/HBoxContainer/Settings/SettingsPill/MarathonDuration");
         Points = GetNode<Label>("Panel/HBoxContainer/Settings/SettingsPill/MarathonPoints");
         SongCount = GetNode<Label>("Panel/HBoxContainer/Settings/SettingsPill/MarathonSongCount");
+        ArtistContainer = GetNode<VBoxContainer>("Panel/HBoxContainer/Settings/SettingsPill/Settings/SettingsPill/Artist/List");
         resetcounter();
 
     }
