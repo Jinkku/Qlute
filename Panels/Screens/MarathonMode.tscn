@@ -1,0 +1,295 @@
+[gd_scene load_steps=18 format=3 uid="uid://tgmmheg4lrja"]
+
+[ext_resource type="Script" uid="uid://cl4x20a7ig0ko" path="res://Script/MarathonMode/MarathonMode.cs" id="1_q6ute"]
+[ext_resource type="PackedScene" uid="uid://c2ouvq16jls8u" path="res://Panels/Overlays/BottomPanelButtons.tscn" id="1_tn84w"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q2vus"]
+bg_color = Color(1, 1, 1, 0.0784314)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tn84w"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q2vus"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tn84w"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(1, 1, 1, 0.156863)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q6ute"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.196078)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q6ute"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_g5dql"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7tk1o"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.0784314)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g5dql"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(1, 1, 1, 0.235294)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y78t7"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.313726)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_24qxe"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.156863)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ie42o"]
+bg_color = Color(1, 1, 1, 0.0980392)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uhtcx"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.427451, 0.643137, 0.992157, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.341797, 0.509643, 0.78125, 1)
+shadow_size = 1
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b1o62"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.307617, 0.729167, 0.478872, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.23801, 0.557292, 0.31783, 1)
+shadow_size = 1
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6vqa4"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.307617, 0.478872, 0.729167, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.23801, 0.366319, 0.557292, 1)
+shadow_size = 1
+shadow_offset = Vector2(0, 4)
+
+[node name="MarathonMode" type="ColorRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.164532, 0.138306, 0.171875, 1)
+script = ExtResource("1_q6ute")
+
+[node name="Title" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_q2vus")
+
+[node name="Label" type="Label" parent="Title"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxEmpty_tn84w")
+text = "Marathon Mode"
+vertical_alignment = 2
+
+[node name="Panel" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 150.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_q2vus")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 2
+alignment = 1
+
+[node name="Leaderboard" type="PanelContainer" parent="Panel/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tn84w")
+
+[node name="LeaderboardPill" type="VBoxContainer" parent="Panel/HBoxContainer/Leaderboard"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/HBoxContainer/Leaderboard/LeaderboardPill"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_q6ute")
+text = "Leaderboard"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="Panel/HBoxContainer/Leaderboard/LeaderboardPill"]
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_q6ute")
+text = "This mode is unranked right now.
+Check the official website for updates.
+<3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Settings" type="PanelContainer" parent="Panel/HBoxContainer"]
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tn84w")
+
+[node name="SettingsPill" type="VBoxContainer" parent="Panel/HBoxContainer/Settings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/HBoxContainer/Settings/SettingsPill"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_q6ute")
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="MarathonInfo" type="Label" parent="Panel/HBoxContainer/Settings/SettingsPill"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.804688, 0.894426, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxEmpty_q6ute")
+text = "- Marathon info"
+
+[node name="MarathonDuration" type="Label" parent="Panel/HBoxContainer/Settings/SettingsPill"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxEmpty_q6ute")
+text = "Duration: 00:00:00"
+
+[node name="MarathonPoints" type="Label" parent="Panel/HBoxContainer/Settings/SettingsPill"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxEmpty_q6ute")
+text = "You can earn 0pp from this Marathon."
+
+[node name="MarathonSongCount" type="Label" parent="Panel/HBoxContainer/Settings/SettingsPill"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxEmpty_q6ute")
+text = "You will play 0 songs in this Marathon."
+
+[node name="LOD" type="Label" parent="Panel/HBoxContainer/Settings/SettingsPill"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.804688, 0.894426, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxEmpty_q6ute")
+text = "- Level of Difficulty"
+
+[node name="DiffButton" type="OptionButton" parent="Panel/HBoxContainer/Settings/SettingsPill"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_g5dql")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_7tk1o")
+theme_override_styles/hover = SubResource("StyleBoxFlat_g5dql")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_y78t7")
+theme_override_styles/normal = SubResource("StyleBoxFlat_24qxe")
+selected = 0
+item_count = 5
+popup/item_0/text = "Lv. 0 - 3 (Easy)"
+popup/item_0/id = 0
+popup/item_1/text = "Lv. 4 - 6 (Normal)"
+popup/item_1/id = 1
+popup/item_2/text = "Lv. 6 - 12 (Hard)"
+popup/item_2/id = 2
+popup/item_3/text = "Lv. 12 - 24 (Expert)"
+popup/item_3/id = 3
+popup/item_4/text = "Lv. 24 - 48 (Impossible)"
+popup/item_4/id = 4
+
+[node name="Play" type="Button" parent="Panel/HBoxContainer/Settings/SettingsPill"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_styles/focus = SubResource("StyleBoxFlat_ie42o")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uhtcx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_b1o62")
+theme_override_styles/normal = SubResource("StyleBoxFlat_6vqa4")
+text = "Start the Marathon!!!"
+
+[node name="ControlPanel" parent="." instance=ExtResource("1_tn84w")]
+layout_mode = 1
+
+[connection signal="item_selected" from="Panel/HBoxContainer/Settings/SettingsPill/DiffButton" to="." method="_changedmode"]
+[connection signal="pressed" from="Panel/HBoxContainer/Settings/SettingsPill/Play" to="." method="_start"]
+[connection signal="pressed" from="ControlPanel/Box/BackButton" to="." method="_exit"]
+
+[editable path="ControlPanel"]
