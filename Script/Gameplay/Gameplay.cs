@@ -232,10 +232,19 @@ public partial class Gameplay : Control
 			{
 				SettingsOperator.toppaneltoggle();
 				BeatmapBackground.FlashEnable = true;
-				SettingsOperator.Sessioncfg["localpp"] = (double)SettingsOperator.Sessioncfg["localpp"] + SettingsOperator.Gameplaycfg["pp"];
-				ApiOperator.SubmitScore();
 				Finished = true;
-				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultsScreen.tscn");
+				if (!SettingsOperator.Marathon)
+				{
+					GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultsScreen.tscn");
+					ApiOperator.SubmitScore();
+				}
+				else
+				{
+					SettingsOperator.MarathonID++;
+					if (SettingsOperator.MarathonID >= SettingsOperator.MarathonMapPaths.Count) GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultsScreen.tscn");
+					SettingsOperator.SelectSongID(SettingsOperator.MarathonMapPaths[SettingsOperator.MarathonID]);
+					GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/LoadingMarathonScreen.tscn");
+				}
 			}
 
 			if (SettingsOperator.Gameplaycfg["combo"] > SettingsOperator.Gameplaycfg["maxcombo"])
@@ -270,11 +279,17 @@ public partial class Gameplay : Control
 					hitnote(i, false);
 				}
 			}
-			if (Input.IsActionJustPressed("pausemenu"))
+			if (Input.IsActionJustPressed("pausemenu") && !SettingsOperator.Marathon)
 			{
 				ShowPauseMenu();
 			}
-			else if (Input.IsActionJustPressed("retry"))
+			else if (Input.IsActionJustPressed("pausemenu") && SettingsOperator.Marathon)
+			{
+				SettingsOperator.toppaneltoggle();
+				BeatmapBackground.FlashEnable = true;
+				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MarathonMode.tscn");
+			}
+			else if (Input.IsActionJustPressed("retry") && !SettingsOperator.Marathon)
 			{
 				BeatmapBackground.FlashEnable = true;
 				SettingsOperator.toppaneltoggle();

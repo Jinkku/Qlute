@@ -16,6 +16,7 @@ public partial class SongLoadingScreen : Control
 
 	public override void _Ready()
 	{
+		SettingsOperator.Marathon = false;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		ArtificialLoad=GetNode<Timer>("./Timer");
 		Animation=GetNode<AnimationPlayer>("./Wafuk");

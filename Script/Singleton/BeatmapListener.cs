@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 
 public class BeatmapLegend
 {
+	public int ID { get; set; } = 0;
 	public string Title { get; set; } = null;
 	public string Artist { get; set; } = null;
 	public string Mapper { get; set; } = null;

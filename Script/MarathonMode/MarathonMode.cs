@@ -9,6 +9,8 @@ public partial class MarathonMode : ColorRect
     private Label SongCount { get; set; }
     private VBoxContainer ArtistContainer { get; set; }
     private int DiffCount { get; set; } = 0;
+
+	public SettingsOperator SettingsOperator { get; set; }
     private void _changedmode(int value)
     {
         DiffCount = value;
@@ -49,12 +51,13 @@ public partial class MarathonMode : ColorRect
         foreach (Node child in ArtistContainer.GetChildren()) // Remove all children from the ArtistContainer
         {
             child.QueueFree();
+            SettingsOperator.MarathonMapPaths.Clear(); // Clear the marathon map paths
         }
 
-
+        var Artist = new List<string>();
         foreach (BeatmapLegend beatmap in SettingsOperator.Beatmaps)
         {
-            if (beatmap.Levelrating >= Mini && beatmap.Levelrating <= Max)
+            if (beatmap.Levelrating >= Mini && beatmap.Levelrating <= Max && !Artist.Contains(beatmap.Artist))
             {
                 Dur += beatmap.Timetotal;
                 PointsTotal += Math.Max(0, beatmap.pp * per);
@@ -65,6 +68,8 @@ public partial class MarathonMode : ColorRect
                     Text = $"{beatmap.Artist} - {beatmap.Title} [{beatmap.Version}]",
                 };
                 ArtistContainer.AddChild(artistLabel);
+                SettingsOperator.MarathonMapPaths.Add(beatmap.ID); // Add the map path to the marathon map paths
+                Artist.Add(beatmap.Artist); // Add the artist to the list to avoid duplicates
             }
         }
         Duration.Text = "Duration:" + TimeSpan.FromMilliseconds(Dur / AudioPlayer.Instance.PitchScale).ToString(@"hh\:mm\:ss") ?? "00:00:00";
@@ -73,6 +78,8 @@ public partial class MarathonMode : ColorRect
     }
     public override void _Ready()
     {
+		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
+        SettingsOperator.Marathon = true;
         Duration = GetNode<Label>("Panel/HBoxContainer/Settings/SettingsPill/MarathonDuration");
         Points = GetNode<Label>("Panel/HBoxContainer/Settings/SettingsPill/MarathonPoints");
         SongCount = GetNode<Label>("Panel/HBoxContainer/Settings/SettingsPill/MarathonSongCount");
@@ -86,6 +93,8 @@ public partial class MarathonMode : ColorRect
     }
     private void _start()
     {
-        GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
+        SettingsOperator.MarathonID = 0; // Set the first map as the starting point
+        SettingsOperator.SelectSongID(SettingsOperator.MarathonMapPaths[SettingsOperator.MarathonID]);
+        GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/LoadingMarathonScreen.tscn");
     }
 }

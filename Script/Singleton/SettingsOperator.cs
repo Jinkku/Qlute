@@ -79,12 +79,16 @@ public partial class SettingsOperator : Node
         return id;
     }
     public static bool Start_reloadLeaderboard {get; set; } = false;
+    public static List<int> MarathonMapPaths { get; set; } = new List<int>();
+    public static bool Marathon { get; set; } = false; // Marathon mode flag
+    public static int MarathonID { get; set; } = -1; // ID of the current marathon song
     public void SelectSongID(int id)
     {
         if (Beatmaps.ElementAt(id) != null)
         {
             ApiOperator.LeaderboardStatus = 0; // Reset leaderboard status
             ApiOperator.LeaderboardList.Clear(); // Clear the leaderboard list
+            if (!Marathon) MarathonMapPaths.Clear(); // Clear marathon map paths if not in marathon mode
             Start_reloadLeaderboard = true;
             var beatmap = Beatmaps[id];
             Sessioncfg["SongID"] = id;
@@ -265,6 +269,7 @@ public partial class SettingsOperator : Node
             }
         }
         Beatmaps.Add(new BeatmapLegend{
+            ID = Beatmaps.Count,
             Title = songtitle,
             Artist = artist,
             Mapper = mapper,

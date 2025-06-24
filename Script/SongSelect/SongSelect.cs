@@ -7,7 +7,7 @@ public partial class SongSelect : Control
 {
 	// Called when the node enters the scene tree for the first time.
 	 [Export] private TextureRect textureRect;
-	public static SettingsOperator SettingsOperator { get; set; }
+	public SettingsOperator SettingsOperator { get; set; }
 	public PackedScene musiccardtemplate;
 	public Label SongTitle { get; set; }
 	public Label SongArtist { get; set; }
