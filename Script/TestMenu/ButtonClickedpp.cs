@@ -4,8 +4,8 @@ using System.Linq;
 public partial class ButtonClickedpp : Button
 {
     private void _on_pressed(){
-        using var file = FileAccess.Open((string)SettingsOperator.Beatmaps[(int)GetMeta("SongID")]["rawurl"], FileAccess.ModeFlags.Read);
-        var timetotal = (int)SettingsOperator.Beatmaps[(int)GetMeta("SongID")]["timetotal"];
+        using var file = FileAccess.Open((string)SettingsOperator.Beatmaps[(int)GetMeta("SongID")].Rawurl, FileAccess.ModeFlags.Read);
+        var timetotal = SettingsOperator.Beatmaps[(int)GetMeta("SongID")].Timetotal;
         var text = file.GetAsText();
         var lines = text.Split("\n");
         Notify.Post("Clicked "+ GetMeta("SongID"));

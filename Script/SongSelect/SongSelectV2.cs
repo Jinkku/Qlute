@@ -13,13 +13,13 @@ public partial class SongSelectV2 : Control
 		SongBoomBox = GetNode<HBoxContainer>("SongBoomBox");
 
 		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
-		foreach (Dictionary<string, object> beatmap in SettingsOperator.Beatmaps)
+		foreach (BeatmapLegend beatmap in SettingsOperator.Beatmaps)
 		{
 			var Disc = GD.Load<PackedScene>("res://Panels/SongSelectV2/MusicDisc.tscn").Instantiate();//GetNode<>("MusicDisc").SetMeta(beatmap);
-			Disc.SetMeta("songtitle", beatmap["Title"].ToString());
-			Disc.SetMeta("songartist", beatmap["Artist"].ToString());
-			Disc.SetMeta("songmapper", beatmap["Mapper"].ToString());
-			Disc.SetMeta("image", beatmap["path"].ToString()+beatmap["background"].ToString());
+			Disc.SetMeta("songtitle", beatmap.Title);
+			Disc.SetMeta("songartist", beatmap.Artist);
+			Disc.SetMeta("songmapper", beatmap.Mapper);
+			Disc.SetMeta("image", beatmap.Path + beatmap.Background);
 			SongBoomBox.AddChild(Disc);
 		}
 	}

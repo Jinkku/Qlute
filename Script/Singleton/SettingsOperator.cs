@@ -32,7 +32,7 @@ public partial class SettingsOperator : Node
     public static double AllMiliSecondsFromBeatmap {get;set;}
     public static double MiliSecondsFromBeatmap {get;set;}
     public static int MiliSecondsFromBeatmapTimes {get;set;}
-    public static List<Dictionary<string,object>> Beatmaps = new List<Dictionary<string,object>>();
+    public static List<BeatmapLegend> Beatmaps = new List<BeatmapLegend>();
     public Dictionary<string, object> Configuration { get; set; } = new Dictionary<string, object>
     {
         { "scaled", false },
@@ -88,21 +88,21 @@ public partial class SettingsOperator : Node
             Start_reloadLeaderboard = true;
             var beatmap = Beatmaps[id];
             Sessioncfg["SongID"] = id;
-            Sessioncfg["beatmapurl"] = beatmap["rawurl"];
-            Sessioncfg["beatmaptitle"] = beatmap["Title"];
-            Sessioncfg["beatmapartist"] = beatmap["Artist"];
-            Sessioncfg["beatmapdiff"] = beatmap["Version"];
-            Sessioncfg["beatmapbpm"] = beatmap["bpm"];
-            Gameplaycfg["timetotal"] = (int)beatmap["timetotal"];
-            Sessioncfg["beatmapmapper"] = beatmap["Mapper"];
-            Sessioncfg["beatmapaccuracy"] = (int)beatmap["accuracy"];
-            Sessioncfg["levelrating"] = (double)beatmap["levelrating"];
-            Sessioncfg["osubeatid"] = (int)beatmap["osubeatid"];
-            Sessioncfg["osubeatidset"] = (int)beatmap["osubeatidset"];
-            var Texture = LoadImage(beatmap["path"].ToString() + beatmap["background"].ToString());
+            Sessioncfg["beatmapurl"] = beatmap.Rawurl;
+            Sessioncfg["beatmaptitle"] = beatmap.Title;
+            Sessioncfg["beatmapartist"] = beatmap.Artist;
+            Sessioncfg["beatmapdiff"] = beatmap.Version;
+            Sessioncfg["beatmapbpm"] = (int)beatmap.Bpm;
+            Gameplaycfg["timetotal"] = (int)beatmap.Timetotal;
+            Sessioncfg["beatmapmapper"] = beatmap.Mapper;
+            Sessioncfg["beatmapaccuracy"] = (int)beatmap.Accuracy;
+            Sessioncfg["levelrating"] = (float)beatmap.Levelrating;
+            Sessioncfg["osubeatid"] = (int)beatmap.Osubeatid;
+            Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
+            var Texture = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
             Sessioncfg["background"] = (Texture2D)Texture;
-            Gameplaycfg["maxpp"] = Convert.ToInt32(beatmap["pp"]);
-            string audioPath = beatmap["path"] + "" + beatmap["audio"];
+            Gameplaycfg["maxpp"] = Convert.ToInt32(beatmap.pp);
+            string audioPath = beatmap.Path + "" + beatmap.Audio;
             if (System.IO.File.Exists(audioPath))
             {
                 AudioStream filestream = null;
@@ -155,7 +155,7 @@ public partial class SettingsOperator : Node
         int qlbeatidset = 0;
         double ppvalue = 0;
         string mapper = "";
-        double levelrating = 0;
+        float levelrating = 0;
         int notetime = 0;
         string background = "";
         string audio = "";
@@ -254,7 +254,7 @@ public partial class SettingsOperator : Node
                 {
                     ppvalue = Get_ppvalue(hitob,0,0,0,combo: hitob);
                     isHitObjectSection = !isHitObjectSection;
-                    levelrating = hitob * 0.005;
+                    levelrating = hitob * 0.005f;
                     timetotal = notetime;
                     break;
                 }
@@ -264,26 +264,26 @@ public partial class SettingsOperator : Node
                 hitob++;
             }
         }
-		Beatmaps.Add(new Dictionary<string, object>{
-            { "Title", songtitle },
-            { "Artist", artist },
-            { "Mapper", mapper },
-            { "KeyCount", keycount },
-            { "Version", version },
-            { "pp", ppvalue },
-            { "osubeatid", osubeatid },
-            { "osubeatidset", osubeatidset },
-            { "beatid", qlbeatid },
-            { "beatidset", qlbeatidset },
-            { "bpm", bpm },
-            { "dance", dance },
-            { "timetotal", (int)timetotal },
-            { "levelrating", levelrating },
-            { "accuracy", accuracy},
-            { "background", background },
-            { "audio", audio },
-            { "rawurl", rawurl },
-            { "path", path },
+        Beatmaps.Add(new BeatmapLegend{
+            Title = songtitle,
+            Artist = artist,
+            Mapper = mapper,
+            KeyCount = keycount,
+            Version = version,
+            pp = ppvalue,
+            Osubeatid = osubeatid,
+            Osubeatidset = osubeatidset,
+            Beatid = qlbeatid,
+            Beatidset = qlbeatidset,
+            Bpm = bpm,
+            Dance = dance,
+            Timetotal = timetotal,
+            Levelrating = levelrating,
+            Accuracy = accuracy,
+            Background = background,
+            Audio = audio,
+            Rawurl = rawurl,
+            Path = path
         });
     }
     public static void ResetScore(){

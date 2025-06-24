@@ -16,10 +16,10 @@ public class BeatmapLegend
 	public int Osubeatidset { get; set; } = -1;
 	public int Beatid { get; set; } = -1; // Beatmap ID for Qlute-made beatmaps
 	public int Beatidset { get; set; } = -1; // Beatmap ID for Qlute-made beatmaps
-	public double Bpm { get; set; } = 0.0;
+	public float Bpm { get; set; } = 0.0f;
 	public List<DanceCounter> Dance { get; set; } = new List<DanceCounter>();
 	public int Timetotal { get; set; } = 0; // in milliseconds
-	public double Levelrating { get; set; } = 0.0; // Level rating for the beatmap
+	public float Levelrating { get; set; } = 0.0f; // Level rating for the beatmap
 	public double Accuracy { get; set; } = 0.0; // Accuracy Level for the beatmap (not been used yet)
 	public string Background { get; set; } = null; // Background image path
 	public string Audio { get; set; } = null; // Audio file path

@@ -5,7 +5,6 @@ using NVorbis;
 public partial class AudioPlayer : AudioStreamPlayer
 {
     public static AudioStreamPlayer Instance;
-    private static VorbisReader _vorbisReader;
     private bool _isPlaying = false;
     public static bool _isogg = false;
     private float _seekPosition = 0.0f;

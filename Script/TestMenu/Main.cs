@@ -34,10 +34,10 @@ public partial class Main : Control
 		PostMarks.Add(Markings);
 		GraphBars.Add(Bars);
 	}
-	foreach (var file in SettingsOperator.Beatmaps)
+	foreach (BeatmapLegend file in SettingsOperator.Beatmaps)
 	{
 		var button = ResourceLoader.Load<PackedScene>("res://Panels/Testing/TestButtonpp.tscn").Instantiate().GetNode<Button>(".");
-		button.Text = file["Title"].ToString();
+		button.Text = file.Title;
 		button.SetMeta("SongID",tick);
 //		button.Connect("pressed", this, "debugbuttonpressed");
 		panelContainer.AddChild(button);

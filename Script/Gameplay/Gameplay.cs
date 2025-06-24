@@ -135,7 +135,7 @@ public partial class Gameplay : Control
 		//var note = noteblock.GetNode<Area2D>(".");
 		//var notetexture = noteblock.GetNode<Sprite2D>("./Notetext");
 		//notetexture.Texture = GD.Load<Texture2D>("res://Skin/Game/note.svg");
-		dance = (IEnumerable<DanceCounter>)SettingsOperator.Beatmaps[(int)SettingsOperator.Sessioncfg["SongID"]]["dance"];
+		dance = (IEnumerable<DanceCounter>)SettingsOperator.Beatmaps[(int)SettingsOperator.Sessioncfg["SongID"]].Dance;
         foreach (string line in lines)
         {
             if (line.Trim() == "[HitObjects]")

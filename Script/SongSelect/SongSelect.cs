@@ -67,7 +67,7 @@ public partial class SongSelect : Control
 		var button = musiccardtemplate.Instantiate();
 		GetNode<Control>("SongPanel").AddChild(button);
 		SongEntry.Add(button);
-		var background = SettingsOperator.Beatmaps[id]["path"].ToString()+SettingsOperator.Beatmaps[id]["background"].ToString();
+		var background = SettingsOperator.Beatmaps[id].Path + SettingsOperator.Beatmaps[id].Background;
 		var childButton = button.GetNode<Button>(".");
 		var SongTitle = button.GetNode<Label>("MarginContainer/VBoxContainer/SongTitle");
 		var SongArtist = button.GetNode<Label>("MarginContainer/VBoxContainer/SongArtist");
@@ -76,11 +76,11 @@ public partial class SongSelect : Control
 		var Rating = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBox/Rating");
 		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBox/Version");
 		childButton.Position = new Vector2(0, startposition + (83*id));
-		SongTitle.Text = SettingsOperator.Beatmaps[id]["Title"].ToString();
-		SongArtist.Text = SettingsOperator.Beatmaps[id]["Artist"].ToString();
-		SongMapper.Text = "Created by " + SettingsOperator.Beatmaps[id]["Mapper"].ToString();
-		Version.Text = SettingsOperator.Beatmaps[id]["Version"].ToString();
-		Rating.Text = "Lv. " + float.Parse(SettingsOperator.Beatmaps[id]["levelrating"].ToString()).ToString("0");
+		SongTitle.Text = SettingsOperator.Beatmaps[id].Title;
+		SongArtist.Text = SettingsOperator.Beatmaps[id].Artist;
+		SongMapper.Text = "Created by " + SettingsOperator.Beatmaps[id].Mapper;
+		Version.Text = SettingsOperator.Beatmaps[id].Version.ToString();
+		Rating.Text = "Lv. " + SettingsOperator.Beatmaps[id].Levelrating.ToString("0");
 		childButton.Name = id.ToString();
 		childButton.ClipText = true;
 		childButton.SetMeta("bg", background);
