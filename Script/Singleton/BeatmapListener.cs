@@ -6,25 +6,25 @@ using System.Runtime.CompilerServices;
 
 public class BeatmapLegend
 {
-	public string Title { get; set; }
-	public string Artist { get; set; }
-	public string Mapper { get; set; }
-	public int KeyCount { get; set; }
-	public string Version { get; set; }
-	public double pp { get; set; }
-	public int Osubeatid { get; set; }
-	public int Osubeatidset { get; set; }
-	public int Beatid { get; set; }
-	public int Beatidset { get; set; }
-	public double Bpm { get; set; }
-	public List<DanceCounter> Dance { get; set; }
-	public int Timetotal { get; set; }
-	public double Levelrating { get; set; }
-	public double Accuracy { get; set; }
-	public string Background { get; set; }
-	public string Audio { get; set; }
-	public string Rawurl { get; set; }
-	public string Rath { get; set; }
+	public string Title { get; set; } = null;
+	public string Artist { get; set; } = null;
+	public string Mapper { get; set; } = null;
+	public int KeyCount { get; set; } = 4;
+	public string Version { get; set; } = null;
+	public double pp { get; set; } = 0.0;
+	public int Osubeatid { get; set; } = -1; // osu!mania compatibility
+	public int Osubeatidset { get; set; } = -1;
+	public int Beatid { get; set; } = -1; // Beatmap ID for Qlute-made beatmaps
+	public int Beatidset { get; set; } = -1; // Beatmap ID for Qlute-made beatmaps
+	public double Bpm { get; set; } = 0.0;
+	public List<DanceCounter> Dance { get; set; } = new List<DanceCounter>();
+	public int Timetotal { get; set; } = 0; // in milliseconds
+	public double Levelrating { get; set; } = 0.0; // Level rating for the beatmap
+	public double Accuracy { get; set; } = 0.0; // Accuracy Level for the beatmap (not been used yet)
+	public string Background { get; set; } = null; // Background image path
+	public string Audio { get; set; } = null; // Audio file path
+	public string Rawurl { get; set; } = null; // Raw URL for the beatmap, used for downloading
+	public string Path { get; set; } = null; // Path for the beatmap
 }
 public partial class BeatmapListener : Node
 {
