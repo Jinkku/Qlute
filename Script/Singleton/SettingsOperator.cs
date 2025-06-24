@@ -345,6 +345,7 @@ public partial class SettingsOperator : Node
         { "loggingin", false },
         { "showaccountpro", false },
         { "settingspanelv", false },
+        { "chatboxv", false },
         { "notificationpanelv", false },
         { "ranknumber", null },
 		{ "playercolour", null },

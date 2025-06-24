@@ -1,0 +1,208 @@
+[gd_scene load_steps=13 format=3 uid="uid://d3gt5fc6h256t"]
+
+[ext_resource type="Texture2D" uid="uid://c1tk38b5u5ps5" path="res://Skin/System/chat2x.png" id="1_0r8ct"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wb4tt"]
+bg_color = Color(0.176471, 0.137255, 0.407843, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lxvh4"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.286275, 0.247059, 0.529412, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xs1ts"]
+bg_color = Color(0.121569, 0.0941176, 0.254902, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eye8f"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.25098)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_771wj"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.156863)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iha2g"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.156863)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nsfte"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.25098)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2a1my"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0r8ct"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lxvh4"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2rbjs"]
+content_margin_left = 5.0
+content_margin_right = 5.0
+bg_color = Color(0, 0, 0, 0.470588)
+
+[node name="ChatOverlay" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 254)
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wb4tt")
+
+[node name="ChatV" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Title" type="PanelContainer" parent="ChatV"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lxvh4")
+
+[node name="TitleH" type="HBoxContainer" parent="ChatV/Title"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="ChatV/Title/TitleH"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("1_0r8ct")
+expand_mode = 4
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="ChatV/Title/TitleH"]
+layout_mode = 2
+text = "Qlute/chat"
+
+[node name="ChatSect" type="HBoxContainer" parent="ChatV"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="ChatRooms" type="PanelContainer" parent="ChatV/ChatSect"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xs1ts")
+
+[node name="ChatScroll" type="ScrollContainer" parent="ChatV/ChatSect/ChatRooms"]
+layout_mode = 2
+
+[node name="ChatRoomV" type="VBoxContainer" parent="ChatV/ChatSect/ChatRooms/ChatScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="Local" type="Label" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_eye8f")
+text = "Local"
+
+[node name="ChatRoom4" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
+text = "SweetyTweety"
+alignment = 0
+
+[node name="PublicChannels" type="Label" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_eye8f")
+text = "Public Channels"
+
+[node name="ChatRoom" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
+text = "#general"
+alignment = 0
+
+[node name="ChatRoom2" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
+text = "#off-topic"
+alignment = 0
+
+[node name="ChatRoom3" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
+text = "#anime"
+alignment = 0
+
+[node name="Friends" type="Label" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_eye8f")
+text = "Friends"
+
+[node name="ChatRoom6" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
+text = "SweetyTweety"
+alignment = 0
+
+[node name="ChatRoom5" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
+text = "Epicgamer92"
+alignment = 0
+
+[node name="ChatTextS" type="PanelContainer" parent="ChatV/ChatSect"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0r8ct")
+
+[node name="ChatTextSV" type="VBoxContainer" parent="ChatV/ChatSect/ChatTextS"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="ChatText" type="ScrollContainer" parent="ChatV/ChatSect/ChatTextS/ChatTextSV"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_lxvh4")
+
+[node name="ChatTextV" type="VBoxContainer" parent="ChatV/ChatSect/ChatTextS/ChatTextSV/ChatText"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LineEdit" type="LineEdit" parent="ChatV/ChatSect/ChatTextS/ChatTextSV"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_2rbjs")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2rbjs")
+placeholder_text = "You are chatting as: Guest"

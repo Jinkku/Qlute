@@ -333,6 +333,7 @@ icon_alignment = 1
 [connection signal="pressed" from="InfoBar/AccountButton" to="InfoBar/HBoxContainer/Settings" method="_on_AccountButton_pressed"]
 [connection signal="pressed" from="InfoBar/HBoxContainer/MusicPlayer" to="InfoBar" method="_on_browse_pressed"]
 [connection signal="pressed" from="InfoBar/HBoxContainer/Browse" to="InfoBar" method="_on_browse_pressed"]
+[connection signal="pressed" from="InfoBar/HBoxContainer/Chat" to="InfoBar" method="_ChatRoom"]
 [connection signal="pressed" from="InfoBar/HBoxContainer/Settings" to="InfoBar/HBoxContainer/Settings" method="_settings_pressed"]
 [connection signal="ready" from="InfoBar/HBoxContainer/Settings" to="InfoBar/HBoxContainer/Settings" method="ready"]
 [connection signal="pressed" from="InfoBar/HBoxContainer/Notifications" to="InfoBar/HBoxContainer/Settings" method="_on_notifications"]
