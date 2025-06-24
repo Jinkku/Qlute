@@ -28,6 +28,7 @@ offset_right = 6.0
 offset_bottom = -50.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 
 [node name="Key1" type="PanelContainer" parent="KeyBoxes"]
 modulate = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
@@ -61,25 +62,30 @@ anchor_bottom = 1.0
 offset_bottom = -200.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="Section1" type="ColorRect" parent="ChartSections"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+mouse_filter = 1
 color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
 
 [node name="Section2" type="ColorRect" parent="ChartSections"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+mouse_filter = 1
 color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
 
 [node name="Section3" type="ColorRect" parent="ChartSections"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+mouse_filter = 1
 color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
 
 [node name="Section4" type="ColorRect" parent="ChartSections"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+mouse_filter = 1
 color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
 
 [node name="Guard" type="ColorRect" parent="."]
@@ -95,3 +101,4 @@ offset_right = 6.0
 offset_bottom = -200.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2

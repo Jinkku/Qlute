@@ -13,6 +13,16 @@ public partial class Create : Control
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
 
 	}
+	private void _enter()
+	{
+		var s = GetNode<Label>("Info/ContextSections/Na");
+		s.Text = "on!";
+	}
+		private void _off()
+	{
+		var s = GetNode<Label>("Info/ContextSections/Na");
+		s.Text = "off";
+	}
 	public override void _Process(double delta)
 	{
 	}
