@@ -1,7 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://cfg55dbl1ip8a"]
+[gd_scene load_steps=3 format=3 uid="uid://cfg55dbl1ip8a"]
 
-[ext_resource type="Texture2D" uid="uid://beg5x4bfct3fv" path="res://Skin/Game/note.svg" id="1_3mpj0"]
+[ext_resource type="Texture2D" uid="uid://b7cvsrsyj4lkm" path="res://Skin/Game/Backgroundnote.svg" id="1_8hoci"]
+[ext_resource type="Texture2D" uid="uid://cr32g3qxi1a4c" path="res://Skin/Game/Foregroundnote.svg" id="2_02252"]
 
-[node name="Note" type="Sprite2D"]
-texture = ExtResource("1_3mpj0")
+[node name="NoteBack" type="Sprite2D"]
+texture = ExtResource("1_8hoci")
+centered = false
+
+[node name="NoteFront" type="Sprite2D" parent="."]
+texture = ExtResource("2_02252")
 centered = false

@@ -132,9 +132,6 @@ public partial class Gameplay : Control
 		var t = "";
 		var timen = -1;
         var isHitObjectSection = false;
-		//var note = noteblock.GetNode<Area2D>(".");
-		//var notetexture = noteblock.GetNode<Sprite2D>("./Notetext");
-		//notetexture.Texture = GD.Load<Texture2D>("res://Skin/Game/note.svg");
 		dance = (IEnumerable<DanceCounter>)SettingsOperator.Beatmaps[(int)SettingsOperator.Sessioncfg["SongID"]].Dance;
         foreach (string line in lines)
         {
@@ -326,24 +323,18 @@ public partial class Gameplay : Control
 					Noteindex++;
 					timepart = Note.timing;
 				}
-				if (!Note.hit && Note.Node == null)
-				{
-					var node = new Sprite2D();
-					node.SetMeta("part", Note.NoteSection);
-					node.Centered = false;
-					node.SelfModulate = new Color(0.83f, 0f, 1f);
-					node.Texture = NoteSkinBack;
-					Note.Node = node;
-				}
 				if (notex > -150 && notex < viewportSize + 150 && !Note.hit)
 				{
-					if (Note.Node != null && !Note.Node.IsInsideTree())
+					if (!Note.hit && Note.Node == null)
 					{
-						GetNode<ColorRect>($"Playfield/ChartSections/Section{(int)Note.Node.GetMeta("part") + 1}").AddChild(Note.Node);
-						var SkinFore = new Sprite2D();
-						SkinFore.Centered = false;
-						SkinFore.Texture = NoteSkinFore;
-						Note.Node.AddChild(SkinFore);
+						var playfieldpart = GetNode<ColorRect>($"Playfield/ChartSections/Section{Note.NoteSection + 1}");
+						Note.Node = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Sprite2D>(".");
+						Note.Node.SetMeta("part", Note.NoteSection);
+						Note.Node.SelfModulate = new Color(0.83f, 0f, 1f);
+						Note.Node.Texture = NoteSkinBack;
+						var notefront = Note.Node.GetNode<Sprite2D>("NoteFront");
+						notefront.Texture = NoteSkinFore;
+						playfieldpart.AddChild(Note.Node);
 					}
 					if (Note.Node != null && (int)notex + nodeSize > Chart.Size.Y && (int)notex + nodeSize < Chart.Size.Y + MehJudge && ModsOperator.Mods["auto"])
 					{
