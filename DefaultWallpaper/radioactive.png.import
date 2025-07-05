@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b8q15qdd3vh05"
-path="res://.godot/imported/d.png-a239236afc361f23b2b66d1d594de7a7.ctex"
+uid="uid://lkv5lbfl8asn"
+path="res://.godot/imported/radioactive.png-35e9f9dff8fe5a4a9095638cfc49380c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://DefaultWallpaper/d.png"
-dest_files=["res://.godot/imported/d.png-a239236afc361f23b2b66d1d594de7a7.ctex"]
+source_file="res://DefaultWallpaper/radioactive.png"
+dest_files=["res://.godot/imported/radioactive.png-35e9f9dff8fe5a4a9095638cfc49380c.ctex"]
 
 [params]
 
