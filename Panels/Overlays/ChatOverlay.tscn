@@ -91,7 +91,7 @@ stretch_mode = 4
 
 [node name="Label" type="Label" parent="ChatV/Title/TitleH"]
 layout_mode = 2
-text = "Qlute/chat"
+text = "Qlute/chat (beta)"
 
 [node name="ChatSect" type="HBoxContainer" parent="ChatV"]
 layout_mode = 2
@@ -113,11 +113,13 @@ size_flags_vertical = 3
 theme_override_constants/separation = 0
 
 [node name="Local" type="Label" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+visible = false
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_eye8f")
 text = "Local"
 
 [node name="ChatRoom4" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+visible = false
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
 theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
@@ -127,11 +129,13 @@ text = "SweetyTweety"
 alignment = 0
 
 [node name="PublicChannels" type="Label" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+visible = false
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_eye8f")
 text = "Public Channels"
 
 [node name="ChatRoom" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+visible = false
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
 theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
@@ -141,6 +145,7 @@ text = "#general"
 alignment = 0
 
 [node name="ChatRoom2" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+visible = false
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
 theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
@@ -150,6 +155,7 @@ text = "#off-topic"
 alignment = 0
 
 [node name="ChatRoom3" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+visible = false
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
 theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
@@ -159,11 +165,13 @@ text = "#anime"
 alignment = 0
 
 [node name="Friends" type="Label" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+visible = false
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_eye8f")
 text = "Friends"
 
 [node name="ChatRoom6" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+visible = false
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
 theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
@@ -173,6 +181,7 @@ text = "SweetyTweety"
 alignment = 0
 
 [node name="ChatRoom5" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+visible = false
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
 theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
@@ -181,7 +190,16 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
 text = "Epicgamer92"
 alignment = 0
 
+[node name="Beta" type="Label" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Please check later!
+;w;"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="ChatTextS" type="PanelContainer" parent="ChatV/ChatSect"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_0r8ct")
