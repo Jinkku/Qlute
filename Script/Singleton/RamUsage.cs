@@ -6,10 +6,12 @@ public partial class RamUsage : PanelContainer
 	// Called when the node enters the scene tree for the first time.
 	public Label  FreeRam {get;set;}
 	public Label  UsedRam {get;set;}
+	public Label  RealFPS {get;set;}
 	public Label  TotalRam {get;set;}
 	public override void _Ready()
 	{
-		FreeRam = GetNode<Label>("VSplit/FreeT/Free");
+		UsedRam = GetNode<Label>("VSplit/UsedT/Used");
+		RealFPS = GetNode<Label>("VSplit/RealtimeFPS/FPS");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -27,7 +29,8 @@ public partial class RamUsage : PanelContainer
 	public override void _Process(double delta)
 	{
 		Vector2 mpos = GetViewport().GetMousePosition();
-		FreeRam.Text = ConvertBytes(((int)OS.GetStaticMemoryUsage()));
+		UsedRam.Text = ConvertBytes(((int)OS.GetStaticMemoryUsage()));
+		RealFPS.Text = (1 / delta).ToString("0") + "fps";
 		Position = mpos-Size;
 	}
 }

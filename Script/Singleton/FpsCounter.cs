@@ -42,7 +42,7 @@ public partial class FpsCounter : PanelContainer
 		Latency.Text = " \n" + lat.ToString("0.00")+ "ms";
 	}
 	private void _on_mouse_entered(){
-		RamUsage = GD.Load<PackedScene>("res://Panels/Overlays/ramusage.tscn").Instantiate().GetNode<PanelContainer>(".");
+		RamUsage = GD.Load<PackedScene>("res://Panels/Overlays/ExtendedDetails.tscn").Instantiate().GetNode<PanelContainer>(".");
 		GetTree().CurrentScene.AddChild(RamUsage);
 
 	}private void _on_mouse_exited(){
