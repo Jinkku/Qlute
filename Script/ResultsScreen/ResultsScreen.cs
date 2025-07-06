@@ -18,6 +18,7 @@ public partial class ResultsScreen : Control
 	public Label Accuracy { get; set; }
 	public Label Avgms { get; set; }
 	public Label AccuracyMedal { get; set; }
+	public Label Username { get; set; }
 	public TextureRect AccuracyPanel { get; set; }
 	public string AccM {get;set;}
 	public override void _Ready()
@@ -28,6 +29,7 @@ public partial class ResultsScreen : Control
 		SongDiff = GetNode<Label>("AlertBox/Box/Difficulty");
 		SongMapper = GetNode<Label>("AlertBox/Box/Creator");
 		pp = GetNode<Label>("AlertBox/Box/Info/pp/VC/Text");
+		Username = GetNode<Label>("AlertBox/Box/Username");
 		Score = GetNode<Label>("AlertBox/Box/Score");
 		Max = GetNode<Label>("AlertBox/Box/Info/MAX/VC/Text");
 		Great = GetNode<Label>("AlertBox/Box/Info/GREAT/VC/Text");
@@ -38,6 +40,7 @@ public partial class ResultsScreen : Control
 		Avgms = GetNode<Label>("AlertBox/Box/Info/AvgHit/VC/Text");
 		AccuracyPanel = GetNode<TextureRect>("AlertBox/Box/Rank");
 		AccuracyMedal = GetNode<Label>("AlertBox/Box/Rank/Medal");
+		Username.Text = ApiOperator.Username;
 		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No Beatmaps Selected";
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "Please select a Beatmap!";
 		SongMapper.Text = "Creator: " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString();
