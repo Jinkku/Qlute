@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using System.IO;
+using System.Threading.Tasks;
 
 public partial class MusicCard : Button
 {
@@ -12,13 +14,25 @@ public partial class MusicCard : Button
 	public TextureRect Preview { get; set; }
 	public int SongID { get; set; }
 	public int waitt = 0;
-	public override void _Ready()
+	public static Task LoadImage(string path, Action<Texture2D> callback)
+	{
+		callback(SettingsOperator.LoadImage(path));
+		return Task.CompletedTask;
+	}
+	public async override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		self = GetNode<Button>(".");
 		Cover = GetTree().Root.GetNode<TextureRect>("Song Select/BeatmapBackground");
-		Preview = GetNode<TextureRect>("./SongBackgroundPreview/BackgroundPreview");
-
+		Preview = GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
+		GD.Print(self.GetMeta("background"));
+		if (self.HasMeta("background"))
+		{
+			await LoadImage(self.GetMeta("background").ToString(), (Texture2D texture) =>
+			{
+				Preview.Texture = texture;
+			});
+		}
 		// Check if "SongID" metadata exists, if not, set it to 0
 		if (!self.HasMeta("SongID"))
 		{

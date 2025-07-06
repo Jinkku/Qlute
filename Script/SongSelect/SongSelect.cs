@@ -64,31 +64,30 @@ public partial class SongSelect : Control
 	public void AddSongList(int id)
 	{
 		
-		var button = musiccardtemplate.Instantiate();
-		GetNode<Control>("SongPanel").AddChild(button);
-		SongEntry.Add(button);
 		var background = SettingsOperator.Beatmaps[id].Path + SettingsOperator.Beatmaps[id].Background;
-		var childButton = button.GetNode<Button>(".");
+		var button = musiccardtemplate.Instantiate().GetNode<Button>(".");
 		var SongTitle = button.GetNode<Label>("MarginContainer/VBoxContainer/SongTitle");
 		var SongArtist = button.GetNode<Label>("MarginContainer/VBoxContainer/SongArtist");
 		var SongMapper = button.GetNode<Label>("MarginContainer/VBoxContainer/SongMapper");
 		var TextureRect = button.GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
 		var Rating = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBox/Rating");
 		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBox/Version");
-		childButton.Position = new Vector2(0, startposition + (83*id));
+		button.Position = new Vector2(0, startposition + (83*id));
 		SongTitle.Text = SettingsOperator.Beatmaps[id].Title;
 		SongArtist.Text = SettingsOperator.Beatmaps[id].Artist;
 		SongMapper.Text = "Created by " + SettingsOperator.Beatmaps[id].Mapper;
 		Version.Text = SettingsOperator.Beatmaps[id].Version.ToString();
 		Rating.Text = "Lv. " + SettingsOperator.Beatmaps[id].Levelrating.ToString("0");
-		childButton.Name = id.ToString();
-		childButton.ClipText = true;
-		childButton.SetMeta("bg", background);
-		childButton.SetMeta("SongID", id);
-		if (background != ImageURL){
-			ImageCache = SettingsOperator.LoadImage(background);
-		}
-		TextureRect.Texture = ImageCache;
+		button.Name = id.ToString();
+		button.ClipText = true;
+		button.SetMeta("background", background);
+		button.SetMeta("SongID", id);
+		GetNode<Control>("SongPanel").AddChild(button);
+		SongEntry.Add(button);
+		//if (background != ImageURL){
+		//	ImageCache = SettingsOperator.LoadImage(background);
+		//}
+		//TextureRect.Texture = ImageCache;
 	}
 	private void _on_random(){
 		SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
