@@ -25,7 +25,6 @@ public partial class MusicCard : Button
 		self = GetNode<Button>(".");
 		Cover = GetTree().Root.GetNode<TextureRect>("Song Select/BeatmapBackground");
 		Preview = GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
-		GD.Print(self.GetMeta("background"));
 		if (self.HasMeta("background"))
 		{
 			await LoadImage(self.GetMeta("background").ToString(), (Texture2D texture) =>
