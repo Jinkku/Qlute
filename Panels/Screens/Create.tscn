@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://dnxlc61trat1l"]
+[gd_scene load_steps=33 format=3 uid="uid://dnxlc61trat1l"]
 
 [ext_resource type="Script" uid="uid://cdhm1bqkq60y3" path="res://Script/LevelEditor/Create.cs" id="1_4dycg"]
 [ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="1_s6crp"]
@@ -48,6 +48,9 @@ content_margin_left = 5.0
 content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lwg7d"]
+content_margin_right = 15.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_elvf5"]
 content_margin_left = 5.0
@@ -285,6 +288,14 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_pjdex")
 theme_override_styles/normal = SubResource("StyleBoxFlat_5cjqt")
 text = "View"
 
+[node name="Label2" type="Label" parent="ToolBar/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.945312, 1, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_lwg7d")
+text = "Note: Some function will not work!"
+horizontal_alignment = 2
+
 [node name="Creativity" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 9
@@ -353,6 +364,7 @@ layout_mode = 2
 text = "0 Notes"
 
 [node name="Na" type="Label" parent="Info/ContextSections"]
+visible = false
 layout_mode = 2
 text = "0"
 
@@ -406,11 +418,18 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_lwg7d")
 theme_override_styles/normal = SubResource("StyleBoxFlat_vy1ai")
 text = "Test"
 
-[connection signal="mouse_entered" from="Ground/Playfield" to="." method="_enter"]
-[connection signal="mouse_exited" from="Ground/Playfield" to="." method="_off"]
+[connection signal="mouse_entered" from="Ground/Playfield/ChartSections/Section1" to="." method="_enter" binds= [0]]
+[connection signal="mouse_exited" from="Ground/Playfield/ChartSections/Section1" to="." method="_off" binds= [0]]
+[connection signal="mouse_entered" from="Ground/Playfield/ChartSections/Section2" to="." method="_enter" binds= [1]]
+[connection signal="mouse_exited" from="Ground/Playfield/ChartSections/Section2" to="." method="_off" binds= [1]]
+[connection signal="mouse_entered" from="Ground/Playfield/ChartSections/Section3" to="." method="_enter" binds= [2]]
+[connection signal="mouse_exited" from="Ground/Playfield/ChartSections/Section3" to="." method="_off" binds= [2]]
+[connection signal="mouse_entered" from="Ground/Playfield/ChartSections/Section4" to="." method="_enter" binds= [3]]
+[connection signal="mouse_exited" from="Ground/Playfield/ChartSections/Section4" to="." method="_off" binds= [3]]
 [connection signal="toggled" from="ToolBar/HBoxContainer/File" to="." method="_pressed"]
 [connection signal="toggled" from="ToolBar/HBoxContainer/File/ContextMenu/ContextSections/New" to="ToolBar/HBoxContainer/File/ContextMenu" method="_new"]
 [connection signal="pressed" from="ControlPanel/Box/Button" to="." method="_on_back"]
 [connection signal="pressed" from="ControlPanel/Box/Test" to="." method="_on_back"]
 
 [editable path="BeatmapBackground"]
+[editable path="Ground/Playfield"]
