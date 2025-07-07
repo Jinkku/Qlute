@@ -446,6 +446,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="Replay" type="Button" parent="PlayerButtons/Options"]
+visible = false
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
@@ -473,6 +474,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_rvt4u")
 text = "Continue"
 
 [node name="AddCollection" type="Button" parent="PlayerButtons/Options"]
+visible = false
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
