@@ -1,12 +1,22 @@
-[gd_scene load_steps=18 format=3 uid="uid://ddoobud01aev"]
+[gd_scene load_steps=21 format=3 uid="uid://ddoobud01aev"]
 
-[ext_resource type="Texture2D" uid="uid://ccy66a722j6xe" path="res://DefaultWallpaper/b.png" id="1_8h4jc"]
+[ext_resource type="Texture2D" uid="uid://fgbtqxkt8lm" path="res://DefaultWallpaper/attack.png" id="1_8h4jc"]
 [ext_resource type="Script" uid="uid://csn1oydkld5la" path="res://Script/Browse/BeatmapInfo.cs" id="1_60ltk"]
 [ext_resource type="Texture2D" uid="uid://bx4ufaujlqpm8" path="res://Skin/System/download.png" id="1_on5xq"]
 [ext_resource type="Texture2D" uid="uid://b6hfhv5kwa3oi" path="res://Skin/System/heart.png" id="2_8h4jc"]
+[ext_resource type="Script" uid="uid://cdcldgnst0tvx" path="res://Script/Browse/DownloadProcess.cs" id="4_5idjq"]
 [ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="4_osl5l"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_osl5l"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eeb1h"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.160236, 0.131882, 0.167969, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_60ltk"]
 content_margin_left = 10.0
@@ -58,6 +68,8 @@ corner_radius_top_left = 15
 corner_radius_top_right = 15
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b8x4y"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7hhbs"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_60ltk"]
 
@@ -142,18 +154,22 @@ theme_override_constants/separation = 10
 [node name="Download" type="Button" parent="Pill/Padding/Info/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_osl5l")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_eeb1h")
 theme_override_styles/hover = SubResource("StyleBoxFlat_60ltk")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_5idjq")
 theme_override_styles/normal = SubResource("StyleBoxFlat_at4uj")
 text = "Download"
 icon = ExtResource("1_on5xq")
+script = ExtResource("4_5idjq")
 
 [node name="Favorite" type="Button" parent="Pill/Padding/Info/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_osl5l")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_eeb1h")
 theme_override_styles/hover = SubResource("StyleBoxFlat_60ltk")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_5idjq")
 theme_override_styles/normal = SubResource("StyleBoxFlat_at4uj")
+disabled = true
 text = "Favorite"
 icon = ExtResource("2_8h4jc")
 
@@ -182,9 +198,18 @@ text = "Comment Section"
 horizontal_alignment = 1
 
 [node name="LineEdit" type="LineEdit" parent="Pill/Padding/Info/HBoxContainer2/Comment Section/CommentContent"]
+visible = false
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_b8x4y")
 placeholder_text = "\"This beatmap is so crazy\" - aquapoki"
+
+[node name="PCBL" type="Label" parent="Pill/Padding/Info/HBoxContainer2/Comment Section/CommentContent"]
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_styles/normal = SubResource("StyleBoxEmpty_7hhbs")
+text = "Please come back later!"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="PanelContainer2" type="PanelContainer" parent="Pill/Padding/Info/HBoxContainer2"]
 custom_minimum_size = Vector2(300, 300)
@@ -200,6 +225,14 @@ layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_38xqh")
 text = "Votes"
 horizontal_alignment = 1
+
+[node name="PCBL" type="Label" parent="Pill/Padding/Info/HBoxContainer2/PanelContainer2/PH"]
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_styles/normal = SubResource("StyleBoxEmpty_7hhbs")
+text = "Please come back later!"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Back" type="Button" parent="."]
 custom_minimum_size = Vector2(108, 50)
@@ -217,4 +250,5 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_secoq")
 text = "  Back"
 icon = ExtResource("4_osl5l")
 
+[connection signal="pressed" from="Pill/Padding/Info/HBoxContainer/Download" to="Pill/Padding/Info/HBoxContainer/Download" method="_download"]
 [connection signal="pressed" from="Back" to="." method="_close"]
