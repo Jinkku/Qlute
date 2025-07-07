@@ -1,9 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://dgy27wulmugfs"]
+[gd_scene load_steps=12 format=3 uid="uid://dgy27wulmugfs"]
 
 [ext_resource type="Script" uid="uid://dtqpa0tsirnjp" path="res://Script/SongLoadingScreen/SongLoadingScreen.cs" id="1_2kt4t"]
 [ext_resource type="Texture2D" uid="uid://sfbrs7c6t7dr" path="res://DefaultWallpaper/future.png" id="1_4pmu1"]
-[ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="2_h8mlh"]
 [ext_resource type="Script" uid="uid://c3epg1qy8dum3" path="res://Script/SongLoadingScreen/ImageScript.cs" id="2_yjtgo"]
+[ext_resource type="PackedScene" uid="uid://c2ouvq16jls8u" path="res://Panels/Overlays/BottomPanelButtons.tscn" id="4_28gti"]
 [ext_resource type="PackedScene" uid="uid://djrsc8oxuw7h6" path="res://Panels/Overlays/DisclaimerInfo.tscn" id="6_ukgnb"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_28gti"]
@@ -14,6 +14,19 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 expand_margin_left = 150.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ukgnb"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.242188, 0.242188, 0.242188, 1)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_right = 250.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_28gti"]
 content_margin_left = 15.0
@@ -35,23 +48,6 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b2ms5"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jj613"]
-content_margin_left = 10.0
-content_margin_right = 20.0
-bg_color = Color(0.92549, 0.294118, 0.180392, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0hfqi"]
-content_margin_left = 10.0
-content_margin_right = 20.0
-bg_color = Color(0.666667, 0.222387, 0.142361, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jr6c1"]
-content_margin_left = 10.0
-content_margin_right = 20.0
-bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
 
 [node name="Song Loading Screen" type="Control"]
 layout_mode = 3
@@ -75,48 +71,30 @@ color = Color(0.0784314, 0.0784314, 0.0784314, 1)
 wait_time = 1.5
 one_shot = true
 
-[node name="InfoBox" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 50.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 60
-
-[node name="H" type="HBoxContainer" parent="InfoBox"]
-layout_mode = 2
-
-[node name="Pic" type="Control" parent="InfoBox/H"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Previewimage" type="PanelContainer" parent="InfoBox/H/Pic"]
+[node name="Previewimage" type="PanelContainer" parent="."]
 clip_children = 2
-custom_minimum_size = Vector2(200, 200)
+custom_minimum_size = Vector2(600, 400)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -150.0
-offset_right = -150.0
-grow_horizontal = 2
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -200.0
+offset_right = 400.0
+offset_bottom = 200.0
 grow_vertical = 2
 pivot_offset = Vector2(311, 298)
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_28gti")
 
-[node name="a" type="Control" parent="InfoBox/H/Pic/Previewimage"]
+[node name="a" type="Control" parent="Previewimage"]
 layout_mode = 2
 
-[node name="Objimg" type="TextureRect" parent="InfoBox/H/Pic/Previewimage/a"]
-layout_mode = 2
-offset_right = 680.0
-offset_bottom = 595.0
+[node name="Objimg" type="TextureRect" parent="Previewimage/a"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 57.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_4pmu1")
@@ -124,71 +102,73 @@ expand_mode = 1
 stretch_mode = 6
 script = ExtResource("2_yjtgo")
 
-[node name="Box" type="VBoxContainer" parent="InfoBox/H"]
+[node name="InfoBox" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -480.0
+offset_top = -75.0
+offset_right = -176.0
+offset_bottom = 75.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ukgnb")
+
+[node name="Box" type="VBoxContainer" parent="InfoBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="Title" type="Label" parent="InfoBox/H/Box"]
+[node name="Title" type="Label" parent="InfoBox/Box"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxEmpty_28gti")
 text = "Sweet Dreams"
 
-[node name="Artist" type="Label" parent="InfoBox/H/Box"]
+[node name="Artist" type="Label" parent="InfoBox/Box"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxEmpty_28gti")
 text = "Tokana Nanashi"
 
-[node name="Difficulty" type="Label" parent="InfoBox/H/Box"]
+[node name="Difficulty" type="Label" parent="InfoBox/Box"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxEmpty_28gti")
 text = "Love me like you take me away~"
 
-[node name="Source" type="Label" parent="InfoBox/H/Box"]
+[node name="Source" type="Label" parent="InfoBox/Box"]
 visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ukgnb")
 text = "Source: MAKA PIE?!"
 
-[node name="Creator" type="Label" parent="InfoBox/H/Box"]
+[node name="Creator" type="Label" parent="InfoBox/Box"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ukgnb")
 text = "Creator: dummy"
 
-[node name="Infos" type="PanelContainer" parent="InfoBox/H/Box"]
+[node name="Infos" type="PanelContainer" parent="InfoBox/Box"]
 custom_minimum_size = Vector2(0, 19)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5hbj0")
 
-[node name="Sections" type="HBoxContainer" parent="InfoBox/H/Box/Infos"]
+[node name="Sections" type="HBoxContainer" parent="InfoBox/Box/Infos"]
 layout_mode = 2
 
-[node name="Level" type="Label" parent="InfoBox/H/Box/Infos/Sections"]
+[node name="Level" type="Label" parent="InfoBox/Box/Infos/Sections"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_cviis")
 text = "Lv. 42"
 
-[node name="BackButton" type="Button" parent="."]
-custom_minimum_size = Vector2(0, 50)
+[node name="ControlPanel" parent="." instance=ExtResource("4_28gti")]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -50.0
-offset_right = 108.0
-grow_vertical = 0
-theme_override_styles/focus = SubResource("StyleBoxEmpty_b2ms5")
-theme_override_styles/hover = SubResource("StyleBoxFlat_jj613")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_0hfqi")
-theme_override_styles/normal = SubResource("StyleBoxFlat_jr6c1")
-text = "  Back"
-icon = ExtResource("2_h8mlh")
 
 [node name="DisclaimerInfo" parent="." instance=ExtResource("6_ukgnb")]
 visible = false
@@ -199,4 +179,6 @@ offset_right = 420.0
 offset_bottom = 124.0
 
 [connection signal="timeout" from="Timer" to="." method="_Timer_load"]
-[connection signal="pressed" from="BackButton" to="." method="_on_back"]
+[connection signal="pressed" from="ControlPanel/Box/BackButton" to="." method="_on_back"]
+
+[editable path="ControlPanel"]
