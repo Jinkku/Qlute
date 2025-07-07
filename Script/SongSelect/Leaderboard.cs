@@ -22,6 +22,7 @@ public partial class Leaderboard : Button
 		SettingsOperator.Gameplaycfg["meh"] = (int)GetMeta("meh");
 		SettingsOperator.Gameplaycfg["bad"] = (int)GetMeta("bad");
 		SettingsOperator.Gameplaycfg["score"] = (int)GetMeta("score");
+		SettingsOperator.Gameplaycfg["combo"] = (int)GetMeta("combo");
 		SettingsOperator.Gameplaycfg["pp"] = (double)GetMeta("points");
 		SettingsOperator.Gameplaycfg["accuracy"] = (SettingsOperator.Gameplaycfg["max"] + (SettingsOperator.Gameplaycfg["great"] / 2) + (SettingsOperator.Gameplaycfg["meh"] / 3)) / (SettingsOperator.Gameplaycfg["max"] + SettingsOperator.Gameplaycfg["great"] + SettingsOperator.Gameplaycfg["meh"] + SettingsOperator.Gameplaycfg["bad"]);
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultsScreen.tscn");
