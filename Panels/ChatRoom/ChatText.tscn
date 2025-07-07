@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://ymalcerl8brc"]
+
+[ext_resource type="Script" uid="uid://ljl76d6kfe1x" path="res://Script/ChatRoom/chat_text.gd" id="1_j3gw7"]
+
+[node name="ChatRow" type="Control"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 181.0
+offset_bottom = 19.0
+script = ExtResource("1_j3gw7")
+metadata/username = ""
+metadata/text = ""
+
+[node name="ChatText" type="Label" parent="."]
+custom_minimum_size = Vector2(150, 0)
+offset_right = 1.0
+offset_bottom = 19.0
+text = "Username"
+text_overrun_behavior = 4
+
+[node name="Text" type="Label" parent="ChatText"]
+layout_mode = 0
+offset_right = 78.0
+offset_bottom = 19.0
+text = "Chat Text"
+vertical_alignment = 1
