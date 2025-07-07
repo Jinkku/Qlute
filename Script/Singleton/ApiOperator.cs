@@ -105,7 +105,6 @@ public partial class ApiOperator : Node
 			ApiOperator.Login(Username, PasswordHash);
 		}
 	}
-
 	private void _Submitrequest(long result, long responseCode, string[] headers, byte[] body)
 	{
 		Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();

@@ -381,20 +381,21 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0ms"
 horizontal_alignment = 1
 
-[node name="TScore" type="PanelContainer" parent="AlertBox/Box/Info"]
+[node name="TRank" type="PanelContainer" parent="AlertBox/Box/Info"]
+visible = false
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
-[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/TScore"]
+[node name="VC" type="VBoxContainer" parent="AlertBox/Box/Info/TRank"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="AlertBox/Box/Info/TScore/VC"]
+[node name="Name" type="Label" parent="AlertBox/Box/Info/TRank/VC"]
 layout_mode = 2
 text = "new rank"
 horizontal_alignment = 1
 
-[node name="Text" type="Label" parent="AlertBox/Box/Info/TScore/VC"]
+[node name="Text" type="Label" parent="AlertBox/Box/Info/TRank/VC"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
@@ -402,6 +403,7 @@ text = "#0"
 horizontal_alignment = 1
 
 [node name="TPP" type="PanelContainer" parent="AlertBox/Box/Info"]
+visible = false
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")

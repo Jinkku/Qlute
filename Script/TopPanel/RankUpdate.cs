@@ -43,6 +43,8 @@ public partial class RankUpdate : Label
 		}
 		PointsUpdate.Text =$"{pp.ToString("N0")}pp\n{app}" + ppnow.ToString("N0") + "pp";
 		RankUpdateT.Text = $"#{rank.ToString("N0")}\n{arank}" + ranknow.ToString("N0");
+		SettingsOperator.UpdatedRank = arank + ranknow.ToString("N0");
+		SettingsOperator.Updatedpp = app + ppnow.ToString("N0") + "pp";
 		SettingsOperator.Sessioncfg["ranknumber"] = rank;
 		SettingsOperator.ranked_points = pp;
 		Updated = true;

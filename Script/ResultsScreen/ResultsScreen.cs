@@ -13,6 +13,10 @@ public partial class ResultsScreen : Control
 	public Label Meh { get; set; }
 	public Label Bad { get; set; }
 	public Label pp { get; set; }
+	public Label Tpp { get; set; }
+	public Label TRank { get; set; }
+	public PanelContainer TRankBox { get; set; }
+	public PanelContainer TppBox { get; set; }
 	public Label Score { get; set; }
 	public Label Combo { get; set; }
 	public Label Accuracy { get; set; }
@@ -40,7 +44,11 @@ public partial class ResultsScreen : Control
 		Avgms = GetNode<Label>("AlertBox/Box/Info/AvgHit/VC/Text");
 		AccuracyPanel = GetNode<TextureRect>("AlertBox/Box/Rank");
 		AccuracyMedal = GetNode<Label>("AlertBox/Box/Rank/Medal");
-		Username.Text = ApiOperator.Username;
+		TRank = GetNode<Label>("AlertBox/Box/Info/TRank/VC/Text");
+		Tpp = GetNode<Label>("AlertBox/Box/Info/TPP/VC/Text");
+		TRankBox = GetNode<PanelContainer>("AlertBox/Box/Info/TRank");
+		TppBox = GetNode<PanelContainer>("AlertBox/Box/Info/TPP");
+		Username.Text = "played by " + ApiOperator.Username;
 		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No Beatmaps Selected";
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "Please select a Beatmap!";
 		SongMapper.Text = "Creator: " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString();
@@ -85,14 +93,29 @@ public partial class ResultsScreen : Control
 
 	}
 	public void _retry(){
+		SettingsOperator.ResetRank();
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 	}
-	public void _continue(){
-		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
+	public void _continue()
+	{
+		SettingsOperator.ResetRank();
 		AudioPlayer.Instance.Play();
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	public override void _Process(double _delta)
 	{
+		if (SettingsOperator.UpdatedRank != "#0")
+		{
+			TRankBox.Visible = true;
+			TRank.Text = SettingsOperator.UpdatedRank;
+		}
+		else TRankBox.Visible = false;
+		if (SettingsOperator.Updatedpp != "0pp")
+		{
+			TppBox.Visible = true;
+			Tpp.Text = SettingsOperator.Updatedpp;
+		}
+		else TppBox.Visible = false;
 	}
 }

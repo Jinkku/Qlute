@@ -13,8 +13,9 @@ public class DanceCounter {
 }
 
 public partial class SettingsOperator : Node
-{	
-	//public string homedir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + "/.qlute";
+{
+    public static string UpdatedRank = "#0";
+    public static string Updatedpp = "0pp";
     public static string homedir = OS.GetUserDataDir();
 	public static string tempdir => homedir + "/temp";
 	public static string beatmapsdir => homedir + "/beatmaps";
@@ -33,23 +34,28 @@ public partial class SettingsOperator : Node
     public static double MiliSecondsFromBeatmap {get;set;}
     public static int MiliSecondsFromBeatmapTimes {get;set;}
     public static List<BeatmapLegend> Beatmaps = new List<BeatmapLegend>();
+    public static void ResetRank()
+    {
+        UpdatedRank = "#0";
+        Updatedpp = "0pp";
+    }
     public Dictionary<string, object> Configuration { get; set; } = new Dictionary<string, object>
     {
         { "scaled", false },
         { "windowmode", 0 },
-		{ "volume", 1 },
-		{ "backgrounddim", 70 },
-		{ "audiooffset", 0 },
-		{ "skin", null },
-		{ "username", null },
-		{ "password", null },
-		{ "stayloggedin", true },
-		{ "api", "https://qlute.pxki.us.to/" },
-		{ "client-id", null },
+        { "volume", 1 },
+        { "backgrounddim", 70 },
+        { "audiooffset", 0 },
+        { "skin", null },
+        { "username", null },
+        { "password", null },
+        { "stayloggedin", true },
+        { "api", "https://qlute.pxki.us.to/" },
+        { "client-id", null },
         { "client-secret", null },
         { "scrollspeed", (int)1346 }, // 11485 ms max
 		{ "showfps", false },
-		{ "teststrip", "Ya" },
+        { "teststrip", "Ya" },
 
     };
     public Dictionary<string, object> Configurationbk {get; set;}
