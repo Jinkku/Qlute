@@ -86,6 +86,7 @@ public partial class CardFunctions : Button
             Blank.AnchorBottom = 1;
             Blank.Modulate = new Color(0, 0, 0, 0f);
             Blank.Name = "Blank-Chan";
+            BeatmapInfoCard.GetNode<Button>("Pill/Padding/Info/HBoxContainer/Download").SetMeta("beatmap", GetMeta("beatmap"));
             GetTree().CurrentScene.AddChild(Blank);
             GetTree().CurrentScene.AddChild(BeatmapInfoCard);
             Animation.SetParallel(true);
