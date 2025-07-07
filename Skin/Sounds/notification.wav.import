@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://g3xip70ymsl1"
-path="res://.godot/imported/notification.wav-ccef7f4c011caa6871b139388d8bc394.sample"
+path="res://.godot/imported/notification.wav-b886ac72f210d10212c71654d52b04bf.sample"
 
 [deps]
 
-source_file="res://Sounds/notification.wav"
-dest_files=["res://.godot/imported/notification.wav-ccef7f4c011caa6871b139388d8bc394.sample"]
+source_file="res://Skin/Sounds/notification.wav"
+dest_files=["res://.godot/imported/notification.wav-b886ac72f210d10212c71654d52b04bf.sample"]
 
 [params]
 

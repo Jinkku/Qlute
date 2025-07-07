@@ -90,8 +90,7 @@ public partial class InfoBar : ColorRect
 		Loadingicon.Visible = (bool)SettingsOperator.Sessioncfg["loggingin"];
 		foreach (var NotiInfo in NotificationListener.NotificationList){
 			if (!NotiInfo.Finished){
-				Sample.Instance.Stream = ResourceLoader.Load<AudioStreamWav>("res://Sounds/notification.wav");
-				Sample.Instance.Play();
+				Sample.PlaySample("res://Skin/Sounds/notification.wav");
     	    var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/Notification.tscn").Instantiate().GetNode<Button>(".");
 			NotificationListener.NotificationCards.Add(NotiCard);
 	        AddChild(NotiCard);

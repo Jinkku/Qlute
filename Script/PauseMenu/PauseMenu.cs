@@ -8,7 +8,9 @@ public partial class PauseMenu : Control
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		if (Gameplay.Dead){
+		if (GetTree().CurrentScene is CanvasItem canvasScene) canvasScene.Modulate = new Color(1f, 1f, 1f, 1f);
+		if (Gameplay.Dead)
+		{
 			GetNode<Button>("PanelContainer/VBoxContainer/Continue").Visible = false;
 			GetNode<Label>("PauseLabel/Text").Visible = true;
 			GetNode<Label>("PauseLabel").Text = "Game Over";

@@ -41,6 +41,7 @@ public partial class Gameplay : Control
 	public Label hittext {get;set;}
 	public Tween hittextani {get;set;}
 	private Tween hitnoteani {get;set;}
+	private Tween HurtAnimation {get;set;}
 	public Vector2 hittextoldpos {get;set;}
 	public List<NotesEn> Notes = new List<NotesEn>();
 	public int Noteindex = 1;
@@ -441,8 +442,18 @@ public partial class Gameplay : Control
 		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility ){
 			Hittext("Miss", new Color(1f,0.28f,0f));
 			SettingsOperator.Gameplaycfg["bad"]++;
+			if (SettingsOperator.Gameplaycfg["combo"] > 50) Sample.PlaySample("res://Skin/Sounds/combobreak.wav");
 			SettingsOperator.Gameplaycfg["combo"] = 0;
 			HealthBar.Damage(5);
+			if (HurtAnimation != null && HurtAnimation.IsRunning())
+			{
+				HurtAnimation.Stop();
+			}
+			if (GetTree().CurrentScene is CanvasItem canvasScene) canvasScene.Modulate = new Color(1f, 0.5f, 0.5f, 1f);
+			HurtAnimation = CreateTween();
+			HurtAnimation.TweenProperty(GetTree().CurrentScene, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
 			return 3;
 		}
 		 else{
