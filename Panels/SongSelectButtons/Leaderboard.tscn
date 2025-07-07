@@ -86,7 +86,7 @@ corner_radius_bottom_left = 10
 content_margin_top = 3.0
 
 [node name="Leaderboard" type="Button"]
-custom_minimum_size = Vector2(350, 60)
+custom_minimum_size = Vector2(335, 60)
 offset_right = 8.0
 offset_bottom = 8.0
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ysfsi")
@@ -100,13 +100,13 @@ layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 360.0
+offset_left = 345.0
 offset_top = -9.5
-offset_right = 400.0
+offset_right = 385.0
 offset_bottom = 9.5
 grow_horizontal = 0
 grow_vertical = 2
-text = "299d"
+text = "---"
 vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]

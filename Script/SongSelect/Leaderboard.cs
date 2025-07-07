@@ -31,6 +31,7 @@ public partial class Leaderboard : Button
 		Username = GetNode<Label>("HBoxContainer/UserInfo/Username");
 		Score = GetNode<Label>("HBoxContainer/UserInfo/PlayScore/Score");
 		Combo = GetNode<Label>("HBoxContainer/UserInfo/PlayScore/Combo");
+		Time = GetNode<Label>("created");
 		if (!HasMeta("username"))
 		{
 			Username.Text = "Unknown";
@@ -58,7 +59,32 @@ public partial class Leaderboard : Button
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	long _lastTime = 0;
+	public override void _Process(double _delta)
 	{
+		if (HasMeta("time"))
+		{
+			int seconds = (int)(DateTimeOffset.UtcNow.ToUnixTimeSeconds() - (long)GetMeta("time"));
+			if (_lastTime != seconds)
+			{
+				_lastTime = seconds;
+				string formattedTime;
+				if (seconds < 60)
+					formattedTime = $"{seconds}s";
+				else if (seconds < 3600)
+					formattedTime = $"{seconds / 60}m";
+				else if (seconds < 86400)
+					formattedTime = $"{seconds / 3600}h";
+				else if (seconds < 2592000)
+					formattedTime = $"{seconds / 86400}d";
+				else if (seconds < 2419200) // 4 weeks
+					formattedTime = $"{seconds / 604800}w";
+				else if (seconds < 31557600) // 12 months
+					formattedTime = $"{seconds / 31557600}m";
+				else
+					formattedTime = $"{seconds / 31557600}y";
+				Time.Text = formattedTime;
+			}
+		}
 	}
 }
