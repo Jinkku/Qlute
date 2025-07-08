@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://d0qmsp3ewrdj4"]
+[gd_scene load_steps=27 format=3 uid="uid://d0qmsp3ewrdj4"]
 
 [ext_resource type="Script" uid="uid://bcpf58suyr63f" path="res://Script/SettingsPanel/SettingsPanel.cs" id="1_gfh6f"]
 [ext_resource type="Texture2D" uid="uid://cj5ugwjbsax06" path="res://Skin/SettingsIcon/display.png" id="2_r347j"]
@@ -12,6 +12,14 @@
 bg_color = Color(0, 0, 0, 0.392157)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n2spt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_crlok"]
+bg_color = Color(1, 1, 1, 0.156863)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjgno"]
+bg_color = Color(1, 1, 1, 0.235294)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_k6nch"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rfoxt"]
 content_margin_left = 10.0
@@ -134,6 +142,9 @@ alignment = 1
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
+theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
 icon = ExtResource("2_r347j")
 icon_alignment = 1
 
@@ -141,6 +152,9 @@ icon_alignment = 1
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
+theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
 icon = ExtResource("3_tkltb")
 icon_alignment = 1
 
@@ -148,6 +162,9 @@ icon_alignment = 1
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
+theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
 icon = ExtResource("4_b8fcs")
 icon_alignment = 1
 
@@ -318,11 +335,13 @@ theme_override_fonts/font = SubResource("FontVariation_n76qt")
 text = "Audio"
 
 [node name="AudioNotice" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
+visible = false
 layout_mode = 2
 mouse_filter = 0
 text = "Audio device"
 
 [node name="AudioSelector" type="OptionButton" parent="ColorRect/Panels/Scroll/Sections"]
+visible = false
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_db3eo")
 theme_override_styles/normal = SubResource("StyleBoxFlat_32tni")
