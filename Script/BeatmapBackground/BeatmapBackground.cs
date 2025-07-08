@@ -67,6 +67,8 @@ public partial class BeatmapBackground : TextureRect
 		if (!Flash.Visible && FlashEnable)
 		{
 			Flash.Visible = true;
+			resettime();
+			_flashstart();
 		}
 		else if (Flash.Visible && !FlashEnable)
 		{

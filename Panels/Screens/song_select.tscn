@@ -328,7 +328,6 @@ layout_mode = 1
 offset_left = 105.0
 offset_right = 605.0
 mouse_filter = 2
-alignment = 0
 
 [node name="ControlPanel" type="PanelContainer" parent="BottomBar"]
 layout_mode = 1
