@@ -15,14 +15,24 @@ public partial class ModsMulti : Label
 		{
 			if (mod.Value && mod.Key == "dt")
 			{
-				multiplier*= 1.15;
-			}else if (mod.Value && mod.Key == "ht"){
-				multiplier*=0.3;
-			}else if (mod.Value && mod.Key == "black-out"){
-				multiplier*=1.15;
-			}else if (mod.Value && mod.Key != "auto" && mod.Key != "random"){
-				multiplier*= 1.05;
+				multiplier *= 1.15;
 			}
+			else if (mod.Value && mod.Key == "ht")
+			{
+				multiplier *= 0.3;
+			}
+			else if (mod.Value && mod.Key == "no-fail")
+			{
+				multiplier *= 0.5;
+			}
+			else if (mod.Value && mod.Key == "black-out")
+			{
+				multiplier *= 1.15;
+			}
+			else if (mod.Value && mod.Key != "auto" && mod.Key != "random")
+			{
+				multiplier *= 1.05;
+			} 
 		}
 		Text = multiplier.ToString("0.00")+"x";
 	}

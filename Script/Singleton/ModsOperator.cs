@@ -25,25 +25,53 @@ public partial class ModsOperator : Node
 		} else{
 			AudioPlayer.Instance.PitchScale = 1f;
 		}
+		var modalias = GetModAlias();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public static string GetModAlias(){
+	public static List<string> ModsEnabled { get; set; } = new List<string>();
+	public static string GetModAlias()
+	{
 		var modalias = "";
-		foreach (var modst in Mods.Keys){
-			if (Mods[modst]){
-				if (modst == "auto"){
+		ModsEnabled.Clear();
+		foreach (var modst in Mods.Keys)
+		{
+			if (Mods[modst])
+			{
+				if (modst == "auto")
+				{
 					modalias += "AT";
-				} else if (modst == "dt"){
+					ModsEnabled.Add("AT");
+				}
+				else if (modst == "dt")
+				{
 					modalias += "DT";
-				} else if (modst == "ht"){
+					ModsEnabled.Add("DT");
+				}
+				else if (modst == "ht")
+				{
 					modalias += "HT";
-				} else if (modst == "random"){
+					ModsEnabled.Add("HT");
+				}
+				else if (modst == "random")
+				{
 					modalias += "RND";
-				} else if (modst == "slice"){
+					ModsEnabled.Add("RND");
+				}
+				else if (modst == "slice")
+				{
 					modalias += "SL";
-				} else if (modst == "black-out"){
+					ModsEnabled.Add("SL");
+				}
+				else if (modst == "black-out")
+				{
 					modalias += "BT";
+					ModsEnabled.Add("BT");
+				}
+				else if (modst == "no-fail")
+				{
+					modalias += "NF";
+					ModsEnabled.Add("NF");
 				}
 			}
 		}
@@ -52,6 +80,7 @@ public partial class ModsOperator : Node
     public static Dictionary<string, bool> Mods { get; set; } = new Dictionary<string, bool>
     {
 		{"auto", false},
+		{"no-fail", false},
 		{"dt", false},
 		{"ht", false},
 		{"random", false},

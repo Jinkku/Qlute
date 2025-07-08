@@ -383,6 +383,7 @@ public partial class SettingsOperator : Node
 		AnimationPlayer Ana = GetTree().Root.GetNode<AnimationPlayer>("TopPanelOnTop/TopPanel/Wabamp");
 		if (((bool)Sessioncfg["toppanelhide"] == true)) Ana.PlayBackwards("Bootup"); else Ana.Play("Bootup");}
     public static float TopPanelPosition { get; set; } = 0.0f;
+    private double oldtime = 0.0f;
 
     public override void _Process(double _delta)
     {
@@ -390,6 +391,11 @@ public partial class SettingsOperator : Node
         if (Input.IsActionJustPressed("Hide Panel"))
         {
             toppaneltoggle();
+        }
+        if (DateTimeOffset.UtcNow.ToUnixTimeSeconds() - oldtime > 2)
+        { 
+            oldtime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            ResetVol();
         }
     }
     public override void _Ready()
@@ -441,21 +447,31 @@ public partial class SettingsOperator : Node
         backgrounddim = int.TryParse(GetSetting("backgrounddim").ToString(), out int bkd) ? bkd : 70;
         SampleVol = int.TryParse(GetSetting("sample").ToString(), out int smp) ? smp : 80;
         MasterVol = int.TryParse(GetSetting("master").ToString(), out int mtr) ? mtr : 80;
-		AudioPlayer.Instance.VolumeDb = (int)(Math.Log10(MasterVol / 100) * 20) - 5;
-		Sample.Instance.VolumeDb = (int)(Math.Log10(SampleVol / 100) * 20) - 5; // -5 to adjust the volume to a more NOT loud level and cap it
+        ResetVol();
 		var resolutionIndex = int.TryParse(GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
 		changeres(resolutionIndex);
     }
-    public void changeres(int index) {
-		GD.Print(string.Format("Resolution changed to {0}", index));
-		if (index == 0){
-			DisplayServer.WindowSetMode(DisplayServer.WindowMode.ExclusiveFullscreen);
-		} else if (index == 1){
-			DisplayServer.WindowSetMode(DisplayServer.WindowMode.Fullscreen);
-		} else if (index == 2){
-			DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);
-		}
-		SetSetting("windowmode",index);
+    public void ResetVol()
+    {
+        AudioPlayer.Instance.VolumeDb = (int)(Math.Log10(MasterVol / 100.0) * 20) - 5; // -5 to adjust the volume to a more NOT loud level and cap it
+        Sample.Instance.VolumeDb = (int)(Math.Log10(SampleVol / 100.0) * 20) - 5;
+    }
+    public void changeres(int index)
+    {
+        GD.Print(string.Format("Resolution changed to {0}", index));
+        if (index == 0)
+        {
+            DisplayServer.WindowSetMode(DisplayServer.WindowMode.ExclusiveFullscreen);
+        }
+        else if (index == 1)
+        {
+            DisplayServer.WindowSetMode(DisplayServer.WindowMode.Fullscreen);
+        }
+        else if (index == 2)
+        {
+            DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);
+        }
+        SetSetting("windowmode", index);
     }
     // Set a setting
     public void SetSetting(string key, object value)

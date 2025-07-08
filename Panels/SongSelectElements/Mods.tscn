@@ -271,14 +271,29 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_2d24i")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_woq5l")
 theme_override_styles/normal = SubResource("StyleBoxFlat_k8tw6")
 toggle_mode = true
-text = "Black-out"
+text = "Black out"
 script = ExtResource("2_cltyr")
 metadata/ModName = "black-out"
 metadata/ModNameSmall = "BO"
 
+[node name="Mod7" type="Button" parent="MarginContainer/VBoxContainer/ModsEntries"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ulxgl")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_picxj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2d24i")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_woq5l")
+theme_override_styles/normal = SubResource("StyleBoxFlat_k8tw6")
+toggle_mode = true
+text = "No Fail"
+script = ExtResource("2_cltyr")
+metadata/ModName = "no-fail"
+metadata/ModNameSmall = "NF"
+
 [node name="Options" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 10
+size_flags_vertical = 8
 alignment = 1
 
 [node name="Retry" type="Button" parent="MarginContainer/VBoxContainer/Options"]
@@ -305,4 +320,5 @@ text = "Customize"
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ModsEntries/Mod4" to="MarginContainer/VBoxContainer/ModsEntries/Mod4" method="_modpressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ModsEntries/Mod5" to="MarginContainer/VBoxContainer/ModsEntries/Mod5" method="_modpressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/ModsEntries/Mod6" to="MarginContainer/VBoxContainer/ModsEntries/Mod6" method="_modpressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/ModsEntries/Mod7" to="MarginContainer/VBoxContainer/ModsEntries/Mod7" method="_modpressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Options/Retry" to="." method="_reset"]

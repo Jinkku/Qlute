@@ -24,6 +24,11 @@ public partial class Modscfg : Button
             DisabledButton();
         } else if (ModsOperator.Mods["black-out"] && GetMeta("ModName").ToString() == "slice"){
             DisabledButton();
+        }else if (ModsOperator.Mods["no-fail"] && GetMeta("ModName").ToString() == "auto")
+        {
+            DisabledButton();
+        } else if (ModsOperator.Mods["auto"] && GetMeta("ModName").ToString() == "no-fail"){
+            DisabledButton();
         } else if (GetMeta("ModName").ToString() == "random"){
             DisabledButton();
         }

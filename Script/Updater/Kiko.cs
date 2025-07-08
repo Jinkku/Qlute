@@ -18,7 +18,7 @@ public partial class Kiko : Node
         if (responseCode == 200)
         {
             VersionCode = Encoding.UTF8.GetString(body);
-            Notify.Post("New update is avaliable!\n" + VersionCode + " is available, click to view.",uri: "https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=0gcJCfwAo7VqN5tD");
+            Notify.Post("New update is avaliable!\n" + VersionCode + " is available, click to view.",uri: "https://jinkku.itch.io/qlute");
         }
         else
         {

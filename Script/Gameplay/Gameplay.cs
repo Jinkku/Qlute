@@ -217,7 +217,7 @@ public partial class Gameplay : Control
 
 			// DEATH
 
-			if (HealthBar.Health == 0 && !Dead)
+			if (HealthBar.Health == 0 && !Dead && !ModsOperator.Mods["no-fail"])
 			{
 				Dead = !Dead;
 				ShowPauseMenu();

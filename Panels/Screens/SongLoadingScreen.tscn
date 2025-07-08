@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://dgy27wulmugfs"]
+[gd_scene load_steps=13 format=3 uid="uid://dgy27wulmugfs"]
 
 [ext_resource type="Script" uid="uid://dtqpa0tsirnjp" path="res://Script/SongLoadingScreen/SongLoadingScreen.cs" id="1_2kt4t"]
 [ext_resource type="Texture2D" uid="uid://sfbrs7c6t7dr" path="res://DefaultWallpaper/future.png" id="1_4pmu1"]
 [ext_resource type="Script" uid="uid://c3epg1qy8dum3" path="res://Script/SongLoadingScreen/ImageScript.cs" id="2_yjtgo"]
 [ext_resource type="PackedScene" uid="uid://c2ouvq16jls8u" path="res://Panels/Overlays/BottomPanelButtons.tscn" id="4_28gti"]
+[ext_resource type="PackedScene" uid="uid://cxtvce61elw00" path="res://Panels/Overlays/ModShowcase.tscn" id="4_ukgnb"]
 [ext_resource type="PackedScene" uid="uid://djrsc8oxuw7h6" path="res://Panels/Overlays/DisclaimerInfo.tscn" id="6_ukgnb"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_28gti"]
@@ -166,6 +167,9 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_cviis")
 text = "Lv. 42"
+
+[node name="ModsShown" parent="InfoBox/Box" instance=ExtResource("4_ukgnb")]
+layout_mode = 2
 
 [node name="ControlPanel" parent="." instance=ExtResource("4_28gti")]
 layout_mode = 1

@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxtvce61elw00"]
+
+[ext_resource type="Script" uid="uid://c6n2xpe1glwfm" path="res://Script/Mods/ModsShown.cs" id="1_vak2j"]
+
+[node name="ModsShown" type="HBoxContainer"]
+custom_minimum_size = Vector2(90, 30)
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_vak2j")
