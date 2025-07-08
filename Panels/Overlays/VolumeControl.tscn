@@ -1,41 +1,58 @@
-[gd_scene load_steps=2 format=3 uid="uid://bdhijpl2ka7fa"]
+[gd_scene load_steps=3 format=3 uid="uid://bdhijpl2ka7fa"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xa8su"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.310862, 0.205126, 0.388021, 1)
+[ext_resource type="Script" uid="uid://b1jn5aayb7mj5" path="res://Script/VolumeControl/VolumeControl.cs" id="1_ew4jh"]
 
-[node name="Control" type="PanelContainer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fffab"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.588235)
+skew = Vector2(0.1, 0)
+expand_margin_left = 55.0
+
+[node name="VolumeControl" type="PanelContainer"]
 custom_minimum_size = Vector2(400, 0)
 anchors_preset = 9
 anchor_bottom = 1.0
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_xa8su")
+theme_override_styles/panel = SubResource("StyleBoxFlat_fffab")
+script = ExtResource("1_ew4jh")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 20
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="Music" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-text = "MASTER"
+text = "Music 100%"
 
-[node name="HSlider" type="HSlider" parent="VBoxContainer"]
+[node name="MASTER" type="HSlider" parent="VBoxContainer"]
 layout_mode = 2
+min_value = 0.1
+value = 100.0
 
-[node name="Label2" type="Label" parent="VBoxContainer"]
+[node name="Sample" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-text = "EFFECTS"
+text = "Sample 100%"
 
-[node name="HSlider2" type="HSlider" parent="VBoxContainer"]
+[node name="EFFECTS" type="HSlider" parent="VBoxContainer"]
 layout_mode = 2
+min_value = 0.1
+value = 100.0
 
 [node name="Label3" type="Label" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "MUSIC"
 
-[node name="HSlider3" type="HSlider" parent="VBoxContainer"]
+[node name="MUSIC" type="HSlider" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
+min_value = 0.1
+value = 100.0
+
+[connection signal="value_changed" from="VBoxContainer/MASTER" to="." method="_master"]
+[connection signal="value_changed" from="VBoxContainer/EFFECTS" to="." method="_sample"]
+[connection signal="value_changed" from="VBoxContainer/MUSIC" to="." method="_master"]

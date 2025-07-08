@@ -29,6 +29,8 @@ public partial class SettingsOperator : Node
     public static bool loopaudio = false;
     public static bool jukebox = false;
     public int backgrounddim {get;set;}
+    public int MasterVol {get;set;}
+    public int SampleVol {get;set;}
     public int scrollspeed {get;set;}
     public static double AllMiliSecondsFromBeatmap {get;set;}
     public static double MiliSecondsFromBeatmap {get;set;}
@@ -43,7 +45,8 @@ public partial class SettingsOperator : Node
     {
         { "scaled", false },
         { "windowmode", 0 },
-        { "volume", 1 },
+        { "master", 80 },
+        { "sample", 80 },
         { "backgrounddim", 70 },
         { "audiooffset", 0 },
         { "skin", null },
@@ -400,8 +403,10 @@ public partial class SettingsOperator : Node
             using var saveFile = FileAccess.Open(settingsfile, FileAccess.ModeFlags.Read);
             var json = saveFile.GetAsText();
             Configuration = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
-            foreach (string s in Configurationbk.Keys){
-                if (!Configuration.ContainsKey(s)){
+            foreach (string s in Configurationbk.Keys)
+            {
+                if (!Configuration.ContainsKey(s))
+                {
                     Configuration[s] = Configurationbk[s];
                 }
             }
@@ -412,7 +417,32 @@ public partial class SettingsOperator : Node
             GD.Print("Creating config...");
             SaveSettings();
         }
+
+
+        // Check if temp folder is not empty, then delete its contents
+        if (System.IO.Directory.Exists(tempdir))
+        {
+            var files = System.IO.Directory.GetFiles(tempdir);
+            var dirs = System.IO.Directory.GetDirectories(tempdir);
+            if (files.Length > 0 || dirs.Length > 0)
+            {
+                foreach (var file in files)
+                {
+                    try { System.IO.File.Delete(file); } catch { }
+                }
+                foreach (var dir in dirs)
+                {
+                    try { System.IO.Directory.Delete(dir, true); } catch { }
+                }
+            }
+        }
+
+
         backgrounddim = int.TryParse(GetSetting("backgrounddim").ToString(), out int bkd) ? bkd : 70;
+        SampleVol = int.TryParse(GetSetting("sample").ToString(), out int smp) ? smp : 80;
+        MasterVol = int.TryParse(GetSetting("master").ToString(), out int mtr) ? mtr : 80;
+		AudioPlayer.Instance.VolumeDb = (int)(Math.Log10(MasterVol / 100) * 20) - 5;
+		Sample.Instance.VolumeDb = (int)(Math.Log10(SampleVol / 100) * 20) - 5; // -5 to adjust the volume to a more NOT loud level and cap it
 		var resolutionIndex = int.TryParse(GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
 		changeres(resolutionIndex);
     }

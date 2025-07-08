@@ -31,7 +31,6 @@ config/icon="res://Icons/logo.png"
 [autoload]
 
 Transition="*res://Panels/Overlays/SceneTransition.tscn"
-SettingsOperator="*res://Script/Singleton/SettingsOperator.cs"
 BeatmapListener="*res://Script/Singleton/BeatmapListener.cs"
 Global="*res://Script/Singleton/Global.cs"
 AudioPlayer="*res://Script/Singleton/AudioPlayer.cs"
@@ -39,6 +38,7 @@ TopPanelOnTop="*res://Script/Singleton/OnTopOverlays.cs"
 ApiOperator="*res://Script/Singleton/ApiOperator.cs"
 ModsOperator="*res://Script/Singleton/ModsOperator.cs"
 Sample="*res://Script/Singleton/Sample.cs"
+SettingsOperator="*res://Script/Singleton/SettingsOperator.cs"
 Kiko="*res://Script/Updater/Kiko.cs"
 
 [display]
