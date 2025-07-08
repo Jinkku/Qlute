@@ -41,6 +41,35 @@ public partial class SettingsOperator : Node
         UpdatedRank = "#0";
         Updatedpp = "0pp";
     }
+
+    public void RefreshFPS()
+    {
+        var fps = int.TryParse(GetSetting("fpsmode").ToString(), out int fpsm) ? (int)fpsm : 1;
+        if (fps == 0)
+        {
+            DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Enabled);
+        }
+        else if (fps == 1)
+        {
+            DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
+            Engine.MaxFps = (int)DisplayServer.ScreenGetRefreshRate() * 2;
+        }
+        else if (fps == 2)
+        {
+            DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
+            Engine.MaxFps = (int)DisplayServer.ScreenGetRefreshRate() * 4;
+        }
+        else if (fps == 3)
+        {
+            DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
+            Engine.MaxFps = (int)DisplayServer.ScreenGetRefreshRate() * 8;
+        }
+        else if (fps == 2)
+        {
+            DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
+            Engine.MaxFps = 0; // Unlimited FPS
+        }
+    }
     public Dictionary<string, object> Configuration { get; set; } = new Dictionary<string, object>
     {
         { "scaled", false },
@@ -57,7 +86,8 @@ public partial class SettingsOperator : Node
         { "client-id", null },
         { "client-secret", null },
         { "scrollspeed", (int)1346 }, // 11485 ms max
-		{ "showfps", false },
+        { "fpsmode", 1 },
+        { "showfps", false },
         { "teststrip", "Ya" },
 
     };
@@ -399,7 +429,7 @@ public partial class SettingsOperator : Node
         }
     }
     public override void _Ready()
-	{
+    {
         Configurationbk = new Dictionary<string, object>(Configuration);
         GD.Print("Please wait...");
         GD.Print("Checking if config file is saved...");
@@ -448,8 +478,9 @@ public partial class SettingsOperator : Node
         SampleVol = int.TryParse(GetSetting("sample").ToString(), out int smp) ? smp : 80;
         MasterVol = int.TryParse(GetSetting("master").ToString(), out int mtr) ? mtr : 80;
         ResetVol();
-		var resolutionIndex = int.TryParse(GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
-		changeres(resolutionIndex);
+        var resolutionIndex = int.TryParse(GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
+        changeres(resolutionIndex);
+        RefreshFPS();
     }
     public void ResetVol()
     {
