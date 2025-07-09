@@ -176,13 +176,28 @@ layout_mode = 1
 
 [node name="DisclaimerInfo" parent="." instance=ExtResource("6_ukgnb")]
 visible = false
-layout_mode = 0
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 420.0
-offset_bottom = 124.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -420.0
+offset_top = -124.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="title" parent="DisclaimerInfo/DisclaimerSort" index="0"]
+text = "You are in Marathon Mode"
+vertical_alignment = 1
+
+[node name="desc" parent="DisclaimerInfo/DisclaimerSort" index="1"]
+text = "If you fail you will lose your progress!"
 
 [connection signal="timeout" from="Timer" to="." method="_Timer_load"]
 [connection signal="pressed" from="ControlPanel/Box/BackButton" to="." method="_on_back"]
 
 [editable path="ControlPanel"]
+[editable path="DisclaimerInfo"]

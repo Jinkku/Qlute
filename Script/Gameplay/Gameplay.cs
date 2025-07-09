@@ -231,10 +231,10 @@ public partial class Gameplay : Control
 				SettingsOperator.toppaneltoggle();
 				BeatmapBackground.FlashEnable = true;
 				Finished = true;
+				ApiOperator.SubmitScore();
 				if (!SettingsOperator.Marathon)
 				{
 					GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultsScreen.tscn");
-					ApiOperator.SubmitScore();
 				}
 				else
 				{
@@ -286,6 +286,7 @@ public partial class Gameplay : Control
 				SettingsOperator.toppaneltoggle();
 				BeatmapBackground.FlashEnable = true;
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MarathonMode.tscn");
+				SettingsOperator.Marathon = false;
 			}
 			else if (Input.IsActionJustPressed("retry") && !SettingsOperator.Marathon)
 			{

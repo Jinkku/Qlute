@@ -95,6 +95,6 @@ public partial class MarathonMode : ColorRect
     {
         SettingsOperator.MarathonID = 0; // Set the first map as the starting point
         SettingsOperator.SelectSongID(SettingsOperator.MarathonMapPaths[SettingsOperator.MarathonID]);
-        GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/LoadingMarathonScreen.tscn");
+        GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
     }
 }

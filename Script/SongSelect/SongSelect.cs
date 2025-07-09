@@ -120,6 +120,7 @@ public partial class SongSelect : Control
 		//Debugtext.Text = "X3";
 		//Debugtext.Position = new Vector2(100,100);
 		//AddChild(Debugtext);
+		SettingsOperator.Marathon = false;
 		Diff = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Difficulty");
 		ModScreen = GetNode<Control>("ModsScreen");
 		ModScreen.Visible = true;

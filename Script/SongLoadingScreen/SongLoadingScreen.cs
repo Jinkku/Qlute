@@ -21,7 +21,6 @@ public partial class SongLoadingScreen : Control
 
 	public override void _Ready()
 	{
-		SettingsOperator.Marathon = false;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		InfoBox = GetNode<PanelContainer>("InfoBox");
 		PicturePanel = GetNode<PanelContainer>("Previewimage");
@@ -53,7 +52,8 @@ public partial class SongLoadingScreen : Control
 		ArtificialLoad.Start();
 	}
 	private void _on_back(){
-		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
+		if (SettingsOperator.Marathon) GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MarathonMode.tscn");
+		else GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 	}
 	private void _Timer_load(){
 		SettingsOperator.toppaneltoggle();
@@ -63,5 +63,6 @@ public partial class SongLoadingScreen : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		GetNode<PanelContainer>("DisclaimerInfo").Visible = SettingsOperator.Marathon;
 	}
 }
