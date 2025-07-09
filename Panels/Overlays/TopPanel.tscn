@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bwpja5llmgtqo"]
+[gd_scene load_steps=32 format=3 uid="uid://bwpja5llmgtqo"]
 
 [ext_resource type="Script" uid="uid://borvy2xtb1o65" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
 [ext_resource type="Texture2D" uid="uid://bvjgpego4fwun" path="res://Skin/System/settings.png" id="1_vco36"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://dkiv7s0dfykav" path="res://Skin/System/notifications.png" id="5_6ko15"]
 [ext_resource type="Script" uid="uid://bm70a8842a0fp" path="res://Script/TopPanel/RankUpdate.cs" id="6_3trnu"]
 [ext_resource type="Script" uid="uid://cmb50kh06rh1x" path="res://Script/TopPanel/Overlays/Clock.cs" id="7_fe0ly"]
+[ext_resource type="Script" uid="uid://dp1rdt0w40nki" path="res://Script/TestMenu/Debugitem2.cs" id="13_1qp4o"]
 
 [sub_resource type="Animation" id="Animation_xvajm"]
 resource_name = "Bootup"
@@ -332,6 +333,16 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
 keep_pressed_outside = true
 icon = ExtResource("5_6ko15")
 icon_alignment = 1
+
+[node name="Debugitem2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 70.0
+offset_right = 58.0
+offset_bottom = 89.0
+theme_override_font_sizes/font_size = 12
+text = "Debug infomation"
+script = ExtResource("13_1qp4o")
 
 [connection signal="animation_finished" from="Wabamp" to="InfoBar" method="_Slidepanelfinished"]
 [connection signal="animation_started" from="Wabamp" to="InfoBar" method="_Slidepanelstart"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://coyf2teo5g6nm"]
+[gd_scene load_steps=27 format=3 uid="uid://coyf2teo5g6nm"]
 
 [ext_resource type="Script" uid="uid://bqj04u64e106v" path="res://Script/SongSelect/SongSelect.cs" id="1_fin0e"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dpjsc7sxiwkm7" path="res://Panels/SongSelectElements/Mods.tscn" id="6_4xos4"]
 [ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="6_wb004"]
 [ext_resource type="PackedScene" uid="uid://cxtvce61elw00" path="res://Panels/Overlays/ModShowcase.tscn" id="7_p20rm"]
+[ext_resource type="PackedScene" uid="uid://c1aa8tscp5u6p" path="res://Panels/Overlays/BeatmapContextMenu.tscn" id="9_1t01f"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ixo7g"]
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
@@ -463,6 +464,15 @@ mouse_filter = 2
 [node name="ModsApplet" parent="ModsScreen" instance=ExtResource("6_4xos4")]
 z_index = 1
 layout_mode = 1
+
+[node name="ContextMenu" parent="." instance=ExtResource("9_1t01f")]
+visible = false
+z_index = 3
+layout_mode = 0
+offset_left = 1073.0
+offset_top = 359.0
+offset_right = 1253.0
+offset_bottom = 427.0
 
 [connection signal="resized" from="." to="." method="_res_resize"]
 [connection signal="mouse_entered" from="SongPanel" to="." method="_songenter"]

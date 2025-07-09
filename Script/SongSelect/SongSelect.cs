@@ -31,6 +31,10 @@ public partial class SongSelect : Control
 	public Label RankedStatus {get;set;}
 	private bool AnimationSong {get;set;}
 	private int SongLoaded {get;set;}
+	private bool ContextMenuActive {get;set;}
+	private Tween ContextMenuAni {get;set;}
+	private PanelContainer ContextMenu {get;set;}
+	
 
     int startposition = 0;
 	int scrolloldvalue {get;set;}
@@ -110,6 +114,8 @@ public partial class SongSelect : Control
 		SettingsOperator.loopaudio = true;
 		scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
 		RankedStatus = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box1/RankedStatus");
+		ContextMenu = GetNode<PanelContainer>("ContextMenu");
+		ContextMenu.Visible = false;
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		SongETick = 0;
 		startposition = (int)GetViewportRect().Size.Y/2 - 166;
@@ -255,6 +261,34 @@ public partial class SongSelect : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
+
+		if (Input.IsMouseButtonPressed(MouseButton.Right) && SettingsOperator.SongIDHighlighted != -1)
+		{
+			ContextMenu.SetMeta("SongID", SettingsOperator.SongIDHighlighted);
+			ContextMenuActive = true;
+			ContextMenu.Visible = true;
+			ContextMenuAni?.Kill();
+			ContextMenuAni = ContextMenu.CreateTween();
+			ContextMenuAni.SetParallel(true);
+			ContextMenuAni.TweenProperty(ContextMenu, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			ContextMenuAni.TweenProperty(ContextMenu, "position", GetViewport().GetMousePosition(), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		} else if (Input.IsMouseButtonPressed(MouseButton.Left) && ContextMenuActive) // Hide context menu if left mouse button is pressed outside of it
+		{
+			Vector2 mousePos = GetViewport().GetMousePosition();
+			Rect2 contextRect = new Rect2(ContextMenu.Position, ContextMenu.Size);
+			if (!contextRect.HasPoint(mousePos))
+			{
+				ContextMenu.SetMeta("SongID", -1);
+				ContextMenuAni?.Kill();
+				ContextMenuAni = ContextMenu.CreateTween();
+				ContextMenuAni.SetParallel(true);
+				ContextMenuAni.TweenProperty(ContextMenu, "modulate", new Color(1f, 1f, 1f, 0f), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+				ContextMenuAni.TweenProperty(ContextMenu, "position", GetViewport().GetMousePosition(), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+				ContextMenuAni.TweenProperty(ContextMenu, "visible", false, 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+				ContextMenuActive = false;
+			}
+		}
+
 		if (SettingsOperator.Start_reloadLeaderboard && ApiOperator.LeaderboardStatus == 0 && SettingsOperator.Beatmaps.Count > 0)
 		{
 			SettingsOperator.Start_reloadLeaderboard = false;

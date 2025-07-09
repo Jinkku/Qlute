@@ -1,0 +1,88 @@
+[gd_scene load_steps=7 format=3 uid="uid://c1aa8tscp5u6p"]
+
+[ext_resource type="Script" uid="uid://dnb0hvqt3boys" path="res://Script/SongSelect/BeatmapContextMenu.cs" id="1_m6md1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fn0xp"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 0.784314)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pjdex"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m6md1"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.0784314)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aw2xo"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.156863)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_elvf5"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[node name="ContextMenu" type="PanelContainer"]
+custom_minimum_size = Vector2(180, 37)
+offset_right = 180.0
+offset_bottom = 37.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_fn0xp")
+script = ExtResource("1_m6md1")
+metadata/SongID = -1
+
+[node name="ContextSections" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Delete" type="Button" parent="ContextSections"]
+layout_mode = 2
+theme_override_colors/font_hover_pressed_color = Color(0.976471, 0.47451, 0.47451, 1)
+theme_override_colors/font_hover_color = Color(0.976471, 0.47451, 0.47451, 1)
+theme_override_colors/font_color = Color(0.976562, 0.473022, 0.473022, 1)
+theme_override_colors/font_focus_color = Color(0.976471, 0.47451, 0.47451, 1)
+theme_override_colors/font_pressed_color = Color(0.976471, 0.47451, 0.47451, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
+theme_override_styles/hover = SubResource("StyleBoxFlat_m6md1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_aw2xo")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_elvf5")
+text = "Delete"
+alignment = 0
+
+[node name="DeleteBeatmap" type="Button" parent="ContextSections"]
+layout_mode = 2
+theme_override_colors/font_hover_pressed_color = Color(0.976471, 0.47451, 0.47451, 1)
+theme_override_colors/font_hover_color = Color(0.976471, 0.47451, 0.47451, 1)
+theme_override_colors/font_color = Color(0.976562, 0.473022, 0.473022, 1)
+theme_override_colors/font_focus_color = Color(0.976471, 0.47451, 0.47451, 1)
+theme_override_colors/font_pressed_color = Color(0.976471, 0.47451, 0.47451, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
+theme_override_styles/hover = SubResource("StyleBoxFlat_m6md1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_aw2xo")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_elvf5")
+text = "Delete Beatmapset"
+alignment = 0
+
+[connection signal="pressed" from="ContextSections/Delete" to="." method="_delete"]
+[connection signal="pressed" from="ContextSections/DeleteBeatmap" to="." method="_deletebeatmap"]

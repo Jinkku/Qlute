@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 public class BeatmapLegend
 {
 	public int ID { get; set; } = 0;
+	public int SetID { get; set; } = 0;
 	public string Title { get; set; } = null;
 	public string Artist { get; set; } = null;
 	public string Mapper { get; set; } = null;
@@ -30,16 +31,17 @@ public class BeatmapLegend
 public partial class BeatmapListener : Node
 {
 	public static SettingsOperator SettingsOperator { get; set; }
+	public int SetID { get; set; } = 0; // Set ID for the beatmap, used for grouping beatmaps together
 	public void Parse_BeatmapDir(string dir)
 	{
 		var files = Directory.GetFiles(dir, "*.osu");
 		Array.Sort(files, (x, y) => new FileInfo(x).Length.CompareTo(new FileInfo(y).Length));
 		foreach (string file in files)
 		{
-			//GD.Print(file);
-			SettingsOperator.Parse_Beatmapfile(file);
+			SettingsOperator.Parse_Beatmapfile(file,SetID: SetID); // Parse the beatmap file and add it to the beatmaps list
 			SettingsOperator.Sessioncfg["reloaddb"] = true;
 		}
+		SetID++; // Increment SetID for each beatmap directory parsed
 	}
 
 	public void CheckAndExtractOszFiles()

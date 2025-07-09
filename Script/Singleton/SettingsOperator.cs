@@ -182,7 +182,7 @@ public partial class SettingsOperator : Node
         ppvalue *=(float)multiplier;
         return Math.Max(0,ppvalue);
         }
-    public static void Parse_Beatmapfile(string filename){
+    public static void Parse_Beatmapfile(string filename, int SetID = 0){
         using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
         var text = file.GetAsText();
         var lines = text.Split("\n");
@@ -309,6 +309,7 @@ public partial class SettingsOperator : Node
         }
         Beatmaps.Add(new BeatmapLegend{
             ID = Beatmaps.Count,
+            SetID = SetID,
             Title = songtitle,
             Artist = artist,
             Mapper = mapper,
@@ -373,6 +374,8 @@ public partial class SettingsOperator : Node
         {"bad", 0},
     };
     public static int ranked_points {get;set;}
+    
+    public static int SongIDHighlighted { get; set; } = -1; // Highlighted song ID for the song select screen
     public static Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
     {
         { "TopPanelSlideip", false },
@@ -387,7 +390,7 @@ public partial class SettingsOperator : Node
         { "chatboxv", false },
         { "notificationpanelv", false },
         { "ranknumber", null },
-		{ "playercolour", null },
+        { "playercolour", null },
         { "SongID", -1 },
         { "totalbeatmaps", 0 },
         { "beatmapurl", null },
@@ -404,7 +407,7 @@ public partial class SettingsOperator : Node
         { "fps" , 0},
         { "ms" , 0.0f},
         { "background" , null},
-		{ "client-id", null },
+        { "client-id", null },
         { "client-secret", null },
 
     };

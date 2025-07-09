@@ -70,9 +70,11 @@ public partial class MusicCard : Button
 	}
 	private void _focus()
 	{
+		SettingsOperator.SongIDHighlighted = (int)self.GetMeta("SongID");
         AnimationButton(Focuscolour);
 	}private void _unfocus()
 	{
+		SettingsOperator.SongIDHighlighted = -1;
 		if (Checkid())
 		{
 			AnimationButton(toggledcolour);
@@ -96,6 +98,11 @@ public partial class MusicCard : Button
 	}
 	public override void _Process(double _delta)
 	{
+		
+		
+
+
+
 		if (ButtonPressed != Checkid())
 		{
 			ButtonPressed = Checkid();
