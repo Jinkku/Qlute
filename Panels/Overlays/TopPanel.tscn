@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://bwpja5llmgtqo"]
+[gd_scene load_steps=31 format=3 uid="uid://bwpja5llmgtqo"]
 
 [ext_resource type="Script" uid="uid://borvy2xtb1o65" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
 [ext_resource type="Texture2D" uid="uid://bvjgpego4fwun" path="res://Skin/System/settings.png" id="1_vco36"]
@@ -116,6 +116,9 @@ bg_color = Color(1, 1, 1, 0.34902)
 content_margin_left = 12.0
 content_margin_right = 12.0
 bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3trnu"]
+bg_color = Color(1, 1, 1, 0.156863)
 
 [sub_resource type="FontVariation" id="FontVariation_3trnu"]
 variation_embolden = 1.0
@@ -280,6 +283,7 @@ icon_alignment = 1
 [node name="Browse" type="Button" parent="InfoBar/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
 keep_pressed_outside = true
@@ -289,6 +293,7 @@ icon_alignment = 1
 [node name="Chat" type="Button" parent="InfoBar/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
 keep_pressed_outside = true
@@ -298,6 +303,7 @@ icon_alignment = 1
 [node name="Settings" type="Button" parent="InfoBar/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
 keep_pressed_outside = true
@@ -320,6 +326,7 @@ script = ExtResource("7_fe0ly")
 [node name="Notifications" type="Button" parent="InfoBar/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
 keep_pressed_outside = true

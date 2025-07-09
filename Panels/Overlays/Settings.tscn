@@ -82,7 +82,9 @@ content_margin_right = 5.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bjgno"]
 content_margin_left = 5.0
+content_margin_top = 5.0
 content_margin_right = 5.0
+content_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_db3eo"]
 

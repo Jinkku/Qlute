@@ -61,7 +61,6 @@ offset_bottom = 3.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_onmcp")
 
 [node name="Notlog" type="MarginContainer" parent="AccPanel"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
@@ -127,6 +126,7 @@ size_flags_horizontal = 3
 text = "Create"
 
 [node name="Log" type="Control" parent="AccPanel"]
+visible = false
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 
@@ -259,7 +259,7 @@ layout_mode = 0
 offset_left = 8.0
 offset_top = 144.0
 offset_right = 289.0
-offset_bottom = 194.0
+offset_bottom = 189.0
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6jcst")
 text = "Log out"
 

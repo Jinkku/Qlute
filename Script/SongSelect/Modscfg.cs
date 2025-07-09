@@ -3,10 +3,22 @@ using System;
 
 public partial class Modscfg : Button
 {
+    private Label _modTitle;
+    private Label _modDesc;
 	public override void _Ready()
-	{
+    {
+        _modTitle = GetNode<Label>("Margin/Pill/Title");
+        _modDesc = GetNode<Label>("Margin/Pill/Desc");
+        if (HasMeta("Title"))
+        {
+            _modTitle.Text = GetMeta("Title").ToString();
+        }
+        if (HasMeta("Desc"))
+        {
+            _modDesc.Text = GetMeta("Desc").ToString();
+        }
         ButtonPressed = ModsOperator.Mods[GetMeta("ModName").ToString()];
-	}
+    }
     private void DisabledButton(){
         Disabled = true;
         ModsOperator.Mods[GetMeta("ModName").ToString()] = !Disabled;

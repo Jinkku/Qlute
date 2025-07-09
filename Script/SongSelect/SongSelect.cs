@@ -23,7 +23,6 @@ public partial class SongSelect : Control
 	public string ImageURL {get;set;}
 	public Control ModScreen { get; set; }
 	public Tween ModScreen_Tween { get; set; }
-	public ColorRect Blocker { get; set; }
 	public Label Diff { get; set; }
 	public ScrollBar scrollBar { get; set; }
 	public PanelContainer Info {get;set;}
@@ -124,7 +123,6 @@ public partial class SongSelect : Control
 		Diff = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Difficulty");
 		ModScreen = GetNode<Control>("ModsScreen");
 		ModScreen.Visible = true;
-		Blocker = GetNode<ColorRect>("Blocker");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SongTitle = GetNode<Label>("SongControl/AmazingPillar/Title");
 		SongArtist = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box1/Artist");
@@ -344,10 +342,6 @@ public partial class SongSelect : Control
 		}
 	}
 	
-	private void _modfin(){
-		Blocker.Visible = false;
-		ModsScreenActive = false;
-	}
 	private bool ModsScreenActive = false;
 	private bool SongPanelAccess = false;
 	private void _songenter()
@@ -368,17 +362,14 @@ public partial class SongSelect : Control
 		var colour = new Color(1f,1f,1f,1f);
 		var pos = new Vector2(0,0);
 		if (ModsScreenActive) {
+			ModsScreenActive = false;
 			colour = new Color(0f,0f,0f,0f);
 			pos = new Vector2(0,GetViewportRect().Size.Y);
-			ModScreen_Tween.Connect("finished",new Callable(this,nameof(_modfin)));
 		}else {
 			ModsScreenActive = true;
-			Blocker.Visible = true;
-			Blocker.SelfModulate = new Color(0f,0f,0f,0f);
 			ModScreen.Position = new Vector2(0,GetViewportRect().Size.Y);
 		}
 		ModScreen_Tween.SetParallel(true);
-		ModScreen_Tween.TweenProperty(Blocker, "self_modulate", colour , 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		ModScreen_Tween.TweenProperty(ModScreen, "position", pos , 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		ModScreen_Tween.Play();
 	}

@@ -1,91 +1,35 @@
-[gd_scene load_steps=16 format=3 uid="uid://dpjsc7sxiwkm7"]
+[gd_scene load_steps=15 format=3 uid="uid://dpjsc7sxiwkm7"]
 
 [ext_resource type="Script" uid="uid://dxbbl1s8m45so" path="res://Script/Mods/Mods.cs" id="1_7gucc"]
+[ext_resource type="Script" uid="uid://b4xchyvoqsbhp" path="res://Script/Mods/CustomizeMenu.cs" id="1_u70wj"]
 [ext_resource type="Script" uid="uid://bhe0fbn3yi1r4" path="res://Script/SongSelect/ModsMulti.cs" id="2_caatv"]
-[ext_resource type="Script" uid="uid://ddyso8ifkfuv2" path="res://Script/SongSelect/Modscfg.cs" id="2_cltyr"]
+[ext_resource type="PackedScene" uid="uid://c2ouvq16jls8u" path="res://Panels/Overlays/BottomPanelButtons.tscn" id="5_smilj"]
+[ext_resource type="PackedScene" uid="uid://c8egllgadndpy" path="res://Panels/Mods/ModButton.tscn" id="6_133ox"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2j6ug"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(0.196078, 0.196078, 0.196078, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-expand_margin_left = 15.0
-expand_margin_top = 15.0
-expand_margin_right = 15.0
-expand_margin_bottom = 15.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_smilj"]
+content_margin_left = 25.0
+content_margin_top = 25.0
+content_margin_right = 25.0
+content_margin_bottom = 25.0
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gmdhu"]
-content_margin_left = 10.0
-content_margin_top = 5.0
-content_margin_right = 10.0
-content_margin_bottom = 5.0
-bg_color = Color(0.5625, 0.490173, 0.331055, 1)
-skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u70wj"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u70wj"]
+content_margin_left = 25.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqe06"]
 content_margin_left = 15.0
 content_margin_top = 5.0
 content_margin_right = 15.0
 content_margin_bottom = 5.0
-skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ulxgl"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_picxj"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(0.15625, 0.15625, 0.15625, 1)
-skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2d24i"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(0.443034, 0.385417, 1, 1)
-skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_woq5l"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(0.291667, 0.446615, 1, 1)
-skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k8tw6"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(0.442708, 0.442708, 0.442708, 1)
 skew = Vector2(0.5, 0)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
@@ -141,184 +85,187 @@ shadow_color = Color(0.23801, 0.366319, 0.557292, 1)
 shadow_size = 1
 shadow_offset = Vector2(0, 4)
 
-[node name="ModsScreen" type="PanelContainer"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -320.0
-offset_top = -180.0
-offset_right = 320.0
-offset_bottom = 180.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_133ox"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 0.588235)
+
+[node name="ModMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_2j6ug")
-script = ExtResource("1_7gucc")
+mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+[node name="Customize" type="PanelContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = 120.0
+offset_bottom = -50.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_smilj")
+script = ExtResource("1_u70wj")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Customize"]
 layout_mode = 2
 
-[node name="TitleBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="Customize/VBoxContainer"]
 layout_mode = 2
-alignment = 1
+text = "DT Multiplier 1.5x"
 
-[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/TitleBox"]
+[node name="HSlider" type="HSlider" parent="Customize/VBoxContainer"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_gmdhu")
+min_value = 1.1
+max_value = 2.0
+step = 0.01
+value = 1.5
+
+[node name="Title" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_u70wj")
+
+[node name="Info" type="HBoxContainer" parent="Title"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="Title" type="Label" parent="Title/Info"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_u70wj")
 text = "Mods"
+vertical_alignment = 2
 
-[node name="ModsMulti" type="Label" parent="MarginContainer/VBoxContainer/TitleBox"]
+[node name="ModsMulti" type="Label" parent="Title/Info"]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_wqe06")
 text = "1.0x"
 script = ExtResource("2_caatv")
 
-[node name="ModsEntries" type="GridContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 6
-columns = 6
-
-[node name="Mod" type="Button" parent="MarginContainer/VBoxContainer/ModsEntries"]
-custom_minimum_size = Vector2(100, 50)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ulxgl")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_picxj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_2d24i")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_woq5l")
-theme_override_styles/normal = SubResource("StyleBoxFlat_k8tw6")
-toggle_mode = true
-text = "Auto"
-script = ExtResource("2_cltyr")
-metadata/ModName = "auto"
-metadata/ModNameSmall = "AT"
-
-[node name="Mod2" type="Button" parent="MarginContainer/VBoxContainer/ModsEntries"]
-custom_minimum_size = Vector2(100, 50)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ulxgl")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_picxj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_2d24i")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_woq5l")
-theme_override_styles/normal = SubResource("StyleBoxFlat_k8tw6")
-toggle_mode = true
-text = "DT"
-script = ExtResource("2_cltyr")
-metadata/ModName = "dt"
-metadata/ModNameSmall = "DT"
-
-[node name="Mod3" type="Button" parent="MarginContainer/VBoxContainer/ModsEntries"]
-custom_minimum_size = Vector2(100, 50)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ulxgl")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_picxj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_2d24i")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_woq5l")
-theme_override_styles/normal = SubResource("StyleBoxFlat_k8tw6")
-toggle_mode = true
-text = "HT"
-script = ExtResource("2_cltyr")
-metadata/ModName = "ht"
-metadata/ModNameSmall = "HT"
-
-[node name="Mod4" type="Button" parent="MarginContainer/VBoxContainer/ModsEntries"]
-custom_minimum_size = Vector2(100, 50)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ulxgl")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_picxj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_2d24i")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_woq5l")
-theme_override_styles/normal = SubResource("StyleBoxFlat_k8tw6")
-toggle_mode = true
-text = "Random"
-script = ExtResource("2_cltyr")
-metadata/ModName = "random"
-metadata/ModNameSmall = "RND"
-
-[node name="Mod5" type="Button" parent="MarginContainer/VBoxContainer/ModsEntries"]
-custom_minimum_size = Vector2(100, 50)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ulxgl")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_picxj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_2d24i")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_woq5l")
-theme_override_styles/normal = SubResource("StyleBoxFlat_k8tw6")
-toggle_mode = true
-text = "Slice"
-script = ExtResource("2_cltyr")
-metadata/ModName = "slice"
-metadata/ModNameSmall = "SL"
-
-[node name="Mod6" type="Button" parent="MarginContainer/VBoxContainer/ModsEntries"]
-custom_minimum_size = Vector2(100, 50)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ulxgl")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_picxj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_2d24i")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_woq5l")
-theme_override_styles/normal = SubResource("StyleBoxFlat_k8tw6")
-toggle_mode = true
-text = "Black out"
-script = ExtResource("2_cltyr")
-metadata/ModName = "black-out"
-metadata/ModNameSmall = "BO"
-
-[node name="Mod7" type="Button" parent="MarginContainer/VBoxContainer/ModsEntries"]
-custom_minimum_size = Vector2(100, 50)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ulxgl")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_picxj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_2d24i")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_woq5l")
-theme_override_styles/normal = SubResource("StyleBoxFlat_k8tw6")
-toggle_mode = true
-text = "No Fail"
-script = ExtResource("2_cltyr")
-metadata/ModName = "no-fail"
-metadata/ModNameSmall = "NF"
-
-[node name="Options" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 8
-alignment = 1
-
-[node name="Retry" type="Button" parent="MarginContainer/VBoxContainer/Options"]
+[node name="Reset" type="Button" parent="Title/Info"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
 theme_override_styles/focus = SubResource("StyleBoxFlat_4kah8")
 theme_override_styles/hover = SubResource("StyleBoxFlat_g6tdb")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_tykkm")
 theme_override_styles/normal = SubResource("StyleBoxFlat_oxxgw")
 text = "Reset"
 
-[node name="Continue" type="Button" parent="MarginContainer/VBoxContainer/Options"]
+[node name="Customize" type="Button" parent="Title/Info"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
 theme_override_styles/focus = SubResource("StyleBoxFlat_4kah8")
 theme_override_styles/hover = SubResource("StyleBoxFlat_g6tdb")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_tykkm")
 theme_override_styles/normal = SubResource("StyleBoxFlat_oxxgw")
 text = "Customize"
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/ModsEntries/Mod" to="MarginContainer/VBoxContainer/ModsEntries/Mod" method="_modpressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/ModsEntries/Mod2" to="MarginContainer/VBoxContainer/ModsEntries/Mod2" method="_modpressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/ModsEntries/Mod3" to="MarginContainer/VBoxContainer/ModsEntries/Mod3" method="_modpressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/ModsEntries/Mod4" to="MarginContainer/VBoxContainer/ModsEntries/Mod4" method="_modpressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/ModsEntries/Mod5" to="MarginContainer/VBoxContainer/ModsEntries/Mod5" method="_modpressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/ModsEntries/Mod6" to="MarginContainer/VBoxContainer/ModsEntries/Mod6" method="_modpressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/ModsEntries/Mod7" to="MarginContainer/VBoxContainer/ModsEntries/Mod7" method="_modpressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Options/Retry" to="." method="_reset"]
+[node name="ControlPanel" parent="." instance=ExtResource("5_smilj")]
+visible = false
+layout_mode = 1
+
+[node name="Mods" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 120.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_133ox")
+script = ExtResource("1_7gucc")
+
+[node name="ModsEntries" type="GridContainer" parent="Mods"]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 4
+
+[node name="ModButton" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
+layout_mode = 2
+toggle_mode = true
+metadata/Title = "Auto"
+metadata/Desc = "Perfect play"
+metadata/ModName = "auto"
+metadata/ModNameSmall = "AT"
+
+[node name="ModButton2" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
+layout_mode = 2
+toggle_mode = true
+metadata/Title = "Nightcore"
+metadata/Desc = "Have that classic 2012 feel~"
+metadata/ModName = "dt"
+metadata/ModNameSmall = "DT"
+
+[node name="ModButton3" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
+layout_mode = 2
+toggle_mode = true
+metadata/Title = "Half Time"
+metadata/Desc = "Very slooooow"
+metadata/ModName = "ht"
+metadata/ModNameSmall = "HT"
+
+[node name="ModButton5" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
+layout_mode = 2
+disabled = true
+toggle_mode = true
+metadata/Title = "Random"
+metadata/Desc = "A ramdomized beatmap (not implemented)"
+metadata/ModName = "random"
+metadata/ModNameSmall = "RND"
+
+[node name="ModButton6" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
+layout_mode = 2
+toggle_mode = true
+metadata/Title = "Slice"
+metadata/Desc = "Half of the screen is covered -w-"
+metadata/ModName = "slice"
+metadata/ModNameSmall = "SL"
+
+[node name="ModButton7" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
+layout_mode = 2
+toggle_mode = true
+metadata/Title = "Black out"
+metadata/Desc = "Who turn off the lights?!"
+metadata/ModName = "black-out"
+metadata/ModNameSmall = "BO"
+
+[node name="ModButton8" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
+layout_mode = 2
+toggle_mode = true
+metadata/Title = "No Fail"
+metadata/Desc = "Your immortal!"
+metadata/ModName = "no-fail"
+metadata/ModNameSmall = "NF"
+
+[connection signal="pressed" from="Title/Info/Reset" to="Mods" method="_reset"]
+[connection signal="pressed" from="Title/Info/Customize" to="Customize" method="_customize"]
+[connection signal="pressed" from="ControlPanel/Box/BackButton" to="Mods" method="_back"]
+[connection signal="pressed" from="Mods/ModsEntries/ModButton" to="Mods/ModsEntries/ModButton" method="_modpressed"]
+[connection signal="pressed" from="Mods/ModsEntries/ModButton2" to="Mods/ModsEntries/ModButton2" method="_modpressed"]
+[connection signal="pressed" from="Mods/ModsEntries/ModButton3" to="Mods/ModsEntries/ModButton3" method="_modpressed"]
+[connection signal="pressed" from="Mods/ModsEntries/ModButton5" to="Mods/ModsEntries/ModButton5" method="_modpressed"]
+[connection signal="pressed" from="Mods/ModsEntries/ModButton6" to="Mods/ModsEntries/ModButton6" method="_modpressed"]
+[connection signal="pressed" from="Mods/ModsEntries/ModButton7" to="Mods/ModsEntries/ModButton7" method="_modpressed"]
+[connection signal="pressed" from="Mods/ModsEntries/ModButton8" to="Mods/ModsEntries/ModButton8" method="_modpressed"]
+
+[editable path="ControlPanel"]
