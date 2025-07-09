@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://coyf2teo5g6nm"]
+[gd_scene load_steps=23 format=3 uid="uid://coyf2teo5g6nm"]
 
 [ext_resource type="Script" uid="uid://bqj04u64e106v" path="res://Script/SongSelect/SongSelect.cs" id="1_fin0e"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
@@ -6,8 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://by5dgss2ux7gu" path="res://Skin/System/external.svg" id="3_javs2"]
 [ext_resource type="Script" uid="uid://d1r50u4kxwpbl" path="res://Script/SongSelect/LeaderboardInfo.cs" id="5_ndd6a"]
 [ext_resource type="PackedScene" uid="uid://dpjsc7sxiwkm7" path="res://Panels/SongSelectElements/Mods.tscn" id="6_4xos4"]
-[ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="6_wb004"]
+[ext_resource type="PackedScene" uid="uid://c2ouvq16jls8u" path="res://Panels/Overlays/BottomPanelButtons.tscn" id="7_p2axe"]
 [ext_resource type="PackedScene" uid="uid://cxtvce61elw00" path="res://Panels/Overlays/ModShowcase.tscn" id="7_p20rm"]
+[ext_resource type="Script" uid="uid://blbe3d2880su3" path="res://Script/Effects/ScreenElementButton.cs" id="8_5rktx"]
 [ext_resource type="PackedScene" uid="uid://c1aa8tscp5u6p" path="res://Panels/Overlays/BeatmapContextMenu.tscn" id="9_1t01f"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ixo7g"]
@@ -57,50 +58,27 @@ content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ombo5"]
-bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p2axe"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u1xf2"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5rktx"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gd11t"]
-content_margin_left = 10.0
-content_margin_right = 20.0
-bg_color = Color(0.92549, 0.294118, 0.180392, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xmk5a"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fx5hl"]
-content_margin_left = 10.0
-content_margin_right = 20.0
-bg_color = Color(0.666667, 0.222387, 0.142361, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uenb6"]
-content_margin_left = 10.0
-content_margin_right = 20.0
-bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2gjtq"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llhhs"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1o1bf"]
-content_margin_left = 10.0
-content_margin_right = 10.0
-bg_color = Color(0, 0, 0, 1)
-border_color = Color(1, 0.638021, 0.276042, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kqc14"]
-content_margin_left = 10.0
-content_margin_right = 10.0
-bg_color = Color(0, 0, 0, 1)
-border_color = Color(1, 0.638021, 0.276042, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vc7sc"]
-content_margin_left = 10.0
-content_margin_right = 10.0
-bg_color = Color(0, 0, 0, 0.47451)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dfrpo"]
-content_margin_left = 10.0
-content_margin_right = 10.0
-bg_color = Color(0, 0, 0, 1)
-border_color = Color(1, 0.638021, 0.276042, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cv1hb"]
 bg_color = Color(1, 1, 1, 1)
@@ -362,61 +340,73 @@ offset_left = 105.0
 offset_right = 605.0
 mouse_filter = 2
 
-[node name="ControlPanel" type="PanelContainer" parent="BottomBar"]
+[node name="ControlPanel" parent="BottomBar" instance=ExtResource("7_p2axe")]
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+
+[node name="Box" parent="BottomBar/ControlPanel" index="0"]
+theme_override_constants/separation = 5
+
+[node name="Mod" type="Button" parent="BottomBar/ControlPanel/Box" index="1"]
+custom_minimum_size = Vector2(108, 50)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_p2axe")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5rktx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_xmk5a")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2gjtq")
+script = ExtResource("8_5rktx")
+metadata/unfocus = Color(0.0784314, 0.0784314, 0.0784314, 1)
+metadata/focus = Color(0.21875, 0.21875, 0.21875, 1)
+metadata/highlight = Color(0.398438, 0.279665, 0.192993, 1)
+
+[node name="Label" type="Label" parent="BottomBar/ControlPanel/Box/Mod"]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -50.0
 grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_ombo5")
-
-[node name="Box" type="HBoxContainer" parent="BottomBar/ControlPanel"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Button" type="Button" parent="BottomBar/ControlPanel/Box"]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_u1xf2")
-theme_override_styles/hover = SubResource("StyleBoxFlat_gd11t")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_fx5hl")
-theme_override_styles/normal = SubResource("StyleBoxFlat_uenb6")
-text = "  Back"
-icon = ExtResource("6_wb004")
-
-[node name="Mods" type="Button" parent="BottomBar/ControlPanel/Box"]
-custom_minimum_size = Vector2(89, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-theme_override_styles/focus = SubResource("StyleBoxEmpty_llhhs")
-theme_override_styles/hover = SubResource("StyleBoxFlat_1o1bf")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_kqc14")
-theme_override_styles/normal = SubResource("StyleBoxFlat_vc7sc")
+grow_vertical = 2
 text = "Mods"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Random" type="Button" parent="BottomBar/ControlPanel/Box"]
-custom_minimum_size = Vector2(89, 0)
+[node name="Random" type="Button" parent="BottomBar/ControlPanel/Box" index="2"]
+custom_minimum_size = Vector2(108, 50)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
-theme_override_styles/focus = SubResource("StyleBoxEmpty_llhhs")
-theme_override_styles/hover = SubResource("StyleBoxFlat_dfrpo")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_dfrpo")
-theme_override_styles/normal = SubResource("StyleBoxFlat_vc7sc")
+size_flags_horizontal = 0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_p2axe")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5rktx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_xmk5a")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2gjtq")
+script = ExtResource("8_5rktx")
+metadata/unfocus = Color(0.0784314, 0.0784314, 0.0784314, 1)
+metadata/focus = Color(0.21875, 0.21875, 0.21875, 1)
+metadata/highlight = Color(0.228304, 0.398438, 0.192993, 1)
+
+[node name="Label" type="Label" parent="BottomBar/ControlPanel/Box/Random"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Random"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Collections" type="Button" parent="BottomBar/ControlPanel/Box"]
+[node name="Collections" type="Button" parent="BottomBar/ControlPanel/Box" index="3"]
 visible = false
-custom_minimum_size = Vector2(89, 0)
+custom_minimum_size = Vector2(108, 50)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
-theme_override_styles/focus = SubResource("StyleBoxEmpty_llhhs")
-theme_override_styles/hover = SubResource("StyleBoxFlat_dfrpo")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_dfrpo")
-theme_override_styles/normal = SubResource("StyleBoxFlat_vc7sc")
-text = "Collections"
+size_flags_horizontal = 0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_p2axe")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5rktx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_xmk5a")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2gjtq")
+script = ExtResource("8_5rktx")
+metadata/unfocus = Color(0.0784314, 0.0784314, 0.0784314, 1)
+metadata/focus = Color(0.21875, 0.21875, 0.21875, 1)
+metadata/highlight = Color(0.192993, 0.205833, 0.398438, 1)
 
 [node name="Start" type="Button" parent="BottomBar"]
 self_modulate = Color(0.460938, 0.460938, 0.460938, 1)
@@ -478,9 +468,22 @@ offset_bottom = 427.0
 [connection signal="mouse_entered" from="SongPanel" to="." method="_songenter"]
 [connection signal="mouse_exited" from="SongPanel" to="." method="_songexit"]
 [connection signal="value_changed" from="SongPanel/VScrollBar" to="." method="_valuechangedscroll"]
-[connection signal="pressed" from="BottomBar/ControlPanel/Box/Button" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="BottomBar/ControlPanel/Box/Mods" to="." method="_Mods_show"]
+[connection signal="button_down" from="BottomBar/ControlPanel/Box/Mod" to="BottomBar/ControlPanel/Box/Mod" method="_highlight"]
+[connection signal="button_up" from="BottomBar/ControlPanel/Box/Mod" to="BottomBar/ControlPanel/Box/Mod" method="_focus"]
+[connection signal="mouse_entered" from="BottomBar/ControlPanel/Box/Mod" to="BottomBar/ControlPanel/Box/Mod" method="_focus"]
+[connection signal="mouse_exited" from="BottomBar/ControlPanel/Box/Mod" to="BottomBar/ControlPanel/Box/Mod" method="_unfocus"]
+[connection signal="pressed" from="BottomBar/ControlPanel/Box/Mod" to="." method="_Mods_show"]
+[connection signal="button_down" from="BottomBar/ControlPanel/Box/Random" to="BottomBar/ControlPanel/Box/Random" method="_highlight"]
+[connection signal="button_up" from="BottomBar/ControlPanel/Box/Random" to="BottomBar/ControlPanel/Box/Random" method="_focus"]
+[connection signal="mouse_entered" from="BottomBar/ControlPanel/Box/Random" to="BottomBar/ControlPanel/Box/Random" method="_focus"]
+[connection signal="mouse_exited" from="BottomBar/ControlPanel/Box/Random" to="BottomBar/ControlPanel/Box/Random" method="_unfocus"]
 [connection signal="pressed" from="BottomBar/ControlPanel/Box/Random" to="." method="_on_random"]
+[connection signal="button_down" from="BottomBar/ControlPanel/Box/Collections" to="BottomBar/ControlPanel/Box/Collections" method="_highlight"]
+[connection signal="button_up" from="BottomBar/ControlPanel/Box/Collections" to="BottomBar/ControlPanel/Box/Collections" method="_focus"]
+[connection signal="mouse_entered" from="BottomBar/ControlPanel/Box/Collections" to="BottomBar/ControlPanel/Box/Collections" method="_focus"]
+[connection signal="mouse_exited" from="BottomBar/ControlPanel/Box/Collections" to="BottomBar/ControlPanel/Box/Collections" method="_unfocus"]
 [connection signal="mouse_entered" from="BottomBar/Start" to="." method="_start_focus"]
 [connection signal="mouse_exited" from="BottomBar/Start" to="." method="_start_unfocus"]
 [connection signal="pressed" from="BottomBar/Start" to="." method="_Start"]
+
+[editable path="BottomBar/ControlPanel"]
