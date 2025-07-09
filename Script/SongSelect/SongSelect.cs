@@ -94,6 +94,7 @@ public partial class SongSelect : Control
 	}
 	private void _on_random(){
 		SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
+		scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
 	}
 
 
@@ -345,7 +346,6 @@ public partial class SongSelect : Control
 		else if (Input.IsActionJustPressed("Random"))
 		{
 			_on_random();
-			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
 
 		}
 		else if (Input.IsActionJustPressed("Collections"))
