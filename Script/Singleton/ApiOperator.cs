@@ -101,8 +101,13 @@ public partial class ApiOperator : Node
 		SubmitApi.Connect("request_completed", new Callable(this, nameof(_Submitrequest)));
 		if ((Username != null || PasswordHash != null) && (bool)SettingsOperator.Sessioncfg["loggedin"] == false)
 		{
+			GD.Print("Attempting to login with username: " + Username);
 			UPlayerName.Instance.Text = Username;
 			ApiOperator.Login(Username, PasswordHash);
+		}
+		else
+		{
+			GD.Print("No username or password found, skipping login.");
 		}
 	}
 	private void _Submitrequest(long result, long responseCode, string[] headers, byte[] body)
