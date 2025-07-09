@@ -64,7 +64,7 @@ public partial class SettingsOperator : Node
             DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
             Engine.MaxFps = (int)DisplayServer.ScreenGetRefreshRate() * 8;
         }
-        else if (fps == 2)
+        else if (fps == 4)
         {
             DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
             Engine.MaxFps = 0; // Unlimited FPS
