@@ -468,6 +468,7 @@ offset_bottom = 427.0
 [connection signal="mouse_entered" from="SongPanel" to="." method="_songenter"]
 [connection signal="mouse_exited" from="SongPanel" to="." method="_songexit"]
 [connection signal="value_changed" from="SongPanel/VScrollBar" to="." method="_valuechangedscroll"]
+[connection signal="pressed" from="BottomBar/ControlPanel/Box/BackButton" to="." method="_on_back_pressed"]
 [connection signal="button_down" from="BottomBar/ControlPanel/Box/Mod" to="BottomBar/ControlPanel/Box/Mod" method="_highlight"]
 [connection signal="button_up" from="BottomBar/ControlPanel/Box/Mod" to="BottomBar/ControlPanel/Box/Mod" method="_focus"]
 [connection signal="mouse_entered" from="BottomBar/ControlPanel/Box/Mod" to="BottomBar/ControlPanel/Box/Mod" method="_focus"]
