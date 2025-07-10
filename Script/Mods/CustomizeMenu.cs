@@ -15,11 +15,6 @@ public partial class CustomizeMenu : PanelContainer
 		_customizePanelHeight = (int)Position.Y;
 		_modmenuPanelHeight = (int)_modmenuPanel.Position.Y;
 	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
 	private void _customize()
 	{
 		_isCustomizing = !_isCustomizing;
@@ -32,23 +27,14 @@ public partial class CustomizeMenu : PanelContainer
 		if (_isCustomizing)
 		{
 			// Move the mod menu panel down
-			Modulate = new Color(1f, 1f, 1f, 0f);
-			_customizeTween.TweenProperty(_modmenuPanel, "position", new Vector2(_modmenuPanel.Position.X, _modmenuPanel.Position.Y - Size.Y - 15), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-			//_customizeTween.TweenProperty(_modmenuPanel, "modulate", new Color(1f, 1f, 1f, 0.5f), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-			_customizeTween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), 0.3f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-			// Move the customize panel up
-			_customizeTween.TweenProperty(this, "position", new Vector2(Position.X, _customizePanelHeight + Size.Y + 15), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-			GetTree().CurrentScene.GetNode<Button>("Title/Info/Customize").Text = "Close Customize"; // Hide Customize
+			_customizeTween.TweenProperty(_modmenuPanel, "size", new Vector2(_modmenuPanel.Size.X - 400, _modmenuPanel.Size.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+			_customizeTween.TweenProperty(this, "position", new Vector2(Position.X - 400, Position.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		}
 		else
 		{
 			// Move the mod menu panel back to its original position
-			_customizeTween.TweenProperty(_modmenuPanel, "position", new Vector2(_modmenuPanel.Position.X, _modmenuPanelHeight), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-			//_customizeTween.TweenProperty(_modmenuPanel, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-			_customizeTween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 0f), 0.3f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-			// Move the customize panel back to its original position
-			_customizeTween.TweenProperty(this, "position", new Vector2(Position.X, _customizePanelHeight), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-			GetTree().CurrentScene.GetNode<Button>("Title/Info/Customize").Text = "Customize"; // Open Customize
+			_customizeTween.TweenProperty(_modmenuPanel, "size", new Vector2(_modmenuPanel.Size.X + 400, _modmenuPanel.Size.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+			_customizeTween.TweenProperty(this, "position", new Vector2(Position.X + 400, Position.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		}
 		_customizeTween.Play();
 	}

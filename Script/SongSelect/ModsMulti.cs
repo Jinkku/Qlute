@@ -15,11 +15,11 @@ public partial class ModsMulti : Label
 		{
 			if (mod.Value && mod.Key == "dt")
 			{
-				multiplier *= 1.15;
+				multiplier *= 1.15 * (AudioPlayer.Instance.PitchScale / 1.25f);
 			}
 			else if (mod.Value && mod.Key == "ht")
 			{
-				multiplier *= 0.3;
+				multiplier *= 0.3 * (AudioPlayer.Instance.PitchScale / 0.5f);
 			}
 			else if (mod.Value && mod.Key == "no-fail")
 			{

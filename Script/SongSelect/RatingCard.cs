@@ -11,6 +11,5 @@ public partial class RatingCard : Label
 	public override void _Process(double delta)
 	{
 		Text = "Lv. " + ((int)((int)SettingsOperator.Beatmaps[Int32.Parse(GetNode<Button>("../../../../").GetMeta("SongID").ToString())].Levelrating * ModsMulti.multiplier)).ToString();
-		//(int)float.Parse(song["levelrating"].ToString())
 	}
 }

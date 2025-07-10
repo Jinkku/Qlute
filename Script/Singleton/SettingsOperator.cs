@@ -399,6 +399,7 @@ public partial class SettingsOperator : Node
         { "beatmapmapper", null },
         { "beatmapbpm", (int)160 },
         { "osubeatid", 0 },
+        {"levelrating", 1},
         { "osubeatidset", 0 },
         { "beatmapaccuracy", (int)0 },
         { "beatmapdiff", null },

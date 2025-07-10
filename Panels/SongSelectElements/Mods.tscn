@@ -1,9 +1,13 @@
-[gd_scene load_steps=15 format=3 uid="uid://dpjsc7sxiwkm7"]
+[gd_scene load_steps=19 format=3 uid="uid://dpjsc7sxiwkm7"]
 
 [ext_resource type="Script" uid="uid://dxbbl1s8m45so" path="res://Script/Mods/Mods.cs" id="1_7gucc"]
 [ext_resource type="Script" uid="uid://b4xchyvoqsbhp" path="res://Script/Mods/CustomizeMenu.cs" id="1_u70wj"]
 [ext_resource type="Script" uid="uid://bhe0fbn3yi1r4" path="res://Script/SongSelect/ModsMulti.cs" id="2_caatv"]
+[ext_resource type="Script" uid="uid://f41458s5sqqm" path="res://Script/Mods/Customizations/DtCustom.cs" id="2_k155b"]
+[ext_resource type="Script" uid="uid://c5wpvib2f3hn" path="res://Script/Mods/Customizations/HtCustom.cs" id="3_b2hs3"]
+[ext_resource type="Script" uid="uid://d4cyep10vdq2d" path="res://Script/Mods/customize.gd" id="5_b2hs3"]
 [ext_resource type="PackedScene" uid="uid://c2ouvq16jls8u" path="res://Panels/Overlays/BottomPanelButtons.tscn" id="5_smilj"]
+[ext_resource type="Script" uid="uid://bagjvps0md7pu" path="res://Script/Mods/LevelCompute.cs" id="5_vbcbr"]
 [ext_resource type="PackedScene" uid="uid://c8egllgadndpy" path="res://Panels/Mods/ModButton.tscn" id="6_133ox"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_smilj"]
@@ -102,15 +106,14 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="Customize" type="PanelContainer" parent="."]
-visible = false
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -400.0
 offset_top = 120.0
+offset_right = 400.0
 offset_bottom = -50.0
 grow_horizontal = 0
 grow_vertical = 2
@@ -119,17 +122,38 @@ script = ExtResource("1_u70wj")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Customize"]
 layout_mode = 2
+theme_override_constants/separation = 15
 
-[node name="Label" type="Label" parent="Customize/VBoxContainer"]
+[node name="DT Custom" type="VBoxContainer" parent="Customize/VBoxContainer"]
 layout_mode = 2
-text = "DT Multiplier 1.5x"
+script = ExtResource("2_k155b")
 
-[node name="HSlider" type="HSlider" parent="Customize/VBoxContainer"]
+[node name="DTM" type="Label" parent="Customize/VBoxContainer/DT Custom"]
+layout_mode = 2
+text = "DT Speed 1.5x"
+
+[node name="DTMS" type="HSlider" parent="Customize/VBoxContainer/DT Custom"]
 layout_mode = 2
 min_value = 1.1
 max_value = 2.0
 step = 0.01
 value = 1.5
+
+[node name="HT Custom" type="VBoxContainer" parent="Customize/VBoxContainer"]
+layout_mode = 2
+script = ExtResource("3_b2hs3")
+
+[node name="HTM" type="Label" parent="Customize/VBoxContainer/HT Custom"]
+layout_mode = 2
+text = "HT Speed 0.5x"
+
+[node name="HTMS" type="HSlider" parent="Customize/VBoxContainer/HT Custom"]
+self_modulate = Color(0.320312, 1, 0.330933, 1)
+layout_mode = 2
+min_value = 0.1
+max_value = 0.9
+step = 0.01
+value = 0.5
 
 [node name="Title" type="PanelContainer" parent="."]
 custom_minimum_size = Vector2(0, 120)
@@ -157,6 +181,12 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_wqe06")
 text = "1.0x"
 script = ExtResource("2_caatv")
 
+[node name="Level" type="Label" parent="Title/Info"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_wqe06")
+text = "Lv. ??"
+script = ExtResource("5_vbcbr")
+
 [node name="Reset" type="Button" parent="Title/Info"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
@@ -178,6 +208,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_g6tdb")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_tykkm")
 theme_override_styles/normal = SubResource("StyleBoxFlat_oxxgw")
 text = "Customize"
+script = ExtResource("5_b2hs3")
 
 [node name="ControlPanel" parent="." instance=ExtResource("5_smilj")]
 visible = false
@@ -198,7 +229,7 @@ script = ExtResource("1_7gucc")
 [node name="ModsEntries" type="GridContainer" parent="Mods"]
 layout_mode = 2
 size_flags_horizontal = 4
-columns = 4
+columns = 3
 
 [node name="ModButton" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
 layout_mode = 2
@@ -257,9 +288,13 @@ metadata/Desc = "Your immortal!"
 metadata/ModName = "no-fail"
 metadata/ModNameSmall = "NF"
 
+[connection signal="value_changed" from="Customize/VBoxContainer/DT Custom/DTMS" to="Customize/VBoxContainer/DT Custom" method="_valuechanged"]
+[connection signal="value_changed" from="Customize/VBoxContainer/HT Custom/HTMS" to="Customize/VBoxContainer/HT Custom" method="_valuechanged"]
 [connection signal="pressed" from="Title/Info/Reset" to="Mods" method="_reset"]
 [connection signal="pressed" from="Title/Info/Customize" to="Customize" method="_customize"]
+[connection signal="pressed" from="Title/Info/Customize" to="Title/Info/Customize" method="_on_pressed"]
 [connection signal="pressed" from="ControlPanel/Box/BackButton" to="Mods" method="_back"]
+[connection signal="resized" from="Mods" to="Mods" method="_on_resized"]
 [connection signal="pressed" from="Mods/ModsEntries/ModButton" to="Mods/ModsEntries/ModButton" method="_modpressed"]
 [connection signal="pressed" from="Mods/ModsEntries/ModButton2" to="Mods/ModsEntries/ModButton2" method="_modpressed"]
 [connection signal="pressed" from="Mods/ModsEntries/ModButton3" to="Mods/ModsEntries/ModButton3" method="_modpressed"]

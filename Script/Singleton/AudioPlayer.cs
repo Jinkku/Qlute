@@ -16,7 +16,7 @@ public partial class AudioPlayer : AudioStreamPlayer
     }
     public override void _Process(double delta)
     {
-        if (SettingsOperator.loopaudio){AudioLoop();}
+        if (SettingsOperator.loopaudio) AudioLoop();
     }
 
     public static AudioStreamMP3 LoadMP3(string path)

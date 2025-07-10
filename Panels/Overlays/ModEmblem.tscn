@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cs1yw4bti3qhr"]
+[gd_scene load_steps=6 format=3 uid="uid://cs1yw4bti3qhr"]
 
 [ext_resource type="Script" uid="uid://fy3vn40joyl5" path="res://Script/Mods/mod_emblem.gd" id="1_gnskv"]
+[ext_resource type="Script" uid="uid://bst48ie3s1yhg" path="res://Script/Mods/CustomValue.cs" id="2_eu4ee"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eu4ee"]
 bg_color = Color(0.136719, 0.136719, 0.136719, 1)
@@ -45,6 +46,7 @@ horizontal_alignment = 1
 visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_brkpi")
+script = ExtResource("2_eu4ee")
 
 [node name="Value" type="Label" parent="Customizations/CustomValue"]
 layout_mode = 2
