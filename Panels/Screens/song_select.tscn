@@ -11,14 +11,6 @@
 [ext_resource type="Script" uid="uid://blbe3d2880su3" path="res://Script/Effects/ScreenElementButton.cs" id="8_5rktx"]
 [ext_resource type="PackedScene" uid="uid://c1aa8tscp5u6p" path="res://Panels/Overlays/BeatmapContextMenu.tscn" id="9_1t01f"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ixo7g"]
-bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
-border_color = Color(0.265625, 0.63855, 1, 1)
-expand_margin_bottom = 5.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5vans"]
-content_margin_left = 15.0
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7pw6v"]
 content_margin_left = 5.0
 content_margin_top = 5.0
@@ -89,6 +81,14 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ixo7g"]
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+border_color = Color(0.265625, 0.63855, 1, 1)
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5vans"]
+content_margin_left = 15.0
+
 [node name="Song Select" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -102,46 +102,6 @@ script = ExtResource("1_fin0e")
 self_modulate = Color(0.54902, 0.54902, 0.54902, 1)
 z_index = -5
 layout_mode = 1
-
-[node name="SongControl" type="PanelContainer" parent="."]
-z_index = 1
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 100.0
-grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_ixo7g")
-
-[node name="AmazingPillar" type="HBoxContainer" parent="SongControl"]
-layout_mode = 2
-size_flags_vertical = 8
-mouse_filter = 0
-alignment = 2
-
-[node name="Title" type="Label" parent="SongControl/AmazingPillar"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.429688, 0.848511, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxEmpty_5vans")
-text = "Amazing Songs"
-text_overrun_behavior = 3
-
-[node name="Margin" type="MarginContainer" parent="SongControl/AmazingPillar"]
-layout_mode = 2
-theme_override_constants/margin_bottom = 5
-
-[node name="MarginContainer" type="MarginContainer" parent="SongControl/AmazingPillar/Margin"]
-layout_mode = 2
-size_flags_horizontal = 8
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 2
-
-[node name="Beatmapsearch" type="LineEdit" parent="SongControl/AmazingPillar/Margin/MarginContainer"]
-custom_minimum_size = Vector2(300, 0)
-layout_mode = 2
-placeholder_text = "search....."
 
 [node name="SongDetails" type="TextureRect" parent="."]
 layout_mode = 1
@@ -440,6 +400,47 @@ theme_override_font_sizes/font_size = 24
 text = "Play"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="SongControl" type="PanelContainer" parent="."]
+z_index = 1
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 36.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ixo7g")
+
+[node name="AmazingPillar" type="HBoxContainer" parent="SongControl"]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 0
+alignment = 2
+
+[node name="Title" type="Label" parent="SongControl/AmazingPillar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.429688, 0.848511, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5vans")
+text = "Amazing Songs"
+text_overrun_behavior = 3
+
+[node name="Margin" type="MarginContainer" parent="SongControl/AmazingPillar"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="SongControl/AmazingPillar/Margin"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 2
+
+[node name="Beatmapsearch" type="LineEdit" parent="SongControl/AmazingPillar/Margin/MarginContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+placeholder_text = "search....."
 
 [node name="ModsScreen" type="Control" parent="."]
 visible = false

@@ -1,0 +1,144 @@
+[gd_scene load_steps=9 format=3 uid="uid://452cy32t37m7"]
+
+[ext_resource type="StyleBox" uid="uid://fxawsqvq06j4" path="res://Skin/System/buttonidle.tres" id="1_effgq"]
+[ext_resource type="Script" uid="uid://dye2ljj2ycrnx" path="res://Script/SongSelect/MusicCard.cs" id="2_o61lg"]
+[ext_resource type="Script" uid="uid://buiifhesbwgmp" path="res://Script/SongSelect/RatingCard.cs" id="4_0nngi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i3see"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gxxkj"]
+bg_color = Color(0.210114, 0.21507, 0.527344, 1)
+corner_radius_top_left = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5o4qg"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 3.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ykgkk"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 3.0
+bg_color = Color(0, 0, 0, 0.54902)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_552jq"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 3.0
+bg_color = Color(0, 0, 0, 0.54902)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="MusicCard" type="Button"]
+custom_minimum_size = Vector2(350, 78)
+anchors_preset = 10
+anchor_right = 1.0
+offset_right = 20.0
+offset_bottom = 78.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i3see")
+theme_override_styles/hover = ExtResource("1_effgq")
+theme_override_styles/pressed = ExtResource("1_effgq")
+theme_override_styles/normal = ExtResource("1_effgq")
+toggle_mode = true
+script = ExtResource("2_o61lg")
+
+[node name="SongBackgroundPreview" type="PanelContainer" parent="."]
+modulate = Color(0.901961, 0.901961, 0.901961, 1)
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gxxkj")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="SongTitle" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.588235)
+theme_override_font_sizes/font_size = 14
+text = "Mystery Song"
+
+[node name="SongArtist" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.588235)
+theme_override_font_sizes/font_size = 12
+text = "idiotiplier"
+
+[node name="SongMapper" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.588235)
+theme_override_font_sizes/font_size = 12
+text = "mapped by idiot"
+
+[node name="InfoBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Ranked" type="PanelContainer" parent="MarginContainer/VBoxContainer/InfoBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5o4qg")
+
+[node name="RankText" type="Label" parent="MarginContainer/VBoxContainer/InfoBox/Ranked"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Unknown"
+
+[node name="Rating" type="Label" parent="MarginContainer/VBoxContainer/InfoBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_ykgkk")
+text = "Lv. 69"
+horizontal_alignment = 1
+script = ExtResource("4_0nngi")
+
+[node name="Version" type="Label" parent="MarginContainer/VBoxContainer/InfoBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_552jq")
+text = "Difficulty Name"
+
+[connection signal="button_down" from="." to="." method="_highlight"]
+[connection signal="button_up" from="." to="." method="_focus"]
+[connection signal="mouse_entered" from="." to="." method="_focus"]
+[connection signal="mouse_exited" from="." to="." method="_unfocus"]
+[connection signal="pressed" from="." to="." method="_on_pressed"]
