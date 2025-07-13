@@ -5,17 +5,19 @@ public partial class CardFunctions : Button
 {
     public async override void _Ready()
     {
-        await Browse.DownloadImage(GetMeta("pic").ToString(), (ImageTexture texture) =>
+        if (this != null)
         {
-            GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview").Texture = texture;
-        });
-        SelfModulate = Idlecolour;
-        var StartAnimation = CreateTween();
-        StartAnimation.TweenProperty(this, "modulate", new Color(1,1,1,1), 1f)
-            .SetTrans(Tween.TransitionType.Cubic)
-            .SetEase(Tween.EaseType.Out);
-        StartAnimation.Play();
-
+            await Browse.DownloadImage(GetMeta("pic").ToString(), (ImageTexture texture) =>
+            {
+                GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview").Texture = texture;
+            });
+            SelfModulate = Idlecolour;
+            var StartAnimation = CreateTween();
+            StartAnimation.TweenProperty(this, "modulate", new Color(1, 1, 1, 1), 1f)
+                .SetTrans(Tween.TransitionType.Cubic)
+                .SetEase(Tween.EaseType.Out);
+            StartAnimation.Play();
+        }
     }
     private Color Idlecolour = new Color(0.20f, 0.20f, 0.20f, 0.5f); // Colour when idle
     private Color Focuscolour = new Color(0.5f, 0.5f, 0.5f, 1); // Colour when focused
