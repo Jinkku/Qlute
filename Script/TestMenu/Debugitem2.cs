@@ -23,11 +23,14 @@ public partial class Debugitem2 : Label
 		{
 			letgo = false; // Reset letgo when the key is released
 		}
-		Text = "Debug Infomation\n" +
-			"FPS: " + Engine.GetFramesPerSecond() + "\n" +
-			"Memory Usage: " + Godot.OS.GetStaticMemoryUsage() + " bytes\n" +
-			"Scene: " + GetTree().CurrentScene.Name + "\n" +
-			"Song ID Highlighted: " + SettingsOperator.SongIDHighlighted + "\n" +
-			"Song ID: " + SettingsOperator.Sessioncfg["SongID"].ToString();
+		if (Visible)
+		{
+			Text = "Debug Infomation\n" +
+				"FPS: " + Engine.GetFramesPerSecond() + "\n" +
+				"Memory Usage: " + Godot.OS.GetStaticMemoryUsage() + " bytes\n" +
+				"Scene: " + GetTree().CurrentScene.Name + "\n" +
+				"Song ID Highlighted: " + SettingsOperator.SongIDHighlighted + "\n" +
+				"Song ID: " + SettingsOperator.Sessioncfg["SongID"].ToString();
+		}
 	}
 }
