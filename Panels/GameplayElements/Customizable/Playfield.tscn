@@ -1,7 +1,7 @@
 [gd_scene load_steps=2 format=3 uid="uid://chb8dgjfmmjgt"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dhhkq"]
-bg_color = Color(1, 1, 1, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cb4c3"]
+bg_color = Color(1, 1, 1, 0.588235)
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
@@ -16,77 +16,54 @@ offset_right = 200.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="KeyBoxes" type="HBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -6.0
-offset_top = -200.0
-offset_right = 6.0
-offset_bottom = -50.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 2
-
-[node name="Key1" type="PanelContainer" parent="KeyBoxes"]
-modulate = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_dhhkq")
-
-[node name="Key2" type="PanelContainer" parent="KeyBoxes"]
-modulate = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_dhhkq")
-
-[node name="Key3" type="PanelContainer" parent="KeyBoxes"]
-modulate = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_dhhkq")
-
-[node name="Key4" type="PanelContainer" parent="KeyBoxes"]
-modulate = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_dhhkq")
-
 [node name="ChartSections" type="HBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_bottom = -200.0
+offset_left = -206.0
+offset_right = 206.0
+offset_bottom = -50.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Section1" type="ColorRect" parent="ChartSections"]
+[node name="Section1" type="PanelContainer" parent="ChartSections"]
+self_modulate = Color(0.0392157, 0.0392157, 0.0392157, 1)
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-mouse_filter = 1
-color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
+theme_override_styles/panel = SubResource("StyleBoxFlat_cb4c3")
 
-[node name="Section2" type="ColorRect" parent="ChartSections"]
-custom_minimum_size = Vector2(100, 0)
+[node name="Control" type="Control" parent="ChartSections/Section1"]
 layout_mode = 2
-mouse_filter = 1
-color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
 
-[node name="Section3" type="ColorRect" parent="ChartSections"]
+[node name="Section2" type="PanelContainer" parent="ChartSections"]
+self_modulate = Color(0.0392157, 0.0392157, 0.0392157, 1)
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-mouse_filter = 1
-color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
+theme_override_styles/panel = SubResource("StyleBoxFlat_cb4c3")
 
-[node name="Section4" type="ColorRect" parent="ChartSections"]
+[node name="Control" type="Control" parent="ChartSections/Section2"]
+layout_mode = 2
+
+[node name="Section3" type="PanelContainer" parent="ChartSections"]
+self_modulate = Color(0.0392157, 0.0392157, 0.0392157, 1)
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-mouse_filter = 1
-color = Color(0.0392157, 0.0392157, 0.0392157, 0.776471)
+theme_override_styles/panel = SubResource("StyleBoxFlat_cb4c3")
+
+[node name="Control" type="Control" parent="ChartSections/Section3"]
+layout_mode = 2
+
+[node name="Section4" type="PanelContainer" parent="ChartSections"]
+self_modulate = Color(0.0392157, 0.0392157, 0.0392157, 1)
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cb4c3")
+
+[node name="Control" type="Control" parent="ChartSections/Section4"]
+layout_mode = 2
 
 [node name="Guard" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(100, 0)

@@ -11,7 +11,6 @@ public class NotesEn {
 }
 public class KeyL {
 	public PanelContainer Node {get;set;}
-	public ColorRect Beam {get;set;}
 	public bool hit {get;set;}
 	public Tween Ani {get;set;}
 }
@@ -23,6 +22,7 @@ public partial class Gameplay : Control
 	//public static Label Ttiming { get; set; }
 	//public static Label Hits { get; set; }
 	public HBoxContainer Chart { get; set; }
+	private int HitPoint { get; set; }
 	public List<KeyL> Keys = new List<KeyL>();
 	public int JudgeResult = -1;
 	public int nodeSize = 54;
@@ -74,6 +74,7 @@ public partial class Gameplay : Control
 		HealthBar.Reset();
 		Control P = GetNode<Control>("Playfield");
 		Chart = GetNode<HBoxContainer>("Playfield/ChartSections");
+		HitPoint = (int)Chart.Size.Y - 150;
 		hittext = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/hittext.tscn").Instantiate().GetNode<Label>(".");
 		hittextinit = true;
 		hittext.Modulate = new Color(1f,1f,1f,0f);
@@ -111,9 +112,9 @@ public partial class Gameplay : Control
 		//Ttiming = GetNode<Label>("Time");
 		//Hits = GetNode<Label>("Hits");
 		foreach (int i in Enumerable.Range(1, 4)){
-			var notet = GetNode<PanelContainer>("Playfield/KeyBoxes/Key"+i);
-			Keys.Add(new KeyL {Node = notet, hit = false, Beam = GetNode<ColorRect>($"Playfield/ChartSections/Section{i}")});
-			notet.Modulate = idlehit;
+			var notet = GetNode<PanelContainer>("Playfield/ChartSections/Section"+i);
+			Keys.Add(new KeyL {Node = notet, hit = false});
+			notet.SelfModulate = idlehit;
 		}
 		
 		SettingsOperator.ResetScore();
@@ -178,13 +179,10 @@ public partial class Gameplay : Control
 	public void hitnote(int Keyx,bool hit){
 		var key = Keys[Keyx];
 		if (hit){
-			key.Node.Modulate = activehit;
-			key.Beam.Color = chartbeam;
-			if (key.Ani != null){
-			key.Ani.Kill();} // Abort the previous animation
+			key.Node.SelfModulate = activehit;
+			key.Ani?.Kill(); // Abort the previous animation
 			key.Ani = Keys[Keyx].Node.CreateTween();
-			key.Ani.Parallel().TweenProperty(Keys[Keyx].Node, "modulate", idlehit, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-			key.Ani.Parallel().TweenProperty(Keys[Keyx].Beam, "color", chartclear, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+			key.Ani.TweenProperty(Keys[Keyx].Node, "self_modulate", idlehit, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			key.Ani.Play();
 		}
 		key.hit = hit;
@@ -312,7 +310,7 @@ public partial class Gameplay : Control
 			for (int i = 0; i < Notes.Count; i++)
 			{
 				var Note = Notes[i];
-				var notex = Note.timing + est + Chart.Size.Y;
+				var notex = Note.timing + est + HitPoint;
 				if (timepart != Note.timing)
 				{
 					Noteindex++;
@@ -322,7 +320,7 @@ public partial class Gameplay : Control
 				{
 					if (!Note.hit && Note.Node == null)
 					{
-						var playfieldpart = GetNode<ColorRect>($"Playfield/ChartSections/Section{Note.NoteSection + 1}");
+						var playfieldpart = GetNode<Control>($"Playfield/ChartSections/Section{Note.NoteSection + 1}/Control");
 						Note.Node = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Sprite2D>(".");
 						Note.Node.SetMeta("part", Note.NoteSection);
 						Note.Node.SelfModulate = new Color(0.83f, 0f, 1f);
@@ -331,7 +329,7 @@ public partial class Gameplay : Control
 						notefront.Texture = NoteSkinFore;
 						playfieldpart.AddChild(Note.Node);
 					}
-					if (Note.Node != null && (int)notex + nodeSize > Chart.Size.Y && (int)notex + nodeSize < Chart.Size.Y + SettingsOperator.MehJudge && ModsOperator.Mods["auto"])
+					if (Note.Node != null && (int)notex + nodeSize > HitPoint && (int)notex + nodeSize < HitPoint + SettingsOperator.MehJudge && ModsOperator.Mods["auto"])
 					{
 						hitnote((int)Note.Node.GetMeta("part"), true);
 					}
@@ -341,7 +339,7 @@ public partial class Gameplay : Control
 					}
 					if (ModsOperator.Mods["slice"] && Note.Node != null)
 					{
-						Note.Node.SelfModulate = new Color(1f, 1f, 1f, Math.Min(Chart.Size.Y, Note.Node.Position.Y - 200) / Chart.Size.Y);
+						Note.Node.SelfModulate = new Color(1f, 1f, 1f, Math.Min(HitPoint, Note.Node.Position.Y - 200) / HitPoint);
 					}
 					else if (ModsOperator.Mods["black-out"] && Note.Node != null)
 					{
@@ -349,12 +347,12 @@ public partial class Gameplay : Control
 					}
 					if (Note.Node != null)
 					{
-						Note.Node.Position = new Vector2(0, notex * scrollspeed - (Chart.Size.Y * (scrollspeed - 1)));
+						Note.Node.Position = new Vector2(0, notex * scrollspeed - (HitPoint * (scrollspeed - 1)));
 						Ttick++;
 						JudgeResult = checkjudge((int)notex, Keys[(int)Note.Node.GetMeta("part")].hit, Note.Node, Note.Node.Visible);
 						if (JudgeResult < 4)
 						{
-							mshitold = Chart.Size.Y + 5;
+							mshitold = HitPoint + 5;
 							Keys[(int)Note.Node.GetMeta("part")].hit = false;
 							mshit = notex;
 							SettingsOperator.Addms(mshitold - mshit - 50);
@@ -407,19 +405,19 @@ public partial class Gameplay : Control
 		hittext.Text = word;
 	}
 	public int checkjudge(int timing,bool keyvalue, Sprite2D node,bool visibility){
-		if (timing+nodeSize > Chart.Size.Y-SettingsOperator.PerfectJudge && timing+nodeSize < Chart.Size.Y+SettingsOperator.PerfectJudge && keyvalue && visibility){
+		if (timing+nodeSize > HitPoint-SettingsOperator.PerfectJudge && timing+nodeSize < HitPoint+SettingsOperator.PerfectJudge && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["max"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
 			Hittext("Perfect", new Color(0f,0.71f,1f));
 			HealthBar.Heal(5);
 			return 0;
-		} else if (timing+nodeSize > Chart.Size.Y-SettingsOperator.GreatJudge/2 && timing+nodeSize < Chart.Size.Y+SettingsOperator.GreatJudge/2 && keyvalue && visibility){
+		} else if (timing+nodeSize > HitPoint-SettingsOperator.GreatJudge/2 && timing+nodeSize < HitPoint+SettingsOperator.GreatJudge/2 && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["great"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
 			Hittext("Great", new Color(0f,1f,0.03f));
 			HealthBar.Heal(3);
 			return 1;
-		}else if (timing+nodeSize > Chart.Size.Y-SettingsOperator.MehJudge/2 && timing+nodeSize < Chart.Size.Y+SettingsOperator.MehJudge/2 && keyvalue && visibility){
+		}else if (timing+nodeSize > HitPoint-SettingsOperator.MehJudge/2 && timing+nodeSize < HitPoint+SettingsOperator.MehJudge/2 && keyvalue && visibility){
 			Hittext("Meh", new Color(1f,0.66f,0f));
 			SettingsOperator.Gameplaycfg["meh"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
