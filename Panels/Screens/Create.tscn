@@ -389,6 +389,7 @@ text = "Test"
 [connection signal="toggled" from="ToolBar/HBoxContainer/File" to="." method="_pressed"]
 [connection signal="pressed" from="ToolBar/HBoxContainer/File/ContextMenu/ContextSections/New" to="ToolBar/HBoxContainer/File/ContextMenu" method="_new"]
 [connection signal="pressed" from="ToolBar/HBoxContainer/File/ContextMenu/ContextSections/Open" to="ToolBar/HBoxContainer/File/ContextMenu" method="_open"]
+[connection signal="pressed" from="ControlPanel/Box/BackButton" to="." method="_on_back"]
 
 [editable path="BeatmapBackground"]
 [editable path="Ground/Playfield"]
