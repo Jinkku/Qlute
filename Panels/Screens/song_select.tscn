@@ -150,13 +150,25 @@ text = "Unranked"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Difficulty" type="Label" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo"]
+[node name="Box5" type="HBoxContainer" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo"]
 layout_mode = 2
+
+[node name="Difficulty" type="Label" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box5"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
 theme_override_font_sizes/font_size = 14
 text = "Difficulty Name"
 clip_text = true
 text_overrun_behavior = 3
+
+[node name="Level" type="Label" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box5"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 14
+text = "Lv. ???"
+horizontal_alignment = 2
 
 [node name="Box2" type="HBoxContainer" parent="SongDetails/SongPanelInfoSpacer/SongPanelInfo"]
 layout_mode = 2

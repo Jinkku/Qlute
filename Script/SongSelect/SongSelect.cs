@@ -12,6 +12,8 @@ public partial class SongSelect : Control
 	public Label SongTitle { get; set; }
 	public Label SongArtist { get; set; }
 	public Label SongMapper { get; set; }
+	private Label LevelRating { get; set; }
+	private Label RankStatus { get; set; }
 	public Label Songpp { get; set; }
 	public Label Debugtext { get; set; }
 	public Label SongBPM { get; set; }
@@ -128,11 +130,13 @@ public partial class SongSelect : Control
 		//Debugtext.Position = new Vector2(100,100);
 		//AddChild(Debugtext);
 		SettingsOperator.Marathon = false;
-		Diff = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Difficulty");
+		Diff = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box5/Difficulty");
 		ModScreen = GetNode<Control>("ModsScreen");
 		ModScreen.Visible = true;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SongTitle = GetNode<Label>("SongControl/AmazingPillar/Title");
+		LevelRating = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box5/Level");
+		RankStatus = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box1/RankedStatus");
 		SongArtist = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box1/Artist");
 		Songpp = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box2/Points");
 		SongBPM = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box3/BPM");
@@ -213,6 +217,7 @@ public partial class SongSelect : Control
 			SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
 			Songpp.Text = "+" + (SettingsOperator.Gameplaycfg["maxpp"]*ModsMulti.multiplier).ToString("N0")+"pp";
 			SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
+			LevelRating.Text = "Lv. " + SettingsOperator.LevelRating.ToString("N0") ?? "Lv. 0";
 			SongBPM.Text = "BPM - " + ((int)SettingsOperator.Sessioncfg["beatmapbpm"]*AudioPlayer.Instance.PitchScale).ToString("N0") ?? "";
 			SongLen.Text = TimeSpan.FromMilliseconds(SettingsOperator.Gameplaycfg["timetotal"]/AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00";
 
@@ -241,6 +246,8 @@ public partial class SongSelect : Control
 		SongMapper.Visible = visible;
 		SongLen.Visible = visible;
 		SongBPM.Visible = visible;
+		LevelRating.Visible = visible;
+		RankStatus.Visible = visible;
 	}
 	public void check_modscreen(){
 		if (!ModsScreenActive){

@@ -142,7 +142,7 @@ public partial class SettingsOperator : Node
             Gameplaycfg["timetotal"] = (int)beatmap.Timetotal;
             Sessioncfg["beatmapmapper"] = beatmap.Mapper;
             Sessioncfg["beatmapaccuracy"] = (int)beatmap.Accuracy;
-            Sessioncfg["levelrating"] = beatmap.Levelrating;
+            LevelRating = (int)Math.Round(beatmap.Levelrating);
             Sessioncfg["osubeatid"] = (int)beatmap.Osubeatid;
             Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
             var Texture = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
@@ -381,6 +381,7 @@ public partial class SettingsOperator : Node
     public static int ranked_points {get;set;}
     
     public static int SongIDHighlighted { get; set; } = -1; // Highlighted song ID for the song select screen
+    public static int LevelRating { get; set; } = -1; // Highlighted song ID for the song select screen
     public static Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
     {
         { "TopPanelSlideip", false },
@@ -404,7 +405,6 @@ public partial class SettingsOperator : Node
         { "beatmapmapper", null },
         { "beatmapbpm", (int)160 },
         { "osubeatid", 0 },
-        {"levelrating", 1},
         { "osubeatidset", 0 },
         { "beatmapaccuracy", (int)0 },
         { "beatmapdiff", null },
