@@ -203,10 +203,12 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
+tooltip_text = "Later release"
 theme_override_styles/focus = SubResource("StyleBoxFlat_4kah8")
 theme_override_styles/hover = SubResource("StyleBoxFlat_g6tdb")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_tykkm")
 theme_override_styles/normal = SubResource("StyleBoxFlat_oxxgw")
+disabled = true
 text = "Customize"
 script = ExtResource("5_b2hs3")
 
