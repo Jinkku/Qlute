@@ -3,9 +3,13 @@ using System;
 
 public partial class FileMenu : PanelContainer
 {
-    private void _new(){
-        Window vum = new Window();
-        AddChild(vum);
-        vum.Size = new Vector2I(100,100);
+    private void _new()
+    {
+    }
+
+    private void _open()
+    {
+        GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
+        SettingsOperator.CreateSelectingBeatmap = true;
     }
 }

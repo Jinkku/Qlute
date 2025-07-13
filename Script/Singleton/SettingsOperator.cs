@@ -117,6 +117,8 @@ public partial class SettingsOperator : Node
         int id = new Random().Next(0, Beatmaps.Count);
         return id;
     }
+    public static bool CreateSelectingBeatmap { get; set; }
+    public static bool MultiSelectingBeatmap { get; set; }
     public static bool Start_reloadLeaderboard {get; set; } = false;
     public static List<int> MarathonMapPaths { get; set; } = new List<int>();
     public static bool Marathon { get; set; } = false; // Marathon mode flag

@@ -124,6 +124,8 @@ skew = Vector2(0.5, 0)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yu1gh"]
 bg_color = Color(0, 0, 0, 0.588235)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m6dsd"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_doo6x"]
 content_margin_left = 5.0
 content_margin_top = 5.0
@@ -135,8 +137,6 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m6dsd"]
 
 [node name="Home Screen" type="Control"]
 layout_mode = 3
@@ -699,7 +699,6 @@ texture = ExtResource("11_ioq3m")
 expand_mode = 1
 
 [node name="IntroPending" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -707,6 +706,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("11_gngjn")
+
+[node name="Bomb" type="Button" parent="IntroPending"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_m6dsd")
+flat = true
 
 [node name="logo" type="TextureRect" parent="IntroPending"]
 layout_mode = 1
@@ -741,16 +750,6 @@ grow_vertical = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_doo6x")
 text = "Press any button to play!"
 horizontal_alignment = 1
-
-[node name="Bomb" type="Button" parent="IntroPending"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_m6dsd")
-flat = true
 
 [node name="Bpmtick" type="Timer" parent="IntroPending"]
 wait_time = 0.375
@@ -794,4 +793,6 @@ script = ExtResource("14_1vpa7")
 [connection signal="mouse_exited" from="HomeButtonBG/HomeButtons/Leave2" to="HomeButtonBG/HomeButtons/Leave2" method="_unfocus"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Leave2" to="." method="_test"]
 [connection signal="pressed" from="IntroPending/Bomb" to="IntroPending" method="_on_bomb_pressed"]
+[connection signal="mouse_entered" from="IntroPending/logo" to="IntroPending" method="_hover"]
+[connection signal="mouse_exited" from="IntroPending/logo" to="IntroPending" method="_unhover"]
 [connection signal="timeout" from="IntroPending/Bpmtick" to="IntroPending" method="_tick"]

@@ -54,10 +54,7 @@ public partial class BeatmapBackground : TextureRect
 	}
 	public override void _Process(double _delta)
 	{
-		if (AudioPlayer.Instance.Stream != null) // Setting up the BPM tick
-		{
-			bpm = 60000 / ((int)SettingsOperator.Sessioncfg["beatmapbpm"] * AudioPlayer.Instance.PitchScale) * 0.001f;
-		}
+		bpm = 60000 / ((int)SettingsOperator.Sessioncfg["beatmapbpm"] * AudioPlayer.Instance.PitchScale) * 0.001f;
 		bpmtime = Extras.GetMilliseconds();
 		if (bpmtimewait - bpmtime < 0) // Ticks for BPM
 		{

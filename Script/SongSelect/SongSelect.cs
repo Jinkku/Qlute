@@ -438,6 +438,8 @@ public partial class SongSelect : Control
 		SettingsOperator.loopaudio = false;
 	}
 	private void _on_back_pressed(){
-		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
+
+		if (SettingsOperator.CreateSelectingBeatmap) GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
+		else GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
 	}
 }

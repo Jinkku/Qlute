@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=31 format=3 uid="uid://cu8ap5uak1q6c"]
+[gd_resource type="Theme" load_steps=34 format=3 uid="uid://cu8ap5uak1q6c"]
 
 [ext_resource type="Texture2D" uid="uid://sqcowf508l8v" path="res://Skin/ThemeNC/Checkbutton-s02.svg" id="1_7xnwh"]
 [ext_resource type="Texture2D" uid="uid://dhu2c56vuhuy4" path="res://Skin/ThemeNC/Checkbutton-s01.svg" id="2_75n4a"]
@@ -88,6 +88,31 @@ corner_radius_bottom_left = 5
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_crlok"]
 content_margin_left = 5.0
 content_margin_right = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uucit"]
+bg_color = Color(0.176471, 0.176471, 0.176471, 1)
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_left = 5.0
+expand_margin_top = 30.0
+expand_margin_right = 5.0
+expand_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fa7xv"]
+bg_color = Color(0.176471, 0.176471, 0.176471, 1)
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_left = 5.0
+expand_margin_top = 30.0
+expand_margin_right = 5.0
+expand_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_muhw3"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.175781, 0.175781, 0.175781, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i37xy"]
 bg_color = Color(0.552941, 0.490196, 0.780392, 1)
@@ -241,6 +266,9 @@ CheckButton/styles/hover = SubResource("StyleBoxFlat_o7dm5")
 CheckButton/styles/hover_pressed = SubResource("StyleBoxFlat_o7dm5")
 CheckButton/styles/normal = SubResource("StyleBoxEmpty_bjgno")
 CheckButton/styles/pressed = SubResource("StyleBoxEmpty_crlok")
+FileDialog/styles/embedded_border = SubResource("StyleBoxFlat_uucit")
+FileDialog/styles/embedded_unfocused_border = SubResource("StyleBoxFlat_fa7xv")
+FileDialog/styles/panel = SubResource("StyleBoxFlat_muhw3")
 HSlider/icons/grabber = ExtResource("3_gw3td")
 HSlider/icons/grabber_highlight = ExtResource("4_m3gsb")
 HSlider/styles/grabber_area = SubResource("StyleBoxFlat_i37xy")
