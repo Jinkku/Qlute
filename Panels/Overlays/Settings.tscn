@@ -43,17 +43,6 @@ variation_opentype = {
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v1adg"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_32tni"]
-content_margin_left = 8.0
-content_margin_top = 15.0
-content_margin_right = 8.0
-content_margin_bottom = 15.0
-bg_color = Color(0, 0, 0, 0.588235)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_svam5"]
 content_margin_left = 8.0
 content_margin_top = 15.0
@@ -87,6 +76,17 @@ content_margin_right = 5.0
 content_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_db3eo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_32tni"]
+content_margin_left = 8.0
+content_margin_top = 15.0
+content_margin_right = 8.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.588235)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m56sc"]
 
@@ -236,7 +236,6 @@ text = "Window mode"
 [node name="WindowSelector" type="OptionButton" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_v1adg")
-theme_override_styles/normal = SubResource("StyleBoxFlat_32tni")
 theme_override_constants/arrow_margin = 10
 item_count = 3
 popup/item_0/text = "Fullscreen"
@@ -255,7 +254,6 @@ text = "Limit FPS"
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_v1adg")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_svam5")
-theme_override_styles/normal = SubResource("StyleBoxFlat_32tni")
 theme_override_constants/arrow_margin = 10
 selected = 1
 item_count = 5
@@ -280,9 +278,6 @@ text = "Screen resolution"
 [node name="Resolution" type="OptionButton" parent="ColorRect/Panels/Scroll/Sections"]
 visible = false
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_v1adg")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_svam5")
-theme_override_styles/normal = SubResource("StyleBoxFlat_32tni")
 theme_override_constants/arrow_margin = 10
 selected = 0
 item_count = 1
@@ -328,6 +323,23 @@ text = "Background Dim"
 [node name="BackgroundDim" type="HSlider" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
 rounded = true
+
+[node name="Skinning" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
+layout_mode = 2
+mouse_filter = 0
+theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
+theme_override_fonts/font = SubResource("FontVariation_n76qt")
+text = "Skinning"
+
+[node name="SkinMode" type="OptionButton" parent="ColorRect/Panels/Scroll/Sections"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_v1adg")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_svam5")
+theme_override_constants/arrow_margin = 10
+selected = 0
+item_count = 1
+popup/item_0/text = "Default Skin"
+popup/item_0/id = 0
 
 [node name="Audio" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
