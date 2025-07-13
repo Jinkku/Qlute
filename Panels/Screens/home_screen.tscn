@@ -102,7 +102,13 @@ _data = {
 &"RESET": SubResource("Animation_vivcs")
 }
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vj7aj"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bh2cj"]
+bg_color = Color(0, 0, 0, 0.588235)
+skew = Vector2(0.5, 0)
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_left = 25.0
+expand_margin_right = 25.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qejje"]
 
@@ -276,10 +282,11 @@ libraries = {
 }
 
 [node name="SubButton" type="PanelContainer" parent="."]
+visible = false
 layout_mode = 1
 offset_right = 462.0
 offset_bottom = 40.0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_vj7aj")
+theme_override_styles/panel = SubResource("StyleBoxFlat_bh2cj")
 script = ExtResource("6_bh2cj")
 
 [node name="SubButtons" type="HBoxContainer" parent="SubButton"]
@@ -699,6 +706,7 @@ texture = ExtResource("11_ioq3m")
 expand_mode = 1
 
 [node name="IntroPending" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

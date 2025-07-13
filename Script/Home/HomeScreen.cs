@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 public static class HomeButtonID
 {
-	public static int ID = 0;
+	public static int ID = -1;
 }
 public partial class HomeScreen : Control
 {
@@ -26,6 +26,7 @@ public partial class HomeScreen : Control
 		SongTitle = GetNode<Label>("./Titlesong");
 		SongArtist = GetNode<Label>("./Descsong");
 		AnimationPlayer ani = GetNode<AnimationPlayer>("Flash/AnimationPlayer");
+		HomeButtonID.ID = -1;
 		//ani.Play("Flash");
 		_Process(0);
 	}
@@ -79,26 +80,19 @@ public partial class HomeScreen : Control
 	private void _leavesignal() {
 		GetTree().Quit();
 	}
-	private void _prepare_sub()
-	{
-
-		SubButtons.Position = new Vector2(HomePanel.Size.X / 2 - (SubButtons.Size.X / 2), HomePanel.Position.Y + HomePanel.Size.Y);
-		SubButtons.Visible = true;
-	}
 	private void _playf()
 	{
 		HomeButtonID.ID = 1;
-		_prepare_sub();
 	}
 	private void _browsef() { HomeButtonID.ID = -1; }
 	private void _leavef() { HomeButtonID.ID = -1; }
 	private void _createf()
 	{
-		HomeButtonID.ID = 2;
-		_prepare_sub();
+		HomeButtonID.ID = -1;
 	}
 	private void _subunf()
 	{
-		if ((GetViewport().GetMousePosition().Y < HomePanel.Position.Y && SubButtons.Visible) | (GetViewport().GetMousePosition().Y > SubButtons.Position.Y + SubButtons.Size.Y && SubButtons.Visible)) SubButtons.Visible = false;
+		if ((GetViewport().GetMousePosition().Y < HomePanel.Position.Y && SubButtons.Visible) | (GetViewport().GetMousePosition().Y > SubButtons.Position.Y + SubButtons.Size.Y && SubButtons.Visible))
+			HomeButtonID.ID = -1;
 	}
 }
