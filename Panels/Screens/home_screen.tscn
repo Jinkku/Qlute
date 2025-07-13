@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://dnu64hotg25n4" path="res://Script/Home/version.gd" id="6_1tkmr"]
 [ext_resource type="Script" uid="uid://cnaimpbrbt36j" path="res://Script/Home/SubButton.cs" id="6_bh2cj"]
 [ext_resource type="Script" uid="uid://d3kp8agi7f31r" path="res://Script/Home/HomeButtonBg.cs" id="6_rg0tv"]
-[ext_resource type="Texture2D" uid="uid://cwnp10imrjpaf" path="res://Skin/System/mainmenulogo.png" id="6_xu4tp"]
 [ext_resource type="Texture2D" uid="uid://die40m3acksoy" path="res://Skin/System/browse.png" id="7_2ki83"]
 [ext_resource type="Texture2D" uid="uid://c1i4ywq15b2kd" path="res://Skin/System/play.png" id="7_w7ma2"]
 [ext_resource type="Script" uid="uid://btpasgcq7n7n6" path="res://Script/Effects/ButtonBounce.cs" id="8_qhwge"]
@@ -15,6 +14,7 @@
 [ext_resource type="Script" uid="uid://dlmyeuotf5af7" path="res://Script/Home/IntroPending.cs" id="11_gngjn"]
 [ext_resource type="Texture2D" uid="uid://7tkemeqh46a0" path="res://Skin/System/exit.png" id="11_ioq3m"]
 [ext_resource type="Script" uid="uid://0xn63uccdk6j" path="res://Script/TimerwithBPM/Bpmtick.cs" id="14_1vpa7"]
+[ext_resource type="Texture2D" uid="uid://clfihr7tq7ydg" path="res://Skin/System/mainmenulogo.svg" id="14_bh2cj"]
 
 [sub_resource type="FontVariation" id="FontVariation_bifyk"]
 base_font = ExtResource("5_pikml")
@@ -717,21 +717,21 @@ grow_vertical = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_m6dsd")
 flat = true
 
-[node name="logo" type="TextureRect" parent="IntroPending"]
+[node name="logo" type="TextureButton" parent="IntroPending"]
+z_index = 3
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -180.0
+offset_left = -164.0
 offset_top = -64.0
-offset_right = 180.0
+offset_right = 164.0
 offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("6_xu4tp")
-expand_mode = 1
+texture_normal = ExtResource("14_bh2cj")
 stretch_mode = 5
 
 [node name="Label" type="Label" parent="IntroPending"]
@@ -795,4 +795,5 @@ script = ExtResource("14_1vpa7")
 [connection signal="pressed" from="IntroPending/Bomb" to="IntroPending" method="_on_bomb_pressed"]
 [connection signal="mouse_entered" from="IntroPending/logo" to="IntroPending" method="_hover"]
 [connection signal="mouse_exited" from="IntroPending/logo" to="IntroPending" method="_unhover"]
+[connection signal="pressed" from="IntroPending/logo" to="IntroPending" method="_on_bomb_pressed"]
 [connection signal="timeout" from="IntroPending/Bpmtick" to="IntroPending" method="_tick"]

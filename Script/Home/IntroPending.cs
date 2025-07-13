@@ -8,14 +8,14 @@ public partial class IntroPending : Control
 	public static Vector2 HomeButtonsPOS {get;set;}
 	private Vector2 HomeLogoSize {get;set;}
 	private Vector2 HomeLogoPos {get;set;}
-	private TextureRect Logo {get;set;}
+	private TextureButton Logo {get;set;}
 	private Tween LogoTween {get;set;}
 	private bool HeartbeatHover { get; set; }
 	public override void _Ready()
 	{
 		HomeButtons = GetNode<PanelContainer>("../HomeButtonBG");
 		HomeButtonsPOS = HomeButtons.Position;
-		Logo = GetNode<TextureRect>("logo");
+		Logo = GetNode<TextureButton>("logo");
 		HomeLogoSize = Logo.Size;
 		HomeLogoPos = Logo.Position;
 		Visible = true;
