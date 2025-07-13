@@ -25,15 +25,12 @@ public partial class Gameplay : Control
 	public HBoxContainer Chart { get; set; }
 	public List<KeyL> Keys = new List<KeyL>();
 	public int JudgeResult = -1;
-	public int PerfectJudge = 500;
 	public int nodeSize = 54;
-	public int GreatJudge {get;set;}
-	public int MehJudge {get;set;}
 	public ColorRect meh {get;set;}
 	public ColorRect great {get;set;}
 	public ColorRect perfect {get;set;}
-	public double mshit {get;set;}
-	public double mshitold {get;set;}
+	public float mshit {get;set;}
+	public float mshitold {get;set;}
 	public long startedtime {get ;set; }
 	public bool songstarted = false;
 	public Node2D noteblock {get;set;}
@@ -86,31 +83,27 @@ public partial class Gameplay : Control
 		reloadSkin();
 		PClock = 0;
 
-		debugtext = new Label();
-		AddChild(debugtext);
-		debugtext.Position = new Vector2(100,300);
-
-		PerfectJudge = PerfectJudge / (int)(SettingsOperator.Sessioncfg["beatmapaccuracy"]);
-		GreatJudge = (int)(PerfectJudge*4);
-		MehJudge = (int)(PerfectJudge*6);
+		SettingsOperator.PerfectJudge = 500 / (int)(SettingsOperator.Sessioncfg["beatmapaccuracy"]);
+		SettingsOperator.GreatJudge = (int)(SettingsOperator.PerfectJudge*4);
+		SettingsOperator.MehJudge = (int)(SettingsOperator.PerfectJudge*6);
 
 		meh = new ColorRect();
-		meh.Size = new Vector2(400,MehJudge);
-		meh.Position = new Vector2(0,-MehJudge/2);
+		meh.Size = new Vector2(400,SettingsOperator.MehJudge);
+		meh.Position = new Vector2(0,-SettingsOperator.MehJudge/2);
 		meh.Color = new Color(0.5f,0f,0f,0.1f);
 		meh.Visible = false;
 		GetNode<ColorRect>("Playfield/Guard").AddChild(meh);
 
 		great = new ColorRect();
-		great.Size = new Vector2(400,GreatJudge);
-		great.Position = new Vector2(0,-GreatJudge/2);
+		great.Size = new Vector2(400,SettingsOperator.GreatJudge);
+		great.Position = new Vector2(0,-SettingsOperator.GreatJudge/2);
 		great.Color = new Color(0f,0.5f,0f,0.1f);
 		great.Visible = false;
 		GetNode<ColorRect>("Playfield/Guard").AddChild(great);
 		
 		perfect = new ColorRect();
-		perfect.Size = new Vector2(400,PerfectJudge*2);
-		perfect.Position = new Vector2(0,-PerfectJudge);
+		perfect.Size = new Vector2(400,SettingsOperator.PerfectJudge*2);
+		perfect.Position = new Vector2(0,-SettingsOperator.PerfectJudge);
 		perfect.Color = new Color(0f,0f,0.5f,0.1f);
 		perfect.Visible = false;
 		GetNode<ColorRect>("Playfield/Guard").AddChild(perfect);
@@ -338,7 +331,7 @@ public partial class Gameplay : Control
 						notefront.Texture = NoteSkinFore;
 						playfieldpart.AddChild(Note.Node);
 					}
-					if (Note.Node != null && (int)notex + nodeSize > Chart.Size.Y && (int)notex + nodeSize < Chart.Size.Y + MehJudge && ModsOperator.Mods["auto"])
+					if (Note.Node != null && (int)notex + nodeSize > Chart.Size.Y && (int)notex + nodeSize < Chart.Size.Y + SettingsOperator.MehJudge && ModsOperator.Mods["auto"])
 					{
 						hitnote((int)Note.Node.GetMeta("part"), true);
 					}
@@ -365,14 +358,6 @@ public partial class Gameplay : Control
 							Keys[(int)Note.Node.GetMeta("part")].hit = false;
 							mshit = notex;
 							SettingsOperator.Addms(mshitold - mshit - 50);
-							var urnote = new ColorRect();
-							urnote.Position = new Vector2(-5, (GetNode<ColorRect>("UR").Size.Y / 2) + (((float)(mshitold - mshit - 50) / MehJudge)) * 200);
-							urnote.Size = new Vector2(15, 2);
-							GetNode<ColorRect>("UR").AddChild(urnote);
-							var urani = urnote.CreateTween();
-							urani.TweenProperty(urnote, "color", new Color(1f, 1f, 1f, 0f), 1).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-							urani.Play();
-							urani.TweenCallback(Callable.From(urnote.QueueFree));
 							SettingsOperator.Gameplaycfg["ms"] = SettingsOperator.Getms();
 							newscore = (int)(SettingsOperator.Gameplaycfg["pp"] / SettingsOperator.Gameplaycfg["maxpp"] * (1000000 * ModsMulti.multiplier));
 							if (scoretween != null)
@@ -422,19 +407,19 @@ public partial class Gameplay : Control
 		hittext.Text = word;
 	}
 	public int checkjudge(int timing,bool keyvalue, Sprite2D node,bool visibility){
-		if (timing+nodeSize > Chart.Size.Y-PerfectJudge && timing+nodeSize < Chart.Size.Y+PerfectJudge && keyvalue && visibility){
+		if (timing+nodeSize > Chart.Size.Y-SettingsOperator.PerfectJudge && timing+nodeSize < Chart.Size.Y+SettingsOperator.PerfectJudge && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["max"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
 			Hittext("Perfect", new Color(0f,0.71f,1f));
 			HealthBar.Heal(5);
 			return 0;
-		} else if (timing+nodeSize > Chart.Size.Y-GreatJudge/2 && timing+nodeSize < Chart.Size.Y+GreatJudge/2 && keyvalue && visibility){
+		} else if (timing+nodeSize > Chart.Size.Y-SettingsOperator.GreatJudge/2 && timing+nodeSize < Chart.Size.Y+SettingsOperator.GreatJudge/2 && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["great"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
 			Hittext("Great", new Color(0f,1f,0.03f));
 			HealthBar.Heal(3);
 			return 1;
-		}else if (timing+nodeSize > Chart.Size.Y-MehJudge/2 && timing+nodeSize < Chart.Size.Y+MehJudge/2 && keyvalue && visibility){
+		}else if (timing+nodeSize > Chart.Size.Y-SettingsOperator.MehJudge/2 && timing+nodeSize < Chart.Size.Y+SettingsOperator.MehJudge/2 && keyvalue && visibility){
 			Hittext("Meh", new Color(1f,0.66f,0f));
 			SettingsOperator.Gameplaycfg["meh"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;

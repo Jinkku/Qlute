@@ -121,6 +121,9 @@ public partial class SettingsOperator : Node
     public static List<int> MarathonMapPaths { get; set; } = new List<int>();
     public static bool Marathon { get; set; } = false; // Marathon mode flag
     public static int MarathonID { get; set; } = -1; // ID of the current marathon song
+    public static int PerfectJudge { get; set; } = 500; // Judge Perfect
+    public static int GreatJudge { get; set; } = -1; // Judge Great
+    public static int MehJudge { get; set; } = -1; // Judge Meh
     public void SelectSongID(int id)
     {
         if (Beatmaps.ElementAt(id) != null)
@@ -345,9 +348,11 @@ public partial class SettingsOperator : Node
         Gameplaycfg["avgms"] = 0;
         Gameplaycfg["ms"] = 0;
     }
-    public static void Addms(double ms){
+    public static void Addms(float ms)
+    {
         AllMiliSecondsFromBeatmap += ms;
         MiliSecondsFromBeatmapTimes++;
+        UnstableRate.Rate.Add(ms);
     }
     public static double Getms(){
         return AllMiliSecondsFromBeatmap/MiliSecondsFromBeatmapTimes;
