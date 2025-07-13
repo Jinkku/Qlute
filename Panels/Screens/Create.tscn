@@ -186,6 +186,7 @@ text = "File"
 script = ExtResource("2_pjdex")
 
 [node name="ContextMenu" type="PanelContainer" parent="ToolBar/HBoxContainer/File"]
+visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -273,7 +274,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.945312, 1, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxEmpty_lwg7d")
-text = "Note: Some function will not work!"
+text = "Note: Most stuff will not work!"
 horizontal_alignment = 2
 
 [node name="Creativity" type="PanelContainer" parent="."]
