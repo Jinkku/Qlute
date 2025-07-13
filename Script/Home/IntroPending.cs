@@ -11,6 +11,7 @@ public partial class IntroPending : Control
 	private TextureButton Logo {get;set;}
 	private Tween LogoTween {get;set;}
 	private bool HeartbeatHover { get; set; }
+	private int beattick = 1;
 	public override void _Ready()
 	{
 		HomeButtons = GetNode<PanelContainer>("../HomeButtonBG");
@@ -34,7 +35,12 @@ public partial class IntroPending : Control
 
 	private void _tick()
 	{
-		if (HeartbeatHover) Sample.PlaySample("res://Skin/Sounds/heartbeat.wav");
+		if (HeartbeatHover && beattick < 4) Sample.PlaySample("res://Skin/Sounds/heartbeat.wav");
+		if (HeartbeatHover && beattick == 4) Sample.PlaySample("res://Skin/Sounds/downbeat.wav");
+		if (beattick > 3) beattick = 1;
+		else beattick++; // for the feedback of hovering the Qlute logo
+
+
 		Logo.Size = new Vector2(HomeLogoSize[0] + 10, HomeLogoSize[1] + 10);
 		Logo.Position = new Vector2(GetViewportRect().Size.X / 2 - (Logo.Size.X / 2), GetViewportRect().Size.Y / 2 - (Logo.Size.Y / 2));
 		if (LogoTween != null)
