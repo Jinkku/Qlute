@@ -24,8 +24,11 @@ public partial class Kiko : Node
     {
         if (responseCode == 200)
         {
-            VersionCode = Encoding.UTF8.GetString(body);
-            Notify.Post("New update is avaliable!\n" + VersionCode + " is available, click to view.",uri: "https://jinkku.itch.io/qlute");
+            VersionCode = Encoding.UTF8.GetString(body).TrimEnd( System.Environment.NewLine.ToCharArray());
+            if (VersionCode != ProjectSettings.GetSetting("application/config/version").ToString())
+            {
+                Notify.Post("New update is avaliable!\n" + VersionCode + " is available, click to view.",uri: "https://jinkku.itch.io/qlute");   
+            }
         }
         else
         {
