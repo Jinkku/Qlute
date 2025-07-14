@@ -17,20 +17,30 @@ public partial class AccountPrompt : Control
 	public Label PerformanceNumber {get;set;}
 	public Label PlayerName {get;set;}
 	public static SettingsOperator SettingsOperator { get; set; }
-	public override void _Process(double _delta){
-		if ((bool)SettingsOperator.Sessioncfg["loggedin"] == true){
+	private void _create()
+	{
+		var Signup = GD.Load<PackedScene>("res://Panels/Screens/Signup.tscn").Instantiate().GetNode<PanelContainer>(".");
+		GetTree().CurrentScene.AddChild(Signup);
+		Hide();
+	}
+	public override void _Process(double _delta)
+	{
+		if ((bool)SettingsOperator.Sessioncfg["loggedin"] == true)
+		{
 			Log.Visible = true;
 			NotLog.Visible = false;
-		}else{
+		}
+		else
+		{
 			Log.Visible = false;
 			NotLog.Visible = true;
 		}
 		Ranking = GetNode<Label>("AccPanel/Log/Panel/RankingNumber");
 		PerformanceNumber = GetNode<Label>("AccPanel/Log/Panel/PerformanceNumber");
-		PlayerName = GetNode<Label>("AccPanel/Log/Panel/UsernameSection/Username"); 
+		PlayerName = GetNode<Label>("AccPanel/Log/Panel/UsernameSection/Username");
 		PlayerName.Text = SettingsOperator.GetSetting("username")?.ToString();
-		Ranking.Text ="#" + SettingsOperator.Sessioncfg["ranknumber"]?.ToString();
-		PerformanceNumber.Text =$"{SettingsOperator.ranked_points.ToString("N0")}pp";
+		Ranking.Text = "#" + SettingsOperator.Sessioncfg["ranknumber"]?.ToString();
+		PerformanceNumber.Text = $"{SettingsOperator.ranked_points.ToString("N0")}pp";
 	}
 	public override void _Ready()
 	{

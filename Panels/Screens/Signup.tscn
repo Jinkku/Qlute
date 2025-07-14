@@ -1,0 +1,57 @@
+[gd_scene load_steps=2 format=3 uid="uid://dw1k5tx8lk8yf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wpkjh"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.117647, 0.117647, 0.117647, 0.784314)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="PanelContainer" type="PanelContainer"]
+custom_minimum_size = Vector2(400, 100)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -177.5
+offset_right = 200.0
+offset_bottom = 177.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wpkjh")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Let's get you ready <3"
+
+[node name="More" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Just put your perferred username and password then we are good to go!
+
+Don't worry you don't need to make an account for playing the game, just for the online functionalites :)
+"
+autowrap_mode = 2
+
+[node name="Username" type="LineEdit" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+placeholder_text = "Username"
+
+[node name="Password" type="LineEdit" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+placeholder_text = "Password"
+secret = true
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Sign up"

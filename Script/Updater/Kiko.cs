@@ -6,8 +6,15 @@ public partial class Kiko : Node
 {
     private HttpRequest KikoApi { get; set; }
     private string VersionCode { get; set; }
+    public static bool UsingExternalPCK { get; set; }
     public override void _Ready()
     {
+        if (FileAccess.FileExists(SettingsOperator.homedir + "/update.pck"))
+        {
+            GD.Print("File updated");
+            ProjectSettings.LoadResourcePack(SettingsOperator.homedir + "/update.pck");
+            UsingExternalPCK = true;
+        }
         KikoApi = new HttpRequest();
         AddChild(KikoApi);
         KikoApi.Connect("request_completed", new Callable(this, nameof(_KikoApiDone)));

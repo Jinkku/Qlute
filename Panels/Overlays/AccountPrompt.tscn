@@ -106,10 +106,6 @@ secret = true
 layout_mode = 2
 text = "Stay logged in"
 
-[node name="CheckButton2" type="CheckButton" parent="AccPanel/Notlog/VBoxContainer"]
-layout_mode = 2
-text = "Save password"
-
 [node name="HBoxContainer2" type="HBoxContainer" parent="AccPanel/Notlog/VBoxContainer"]
 layout_mode = 2
 
@@ -265,4 +261,5 @@ text = "Log out"
 
 [connection signal="draw" from="." to="." method="_on_draw"]
 [connection signal="pressed" from="AccPanel/Notlog/VBoxContainer/HBoxContainer2/Login" to="." method="_on_login_pressed"]
+[connection signal="pressed" from="AccPanel/Notlog/VBoxContainer/HBoxContainer2/Create" to="." method="_create"]
 [connection signal="pressed" from="AccPanel/Log/Logout" to="." method="_logout"]
