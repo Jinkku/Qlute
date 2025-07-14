@@ -13,7 +13,7 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[node name="ColorRect" type="ColorRect"]
+[node name="Sign up Prompt" type="ColorRect"]
 z_index = 254
 anchors_preset = 15
 anchor_right = 1.0

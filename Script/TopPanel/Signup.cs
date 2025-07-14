@@ -13,9 +13,11 @@ public partial class Signup : ColorRect
 	private Label Warning2 { get; set; }
 	private string username;
 	private string password;
+	private Tween tween;
 	public static SettingsOperator SettingsOperator { get; set; }
-	private void _back() {
-		QueueFree();
+	private void _back()
+	{
+		animation(0);
 	}
 	private void _signup()
 	{
@@ -32,12 +34,13 @@ public partial class Signup : ColorRect
 	}
 	private void complete(long result, long responseCode, string[] headers, byte[] body)
 	{
+		Modulate = new Color(1f, 1f, 1f, 1f);
 		SettingsOperator.Sessioncfg["loggingin"] = false;
 		if (responseCode == 200)
 		{
 			Notify.Post("Account created, welcome to Qlute!");
 			ApiOperator.Login(username, password);
-			QueueFree();
+			animation(0);
 		}
 		else
 		{
@@ -46,7 +49,26 @@ public partial class Signup : ColorRect
 
 		GD.Print("Login API Response: " + Encoding.UTF8.GetString(body));
 	}
+
+
+	private void animation(int process)
+	{
+		tween?.Kill();
+		tween = CreateTween();
+		if (process == 0)
+		{
+			tween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 0f), 0.2f);
+			tween.TweenCallback(Callable.From(QueueFree));
+		}
+		else
+		{
+			tween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), 0.2f);
+			tween.Play();
+		}
+	}
+
 	// Called when the node enters the scene tree for the first time.
+
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -56,6 +78,8 @@ public partial class Signup : ColorRect
 		UserLine = GetNode<LineEdit>("PanelContainer/VBoxContainer/Username");
 		PassLine = GetNode<LineEdit>("PanelContainer/VBoxContainer/Password");
 		SignupHTTP = GetNode<HttpRequest>("PanelContainer/Signup");
+		Modulate = new Color(1f, 1f, 1f, 0f);
+		animation(1);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
