@@ -19,7 +19,7 @@ public partial class AccountPrompt : Control
 	public static SettingsOperator SettingsOperator { get; set; }
 	private void _create()
 	{
-		var Signup = GD.Load<PackedScene>("res://Panels/Screens/Signup.tscn").Instantiate().GetNode<PanelContainer>(".");
+		var Signup = GD.Load<PackedScene>("res://Panels/Screens/Signup.tscn").Instantiate().GetNode<ColorRect>(".");
 		GetTree().CurrentScene.AddChild(Signup);
 		Hide();
 	}

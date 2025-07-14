@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dw1k5tx8lk8yf"]
+[gd_scene load_steps=3 format=3 uid="uid://dw1k5tx8lk8yf"]
+
+[ext_resource type="Script" uid="uid://bd06c52fxvij8" path="res://Script/TopPanel/Signup.cs" id="1_desrf"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wpkjh"]
 content_margin_left = 15.0
@@ -11,8 +13,19 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[node name="PanelContainer" type="PanelContainer"]
+[node name="ColorRect" type="ColorRect"]
+z_index = 254
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.588235)
+script = ExtResource("1_desrf")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
 custom_minimum_size = Vector2(400, 100)
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -26,32 +39,62 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wpkjh")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
+theme_override_constants/separation = 15
 
-[node name="Title" type="Label" parent="VBoxContainer"]
+[node name="Title" type="Label" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "Let's get you ready <3"
 
-[node name="More" type="Label" parent="VBoxContainer"]
+[node name="More" type="Label" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "Just put your perferred username and password then we are good to go!
 
-Don't worry you don't need to make an account for playing the game, just for the online functionalites :)
-"
+Don't worry you don't need to make an account for playing the game, just for the online functionalites :)"
 autowrap_mode = 2
 
-[node name="Username" type="LineEdit" parent="VBoxContainer"]
+[node name="Warning" type="Label" parent="PanelContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.992188, 1, 0, 1)
+text = "Something ain't right-"
+autowrap_mode = 2
+
+[node name="Warning2" type="Label" parent="PanelContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.992188, 1, 0, 1)
+text = "Something ain't right-"
+autowrap_mode = 2
+
+[node name="Username" type="LineEdit" parent="PanelContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 placeholder_text = "Username"
 
-[node name="Password" type="LineEdit" parent="VBoxContainer"]
+[node name="Password" type="LineEdit" parent="PanelContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 placeholder_text = "Password"
 secret = true
 
-[node name="Button" type="Button" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="SignupButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Sign up"
+
+[node name="Back" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[node name="Signup" type="HTTPRequest" parent="PanelContainer"]
+download_file = "user://h.html"
+timeout = 3.0
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/SignupButton" to="." method="_signup"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/Back" to="." method="_back"]
+[connection signal="request_completed" from="PanelContainer/Signup" to="." method="complete"]
