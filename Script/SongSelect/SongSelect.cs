@@ -143,6 +143,7 @@ public partial class SongSelect : Control
 		SongLen = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box3/Length");
 		SongMapper = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box2/Mapper");
 		StartButton = GetNode<Button>("BottomBar/Start");
+		StartButton.Visible = false; // Start the button off with being hidden.
 		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
 
 		
@@ -270,6 +271,10 @@ public partial class SongSelect : Control
 	public override void _Process(double _delta)
 	{
 
+
+		// Show Play button if SongID is set.
+		StartButton.Visible = ((int)SettingsOperator.Sessioncfg["SongID"] != -1);
+
 		if (Input.IsMouseButtonPressed(MouseButton.Right) && SettingsOperator.SongIDHighlighted != -1)
 		{
 			ContextMenu.SetMeta("SongID", SettingsOperator.SongIDHighlighted);
@@ -280,7 +285,8 @@ public partial class SongSelect : Control
 			ContextMenuAni.SetParallel(true);
 			ContextMenuAni.TweenProperty(ContextMenu, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 			ContextMenuAni.TweenProperty(ContextMenu, "position", GetViewport().GetMousePosition(), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-		} else if (Input.IsMouseButtonPressed(MouseButton.Left) && ContextMenuActive) // Hide context menu if left mouse button is pressed outside of it
+		}
+		else if (Input.IsMouseButtonPressed(MouseButton.Left) && ContextMenuActive) // Hide context menu if left mouse button is pressed outside of it
 		{
 			Vector2 mousePos = GetViewport().GetMousePosition();
 			Rect2 contextRect = new Rect2(ContextMenu.Position, ContextMenu.Size);
