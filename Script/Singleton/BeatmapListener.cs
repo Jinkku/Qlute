@@ -38,7 +38,7 @@ public partial class BeatmapListener : Node
 		Array.Sort(files, (x, y) => new FileInfo(x).Length.CompareTo(new FileInfo(y).Length));
 		foreach (string file in files)
 		{
-			SettingsOperator.Parse_Beatmapfile(file,SetID: SetID); // Parse the beatmap file and add it to the beatmaps list
+			SettingsOperator.Parse_Beatmapfile(file.Replace("\\","/"),SetID: SetID); // Parse the beatmap file and add it to the beatmaps list
 			SettingsOperator.Sessioncfg["reloaddb"] = true;
 		}
 		SetID++; // Increment SetID for each beatmap directory parsed
@@ -49,7 +49,6 @@ public partial class BeatmapListener : Node
 		foreach (string file in Directory.GetFiles(SettingsOperator.downloadsdir, "*.osz"))
 		{
 			string beatmapDir = Path.Combine(SettingsOperator.beatmapsdir, Path.GetFileNameWithoutExtension(file));
-			GD.Print(beatmapDir);
 			if (!Directory.Exists(beatmapDir))
 			{
 				Directory.CreateDirectory(beatmapDir);
@@ -89,8 +88,9 @@ public partial class BeatmapListener : Node
 					GD.Print("Checking for beatmaps...");
 					foreach (string Dir in Directory.GetDirectories(SettingsOperator.beatmapsdir))
 					{
-						GD.Print(Dir);
-						Parse_BeatmapDir(Dir);
+						var newDir = Dir.Replace("\\", "/");
+						GD.Print(newDir);
+						Parse_BeatmapDir(newDir);
 					}
 				}
 				GD.Print("Found " + tmp);
