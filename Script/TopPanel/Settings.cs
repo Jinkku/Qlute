@@ -8,6 +8,7 @@ public partial class Settings : Button
 	//public static <string, object>GetSetting { get; set; }
 	
 	public static SettingsOperator SettingsOperator { get; set; }
+	private Tween acctween;
 	public Control Card;
 	public Control SettingsPanel {get;set;}
 	public Control NotificationPanel {get;set;}
@@ -149,14 +150,22 @@ public partial class Settings : Button
 
 	}
 	private void toggleaccountpanel(){
-	//	AnimationPlayer AniPlayer = GetNode<AnimationPlayer>("%AccountPanelAnimation");
 		var loggedin = (bool)SettingsOperator.Sessioncfg["loggedin"];
-		if (!(bool)SettingsOperator.Sessioncfg["showaccountpro"]){
-		Card = GD.Load<PackedScene>("res://Panels/Overlays/AccountPrompt.tscn").Instantiate().GetNode<Control>(".");
-		Card.Position = new Vector2(0,50);
-		TopPanel.AddChild(Card);
-		} else {
-			Card.QueueFree();
+		acctween?.Kill();
+		acctween = CreateTween();
+		if (!(bool)SettingsOperator.Sessioncfg["showaccountpro"])
+		{
+			Card = GD.Load<PackedScene>("res://Panels/Overlays/AccountPrompt.tscn").Instantiate().GetNode<Control>(".");
+			Card.ZIndex = -1;
+			TopPanel.AddChild(Card);
+			Card.Position = new Vector2(0, -265);
+			acctween.TweenProperty(Card, "position", new Vector2(0,SettingsOperator.TopPanelPosition), 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			acctween.Play();
+		}
+		else
+		{
+			acctween.TweenProperty(Card, "position", new Vector2(0,-265), 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			acctween.TweenCallback(Callable.From(Card.QueueFree));
 		}
 		SettingsOperator.Sessioncfg["showaccountpro"] = !(bool)SettingsOperator.Sessioncfg["showaccountpro"];}
 	private void _settings_pressed(){

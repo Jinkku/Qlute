@@ -39,10 +39,7 @@ public partial class InfoBar : ColorRect
 		if (!(bool)SettingsOperator.Sessioncfg["chatboxv"])
 		{
 
-			if (IsInstanceValid(ChatBox))
-			{
-				ChatBox.QueueFree();
-			}
+			ChatBox?.QueueFree();
 			ChatBox = GD.Load<PackedScene>("res://Panels/Overlays/ChatOverlay.tscn").Instantiate().GetNode<PanelContainer>(".");
 			TopPanel.AddChild(ChatBox);
 			GetTree().CurrentScene.GetNode(".").SetProcessInput(false);
@@ -93,10 +90,7 @@ public partial class InfoBar : ColorRect
 
 		if (Input.IsActionJustPressed("Special"))
 		{
-			if (IsInstanceValid(VolumePanel))
-			{
-				VolumePanel.QueueFree();
-			}
+			VolumePanel?.QueueFree();
 			VolumePanel = GD.Load<PackedScene>("res://Panels/Overlays/VolumeControl.tscn").Instantiate().GetNode<Control>(".");
 			TopPanel.AddChild(VolumePanel);
 			GetTree().CurrentScene.GetNode(".").SetProcessInput(false);
