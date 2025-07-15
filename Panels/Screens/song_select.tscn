@@ -288,6 +288,20 @@ grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 2
 
+[node name="NoBeatmap" type="Label" parent="SongPanel"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "You have no beatmaps!
+visit the catalog to find some!
+<3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Blocker" type="ColorRect" parent="."]
 visible = false
 z_index = 1

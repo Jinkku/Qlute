@@ -14,6 +14,7 @@ public partial class SongSelect : Control
 	public Label SongMapper { get; set; }
 	private Label LevelRating { get; set; }
 	private Label RankStatus { get; set; }
+	private Label NoBeatmap { get; set; }
 	public Label Songpp { get; set; }
 	public Label Debugtext { get; set; }
 	public Label SongBPM { get; set; }
@@ -120,6 +121,8 @@ public partial class SongSelect : Control
 		ContextMenu = GetNode<PanelContainer>("ContextMenu");
 		ContextMenu.Visible = false;
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
+		NoBeatmap = GetNode<Label>("SongPanel/NoBeatmap");
+		NoBeatmap.Visible = true;
 		SongETick = 0;
 		startposition = (int)GetViewportRect().Size.Y/2 - 166;
 
@@ -274,6 +277,7 @@ public partial class SongSelect : Control
 
 		// Show Play button if SongID is set.
 		StartButton.Visible = ((int)SettingsOperator.Sessioncfg["SongID"] != -1);
+		NoBeatmap.Visible = (SettingsOperator.Beatmaps.Count < 1);
 
 		if (Input.IsMouseButtonPressed(MouseButton.Right) && SettingsOperator.SongIDHighlighted != -1)
 		{
