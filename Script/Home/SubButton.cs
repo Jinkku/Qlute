@@ -18,8 +18,7 @@ public partial class SubButton : PanelContainer
     private Vector2 Mainmenupos { get; set; }
     public override void _Process(double _delta)
     {
-
-        Mainmenupos = new Vector2(MainmenuBar.Size.X / 2 - (Size.X / 2), MainmenuBar.Position.Y + MainmenuBar.Size.Y);
+        Mainmenupos = new Vector2((MainmenuBar.Size.X / 2) - (Size.X / 2), MainmenuBar.Position.Y + MainmenuBar.Size.Y);
         if (_tween != null && !_tween.IsRunning())
             Position = Mainmenupos;
 
@@ -41,7 +40,6 @@ public partial class SubButton : PanelContainer
         }
         if (HomeButtonID.ID != _buttonID)
         {
-
             _buttonID = HomeButtonID.ID;
             foreach (Button button in GetNode<HBoxContainer>("SubButtons").GetChildren())
             {

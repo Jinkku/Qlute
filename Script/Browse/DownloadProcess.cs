@@ -5,7 +5,6 @@ public partial class DownloadProcess : Button
 {
     private void _download()
     {
-
         Notify.Post("Downloading " + GetMeta("beatmap").ToString());
         DownloadBeatmap(int.Parse(GetMeta("beatmap").ToString()));
     }

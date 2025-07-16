@@ -42,7 +42,7 @@ public partial class IntroPending : Control
 
 
 		Logo.Size = new Vector2(HomeLogoSize[0] + 10, HomeLogoSize[1] + 10);
-		Logo.Position = new Vector2(GetViewportRect().Size.X / 2 - (Logo.Size.X / 2), GetViewportRect().Size.Y / 2 - (Logo.Size.Y / 2));
+		Logo.Position = new Vector2((GetViewportRect().Size.X / 2) - (Logo.Size.X / 2), (GetViewportRect().Size.Y / 2) - (Logo.Size.Y / 2));
 		if (LogoTween != null)
 		{
 			LogoTween.Kill();
@@ -55,7 +55,6 @@ public partial class IntroPending : Control
 			.SetTrans(Tween.TransitionType.Cubic)
 			.SetEase(Tween.EaseType.Out);
 		LogoTween.Play();
-
 	}
 	private void _on_bomb_pressed(){
 		HomeButtons.Position = new Vector2(HomeButtons.Position.X,HomeButtons.Position.Y+150);
@@ -82,7 +81,6 @@ public partial class IntroPending : Control
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
 		_tween.Play();
-
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)

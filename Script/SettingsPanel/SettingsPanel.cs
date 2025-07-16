@@ -44,7 +44,6 @@ public partial class SettingsPanel : Control
 	}
 	public override void _Process(double delta)
 	{
-
 		Size = new Vector2(Size.X,GetViewportRect().Size.Y-(GetNode<ColorRect>("..").Position.Y+50));
 	}
 	private void _changed_resolution(int index)
@@ -66,7 +65,6 @@ public partial class SettingsPanel : Control
 	private void _backgrounddim_started(float value)
 	{
 		SettingsOperator.backgrounddim = (int)BackgroundDim.Value;
-		
 	}
 	private void _backgrounddim_ended(int value)
 	{
@@ -75,6 +73,5 @@ public partial class SettingsPanel : Control
 	private void _scroll_speed(float value){
 		SettingsOperator.SetSetting("scrollspeed",(int)(11485/value));
 		ScrollSpeedt.Text = $"Scroll Speed ({value.ToString("0")})";
-
 	}
 }

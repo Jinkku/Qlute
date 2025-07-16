@@ -43,7 +43,7 @@ public partial class LeaderboardPanel : PanelContainer
 			leaderboardEntry.SetMeta("playing", false);
 			leaderboardEntry.SelfModulate = new Color(0.56f, 0.56f, 0.56f); // Default color for other ranks
 			LeaderboardContainer.AddChild(leaderboardEntry);
-			leaderboardEntry.Position = new Vector2(0, (ranknum - 1) * leaderboardEntry.Size.Y + (ranknum * 5)); // Adjust position based on rank
+			leaderboardEntry.Position = new Vector2(0, ((ranknum - 1) * leaderboardEntry.Size.Y) + (ranknum * 5)); // Adjust position based on rank
 			LeadSize += (int)leaderboardEntry.Size.Y + 5;
 			LeaderboardEntries.Add(new LeaderboardStatus
 			{
@@ -61,7 +61,7 @@ public partial class LeaderboardPanel : PanelContainer
 		playerEntry.SetMeta("rank", ranknum);
 		playerEntry.SetMeta("username", ApiOperator.Username);
 		playerEntry.SetMeta("playing", true);
-		playerEntry.Position = new Vector2(0, (ranknum - 1) * playerEntry.Size.Y + (ranknum * 5)); // Adjust position based on rank
+		playerEntry.Position = new Vector2(0, ((ranknum - 1) * playerEntry.Size.Y) + (ranknum * 5)); // Adjust position based on rank
 		LeaderboardContainer.AddChild(playerEntry);
 		LeaderboardEntries.Add(new LeaderboardStatus
 		{
@@ -101,7 +101,6 @@ public partial class LeaderboardPanel : PanelContainer
 				{
 					entry.Score = (int)SettingsOperator.Gameplaycfg["score"];
 				}
-				;
 				var oldrank = entry.Rank;
 				entry.Rank = i + 1;
 				entry.Node.SetMeta("rank", entry.Rank);

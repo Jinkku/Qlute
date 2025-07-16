@@ -18,7 +18,7 @@ public partial class UnstableRate : ColorRect
 			foreach (float ms in new List<float>(Rate))
 			{
 				var urnote = new ColorRect();
-				urnote.Position = new Vector2(-5, (Size.Y / 2) + (ms / SettingsOperator.MehJudge) * Size.Y);
+				urnote.Position = new Vector2(-5, (Size.Y / 2) + ((ms / SettingsOperator.MehJudge) * Size.Y));
 				urnote.Size = new Vector2(15, 2);
 				AddChild(urnote);
 				var urani = urnote.CreateTween();

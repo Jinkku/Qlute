@@ -14,7 +14,6 @@ public partial class LeaderboardInfo : ScrollContainer
 		Leaderboards = GetNode<VBoxContainer>("Leaderboard");
 		NoBeatmap = GetNode<Label>("NoBeatmap");
 		refreshl();
-
 	}
 	private void refreshl(){
 		oldLeaderboardList = ApiOperator.LeaderboardList;

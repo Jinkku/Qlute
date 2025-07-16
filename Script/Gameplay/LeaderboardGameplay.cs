@@ -137,7 +137,6 @@ public partial class LeaderboardGameplay : PanelContainer
 		else
 		{
 			refresh_info();
-
 		}
 	}
 }

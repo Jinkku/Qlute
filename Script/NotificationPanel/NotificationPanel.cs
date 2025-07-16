@@ -13,7 +13,6 @@ public partial class NotificationPanel : ColorRect
 			NotiCard.SetMeta("id", Math.Max(0,(int)NotiInfo.id));
 			NotiCard.Text = NotiInfo.Title;
 		}
-
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

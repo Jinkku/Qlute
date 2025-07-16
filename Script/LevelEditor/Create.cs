@@ -13,7 +13,6 @@ public partial class Create : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	private void _on_back(){
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
-
 	}
 	private void _enter(int id)
 	{

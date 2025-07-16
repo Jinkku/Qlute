@@ -4,7 +4,6 @@ using System.Linq;
 
 public partial class InfoBar : ColorRect
 {
-	
 	public SettingsOperator SettingsOperator { get; set; }
 	public AnimationPlayer Loadinganimation {get ; set; }
 	public ColorRect TopPanel {get;set;}
@@ -38,7 +37,6 @@ public partial class InfoBar : ColorRect
 	{
 		if (!(bool)SettingsOperator.Sessioncfg["chatboxv"])
 		{
-
 			ChatBox?.QueueFree();
 			ChatBox = GD.Load<PackedScene>("res://Panels/Overlays/ChatOverlay.tscn").Instantiate().GetNode<PanelContainer>(".");
 			TopPanel.AddChild(ChatBox);

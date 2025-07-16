@@ -89,7 +89,6 @@ public partial class SettingsOperator : Node
         { "fpsmode", 1 },
         { "showfps", false },
         { "teststrip", "Ya" },
-
     };
     public Dictionary<string, object> Configurationbk {get; set;}
 
@@ -417,7 +416,6 @@ public partial class SettingsOperator : Node
         { "background" , null},
         { "client-id", null },
         { "client-secret", null },
-
     };
     public void toppaneltoggle(){
 		Sessioncfg["toppanelhide"] = !(bool)Sessioncfg["toppanelhide"];
@@ -537,5 +535,4 @@ public partial class SettingsOperator : Node
     {
         return Configuration.ContainsKey(key) ? Configuration[key] : null;
     }
-
 }
