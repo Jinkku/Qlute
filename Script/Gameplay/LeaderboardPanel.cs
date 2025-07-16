@@ -10,14 +10,14 @@ public class LeaderboardStatus
 	public string Username { get; set; }
 	public int Score { get; set; }
 	public bool Playing { get; set; }
-	public int Nodeid { get; set; }
+	public PanelContainer Node { get; set; }
+	public Tween tween { get; set; }
 }
 public partial class LeaderboardPanel : PanelContainer
 {
 	// Called when the node enters the scene tree for the first time.
 	private Control LeaderboardContainer;
 	public List<LeaderboardStatus> LeaderboardEntries = new List<LeaderboardStatus>();
-	public List<PanelContainer> LeaderboardNode = new List<PanelContainer>();
 	private int Count = 0;
 	public override void _Ready()
 	{
@@ -48,9 +48,9 @@ public partial class LeaderboardPanel : PanelContainer
 				Username = entry.username,
 				Score = entry.score,
 				Playing = false,
-				Nodeid = ranknum - 1
+				Node = leaderboardEntry,
+				tween = leaderboardEntry.CreateTween()
 			});
-			LeaderboardNode.Add(leaderboardEntry);
 			ranknum++;
 		}
 		var playerEntry = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/Leaderboard.tscn").Instantiate().GetNode<PanelContainer>(".");
@@ -66,9 +66,9 @@ public partial class LeaderboardPanel : PanelContainer
 			Username = ApiOperator.Username,
 			Score = (int)SettingsOperator.Gameplaycfg["score"],
 			Playing = true,
-			Nodeid = ranknum - 1
+			Node = playerEntry,
+			tween = playerEntry.CreateTween()
 		});
-		LeaderboardNode.Add(playerEntry);
 		Count = ranknum;
 	}
 
@@ -86,9 +86,15 @@ public partial class LeaderboardPanel : PanelContainer
 			{
 				var entry = LeaderboardEntries[i];
 				if (entry.Username == ApiOperator.Username) entry.Score = (int)SettingsOperator.Gameplaycfg["score"];
+				var oldrank = entry.Rank;
 				entry.Rank = i + 1;
-				LeaderboardNode[entry.Nodeid].SetMeta("rank", entry.Rank);
-				LeaderboardNode[entry.Nodeid].Position = new Vector2(0, i * LeaderboardNode[entry.Nodeid].Size.Y + ((i + 1) * 5)); // Adjust position based on new rank
+				entry.Node.SetMeta("rank", entry.Rank);
+				if (entry.Rank != oldrank)
+				{
+					entry.tween?.Kill();
+					entry.tween = entry.Node.CreateTween();
+					entry.tween.TweenProperty(entry.Node, "position", new Vector2(0, i * entry.Node.Size.Y + ((i + 1) * 5)), 0.2).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic); // Adjust position based on new rank
+				}
 			}
 		}
 	}

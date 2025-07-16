@@ -33,7 +33,7 @@ layout_mode = 0
 offset_left = 405.0
 offset_top = 34.0
 offset_right = 705.0
-offset_bottom = 527.0
+offset_bottom = 354.0
 
 [node name="info" type="Label" parent="."]
 layout_mode = 0
