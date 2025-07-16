@@ -1,6 +1,5 @@
-[gd_scene load_steps=3 format=3 uid="uid://bff87daln02bt"]
+[gd_scene load_steps=2 format=3 uid="uid://bff87daln02bt"]
 
-[ext_resource type="PackedScene" uid="uid://bj38y6tgytge3" path="res://Panels/GameplayElements/Customizable/LeaderboardPanel.tscn" id="1_bpd3a"]
 [ext_resource type="Script" uid="uid://byea0sgpf65mm" path="res://Script/TestMenu/LeaderboardTest.cs" id="1_lis1s"]
 
 [node name="ColorRect" type="ColorRect"]
@@ -26,14 +25,7 @@ offset_left = 41.0
 offset_top = 98.0
 offset_right = 341.0
 offset_bottom = 117.0
-max_value = 1e+06
-
-[node name="Leaderboard" parent="." instance=ExtResource("1_bpd3a")]
-layout_mode = 0
-offset_left = 405.0
-offset_top = 34.0
-offset_right = 705.0
-offset_bottom = 354.0
+max_value = 2e+06
 
 [node name="info" type="Label" parent="."]
 layout_mode = 0

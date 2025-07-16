@@ -8,60 +8,23 @@ public partial class LeaderboardTest : ColorRect
 	// Called when the node enters the scene tree for the first time.
 	private void _reset()
 	{
-		ApiOperator.LeaderboardList = new List<LeaderboardEntry>([
-			new LeaderboardEntry
+		ApiOperator.LeaderboardList = new List<LeaderboardEntry>();
+		Random randomizer = new Random();
+		for (int i = 0; i < 50;i++) {
+			ApiOperator.LeaderboardList.Add(new LeaderboardEntry
 			{
-				username = "Player1",
-				points = 1000,
-				score = 720837,
-				combo = 50,
-				MAX = 10,
-				GOOD = 5,
-				MEH = 3,
-				BAD = 2,
-				mods = "HDHR",
-				time = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
-			},
-			new LeaderboardEntry
-			{
-				username = "Player2",
-				points = 800,
-				score = 750234,
-				combo = 40,
-				MAX = 8,
-				GOOD = 4,
-				MEH = 2,
-				BAD = 1,
+				username = $"Player{i.ToString("N0")}",
+				points = randomizer.Next(1, 1000),
+				score = randomizer.Next(1, 1823476),
+				combo = randomizer.Next(1, 3265),
+				MAX = randomizer.Next(1, 1000),
+				GOOD = randomizer.Next(1, 1000),
+				MEH = randomizer.Next(1, 1000),
+				BAD = randomizer.Next(1, 1000),
 				mods = "HD",
 				time = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
-			},
-			new LeaderboardEntry
-			{
-				username = "Player3",
-				points = 800,
-				score = 650234,
-				combo = 40,
-				MAX = 8,
-				GOOD = 4,
-				MEH = 2,
-				BAD = 1,
-				mods = "HD",
-				time = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
-			},
-			new LeaderboardEntry
-			{
-				username = "Player4",
-				points = 800,
-				score = 420483,
-				combo = 40,
-				MAX = 8,
-				GOOD = 4,
-				MEH = 2,
-				BAD = 1,
-				mods = "HD",
-				time = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
-			}
-		]);
+			});
+		}
 		GetNode<PanelContainer>("Leaderboard")?.QueueFree();
 		var x = GD.Load<PackedScene>("res://Panels/GameplayElements/Customizable/LeaderboardPanel.tscn").Instantiate().GetNode<PanelContainer>(".");
 		x.Name = "Leaderboard";
