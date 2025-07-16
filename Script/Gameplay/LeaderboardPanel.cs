@@ -85,11 +85,11 @@ public partial class LeaderboardPanel : PanelContainer
 			for (int i = 0; i < LeaderboardEntries.Count; i++)
 			{
 				var entry = LeaderboardEntries[i];
+				if (entry.Username == ApiOperator.Username) entry.Score = (int)SettingsOperator.Gameplaycfg["score"];
 				entry.Rank = i + 1;
 				LeaderboardNode[entry.Nodeid].SetMeta("rank", entry.Rank);
 				LeaderboardNode[entry.Nodeid].Position = new Vector2(0, i * LeaderboardNode[entry.Nodeid].Size.Y + ((i + 1) * 5)); // Adjust position based on new rank
 			}
 		}
-		// This needs to be fixed imma do it later bro-
 	}
 }

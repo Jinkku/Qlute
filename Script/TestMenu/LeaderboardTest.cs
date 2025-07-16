@@ -8,15 +8,6 @@ public partial class LeaderboardTest : ColorRect
 	// Called when the node enters the scene tree for the first time.
 	private void _reset()
 	{
-		_Ready();
-		GetNode<PanelContainer>("Leaderboard").QueueFree();
-		var x = GD.Load<PackedScene>("res://Panels/GameplayElements/Customizable/LeaderboardPanel.tscn").Instantiate().GetNode<PanelContainer>(".");
-		x.Name = "Leaderboard";
-		x.Position = new Vector2(373, 54);
-		AddChild(x);
-	}
-	public override void _Ready()
-	{
 		ApiOperator.LeaderboardList = new List<LeaderboardEntry>([
 			new LeaderboardEntry
 			{
@@ -71,6 +62,15 @@ public partial class LeaderboardTest : ColorRect
 				time = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
 			}
 		]);
+		GetNode<PanelContainer>("Leaderboard")?.QueueFree();
+		var x = GD.Load<PackedScene>("res://Panels/GameplayElements/Customizable/LeaderboardPanel.tscn").Instantiate().GetNode<PanelContainer>(".");
+		x.Name = "Leaderboard";
+		x.Position = new Vector2(405, 34);
+		AddChild(x);
+	}
+	public override void _Ready()
+	{
+		_reset();
 	}
 	private void _changed(float value)
 	{

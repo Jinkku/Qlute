@@ -2,15 +2,20 @@
 
 [ext_resource type="Script" uid="uid://b6fptxqus0hc6" path="res://Script/Gameplay/LeaderboardPanel.cs" id="1_t8lab"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_eo7hg"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t8lab"]
+bg_color = Color(0.0784314, 0.0784314, 0.0980392, 0.588235)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [node name="Leaderboard" type="PanelContainer"]
 clip_contents = true
-custom_minimum_size = Vector2(300, 320)
+custom_minimum_size = Vector2(300, 500)
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_eo7hg")
+theme_override_styles/panel = SubResource("StyleBoxFlat_t8lab")
 script = ExtResource("1_t8lab")
 
 [node name="ControlLead" type="Control" parent="."]

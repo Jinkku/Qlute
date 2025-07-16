@@ -1,9 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bff87daln02bt"]
+[gd_scene load_steps=3 format=3 uid="uid://bff87daln02bt"]
 
 [ext_resource type="PackedScene" uid="uid://bj38y6tgytge3" path="res://Panels/GameplayElements/Customizable/LeaderboardPanel.tscn" id="1_bpd3a"]
 [ext_resource type="Script" uid="uid://byea0sgpf65mm" path="res://Script/TestMenu/LeaderboardTest.cs" id="1_lis1s"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lis1s"]
 
 [node name="ColorRect" type="ColorRect"]
 anchors_preset = 15
@@ -11,7 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0.0859375, 1, 1)
+color = Color(0.296875, 0.296875, 0.296875, 1)
 script = ExtResource("1_lis1s")
 
 [node name="Button" type="Button" parent="."]
@@ -32,11 +30,10 @@ max_value = 1e+06
 
 [node name="Leaderboard" parent="." instance=ExtResource("1_bpd3a")]
 layout_mode = 0
-offset_left = 373.0
-offset_top = 54.0
-offset_right = 673.0
-offset_bottom = 374.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_lis1s")
+offset_left = 405.0
+offset_top = 34.0
+offset_right = 705.0
+offset_bottom = 527.0
 
 [node name="info" type="Label" parent="."]
 layout_mode = 0
