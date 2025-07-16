@@ -139,7 +139,7 @@ public partial class Gameplay : Control
             if (isHitObjectSection)
             {
                 // Break if we reach an empty line or another section
-                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("["))
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith('['))
                     break;
 				t=line;
 				timing = Convert.ToInt32(line.Split(",")[2]);
