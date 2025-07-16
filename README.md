@@ -10,13 +10,13 @@
 # Qlute
 Embrace your Imagination
 
-[![CodeFactor](https://www.codefactor.io/repository/github/jinkkuu/qlute/badge)](https://www.codefactor.io/repository/github/jinkkuu/qlute)
+[![CodeFactor](https://www.codefactor.io/repository/github/Jinkkuu/qlute/badge)](https://www.codefactor.io/repository/github/Jinkkuu/qlute)
 
 # Downloads
 
-Coming Soon! :)
 
-For now just compile from source
+| [Windows 10+ (x64)](https://github.com/Jinkkuu/Qlute/releases/latest/download/Windows.zip) | [MacOS 12+](https://github.com/Jinkkuu/Qlute/releases/latest/download/MacOS.zip)| [Linux (x64)](https://github.com/Jinkkuu/Qlute/releases/latest/download/Linux.zip)  |
+|--------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| ------------- | 
 
 ## Compiling the game
 Requirements:
