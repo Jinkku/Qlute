@@ -11,7 +11,7 @@ public partial class Kiko : Node
     {
         if (FileAccess.FileExists(SettingsOperator.homedir + "/update.pck"))
         {
-            GD.Print("File updated");
+            GD.Print("[Qlute] Found update file, using that instead.");
             ProjectSettings.LoadResourcePack(SettingsOperator.homedir + "/update.pck");
             UsingExternalPCK = true;
         }
