@@ -39,13 +39,10 @@ public partial class HomeScreen : Control
 
 		if (SettingsOperator.Gameplaycfg["timetotal"] - (AudioPlayer.Instance.GetPlaybackPosition() * 1000) < -1000 && SettingsOperator.Beatmaps.Count > 0)
 		{
-
 			SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
 			AudioPlayer.Instance.Play();
 		}
 		_subunf();
-
-
 	}
 	private void _test()
 	{

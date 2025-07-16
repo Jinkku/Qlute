@@ -151,7 +151,7 @@ public partial class Browse : Control
 		BlankAni.Play();
 		Loadingicon = GetNode<Sprite2D>("Loadingicon");
 		Loadinganimation = GetNode<AnimationPlayer>("Loadingicon/Loadinganimation");
-		Loadingicon.Position = new Vector2(GetViewportRect().Size.X / 2 - Loadingicon.Texture.GetSize().X / 2, GetViewportRect().Size.Y / 2 - Loadingicon.Texture.GetSize().Y / 2); // Get size of the Loading Icon and center it
+		Loadingicon.Position = new Vector2((GetViewportRect().Size.X / 2) - (Loadingicon.Texture.GetSize().X / 2), (GetViewportRect().Size.Y / 2) - (Loadingicon.Texture.GetSize().Y / 2)); // Get size of the Loading Icon and center it
 		Loadingicon.Visible = true;
 		Loadinganimation.Play("loading");
 		var uritext = "";
@@ -228,7 +228,7 @@ public static async Task
 				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor/RankText").TooltipText = line.beatmaps.First().difficulty_rating.ToString("0.00");
 				
 				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvStartColor/LvStartText").Text = "Lv. " + ((line.beatmaps.First().count_circles + line.beatmaps.First().count_sliders) * SettingsOperator.ppbase).ToString("0");
-				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvEndColor/LvEndText").Text = "Lv. " + ((line.beatmaps.Last().count_circles + line.beatmaps.Last().count_sliders) * SettingsOperator.ppbase).ToString("0");;
+				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvEndColor/LvEndText").Text = "Lv. " + ((line.beatmaps.Last().count_circles + line.beatmaps.Last().count_sliders) * SettingsOperator.ppbase).ToString("0");
 				Element.SetMeta("pic", line.covers.card);
 				Element.SetMeta("beatmap", line.id);
 				Element.GetNode<TextureButton>("SongBackgroundPreview/Playbutton").SetMeta("preview_url", "https:" + line.preview_url);

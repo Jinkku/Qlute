@@ -12,7 +12,6 @@ public partial class SetupScreenEditor : Control
 	}
 	private void _back()
 	{
-		
 	}
 	private void _next()
 	{
@@ -29,7 +28,6 @@ public partial class SetupScreenEditor : Control
 				.SetEase(Tween.EaseType.Out);
 			_focus_animation.Play();
 		}
-		
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

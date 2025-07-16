@@ -44,7 +44,6 @@ public partial class FpsCounter : PanelContainer
 	private void _on_mouse_entered(){
 		RamUsage = GD.Load<PackedScene>("res://Panels/Overlays/ExtendedDetails.tscn").Instantiate().GetNode<PanelContainer>(".");
 		GetTree().CurrentScene.AddChild(RamUsage);
-
 	}private void _on_mouse_exited(){
 		RamUsage.QueueFree();
 	}

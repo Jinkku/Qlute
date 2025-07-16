@@ -19,6 +19,5 @@ public partial class Bootstrap : Control
 		}
 		SettingsOperator.toppaneltoggle();
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
-		
 	}
 }

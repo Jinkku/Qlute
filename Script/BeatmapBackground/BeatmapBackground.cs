@@ -50,7 +50,6 @@ public partial class BeatmapBackground : TextureRect
 	public double bpmtime {get;set;}
 	public void resettime(){
 		bpmtimewait = bpmtime + (bpm/0.001f);
-
 	}
 	public override void _Process(double _delta)
 	{

@@ -66,7 +66,6 @@ public partial class Global : Node
 					.SetEase(Tween.EaseType.Out);
 				SkinEditorAni.Play();
 				SkinEditorAni.TweenCallback(Callable.From(() => _skineditorScene.QueueFree()));
-
 			}
 		}
 
@@ -80,7 +79,6 @@ public partial class Global : Node
 		else if (Input.IsActionJustPressed("Skin Editor"))
 		{
 			_SkinStart = !_SkinStart;
-
 		}
 	}
 }

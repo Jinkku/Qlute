@@ -85,7 +85,6 @@ public partial class MarathonMode : ColorRect
         SongCount = GetNode<Label>("Panel/HBoxContainer/Settings/SettingsPill/MarathonSongCount");
         ArtistContainer = GetNode<VBoxContainer>("Panel/HBoxContainer/Settings/SettingsPill/Settings/SettingsPill/Artist/List");
         resetcounter();
-
     }
     private void _exit()
     {

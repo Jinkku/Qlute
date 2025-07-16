@@ -71,7 +71,6 @@ public partial class BeatmapListener : Node
 			System.IO.Compression.ZipFile.ExtractToDirectory(file, SettingsOperator.downloadsdir);
 			File.Delete(file);
 			GD.Print("Extracted pack" + file);
-
 		}
 	}
 	public override void _Ready()
@@ -100,8 +99,6 @@ public partial class BeatmapListener : Node
 				GD.Print("Creating " + tmp);
 				System.IO.Directory.CreateDirectory(tmp);
 			}
-
-
 		}
 	}
 

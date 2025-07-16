@@ -138,9 +138,6 @@ public partial class ApiOperator : Node
 		}
 		SettingsOperator.Sessioncfg["ranknumber"] = n;
 		SettingsOperator.ranked_points = json["points"].AsInt32();
-
-
-
 	}
 	public void Check_Info(string Username)
 	{
@@ -186,20 +183,17 @@ public partial class ApiOperator : Node
 		}
 	}
 	public static string ComputeSha256Hash(string rawData)
-	{
-		using (SHA256 sha256Hash = SHA256.Create())
-		{
-			byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-			StringBuilder builder = new StringBuilder();
-			foreach (byte b in bytes)
-			{
-				builder.Append(b.ToString("x2")); // Convert byte to hexadecimal
-			}
-			return builder.ToString();
-		}
-	}
+    {
+        byte[] bytes = SHA256.HashData(Encoding.UTF8.GetBytes(rawData));
+        StringBuilder builder = new StringBuilder();
+        foreach (byte b in bytes)
+        {
+            builder.Append(b.ToString("x2")); // Convert byte to hexadecimal
+        }
+        return builder.ToString();
+    }
 
-	public static string Login(string username, string password)
+    public static string Login(string username, string password)
 	{
 		SettingsOperator.Sessioncfg["loggingin"] = true;
 		Username = username;

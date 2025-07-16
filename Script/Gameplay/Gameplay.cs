@@ -196,7 +196,6 @@ public partial class Gameplay : Control
 	{
 		try
 		{
-
 			Clock = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - PClock;
 			float est = Clock - startedtime + float.Parse(SettingsOperator.GetSetting("audiooffset").ToString());
 			if (est >= 0 && !songstarted)
@@ -347,7 +346,7 @@ public partial class Gameplay : Control
 					}
 					if (Note.Node != null)
 					{
-						Note.Node.Position = new Vector2(0, notex * scrollspeed - (HitPoint * (scrollspeed - 1)));
+						Note.Node.Position = new Vector2(0, (notex * scrollspeed) - (HitPoint * (scrollspeed - 1)));
 						Ttick++;
 						JudgeResult = checkjudge((int)notex, Keys[(int)Note.Node.GetMeta("part")].hit, Note.Node, Note.Node.Visible);
 						if (JudgeResult < 4)
@@ -411,13 +410,13 @@ public partial class Gameplay : Control
 			Hittext("Perfect", new Color(0f,0.71f,1f));
 			HealthBar.Heal(5);
 			return 0;
-		} else if (timing+nodeSize > HitPoint-SettingsOperator.GreatJudge/2 && timing+nodeSize < HitPoint+SettingsOperator.GreatJudge/2 && keyvalue && visibility){
+		} else if (timing+nodeSize > HitPoint-(SettingsOperator.GreatJudge/2) && timing+nodeSize < HitPoint+(SettingsOperator.GreatJudge/2) && keyvalue && visibility){
 			SettingsOperator.Gameplaycfg["great"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;
 			Hittext("Great", new Color(0f,1f,0.03f));
 			HealthBar.Heal(3);
 			return 1;
-		}else if (timing+nodeSize > HitPoint-SettingsOperator.MehJudge/2 && timing+nodeSize < HitPoint+SettingsOperator.MehJudge/2 && keyvalue && visibility){
+		}else if (timing+nodeSize > HitPoint-(SettingsOperator.MehJudge/2) && timing+nodeSize < HitPoint+(SettingsOperator.MehJudge/2) && keyvalue && visibility){
 			Hittext("Meh", new Color(1f,0.66f,0f));
 			SettingsOperator.Gameplaycfg["meh"]++;
 			SettingsOperator.Gameplaycfg["combo"]++;

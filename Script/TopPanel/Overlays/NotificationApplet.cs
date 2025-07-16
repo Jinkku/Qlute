@@ -41,7 +41,6 @@ public partial class NotificationApplet : Button
 					inoid++;
 					tempcard.SetMeta("id", ino);
 				}
-				;
 			}
 		}
 	}
@@ -60,7 +59,6 @@ public partial class NotificationApplet : Button
 			}
 		}
 		CloseOut();
-
 	}
 	public override void _Process(double delta)
 	{

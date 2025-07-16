@@ -26,6 +26,6 @@ public partial class Clock : Label
 			runtime++;
 		}
 		var run = formatTime(runtime);
-		Text = DateTime.Now.ToString("HH:mm:ss tt") + "\nrunning " + run; ;
+		Text = DateTime.Now.ToString("HH:mm:ss tt") + "\nrunning " + run;
 	}
 }

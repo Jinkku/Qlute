@@ -42,6 +42,5 @@ public partial class ButtonClickedpp : Button
                 ((Label)Main.PostMarks[skipid]).Text = ppvalue.ToString("N0") + "pp";
                 ((ColorRect)Main.GraphBars[skipid]).Size = new Vector2(10,(float)ppvalue/10);
             }}
-
     }
 }

@@ -39,5 +39,4 @@ public partial class VolumeControl : PanelContainer
 		SettingsOperator.SetSetting("sample", (int)value);
 		SettingsOperator.SampleVol = (int)value;
 	}
-
 }

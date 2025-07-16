@@ -98,16 +98,10 @@ public partial class MusicCard : Button
 	}
 	public override void _Process(double _delta)
 	{
-		
-		
-
-
-
 		if (ButtonPressed != Checkid())
 		{
 			ButtonPressed = Checkid();
 			Accessed = true;
-
 		}
 		if (ButtonPressed == true && Accessed)
 		{

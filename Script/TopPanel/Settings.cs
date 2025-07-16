@@ -22,7 +22,6 @@ public partial class Settings : Button
 		TopPanel = GetTree().Root.GetNode<ColorRect>("/root/TopPanelOnTop/TopPanel/InfoBar");
         PlayerName = GetNode<Label>("%UPlayerName");
 		Ranking = GetNode<Label>("%Ranking");
-
 	}
 	public override void _Process(double _delta){
 		if (Input.IsActionJustPressed("Settings")){
@@ -147,7 +146,6 @@ public partial class Settings : Button
 			_tween.Play();
 		}
 		SettingsOperator.Sessioncfg["notificationpanelv"] = !(bool)SettingsOperator.Sessioncfg["notificationpanelv"];
-
 	}
 	private void toggleaccountpanel(){
 		var loggedin = (bool)SettingsOperator.Sessioncfg["loggedin"];
@@ -173,18 +171,15 @@ public partial class Settings : Button
 			toggleaccountpanel();
 		}
 		togglesettingspanel();
-
 	}
 	private void _on_notifications(){
 		if (chkaccountpos()) {
 			toggleaccountpanel();
 		}
 		togglenotificationpanel();
-
 	}
 	private void _on_AccountButton_pressed(){
 		toggleaccountpanel();
-
 	}
 }
 //

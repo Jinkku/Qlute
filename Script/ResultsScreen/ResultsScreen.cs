@@ -27,7 +27,6 @@ public partial class ResultsScreen : Control
 	public string AccM {get;set;}
 	public override void _Ready()
 	{
-		
 		SongTitle = GetNode<Label>("AlertBox/Box/Title");
 		SongArtist = GetNode<Label>("AlertBox/Box/Artist");
 		SongDiff = GetNode<Label>("AlertBox/Box/Difficulty");
@@ -90,7 +89,6 @@ public partial class ResultsScreen : Control
 		}
 		// Set the Rank medal text
 		AccuracyMedal.Text = AccM;
-
 	}
 	public void _retry(){
 		SettingsOperator.ResetRank();

@@ -43,7 +43,7 @@ public partial class SongSelect : Control
 	int scrolloldvalue {get;set;}
 	private void _valuechangedscroll(float value){ // Part of the loading Beatmaps
 		SongETick = 0;
-		startposition = (int)GetViewportRect().Size.Y/2 - 166;
+		startposition = ((int)GetViewportRect().Size.Y/2) - 166;
 		//Debugtext.Text = $"{value.ToString()}/{SongLoaded.ToString()}";
 		ScrollSongs();
 	}
@@ -69,7 +69,6 @@ public partial class SongSelect : Control
 	}
 	public void AddSongList(int id)
 	{
-		
 		var background = SettingsOperator.Beatmaps[id].Path + SettingsOperator.Beatmaps[id].Background;
 		var button = musiccardtemplate.Instantiate().GetNode<Button>(".");
 		var SongTitle = button.GetNode<Label>("MarginContainer/VBoxContainer/SongTitle");
@@ -124,7 +123,7 @@ public partial class SongSelect : Control
 		NoBeatmap = GetNode<Label>("SongPanel/NoBeatmap");
 		NoBeatmap.Visible = true;
 		SongETick = 0;
-		startposition = (int)GetViewportRect().Size.Y/2 - 166;
+		startposition = ((int)GetViewportRect().Size.Y/2) - 166;
 
 
 		//Debugtext = new Label();
@@ -178,7 +177,7 @@ public partial class SongSelect : Control
 			// Calculate visible range with larger buffer to reduce flickering
 			float viewportHeight = GetViewportRect().Size.Y;
 			int visibleItemCount = (int)(viewportHeight / 83); // Increased buffer items
-			int startIndex = Math.Max(0, (int)scrollBar.Value - visibleItemCount / 2 - 1);
+			int startIndex = Math.Max(0, (int)scrollBar.Value - (visibleItemCount / 2) - 1);
 			int endIndex = Math.Min(SettingsOperator.Beatmaps.Count, startIndex + visibleItemCount + 1);
 
 			// Remove items outside visible range
@@ -273,8 +272,6 @@ public partial class SongSelect : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
-
-
 		// Show Play button if SongID is set.
 		StartButton.Visible = ((int)SettingsOperator.Sessioncfg["SongID"] != -1);
 		NoBeatmap.Visible = (SettingsOperator.Beatmaps.Count < 1);
@@ -317,7 +314,6 @@ public partial class SongSelect : Control
 		{
 			SettingsOperator.Sessioncfg["reloaddb"] = false;
 			GetTree().ReloadCurrentScene();
-
 		}
 		check_modscreen();
 		scrollBar.MaxValue = SettingsOperator.Beatmaps.Count;
@@ -341,7 +337,6 @@ public partial class SongSelect : Control
 				SettingsOperator.SelectSongID((int)SettingsOperator.Beatmaps.Count - 1);
 			}
 			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
-
 		}
 		else if (Input.IsActionJustPressed("Songdown"))
 		{
@@ -354,7 +349,6 @@ public partial class SongSelect : Control
 				SettingsOperator.SelectSongID(0);
 			}
 			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
-
 		}
 		else if (Input.IsActionJustPressed("Mod"))
 		{
@@ -363,11 +357,9 @@ public partial class SongSelect : Control
 		else if (Input.IsActionJustPressed("Random"))
 		{
 			_on_random();
-
 		}
 		else if (Input.IsActionJustPressed("Collections"))
 		{
-
 		}
 		else if (Input.IsActionJustPressed("scrolldown") && scrollBar.Value + 1 < SettingsOperator.Beatmaps.Count && SongPanelAccess)
 		{
@@ -448,7 +440,6 @@ public partial class SongSelect : Control
 		SettingsOperator.loopaudio = false;
 	}
 	private void _on_back_pressed(){
-
 		if (SettingsOperator.CreateSelectingBeatmap) GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
 		else GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
 	}

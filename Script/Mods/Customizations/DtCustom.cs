@@ -3,7 +3,6 @@ using System;
 
 public partial class DtCustom : VBoxContainer
 {
-
 	private Label DTLabel;
 	private HSlider DTMS;
 	public static float Speed;
