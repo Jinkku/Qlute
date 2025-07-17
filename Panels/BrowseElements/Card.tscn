@@ -1,9 +1,9 @@
 [gd_scene load_steps=23 format=3 uid="uid://b2pypl6ci4s6g"]
 
 [ext_resource type="Script" uid="uid://da5wukscc4c75" path="res://Script/Browse/CardFunctions.cs" id="1_pttee"]
-[ext_resource type="Texture2D" uid="uid://bx4ufaujlqpm8" path="res://Skin/System/download.png" id="2_tgpg0"]
+[ext_resource type="Texture2D" uid="uid://46vt33hasgbd" path="res://Skin/System/TopPanel/Download.svg" id="2_ilrch"]
 [ext_resource type="Script" uid="uid://cdcldgnst0tvx" path="res://Script/Browse/DownloadProcess.cs" id="3_i800q"]
-[ext_resource type="Texture2D" uid="uid://b6hfhv5kwa3oi" path="res://Skin/System/heart.png" id="3_wsj5f"]
+[ext_resource type="Texture2D" uid="uid://dhtk4mxqohiru" path="res://Skin/System/Heart.svg" id="4_ilrch"]
 [ext_resource type="Texture2D" uid="uid://cix7tpqhp0qkf" path="res://Skin/System/Browse/playidle.png" id="5_ilrch"]
 [ext_resource type="Texture2D" uid="uid://q500uwy2anai" path="res://Skin/System/Browse/playing.png" id="6_c4wxm"]
 [ext_resource type="Script" uid="uid://dwam3ny8h332d" path="res://Script/Browse/MusicPreview.cs" id="7_1lgpj"]
@@ -234,12 +234,13 @@ alignment = 1
 z_index = 1
 layout_mode = 2
 mouse_filter = 1
+theme_override_constants/icon_max_width = 24
 theme_override_styles/focus = SubResource("StyleBoxEmpty_wsj5f")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_c4wxm")
 theme_override_styles/hover = SubResource("StyleBoxFlat_i800q")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bwdvf")
 theme_override_styles/normal = SubResource("StyleBoxFlat_pjk7l")
-icon = ExtResource("2_tgpg0")
+icon = ExtResource("2_ilrch")
 icon_alignment = 1
 script = ExtResource("3_i800q")
 
@@ -247,13 +248,14 @@ script = ExtResource("3_i800q")
 z_index = 1
 layout_mode = 2
 mouse_filter = 1
+theme_override_constants/icon_max_width = 24
 theme_override_styles/focus = SubResource("StyleBoxEmpty_wsj5f")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_c4wxm")
 theme_override_styles/hover = SubResource("StyleBoxFlat_i800q")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bwdvf")
 theme_override_styles/normal = SubResource("StyleBoxFlat_pjk7l")
 disabled = true
-icon = ExtResource("3_wsj5f")
+icon = ExtResource("4_ilrch")
 icon_alignment = 1
 
 [node name="SongBackgroundPreview" type="PanelContainer" parent="."]

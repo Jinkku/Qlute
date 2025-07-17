@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cgqti7e2h5skq"
-path="res://.godot/imported/ButtonHover.png-1c72f5906a8992db616fc6ace765c4f5.ctex"
+uid="uid://1ctvubu5pjib"
+path="res://.godot/imported/GameInfo.svg-c60fc225d1cb24f122cc9be94e34993b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Skin/System/ButtonHover.png"
-dest_files=["res://.godot/imported/ButtonHover.png-1c72f5906a8992db616fc6ace765c4f5.ctex"]
+source_file="res://Skin/System/ResultsScreen/GameInfo.svg"
+dest_files=["res://.godot/imported/GameInfo.svg-c60fc225d1cb24f122cc9be94e34993b.ctex"]
 
 [params]
 
@@ -32,3 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

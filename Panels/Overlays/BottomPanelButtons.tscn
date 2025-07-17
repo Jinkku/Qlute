@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://c2ouvq16jls8u"]
 
 [ext_resource type="Script" uid="uid://blbe3d2880su3" path="res://Script/Effects/ScreenElementButton.cs" id="1_n1f57"]
-[ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="2_eljtg"]
+[ext_resource type="Texture2D" uid="uid://ctnqrw3he2egt" path="res://Skin/System/backicon.svg" id="2_eljtg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_amdr4"]
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)

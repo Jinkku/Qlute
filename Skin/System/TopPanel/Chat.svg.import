@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bx4ufaujlqpm8"
-path="res://.godot/imported/download.png-9a1d21ad36d33d4e2cc1a31a13914783.ctex"
+uid="uid://cpp14plc7cctp"
+path="res://.godot/imported/Chat.svg-c1dd82b480c26f0985fb93998c8d71d9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Skin/System/download.png"
-dest_files=["res://.godot/imported/download.png-9a1d21ad36d33d4e2cc1a31a13914783.ctex"]
+source_file="res://Skin/System/TopPanel/Chat.svg"
+dest_files=["res://.godot/imported/Chat.svg-c1dd82b480c26f0985fb93998c8d71d9.ctex"]
 
 [params]
 
@@ -32,3 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

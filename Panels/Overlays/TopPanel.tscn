@@ -1,17 +1,17 @@
-[gd_scene load_steps=32 format=3 uid="uid://bwpja5llmgtqo"]
+[gd_scene load_steps=33 format=3 uid="uid://bwpja5llmgtqo"]
 
 [ext_resource type="Script" uid="uid://borvy2xtb1o65" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
-[ext_resource type="Texture2D" uid="uid://bvjgpego4fwun" path="res://Skin/System/settings.png" id="1_vco36"]
-[ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="2_4cvop"]
+[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Skin/System/guest.png" id="2_4cvop"]
 [ext_resource type="Script" uid="uid://ddvycljmp7l70" path="res://Script/TopPanel/Settings.cs" id="2_6umcl"]
 [ext_resource type="Script" uid="uid://gu4jvlj8sdfj" path="res://Script/TopPanel/Ranking.cs" id="3_ggapr"]
-[ext_resource type="Texture2D" uid="uid://c2l61nwy40vn1" path="res://Skin/System/chat.png" id="4_e4lty"]
 [ext_resource type="Script" uid="uid://ckunjtbu57684" path="res://Script/TopPanel/UPlayerName.cs" id="4_v36dv"]
-[ext_resource type="Texture2D" uid="uid://die40m3acksoy" path="res://Skin/System/browse.png" id="5_1kmfn"]
-[ext_resource type="Texture2D" uid="uid://cx112orgceagu" path="res://Skin/System/loading.svg" id="5_3trnu"]
-[ext_resource type="Texture2D" uid="uid://dkiv7s0dfykav" path="res://Skin/System/notifications.png" id="5_6ko15"]
+[ext_resource type="Texture2D" uid="uid://cxgktcat5d5n1" path="res://Skin/System/loading.svg" id="5_3trnu"]
 [ext_resource type="Script" uid="uid://bm70a8842a0fp" path="res://Script/TopPanel/RankUpdate.cs" id="6_3trnu"]
+[ext_resource type="Texture2D" uid="uid://ci24g7ndyah7y" path="res://Skin/System/MainMenu/Browse.svg" id="7_1qp4o"]
 [ext_resource type="Script" uid="uid://cmb50kh06rh1x" path="res://Script/TopPanel/Overlays/Clock.cs" id="7_fe0ly"]
+[ext_resource type="Texture2D" uid="uid://cpp14plc7cctp" path="res://Skin/System/TopPanel/Chat.svg" id="8_1qp4o"]
+[ext_resource type="Texture2D" uid="uid://4uedtgsvw7ep" path="res://Skin/System/TopPanel/Settings.svg" id="9_6quot"]
+[ext_resource type="Texture2D" uid="uid://dbrt8ltwm3upi" path="res://Skin/System/TopPanel/Notifications.svg" id="12_1qp4o"]
 [ext_resource type="Script" uid="uid://dp1rdt0w40nki" path="res://Script/TestMenu/Debugitem2.cs" id="13_1qp4o"]
 
 [sub_resource type="Animation" id="Animation_xvajm"]
@@ -117,6 +117,9 @@ bg_color = Color(1, 1, 1, 0.34902)
 content_margin_left = 12.0
 content_margin_right = 12.0
 bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_6quot"]
+load_path = "res://.godot/imported/browse.png-227daa69475810da21b76f1a1baf192b.ctex"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3trnu"]
 bg_color = Color(1, 1, 1, 0.156863)
@@ -278,37 +281,40 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
 keep_pressed_outside = true
-icon = ExtResource("5_1kmfn")
+icon = SubResource("CompressedTexture2D_6quot")
 icon_alignment = 1
 
 [node name="Browse" type="Button" parent="InfoBar/HBoxContainer"]
 layout_mode = 2
+theme_override_constants/icon_max_width = 28
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
 theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
 keep_pressed_outside = true
-icon = ExtResource("5_1kmfn")
+icon = ExtResource("7_1qp4o")
 icon_alignment = 1
 
 [node name="Chat" type="Button" parent="InfoBar/HBoxContainer"]
 layout_mode = 2
+theme_override_constants/icon_max_width = 28
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
 theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
 keep_pressed_outside = true
-icon = ExtResource("4_e4lty")
+icon = ExtResource("8_1qp4o")
 icon_alignment = 1
 
 [node name="Settings" type="Button" parent="InfoBar/HBoxContainer"]
 layout_mode = 2
+theme_override_constants/icon_max_width = 28
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
 theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
 keep_pressed_outside = true
-icon = ExtResource("1_vco36")
+icon = ExtResource("9_6quot")
 icon_alignment = 1
 script = ExtResource("2_6umcl")
 
@@ -326,12 +332,13 @@ script = ExtResource("7_fe0ly")
 
 [node name="Notifications" type="Button" parent="InfoBar/HBoxContainer"]
 layout_mode = 2
+theme_override_constants/icon_max_width = 28
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
 theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
 keep_pressed_outside = true
-icon = ExtResource("5_6ko15")
+icon = ExtResource("12_1qp4o")
 icon_alignment = 1
 
 [node name="Debugitem2" type="Label" parent="."]

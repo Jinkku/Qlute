@@ -1,21 +1,18 @@
-[gd_scene load_steps=17 format=3 uid="uid://oru46ou3jfjl"]
+[gd_scene load_steps=18 format=3 uid="uid://oru46ou3jfjl"]
 
 [ext_resource type="Script" uid="uid://bj6kjjp2yikxr" path="res://Script/ResultsScreen/ResultsScreen.cs" id="1_e0sg4"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="1_xhck8"]
-[ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="3_1di71"]
+[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Skin/System/guest.png" id="3_1di71"]
 [ext_resource type="Texture2D" uid="uid://bryjqoryjlktq" path="res://Skin/System/ResultsScreen/foregroundrank.png" id="3_3q470"]
+[ext_resource type="Texture2D" uid="uid://1ctvubu5pjib" path="res://Skin/System/ResultsScreen/GameInfo.svg" id="3_m0l06"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqbwm"]
-content_margin_left = 0.0
-content_margin_top = 10.0
-content_margin_right = 0.0
-content_margin_bottom = 10.0
-bg_color = Color(0.220413, 0.26426, 0.527344, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-shadow_size = 24
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2ryxt"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+texture = ExtResource("3_m0l06")
+modulate_color = Color(0.133333, 0.152941, 0.243137, 0.588235)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m0l06"]
 bg_color = Color(0.5, 0.5, 0.5, 1)
@@ -141,7 +138,7 @@ offset_right = 250.0
 offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_wqbwm")
+theme_override_styles/panel = SubResource("StyleBoxTexture_2ryxt")
 
 [node name="Box" type="VBoxContainer" parent="AlertBox"]
 layout_mode = 2

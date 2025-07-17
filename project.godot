@@ -15,12 +15,13 @@ config/name_localized={
 "ja": "名無し"
 }
 config/description="Your Keys // Your Rhythm"
-config/version="2025.07.14"
+config/version="2025.07.17"
 run/main_scene="res://Panels/Screens/bootstrap.tscn"
 run/print_header=false
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Qlute"
 config/features=PackedStringArray("4.4", "C#", "Mobile")
+run/flush_stdout_on_print=true
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
 boot_splash/fullsize=false
@@ -42,6 +43,10 @@ Sample="*res://Script/Singleton/Sample.cs"
 SettingsOperator="*res://Script/Singleton/SettingsOperator.cs"
 ApiOperator="*res://Script/Singleton/ApiOperator.cs"
 
+[debug]
+
+file_logging/enable_file_logging=true
+
 [display]
 
 window/size/viewport_width=1280
@@ -59,6 +64,9 @@ project/assembly_name="Qlute"
 
 theme/custom="res://Skin/System/theme.tres"
 theme/custom_font="res://Fonts/font.ttf"
+theme/default_font_hinting=2
+theme/default_font_multichannel_signed_distance_field=true
+theme/lcd_subpixel_layout=0
 
 [input]
 

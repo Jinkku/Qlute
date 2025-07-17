@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=3 uid="uid://b8wmh5ui3lgly"]
 
-[ext_resource type="Texture2D" uid="uid://ccsbfeynxbms" path="res://Skin/System/guest.png" id="1_kgn3a"]
+[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Skin/System/guest.png" id="1_kgn3a"]
 [ext_resource type="Script" uid="uid://bp6h74gm3lwau" path="res://Script/SongSelect/Leaderboard.cs" id="1_ysfsi"]
 [ext_resource type="Script" uid="uid://r1nchdkq185" path="res://Script/SongSelect/LeaderboardRank.cs" id="2_wkrig"]
 

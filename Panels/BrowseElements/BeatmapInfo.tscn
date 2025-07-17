@@ -2,10 +2,10 @@
 
 [ext_resource type="Texture2D" uid="uid://fgbtqxkt8lm" path="res://DefaultWallpaper/attack.png" id="1_8h4jc"]
 [ext_resource type="Script" uid="uid://csn1oydkld5la" path="res://Script/Browse/BeatmapInfo.cs" id="1_60ltk"]
-[ext_resource type="Texture2D" uid="uid://bx4ufaujlqpm8" path="res://Skin/System/download.png" id="1_on5xq"]
-[ext_resource type="Texture2D" uid="uid://b6hfhv5kwa3oi" path="res://Skin/System/heart.png" id="2_8h4jc"]
+[ext_resource type="Texture2D" path="res://Skin/System/download.png" id="1_on5xq"]
+[ext_resource type="Texture2D" path="res://Skin/System/heart.png" id="2_8h4jc"]
 [ext_resource type="Script" uid="uid://cdcldgnst0tvx" path="res://Script/Browse/DownloadProcess.cs" id="4_5idjq"]
-[ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="4_osl5l"]
+[ext_resource type="Texture2D" uid="uid://ctnqrw3he2egt" path="res://Skin/System/backicon.svg" id="4_osl5l"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_osl5l"]
 

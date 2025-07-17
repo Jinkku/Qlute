@@ -1,8 +1,8 @@
 [gd_scene load_steps=20 format=3 uid="uid://1eecnwds7hxx"]
 
 [ext_resource type="Script" uid="uid://gl6ndgfj1mc8" path="res://Script/Browse/Browse.cs" id="1_gq7gs"]
-[ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="2_gtswx"]
-[ext_resource type="Texture2D" uid="uid://cx112orgceagu" path="res://Skin/System/loading.svg" id="3_287m4"]
+[ext_resource type="Texture2D" uid="uid://ctnqrw3he2egt" path="res://Skin/System/backicon.svg" id="2_gtswx"]
+[ext_resource type="Texture2D" uid="uid://cxgktcat5d5n1" path="res://Skin/System/loading.svg" id="3_287m4"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gt3n2"]
 content_margin_left = 25.0
