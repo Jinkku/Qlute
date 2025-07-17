@@ -119,7 +119,6 @@ content_margin_right = 12.0
 bg_color = Color(0, 0, 0, 0)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_6quot"]
-load_path = "res://.godot/imported/browse.png-227daa69475810da21b76f1a1baf192b.ctex"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3trnu"]
 bg_color = Color(1, 1, 1, 0.156863)
