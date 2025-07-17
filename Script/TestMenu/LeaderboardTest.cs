@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 public partial class LeaderboardTest : ColorRect
 {
-	// Called when the node enters the scene tree for the first time.
 	private void _reset()
 	{
 		ApiOperator.LeaderboardList = new List<LeaderboardEntry>();
 		Random randomizer = new Random();
-		for (int i = 0; i < 50;i++) {
+		for (int i = 0; i < 50; i++)
+		{
 			ApiOperator.LeaderboardList.Add(new LeaderboardEntry
 			{
 				username = $"Player{i.ToString("N0")}",
@@ -31,9 +31,15 @@ public partial class LeaderboardTest : ColorRect
 		x.Position = new Vector2(405, 34);
 		AddChild(x);
 	}
+	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		_reset();
+	}
+
+	private void _check()
+	{
+		SettingsOperator.AIPlayer = !SettingsOperator.AIPlayer;
 	}
 	private void _changed(float value)
 	{

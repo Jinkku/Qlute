@@ -23,7 +23,7 @@ public partial class FpsCounter : PanelContainer
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public void _refresh(){
 		var lat = deltam/0.001;
-		if (LatencyL.Count > 1000)
+		if (LatencyL.Count > 100)
 		{
 			LatencyL.RemoveAt(0);
 		}

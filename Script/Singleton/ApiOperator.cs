@@ -11,12 +11,14 @@ public class LeaderboardEntry
 	public double points { get; set; }
 	public int score { get; set; }
 	public int combo { get; set; }
+	public int rcombo { get; set; }
 	public int MAX { get; set; }
 	public int GOOD { get; set; }
 	public int MEH { get; set; }
 	public int BAD { get; set; }
 	public string mods { get; set; }
 	public long time { get; set; }
+	public bool Active { get; set; }
 }
 public partial class ApiOperator : Node
 {
@@ -53,7 +55,6 @@ public partial class ApiOperator : Node
 			$"COMBO: {COMBO}",
 			$"Mods: {ModsOperator.GetModAlias()}"
 		};
-		Notify.Post("Submitting...");
 		SubmitApi.Request(SettingsOperator.GetSetting("api") + "apiv2/submitscore", Headers);
 	}
 	public static List<LeaderboardEntry> LeaderboardList = new List<LeaderboardEntry>();
@@ -67,7 +68,6 @@ public partial class ApiOperator : Node
 			return;
 		}else {
 			LeaderboardStatus = 2; // Set status to loaded
-			GD.Print("Leaderboard API Response: " + body.ToString());
 			LeaderboardList = JsonSerializer.Deserialize<List<LeaderboardEntry>>((string)Encoding.UTF8.GetString(body));
 			GD.Print("Leaderboard loaded successfully.");
 		}

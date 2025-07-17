@@ -51,7 +51,8 @@ public partial class Gameplay : Control
 	private Label debugtext {get;set;}
 	public static bool Dead {get;set;}
 
-	private void ShowPauseMenu(){
+	private void ShowPauseMenu()
+	{
 		PauseMenu = GD.Load<PackedScene>("res://Panels/Screens/PauseMenu.tscn").Instantiate().GetNode<Control>(".");
 		PauseMenu.ZIndex = 200;
 		AddChild(PauseMenu);
@@ -63,7 +64,7 @@ public partial class Gameplay : Control
 		ApiOperator = GetNode<ApiOperator>("/root/ApiOperator");
 		Beatmap_Background = GetNode<TextureRect>("./Beatmap_Background");
 		AudioPlayer.Instance.Stop();
-
+		
 		Dead = false;
 		Beatmap_Background.SelfModulate = new Color(1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)),1f-(1f*(SettingsOperator.backgrounddim*0.01f)));
 		BeatmapBackground.FlashEnable = false;
@@ -114,7 +115,8 @@ public partial class Gameplay : Control
 			Keys.Add(new KeyL {Node = notet, hit = false});
 			notet.SelfModulate = idlehit;
 		}
-		
+
+
 		SettingsOperator.ResetScore();
 		SettingsOperator.Resetms();
         using var file = FileAccess.Open(SettingsOperator.Sessioncfg["beatmapurl"].ToString(), FileAccess.ModeFlags.Read);
@@ -213,6 +215,11 @@ public partial class Gameplay : Control
 		return (long)(Clock - startedtime);
 
     }
+
+	private int Get_Score(float pp, float maxpp, float multiplier) {
+		return (int)(pp / maxpp * (1000000f * multiplier));
+	}
+
 	public override void _Process(double delta)
 	{
 		try
@@ -270,12 +277,7 @@ public partial class Gameplay : Control
 			ReloadAccuracy();
 			ReloadppCounter();
 			SettingsOperator.Gameplaycfg.Time = (int)est;
-			//float est = AudioPlayer.Instance.GetPlaybackPosition()*1000;
 			int Ttick = 0;
-			//maxc=hits[0]+hits[1]+hits[2]+hits[3]
-			//    accuracy=round(((hits[0]+(hits[1]/2)+(hits[2]/3))/(maxc))*100,2)
-			//Hits.Text = "Hits:\n" + SettingsOperator.Gameplaycfg["max"] + "\n" + SettingsOperator.Gameplaycfg["great"] + "\n" + SettingsOperator.Gameplaycfg["meh"] + "\n" + SettingsOperator.Gameplaycfg["bad"] + "\n"+"ms:"+(mshitold-mshit)+"ms " + mshitold + " " + mshit + " " + SettingsOperator.Getms();
-			// Key imputs
 			for (int i = 0; i < 4; i++)
 			{
 				if (Input.IsActionJustPressed("Key" + (i + 1)) && !ModsOperator.Mods["auto"])
@@ -313,7 +315,6 @@ public partial class Gameplay : Control
 					DanceIndex++;
 				}
 			}
-
 
 			// Gamenotes
 
@@ -362,7 +363,7 @@ public partial class Gameplay : Control
 					}
 					else if (ModsOperator.Mods["black-out"] && Note.Node != null)
 					{
-						Note.Node.SelfModulate = new Color(0f, 0f, 0f, 0f);
+						Note.Node.Modulate = new Color(0f, 0f, 0f, 0f);
 					}
 					if (Note.Node != null)
 					{
@@ -376,7 +377,7 @@ public partial class Gameplay : Control
 							mshit = notex;
 							SettingsOperator.Addms(mshitold - mshit - 50);
 							SettingsOperator.Gameplaycfg.ms = SettingsOperator.Getms();
-							SettingsOperator.Gameplaycfg.Score = (int)(SettingsOperator.Gameplaycfg.pp / SettingsOperator.Gameplaycfg.maxpp * (1000000f * ModsMulti.multiplier));
+							SettingsOperator.Gameplaycfg.Score = Get_Score(SettingsOperator.Gameplaycfg.pp,SettingsOperator.Gameplaycfg.maxpp,ModsMulti.multiplier) ;
 							Note.hit = true;
 							Note.Node.Visible = false;
 							Note.Node.QueueFree();

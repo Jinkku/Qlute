@@ -27,15 +27,6 @@ offset_right = 341.0
 offset_bottom = 117.0
 max_value = 2e+06
 
-[node name="info" type="Label" parent="."]
-layout_mode = 0
-offset_left = 30.0
-offset_top = 244.0
-offset_right = 339.0
-offset_bottom = 285.0
-text = "Score changer~
-(should make the card go up if works)"
-
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
 offset_left = 41.0
@@ -45,5 +36,14 @@ offset_bottom = 163.0
 text = "Score changer~
 (should make the card go up if works)"
 
+[node name="CheckButton" type="CheckButton" parent="."]
+layout_mode = 0
+offset_left = 34.0
+offset_top = 252.0
+offset_right = 324.0
+offset_bottom = 281.0
+text = "Enable AI Player Movement"
+
 [connection signal="pressed" from="Button" to="." method="_reset"]
 [connection signal="value_changed" from="HSlider" to="." method="_changed"]
+[connection signal="pressed" from="CheckButton" to="." method="_check"]

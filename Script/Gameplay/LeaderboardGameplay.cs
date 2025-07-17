@@ -53,59 +53,24 @@ public partial class LeaderboardGameplay : PanelContainer
 		{
 			Username.Text = GetMeta("username").ToString();
 		}
-
-		if (!HasMeta("score"))
+		if (HasMeta("id"))
+		{
+			var info = ApiOperator.LeaderboardList[(int)GetMeta("id")];
+			Score.Text = string.Format("{0:N0}", info.score);
+			Combo.Text = $"{info.combo}x";
+			Max.Text = info.MAX.ToString("N0");
+			Great.Text = info.GOOD.ToString("N0");
+			Meh.Text = info.MEH.ToString("N0");
+			Bad.Text = info.BAD.ToString("N0");
+		}
+		else
 		{
 			Score.Text = "0";
-		}
-		else
-		{
-			Score.Text = string.Format("{0:N0}", (int)GetMeta("score"));
-		}
-
-		if (!HasMeta("combo"))
-		{
-			Combo.Text = "0x";
-		}
-		else
-		{
-			Combo.Text = GetMeta("combo") + "x";
-		}
-
-		if (!HasMeta("max"))
-		{
+			Combo.Text = "0";
 			Max.Text = "0";
-		}
-		else
-		{
-			Max.Text = GetMeta("max").ToString();
-		}
-
-		if (!HasMeta("good"))
-		{
 			Great.Text = "0";
-		}
-		else
-		{
-			Great.Text = GetMeta("good").ToString();
-		}
-
-		if (!HasMeta("meh"))
-		{
 			Meh.Text = "0";
-		}
-		else
-		{
-			Meh.Text = GetMeta("meh").ToString();
-		}
-
-		if (!HasMeta("bad"))
-		{
 			Bad.Text = "0";
-		}
-		else
-		{
-			Bad.Text = GetMeta("bad").ToString();
 		}
 		refresh_rank();
 	}

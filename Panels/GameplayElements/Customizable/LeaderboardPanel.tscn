@@ -10,7 +10,9 @@ corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
 [node name="Leaderboard" type="PanelContainer"]
+process_priority = 1
 clip_children = 2
+clip_contents = true
 custom_minimum_size = Vector2(300, 320)
 offset_right = 40.0
 offset_bottom = 40.0
@@ -18,7 +20,12 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_t8lab")
 script = ExtResource("1_t8lab")
 
-[node name="ControlLead" type="Control" parent="."]
+[node name="S" type="ScrollContainer" parent="."]
+layout_mode = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
+
+[node name="ControlLead" type="Control" parent="S"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
