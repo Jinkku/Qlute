@@ -37,10 +37,6 @@ public partial class LeaderboardTest : ColorRect
 		_reset();
 	}
 
-	private void _check()
-	{
-		SettingsOperator.AIPlayer = !SettingsOperator.AIPlayer;
-	}
 	private void _changed(float value)
 	{
 		// This method is called when the value of the slider changes.

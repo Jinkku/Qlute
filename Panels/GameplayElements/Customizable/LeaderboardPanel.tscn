@@ -4,6 +4,7 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t8lab"]
 bg_color = Color(0.148438, 0.148438, 0.148438, 1)
+draw_center = false
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15

@@ -53,16 +53,18 @@ public partial class LeaderboardPanel : PanelContainer
 			id++;
 		}
 		var playerEntry = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/Leaderboard.tscn").Instantiate().GetNode<PanelContainer>(".");
+		var User = ApiOperator.Username;
+		if (ModsOperator.Mods["auto"]) User = "Qlutina";
 		playerEntry.SelfModulate = new Color(56 / 255f, 82 / 255f, 138 / 255f); // Default color for other ranks
 		playerEntry.SetMeta("rank", ranknum);
-		playerEntry.SetMeta("username", ApiOperator.Username);
+		playerEntry.SetMeta("username", User);
 		playerEntry.SetMeta("playing", true);
 		playerEntry.Position = new Vector2(0, ((ranknum - 1) * playerEntry.Size.Y) + (ranknum * 5)); // Adjust position based on rank
 		LeaderboardContainer.AddChild(playerEntry);
 		LeaderboardEntries.Add(new LeaderboardStatus
 		{
 			Rank = ranknum,
-			Username = ApiOperator.Username,
+			Username = User,
 			Score = (int)SettingsOperator.Gameplaycfg.Score,
 			Playing = true,
 			Node = playerEntry,

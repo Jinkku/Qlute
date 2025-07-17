@@ -17,7 +17,6 @@ content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
 bg_color = Color(0, 0, 0, 0.313726)
-skew = Vector2(0.5, 0)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -31,16 +30,11 @@ content_margin_bottom = 5.0
 line_spacing = 0.0
 font_size = 14
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a5nx3"]
-content_margin_left = 3.0
-content_margin_top = 3.0
-content_margin_right = 3.0
-content_margin_bottom = 3.0
-bg_color = Color(0, 0, 0, 0.588235)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_a5nx3"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1bkjm"]
 
@@ -91,9 +85,9 @@ layout_mode = 2
 
 [node name="Score" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 2
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_a5nx3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_a5nx3")
 text = "1,000,000"
 vertical_alignment = 1
 
@@ -101,8 +95,9 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_a5nx3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_a5nx3")
 text = "0x"
+horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="MAX" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
@@ -110,8 +105,9 @@ layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0.394531, 0.687805, 1, 1)
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_a5nx3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_a5nx3")
 text = "0"
+horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="GREAT" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
@@ -119,8 +115,9 @@ layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0.563995, 1, 0.386719, 1)
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_a5nx3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_a5nx3")
 text = "0"
+horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="MEH" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
@@ -128,8 +125,9 @@ layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(1, 0.820312, 0, 1)
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_a5nx3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_a5nx3")
 text = "0"
+horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="BAD" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
@@ -137,8 +135,9 @@ layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(1, 0.503906, 0.503906, 1)
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_a5nx3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_a5nx3")
 text = "0"
+horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="HBoxContainer/UserInfo"]

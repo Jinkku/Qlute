@@ -290,7 +290,6 @@ metadata/Desc = "Your immortal!"
 metadata/ModName = "no-fail"
 metadata/ModNameSmall = "NF"
 
-
 [connection signal="value_changed" from="Customize/VBoxContainer/DT Custom/DTMS" to="Customize/VBoxContainer/DT Custom" method="_valuechanged"]
 [connection signal="value_changed" from="Customize/VBoxContainer/HT Custom/HTMS" to="Customize/VBoxContainer/HT Custom" method="_valuechanged"]
 [connection signal="pressed" from="Title/Info/Reset" to="Mods" method="_reset"]
@@ -305,6 +304,5 @@ metadata/ModNameSmall = "NF"
 [connection signal="pressed" from="Mods/ModsEntries/ModButton6" to="Mods/ModsEntries/ModButton6" method="_modpressed"]
 [connection signal="pressed" from="Mods/ModsEntries/ModButton7" to="Mods/ModsEntries/ModButton7" method="_modpressed"]
 [connection signal="pressed" from="Mods/ModsEntries/ModButton8" to="Mods/ModsEntries/ModButton8" method="_modpressed"]
-[connection signal="pressed" from="Mods/ModsEntries/ModButton9" to="Mods/ModsEntries/ModButton9" method="_modpressed"]
 
 [editable path="ControlPanel"]
