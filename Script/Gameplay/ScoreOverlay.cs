@@ -35,9 +35,9 @@ public partial class ScoreOverlay : Control
 		
 		score.Text = scorev.ToString("N0");
 		pp.Text = ((int)SettingsOperator.Gameplaycfg.pp).ToString("N0") + "pp";
-		var Acc = SettingsOperator.Gameplaycfg.Accuracy.ToString("P0");
-		if (Acc == "NaN"){
-			Acc = "100%";
+		var Acc = SettingsOperator.Gameplaycfg.Accuracy.ToString("P2");
+		if (SettingsOperator.Gameplaycfg.Max + SettingsOperator.Gameplaycfg.Great + SettingsOperator.Gameplaycfg.Meh + SettingsOperator.Gameplaycfg.Bad == 0){
+			Acc = "100.00%";
 		}Accuracy.Text = Acc;
 	}
 }

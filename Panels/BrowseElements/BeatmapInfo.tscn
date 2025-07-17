@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://fgbtqxkt8lm" path="res://DefaultWallpaper/attack.png" id="1_8h4jc"]
 [ext_resource type="Script" uid="uid://csn1oydkld5la" path="res://Script/Browse/BeatmapInfo.cs" id="1_60ltk"]
-[ext_resource type="Texture2D" path="res://Skin/System/download.png" id="1_on5xq"]
-[ext_resource type="Texture2D" path="res://Skin/System/heart.png" id="2_8h4jc"]
+[ext_resource type="Texture2D" uid="uid://46vt33hasgbd" path="res://Skin/System/TopPanel/Download.svg" id="1_on5xq"]
+[ext_resource type="Texture2D" uid="uid://dhtk4mxqohiru" path="res://Skin/System/Heart.svg" id="2_8h4jc"]
 [ext_resource type="Script" uid="uid://cdcldgnst0tvx" path="res://Script/Browse/DownloadProcess.cs" id="4_5idjq"]
 [ext_resource type="Texture2D" uid="uid://ctnqrw3he2egt" path="res://Skin/System/backicon.svg" id="4_osl5l"]
 
@@ -153,6 +153,7 @@ theme_override_constants/separation = 10
 
 [node name="Download" type="Button" parent="Pill/Padding/Info/HBoxContainer"]
 layout_mode = 2
+theme_override_constants/icon_max_width = 26
 theme_override_styles/focus = SubResource("StyleBoxEmpty_osl5l")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_eeb1h")
 theme_override_styles/hover = SubResource("StyleBoxFlat_60ltk")
@@ -164,6 +165,7 @@ script = ExtResource("4_5idjq")
 
 [node name="Favorite" type="Button" parent="Pill/Padding/Info/HBoxContainer"]
 layout_mode = 2
+theme_override_constants/icon_max_width = 26
 theme_override_styles/focus = SubResource("StyleBoxEmpty_osl5l")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_eeb1h")
 theme_override_styles/hover = SubResource("StyleBoxFlat_60ltk")

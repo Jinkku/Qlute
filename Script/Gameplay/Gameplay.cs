@@ -192,7 +192,7 @@ public partial class Gameplay : Control
     public static float ComputeScrollTime(float scrollSpeed) => MAX_TIME_RANGE / scrollSpeed;
 	public static void ReloadAccuracy()
 	{
-		SettingsOperator.Gameplaycfg.Accuracy = ((float)SettingsOperator.Gameplaycfg.Max + ((float)SettingsOperator.Gameplaycfg.Great / 2) + ((float)SettingsOperator.Gameplaycfg.Meh / 3)) / ((float)SettingsOperator.Gameplaycfg.Max + (float)SettingsOperator.Gameplaycfg.Great + (float)SettingsOperator.Gameplaycfg.Meh + (float)SettingsOperator.Gameplaycfg.Bad + 1);
+		SettingsOperator.Gameplaycfg.Accuracy = ((float)SettingsOperator.Gameplaycfg.Max + ((float)SettingsOperator.Gameplaycfg.Great / 2) + ((float)SettingsOperator.Gameplaycfg.Meh / 3)) / ((float)SettingsOperator.Gameplaycfg.Max + (float)SettingsOperator.Gameplaycfg.Great + (float)SettingsOperator.Gameplaycfg.Meh + (float)SettingsOperator.Gameplaycfg.Bad);
 	}
 
 	public static void ReloadppCounter()
