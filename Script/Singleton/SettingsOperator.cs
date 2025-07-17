@@ -36,6 +36,7 @@ public partial class SettingsOperator : Node
     public static float MiliSecondsFromBeatmap {get;set;}
     public static int MiliSecondsFromBeatmapTimes {get;set;}
     public static List<BeatmapLegend> Beatmaps = new List<BeatmapLegend>();
+	public static float AudioOffset { get; set; } = 0;
     public static void ResetRank()
     {
         UpdatedRank = "#0";
@@ -428,6 +429,11 @@ public partial class SettingsOperator : Node
 
     public override void _Process(double _delta)
     {
+		var aud = GetSetting("audiooffset").ToString();
+        if (aud == null) AudioOffset = 0; // AudioOffset Subsystem
+        else AudioOffset = float.Parse(aud);
+
+
         TopPanelPosition = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/TopPanel/InfoBar").Position.Y + 50;
         if (Input.IsActionJustPressed("Hide Panel"))
         {

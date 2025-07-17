@@ -12,8 +12,7 @@ public static class HomeButtonID
 }
 public partial class HomeScreen : Control
 {
-	public Label SongTitle { get; set; }
-	public Label SongArtist { get; set; }
+	public Label SongIndicator { get; set; }
 	public SettingsOperator SettingsOperator { get; set; }
 	public PanelContainer SubButtons { get; set; } // For more buttons for more playability
 	public PanelContainer HomePanel { get; set; } // Main Buttons
@@ -23,8 +22,7 @@ public partial class HomeScreen : Control
 		SubButtons = GetNode<PanelContainer>("SubButton");
 		HomePanel = GetNode<PanelContainer>("HomeButtonBG");
 		SettingsOperator.loopaudio = false;
-		SongTitle = GetNode<Label>("./Titlesong");
-		SongArtist = GetNode<Label>("./Descsong");
+		SongIndicator = GetNode<Label>("SongIndication");
 		AnimationPlayer ani = GetNode<AnimationPlayer>("Flash/AnimationPlayer");
 		HomeButtonID.ID = -1;
 		//ani.Play("Flash");
@@ -34,14 +32,14 @@ public partial class HomeScreen : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
-		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No song selected";
-		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
-
+		SettingsOperator.Gameplaycfg.Time = (int)Gameplay.GetRemainingTime();
 		if (SettingsOperator.Gameplaycfg.TimeTotal - (AudioPlayer.Instance.GetPlaybackPosition() * 1000) < -1000 && SettingsOperator.Beatmaps.Count > 0)
 		{
 			SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
 			AudioPlayer.Instance.Play();
+			Gameplay.StartClock();
 		}
+		SongIndicator.Position = new Vector2(SongIndicator.Position.X, SettingsOperator.TopPanelPosition + 10);
 		_subunf();
 	}
 	private void _test()

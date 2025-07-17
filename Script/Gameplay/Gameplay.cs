@@ -26,12 +26,12 @@ public partial class Gameplay : Control
 	public List<KeyL> Keys = new List<KeyL>();
 	public int JudgeResult = -1;
 	public int nodeSize = 54;
-	public ColorRect meh {get;set;}
+	public ColorRect meh { get; set; }
 	public ColorRect great {get;set;}
 	public ColorRect perfect {get;set;}
 	public float mshit {get;set;}
 	public float mshitold {get;set;}
-	public long startedtime {get ;set; }
+	public static long startedtime { get; set; } = 0;
 	public bool songstarted = false;
 	public Node2D noteblock {get;set;}
 	public bool hittextinit = false;
@@ -185,7 +185,7 @@ public partial class Gameplay : Control
 		}
 		key.hit = hit;
 		}
-	public long Clock {get;set;}
+	public static long Clock { get; set; } = 0;
 	public static long PClock = 0;
 
 	public const float MAX_TIME_RANGE = 11485;
@@ -199,17 +199,31 @@ public partial class Gameplay : Control
 	{
 		SettingsOperator.Gameplaycfg.pp = SettingsOperator.Get_ppvalue(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, ModsMulti.multiplier, SettingsOperator.Gameplaycfg.MaxCombo);
 	}
+	public static void StartClock()
+	{
+		startedtime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+	}
+	public static long GetRemainingTime(bool GameMode = false)
+	{
+		Clock = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+		var AudioOffset = 0f;
+		if (GameMode)
+			AudioOffset = SettingsOperator.AudioOffset;
+			Clock -= PClock;
+		return (long)(Clock - startedtime);
+
+    }
 	public override void _Process(double delta)
 	{
 		try
 		{
-			Clock = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - PClock;
-			float est = Clock - startedtime + float.Parse(SettingsOperator.GetSetting("audiooffset").ToString());
+			float est = GetRemainingTime(GameMode: true);
 			if (est >= 0 && !songstarted)
 			{
+				StartClock();
 				songstarted = true;
 				AudioPlayer.Instance.Play();
-				startedtime = Clock;
+
 			}
 
 			// DEATH
