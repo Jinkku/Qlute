@@ -218,11 +218,11 @@ public partial class SongSelect : Control
 		{
 			// Update song details
 			SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
-			Songpp.Text = "+" + (SettingsOperator.Gameplaycfg["maxpp"]*ModsMulti.multiplier).ToString("N0")+"pp";
+			Songpp.Text = "+" + (SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier).ToString("N0")+"pp";
 			SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
 			LevelRating.Text = "Lv. " + SettingsOperator.LevelRating.ToString("N0") ?? "Lv. 0";
 			SongBPM.Text = "BPM - " + ((int)SettingsOperator.Sessioncfg["beatmapbpm"]*AudioPlayer.Instance.PitchScale).ToString("N0") ?? "";
-			SongLen.Text = TimeSpan.FromMilliseconds(SettingsOperator.Gameplaycfg["timetotal"]/AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00";
+			SongLen.Text = TimeSpan.FromMilliseconds(SettingsOperator.Gameplaycfg.TimeTotal/AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00";
 
 
 			SetControlsVisibility(true);

@@ -28,7 +28,7 @@ public partial class AudioPlayer : AudioStreamPlayer
         return sound;
     }
 	public void AudioLoop(){
-		if (SettingsOperator.Gameplaycfg["timetotal"]-(GetPlaybackPosition()/0.001) < -1000 && SettingsOperator.loopaudio)
+		if (SettingsOperator.Gameplaycfg.TimeTotal - (GetPlaybackPosition()/0.001) < -1000 && SettingsOperator.loopaudio)
 		{
 			AudioPlayer.Instance.Play();
 		}

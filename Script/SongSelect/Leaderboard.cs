@@ -17,14 +17,14 @@ public partial class Leaderboard : Button
 	public void _stats()
 	{
 		SettingsOperator.ResetScore();
-		SettingsOperator.Gameplaycfg["max"] = (int)GetMeta("max");
-		SettingsOperator.Gameplaycfg["great"] = (int)GetMeta("good");
-		SettingsOperator.Gameplaycfg["meh"] = (int)GetMeta("meh");
-		SettingsOperator.Gameplaycfg["bad"] = (int)GetMeta("bad");
-		SettingsOperator.Gameplaycfg["score"] = (int)GetMeta("score");
-		SettingsOperator.Gameplaycfg["combo"] = (int)GetMeta("combo");
-		SettingsOperator.Gameplaycfg["pp"] = (double)GetMeta("points");
-		SettingsOperator.Gameplaycfg["accuracy"] = (SettingsOperator.Gameplaycfg["max"] + (SettingsOperator.Gameplaycfg["great"] / 2) + (SettingsOperator.Gameplaycfg["meh"] / 3)) / (SettingsOperator.Gameplaycfg["max"] + SettingsOperator.Gameplaycfg["great"] + SettingsOperator.Gameplaycfg["meh"] + SettingsOperator.Gameplaycfg["bad"]);
+		SettingsOperator.Gameplaycfg.Max = (int)GetMeta("max");
+		SettingsOperator.Gameplaycfg.Great = (int)GetMeta("good");
+		SettingsOperator.Gameplaycfg.Meh = (int)GetMeta("meh");
+		SettingsOperator.Gameplaycfg.Bad = (int)GetMeta("bad");
+		SettingsOperator.Gameplaycfg.Score = (int)GetMeta("score");
+		SettingsOperator.Gameplaycfg.Combo = (int)GetMeta("combo");
+		SettingsOperator.Gameplaycfg.pp = (float)GetMeta("points");
+		SettingsOperator.Gameplaycfg.Accuracy = (SettingsOperator.Gameplaycfg.Max + (SettingsOperator.Gameplaycfg.Great / 2) + (SettingsOperator.Gameplaycfg.Meh / 3)) / (SettingsOperator.Gameplaycfg.Max + SettingsOperator.Gameplaycfg.Great + SettingsOperator.Gameplaycfg.Meh + SettingsOperator.Gameplaycfg.Bad + 1);
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultsScreen.tscn");
 	}
 	public override void _Ready()

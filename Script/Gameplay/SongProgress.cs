@@ -9,11 +9,7 @@ public partial class SongProgress : ProgressBar
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		float timeTotal = 1; // Avoid division by zero
-
-		if (SettingsOperator.Gameplaycfg.TryGetValue("timetotal", out var total))
-		{
-			timeTotal = Convert.ToSingle(total);
-		}
+		timeTotal = SettingsOperator.Gameplaycfg.TimeTotal;
 		MaxValue = timeTotal;
 		_Process(0);
 	}
@@ -24,10 +20,8 @@ public partial class SongProgress : ProgressBar
 		float timeCurrent = 0;
 		
 
-		if (SettingsOperator.Gameplaycfg.TryGetValue("time", out var current))
-		{
-			timeCurrent = Convert.ToSingle(current);
-		}
+		
+		timeCurrent = SettingsOperator.Gameplaycfg.Time;
 		Value = timeCurrent;
 	}
 }

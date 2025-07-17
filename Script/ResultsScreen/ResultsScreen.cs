@@ -52,15 +52,15 @@ public partial class ResultsScreen : Control
 		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "Please select a Beatmap!";
 		SongMapper.Text = "Creator: " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString();
 		SongDiff.Text = SettingsOperator.Sessioncfg["beatmapdiff"]?.ToString();
-		Max.Text = SettingsOperator.Gameplaycfg["max"].ToString("N0");
-		Great.Text = SettingsOperator.Gameplaycfg["great"].ToString("N0");
-		Meh.Text = SettingsOperator.Gameplaycfg["meh"].ToString("N0");
-		Bad.Text = SettingsOperator.Gameplaycfg["bad"].ToString("N0");
-		pp.Text = SettingsOperator.Gameplaycfg["pp"].ToString("N0")+"/"+(SettingsOperator.Gameplaycfg["maxpp"]*ModsMulti.multiplier).ToString("N0");
-		Combo.Text = ((double)SettingsOperator.Gameplaycfg["maxcombo"]).ToString("N0");
-		Avgms.Text = ((double)SettingsOperator.Gameplaycfg["ms"]).ToString("N0")+"ms";
-		Score.Text = SettingsOperator.Gameplaycfg["score"].ToString("0,000,000");
-		var Acc = SettingsOperator.Gameplaycfg["accuracy"];
+		Max.Text = SettingsOperator.Gameplaycfg.Max.ToString("N0");
+		Great.Text = SettingsOperator.Gameplaycfg.Great.ToString("N0");
+		Meh.Text = SettingsOperator.Gameplaycfg.Meh.ToString("N0");
+		Bad.Text = SettingsOperator.Gameplaycfg.Bad.ToString("N0");
+		pp.Text = SettingsOperator.Gameplaycfg.pp.ToString("N0")+"/"+(SettingsOperator.Gameplaycfg.maxpp*ModsMulti.multiplier).ToString("N0");
+		Combo.Text = ((double)SettingsOperator.Gameplaycfg.MaxCombo).ToString("N0");
+		Avgms.Text = ((double)SettingsOperator.Gameplaycfg.ms).ToString("N0")+"ms";
+		Score.Text = SettingsOperator.Gameplaycfg.Score.ToString("0,000,000");
+		var Acc = SettingsOperator.Gameplaycfg.Accuracy;
 		Accuracy.Text = Acc.ToString("P0");
 		if (Acc > 0.95)
 		{

@@ -34,12 +34,12 @@ public partial class ApiOperator : Node
 	{
 		int BeatmapID = (int)SettingsOperator.Sessioncfg["osubeatid"];
 		int BeatmapSetID = (int)SettingsOperator.Sessioncfg["osubeatidset"];
-		double MAX = SettingsOperator.Gameplaycfg["max"];
-		double GREAT = SettingsOperator.Gameplaycfg["great"];
-		double MEH = SettingsOperator.Gameplaycfg["meh"];
-		double BAD = SettingsOperator.Gameplaycfg["bad"];
-		double COMBO = SettingsOperator.Gameplaycfg["maxcombo"];
-		double timetotal = SettingsOperator.Gameplaycfg["timetotal"] * 0.001;
+		double MAX = SettingsOperator.Gameplaycfg.Max;
+		double GREAT = SettingsOperator.Gameplaycfg.Great;
+		double MEH = SettingsOperator.Gameplaycfg.Meh;
+		double BAD = SettingsOperator.Gameplaycfg.Bad;
+		double COMBO = SettingsOperator.Gameplaycfg.MaxCombo;
+		double timetotal = SettingsOperator.Gameplaycfg.TimeTotal * 0.001;
 		string[] Headers = new string[] {
 			$"BeatmapID: {BeatmapID}",
 			$"BeatmapSetID: {BeatmapSetID}",

@@ -67,7 +67,7 @@ public partial class LeaderboardPanel : PanelContainer
 		{
 			Rank = ranknum,
 			Username = ApiOperator.Username,
-			Score = (int)SettingsOperator.Gameplaycfg["score"],
+			Score = (int)SettingsOperator.Gameplaycfg.Score,
 			Playing = true,
 			Node = playerEntry,
 			tween = playerEntry.CreateTween(),
@@ -87,7 +87,7 @@ public partial class LeaderboardPanel : PanelContainer
 	}
 	public override void _Process(double delta)
 	{
-		var oldscore = (int)SettingsOperator.Gameplaycfg["score"];
+		var oldscore = (int)SettingsOperator.Gameplaycfg.Score;
 		if (LeaderboardEntries.Count > 1)
 		{
 			// Sort the leaderboard by score in descending order
@@ -99,7 +99,7 @@ public partial class LeaderboardPanel : PanelContainer
 				var entry = LeaderboardEntries[i];
 				if (entry.Active)
 				{
-					entry.Score = (int)SettingsOperator.Gameplaycfg["score"];
+					entry.Score = (int)SettingsOperator.Gameplaycfg.Score;
 				}
 				var oldrank = entry.Rank;
 				entry.Rank = i + 1;

@@ -8,6 +8,10 @@ public partial class ScoreOverlay : Control
 	public static Label pp { get; set; }
 	public static Label score { get; set; }
 	public static Label Accuracy { get; set; }
+	private Tween scoretween {get;set;}
+	private int newscore {get;set;}
+	private int oldscore {get;set;}
+	private int scorev {get;set;}
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -18,11 +22,20 @@ public partial class ScoreOverlay : Control
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{	
-		score.Text = SettingsOperator.Gameplaycfg["score"].ToString("00000000");
-		pp.Text = ((int)SettingsOperator.Gameplaycfg["pp"]).ToString("N0") + "pp";
-		var Acc = SettingsOperator.Gameplaycfg["accuracy"].ToString("P0");
+	public override void _Process(double _delta)
+	{
+		if (oldscore != newscore)
+		{
+			oldscore = newscore;
+			scoretween?.Kill();
+			scoretween = CreateTween();
+			scoretween.TweenProperty(this, "scorev", newscore, 0.3f);
+			scoretween.Play();
+		}else newscore = SettingsOperator.Gameplaycfg.Score;
+		
+		score.Text = scorev.ToString("N0");
+		pp.Text = ((int)SettingsOperator.Gameplaycfg.pp).ToString("N0") + "pp";
+		var Acc = SettingsOperator.Gameplaycfg.Accuracy.ToString("P0");
 		if (Acc == "NaN"){
 			Acc = "100%";
 		}Accuracy.Text = Acc;

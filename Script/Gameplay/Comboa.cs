@@ -12,11 +12,11 @@ public partial class Comboa : Label
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (SettingsOperator.Gameplaycfg["combo"] == 0){
+		if (SettingsOperator.Gameplaycfg.Combo == 0){
 			Visible = false;
 		} else{
 			Visible = true;
-			Text = SettingsOperator.Gameplaycfg["combo"].ToString("N0");
+			Text = SettingsOperator.Gameplaycfg.Combo.ToString("N0");
 		}
 	}
 }

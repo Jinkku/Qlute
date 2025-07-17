@@ -18,13 +18,13 @@ public partial class LeaderboardGameplay : PanelContainer
 	public void _stats()
 	{
 		SettingsOperator.ResetScore();
-		SettingsOperator.Gameplaycfg["max"] = (int)GetMeta("max");
-		SettingsOperator.Gameplaycfg["great"] = (int)GetMeta("good");
-		SettingsOperator.Gameplaycfg["meh"] = (int)GetMeta("meh");
-		SettingsOperator.Gameplaycfg["bad"] = (int)GetMeta("bad");
-		SettingsOperator.Gameplaycfg["score"] = (int)GetMeta("score");
-		SettingsOperator.Gameplaycfg["pp"] = (double)GetMeta("points");
-		SettingsOperator.Gameplaycfg["accuracy"] = (SettingsOperator.Gameplaycfg["max"] + (SettingsOperator.Gameplaycfg["great"] / 2) + (SettingsOperator.Gameplaycfg["meh"] / 3)) / (SettingsOperator.Gameplaycfg["max"] + SettingsOperator.Gameplaycfg["great"] + SettingsOperator.Gameplaycfg["meh"] + SettingsOperator.Gameplaycfg["bad"]);
+		SettingsOperator.Gameplaycfg.Max = (int)GetMeta("max");
+		SettingsOperator.Gameplaycfg.Great = (int)GetMeta("good");
+		SettingsOperator.Gameplaycfg.Meh = (int)GetMeta("meh");
+		SettingsOperator.Gameplaycfg.Bad = (int)GetMeta("bad");
+		SettingsOperator.Gameplaycfg.Score = (int)GetMeta("score");
+		SettingsOperator.Gameplaycfg.pp = (int)GetMeta("points");
+		SettingsOperator.Gameplaycfg.Accuracy = (SettingsOperator.Gameplaycfg.Max + (SettingsOperator.Gameplaycfg.Great / 2) + (SettingsOperator.Gameplaycfg.Meh / 3)) / (SettingsOperator.Gameplaycfg.Max + SettingsOperator.Gameplaycfg.Great + SettingsOperator.Gameplaycfg.Meh + SettingsOperator.Gameplaycfg.Bad + 1);
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultsScreen.tscn");
 	}
 	public override void _Ready()
@@ -126,12 +126,12 @@ public partial class LeaderboardGameplay : PanelContainer
 	{
 		if (HasMeta("playing") && (bool)GetMeta("playing"))
 		{
-			Score.Text = SettingsOperator.Gameplaycfg["score"].ToString("N0");
-			Combo.Text = SettingsOperator.Gameplaycfg["combo"] + "x";
-			Max.Text = SettingsOperator.Gameplaycfg["max"].ToString();
-			Great.Text = SettingsOperator.Gameplaycfg["great"].ToString();
-			Meh.Text = SettingsOperator.Gameplaycfg["meh"].ToString();
-			Bad.Text = SettingsOperator.Gameplaycfg["bad"].ToString();
+			Score.Text = SettingsOperator.Gameplaycfg.Score.ToString("N0");
+			Combo.Text = SettingsOperator.Gameplaycfg.Combo + "x";
+			Max.Text = SettingsOperator.Gameplaycfg.Max.ToString();
+			Great.Text = SettingsOperator.Gameplaycfg.Great.ToString();
+			Meh.Text = SettingsOperator.Gameplaycfg.Meh.ToString();
+			Bad.Text = SettingsOperator.Gameplaycfg.Bad.ToString();
 			refresh_rank();
 		}
 		else

@@ -1,0 +1,78 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgyvumso1uaa1"]
+
+[ext_resource type="Script" uid="uid://cdo7nsfhc4nag" path="res://Script/TestMenu/ScoreTest.cs" id="1_8rr42"]
+[ext_resource type="PackedScene" uid="uid://b0f11jnivkb1b" path="res://Panels/GameplayElements/Customizable/ScoreOverlay.tscn" id="2_5nyr6"]
+
+[node name="ColorRect" type="ColorRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.296875, 0.296875, 0.296875, 1)
+script = ExtResource("1_8rr42")
+
+[node name="Score" type="HSlider" parent="."]
+layout_mode = 2
+offset_left = 99.0
+offset_top = 121.0
+offset_right = 399.0
+offset_bottom = 140.0
+max_value = 2e+06
+
+[node name="MAX" type="HSlider" parent="."]
+layout_mode = 2
+offset_left = 99.0
+offset_top = 144.0
+offset_right = 399.0
+offset_bottom = 163.0
+max_value = 1000.0
+
+[node name="GREAT" type="HSlider" parent="."]
+layout_mode = 2
+offset_left = 99.0
+offset_top = 167.0
+offset_right = 399.0
+offset_bottom = 186.0
+max_value = 1000.0
+
+[node name="MEH" type="HSlider" parent="."]
+layout_mode = 2
+offset_left = 100.0
+offset_top = 190.0
+offset_right = 400.0
+offset_bottom = 209.0
+max_value = 1000.0
+
+[node name="BAD" type="HSlider" parent="."]
+layout_mode = 2
+offset_left = 100.0
+offset_top = 213.0
+offset_right = 400.0
+offset_bottom = 232.0
+max_value = 1000.0
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 122.0
+offset_right = 95.0
+offset_bottom = 229.0
+text = "Score
+MAX
+GREAT
+MEH
+BAD"
+
+[node name="ScoreOverlay" parent="." instance=ExtResource("2_5nyr6")]
+layout_mode = 1
+offset_left = 541.0
+offset_top = 148.0
+offset_right = -319.0
+offset_bottom = -472.0
+
+[connection signal="value_changed" from="Score" to="." method="_changed"]
+[connection signal="value_changed" from="MAX" to="." method="_max"]
+[connection signal="value_changed" from="GREAT" to="." method="_great"]
+[connection signal="value_changed" from="MEH" to="." method="_meh"]
+[connection signal="value_changed" from="BAD" to="." method="_bad"]

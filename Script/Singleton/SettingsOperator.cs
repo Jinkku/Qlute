@@ -32,8 +32,8 @@ public partial class SettingsOperator : Node
     public int MasterVol {get;set;}
     public int SampleVol {get;set;}
     public int scrollspeed {get;set;}
-    public static double AllMiliSecondsFromBeatmap {get;set;}
-    public static double MiliSecondsFromBeatmap {get;set;}
+    public static float AllMiliSecondsFromBeatmap {get;set;}
+    public static float MiliSecondsFromBeatmap {get;set;}
     public static int MiliSecondsFromBeatmapTimes {get;set;}
     public static List<BeatmapLegend> Beatmaps = new List<BeatmapLegend>();
     public static void ResetRank()
@@ -140,7 +140,7 @@ public partial class SettingsOperator : Node
             Sessioncfg["beatmapartist"] = beatmap.Artist;
             Sessioncfg["beatmapdiff"] = beatmap.Version;
             Sessioncfg["beatmapbpm"] = (int)beatmap.Bpm;
-            Gameplaycfg["timetotal"] = (int)beatmap.Timetotal;
+            Gameplaycfg.TimeTotal = (int)beatmap.Timetotal;
             Sessioncfg["beatmapmapper"] = beatmap.Mapper;
             Sessioncfg["beatmapaccuracy"] = (int)beatmap.Accuracy;
             LevelRating = (int)Math.Round(beatmap.Levelrating);
@@ -148,7 +148,7 @@ public partial class SettingsOperator : Node
             Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
             var Texture = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
             Sessioncfg["background"] = (Texture2D)Texture;
-            Gameplaycfg["maxpp"] = Convert.ToInt32(beatmap.pp);
+            Gameplaycfg.maxpp = (int)beatmap.pp;
             string audioPath = beatmap.Path + "" + beatmap.Audio;
             if (System.IO.File.Exists(audioPath))
             {
@@ -175,15 +175,15 @@ public partial class SettingsOperator : Node
         }
         else { GD.PrintErr("Can't select a song that don't exist :/"); }
     }
-    public static double Get_ppvalue(int max, int great, int meh, int bad, double multiplier = 1,int combo = 0){
+    public static float Get_ppvalue(int max, int great, int meh, int bad, float multiplier = 1,int combo = 0){
         //bad = Math.Max(1,bad);
-        var ppvalue = 0.0;
+        var ppvalue = 0.0f;
         ppvalue = max * ppbase;
         ppvalue -= ppbase/2 * great;
         ppvalue -= ppbase/3 * meh;
         ppvalue -= ppbase * bad;
         ppvalue += combo * ppbase;
-        ppvalue *=(float)multiplier;
+        ppvalue *=multiplier;
         return Math.Max(0,ppvalue);
         }
     public static void Parse_Beatmapfile(string filename, int SetID = 0){
@@ -335,51 +335,53 @@ public partial class SettingsOperator : Node
             Path = path
         });
     }
-    public static void ResetScore(){
-        Gameplaycfg["score"] = 0;
-        Gameplaycfg["pp"] = 0;
-        Gameplaycfg["max"] = 0;
-        Gameplaycfg["great"] = 0;
-        Gameplaycfg["meh"] = 0;
-        Gameplaycfg["bad"] = 0;
-        Gameplaycfg["accuracy"] = 100;
-        Gameplaycfg["time"] = 0;
-        Gameplaycfg["combo"] = 0;
-        Gameplaycfg["maxcombo"] = 0;
-        Gameplaycfg["avgms"] = 0;
-        Gameplaycfg["ms"] = 0;
-    }
     public static void Addms(float ms)
     {
         AllMiliSecondsFromBeatmap += ms;
         MiliSecondsFromBeatmapTimes++;
         UnstableRate.Rate.Add(ms);
     }
-    public static double Getms(){
+    public static float Getms(){
         return AllMiliSecondsFromBeatmap/MiliSecondsFromBeatmapTimes;
     }
     public static void Resetms(){
         AllMiliSecondsFromBeatmap = 0;
         MiliSecondsFromBeatmapTimes = 0;
     }
-    public static Dictionary<string, double> Gameplaycfg { get; set; } = new Dictionary<string, double>
+    public static void ResetScore(){
+        Gameplaycfg.Score = 0;
+        Gameplaycfg.pp = 0;
+        Gameplaycfg.Max = 0;
+        Gameplaycfg.Great = 0;
+        Gameplaycfg.Meh = 0;
+        Gameplaycfg.Bad = 0;
+        Gameplaycfg.Accuracy = 100;
+        Gameplaycfg.Time = 0;
+        Gameplaycfg.Combo = 0;
+        Gameplaycfg.MaxCombo = 0;
+        Gameplaycfg.Avgms = 0;
+        Gameplaycfg.ms = 0;
+    }
+    public static class Gameplaycfg
     {
-        {"score", 0},
-        {"pp", 0},
-        { "maxpp", 0 },
-        {"time", 0},
-        {"timetotal", 0},
-        {"accuracy", 100},
-        {"combo", 0},
-        {"maxcombo",0},
-        {"max", 0},
-        {"avgms", 0},
-        {"ms", 0},
-        {"great", 0},
-        {"meh", 0},
-        {"bad", 0},
-    };
-    public static int ranked_points {get;set;}
+        public static int Score { get; set; }
+        public static float pp { get; set; }
+        public static float maxpp { get; set; }
+        public static int Time { get; set; }
+        public static int TimeTotal { get; set; }
+        public static float Accuracy { get; set; }
+        public static int Combo { get; set; }
+        public static int MaxCombo { get; set; }
+        public static int Max { get; set; }
+        public static int Great { get; set; }
+        public static int Meh { get; set; }
+        public static int Bad { get; set; }
+        public static float ms { get; set; }
+        public static int Avgms { get; set; }
+
+
+    }
+    public static int ranked_points { get; set; }
     
     public static int SongIDHighlighted { get; set; } = -1; // Highlighted song ID for the song select screen
     public static int LevelRating { get; set; } = -1; // Highlighted song ID for the song select screen

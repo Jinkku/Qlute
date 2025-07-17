@@ -46,8 +46,6 @@ public partial class Gameplay : Control
 	private Control PauseMenu {get;set;}
 	private bool Finished {get;set;}
 	private int score {get;set;}
-	private int newscore {get;set;}
-	private Tween scoretween {get;set;}
 	private IEnumerable<DanceCounter> dance {get;set;}
 	private int DanceIndex {get;set;}
 	private Label debugtext {get;set;}
@@ -192,6 +190,15 @@ public partial class Gameplay : Control
 
 	public const float MAX_TIME_RANGE = 11485;
     public static float ComputeScrollTime(float scrollSpeed) => MAX_TIME_RANGE / scrollSpeed;
+	public static void ReloadAccuracy()
+	{
+		SettingsOperator.Gameplaycfg.Accuracy = ((float)SettingsOperator.Gameplaycfg.Max + ((float)SettingsOperator.Gameplaycfg.Great / 2) + ((float)SettingsOperator.Gameplaycfg.Meh / 3)) / ((float)SettingsOperator.Gameplaycfg.Max + (float)SettingsOperator.Gameplaycfg.Great + (float)SettingsOperator.Gameplaycfg.Meh + (float)SettingsOperator.Gameplaycfg.Bad + 1);
+	}
+
+	public static void ReloadppCounter()
+	{
+		SettingsOperator.Gameplaycfg.pp = SettingsOperator.Get_ppvalue(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, ModsMulti.multiplier, SettingsOperator.Gameplaycfg.MaxCombo);
+	}
 	public override void _Process(double delta)
 	{
 		try
@@ -216,7 +223,7 @@ public partial class Gameplay : Control
 
 			// End Game
 
-			if (SettingsOperator.Gameplaycfg["timetotal"] - SettingsOperator.Gameplaycfg["time"] < -2000 && !Finished)
+			if (SettingsOperator.Gameplaycfg.TimeTotal - SettingsOperator.Gameplaycfg.Time < -2000 && !Finished)
 			{
 				SettingsOperator.toppaneltoggle();
 				BeatmapBackground.FlashEnable = true;
@@ -235,9 +242,9 @@ public partial class Gameplay : Control
 				}
 			}
 
-			if (SettingsOperator.Gameplaycfg["combo"] > SettingsOperator.Gameplaycfg["maxcombo"])
+			if (SettingsOperator.Gameplaycfg.Combo > SettingsOperator.Gameplaycfg.MaxCombo)
 			{
-				SettingsOperator.Gameplaycfg["maxcombo"] = SettingsOperator.Gameplaycfg["combo"];
+				SettingsOperator.Gameplaycfg.MaxCombo = SettingsOperator.Gameplaycfg.Combo;
 			}
 
 
@@ -246,10 +253,9 @@ public partial class Gameplay : Control
 			{
 				est = est * AudioPlayer.Instance.PitchScale;
 			}
-			SettingsOperator.Gameplaycfg["accuracy"] = (SettingsOperator.Gameplaycfg["max"] + (SettingsOperator.Gameplaycfg["great"] / 2) + (SettingsOperator.Gameplaycfg["meh"] / 3)) / (SettingsOperator.Gameplaycfg["max"] + SettingsOperator.Gameplaycfg["great"] + SettingsOperator.Gameplaycfg["meh"] + SettingsOperator.Gameplaycfg["bad"]);
-			SettingsOperator.Gameplaycfg["score"] = score;
-			SettingsOperator.Gameplaycfg["pp"] = SettingsOperator.Get_ppvalue((int)SettingsOperator.Gameplaycfg["max"], (int)SettingsOperator.Gameplaycfg["great"], (int)SettingsOperator.Gameplaycfg["meh"], (int)SettingsOperator.Gameplaycfg["bad"], ModsMulti.multiplier, (int)SettingsOperator.Gameplaycfg["maxcombo"]);
-			SettingsOperator.Gameplaycfg["time"] = (int)est;
+			ReloadAccuracy();
+			ReloadppCounter();
+			SettingsOperator.Gameplaycfg.Time = (int)est;
 			//float est = AudioPlayer.Instance.GetPlaybackPosition()*1000;
 			int Ttick = 0;
 			//maxc=hits[0]+hits[1]+hits[2]+hits[3]
@@ -355,15 +361,8 @@ public partial class Gameplay : Control
 							Keys[(int)Note.Node.GetMeta("part")].hit = false;
 							mshit = notex;
 							SettingsOperator.Addms(mshitold - mshit - 50);
-							SettingsOperator.Gameplaycfg["ms"] = SettingsOperator.Getms();
-							newscore = (int)(SettingsOperator.Gameplaycfg["pp"] / SettingsOperator.Gameplaycfg["maxpp"] * (1000000 * ModsMulti.multiplier));
-							if (scoretween != null)
-							{
-								scoretween.Kill();
-							}
-							scoretween = CreateTween();
-							scoretween.TweenProperty(this, "score", newscore, 0.3f);
-							scoretween.Play();
+							SettingsOperator.Gameplaycfg.ms = SettingsOperator.Getms();
+							SettingsOperator.Gameplaycfg.Score = (int)(SettingsOperator.Gameplaycfg.pp / SettingsOperator.Gameplaycfg.maxpp * (1000000f * ModsMulti.multiplier));
 							Note.hit = true;
 							Note.Node.Visible = false;
 							Note.Node.QueueFree();
@@ -405,28 +404,28 @@ public partial class Gameplay : Control
 	}
 	public int checkjudge(int timing,bool keyvalue, Sprite2D node,bool visibility){
 		if (timing+nodeSize > HitPoint-SettingsOperator.PerfectJudge && timing+nodeSize < HitPoint+SettingsOperator.PerfectJudge && keyvalue && visibility){
-			SettingsOperator.Gameplaycfg["max"]++;
-			SettingsOperator.Gameplaycfg["combo"]++;
+			SettingsOperator.Gameplaycfg.Max++;
+			SettingsOperator.Gameplaycfg.Combo++;
 			Hittext("Perfect", new Color(0f,0.71f,1f));
 			HealthBar.Heal(5);
 			return 0;
 		} else if (timing+nodeSize > HitPoint-(SettingsOperator.GreatJudge/2) && timing+nodeSize < HitPoint+(SettingsOperator.GreatJudge/2) && keyvalue && visibility){
-			SettingsOperator.Gameplaycfg["great"]++;
-			SettingsOperator.Gameplaycfg["combo"]++;
+			SettingsOperator.Gameplaycfg.Great++;
+			SettingsOperator.Gameplaycfg.Combo++;
 			Hittext("Great", new Color(0f,1f,0.03f));
 			HealthBar.Heal(3);
 			return 1;
 		}else if (timing+nodeSize > HitPoint-(SettingsOperator.MehJudge/2) && timing+nodeSize < HitPoint+(SettingsOperator.MehJudge/2) && keyvalue && visibility){
 			Hittext("Meh", new Color(1f,0.66f,0f));
-			SettingsOperator.Gameplaycfg["meh"]++;
-			SettingsOperator.Gameplaycfg["combo"]++;
+			SettingsOperator.Gameplaycfg.Meh++;
+			SettingsOperator.Gameplaycfg.Combo++;
 			HealthBar.Heal(1);
 			return 2;
 		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility ){
 			Hittext("Miss", new Color(1f,0.28f,0f));
-			SettingsOperator.Gameplaycfg["bad"]++;
-			if (SettingsOperator.Gameplaycfg["combo"] > 50) Sample.PlaySample("res://Skin/Sounds/combobreak.wav");
-			SettingsOperator.Gameplaycfg["combo"] = 0;
+			SettingsOperator.Gameplaycfg.Bad++;
+			if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://Skin/Sounds/combobreak.wav");
+			SettingsOperator.Gameplaycfg.Combo = 0;
 			HealthBar.Damage(5);
 			if (HurtAnimation != null && HurtAnimation.IsRunning())
 			{

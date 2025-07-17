@@ -39,7 +39,7 @@ public partial class LeaderboardTest : ColorRect
 	{
 		// This method is called when the value of the slider changes.
 		// You can implement functionality here to handle the change.
-		SettingsOperator.Gameplaycfg["score"] = value;
+		SettingsOperator.Gameplaycfg.Score = (int)value;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

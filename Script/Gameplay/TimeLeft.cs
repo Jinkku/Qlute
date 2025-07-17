@@ -13,7 +13,7 @@ public partial class TimeLeft : Label
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		var etho = SettingsOperator.Gameplaycfg["timetotal"]-SettingsOperator.Gameplaycfg["time"];
+		var etho = SettingsOperator.Gameplaycfg.TimeTotal - SettingsOperator.Gameplaycfg.Time;
 		if (etho < 0)
 		{
 			etho = 0;

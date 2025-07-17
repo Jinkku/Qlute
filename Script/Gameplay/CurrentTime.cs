@@ -13,6 +13,6 @@ public partial class CurrentTime : Label
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		Text = TimeSpan.FromMilliseconds(SettingsOperator.Gameplaycfg["time"]).ToString(@"mm\:ss") ?? "00:00";
+		Text = TimeSpan.FromMilliseconds(SettingsOperator.Gameplaycfg.Time).ToString(@"mm\:ss") ?? "00:00";
 	}
 }
