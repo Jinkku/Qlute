@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 public partial class MusicCard : Button
 {
 	// Called when the node enters the scene tree for the first time.
-	public static SettingsOperator SettingsOperator { get; set; }
+	private SettingsOperator SettingsOperator { get; set; }
 	
 	public Button self { get ;set; }
 	public TextureRect Cover { get; set; }

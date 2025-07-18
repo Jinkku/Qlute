@@ -29,7 +29,7 @@ public partial class ApiOperator : Node
 	public static HttpRequest LeaderboardAPI { get; set; }
 	public static string Username = "Guest";
 	public static string PasswordHash = null;
-	public static SettingsOperator SettingsOperator { get; set; }
+	private SettingsOperator SettingsOperator { get; set; }
 	public static ApiOperator Instance { get; set; }
 	public static string Beatmapapi = "https://catboy.best";
 	public void SubmitScore()

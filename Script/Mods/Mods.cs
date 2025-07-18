@@ -3,7 +3,7 @@ using System;
 
 public partial class Mods : PanelContainer
 {
-	public static SettingsOperator SettingsOperator { get; set; }
+	private SettingsOperator SettingsOperator { get; set; }
 	private GridContainer ModEntry { get; set; }
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

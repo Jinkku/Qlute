@@ -17,7 +17,7 @@ public class KeyL {
 public partial class Gameplay : Control
 {
 	// Called when the node enters the scene tree for the first time.
-	public static SettingsOperator SettingsOperator { get; set; }
+	private SettingsOperator SettingsOperator { get; set; }
 	public static ApiOperator ApiOperator { get; set; }
 	//public static Label Ttiming { get; set; }
 	//public static Label Hits { get; set; }

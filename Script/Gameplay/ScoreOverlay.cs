@@ -4,7 +4,7 @@ using System;
 public partial class ScoreOverlay : Control
 {
 	// Called when the node enters the scene tree for the first time.
-	public static SettingsOperator SettingsOperator { get; set; }
+	private SettingsOperator SettingsOperator { get; set; }
 	public static Label pp { get; set; }
 	public static Label score { get; set; }
 	public static Label Accuracy { get; set; }

@@ -30,7 +30,7 @@ public class BeatmapLegend
 }
 public partial class BeatmapListener : Node
 {
-	public static SettingsOperator SettingsOperator { get; set; }
+	private SettingsOperator SettingsOperator { get; set; }
 	public int SetID { get; set; } = 0; // Set ID for the beatmap, used for grouping beatmaps together
 	public void Parse_BeatmapDir(string dir)
 	{

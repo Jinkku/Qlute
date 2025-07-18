@@ -3,7 +3,7 @@ using System;
 
 public partial class SongOffset : Control
 {
-	public static SettingsOperator SettingsOperator { get; set; }
+	private SettingsOperator SettingsOperator { get; set; }
 	public int tick {get;set;}
 	public HSlider OffsetSlider {get;set;}
 	public Label Offset {get;set;}

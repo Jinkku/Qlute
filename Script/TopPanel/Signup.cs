@@ -14,7 +14,7 @@ public partial class Signup : ColorRect
 	private string username;
 	private string password;
 	private Tween tween;
-	public static SettingsOperator SettingsOperator { get; set; }
+	private SettingsOperator SettingsOperator { get; set; }
 	private void _back()
 	{
 		animation(0);

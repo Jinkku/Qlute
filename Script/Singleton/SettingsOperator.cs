@@ -71,7 +71,7 @@ public partial class SettingsOperator : Node
             Engine.MaxFps = 0; // Unlimited FPS
         }
     }
-    public Dictionary<string, object> Configuration { get; set; } = new Dictionary<string, object>
+    public static Dictionary<string, object> Configuration { get; set; } = new Dictionary<string, object>
     {
         { "scaled", false },
         { "windowmode", 0 },
@@ -541,7 +541,7 @@ public partial class SettingsOperator : Node
     }
 
     // Get a setting
-    public object GetSetting(string key)
+    public static object GetSetting(string key)
     {
         return Configuration.ContainsKey(key) ? Configuration[key] : null;
     }

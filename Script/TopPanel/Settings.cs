@@ -7,7 +7,7 @@ public partial class Settings : Button
 	//public static Dictionary Configuration { get; set; } = new Dictionary<string, object>;
 	//public static <string, object>GetSetting { get; set; }
 	
-	public static SettingsOperator SettingsOperator { get; set; }
+	private SettingsOperator SettingsOperator { get; set; }
 	private Tween acctween;
 	public Control Card;
 	public Control SettingsPanel {get;set;}

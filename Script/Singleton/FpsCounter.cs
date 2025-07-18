@@ -11,7 +11,7 @@ public partial class FpsCounter : PanelContainer
 	Label FPS { get; set; }
 	List<double> LatencyL { get; set; }
 	public double deltam {get; set;}
-	public static SettingsOperator SettingsOperator { get; set; }
+	private SettingsOperator SettingsOperator { get; set; }
 	public PanelContainer RamUsage { get; set; }
 	public override void _Ready(){
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");

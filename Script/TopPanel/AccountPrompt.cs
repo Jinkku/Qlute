@@ -16,7 +16,7 @@ public partial class AccountPrompt : Control
 	public Label Ranking {get;set;}
 	public Label PerformanceNumber {get;set;}
 	public Label PlayerName {get;set;}
-	public static SettingsOperator SettingsOperator { get; set; }
+	private SettingsOperator SettingsOperator { get; set; }
 	private void _create()
 	{
 		var Signup = GD.Load<PackedScene>("res://Panels/Screens/Signup.tscn").Instantiate().GetNode<ColorRect>(".");

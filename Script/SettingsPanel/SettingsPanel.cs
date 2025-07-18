@@ -4,7 +4,7 @@ using System;
 public partial class SettingsPanel : Control
 {
 	// Called when the node enters the scene tree for the first time.
-	public static SettingsOperator SettingsOperator { get; set; }
+	private SettingsOperator SettingsOperator { get; set; }
 	public OptionButton Windowmode { get; set; }
 	public HSlider BackgroundDim { get; set; }
 	public Button OffsetButton { get; set; }
