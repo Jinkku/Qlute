@@ -197,20 +197,20 @@ public partial class Gameplay : Control
 	{
 		SettingsOperator.Gameplaycfg.pp = SettingsOperator.Get_ppvalue(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, ModsMulti.multiplier, SettingsOperator.Gameplaycfg.MaxCombo);
 	}
-	public static void StartClock()
-	{
-	}
-	public float GetRemainingTime(bool GameMode = false)
-	{
-		SettingsOperator.Gameplaycfg.Timeframe = -WaitClock.TimeLeft + AudioPlayer.Instance.GetPlaybackPosition();
-		var AudioOffset = 0f;
-		if (GameMode) {
-			AudioOffset = SettingsOperator.AudioOffset * 0.001f;
-		}
-		
-		return (float)(SettingsOperator.Gameplaycfg.Timeframe - startedtime + AudioOffset);
+	private float smoothedPlaybackPosition = 0f;
 
-    }
+	private float SmoothPosition(float current, ref float previous, float delta) =>
+		previous = Mathf.Lerp(previous, current, delta * 10f);
+
+	public float GetRemainingTime(bool GameMode = false, float delta = 1f)
+	{
+		SettingsOperator.Gameplaycfg.Timeframe = -WaitClock.TimeLeft + 
+			SmoothPosition(AudioPlayer.Instance.GetPlaybackPosition(), ref smoothedPlaybackPosition, delta);
+
+		var AudioOffset = GameMode ? SettingsOperator.AudioOffset * 0.001f : 0f;
+
+		return (float)(SettingsOperator.Gameplaycfg.Timeframe - startedtime + AudioOffset);
+	}
 	private int Get_Score(float pp, float maxpp, float multiplier) {
 		float baseScore = (pp / maxpp) * 1000000f;
 		float finalScore = baseScore * multiplier;
@@ -227,7 +227,7 @@ public partial class Gameplay : Control
 	{
 		try
 		{
-			float est = GetRemainingTime(GameMode: true) / 0.001f;
+			float est = GetRemainingTime(GameMode: true,delta: (float)delta) / 0.001f;
 
 
 			// DEATH

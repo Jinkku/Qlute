@@ -16,7 +16,6 @@ public partial class Bootstrap : Control
 	public void _intro_finished(string animationame){
 		if (SettingsOperator.Beatmaps.Count>0) {
 			SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
-			Gameplay.StartClock();
 		}
 		SettingsOperator.toppaneltoggle();
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
