@@ -30,7 +30,11 @@ public partial class Debugitem2 : Label
 				"Memory Usage: " + Godot.OS.GetStaticMemoryUsage() + " bytes\n" +
 				"Scene: " + GetTree().CurrentScene.Name + "\n" +
 				"Song ID Highlighted: " + SettingsOperator.SongIDHighlighted + "\n" +
-				"Song ID: " + SettingsOperator.Sessioncfg["SongID"].ToString();
+				"Song ID: " + SettingsOperator.Sessioncfg["SongID"].ToString() + "\n" +
+				"pp: " + SettingsOperator.Gameplaycfg.pp + "\n" +
+				"Max pp: " + SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier + "\n" +
+				"Score: " + SettingsOperator.Gameplaycfg.Score  + "\n" +
+				"Avg Timeframe: " + SettingsOperator.Gameplaycfg.Timeframe.ToString();
 		}
 	}
 }

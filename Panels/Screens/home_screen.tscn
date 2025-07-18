@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene load_steps=31 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" uid="uid://bxurggbxgjswg" path="res://Script/Home/HomeScreen.cs" id="1_vj7aj"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
@@ -14,7 +14,6 @@
 [ext_resource type="Script" uid="uid://dlmyeuotf5af7" path="res://Script/Home/IntroPending.cs" id="11_gngjn"]
 [ext_resource type="Texture2D" uid="uid://detqod6pcb68a" path="res://Skin/System/MainMenu/Exit.svg" id="11_ioq3m"]
 [ext_resource type="Texture2D" uid="uid://ci24g7ndyah7y" path="res://Skin/System/MainMenu/Browse.svg" id="11_ohewd"]
-[ext_resource type="PackedScene" uid="uid://bq7vnj4ufmi3q" path="res://Panels/GameplayElements/Customizable/SongProgress.tscn" id="13_bb0aq"]
 [ext_resource type="Script" uid="uid://0xn63uccdk6j" path="res://Script/TimerwithBPM/Bpmtick.cs" id="14_1vpa7"]
 [ext_resource type="Texture2D" uid="uid://boh4sdsnp0kqo" path="res://Skin/System/mainmenulogo.svg" id="14_bh2cj"]
 
@@ -225,17 +224,6 @@ theme_override_fonts/font = ExtResource("5_pikml")
 text = "Qlute/dev (0.0.0)"
 horizontal_alignment = 1
 script = ExtResource("6_1tkmr")
-
-[node name="ProgressBar" parent="Shadow" instance=ExtResource("13_bb0aq")]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = -60.0
-offset_right = -20.0
-offset_bottom = -41.0
-grow_vertical = 0
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1

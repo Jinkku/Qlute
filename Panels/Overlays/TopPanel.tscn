@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bwpja5llmgtqo"]
+[gd_scene load_steps=32 format=3 uid="uid://bwpja5llmgtqo"]
 
 [ext_resource type="Script" uid="uid://borvy2xtb1o65" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
 [ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Skin/System/guest.png" id="2_4cvop"]
@@ -110,6 +110,9 @@ _data = {
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_56gsx"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3trnu"]
+bg_color = Color(1, 1, 1, 0.156863)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rix2n"]
 bg_color = Color(1, 1, 1, 0.34902)
 
@@ -117,11 +120,6 @@ bg_color = Color(1, 1, 1, 0.34902)
 content_margin_left = 12.0
 content_margin_right = 12.0
 bg_color = Color(0, 0, 0, 0)
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_6quot"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3trnu"]
-bg_color = Color(1, 1, 1, 0.156863)
 
 [sub_resource type="FontVariation" id="FontVariation_3trnu"]
 variation_embolden = 1.0
@@ -273,14 +271,16 @@ grow_horizontal = 0
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="MusicPlayer" type="Button" parent="InfoBar/HBoxContainer"]
-visible = false
+[node name="NowPlayer" type="Button" parent="InfoBar/HBoxContainer"]
 layout_mode = 2
+theme_override_constants/icon_max_width = 28
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
 keep_pressed_outside = true
-icon = SubResource("CompressedTexture2D_6quot")
+text = "Now
+Playing"
 icon_alignment = 1
 
 [node name="Browse" type="Button" parent="InfoBar/HBoxContainer"]
@@ -355,7 +355,7 @@ script = ExtResource("13_1qp4o")
 [connection signal="mouse_entered" from="InfoBar" to="InfoBar" method="_hovered"]
 [connection signal="mouse_exited" from="InfoBar" to="InfoBar" method="_unhover"]
 [connection signal="pressed" from="InfoBar/AccountButton" to="InfoBar/HBoxContainer/Settings" method="_on_AccountButton_pressed"]
-[connection signal="pressed" from="InfoBar/HBoxContainer/MusicPlayer" to="InfoBar" method="_on_browse_pressed"]
+[connection signal="pressed" from="InfoBar/HBoxContainer/NowPlayer" to="InfoBar" method="_on_browse_pressed"]
 [connection signal="pressed" from="InfoBar/HBoxContainer/Browse" to="InfoBar" method="_on_browse_pressed"]
 [connection signal="pressed" from="InfoBar/HBoxContainer/Chat" to="InfoBar" method="_ChatRoom"]
 [connection signal="pressed" from="InfoBar/HBoxContainer/Settings" to="InfoBar/HBoxContainer/Settings" method="_settings_pressed"]

@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://cunoteokirmkm"]
+
+[ext_resource type="Script" uid="uid://c0am75ykk1641" path="res://Script/Gameplay/EndScreen.cs" id="1_xhg3f"]
+[ext_resource type="Texture2D" uid="uid://cxl3uhqdgw4j3" path="res://Skin/Game/EndScreen/FC.png" id="3_u07xl"]
+
+[node name="EndScreen" type="ColorRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.588235)
+script = ExtResource("1_xhg3f")
+
+[node name="ComboScene" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -297.0
+offset_top = -45.5
+offset_right = 297.0
+offset_bottom = 45.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_u07xl")
+expand_mode = 2
+stretch_mode = 5

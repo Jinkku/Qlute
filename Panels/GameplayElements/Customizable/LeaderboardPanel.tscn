@@ -4,7 +4,6 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t8lab"]
 bg_color = Color(0.148438, 0.148438, 0.148438, 1)
-draw_center = false
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
@@ -27,6 +26,7 @@ horizontal_scroll_mode = 3
 vertical_scroll_mode = 3
 
 [node name="ControlLead" type="Control" parent="S"]
+show_behind_parent = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

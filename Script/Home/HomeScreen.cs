@@ -32,12 +32,10 @@ public partial class HomeScreen : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
-		SettingsOperator.Gameplaycfg.Time = (int)Gameplay.GetRemainingTime();
 		if (SettingsOperator.Gameplaycfg.TimeTotal - (AudioPlayer.Instance.GetPlaybackPosition() * 1000) < -1000 && SettingsOperator.Beatmaps.Count > 0)
 		{
 			SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
 			AudioPlayer.Instance.Play();
-			Gameplay.StartClock();
 		}
 		SongIndicator.Position = new Vector2(SongIndicator.Position.X, SettingsOperator.TopPanelPosition + 10);
 		_subunf();

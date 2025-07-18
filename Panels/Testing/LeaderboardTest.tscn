@@ -17,7 +17,15 @@ offset_left = 22.0
 offset_top = 188.0
 offset_right = 361.0
 offset_bottom = 215.0
-text = "Click this button if Leaderboard is reset"
+text = "Restart"
+
+[node name="Button2" type="Button" parent="."]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 248.0
+offset_right = 361.0
+offset_bottom = 287.0
+text = "Kill"
 
 [node name="HSlider" type="HSlider" parent="."]
 layout_mode = 2
@@ -36,14 +44,6 @@ offset_bottom = 163.0
 text = "Score changer~
 (should make the card go up if works)"
 
-[node name="CheckButton" type="CheckButton" parent="."]
-layout_mode = 0
-offset_left = 34.0
-offset_top = 252.0
-offset_right = 324.0
-offset_bottom = 281.0
-text = "Enable AI Player Movement"
-
 [connection signal="pressed" from="Button" to="." method="_reset"]
+[connection signal="pressed" from="Button2" to="." method="_kill"]
 [connection signal="value_changed" from="HSlider" to="." method="_changed"]
-[connection signal="pressed" from="CheckButton" to="." method="_check"]

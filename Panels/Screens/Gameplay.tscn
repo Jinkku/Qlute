@@ -22,7 +22,7 @@ grow_vertical = 2
 script = ExtResource("1_33mgo")
 
 [node name="TimeKeeper" type="Node" parent="."]
-process_mode = 3
+process_mode = 4
 script = ExtResource("2_u1m5o")
 
 [node name="Beatmap_Background" parent="." instance=ExtResource("1_uf7ne")]
@@ -112,4 +112,10 @@ offset_right = 315.0
 offset_bottom = 160.0
 grow_vertical = 2
 
+[node name="Wait" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="timeout" from="Wait" to="." method="StartPlay"]

@@ -194,7 +194,7 @@ public partial class SettingsOperator : Node
         string songtitle = "";
         string artist = "";
         string version = "";
-        int timetotal = 0;
+        float timetotal = 0;
         int bpm = 0;
         int osubeatid = 0;
         int accuracy = 0;
@@ -298,7 +298,7 @@ public partial class SettingsOperator : Node
             if (isHitObjectSection)
             {
                 // Break if we reach an empty line or another section
-                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("["))
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith('['))
                 {
                     ppvalue = Get_ppvalue(hitob,0,0,0,combo: hitob);
                     isHitObjectSection = !isHitObjectSection;
@@ -362,10 +362,12 @@ public partial class SettingsOperator : Node
         Gameplaycfg.MaxCombo = 0;
         Gameplaycfg.Avgms = 0;
         Gameplaycfg.ms = 0;
+        Gameplaycfg.Timeframe = 0;
     }
     public static class Gameplaycfg
     {
         public static int Score { get; set; }
+        public static double Timeframe { get; set; }
         public static float pp { get; set; }
         public static float maxpp { get; set; }
         public static int Time { get; set; }
