@@ -1,8 +1,9 @@
-[gd_scene load_steps=31 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene load_steps=32 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" uid="uid://bxurggbxgjswg" path="res://Script/Home/HomeScreen.cs" id="1_vj7aj"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
 [ext_resource type="PackedScene" uid="uid://i4ipbotu77y8" path="res://Panels/Overlays/SongIndication.tscn" id="3_bb0aq"]
+[ext_resource type="Texture2D" uid="uid://3l7m8wfhdqg5" path="res://Skin/System/devlogomini.png" id="3_rmu25"]
 [ext_resource type="Script" uid="uid://dpoy0iryy0xx2" path="res://Script/Home/MenuNotice.cs" id="4_7kbet"]
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="5_pikml"]
 [ext_resource type="Script" uid="uid://dnu64hotg25n4" path="res://Script/Home/version.gd" id="6_1tkmr"]
@@ -18,15 +19,15 @@
 [ext_resource type="Texture2D" uid="uid://boh4sdsnp0kqo" path="res://Skin/System/mainmenulogo.svg" id="14_bh2cj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1gbip"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
 bg_color = Color(0, 0, 0, 0.568627)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-expand_margin_left = 10.0
-expand_margin_top = 10.0
-expand_margin_right = 10.0
-expand_margin_bottom = 10.0
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [sub_resource type="Gradient" id="Gradient_5vo6i"]
 colors = PackedColorArray(0, 0, 0, 0.568627, 0, 0, 0, 0)
@@ -310,7 +311,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
 theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
 icon_alignment = 1
 script = ExtResource("8_qhwge")
-metadata/ID = 1
+metadata/ID = 0
 
 [node name="Label" type="Label" parent="SubButton/SubButtons/Play_Multi"]
 layout_mode = 1
@@ -733,6 +734,32 @@ horizontal_alignment = 1
 wait_time = 0.375
 autostart = true
 script = ExtResource("14_1vpa7")
+
+[node name="Logo" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+offset_right = 50.0
+grow_vertical = 0
+texture = ExtResource("3_rmu25")
+expand_mode = 1
+
+[node name="Desc" type="Label" parent="Logo"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 60.0
+offset_top = -20.5
+offset_right = 220.0
+offset_bottom = 20.5
+grow_vertical = 2
+text = "Jinkku Productions
+2023-2025"
+vertical_alignment = 1
 
 [connection signal="timeout" from="SongIndication/MenuNotice/Timer" to="SongIndication/MenuNotice/HTTPRequest" method="_on_timer_timeout"]
 [connection signal="request_completed" from="SongIndication/MenuNotice/HTTPRequest" to="SongIndication/MenuNotice/HTTPRequest" method="_on_request_completed"]
