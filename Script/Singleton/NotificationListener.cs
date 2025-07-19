@@ -6,9 +6,8 @@ using System.Collections.Generic;
 static class Notify
 {
     public static void Post(string text, string uri = ""){
-        GD.Print(NotificationListener.NotificationList.Count);
         NotificationListener.NotificationList.Add(new NotificationLegend{
-        Time = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+        Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
         Title = text,
         Text = "a",
         uri = uri,
