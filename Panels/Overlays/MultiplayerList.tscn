@@ -1,0 +1,220 @@
+[gd_scene load_steps=6 format=3 uid="uid://dl7cw2xx5dgea"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rw8iw"]
+bg_color = Color(0.164706, 0.137255, 0.172549, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r6ipc"]
+bg_color = Color(0, 0, 0, 0.196078)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_diqlj"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rw8iw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_diqlj"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.588235)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="PanelContainer" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rw8iw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Title" type="PanelContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_r6ipc")
+
+[node name="H" type="HBoxContainer" parent="VBoxContainer/Title"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="Title" type="Label" parent="VBoxContainer/Title/H"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_diqlj")
+text = "Multiplayer List"
+vertical_alignment = 2
+
+[node name="Marg" type="MarginContainer" parent="VBoxContainer/Title/H"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Tools" type="HBoxContainer" parent="VBoxContainer/Title/H/Marg"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/Title/H/Marg/Tools"]
+layout_mode = 2
+text = "Show in progress "
+
+[node name="Type" type="OptionButton" parent="VBoxContainer/Title/H/Marg/Tools"]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "All"
+popup/item_0/id = 0
+popup/item_1/text = "Open"
+popup/item_1/id = 1
+popup/item_2/text = "Locked"
+popup/item_2/id = 2
+
+[node name="CR" type="Button" parent="VBoxContainer/Title/H/Marg/Tools"]
+layout_mode = 2
+text = "Refresh"
+
+[node name="CR2" type="Button" parent="VBoxContainer/Title/H/Marg/Tools"]
+layout_mode = 2
+text = "Create Room"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 25
+theme_override_styles/separator = SubResource("StyleBoxEmpty_rw8iw")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+text = "Multiplayer Room test"
+
+[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2"]
+layout_mode = 2
+text = "Multiplayer Room test"
+
+[node name="PanelContainer3" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3"]
+layout_mode = 2
+text = "Multiplayer Room test"
+
+[node name="PanelContainer4" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer4"]
+layout_mode = 2
+text = "Multiplayer Room test"
+
+[node name="PanelContainer5" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5"]
+layout_mode = 2
+text = "Multiplayer Room test"
+
+[node name="PanelContainer6" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer6"]
+layout_mode = 2
+text = "Multiplayer Room test"
+
+[node name="PanelContainer7" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer7"]
+layout_mode = 2
+text = "Multiplayer Room test"
+
+[node name="PanelContainer8" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer8"]
+layout_mode = 2
+text = "Multiplayer Room test"
+
+[node name="PanelContainer9" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer9"]
+layout_mode = 2
+text = "Multiplayer Room test"
+
+[node name="PanelContainer10" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer10"]
+layout_mode = 2
+text = "Multiplayer Room test"
+
+[node name="PanelContainer11" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer11"]
+layout_mode = 2
+text = "Multiplayer Room test"
+
+[node name="PanelContainer12" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer12"]
+layout_mode = 2
+text = "Multiplayer Room test"
+
+[node name="PanelContainer13" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer13"]
+layout_mode = 2
+text = "Multiplayer Room test"

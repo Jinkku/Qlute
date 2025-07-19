@@ -50,8 +50,11 @@ public partial class HomeScreen : Control
 	}
 	private void _play()
 	{
-		if (Input.IsActionPressed("TestMode")) GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongSelectV2.tscn");
-		else GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
+	}
+	private void Multiplayer()
+	{
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MultiplayerList.tscn");
 	}
 	private void _browse() {
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Browse.tscn");
