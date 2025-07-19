@@ -17,6 +17,8 @@ public partial class AudioPlayer : AudioStreamPlayer
     public override void _Process(double delta)
     {
         if (SettingsOperator.loopaudio) AudioLoop();
+        SettingsOperator.Gameplaycfg.Time = GetPlaybackPosition();
+        SettingsOperator.Gameplaycfg.TimeTotal = (float)(Stream?.GetLength() ?? 0);
     }
 
     public static AudioStreamMP3 LoadMP3(string path)
@@ -28,7 +30,7 @@ public partial class AudioPlayer : AudioStreamPlayer
         return sound;
     }
 	public void AudioLoop(){
-		if (SettingsOperator.Gameplaycfg.TimeTotal - (GetPlaybackPosition()/0.001) < -1000 && SettingsOperator.loopaudio)
+		if (SettingsOperator.Gameplaycfg.TimeTotal - GetPlaybackPosition() < 0.1 && SettingsOperator.loopaudio)
 		{
 			AudioPlayer.Instance.Play();
 		}

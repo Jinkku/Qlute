@@ -3,24 +3,21 @@ using System;
 
 public partial class SongProgress : ProgressBar
 {
+	private float timeTotal {get;set;}
+	private float timeCurrent { get; set; }
 	// Called when the node enters the scene tree for the first time.
-	private SettingsOperator SettingsOperator { get; set; }
 	public override void _Ready()
 	{
-		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		float timeTotal = 1; // Avoid division by zero
-		timeTotal = SettingsOperator.Gameplaycfg.TimeTotal;
-		MaxValue = timeTotal;
+		timeTotal = 1; // Avoid division by zero
+		timeCurrent = 0;
 		_Process(0);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		float timeCurrent = 0;
-		
-
-		
+		timeTotal = SettingsOperator.Gameplaycfg.TimeTotal;
+		MaxValue = timeTotal;
 		timeCurrent = SettingsOperator.Gameplaycfg.Time;
 		Value = timeCurrent;
 	}

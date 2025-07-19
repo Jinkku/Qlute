@@ -141,7 +141,7 @@ public partial class SettingsOperator : Node
             Sessioncfg["beatmapartist"] = beatmap.Artist;
             Sessioncfg["beatmapdiff"] = beatmap.Version;
             Sessioncfg["beatmapbpm"] = (int)beatmap.Bpm;
-            Gameplaycfg.TimeTotal = (int)beatmap.Timetotal;
+            Gameplaycfg.TimeTotalGame = beatmap.Timetotal * 0.001f;
             Sessioncfg["beatmapmapper"] = beatmap.Mapper;
             Sessioncfg["beatmapaccuracy"] = (int)beatmap.Accuracy;
             LevelRating = (int)Math.Round(beatmap.Levelrating);
@@ -370,8 +370,9 @@ public partial class SettingsOperator : Node
         public static double Timeframe { get; set; }
         public static float pp { get; set; }
         public static float maxpp { get; set; }
-        public static int Time { get; set; }
-        public static int TimeTotal { get; set; }
+        public static float Time { get; set; }
+        public static float TimeTotal { get; set; }
+        public static float TimeTotalGame { get; set; }
         public static float Accuracy { get; set; }
         public static int Combo { get; set; }
         public static int MaxCombo { get; set; }

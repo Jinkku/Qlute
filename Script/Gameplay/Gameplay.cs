@@ -241,13 +241,14 @@ public partial class Gameplay : Control
 
 			// End Game
 
-			if (SettingsOperator.Gameplaycfg.TimeTotal - SettingsOperator.Gameplaycfg.Time < -5 && !Finished)
+			if (SettingsOperator.Gameplaycfg.TimeTotalGame - SettingsOperator.Gameplaycfg.Time < 0 && !Finished)
 			{
 				Finished = true;
 				ApiOperator.SubmitScore();
 				if (!SettingsOperator.Marathon)
 				{
 					AddChild(GD.Load<PackedScene>("res://Panels/Screens/EndScreen.tscn").Instantiate());
+					GD.Print(SettingsOperator.Gameplaycfg.Accuracy);
 				}
 				else
 				{
@@ -267,7 +268,6 @@ public partial class Gameplay : Control
 			Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)));
 			ReloadAccuracy();
 			ReloadppCounter();
-			SettingsOperator.Gameplaycfg.Time = (int)est;
 			int Ttick = 0;
 			for (int i = 0; i < 4; i++)
 			{

@@ -41,7 +41,7 @@ public partial class ApiOperator : Node
 		double MEH = SettingsOperator.Gameplaycfg.Meh;
 		double BAD = SettingsOperator.Gameplaycfg.Bad;
 		double COMBO = SettingsOperator.Gameplaycfg.MaxCombo;
-		double timetotal = SettingsOperator.Gameplaycfg.TimeTotal * 0.001;
+		double timetotal = SettingsOperator.Gameplaycfg.TimeTotal;
 		string[] Headers = new string[] {
 			$"BeatmapID: {BeatmapID}",
 			$"BeatmapSetID: {BeatmapSetID}",

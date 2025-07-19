@@ -1,0 +1,161 @@
+[gd_scene load_steps=17 format=3 uid="uid://bid386g4mu454"]
+
+[ext_resource type="Script" uid="uid://depnjfvaitcqy" path="res://Script/TopPanel/Overlays/NowPlaying.cs" id="1_jkubj"]
+[ext_resource type="Texture2D" uid="uid://sfbrs7c6t7dr" path="res://DefaultWallpaper/future.png" id="2_s31hx"]
+[ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="3_h74x6"]
+[ext_resource type="Script" uid="uid://bkssygfdsllly" path="res://Script/Home/SongIndication.cs" id="3_wsnno"]
+[ext_resource type="Script" uid="uid://covi80vxoi1m7" path="res://Script/Gameplay/SongProgress.cs" id="4_h74x6"]
+[ext_resource type="Texture2D" uid="uid://djva7iioax2sy" path="res://Skin/System/MusicPlayer/Play.png" id="6_2pwl0"]
+[ext_resource type="Texture2D" uid="uid://c14lwc8d3sqpi" path="res://Skin/System/MusicPlayer/Prev.png" id="6_pkmya"]
+[ext_resource type="Texture2D" uid="uid://7jh4dm1rrsff" path="res://Skin/System/MusicPlayer/Next.png" id="8_617ia"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wsnno"]
+content_margin_bottom = 15.0
+bg_color = Color(0.160784, 0.160784, 0.160784, 1)
+border_width_bottom = 3
+border_color = Color(0.498039, 0.415686, 0.952941, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="LabelSettings" id="LabelSettings_2pwl0"]
+font = ExtResource("3_h74x6")
+font_size = 12
+shadow_size = 3
+shadow_color = Color(0, 0, 0, 0.235294)
+shadow_offset = Vector2(0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2pwl0"]
+bg_color = Color(0.03125, 0.03125, 0.03125, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6pqoc"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h74x6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jkubj"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.21875, 0.21875, 0.21875, 0.588235)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s31hx"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0.648438, 1, 0.588235)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h74x6"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.588235)
+draw_center = false
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="NowPlaying" type="PanelContainer"]
+clip_children = 2
+custom_minimum_size = Vector2(300, 120)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_wsnno")
+script = ExtResource("1_jkubj")
+
+[node name="V" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Banner" type="TextureRect" parent="V"]
+self_modulate = Color(1, 1, 1, 0.666667)
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("2_s31hx")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Title" type="Label" parent="V/Banner"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Artist - Title"
+label_settings = SubResource("LabelSettings_2pwl0")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+script = ExtResource("3_wsnno")
+
+[node name="ProgressBar" type="ProgressBar" parent="V"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_2pwl0")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6pqoc")
+show_percentage = false
+script = ExtResource("4_h74x6")
+
+[node name="SPACE" type="MarginContainer" parent="V"]
+layout_mode = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="PlayerControls" type="HBoxContainer" parent="V"]
+layout_mode = 2
+alignment = 1
+
+[node name="Prev" type="Button" parent="V/PlayerControls"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+theme_override_constants/icon_max_width = 30
+theme_override_font_sizes/font_size = 12
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h74x6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jkubj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_s31hx")
+theme_override_styles/normal = SubResource("StyleBoxFlat_h74x6")
+icon = ExtResource("6_pkmya")
+icon_alignment = 1
+
+[node name="Play" type="Button" parent="V/PlayerControls"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+theme_override_constants/icon_max_width = 30
+theme_override_font_sizes/font_size = 12
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h74x6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jkubj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_s31hx")
+theme_override_styles/normal = SubResource("StyleBoxFlat_h74x6")
+icon = ExtResource("6_2pwl0")
+icon_alignment = 1
+
+[node name="Next" type="Button" parent="V/PlayerControls"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+theme_override_constants/icon_max_width = 30
+theme_override_font_sizes/font_size = 12
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h74x6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jkubj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_s31hx")
+theme_override_styles/normal = SubResource("StyleBoxFlat_h74x6")
+icon = ExtResource("8_617ia")
+icon_alignment = 1
+
+[connection signal="pressed" from="V/PlayerControls/Prev" to="." method="Prev"]
+[connection signal="pressed" from="V/PlayerControls/Play" to="." method="Play"]
+[connection signal="pressed" from="V/PlayerControls/Next" to="." method="Next"]

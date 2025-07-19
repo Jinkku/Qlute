@@ -15,9 +15,9 @@ public partial class EndScreen : ColorRect
 		Tween.TweenInterval(3);
 		Tween.Connect("finished", new Callable(this, nameof(done)));
 		ComboScreen = GetNode<TextureRect>("ComboScene");
-		if (SettingsOperator.Gameplaycfg.Bad != 0) FC();
-		else if (SettingsOperator.Gameplaycfg.Accuracy > 95f) MAX();
-		else if (SettingsOperator.Gameplaycfg.Accuracy > 70f) Good();
+		if (SettingsOperator.Gameplaycfg.Bad == 0) FC();
+		else if (SettingsOperator.Gameplaycfg.Accuracy > 0.89f) MAX();
+		else if (SettingsOperator.Gameplaycfg.Accuracy > 0.69f) Good();
 		else Bad();
 	}
 
