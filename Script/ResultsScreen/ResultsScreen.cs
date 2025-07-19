@@ -64,6 +64,11 @@ public partial class ResultsScreen : Control
 		Accuracy.Text = Acc.ToString("P0");
 		if (Acc > 0.95)
 		{
+			AccM = "SS";
+			AccuracyPanel.SelfModulate = new Color(0.23f, 0.47f, 0.83f); // #3b78d3 (Blue)
+		}
+		else if (Acc > 0.95)
+		{
 			AccM = "S";
 			AccuracyPanel.SelfModulate = new Color(0.23f, 0.47f, 0.83f); // #3b78d3 (Blue)
 		}
