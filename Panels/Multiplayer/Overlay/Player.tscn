@@ -1,11 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cg1d7mkb34w3e"]
+[gd_scene load_steps=3 format=3 uid="uid://cg1d7mkb34w3e"]
 
-[ext_resource type="Shader" uid="uid://bndbk7ky1x4q" path="res://Shaders/circle.gdshader" id="1_057po"]
 [ext_resource type="Texture2D" uid="uid://dgks5gkrmoe4k" path="res://Skin/System/Masks/circle.png" id="1_mffyp"]
 [ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Skin/System/guest.png" id="2_mffyp"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_shc00"]
-shader = ExtResource("1_057po")
 
 [node name="Player" type="TextureRect"]
 clip_children = 1
@@ -16,8 +12,8 @@ texture = ExtResource("1_mffyp")
 expand_mode = 1
 
 [node name="Icon" type="TextureRect" parent="."]
-material = SubResource("ShaderMaterial_shc00")
 custom_minimum_size = Vector2(50, 50)
+layout_mode = 0
 texture = ExtResource("2_mffyp")
 expand_mode = 1
 stretch_mode = 4

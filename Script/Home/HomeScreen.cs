@@ -54,7 +54,7 @@ public partial class HomeScreen : Control
 	}
 	private void Multiplayer()
 	{
-		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Multiplayer/MultiplayerListRoom.tscn");
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MultiplayerList.tscn");
 	}
 	private void _browse() {
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Browse.tscn");
