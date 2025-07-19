@@ -310,7 +310,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
 theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
 icon_alignment = 1
 script = ExtResource("8_qhwge")
-metadata/ID = 0
+metadata/ID = 1
 
 [node name="Label" type="Label" parent="SubButton/SubButtons/Play_Multi"]
 layout_mode = 1
@@ -741,7 +741,7 @@ script = ExtResource("14_1vpa7")
 [connection signal="pressed" from="SubButton/SubButtons/Play_Solo" to="." method="_play"]
 [connection signal="mouse_entered" from="SubButton/SubButtons/Play_Multi" to="SubButton/SubButtons/Play_Multi" method="_focus"]
 [connection signal="mouse_exited" from="SubButton/SubButtons/Play_Multi" to="SubButton/SubButtons/Play_Multi" method="_unfocus"]
-[connection signal="pressed" from="SubButton/SubButtons/Play_Multi" to="." method="_play"]
+[connection signal="pressed" from="SubButton/SubButtons/Play_Multi" to="." method="Multiplayer"]
 [connection signal="mouse_entered" from="SubButton/SubButtons/Play_Marathon" to="SubButton/SubButtons/Play_Marathon" method="_focus"]
 [connection signal="mouse_exited" from="SubButton/SubButtons/Play_Marathon" to="SubButton/SubButtons/Play_Marathon" method="_unfocus"]
 [connection signal="pressed" from="SubButton/SubButtons/Play_Marathon" to="." method="_marathonmode"]

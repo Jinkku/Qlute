@@ -1,0 +1,132 @@
+[gd_scene load_steps=10 format=3 uid="uid://23bfviyiqln0"]
+
+[ext_resource type="Script" uid="uid://djrx4mq0mhcfg" path="res://Script/Multiplayer/MultiplayerListRoomButton.cs" id="1_gcijc"]
+[ext_resource type="PackedScene" uid="uid://cg1d7mkb34w3e" path="res://Panels/Multiplayer/Overlay/Player.tscn" id="1_r3avh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rnm46"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_obo01"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.156863, 0.156863, 0.156863, 0.588235)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xfkca"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.331512, 0.476228, 0.554688, 0.588235)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ixxv"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.117647, 0.117647, 0.117647, 0.588235)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gcijc"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.156863)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fl6o3"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(1, 1, 1, 0.156863)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="LabelSettings" id="LabelSettings_rnm46"]
+
+[node name="MultiplayerRoom" type="Button"]
+custom_minimum_size = Vector2(700, 100)
+offset_right = 700.0
+offset_bottom = 100.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_rnm46")
+theme_override_styles/hover = SubResource("StyleBoxFlat_obo01")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_xfkca")
+theme_override_styles/normal = SubResource("StyleBoxFlat_1ixxv")
+script = ExtResource("1_gcijc")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="Columns" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MarginContainer/Columns"]
+layout_mode = 2
+text = "Multiplayer Name"
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Columns"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_gcijc")
+
+[node name="Players" type="HBoxContainer" parent="MarginContainer/Columns/PanelContainer"]
+layout_mode = 2
+
+[node name="PlayerCount" type="Label" parent="MarginContainer/Columns/PanelContainer/Players"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/normal = SubResource("StyleBoxFlat_fl6o3")
+text = "+5"
+label_settings = SubResource("LabelSettings_rnm46")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player" parent="MarginContainer/Columns/PanelContainer/Players" instance=ExtResource("1_r3avh")]
+layout_mode = 2
+
+[node name="Player2" parent="MarginContainer/Columns/PanelContainer/Players" instance=ExtResource("1_r3avh")]
+layout_mode = 2
+
+[node name="Player3" parent="MarginContainer/Columns/PanelContainer/Players" instance=ExtResource("1_r3avh")]
+layout_mode = 2
+
+[node name="Player4" parent="MarginContainer/Columns/PanelContainer/Players" instance=ExtResource("1_r3avh")]
+layout_mode = 2
+
+[node name="Player5" parent="MarginContainer/Columns/PanelContainer/Players" instance=ExtResource("1_r3avh")]
+layout_mode = 2
+
+[node name="Player6" parent="MarginContainer/Columns/PanelContainer/Players" instance=ExtResource("1_r3avh")]
+layout_mode = 2

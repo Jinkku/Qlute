@@ -1,5 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dl7cw2xx5dgea"]
 
+[ext_resource type="PackedScene" uid="uid://23bfviyiqln0" path="res://Panels/Multiplayer/MultiplayerListRoom.tscn" id="1_r6ipc"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rw8iw"]
 bg_color = Color(0.164706, 0.137255, 0.172549, 1)
 
@@ -13,17 +15,6 @@ content_margin_right = 15.0
 content_margin_bottom = 20.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rw8iw"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_diqlj"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
-bg_color = Color(0, 0, 0, 0.588235)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
 
 [node name="PanelContainer" type="PanelContainer"]
 anchors_preset = 15
@@ -102,119 +93,41 @@ layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 3
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(700, 100)
+[node name="MultiplayerRoom" parent="VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_r6ipc")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
 
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer"]
+[node name="MultiplayerRoom2" parent="VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_r6ipc")]
 layout_mode = 2
-text = "Multiplayer Room test"
 
-[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(700, 100)
+[node name="MultiplayerRoom3" parent="VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_r6ipc")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
 
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2"]
+[node name="MultiplayerRoom4" parent="VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_r6ipc")]
 layout_mode = 2
-text = "Multiplayer Room test"
 
-[node name="PanelContainer3" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(700, 100)
+[node name="MultiplayerRoom5" parent="VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_r6ipc")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
 
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3"]
+[node name="MultiplayerRoom6" parent="VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_r6ipc")]
 layout_mode = 2
-text = "Multiplayer Room test"
 
-[node name="PanelContainer4" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(700, 100)
+[node name="MultiplayerRoom7" parent="VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_r6ipc")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
 
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer4"]
+[node name="MultiplayerRoom8" parent="VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_r6ipc")]
 layout_mode = 2
-text = "Multiplayer Room test"
 
-[node name="PanelContainer5" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(700, 100)
+[node name="MultiplayerRoom9" parent="VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_r6ipc")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
 
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5"]
+[node name="MultiplayerRoom10" parent="VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_r6ipc")]
 layout_mode = 2
-text = "Multiplayer Room test"
 
-[node name="PanelContainer6" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(700, 100)
+[node name="MultiplayerRoom11" parent="VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_r6ipc")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
 
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer6"]
+[node name="MultiplayerRoom12" parent="VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_r6ipc")]
 layout_mode = 2
-text = "Multiplayer Room test"
 
-[node name="PanelContainer7" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(700, 100)
+[node name="MultiplayerRoom13" parent="VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_r6ipc")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
-
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer7"]
-layout_mode = 2
-text = "Multiplayer Room test"
-
-[node name="PanelContainer8" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(700, 100)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
-
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer8"]
-layout_mode = 2
-text = "Multiplayer Room test"
-
-[node name="PanelContainer9" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(700, 100)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
-
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer9"]
-layout_mode = 2
-text = "Multiplayer Room test"
-
-[node name="PanelContainer10" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(700, 100)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
-
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer10"]
-layout_mode = 2
-text = "Multiplayer Room test"
-
-[node name="PanelContainer11" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(700, 100)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
-
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer11"]
-layout_mode = 2
-text = "Multiplayer Room test"
-
-[node name="PanelContainer12" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(700, 100)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
-
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer12"]
-layout_mode = 2
-text = "Multiplayer Room test"
-
-[node name="PanelContainer13" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(700, 100)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_diqlj")
-
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer13"]
-layout_mode = 2
-text = "Multiplayer Room test"
