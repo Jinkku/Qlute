@@ -7,7 +7,7 @@ public partial class LeaderboardInfo : ScrollContainer
 	// Called when the node enters the scene tree for the first time.
 	private VBoxContainer Leaderboards { get; set; }
 	private Label NoBeatmap { get; set; }
-	public List<LeaderboardEntry> oldLeaderboardList { get; set; } = new List<LeaderboardEntry>();
+	private List<LeaderboardEntry> oldLeaderboardList { get; set; } = new List<LeaderboardEntry>();
 
 	public override void _Ready()
 	{

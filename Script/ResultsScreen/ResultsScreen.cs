@@ -4,6 +4,7 @@ using System;
 public partial class ResultsScreen : Control
 {
 	// Called when the node enters the scene tree for the first time.
+	private Tween Tween { get; set; }
 	public Label SongTitle { get; set; }
 	public Label SongArtist { get; set; }
 	public Label SongMapper { get; set; }
@@ -25,8 +26,14 @@ public partial class ResultsScreen : Control
 	public Label Username { get; set; }
 	public TextureRect AccuracyPanel { get; set; }
 	public string AccM {get;set;}
+	private Color MedalColour { get; set; }
+	private int scorevalue { get; set; }
+	private PanelContainer AlertBox { get; set; }
+	private PanelContainer LeaderboardList { get; set; }
+	private GridContainer Grid { get; set; }
 	public override void _Ready()
 	{
+		Tween = CreateTween();
 		SongTitle = GetNode<Label>("AlertBox/Box/Title");
 		SongArtist = GetNode<Label>("AlertBox/Box/Artist");
 		SongDiff = GetNode<Label>("AlertBox/Box/Difficulty");
@@ -44,6 +51,9 @@ public partial class ResultsScreen : Control
 		AccuracyPanel = GetNode<TextureRect>("AlertBox/Box/Rank");
 		AccuracyMedal = GetNode<Label>("AlertBox/Box/Rank/Medal");
 		TRank = GetNode<Label>("AlertBox/Box/Info/TRank/VC/Text");
+		Grid = GetNode<GridContainer>("AlertBox/Box/Info");
+		AlertBox = GetNode<PanelContainer>("AlertBox");
+		LeaderboardList = GetNode<PanelContainer>("LeaderboardList");
 		Tpp = GetNode<Label>("AlertBox/Box/Info/TPP/VC/Text");
 		TRankBox = GetNode<PanelContainer>("AlertBox/Box/Info/TRank");
 		TppBox = GetNode<PanelContainer>("AlertBox/Box/Info/TPP");
@@ -56,42 +66,52 @@ public partial class ResultsScreen : Control
 		Great.Text = SettingsOperator.Gameplaycfg.Great.ToString("N0");
 		Meh.Text = SettingsOperator.Gameplaycfg.Meh.ToString("N0");
 		Bad.Text = SettingsOperator.Gameplaycfg.Bad.ToString("N0");
-		pp.Text = SettingsOperator.Gameplaycfg.pp.ToString("N0")+"/"+(SettingsOperator.Gameplaycfg.maxpp*ModsMulti.multiplier).ToString("N0");
+		pp.Text = SettingsOperator.Gameplaycfg.pp.ToString("N0") + "/" + (SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier).ToString("N0");
 		Combo.Text = ((double)SettingsOperator.Gameplaycfg.MaxCombo).ToString("N0");
-		Avgms.Text = ((double)SettingsOperator.Gameplaycfg.ms).ToString("N0")+"ms";
-		Score.Text = SettingsOperator.Gameplaycfg.Score.ToString("0,000,000");
+		Avgms.Text = ((double)SettingsOperator.Gameplaycfg.ms).ToString("N0") + "ms";
 		var Acc = SettingsOperator.Gameplaycfg.Accuracy;
 		Accuracy.Text = Acc.ToString("P0");
-		if (Acc > 0.95)
+		if (Acc == 1)
 		{
 			AccM = "SS";
-			AccuracyPanel.SelfModulate = new Color(0.23f, 0.47f, 0.83f); // #3b78d3 (Blue)
+			MedalColour = new Color(0.23f, 0.47f, 0.83f); // #3b78d3 (Blue)
 		}
 		else if (Acc > 0.95)
 		{
 			AccM = "S";
-			AccuracyPanel.SelfModulate = new Color(0.23f, 0.47f, 0.83f); // #3b78d3 (Blue)
+			MedalColour = new Color(0.23f, 0.47f, 0.83f); // #3b78d3 (Blue)
 		}
 		else if (Acc > 0.90)
 		{
 			AccM = "A";
-			AccuracyPanel.SelfModulate = new Color(0.40f, 0.73f, 0.19f); // #67b930 (Green)
+			MedalColour = new Color(0.40f, 0.73f, 0.19f); // #67b930 (Green)
 		}
 		else if (Acc > 0.80)
 		{
 			AccM = "B";
-			AccuracyPanel.SelfModulate = new Color(0.77f, 0.76f, 0.13f); // #c5c220 (Gold)
+			MedalColour = new Color(0.77f, 0.76f, 0.13f); // #c5c220 (Gold)
 		}
 		else if (Acc > 0.70)
 		{
 			AccM = "C";
-			AccuracyPanel.SelfModulate = new Color(0.83f, 0.44f, 0.13f); // #d47037 (Orange)
+			MedalColour = new Color(0.83f, 0.44f, 0.13f); // #d47037 (Orange)
 		}
 		else
 		{
 			AccM = "D";
-			AccuracyPanel.SelfModulate = new Color(0.83f, 0.22f, 0.22f); //#d43737 (Red)
+			MedalColour = new Color(0.83f, 0.22f, 0.22f); //#d43737 (Red)
 		}
+		Grid.Modulate = new Color(1f, 1f, 1f, 0f);
+		Tween.TweenProperty(AccuracyPanel, "modulate", new Color(5f, 5f, 5f, 0f), 0f);
+		Tween.TweenProperty(AccuracyPanel, "self_modulate", new Color(5f, 5f, 5f, 0f), 0f);
+		Tween.TweenProperty(this, "scorevalue", SettingsOperator.Gameplaycfg.Score, 2f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		Tween.TweenInterval(1);
+		Tween.TweenProperty(AccuracyPanel, "modulate", new Color(1f, 1f, 1f, 1f), 0f);
+		Tween.TweenProperty(AccuracyPanel, "self_modulate", new Color(5f, 5f, 5f, 1f), 0f);
+		Tween.TweenProperty(AccuracyPanel, "self_modulate", MedalColour, 1f);
+		Tween.Parallel().TweenProperty(Grid, "modulate", new Color(1f,1f,1f,1f), 0.5f);
+		Tween.Parallel().TweenProperty(AlertBox, "position", new Vector2(GetViewportRect().Size.X / 2 - (AlertBox.Size.X / 2) + (LeaderboardList.Size.X / 2), AlertBox.Position.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		Tween.Parallel().TweenProperty(LeaderboardList, "position", new Vector2(0, LeaderboardList.Position.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		// Set the Rank medal text
 		AccuracyMedal.Text = AccM;
 	}
@@ -120,5 +140,6 @@ public partial class ResultsScreen : Control
 			Tpp.Text = SettingsOperator.Updatedpp;
 		}
 		else TppBox.Visible = false;
+		Score.Text = scorevalue.ToString("N0");
 	}
 }
