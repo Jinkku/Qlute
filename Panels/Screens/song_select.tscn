@@ -389,7 +389,7 @@ metadata/focus = Color(0.21875, 0.21875, 0.21875, 1)
 metadata/highlight = Color(0.192993, 0.205833, 0.398438, 1)
 
 [node name="Start" type="Button" parent="BottomBar"]
-self_modulate = Color(0.460938, 0.460938, 0.460938, 1)
+self_modulate = Color(0.461, 0.461, 0.461, 0.5)
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 1
 anchors_preset = 3
@@ -520,6 +520,8 @@ offset_bottom = 427.0
 [connection signal="button_up" from="BottomBar/ControlPanel/Box/Collections" to="BottomBar/ControlPanel/Box/Collections" method="_focus"]
 [connection signal="mouse_entered" from="BottomBar/ControlPanel/Box/Collections" to="BottomBar/ControlPanel/Box/Collections" method="_focus"]
 [connection signal="mouse_exited" from="BottomBar/ControlPanel/Box/Collections" to="BottomBar/ControlPanel/Box/Collections" method="_unfocus"]
+[connection signal="button_down" from="BottomBar/Start" to="." method="_start_down"]
+[connection signal="button_up" from="BottomBar/Start" to="." method="_start_focus"]
 [connection signal="mouse_entered" from="BottomBar/Start" to="." method="_start_focus"]
 [connection signal="mouse_exited" from="BottomBar/Start" to="." method="_start_unfocus"]
 [connection signal="pressed" from="BottomBar/Start" to="." method="_Start"]

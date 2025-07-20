@@ -113,7 +113,7 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -45.0
+offset_left = -40.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_c7mxw")
@@ -123,8 +123,9 @@ layout_mode = 2
 alignment = 1
 
 [node name="Close" type="Button" parent="Info/V"]
-custom_minimum_size = Vector2(35, 35)
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 theme_override_styles/focus = SubResource("StyleBoxEmpty_36gcf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5g2n4")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_f6r5x")

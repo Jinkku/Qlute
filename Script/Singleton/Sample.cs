@@ -23,7 +23,10 @@ public partial class Sample : AudioStreamPlayer
       GD.PrintErr("Failed to load audio stream from path: " + path);
       return;
     }
-    
+    if (Instance.Playing)
+    {
+      Instance.Stop();
+    }
     Instance.Stream = audioStream;
     Instance.Play();
   }

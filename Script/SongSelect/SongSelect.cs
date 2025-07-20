@@ -160,7 +160,16 @@ public partial class SongSelect : Control
 	public Tween StartTween {get;set;}
 	private Color idlestartcolour = new Color(0.5f,0.5f,0.5f,0.5f);
 	private Color focuscolour = new Color(0.270f, 0.549f, 1f);
-	private void _start_focus(){
+	private Color startpress = new Color(0.44f, 0.53f, 0.5f);
+	private void _start_down()
+	{
+		StartTween?.Kill();
+		StartTween = StartButton.CreateTween();
+		StartTween.TweenProperty(StartButton, "self_modulate", idlestartcolour, 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		StartTween.Play();
+	}
+	private void _start_focus()
+	{
 		StartTween?.Kill();
 		StartTween = StartButton.CreateTween();
 		StartTween.TweenProperty(StartButton, "self_modulate", focuscolour, 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
@@ -421,6 +430,7 @@ public partial class SongSelect : Control
 		if (ModsScreenActive){
 			_Mods_show();
 		}
+		Sample.PlaySample("res://Skin/Sounds/play.wav");
 		var SongDetails = GetNode<TextureRect>("SongDetails");
 		var SongPanel = GetNode<Control>("SongPanel");
 		var BottomBar = GetNode<Control>("BottomBar");
