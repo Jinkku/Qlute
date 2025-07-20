@@ -231,7 +231,7 @@ public partial class SongSelect : Control
 			SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
 			LevelRating.Text = "Lv. " + SettingsOperator.LevelRating.ToString("N0") ?? "Lv. 0";
 			SongBPM.Text = "BPM - " + ((int)SettingsOperator.Sessioncfg["beatmapbpm"]*AudioPlayer.Instance.PitchScale).ToString("N0") ?? "";
-			SongLen.Text = TimeSpan.FromMilliseconds(SettingsOperator.Gameplaycfg.TimeTotal/AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00";
+			SongLen.Text = TimeSpan.FromMilliseconds((SettingsOperator.Gameplaycfg.TimeTotalGame / 0.001f) /AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00";
 
 
 			SetControlsVisibility(true);
