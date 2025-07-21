@@ -32,7 +32,8 @@ public partial class SettingsOperator : Node
     public int MasterVol {get;set;}
     public int SampleVol {get;set;}
     public int scrollspeed {get;set;}
-    public static float AllMiliSecondsFromBeatmap {get;set;}
+    public static bool SpectatorMode { get; set; } = false;
+    public static float AllMiliSecondsFromBeatmap { get; set; }
     public static float MiliSecondsFromBeatmap {get;set;}
     public static int MiliSecondsFromBeatmapTimes {get;set;}
     public static List<BeatmapLegend> Beatmaps = new List<BeatmapLegend>();
@@ -312,29 +313,33 @@ public partial class SettingsOperator : Node
                 hitob++;
             }
         }
-        Beatmaps.Add(new BeatmapLegend{
-            ID = Beatmaps.Count,
-            SetID = SetID,
-            Title = songtitle,
-            Artist = artist,
-            Mapper = mapper,
-            KeyCount = keycount,
-            Version = version,
-            pp = ppvalue,
-            Osubeatid = osubeatid,
-            Osubeatidset = osubeatidset,
-            Beatid = qlbeatid,
-            Beatidset = qlbeatidset,
-            Bpm = bpm,
-            Dance = dance,
-            Timetotal = timetotal,
-            Levelrating = levelrating,
-            Accuracy = accuracy,
-            Background = background,
-            Audio = audio,
-            Rawurl = rawurl,
-            Path = path
-        });
+        if (keycount == 4)
+        {
+            Beatmaps.Add(new BeatmapLegend
+            {
+                ID = Beatmaps.Count,
+                SetID = SetID,
+                Title = songtitle,
+                Artist = artist,
+                Mapper = mapper,
+                KeyCount = keycount,
+                Version = version,
+                pp = ppvalue,
+                Osubeatid = osubeatid,
+                Osubeatidset = osubeatidset,
+                Beatid = qlbeatid,
+                Beatidset = qlbeatidset,
+                Bpm = bpm,
+                Dance = dance,
+                Timetotal = timetotal,
+                Levelrating = levelrating,
+                Accuracy = accuracy,
+                Background = background,
+                Audio = audio,
+                Rawurl = rawurl,
+                Path = path
+            });
+        }
     }
     public static void Addms(float ms)
     {

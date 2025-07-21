@@ -182,6 +182,7 @@ layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxEmpty_1bkjm")
 
 [node name="Medal" type="PanelContainer" parent="HBoxContainer"]
+visible = false
 self_modulate = Color(0, 0.695312, 1, 1)
 clip_children = 2
 custom_minimum_size = Vector2(50, 25)

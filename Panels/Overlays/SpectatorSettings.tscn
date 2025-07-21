@@ -1,0 +1,91 @@
+[gd_scene load_steps=7 format=3 uid="uid://bbglg2yq3l8dt"]
+
+[ext_resource type="Texture2D" uid="uid://4uedtgsvw7ep" path="res://Skin/System/TopPanel/Settings.svg" id="1_n2d5a"]
+[ext_resource type="Script" uid="uid://c6hj7yvehepy" path="res://Script/Spectator/SpectatorSettings.cs" id="1_uk8rj"]
+[ext_resource type="Script" uid="uid://dctbv0d1u4vpa" path="res://Script/Spectator/SpeedPanel.cs" id="2_lnka0"]
+[ext_resource type="Script" uid="uid://ctgdfml2vqvm0" path="res://Script/Spectator/misc.gd" id="3_lnka0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mvjke"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.196078)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n2d5a"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.02, 0.02, 0.02, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="SpectatorSettings" type="Control"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_uk8rj")
+
+[node name="SpectatorMenu" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -197.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mvjke")
+
+[node name="V" type="VBoxContainer" parent="SpectatorMenu"]
+layout_mode = 2
+
+[node name="Speed" type="PanelContainer" parent="SpectatorMenu/V"]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_n2d5a")
+script = ExtResource("2_lnka0")
+
+[node name="Rows" type="VBoxContainer" parent="SpectatorMenu/V/Speed"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="SpectatorMenu/V/Speed/Rows"]
+layout_mode = 2
+text = "Speed multiplier"
+
+[node name="SpeedMulti" type="Label" parent="SpectatorMenu/V/Speed/Rows"]
+layout_mode = 2
+text = "1.0x"
+
+[node name="Speed" type="HSlider" parent="SpectatorMenu/V/Speed/Rows"]
+layout_mode = 2
+min_value = 0.01
+max_value = 2.0
+step = 0.01
+value = 0.01
+
+[node name="Button" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -360.0
+offset_top = 20.0
+offset_right = -310.0
+offset_bottom = 70.0
+grow_horizontal = 0
+texture = ExtResource("1_n2d5a")
+script = ExtResource("3_lnka0")
+
+[connection signal="mouse_entered" from="." to="." method="_focus"]
+[connection signal="mouse_exited" from="." to="." method="_unfocus"]
+[connection signal="value_changed" from="SpectatorMenu/V/Speed/Rows/Speed" to="SpectatorMenu/V/Speed" method="_speed_change"]
