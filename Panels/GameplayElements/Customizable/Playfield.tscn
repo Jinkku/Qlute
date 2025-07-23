@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://chb8dgjfmmjgt"]
+[gd_scene load_steps=3 format=3 uid="uid://chb8dgjfmmjgt"]
+
+[ext_resource type="PackedScene" uid="uid://cfg55dbl1ip8a" path="res://Panels/GameplayElements/Static/note.tscn" id="1_6jlou"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cb4c3"]
 bg_color = Color(1, 1, 1, 0.588235)
@@ -17,6 +19,8 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ChartSections" type="HBoxContainer" parent="."]
+clip_children = 2
+clip_contents = true
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
@@ -79,3 +83,20 @@ offset_bottom = -200.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[node name="Note1" parent="Guard" instance=ExtResource("1_6jlou")]
+self_modulate = Color(1, 1, 1, 0.05)
+position = Vector2(0, -45)
+
+[node name="Note2" parent="Guard" instance=ExtResource("1_6jlou")]
+self_modulate = Color(1, 1, 1, 0.05)
+position = Vector2(104, -45)
+
+[node name="Note3" parent="Guard" instance=ExtResource("1_6jlou")]
+self_modulate = Color(1, 1, 1, 0.05)
+position = Vector2(208, -45)
+
+[node name="Note4" parent="Guard" instance=ExtResource("1_6jlou")]
+self_modulate = Color(1, 1, 1, 0.05)
+position = Vector2(312, -45)
