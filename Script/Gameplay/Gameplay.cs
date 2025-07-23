@@ -51,7 +51,9 @@ public partial class Gameplay : Control
 	private int DanceIndex {get;set;}
 	private Label debugtext {get;set;}
 	public static bool Dead {get;set;}
-
+	private int scoreint { get; set; }
+	private Control SpectatorPanel { get; set; }
+	private Tween scoretween { get; set; }
 	private void ShowPauseMenu()
 	{
 		PauseMenu = GD.Load<PackedScene>("res://Panels/Screens/PauseMenu.tscn").Instantiate().GetNode<Control>(".");
@@ -62,6 +64,7 @@ public partial class Gameplay : Control
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
+		SpectatorPanel = GD.Load<PackedScene>("res://Panels/Overlays/SpectatorSettings.tscn").Instantiate().GetNode<Control>(".");
 		ApiOperator = GetNode<ApiOperator>("/root/ApiOperator");
 		Beatmap_Background = GetNode<TextureRect>("./Beatmap_Background");
 		WaitClock = GetNode<Timer>("Wait");
@@ -158,6 +161,8 @@ public partial class Gameplay : Control
 				Notes.Add(new NotesEn { timing = timen, NoteSection = part });
 			}
 		}
+
+		if (SettingsOperator.SpectatorMode) AddChild(SpectatorPanel);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -225,9 +230,11 @@ public partial class Gameplay : Control
 
 	public override void _Process(double delta)
 	{
+
+		SettingsOperator.Gameplaycfg.Score = scoreint; // Set the score of the player
 		try
 		{
-			float est = GetRemainingTime(GameMode: true,delta: (float)delta) / 0.001f;
+			float est = GetRemainingTime(GameMode: true, delta: (float)delta) / 0.001f;
 
 
 			// DEATH
@@ -368,7 +375,11 @@ public partial class Gameplay : Control
 							mshit = notex;
 							SettingsOperator.Addms(mshitold - mshit - 50);
 							SettingsOperator.Gameplaycfg.ms = SettingsOperator.Getms();
-							SettingsOperator.Gameplaycfg.Score = Get_Score(SettingsOperator.Gameplaycfg.pp, SettingsOperator.Gameplaycfg.maxpp, ModsMulti.multiplier);
+
+							scoretween?.Kill();
+							scoretween = CreateTween();
+							scoretween.TweenProperty(this, "scoreint", Get_Score(SettingsOperator.Gameplaycfg.pp, SettingsOperator.Gameplaycfg.maxpp, ModsMulti.multiplier), 0.3f);
+							scoretween.Play();
 							Note.hit = true;
 							Note.Node.Visible = false;
 							Note.Node.QueueFree();

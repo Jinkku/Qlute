@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bmi44rm7jttn"]
+[gd_scene load_steps=12 format=3 uid="uid://bmi44rm7jttn"]
 
 [ext_resource type="Script" uid="uid://biavu27wnraf2" path="res://Script/Gameplay/Gameplay.cs" id="1_33mgo"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="1_uf7ne"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://chb8dgjfmmjgt" path="res://Panels/GameplayElements/Customizable/Playfield.tscn" id="5_j387h"]
 [ext_resource type="PackedScene" uid="uid://dp0inqauwdmyy" path="res://Panels/GameplayElements/Customizable/unstablerate.tscn" id="8_acwn2"]
 [ext_resource type="PackedScene" uid="uid://bj38y6tgytge3" path="res://Panels/GameplayElements/Customizable/LeaderboardPanel.tscn" id="10_wpryt"]
+[ext_resource type="Texture2D" uid="uid://c3qy7vl54kmf1" path="res://Skin/System/ResultsScreen/backgroundrank.png" id="11_8fu54"]
 
 [node name="Gameplay" type="Control"]
 process_mode = 1
@@ -115,6 +116,34 @@ grow_vertical = 2
 [node name="Wait" type="Timer" parent="."]
 one_shot = true
 autostart = true
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="."]
+self_modulate = Color(1, 1, 1, 0.4)
+position = Vector2(47, 418)
+scale = Vector2(2.87, 2.87)
+texture_normal = ExtResource("11_8fu54")
+action = "Key1"
+
+[node name="TouchScreenButton2" type="TouchScreenButton" parent="."]
+self_modulate = Color(1, 1, 1, 0.4)
+position = Vector2(350, 423)
+scale = Vector2(2.87, 2.87)
+texture_normal = ExtResource("11_8fu54")
+action = "Key2"
+
+[node name="TouchScreenButton3" type="TouchScreenButton" parent="."]
+self_modulate = Color(1, 1, 1, 0.4)
+position = Vector2(656, 426)
+scale = Vector2(2.87, 2.87)
+texture_normal = ExtResource("11_8fu54")
+action = "Key3"
+
+[node name="TouchScreenButton4" type="TouchScreenButton" parent="."]
+self_modulate = Color(1, 1, 1, 0.4)
+position = Vector2(954, 426)
+scale = Vector2(2.87, 2.87)
+texture_normal = ExtResource("11_8fu54")
+action = "Key4"
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="timeout" from="Wait" to="." method="StartPlay"]
