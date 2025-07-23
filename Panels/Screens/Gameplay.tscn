@@ -118,6 +118,7 @@ one_shot = true
 autostart = true
 
 [node name="TouchScreenButton" type="TouchScreenButton" parent="."]
+visible = false
 self_modulate = Color(1, 1, 1, 0.4)
 position = Vector2(47, 418)
 scale = Vector2(2.87, 2.87)
@@ -125,6 +126,7 @@ texture_normal = ExtResource("11_8fu54")
 action = "Key1"
 
 [node name="TouchScreenButton2" type="TouchScreenButton" parent="."]
+visible = false
 self_modulate = Color(1, 1, 1, 0.4)
 position = Vector2(350, 423)
 scale = Vector2(2.87, 2.87)
@@ -132,6 +134,7 @@ texture_normal = ExtResource("11_8fu54")
 action = "Key2"
 
 [node name="TouchScreenButton3" type="TouchScreenButton" parent="."]
+visible = false
 self_modulate = Color(1, 1, 1, 0.4)
 position = Vector2(656, 426)
 scale = Vector2(2.87, 2.87)
@@ -139,6 +142,7 @@ texture_normal = ExtResource("11_8fu54")
 action = "Key3"
 
 [node name="TouchScreenButton4" type="TouchScreenButton" parent="."]
+visible = false
 self_modulate = Color(1, 1, 1, 0.4)
 position = Vector2(954, 426)
 scale = Vector2(2.87, 2.87)
