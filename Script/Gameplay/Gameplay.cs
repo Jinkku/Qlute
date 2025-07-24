@@ -193,9 +193,9 @@ public partial class Gameplay : Control
 
 	public const float MAX_TIME_RANGE = 11485;
     public static float ComputeScrollTime(float scrollSpeed) => MAX_TIME_RANGE / scrollSpeed;
-	public static void ReloadAccuracy()
+	public static float ReloadAccuracy(int max, int great, int meh, int bad)
 	{
-		SettingsOperator.Gameplaycfg.Accuracy = ((float)SettingsOperator.Gameplaycfg.Max + ((float)SettingsOperator.Gameplaycfg.Great / 2) + ((float)SettingsOperator.Gameplaycfg.Meh / 3)) / ((float)SettingsOperator.Gameplaycfg.Max + (float)SettingsOperator.Gameplaycfg.Great + (float)SettingsOperator.Gameplaycfg.Meh + (float)SettingsOperator.Gameplaycfg.Bad);
+		 return ((float)max + ((float)great / 2) + ((float)meh / 3)) / ((float)max + (float)great + (float)meh + (float)bad);
 	}
 
 	public static void ReloadppCounter()
@@ -273,7 +273,7 @@ public partial class Gameplay : Control
 
 
 			Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)));
-			ReloadAccuracy();
+			SettingsOperator.Gameplaycfg.Accuracy = ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 			ReloadppCounter();
 			int Ttick = 0;
 			for (int i = 0; i < 4; i++)

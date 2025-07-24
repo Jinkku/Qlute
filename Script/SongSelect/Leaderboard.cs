@@ -24,7 +24,7 @@ public partial class Leaderboard : Button
 		SettingsOperator.Gameplaycfg.Score = (int)GetMeta("score");
 		SettingsOperator.Gameplaycfg.MaxCombo = (int)GetMeta("combo");
 		SettingsOperator.Gameplaycfg.pp = (float)GetMeta("points");
-		Gameplay.ReloadAccuracy();
+		SettingsOperator.Gameplaycfg.Accuracy = Gameplay.ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultsScreen.tscn");
 	}
 	public override void _Ready()

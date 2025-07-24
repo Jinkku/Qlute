@@ -1,26 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://bj38y6tgytge3"]
+[gd_scene load_steps=4 format=3 uid="uid://bj38y6tgytge3"]
 
 [ext_resource type="Script" uid="uid://b6fptxqus0hc6" path="res://Script/Gameplay/LeaderboardPanel.cs" id="1_t8lab"]
+[ext_resource type="Texture2D" uid="uid://ey0q5n5ojnr" path="res://Skin/Game/Leaderboard/LeaderboardMask.png" id="1_ty6eh"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t8lab"]
-bg_color = Color(0.148438, 0.148438, 0.148438, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fdekv"]
+texture = ExtResource("1_ty6eh")
 
 [node name="Leaderboard" type="PanelContainer"]
 process_priority = 1
-clip_children = 2
+clip_children = 1
 clip_contents = true
 custom_minimum_size = Vector2(300, 320)
 offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_t8lab")
+theme_override_styles/panel = SubResource("StyleBoxTexture_fdekv")
 script = ExtResource("1_t8lab")
 
 [node name="S" type="ScrollContainer" parent="."]
+clip_contents = false
 layout_mode = 2
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 3

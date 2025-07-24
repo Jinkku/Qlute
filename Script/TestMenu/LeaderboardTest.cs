@@ -8,9 +8,9 @@ public partial class LeaderboardTest : ColorRect
 	private PanelContainer Leaderboard { get; set; }
 	private void _reset()
 	{
-		ApiOperator.LeaderboardList = new List<LeaderboardEntry>();
+		ApiOperator.LeaderboardList.Clear();
 		Random randomizer = new Random();
-		for (int i = 0; i < 50; i++)
+		for (int i = 0; i < 101; i++)
 		{
 			ApiOperator.LeaderboardList.Add(new LeaderboardEntry
 			{
@@ -49,16 +49,21 @@ public partial class LeaderboardTest : ColorRect
 
 		_reset();
 	}
+	private Tween scoretween { get; set; }
+	private int scoreint { get; set; }
 
 	private void _changed(float value)
 	{
 		// This method is called when the value of the slider changes.
-		// You can implement functionality here to handle the change.
-		SettingsOperator.Gameplaycfg.Score = (int)value;
+		scoretween?.Kill();
+		scoretween = CreateTween();
+		scoretween.TweenProperty(this, "scoreint", (int)value, 10f);
+		scoretween.Play();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		SettingsOperator.Gameplaycfg.Score = scoreint;
 	}
 }

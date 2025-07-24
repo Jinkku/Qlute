@@ -12,6 +12,7 @@ public class LeaderboardEntry
 	public int score { get; set; }
 	public int combo { get; set; }
 	public int rcombo { get; set; }
+	public float Accuracy { get; set; }
 	public int MAX { get; set; }
 	public int GOOD { get; set; }
 	public int MEH { get; set; }
@@ -66,10 +67,19 @@ public partial class ApiOperator : Node
 			Notify.Post("Failed to load leaderboard. Please try again later.");
 			LeaderboardStatus = 0; // Set status to not loaded
 			return;
-		}else {
+		}
+		else
+		{
+			LeaderboardList.Clear();
 			LeaderboardStatus = 2; // Set status to loaded
 			LeaderboardList = JsonSerializer.Deserialize<List<LeaderboardEntry>>((string)Encoding.UTF8.GetString(body));
 			GD.Print("Leaderboard loaded successfully.");
+		}
+
+		for (int i = 0; i < LeaderboardList.Count; i++)
+		{
+			var entry = LeaderboardList[i];
+			entry.Accuracy = Gameplay.ReloadAccuracy(entry.MAX, entry.GOOD, entry.MEH, entry.BAD);
 		}
 	}
 	public static void ReloadLeaderboard(int BeatmapID)

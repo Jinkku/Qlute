@@ -23,6 +23,7 @@ public partial class LeaderboardPanel : PanelContainer
 	private int LeadSize = 0;
 	private ScrollContainer Scroll { get; set; }
 	private PanelContainer PlayerNode { get; set; }
+	private string User { get; set; }
 	public override void _Ready()
 	{
 		LeaderboardContainer = GetNode<Control>("S/ControlLead");
@@ -32,6 +33,7 @@ public partial class LeaderboardPanel : PanelContainer
 		foreach (var entry in ApiOperator.LeaderboardList)
 		{
 			var leaderboardEntry = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/Leaderboard.tscn").Instantiate().GetNode<PanelContainer>(".");
+			Size = new Vector2(leaderboardEntry.Size.X, Size.Y);
 			leaderboardEntry.SetMeta("username", entry.username);
 			leaderboardEntry.SetMeta("id", id);
 			leaderboardEntry.SetMeta("rank", ranknum);
@@ -47,13 +49,13 @@ public partial class LeaderboardPanel : PanelContainer
 				Score = entry.score,
 				Playing = false,
 				Node = leaderboardEntry,
-				tween = leaderboardEntry.CreateTween()
+				tween = null
 			});
 			ranknum++;
 			id++;
 		}
 		var playerEntry = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/Leaderboard.tscn").Instantiate().GetNode<PanelContainer>(".");
-		var User = ApiOperator.Username;
+		User = ApiOperator.Username;
 		if (ModsOperator.Mods["auto"]) User = "Qlutina";
 		playerEntry.SelfModulate = new Color(56 / 255f, 82 / 255f, 138 / 255f); // Default color for other ranks
 		playerEntry.SetMeta("rank", ranknum);
@@ -68,7 +70,7 @@ public partial class LeaderboardPanel : PanelContainer
 			Score = (int)SettingsOperator.Gameplaycfg.Score,
 			Playing = true,
 			Node = playerEntry,
-			tween = playerEntry.CreateTween(),
+			tween = null,
 			Active = true
 		});
 		PlayerNode = playerEntry;
@@ -83,25 +85,25 @@ public partial class LeaderboardPanel : PanelContainer
 		Y += (ID + 1) * 5; // Then Adds a offset of 5
 		return new Vector2(0, Y); // returns value
 	}
+	private int oldscore { get; set; }
 	public override void _Process(double delta)
 	{
-		var oldscore = (int)SettingsOperator.Gameplaycfg.Score;
 		if (LeaderboardEntries.Count > 1)
 		{
 			Scroll.ScrollVertical = (int)PlayerNode.Position.Y;
-			LeaderboardContainer.CustomMinimumSize = new Vector2(0,PlayerNode.Position.Y + PlayerNode.Size.Y);
+			LeaderboardContainer.CustomMinimumSize = new Vector2(0, PlayerNode.Position.Y + PlayerNode.Size.Y);
 
 
 			// Sort the leaderboard by score in descending order
-			LeaderboardEntries.Sort((a, b) => b.Score.CompareTo(a.Score));
+			LeaderboardEntries = LeaderboardEntries.OrderByDescending(entry => entry.Score).ToList();
 
 			// Update ranks and UI
 			for (int i = 0; i < LeaderboardEntries.Count; i++)
 			{
 				var entry = LeaderboardEntries[i];
-				if (entry.Active && entry.Username == ApiOperator.Username)
+				if (entry.Active && entry.Username == User)
 				{
-					entry.Score = (int)SettingsOperator.Gameplaycfg.Score;
+					entry.Score = SettingsOperator.Gameplaycfg.Score;
 				}
 				var oldrank = entry.Rank;
 				entry.Rank = i + 1;
@@ -112,7 +114,7 @@ public partial class LeaderboardPanel : PanelContainer
 					entry.tween = entry.Node.CreateTween();
 					entry.tween.Parallel().TweenProperty(entry.Node, "modulate", new Color(2f, 2f, 2f, 0.5f), 0.3).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 					entry.tween.Parallel().TweenProperty(entry.Node, "position", Convert_Position(entry.Node, i), 0.5).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic); // Adjust position based on new rank
-					entry.tween.TweenProperty(entry.Node, "modulate", new Color(1f,1f,1f,1f), 0.5).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+					entry.tween.TweenProperty(entry.Node, "modulate", new Color(1f, 1f, 1f, 1f), 0.5).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 				}
 			}
 		}
