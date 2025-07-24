@@ -23,6 +23,7 @@ public partial class LeaderboardPanel : PanelContainer
 	private int LeadSize = 0;
 	private ScrollContainer Scroll { get; set; }
 	private PanelContainer PlayerNode { get; set; }
+	private int PlayerLeaderboardEntry { get; set; }
 	private string User { get; set; }
 	public override void _Ready()
 	{
@@ -42,6 +43,8 @@ public partial class LeaderboardPanel : PanelContainer
 			LeaderboardContainer.AddChild(leaderboardEntry);
 			leaderboardEntry.Position = new Vector2(0, ((ranknum - 1) * leaderboardEntry.Size.Y) + (ranknum * 5)); // Adjust position based on rank
 			LeadSize += (int)leaderboardEntry.Size.Y + 5;
+			leaderboardEntry.ProcessMode = ProcessModeEnum.Pausable;
+			leaderboardEntry.Visible = false;
 			LeaderboardEntries.Add(new LeaderboardStatus
 			{
 				Rank = ranknum,
@@ -74,6 +77,7 @@ public partial class LeaderboardPanel : PanelContainer
 			Active = true
 		});
 		PlayerNode = playerEntry;
+		PlayerLeaderboardEntry = id;
 		Count = ranknum;
 	}
 
@@ -104,6 +108,17 @@ public partial class LeaderboardPanel : PanelContainer
 				if (entry.Active && entry.Username == User)
 				{
 					entry.Score = SettingsOperator.Gameplaycfg.Score;
+					PlayerLeaderboardEntry = i;
+				}
+				if (entry.Rank > LeaderboardEntries[PlayerLeaderboardEntry].Rank - 6 && entry.Rank < LeaderboardEntries[PlayerLeaderboardEntry].Rank + 6 && !entry.Playing)
+				{
+					entry.Node.Visible = true;
+					entry.Node.ProcessMode = ProcessModeEnum.Pausable;
+				}
+				else if (!entry.Playing)
+				{
+					entry.Node.Visible = false;
+					entry.Node.ProcessMode = ProcessModeEnum.Disabled;
 				}
 				var oldrank = entry.Rank;
 				entry.Rank = i + 1;

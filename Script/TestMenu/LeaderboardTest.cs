@@ -57,7 +57,7 @@ public partial class LeaderboardTest : ColorRect
 		// This method is called when the value of the slider changes.
 		scoretween?.Kill();
 		scoretween = CreateTween();
-		scoretween.TweenProperty(this, "scoreint", (int)value, 10f);
+		scoretween.TweenProperty(this, "scoreint", (int)value, 1f);
 		scoretween.Play();
 	}
 
