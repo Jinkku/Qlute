@@ -23,6 +23,7 @@ public partial class Gameplay : Control
 	//public static Label Hits { get; set; }
 	public HBoxContainer Chart { get; set; }
 	private int HitPoint { get; set; }
+	private Tween MainScreenAnimation { get; set; }
 	public List<KeyL> Keys = new List<KeyL>();
 	public int JudgeResult = -1;
 	public int nodeSize = 54;
@@ -44,7 +45,7 @@ public partial class Gameplay : Control
 	public List<NotesEn> Notes = new List<NotesEn>();
 	public int Noteindex = 1;
 	public TextureRect Beatmap_Background {get;set;}
-	private Control PauseMenu {get;set;}
+	private Node PauseMenu {get;set;}
 	private bool Finished {get;set;}
 	private int score {get;set;}
 	private IEnumerable<DanceCounter> dance {get;set;}
@@ -57,10 +58,26 @@ public partial class Gameplay : Control
 	private void ShowPauseMenu()
 	{
 		PauseMenu = GD.Load<PackedScene>("res://Panels/Screens/PauseMenu.tscn").Instantiate().GetNode<Control>(".");
-		PauseMenu.ZIndex = 200;
-		AddChild(PauseMenu);
-		GetTree().Paused = true;
+		GetTree().Root.AddChild(PauseMenu);
 	}
+
+
+	private void FailAnimation()
+	{
+		var Interval = 1f; // Interval of speed that the animation will go.
+		MainScreenAnimation?.Kill();
+		MainScreenAnimation = CreateTween();
+		PivotOffset = new Vector2(Size.X / 2, Size.Y / 2);
+		MainScreenAnimation.TweenInterval(0.5f);
+		MainScreenAnimation.Parallel().TweenProperty(this, "modulate", new Color(1f,0.8f,0.8f,1f), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		MainScreenAnimation.Parallel().TweenProperty(this, "position", new Vector2(Position.X, Position.Y+ 20), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		MainScreenAnimation.Parallel().TweenProperty(this, "rotation", 0.25f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		MainScreenAnimation.Parallel().TweenProperty(AudioPlayer.Instance, "pitch_scale", 0.01f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		MainScreenAnimation.Parallel().TweenProperty(this, "scale", Scale * 0.9f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		MainScreenAnimation.Connect("finished", new Callable(this, nameof(ShowPauseMenu)));
+	}
+
+
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -69,6 +86,7 @@ public partial class Gameplay : Control
 		Beatmap_Background = GetNode<TextureRect>("./Beatmap_Background");
 		WaitClock = GetNode<Timer>("Wait");
 		AudioPlayer.Instance.Stop();
+		ClipContents = true;
 
 		Dead = false;
 		Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)));
@@ -242,7 +260,7 @@ public partial class Gameplay : Control
 			if (HealthBar.Health == 0 && !Dead && !ModsOperator.Mods["no-fail"])
 			{
 				Dead = !Dead;
-				ShowPauseMenu();
+				FailAnimation();
 			}
 
 
@@ -287,7 +305,13 @@ public partial class Gameplay : Control
 					hitnote(i, false);
 				}
 			}
-			if (Input.IsActionJustPressed("pausemenu") && !SettingsOperator.Marathon)
+			if (Input.IsActionJustPressed("pausemenu") && SettingsOperator.SpectatorMode)
+			{
+				BeatmapBackground.FlashEnable = true;
+				SettingsOperator.toppaneltoggle();
+				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
+			}
+			else if (Input.IsActionJustPressed("pausemenu") && !SettingsOperator.Marathon)
 			{
 				ShowPauseMenu();
 			}
