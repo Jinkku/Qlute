@@ -796,7 +796,7 @@ vertical_alignment = 1
 [connection signal="mouse_exited" from="HomeButtonBG/HomeButtons/Play" to="HomeButtonBG/HomeButtons/Play" method="_unfocus"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Play" to="." method="_play"]
 [connection signal="button_down" from="HomeButtonBG/HomeButtons/Create" to="HomeButtonBG/HomeButtons/Create" method="_down"]
-[connection signal="button_up" from="HomeButtonBG/HomeButtons/Create" to="HomeButtonBG/HomeButtons/Create" method="_on_button_up"]
+[connection signal="button_up" from="HomeButtonBG/HomeButtons/Create" to="HomeButtonBG/HomeButtons/Create" method="_up"]
 [connection signal="mouse_entered" from="HomeButtonBG/HomeButtons/Create" to="." method="_createf"]
 [connection signal="mouse_entered" from="HomeButtonBG/HomeButtons/Create" to="HomeButtonBG/HomeButtons/Create" method="_focus"]
 [connection signal="mouse_exited" from="HomeButtonBG/HomeButtons/Create" to="HomeButtonBG/HomeButtons/Create" method="_unfocus"]

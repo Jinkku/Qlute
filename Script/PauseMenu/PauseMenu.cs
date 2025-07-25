@@ -1,11 +1,14 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class PauseMenu : Control
 {
 	// Called when the node enters the scene tree for the first time.
 	private SettingsOperator SettingsOperator { get; set; }
 	private Tween PauseTween { get; set; }
+	private int MaxChild {get;set;}
+	private int Childint { get; set; }
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -13,8 +16,10 @@ public partial class PauseMenu : Control
 		Modulate = new Color(0f, 0f, 0f, 0f);
 		PauseTween?.Kill();
 		PauseTween = CreateTween();
-		PauseTween.TweenProperty(this, "modulate", new Color(1f,1f,1f,1f), 0.4f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		PauseTween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), 0.4f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		PauseTween.Play();
+		MaxChild = GetNode<VBoxContainer>("PanelContainer/VBoxContainer").GetChildCount();
+		Childint = 0;
 		if (Gameplay.Dead)
 		{
 			GetNode<Button>("PanelContainer/VBoxContainer/Continue").Visible = false;
@@ -46,8 +51,21 @@ public partial class PauseMenu : Control
 		SettingsOperator.toppaneltoggle();
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 	}
+	private Control FocusOwner { get; set; }
 	public override void _Process(double delta)
 	{
+		if (( Input.IsActionJustPressed("ui_up") || Input.IsActionJustPressed("ui_down") ) && GetViewport().GuiGetFocusOwner() == null)
+		{
+			foreach (Button Node in GetNode<VBoxContainer>("PanelContainer/VBoxContainer").GetChildren())
+			{
+				if (Node.Visible)
+				{
+					Node.GrabFocus();
+					break;
+				}
+			}
+		}
+
 		if (Input.IsActionJustPressed("pausemenu") && !Gameplay.Dead)
 		{
 			_continue();
