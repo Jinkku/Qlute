@@ -1,10 +1,10 @@
 [gd_scene load_steps=29 format=3 uid="uid://beeu7jswbwsts"]
 
 [ext_resource type="Script" uid="uid://do76anrqegieu" path="res://Script/SkinEditor/SkinEditor.cs" id="1_wk53w"]
-[ext_resource type="Texture2D" uid="uid://b6hfhv5kwa3oi" path="res://Skin/System/heart.png" id="2_imael"]
+[ext_resource type="Texture2D" uid="uid://dhtk4mxqohiru" path="res://Skin/System/Heart.svg" id="2_imael"]
 [ext_resource type="Script" uid="uid://hujhlkgh6dfp" path="res://Script/CreateEditor/ContextMenus.cs" id="2_wk53w"]
 [ext_resource type="Script" uid="uid://cmqncf5p3shyd" path="res://Script/CreateEditor/FileMenu.cs" id="3_imael"]
-[ext_resource type="Texture2D" uid="uid://b4rsw0hpkn2jc" path="res://Skin/System/backicon.svg" id="4_ujy7e"]
+[ext_resource type="Texture2D" uid="uid://ctnqrw3he2egt" path="res://Skin/System/backicon.svg" id="4_ujy7e"]
 [ext_resource type="Script" uid="uid://blbe3d2880su3" path="res://Script/Effects/ScreenElementButton.cs" id="5_imael"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wk53w"]
