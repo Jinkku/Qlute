@@ -51,11 +51,6 @@ public partial class Modscfg : Button
 	}
     private void _modpressed(){
         ModsOperator.Mods[GetMeta("ModName").ToString()] = ButtonPressed;
-        if (ModsOperator.Mods[GetMeta("ModName").ToString()] && GetMeta("ModName").ToString() == "auto")
-        {
-            SettingsOperator.SpectatorMode = true;
-        }
-        else SettingsOperator.SpectatorMode = false;
         ModsOperator.Refresh();
     }
 }

@@ -437,6 +437,14 @@ public partial class SongSelect : Control
 			_Mods_show();
 		}
 		Sample.PlaySample("res://Skin/Sounds/play.wav");
+
+
+		if (ModsOperator.Mods["npc"])
+		{
+			Gameplay.reload_npcleaderboard();
+		}
+
+		
 		var SongDetails = GetNode<TextureRect>("SongDetails");
 		var SongPanel = GetNode<Control>("SongPanel");
 		var BottomBar = GetNode<Control>("BottomBar");

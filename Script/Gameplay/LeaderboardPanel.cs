@@ -47,12 +47,12 @@ public partial class LeaderboardPanel : PanelContainer
 			leaderboardEntry.Visible = false;
 			LeaderboardEntries.Add(new LeaderboardStatus
 			{
-				Rank = ranknum,
-				Username = entry.username,
-				Score = entry.score,
-				Playing = false,
-				Node = leaderboardEntry,
-				tween = null
+					Rank = ranknum,
+					Username = entry.username,
+					Score = entry.score,
+					Playing = false,
+					Node = leaderboardEntry,
+					tween = null
 			});
 			ranknum++;
 			id++;
@@ -109,6 +109,10 @@ public partial class LeaderboardPanel : PanelContainer
 				{
 					entry.Score = SettingsOperator.Gameplaycfg.Score;
 					PlayerLeaderboardEntry = i;
+				}
+				else if (ModsOperator.Mods["npc"] && i > LeaderboardEntries.Count - 1)
+				{
+					entry.Score = ApiOperator.LeaderboardList[i].score;
 				}
 				if (entry.Rank > LeaderboardEntries[PlayerLeaderboardEntry].Rank - 6 && entry.Rank < LeaderboardEntries[PlayerLeaderboardEntry].Rank + 6 && !entry.Playing)
 				{

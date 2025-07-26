@@ -18,11 +18,22 @@ public partial class ModsOperator : Node
 	}
 	public static void Refresh()
 	{
-		if (Mods["ht"]){
+        if (ModsOperator.Mods["auto"])
+        {
+            SettingsOperator.SpectatorMode = true;
+        }
+        else SettingsOperator.SpectatorMode = false;
+		
+		if (Mods["ht"])
+		{
 			AudioPlayer.Instance.PitchScale = 0.5f;
-		} else if (Mods["dt"]) {
+		}
+		else if (Mods["dt"])
+		{
 			AudioPlayer.Instance.PitchScale = 1.25f;
-		} else{
+		}
+		else
+		{
 			AudioPlayer.Instance.PitchScale = 1f;
 		}
 		var modalias = GetModAlias();
@@ -73,6 +84,11 @@ public partial class ModsOperator : Node
 					modalias += "NF";
 					ModsEnabled.Add("NF");
 				}
+				else if (modst == "npc")
+				{
+					modalias += "";
+					ModsEnabled.Add("NPC");
+				}
 			}
 		}
 		return modalias;
@@ -86,5 +102,6 @@ public partial class ModsOperator : Node
 		{"random", false},
 		{"slice", false},
 		{"black-out", false},
+		{"npc", false},
 	};
 }
