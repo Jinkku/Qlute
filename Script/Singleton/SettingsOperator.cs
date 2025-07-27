@@ -152,7 +152,7 @@ public partial class SettingsOperator : Node
             Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
             var Texture = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
             Sessioncfg["background"] = (Texture2D)Texture;
-            Gameplaycfg.maxpp = (int)beatmap.pp;
+            Gameplaycfg.maxpp = beatmap.pp;
             string audioPath = beatmap.Path + "" + beatmap.Audio;
             if (System.IO.File.Exists(audioPath))
             {
@@ -179,9 +179,9 @@ public partial class SettingsOperator : Node
         }
         else { GD.PrintErr("Can't select a song that don't exist :/"); }
     }
-    public static float Get_ppvalue(int max, int great, int meh, int bad, float multiplier = 1,int combo = 0){
+    public static double Get_ppvalue(int max, int great, int meh, int bad, float multiplier = 1,int combo = 0){
         //bad = Math.Max(1,bad);
-        var ppvalue = 0.0f;
+        var ppvalue = 0.0;
         ppvalue = max * ppbase;
         ppvalue -= ppbase/2 * great;
         ppvalue -= ppbase/3 * meh;
@@ -375,8 +375,8 @@ public partial class SettingsOperator : Node
     {
         public static int Score { get; set; }
         public static double Timeframe { get; set; }
-        public static float pp { get; set; }
-        public static float maxpp { get; set; }
+        public static double pp { get; set; }
+        public static double maxpp { get; set; }
         public static float Time { get; set; }
         public static float TimeTotal { get; set; }
         public static float TimeTotalGame { get; set; }
