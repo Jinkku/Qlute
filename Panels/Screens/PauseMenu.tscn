@@ -190,6 +190,15 @@ text = "Exit"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 134.0
+offset_bottom = 28.3333
+text = "F2 to save Replay
+F3 to view Replay"
+
 [connection signal="button_down" from="PanelContainer/VBoxContainer/Continue" to="PanelContainer/VBoxContainer/Continue" method="_unfocus"]
 [connection signal="button_down" from="PanelContainer/VBoxContainer/Continue" to="PanelContainer/VBoxContainer/Continue" method="_down"]
 [connection signal="button_up" from="PanelContainer/VBoxContainer/Continue" to="PanelContainer/VBoxContainer/Continue" method="_focus"]
