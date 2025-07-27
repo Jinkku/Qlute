@@ -296,10 +296,10 @@ public partial class Gameplay : Control
 
 		return (float)(SettingsOperator.Gameplaycfg.Timeframe - startedtime + AudioOffset);
 	}
-	private int Get_Score(float pp, float maxpp, float multiplier) {
-		float baseScore = (pp / maxpp) * 1000000f;
-		float finalScore = baseScore * multiplier;
-		return (int)MathF.Round(finalScore);
+	private int Get_Score(double pp, double maxpp, float multiplier) {
+		double baseScore = (pp / maxpp) * 1000000;
+		double finalScore = baseScore * multiplier;
+		return (int)finalScore;
 	}
 
 	private void StartPlay()
