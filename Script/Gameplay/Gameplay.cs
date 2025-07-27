@@ -9,11 +9,13 @@ public class NotesEn {
 	public Sprite2D Node {get;set;}
 	public bool hit {get;set;}
 }
-public class KeyL {
-	public PanelContainer Node {get;set;}
-	public bool hit {get;set;}
-	public Tween Ani {get;set;}
+public class KeyL
+{
+	public PanelContainer Node { get; set; }
+	public bool hit { get; set; }
+	public Tween Ani { get; set; }
 }
+
 public partial class Gameplay : Control
 {
 	// Called when the node enters the scene tree for the first time.
@@ -28,30 +30,31 @@ public partial class Gameplay : Control
 	public int JudgeResult = -1;
 	public int nodeSize = 54;
 	public ColorRect meh { get; set; }
-	public ColorRect great {get;set;}
-	public ColorRect perfect {get;set;}
-	public float mshit {get;set;}
-	public float mshitold {get;set;}
+	public ColorRect great { get; set; }
+	public ColorRect perfect { get; set; }
+	public float mshit { get; set; }
+	public float mshitold { get; set; }
 	public long startedtime { get; set; } = 0;
 	public bool songstarted = false;
-	public Node2D noteblock {get;set;}
+	public Node2D noteblock { get; set; }
 	public bool hittextinit = false;
-	public Label hittext {get;set;}
-	public Tween hittextani {get;set;}
-	private Tween hitnoteani {get;set;}
-	private Tween HurtAnimation {get;set;}
-	public Vector2 hittextoldpos {get;set;}
-	public Timer WaitClock {get;set;}
+	public Label hittext { get; set; }
+	public Tween hittextani { get; set; }
+	private Tween hitnoteani { get; set; }
+	private Tween HurtAnimation { get; set; }
+	public Vector2 hittextoldpos { get; set; }
+	public Timer WaitClock { get; set; }
 	public List<NotesEn> Notes = new List<NotesEn>();
 	public int Noteindex = 1;
-	public TextureRect Beatmap_Background {get;set;}
-	private Node PauseMenu {get;set;}
-	private bool Finished {get;set;}
-	private int score {get;set;}
-	private IEnumerable<DanceCounter> dance {get;set;}
-	private int DanceIndex {get;set;}
-	private Label debugtext {get;set;}
-	public static bool Dead {get;set;}
+	public TextureRect Beatmap_Background { get; set; }
+	private Node PauseMenu { get; set; }
+	private bool Finished { get; set; }
+	private int score { get; set; }
+	private IEnumerable<DanceCounter> dance { get; set; }
+	private int DanceIndex { get; set; }
+	private Label debugtext { get; set; }
+	public static int ReplayINT { get; set;} // Track the progress of replay...
+	public static bool Dead { get; set; }
 	private int scoreint { get; set; }
 	private Control SpectatorPanel { get; set; }
 	private Tween scoretween { get; set; }
@@ -69,8 +72,8 @@ public partial class Gameplay : Control
 		MainScreenAnimation = CreateTween();
 		PivotOffset = new Vector2(Size.X / 2, Size.Y / 2);
 		MainScreenAnimation.TweenInterval(0.5f);
-		MainScreenAnimation.Parallel().TweenProperty(this, "modulate", new Color(1f,0.8f,0.8f,1f), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-		MainScreenAnimation.Parallel().TweenProperty(this, "position", new Vector2(Position.X, Position.Y+ 20), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		MainScreenAnimation.Parallel().TweenProperty(this, "modulate", new Color(1f, 0.8f, 0.8f, 1f), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		MainScreenAnimation.Parallel().TweenProperty(this, "position", new Vector2(Position.X, Position.Y + 20), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		MainScreenAnimation.Parallel().TweenProperty(this, "rotation", 0.25f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		MainScreenAnimation.Parallel().TweenProperty(AudioPlayer.Instance, "pitch_scale", 0.01f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		MainScreenAnimation.Parallel().TweenProperty(this, "scale", Scale * 0.9f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
@@ -83,7 +86,7 @@ public partial class Gameplay : Control
 		if (ModsOperator.Mods["npc"])
 		{
 			Random rnd = new Random();
-			for (int i = 0; i < ApiOperator.LeaderboardList.Count;i++)
+			for (int i = 0; i < ApiOperator.LeaderboardList.Count; i++)
 			{
 				var value = rnd.Next(1, maxrndvalue);
 				var entry = ApiOperator.LeaderboardList[i];
@@ -109,7 +112,7 @@ public partial class Gameplay : Control
 				}
 				entry.combo = Math.Max(entry.rcombo, entry.combo);
 				entry.Accuracy = ReloadAccuracy(entry.MAX, entry.GOOD, entry.MEH, entry.BAD);
-				
+
 				entry.score = Get_Score(SettingsOperator.Get_ppvalue(entry.MAX, entry.GOOD, entry.MEH, entry.BAD, ModsMulti.multiplier, entry.combo), SettingsOperator.Gameplaycfg.maxpp, ModsMulti.multiplier) / (1 + i);
 			}
 		}
@@ -140,6 +143,7 @@ public partial class Gameplay : Control
 
 	public override void _Ready()
 	{
+		ReplayINT = 0;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SpectatorPanel = GD.Load<PackedScene>("res://Panels/Overlays/SpectatorSettings.tscn").Instantiate().GetNode<Control>(".");
 		ApiOperator = GetNode<ApiOperator>("/root/ApiOperator");
@@ -242,26 +246,32 @@ public partial class Gameplay : Control
 			}
 		}
 
-		if (SettingsOperator.SpectatorMode) AddChild(SpectatorPanel);
+		if (SettingsOperator.SpectatorMode || SettingsOperator.ReplayMode) AddChild(SpectatorPanel);
+		if (!SettingsOperator.ReplayMode) Replay.ResetReplay();
+		GD.Print($"Replay mode: {SettingsOperator.ReplayMode}");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 
 
-	public Texture2D NoteSkinBack {get;set;}
-	public Texture2D NoteSkinFore {get;set;}
-	public Color chartclear = new Color(0.03f,0.03f,0.03f,0.78f);
-	public Color chartbeam = new Color(0.20f,0.0f,0.20f,0.78f);
-	public Color activehit = new Color(0.20f,0.0f,0.20f);
-	public Color idlehit = new Color(0.03f,0.03f,0.03f);
-	public void reloadSkin(){
+	public Texture2D NoteSkinBack { get; set; }
+	public Texture2D NoteSkinFore { get; set; }
+	public Color chartclear = new Color(0.03f, 0.03f, 0.03f, 0.78f);
+	public Color chartbeam = new Color(0.20f, 0.0f, 0.20f, 0.78f);
+	public Color activehit = new Color(0.20f, 0.0f, 0.20f);
+	public Color idlehit = new Color(0.03f, 0.03f, 0.03f);
+	public void reloadSkin()
+	{
 		NoteSkinBack = GD.Load<Texture2D>("res://Skin/Game/Backgroundnote.svg");
 		NoteSkinFore = GD.Load<Texture2D>("res://Skin/Game/Foregroundnote.svg");
 		nodeSize = (int)NoteSkinBack.GetSize().Y;
 	}
-	public void hitnote(int Keyx,bool hit){
+	public void hitnote(int Keyx, bool hit, int est)
+	{
 		var key = Keys[Keyx];
-		if (hit){
+		if (hit)
+		{
+			if (!SettingsOperator.ReplayMode) Replay.AddReplay(est, Keyx);
 			key.Node.SelfModulate = activehit;
 			key.Ani?.Kill(); // Abort the previous animation
 			key.Ani = Keys[Keyx].Node.CreateTween();
@@ -269,13 +279,13 @@ public partial class Gameplay : Control
 			key.Ani.Play();
 		}
 		key.hit = hit;
-		}
+	}
 
 	public const float MAX_TIME_RANGE = 11485;
-    public static float ComputeScrollTime(float scrollSpeed) => MAX_TIME_RANGE / scrollSpeed;
+	public static float ComputeScrollTime(float scrollSpeed) => MAX_TIME_RANGE / scrollSpeed;
 	public static float ReloadAccuracy(int max, int great, int meh, int bad)
 	{
-		 return ((float)max + ((float)great / 2) + ((float)meh / 3)) / ((float)max + (float)great + (float)meh + (float)bad);
+		return ((float)max + ((float)great / 2) + ((float)meh / 3)) / ((float)max + (float)great + (float)meh + (float)bad);
 	}
 
 	public static void ReloadppCounter()
@@ -289,14 +299,17 @@ public partial class Gameplay : Control
 
 	public float GetRemainingTime(bool GameMode = false, float delta = 1f)
 	{
-		SettingsOperator.Gameplaycfg.Timeframe = -WaitClock.TimeLeft + 
+		SettingsOperator.Gameplaycfg.Timeframe = -WaitClock.TimeLeft +
 			SmoothPosition(AudioPlayer.Instance.GetPlaybackPosition(), ref smoothedPlaybackPosition, delta);
 
 		var AudioOffset = GameMode ? SettingsOperator.AudioOffset * 0.001f : 0f;
 
-		return (float)(SettingsOperator.Gameplaycfg.Timeframe - startedtime + AudioOffset);
+		SettingsOperator.Gameplaycfg.Timeframe = SettingsOperator.Gameplaycfg.Timeframe - startedtime + AudioOffset;
+
+		return (float)(SettingsOperator.Gameplaycfg.Timeframe);
 	}
-	private int Get_Score(float pp, float maxpp, float multiplier) {
+	private int Get_Score(float pp, float maxpp, float multiplier)
+	{
 		float baseScore = (pp / maxpp) * 1000000f;
 		float finalScore = baseScore * multiplier;
 		return (int)MathF.Round(finalScore);
@@ -307,6 +320,37 @@ public partial class Gameplay : Control
 		songstarted = true;
 		AudioPlayer.Instance.Play();
 	}
+
+
+	private void CheckReplayKey(int est)
+	{
+			// Replay part (if enabled)
+			if (SettingsOperator.ReplayMode)
+			{
+				var Replayindex = Replay.ReplayCache.ElementAt(ReplayINT);
+				if (est > Replayindex.Time)
+				{
+					if (ReplayINT < Replay.ReplayCache.Count())
+					{
+						hitnote(Replayindex.NoteTap, true, est);
+						ReplayINT++;
+					}
+				}
+			}
+	}
+
+	private void PlayerKeyCheck(int est){
+			for (int i = 0; i < 4; i++)
+			{
+				if (Input.IsActionJustPressed("Key" + (i + 1)) && !ModsOperator.Mods["auto"])
+				{
+					hitnote(i, true, est);
+				}
+				else if (Input.IsActionJustReleased("Key" + (i + 1)) && !ModsOperator.Mods["auto"])
+				{
+					hitnote(i, false, est);
+				}
+			}}
 
 	public override void _Process(double delta)
 	{
@@ -332,6 +376,7 @@ public partial class Gameplay : Control
 			{
 				Finished = true;
 				ApiOperator.SubmitScore();
+				Replay.SaveReplay();
 				if (!SettingsOperator.Marathon)
 				{
 					AddChild(GD.Load<PackedScene>("res://Panels/Screens/EndScreen.tscn").Instantiate());
@@ -355,17 +400,6 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg.Accuracy = ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 			ReloadppCounter();
 			int Ttick = 0;
-			for (int i = 0; i < 4; i++)
-			{
-				if (Input.IsActionJustPressed("Key" + (i + 1)) && !ModsOperator.Mods["auto"])
-				{
-					hitnote(i, true);
-				}
-				else if (Input.IsActionJustReleased("Key" + (i + 1)) && !ModsOperator.Mods["auto"])
-				{
-					hitnote(i, false);
-				}
-			}
 			if (Input.IsActionJustPressed("pausemenu") && SettingsOperator.SpectatorMode)
 			{
 				BeatmapBackground.FlashEnable = true;
@@ -390,6 +424,9 @@ public partial class Gameplay : Control
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 			}
 			//debugtext.Text = $"est: {est}\nDanceIndex:{DanceIndex}\nTimeindex:{dance.ElementAt(DanceIndex).time}";
+
+
+
 			if ((int)est > dance.ElementAt(DanceIndex).time)
 			{
 				BeatmapBackground.FlashEnable = dance.ElementAt(DanceIndex).flash;
@@ -399,6 +436,8 @@ public partial class Gameplay : Control
 				}
 			}
 
+			PlayerKeyCheck((int)est);
+			CheckReplayKey((int)est);
 			// Gamenotes
 
 			var viewportSize = 0f;
@@ -434,11 +473,11 @@ public partial class Gameplay : Control
 					}
 					if (Note.Node != null && (int)notex + nodeSize > HitPoint && (int)notex + nodeSize < HitPoint + SettingsOperator.MehJudge && ModsOperator.Mods["auto"])
 					{
-						hitnote((int)Note.Node.GetMeta("part"), true);
+						hitnote((int)Note.Node.GetMeta("part"), true, (int)est);
 					}
 					else if (ModsOperator.Mods["auto"])
 					{
-						hitnote((int)Note.Node.GetMeta("part"), false);
+						hitnote((int)Note.Node.GetMeta("part"), false, (int)est);
 					}
 					if (ModsOperator.Mods["slice"] && Note.Node != null)
 					{
@@ -457,7 +496,6 @@ public partial class Gameplay : Control
 						{
 							// NPC Part
 							CheckNPCValues();
-
 
 							mshitold = HitPoint + 5;
 							Keys[(int)Note.Node.GetMeta("part")].hit = false;
@@ -508,27 +546,35 @@ public partial class Gameplay : Control
 		hittextani.Play();
 		hittext.Text = word;
 	}
-	public int checkjudge(int timing,bool keyvalue, Sprite2D node,bool visibility){
-		if (timing+nodeSize > HitPoint-SettingsOperator.PerfectJudge && timing+nodeSize < HitPoint+SettingsOperator.PerfectJudge && keyvalue && visibility){
+	public int checkjudge(int timing, bool keyvalue, Sprite2D node, bool visibility)
+	{
+		if (timing + nodeSize > HitPoint - SettingsOperator.PerfectJudge && timing + nodeSize < HitPoint + SettingsOperator.PerfectJudge && keyvalue && visibility)
+		{
 			SettingsOperator.Gameplaycfg.Max++;
 			SettingsOperator.Gameplaycfg.Combo++;
-			Hittext("Perfect", new Color(0f,0.71f,1f));
+			Hittext("Perfect", new Color(0f, 0.71f, 1f));
 			HealthBar.Heal(5);
 			return 0;
-		} else if (timing+nodeSize > HitPoint-(SettingsOperator.GreatJudge/2) && timing+nodeSize < HitPoint+(SettingsOperator.GreatJudge/2) && keyvalue && visibility){
+		}
+		else if (timing + nodeSize > HitPoint - (SettingsOperator.GreatJudge / 2) && timing + nodeSize < HitPoint + (SettingsOperator.GreatJudge / 2) && keyvalue && visibility)
+		{
 			SettingsOperator.Gameplaycfg.Great++;
 			SettingsOperator.Gameplaycfg.Combo++;
-			Hittext("Great", new Color(0f,1f,0.03f));
+			Hittext("Great", new Color(0f, 1f, 0.03f));
 			HealthBar.Heal(3);
 			return 1;
-		}else if (timing+nodeSize > HitPoint-(SettingsOperator.MehJudge/2) && timing+nodeSize < HitPoint+(SettingsOperator.MehJudge/2) && keyvalue && visibility){
-			Hittext("Meh", new Color(1f,0.66f,0f));
+		}
+		else if (timing + nodeSize > HitPoint - (SettingsOperator.MehJudge / 2) && timing + nodeSize < HitPoint + (SettingsOperator.MehJudge / 2) && keyvalue && visibility)
+		{
+			Hittext("Meh", new Color(1f, 0.66f, 0f));
 			SettingsOperator.Gameplaycfg.Meh++;
 			SettingsOperator.Gameplaycfg.Combo++;
 			HealthBar.Heal(1);
 			return 2;
-		}else if (timing+nodeSize > GetViewportRect().Size.Y+60 && visibility ){
-			Hittext("Miss", new Color(1f,0.28f,0f));
+		}
+		else if (timing + nodeSize > GetViewportRect().Size.Y + 60 && visibility)
+		{
+			Hittext("Miss", new Color(1f, 0.28f, 0f));
 			SettingsOperator.Gameplaycfg.Bad++;
 			if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://Skin/Sounds/combobreak.wav");
 			SettingsOperator.Gameplaycfg.Combo = 0;
@@ -544,7 +590,8 @@ public partial class Gameplay : Control
 				.SetEase(Tween.EaseType.Out);
 			return 3;
 		}
-		 else{
+		else
+		{
 			return 4;
 		}
 	}

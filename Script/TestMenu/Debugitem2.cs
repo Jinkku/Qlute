@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 public partial class Debugitem2 : Label
 {
@@ -23,6 +24,13 @@ public partial class Debugitem2 : Label
 		{
 			letgo = false; // Reset letgo when the key is released
 		}
+		var moka = 0;
+		try
+		{
+			moka = Replay.ReplayCache.ElementAt(Gameplay.ReplayINT).Time;
+		} catch {
+			moka = 0;
+		}
 		if (Visible)
 		{
 			Text = "Debug Infomation\n" +
@@ -33,8 +41,9 @@ public partial class Debugitem2 : Label
 				"Song ID: " + SettingsOperator.Sessioncfg["SongID"].ToString() + "\n" +
 				"pp: " + SettingsOperator.Gameplaycfg.pp + "\n" +
 				"Max pp: " + SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier + "\n" +
-				"Score: " + SettingsOperator.Gameplaycfg.Score  + "\n" +
-				"Avg Timeframe: " + SettingsOperator.Gameplaycfg.Timeframe.ToString();
+				"Score: " + SettingsOperator.Gameplaycfg.Score + "\n" +
+				"Timeframe: " + AudioPlayer.Instance.GetPlaybackPosition() / 0.001 + "\n" +
+				"Replay file index: " + moka;
 		}
 	}
 }

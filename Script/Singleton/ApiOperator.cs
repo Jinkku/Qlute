@@ -35,15 +35,17 @@ public partial class ApiOperator : Node
 	public static string Beatmapapi = "https://catboy.best";
 	public void SubmitScore()
 	{
-		int BeatmapID = (int)SettingsOperator.Sessioncfg["osubeatid"];
-		int BeatmapSetID = (int)SettingsOperator.Sessioncfg["osubeatidset"];
-		double MAX = SettingsOperator.Gameplaycfg.Max;
-		double GREAT = SettingsOperator.Gameplaycfg.Great;
-		double MEH = SettingsOperator.Gameplaycfg.Meh;
-		double BAD = SettingsOperator.Gameplaycfg.Bad;
-		double COMBO = SettingsOperator.Gameplaycfg.MaxCombo;
-		double timetotal = SettingsOperator.Gameplaycfg.TimeTotal;
-		string[] Headers = new string[] {
+		if (!SettingsOperator.ReplayMode && !SettingsOperator.SpectatorMode)
+		{
+			int BeatmapID = (int)SettingsOperator.Sessioncfg["osubeatid"];
+			int BeatmapSetID = (int)SettingsOperator.Sessioncfg["osubeatidset"];
+			double MAX = SettingsOperator.Gameplaycfg.Max;
+			double GREAT = SettingsOperator.Gameplaycfg.Great;
+			double MEH = SettingsOperator.Gameplaycfg.Meh;
+			double BAD = SettingsOperator.Gameplaycfg.Bad;
+			double COMBO = SettingsOperator.Gameplaycfg.MaxCombo;
+			double timetotal = SettingsOperator.Gameplaycfg.TimeTotal;
+			string[] Headers = new string[] {
 			$"BeatmapID: {BeatmapID}",
 			$"BeatmapSetID: {BeatmapSetID}",
 			$"USERNAME: {SettingsOperator.GetSetting("username")}",
@@ -56,7 +58,8 @@ public partial class ApiOperator : Node
 			$"COMBO: {COMBO}",
 			$"Mods: {ModsOperator.GetModAlias()}"
 		};
-		SubmitApi.Request(SettingsOperator.GetSetting("api") + "apiv2/submitscore", Headers);
+			SubmitApi.Request(SettingsOperator.GetSetting("api") + "apiv2/submitscore", Headers);
+		}
 	}
 	public static List<LeaderboardEntry> LeaderboardList = new List<LeaderboardEntry>();
 	public void _LeaderboardAPIDone(long result, long responseCode, string[] headers, byte[] body)

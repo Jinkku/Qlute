@@ -19,10 +19,10 @@ public partial class ModsOperator : Node
 	public static void Refresh()
 	{
         if (ModsOperator.Mods["auto"])
-        {
-            SettingsOperator.SpectatorMode = true;
-        }
-        else SettingsOperator.SpectatorMode = false;
+		{
+			SettingsOperator.SpectatorMode = true;
+		}
+		else SettingsOperator.SpectatorMode = false;
 		
 		if (Mods["ht"])
 		{
