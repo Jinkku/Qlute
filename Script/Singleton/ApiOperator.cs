@@ -35,7 +35,7 @@ public partial class ApiOperator : Node
 	public static string Beatmapapi = "https://catboy.best";
 	public void SubmitScore()
 	{
-		if (!SettingsOperator.ReplayMode && !SettingsOperator.SpectatorMode)
+		if (!SettingsOperator.SpectatorMode)
 		{
 			int BeatmapID = (int)SettingsOperator.Sessioncfg["osubeatid"];
 			int BeatmapSetID = (int)SettingsOperator.Sessioncfg["osubeatidset"];

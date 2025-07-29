@@ -18,24 +18,20 @@ public static class Replay
     {
         ReplayCache.Clear();
         GD.Print("[Qlute] Resetting Replay cache...");
-        //FilePath = $"{SettingsOperator.replaydir}/[{ApiOperator.Username}] [{SettingsOperator.Sessioncfg["beatmapmapper"].ToString()}] {SettingsOperator.Sessioncfg["beatmapartist"].ToString()} - {SettingsOperator.Sessioncfg["beatmaptitle"].ToString()} [{SettingsOperator.Sessioncfg["beatmapdiff"].ToString()}]-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.qrf";
-        FilePath = $"{SettingsOperator.replaydir}/Testreplay.qrf";
+        FilePath = $"{SettingsOperator.replaydir}/[{ApiOperator.Username}] [{SettingsOperator.Sessioncfg["beatmapmapper"].ToString()}] {SettingsOperator.Sessioncfg["beatmapartist"].ToString()} - {SettingsOperator.Sessioncfg["beatmaptitle"].ToString()} [{SettingsOperator.Sessioncfg["beatmapdiff"].ToString()}]-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.qrf";
         GD.Print($"[Qlute] Set file path to {FilePath}");
-        SettingsOperator.ReplayMode = false;
+        SettingsOperator.SpectatorMode = false;
     }
     /// <summary>
     /// Add a timestamp for the replay
     /// </summary>
     public static void AddReplay(int Time, int NoteTap)
     {
-        if (!SettingsOperator.ReplayMode)
+        ReplayCache.Add(new ReplayLegend
         {
-            ReplayCache.Add(new ReplayLegend
-            {
-                Time = Time,
-                NoteTap = NoteTap
-            });
-        }
+            Time = Time,
+            NoteTap = NoteTap
+        });
     }
 /// <summary>
 /// Saves the replay file to it's desired path.
@@ -84,6 +80,6 @@ public static class Replay
             }
         }
         GD.Print("[Qlute] Completed Successfully!");
-        SettingsOperator.ReplayMode = true;
+        SettingsOperator.SpectatorMode = true;
 	}
 }

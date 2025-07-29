@@ -436,7 +436,7 @@ public partial class SongSelect : Control
 	}
 	private void _resetreplay()
 	{
-		SettingsOperator.ReplayMode = false;
+		SettingsOperator.SpectatorMode = false;
 	}
 
 	private void _Start(){

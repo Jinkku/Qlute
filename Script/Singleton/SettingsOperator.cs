@@ -33,7 +33,6 @@ public partial class SettingsOperator : Node
     public int SampleVol {get;set;}
     public int scrollspeed {get;set;}
     public static bool SpectatorMode { get; set; } = false;
-    public static bool ReplayMode { get; set; } = false;
     public static float AllMiliSecondsFromBeatmap { get; set; }
     public static float MiliSecondsFromBeatmap {get;set;}
     public static int MiliSecondsFromBeatmapTimes {get;set;}

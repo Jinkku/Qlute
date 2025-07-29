@@ -44,13 +44,13 @@ public partial class Gameplay : Control
 	private Tween HurtAnimation { get; set; }
 	public Vector2 hittextoldpos { get; set; }
 	public Timer WaitClock { get; set; }
-	public List<NotesEn> Notes = new List<NotesEn>();
+	public static List<NotesEn> Notes = new List<NotesEn>();
 	public int Noteindex = 1;
 	public TextureRect Beatmap_Background { get; set; }
 	private Node PauseMenu { get; set; }
 	private bool Finished { get; set; }
 	private int score { get; set; }
-	private IEnumerable<DanceCounter> dance { get; set; }
+	public static IEnumerable<DanceCounter> dance { get; set; }
 	private int DanceIndex { get; set; }
 	private Label debugtext { get; set; }
 	public static int ReplayINT { get; set;} // Track the progress of replay...
@@ -141,6 +141,47 @@ public partial class Gameplay : Control
 		}
 	}
 
+	public static void ReloadBeatmap(string filepath)
+	{
+		Notes.Clear();
+		using var file = FileAccess.Open(filepath, FileAccess.ModeFlags.Read);
+		var text = file.GetAsText();
+		var lines = text.Split("\n");
+		var part = 0;
+		var timing = 0;
+		var t = "";
+		var timen = -1;
+		var isHitObjectSection = false;
+		dance = (IEnumerable<DanceCounter>)SettingsOperator.Beatmaps[(int)SettingsOperator.Sessioncfg["SongID"]].Dance;
+		foreach (string line in lines)
+		{
+			if (line.Trim() == "[HitObjects]")
+			{
+				isHitObjectSection = true;
+				continue;
+			}
+
+			if (isHitObjectSection)
+			{
+				// Break if we reach an empty line or another section
+				if (string.IsNullOrWhiteSpace(line) || line.StartsWith('['))
+					break;
+				t = line;
+				timing = Convert.ToInt32(line.Split(",")[2]);
+				part = Convert.ToInt32(line.Split(",")[0]);
+				if (part == 64) { part = 0; }
+				else if (part == 192) { part = 1; }
+				else if (part == 320) { part = 2; }
+				else if (part == 448) { part = 3; }
+				else if (part < 128) { part = 0; }
+				else if (part < 256) { part = 1; }
+				else if (part < 384) { part = 2; }
+				else if (part < 512) { part = 3; }
+				timen = -timing;
+				Notes.Add(new NotesEn { timing = timen, NoteSection = part });
+			}
+		}
+	}
 	public override void _Ready()
 	{
 		ReplayINT = 0;
@@ -194,8 +235,7 @@ public partial class Gameplay : Control
 		perfect.Visible = false;
 		GetNode<ColorRect>("Playfield/Guard").AddChild(perfect);
 
-		//Ttiming = GetNode<Label>("Time");
-		//Hits = GetNode<Label>("Hits");
+
 		foreach (int i in Enumerable.Range(1, 4))
 		{
 			var notet = GetNode<PanelContainer>("Playfield/ChartSections/Section" + i);
@@ -208,50 +248,31 @@ public partial class Gameplay : Control
 
 		SettingsOperator.ResetScore();
 		SettingsOperator.Resetms();
-		using var file = FileAccess.Open(SettingsOperator.Sessioncfg["beatmapurl"].ToString(), FileAccess.ModeFlags.Read);
-		var text = file.GetAsText();
-		var lines = text.Split("\n");
-		var part = 0;
-		var timing = 0;
-		var t = "";
-		var timen = -1;
-		var isHitObjectSection = false;
-		dance = (IEnumerable<DanceCounter>)SettingsOperator.Beatmaps[(int)SettingsOperator.Sessioncfg["SongID"]].Dance;
-		foreach (string line in lines)
-		{
-			if (line.Trim() == "[HitObjects]")
-			{
-				isHitObjectSection = true;
-				continue;
-			}
+		ReloadBeatmap(SettingsOperator.Sessioncfg["beatmapurl"].ToString());
 
-			if (isHitObjectSection)
+		// If auto is enabled, it will make a Replay file with Auto being the player playing the beatmap. Before this it didn't make the replay file, it just plays.
+		// I am doing this because it's more simpler for me and don't have to worry about breaking auto (Qlutina)
+		if (ModsOperator.Mods["auto"]) {
+			Replay.ResetReplay(); // Resets the replay to be cleared before making the auto replay.
+			SettingsOperator.SpectatorMode = true; // Enables Spectator Mode to play the Replay, without this it won't know it even existed lol :p
+			foreach (NotesEn note in Notes)
 			{
-				// Break if we reach an empty line or another section
-				if (string.IsNullOrWhiteSpace(line) || line.StartsWith('['))
-					break;
-				t = line;
-				timing = Convert.ToInt32(line.Split(",")[2]);
-				part = Convert.ToInt32(line.Split(",")[0]);
-				if (part == 64) { part = 0; }
-				else if (part == 192) { part = 1; }
-				else if (part == 320) { part = 2; }
-				else if (part == 448) { part = 3; }
-				else if (part < 128) { part = 0; }
-				else if (part < 256) { part = 1; }
-				else if (part < 384) { part = 2; }
-				else if (part < 512) { part = 3; }
-				timen = -timing;
-				Notes.Add(new NotesEn { timing = timen, NoteSection = part });
+				var time = -note.timing;
+				var key = note.NoteSection;
+				Replay.AddReplay(time, key); // Adds the input into the Replay Cache.
 			}
 		}
 
-		if (SettingsOperator.SpectatorMode || SettingsOperator.ReplayMode) AddChild(SpectatorPanel);
-		if (!SettingsOperator.ReplayMode) Replay.ResetReplay();
-		GD.Print($"Replay mode: {SettingsOperator.ReplayMode}");
+
+
+		if (SettingsOperator.SpectatorMode)
+			{
+				AddChild(SpectatorPanel);
+			}
+			else Replay.ResetReplay();
+		GD.Print($"Spectator mode: {SettingsOperator.SpectatorMode}");
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
 
 
 	public Texture2D NoteSkinBack { get; set; }
@@ -262,8 +283,8 @@ public partial class Gameplay : Control
 	public Color idlehit = new Color(0.03f, 0.03f, 0.03f);
 	public void reloadSkin()
 	{
-		NoteSkinBack = GD.Load<Texture2D>("res://Skin/Game/Backgroundnote.svg");
-		NoteSkinFore = GD.Load<Texture2D>("res://Skin/Game/Foregroundnote.svg");
+		NoteSkinBack = GD.Load<Texture2D>("res://Skin/Game/Backgroundnote.png");
+		NoteSkinFore = GD.Load<Texture2D>("res://Skin/Game/Foregroundnote.png");
 		nodeSize = (int)NoteSkinBack.GetSize().Y;
 	}
 	public void hitnote(int Keyx, bool hit, int est)
@@ -271,7 +292,7 @@ public partial class Gameplay : Control
 		var key = Keys[Keyx];
 		if (hit)
 		{
-			if (!SettingsOperator.ReplayMode) Replay.AddReplay(est, Keyx);
+			if (!SettingsOperator.SpectatorMode) Replay.AddReplay(est, Keyx);
 			key.Node.SelfModulate = activehit;
 			key.Ani?.Kill(); // Abort the previous animation
 			key.Ani = Keys[Keyx].Node.CreateTween();
@@ -294,9 +315,15 @@ public partial class Gameplay : Control
 	}
 	private float smoothedPlaybackPosition = 0f;
 
+    /// <summary>
+    /// Smooths position of the playback
+    /// </summary>
 	private float SmoothPosition(float current, ref float previous, float delta) =>
 		previous = Mathf.Lerp(previous, current, delta * 10f);
 
+    /// <summary>
+    /// Game Clock
+    /// </summary>
 	public float GetRemainingTime(bool GameMode = false, float delta = 1f)
 	{
 		SettingsOperator.Gameplaycfg.Timeframe = -WaitClock.TimeLeft +
@@ -308,11 +335,17 @@ public partial class Gameplay : Control
 
 		return (float)(SettingsOperator.Gameplaycfg.Timeframe);
 	}
+    /// <summary>
+    /// Get's the Score calculated
+    /// </summary>
 	private int Get_Score(double pp, double maxpp, float multiplier) {
 		double baseScore = (pp / maxpp) * 1000000;
 		double finalScore = baseScore * multiplier;
 		return (int)finalScore;
 	}
+    /// <summary>
+    /// Starts Playback
+    /// </summary>
 
 	private void StartPlay()
 	{
@@ -321,36 +354,43 @@ public partial class Gameplay : Control
 	}
 
 
+    /// <summary>
+    /// If SettingsOperator.ReplayMode is enabled, this will check at the specified index of the replay cache to simulate a keypress in Replay Mode.
+    /// </summary>
 	private void CheckReplayKey(int est)
 	{
-			// Replay part (if enabled)
-			if (SettingsOperator.ReplayMode)
+		// Replay part (if enabled)
+		if (SettingsOperator.SpectatorMode && Replay.ReplayCache.Count >0)
+		{
+			var Replayindex = Replay.ReplayCache[Math.Min(ReplayINT,Replay.ReplayCache.Count-1)];
+			if (est > Replayindex.Time - 50) // Hardcoding this until further notice....
 			{
-				var Replayindex = Replay.ReplayCache.ElementAt(ReplayINT);
-				if (est > Replayindex.Time)
+				if (ReplayINT < Replay.ReplayCache.Count())
 				{
-					if (ReplayINT < Replay.ReplayCache.Count())
-					{
-						hitnote(Replayindex.NoteTap, true, est);
-						ReplayINT++;
-					}
+					hitnote(Replayindex.NoteTap, true, est);
+					ReplayINT++;
 				}
 			}
+		}
 	}
+    /// <summary>
+    /// This is the one that controls the Player input.
+    /// </summary>
 
 	private void PlayerKeyCheck(int est){
 			for (int i = 0; i < 4; i++)
 			{
-				if (Input.IsActionJustPressed("Key" + (i + 1)) && !ModsOperator.Mods["auto"])
+				if (Input.IsActionJustPressed("Key" + (i + 1)) && !SettingsOperator.SpectatorMode)
 				{
 					hitnote(i, true, est);
 				}
-				else if (Input.IsActionJustReleased("Key" + (i + 1)) && !ModsOperator.Mods["auto"])
+				else if (Input.IsActionJustReleased("Key" + (i + 1)) && !SettingsOperator.SpectatorMode)
 				{
 					hitnote(i, false, est);
 				}
 			}}
 
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 
@@ -470,17 +510,9 @@ public partial class Gameplay : Control
 						notefront.Texture = NoteSkinFore;
 						playfieldpart.AddChild(Note.Node);
 					}
-					if (Note.Node != null && (int)notex + nodeSize > HitPoint && (int)notex + nodeSize < HitPoint + SettingsOperator.MehJudge && ModsOperator.Mods["auto"])
-					{
-						hitnote((int)Note.Node.GetMeta("part"), true, (int)est);
-					}
-					else if (ModsOperator.Mods["auto"])
-					{
-						hitnote((int)Note.Node.GetMeta("part"), false, (int)est);
-					}
 					if (ModsOperator.Mods["slice"] && Note.Node != null)
 					{
-						Note.Node.SelfModulate = new Color(1f, 1f, 1f, Math.Min(HitPoint, Note.Node.Position.Y - 200) / HitPoint);
+						Note.Node.Modulate = new Color(1f, 1f, 1f, Math.Min(HitPoint, Note.Node.Position.Y - 200) / HitPoint);
 					}
 					else if (ModsOperator.Mods["black-out"] && Note.Node != null)
 					{

@@ -123,7 +123,7 @@ public partial class ResultsScreen : Control
 	}
 	private void _resetreplay()
 	{
-		SettingsOperator.ReplayMode = false;
+		SettingsOperator.SpectatorMode = false;
 	}
 	public void _retry()
 	{

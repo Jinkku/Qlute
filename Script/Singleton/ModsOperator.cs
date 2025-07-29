@@ -17,13 +17,7 @@ public partial class ModsOperator : Node
 		Refresh();
 	}
 	public static void Refresh()
-	{
-        if (ModsOperator.Mods["auto"])
-		{
-			SettingsOperator.SpectatorMode = true;
-		}
-		else SettingsOperator.SpectatorMode = false;
-		
+	{		
 		if (Mods["ht"])
 		{
 			AudioPlayer.Instance.PitchScale = 0.5f;
