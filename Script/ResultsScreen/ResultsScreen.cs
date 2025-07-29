@@ -34,7 +34,6 @@ public partial class ResultsScreen : Control
 	private Button WatchReplay { get; set; }
 	private void _watchreplay()
 	{
-		GD.Print(Replay.FilePath);
 		Replay.ReloadReplay(Replay.FilePath);
 		_retry();
 	}

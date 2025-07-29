@@ -44,6 +44,10 @@ public partial class PauseMenu : Control
 		Visible = false;
 		FadeOut();
 	}
+	private void _resetreplay()
+	{
+		SettingsOperator.SpectatorMode = false;
+	}
 	private void _retry()
 	{
 		FadeOut();
@@ -54,7 +58,22 @@ public partial class PauseMenu : Control
 	private Control FocusOwner { get; set; }
 	public override void _Process(double delta)
 	{
-		if (( Input.IsActionJustPressed("ui_up") || Input.IsActionJustPressed("ui_down") ) && GetViewport().GuiGetFocusOwner() == null)
+
+		if (Input.IsActionJustPressed("Save Replay"))
+		{
+			Replay.SaveReplay();
+		}
+		else if (Input.IsActionJustPressed("View Replay"))
+		{
+			Replay.SaveReplay();
+			Replay.ReloadReplay(Replay.FilePath);
+			_retry();
+		}
+
+
+
+
+		if ((Input.IsActionJustPressed("ui_up") || Input.IsActionJustPressed("ui_down")) && GetViewport().GuiGetFocusOwner() == null)
 		{
 			foreach (Button Node in GetNode<VBoxContainer>("PanelContainer/VBoxContainer").GetChildren())
 			{
