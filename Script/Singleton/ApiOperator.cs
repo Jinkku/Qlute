@@ -26,9 +26,10 @@ public partial class ApiOperator : Node
 {
 	// Called when the node enters the scene tree for the first time.
 	public static HttpRequest LoginApi { get; set; }
-	public static HttpRequest InfoApi { get; set; }
-	public static HttpRequest SubmitApi { get; set; }
+	public  HttpRequest InfoApi { get; set; }
+	public  HttpRequest SubmitApi { get; set; }
 	public static HttpRequest LeaderboardAPI { get; set; }
+	public  HttpRequest StatusChecker { get; set; }
 	public static string Username = "Guest";
 	public static string PasswordHash = null;
 	private SettingsOperator SettingsOperator { get; set; }
@@ -111,6 +112,7 @@ public partial class ApiOperator : Node
 		InfoApi = new HttpRequest();
 		SubmitApi = new HttpRequest();
 		LeaderboardAPI = new HttpRequest();
+		StatusChecker = new HttpRequest();
 		LoginApi.Timeout = 3;
 		InfoApi.Timeout = 3;
 		LeaderboardAPI.Timeout = 3;
@@ -118,6 +120,7 @@ public partial class ApiOperator : Node
 		AddChild(LoginApi);
 		AddChild(SubmitApi);
 		AddChild(LeaderboardAPI);
+		AddChild(StatusChecker);
 		LoginApi.Connect("request_completed", new Callable(this, nameof(_on_login_api_request_completed)));
 		LeaderboardAPI.Connect("request_completed", new Callable(this, nameof(_LeaderboardAPIDone)));
 		InfoApi.Connect("request_completed", new Callable(this, nameof(_on_info_request_completed)));
@@ -206,17 +209,17 @@ public partial class ApiOperator : Node
 		}
 	}
 	public static string ComputeSha256Hash(string rawData)
-    {
-        byte[] bytes = SHA256.HashData(Encoding.UTF8.GetBytes(rawData));
-        StringBuilder builder = new StringBuilder();
-        foreach (byte b in bytes)
-        {
-            builder.Append(b.ToString("x2")); // Convert byte to hexadecimal
-        }
-        return builder.ToString();
-    }
+	{
+		byte[] bytes = SHA256.HashData(Encoding.UTF8.GetBytes(rawData));
+		StringBuilder builder = new StringBuilder();
+		foreach (byte b in bytes)
+		{
+			builder.Append(b.ToString("x2")); // Convert byte to hexadecimal
+		}
+		return builder.ToString();
+	}
 
-    public static string Login(string username, string password)
+	public static string Login(string username, string password)
 	{
 		SettingsOperator.Sessioncfg["loggingin"] = true;
 		Username = username;
@@ -227,5 +230,42 @@ public partial class ApiOperator : Node
 		};
 		var msg = LoginApi.Request(SettingsOperator.GetSetting("api") + "apiv2/chkprofile", Headers);
 		return msg.ToString();
+	}
+	
+	private long Timer { get; set; }
+
+	private void CheckStatus()
+	{
+		var Status = "N/A";
+		var Title = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "";
+		var Artist = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
+		var Difficulty = SettingsOperator.Sessioncfg["beatmapdiff"]?.ToString() ?? "";
+		var Mapper = SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
+		if (GetTree().CurrentScene.Name == "Gameplay")
+		{
+			Status = $"Playing {Artist} - {Title} by {Mapper} [{Difficulty}]";
+		}
+		else if (GetTree().CurrentScene.Name == "BrowseCatalog")
+		{
+			Status = "Browsing for new songs...";
+		}
+		else
+		{
+			Status = $"Listening to {Artist} - {Title}";
+		}
+		string[] Headers = new string[] {
+		$"NOWPLAYING: {Status}",
+		$"USERNAME: {SettingsOperator.GetSetting("username")}",
+		$"PASSWORD: {SettingsOperator.GetSetting("password")}",
+		};
+		StatusChecker.Request(SettingsOperator.GetSetting("api") + "apiv2/setstatus", Headers);
+	}
+	public override void _Process(double delta)
+	{
+		if ((bool)SettingsOperator.Sessioncfg["loggedin"] && DateTimeOffset.Now.ToUnixTimeSeconds() - Timer > 3)
+		{
+			Timer = DateTimeOffset.Now.ToUnixTimeSeconds();
+			CheckStatus();
+		}
 	}
 }
