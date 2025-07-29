@@ -130,6 +130,7 @@ content_margin_right = 10.0
 content_margin_bottom = 5.0
 
 [node name="TopPanel" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -140,12 +141,14 @@ mouse_filter = 2
 
 [node name="Wabamp" type="AnimationPlayer" parent="."]
 unique_name_in_owner = true
+process_mode = 3
 libraries = {
 &"": SubResource("AnimationLibrary_dtwww")
 }
 
 [node name="InfoBar" type="ColorRect" parent="."]
 unique_name_in_owner = true
+process_mode = 3
 z_index = 1
 layout_mode = 1
 anchors_preset = 10
@@ -156,6 +159,7 @@ color = Color(0.0383, 0.023, 0.05, 0.784314)
 script = ExtResource("1_bm6kj")
 
 [node name="Shadow" type="TextureRect" parent="InfoBar"]
+process_mode = 3
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -169,6 +173,7 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_gkq3o")
 
 [node name="AccountButton" type="Button" parent="InfoBar"]
+process_mode = 3
 self_modulate = Color(0.5, 0, 0.421875, 1)
 layout_mode = 0
 offset_right = 200.0
@@ -181,6 +186,7 @@ alignment = 0
 
 [node name="ProfilePicture" type="TextureRect" parent="InfoBar/AccountButton"]
 unique_name_in_owner = true
+process_mode = 3
 layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
@@ -190,6 +196,7 @@ stretch_mode = 4
 
 [node name="Ranking" type="Label" parent="InfoBar/AccountButton"]
 unique_name_in_owner = true
+process_mode = 3
 visible = false
 layout_mode = 0
 offset_left = 55.0
@@ -201,6 +208,7 @@ script = ExtResource("3_ggapr")
 
 [node name="UPlayerName" type="Label" parent="InfoBar/AccountButton"]
 unique_name_in_owner = true
+process_mode = 3
 layout_mode = 1
 offset_left = 55.0
 offset_top = 5.0
@@ -213,17 +221,20 @@ text_overrun_behavior = 3
 script = ExtResource("4_v36dv")
 
 [node name="Loadingicon" type="Sprite2D" parent="InfoBar/AccountButton"]
+process_mode = 3
 visible = false
 texture_filter = 1
 position = Vector2(175, 25)
 texture = ExtResource("5_3trnu")
 
 [node name="Loadinganimation" type="AnimationPlayer" parent="InfoBar/AccountButton/Loadingicon"]
+process_mode = 3
 libraries = {
 &"": SubResource("AnimationLibrary_1f8y5")
 }
 
 [node name="RankUpdate" type="Label" parent="InfoBar/AccountButton"]
+process_mode = 3
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -243,6 +254,7 @@ vertical_alignment = 1
 script = ExtResource("6_3trnu")
 
 [node name="PerformanceUpdate" type="Label" parent="InfoBar/AccountButton/RankUpdate"]
+process_mode = 3
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -260,6 +272,7 @@ text = "99,999pp
 vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="InfoBar"]
+process_mode = 3
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -271,6 +284,7 @@ grow_vertical = 2
 theme_override_constants/separation = 0
 
 [node name="NowPlayer" type="Button" parent="InfoBar/HBoxContainer"]
+process_mode = 3
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_constants/icon_max_width = 28
@@ -284,6 +298,7 @@ icon_alignment = 1
 script = ExtResource("7_6quot")
 
 [node name="Browse" type="Button" parent="InfoBar/HBoxContainer"]
+process_mode = 3
 layout_mode = 2
 theme_override_constants/icon_max_width = 28
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
@@ -295,6 +310,7 @@ icon = ExtResource("7_1qp4o")
 icon_alignment = 1
 
 [node name="Chat" type="Button" parent="InfoBar/HBoxContainer"]
+process_mode = 3
 layout_mode = 2
 theme_override_constants/icon_max_width = 28
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
@@ -306,6 +322,7 @@ icon = ExtResource("8_1qp4o")
 icon_alignment = 1
 
 [node name="Settings" type="Button" parent="InfoBar/HBoxContainer"]
+process_mode = 3
 layout_mode = 2
 theme_override_constants/icon_max_width = 28
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
@@ -318,6 +335,7 @@ icon_alignment = 1
 script = ExtResource("2_6umcl")
 
 [node name="Clock" type="Label" parent="InfoBar/HBoxContainer"]
+process_mode = 3
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
@@ -329,6 +347,7 @@ vertical_alignment = 1
 script = ExtResource("7_fe0ly")
 
 [node name="Notifications" type="Button" parent="InfoBar/HBoxContainer"]
+process_mode = 3
 layout_mode = 2
 theme_override_constants/icon_max_width = 28
 theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
@@ -340,6 +359,7 @@ icon = ExtResource("12_1qp4o")
 icon_alignment = 1
 
 [node name="Debugitem2" type="Label" parent="."]
+process_mode = 3
 layout_mode = 0
 offset_left = 18.0
 offset_top = 70.0

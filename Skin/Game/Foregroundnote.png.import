@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cr32g3qxi1a4c"
-path="res://.godot/imported/Foregroundnote.svg-ac46549400cca76794f8ade4cd52ee79.ctex"
+uid="uid://dfpwg60xx2rsd"
+path="res://.godot/imported/Foregroundnote.png-7f999eba2a6f150a0f8189dba383e7ae.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Skin/Game/Foregroundnote.svg"
-dest_files=["res://.godot/imported/Foregroundnote.svg-ac46549400cca76794f8ade4cd52ee79.ctex"]
+source_file="res://Skin/Game/Foregroundnote.png"
+dest_files=["res://.godot/imported/Foregroundnote.png-7f999eba2a6f150a0f8189dba383e7ae.ctex"]
 
 [params]
 
@@ -32,6 +32,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

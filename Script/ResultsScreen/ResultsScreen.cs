@@ -31,6 +31,12 @@ public partial class ResultsScreen : Control
 	private PanelContainer AlertBox { get; set; }
 	private PanelContainer LeaderboardList { get; set; }
 	private GridContainer Grid { get; set; }
+	private Button WatchReplay { get; set; }
+	private void _watchreplay()
+	{
+		Replay.ReloadReplay(Replay.FilePath);
+		_retry();
+	}
 	public override void _Ready()
 	{
 		Tween = CreateTween();
@@ -109,13 +115,33 @@ public partial class ResultsScreen : Control
 		Tween.TweenProperty(AccuracyPanel, "modulate", new Color(1f, 1f, 1f, 1f), 0f);
 		Tween.TweenProperty(AccuracyPanel, "self_modulate", new Color(5f, 5f, 5f, 1f), 0f);
 		Tween.TweenProperty(AccuracyPanel, "self_modulate", MedalColour, 1f);
-		Tween.Parallel().TweenProperty(Grid, "modulate", new Color(1f,1f,1f,1f), 0.5f);
+		Tween.Parallel().TweenProperty(Grid, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f);
 		Tween.Parallel().TweenProperty(AlertBox, "position", new Vector2(GetViewportRect().Size.X / 2 - (AlertBox.Size.X / 2) + (LeaderboardList.Size.X / 2), AlertBox.Position.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		Tween.Parallel().TweenProperty(LeaderboardList, "position", new Vector2(0, LeaderboardList.Position.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		// Set the Rank medal text
 		AccuracyMedal.Text = AccM;
+
+
+		WatchReplay = GetNode<Button>("PlayerButtons/Options/Replay");
+		// Checks if the replay file is in replay folder (temp until have backend support replay downloading :p)
+		if (FileAccess.FileExists(Replay.FilePath) && Replay.FilePath != "")
+		{
+			WatchReplay.Disabled = false;
+		}
+		else
+		{
+			WatchReplay.Disabled = true;
+		}
+
+
+
 	}
-	public void _retry(){
+	private void _resetreplay()
+	{
+		SettingsOperator.SpectatorMode = false;
+	}
+	public void _retry()
+	{
 		SettingsOperator.ResetRank();
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 	}
@@ -123,6 +149,7 @@ public partial class ResultsScreen : Control
 	{
 		SettingsOperator.ResetRank();
 		AudioPlayer.Instance.Play();
+		Replay.FilePath = "";
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

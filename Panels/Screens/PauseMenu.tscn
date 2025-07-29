@@ -190,6 +190,15 @@ text = "Exit"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 134.0
+offset_bottom = 28.3333
+text = "F1 to save Replay
+F2 to view Replay"
+
 [connection signal="button_down" from="PanelContainer/VBoxContainer/Continue" to="PanelContainer/VBoxContainer/Continue" method="_unfocus"]
 [connection signal="button_down" from="PanelContainer/VBoxContainer/Continue" to="PanelContainer/VBoxContainer/Continue" method="_down"]
 [connection signal="button_up" from="PanelContainer/VBoxContainer/Continue" to="PanelContainer/VBoxContainer/Continue" method="_focus"]
@@ -206,6 +215,7 @@ vertical_alignment = 1
 [connection signal="focus_exited" from="PanelContainer/VBoxContainer/Retry" to="PanelContainer/VBoxContainer/Retry" method="_unfocus"]
 [connection signal="mouse_entered" from="PanelContainer/VBoxContainer/Retry" to="PanelContainer/VBoxContainer/Retry" method="_focus"]
 [connection signal="mouse_exited" from="PanelContainer/VBoxContainer/Retry" to="PanelContainer/VBoxContainer/Retry" method="_unfocus"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Retry" to="." method="_resetreplay"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Retry" to="." method="_retry"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Retry" to="PanelContainer/VBoxContainer/Retry" method="_click"]
 [connection signal="button_down" from="PanelContainer/VBoxContainer/Exit" to="." method="_unfocus"]
@@ -215,5 +225,6 @@ vertical_alignment = 1
 [connection signal="focus_exited" from="PanelContainer/VBoxContainer/Exit" to="PanelContainer/VBoxContainer/Exit" method="_unfocus"]
 [connection signal="mouse_entered" from="PanelContainer/VBoxContainer/Exit" to="PanelContainer/VBoxContainer/Exit" method="_focus"]
 [connection signal="mouse_exited" from="PanelContainer/VBoxContainer/Exit" to="PanelContainer/VBoxContainer/Exit" method="_unfocus"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Exit" to="." method="_resetreplay"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Exit" to="." method="_exit"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Exit" to="PanelContainer/VBoxContainer/Exit" method="_click"]

@@ -37,6 +37,7 @@ public partial class SongSelect : Control
 	private bool ContextMenuActive {get;set;}
 	private Tween ContextMenuAni {get;set;}
 	private PanelContainer ContextMenu {get;set;}
+	private OptionButton LeaderboardType {get;set;}
 	
 
     int startposition = 0;
@@ -126,11 +127,6 @@ public partial class SongSelect : Control
 		startposition = ((int)GetViewportRect().Size.Y/2) - 166;
 
 
-		//Debugtext = new Label();
-		//Debugtext.ZIndex = 1024;
-		//Debugtext.Text = "X3";
-		//Debugtext.Position = new Vector2(100,100);
-		//AddChild(Debugtext);
 		SettingsOperator.Marathon = false;
 		Diff = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box5/Difficulty");
 		ModScreen = GetNode<Control>("ModsScreen");
@@ -144,11 +140,13 @@ public partial class SongSelect : Control
 		SongBPM = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box3/BPM");
 		SongLen = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box3/Length");
 		SongMapper = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box2/Mapper");
+		LeaderboardType = GetNode<OptionButton>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box4/Leaderboards");
 		StartButton = GetNode<Button>("BottomBar/Start");
 		StartButton.Visible = false; // Start the button off with being hidden.
 		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
+		LeaderboardType.Selected = SettingsOperator.LeaderboardType;
 
-		
+
 		check_modscreen();
 		
 
@@ -273,6 +271,13 @@ public partial class SongSelect : Control
 		}
 	}
 
+	private void _leaderboardmode(int index)
+	{
+		SettingsOperator.SetSetting("leaderboardtype", index);
+		SettingsOperator.LeaderboardType = index;
+		SettingsOperator.Start_reloadLeaderboard = true;
+	}
+
 	private void _reloadLeaderboard()
 	{
 		if (SettingsOperator.Sessioncfg["osubeatid"] != null)
@@ -319,7 +324,7 @@ public partial class SongSelect : Control
 			}
 		}
 
-		if (SettingsOperator.Start_reloadLeaderboard && ApiOperator.LeaderboardStatus == 0 && SettingsOperator.Beatmaps.Count > 0)
+		if (SettingsOperator.Start_reloadLeaderboard && SettingsOperator.Beatmaps.Count > 0)
 		{
 			SettingsOperator.Start_reloadLeaderboard = false;
 			GD.Print("Loading Leaderboard for: " + SettingsOperator.Sessioncfg["osubeatid"]);
@@ -406,12 +411,10 @@ public partial class SongSelect : Control
 	private void _songenter()
 	{
 		SongPanelAccess = true;
-		GD.Print("SongPanelAccess: " + SongPanelAccess);
 	}
 	private void _songexit()
 	{
 		SongPanelAccess = false;
-		GD.Print("SongPanelAccess: " + SongPanelAccess);
 	 }
 	private void _Mods_show(){
 		if (ModScreen_Tween != null){
@@ -432,6 +435,11 @@ public partial class SongSelect : Control
 		ModScreen_Tween.TweenProperty(ModScreen, "position", pos , 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		ModScreen_Tween.Play();
 	}
+	private void _resetreplay()
+	{
+		SettingsOperator.SpectatorMode = false;
+	}
+
 	private void _Start(){
 		if (ModsScreenActive){
 			_Mods_show();

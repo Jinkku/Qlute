@@ -502,6 +502,7 @@ offset_right = 1253.0
 offset_bottom = 427.0
 
 [connection signal="resized" from="." to="." method="_res_resize"]
+[connection signal="item_selected" from="SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box4/Leaderboards" to="." method="_leaderboardmode"]
 [connection signal="mouse_entered" from="SongPanel" to="." method="_songenter"]
 [connection signal="mouse_exited" from="SongPanel" to="." method="_songexit"]
 [connection signal="value_changed" from="SongPanel/VScrollBar" to="." method="_valuechangedscroll"]
@@ -524,6 +525,7 @@ offset_bottom = 427.0
 [connection signal="button_up" from="BottomBar/Start" to="." method="_start_focus"]
 [connection signal="mouse_entered" from="BottomBar/Start" to="." method="_start_focus"]
 [connection signal="mouse_exited" from="BottomBar/Start" to="." method="_start_unfocus"]
+[connection signal="pressed" from="BottomBar/Start" to="." method="_resetreplay"]
 [connection signal="pressed" from="BottomBar/Start" to="." method="_Start"]
 
 [editable path="BottomBar/ControlPanel"]

@@ -16,7 +16,7 @@ public partial class SettingsOperator : Node
 {
     public static string UpdatedRank = "#0";
     public static string Updatedpp = "0pp";
-    public static string homedir = OS.GetUserDataDir();
+    public static string homedir = OS.GetUserDataDir().Replace("\\", "/");
 	public static string tempdir => homedir + "/temp";
 	public static string beatmapsdir => homedir + "/beatmaps";
     public static float ppbase = 0.035f;
@@ -38,6 +38,7 @@ public partial class SettingsOperator : Node
     public static int MiliSecondsFromBeatmapTimes {get;set;}
     public static List<BeatmapLegend> Beatmaps = new List<BeatmapLegend>();
 	public static float AudioOffset { get; set; } = 0;
+    public static int LeaderboardType = 1;
     public static void ResetRank()
     {
         UpdatedRank = "#0";
@@ -90,7 +91,7 @@ public partial class SettingsOperator : Node
         { "scrollspeed", (int)1346 }, // 11485 ms max
         { "fpsmode", 1 },
         { "showfps", false },
-        { "teststrip", "Ya" },
+        { "leaderboardtype", 1 },
     };
     public Dictionary<string, object> Configurationbk {get; set;}
 
@@ -437,7 +438,7 @@ public partial class SettingsOperator : Node
 
     public override void _Process(double _delta)
     {
-		var aud = GetSetting("audiooffset").ToString();
+        var aud = GetSetting("audiooffset").ToString();
         if (aud == null) AudioOffset = 0; // AudioOffset Subsystem
         else AudioOffset = float.Parse(aud);
 
@@ -448,10 +449,14 @@ public partial class SettingsOperator : Node
             toppaneltoggle();
         }
         if (DateTimeOffset.UtcNow.ToUnixTimeSeconds() - oldtime > 2)
-        { 
+        {
             oldtime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             ResetVol();
         }
+
+
+
+
     }
     public override void _Ready()
     {
@@ -497,7 +502,7 @@ public partial class SettingsOperator : Node
                 }
             }
         }
-
+        
 
         backgrounddim = int.TryParse(GetSetting("backgrounddim").ToString(), out int bkd) ? bkd : 70;
         SampleVol = int.TryParse(GetSetting("sample").ToString(), out int smp) ? smp : 80;
@@ -506,6 +511,9 @@ public partial class SettingsOperator : Node
         var resolutionIndex = int.TryParse(GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
         changeres(resolutionIndex);
         RefreshFPS();
+        Replay.Init();
+        LeaderboardType = int.TryParse(GetSetting("leaderboardtype").ToString(), out int lbtm) ? (int)lbtm : 1;
+		if (LeaderboardType < 0 && LeaderboardType > 1) LeaderboardType = 1;
     }
     public void ResetVol()
     {

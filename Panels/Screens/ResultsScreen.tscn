@@ -437,14 +437,13 @@ layout_mode = 2
 alignment = 1
 
 [node name="Replay" type="Button" parent="PlayerButtons/Options"]
-visible = false
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
 theme_override_styles/hover = SubResource("StyleBoxFlat_uquna")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_f25vf")
 theme_override_styles/normal = SubResource("StyleBoxFlat_rvt4u")
-text = "Replay"
+text = "Watch Replay"
 
 [node name="Retry" type="Button" parent="PlayerButtons/Options"]
 custom_minimum_size = Vector2(150, 0)
@@ -504,7 +503,8 @@ text = "No scores set on this beatmap!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="pressed" from="PlayerButtons/Options/Replay" to="." method="_continue"]
+[connection signal="pressed" from="PlayerButtons/Options/Replay" to="." method="_watchreplay"]
+[connection signal="pressed" from="PlayerButtons/Options/Retry" to="." method="_resetreplay"]
 [connection signal="pressed" from="PlayerButtons/Options/Retry" to="." method="_retry"]
 [connection signal="pressed" from="PlayerButtons/Options/Continue" to="." method="_continue"]
 [connection signal="pressed" from="PlayerButtons/Options/AddCollection" to="." method="_continue"]

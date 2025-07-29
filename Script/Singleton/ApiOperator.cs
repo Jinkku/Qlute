@@ -19,6 +19,7 @@ public class LeaderboardEntry
 	public int BAD { get; set; }
 	public string mods { get; set; }
 	public long time { get; set; }
+	public string FilePath { get; set; }
 	public bool Active { get; set; }
 }
 public partial class ApiOperator : Node
@@ -35,15 +36,17 @@ public partial class ApiOperator : Node
 	public static string Beatmapapi = "https://catboy.best";
 	public void SubmitScore()
 	{
-		int BeatmapID = (int)SettingsOperator.Sessioncfg["osubeatid"];
-		int BeatmapSetID = (int)SettingsOperator.Sessioncfg["osubeatidset"];
-		double MAX = SettingsOperator.Gameplaycfg.Max;
-		double GREAT = SettingsOperator.Gameplaycfg.Great;
-		double MEH = SettingsOperator.Gameplaycfg.Meh;
-		double BAD = SettingsOperator.Gameplaycfg.Bad;
-		double COMBO = SettingsOperator.Gameplaycfg.MaxCombo;
-		double timetotal = SettingsOperator.Gameplaycfg.TimeTotal;
-		string[] Headers = new string[] {
+		if (!SettingsOperator.SpectatorMode)
+		{
+			int BeatmapID = (int)SettingsOperator.Sessioncfg["osubeatid"];
+			int BeatmapSetID = (int)SettingsOperator.Sessioncfg["osubeatidset"];
+			double MAX = SettingsOperator.Gameplaycfg.Max;
+			double GREAT = SettingsOperator.Gameplaycfg.Great;
+			double MEH = SettingsOperator.Gameplaycfg.Meh;
+			double BAD = SettingsOperator.Gameplaycfg.Bad;
+			double COMBO = SettingsOperator.Gameplaycfg.MaxCombo;
+			double timetotal = SettingsOperator.Gameplaycfg.TimeTotal;
+			string[] Headers = new string[] {
 			$"BeatmapID: {BeatmapID}",
 			$"BeatmapSetID: {BeatmapSetID}",
 			$"USERNAME: {SettingsOperator.GetSetting("username")}",
@@ -56,7 +59,8 @@ public partial class ApiOperator : Node
 			$"COMBO: {COMBO}",
 			$"Mods: {ModsOperator.GetModAlias()}"
 		};
-		SubmitApi.Request(SettingsOperator.GetSetting("api") + "apiv2/submitscore", Headers);
+			SubmitApi.Request(SettingsOperator.GetSetting("api") + "apiv2/submitscore", Headers);
+		}
 	}
 	public static List<LeaderboardEntry> LeaderboardList = new List<LeaderboardEntry>();
 	public void _LeaderboardAPIDone(long result, long responseCode, string[] headers, byte[] body)
@@ -84,8 +88,17 @@ public partial class ApiOperator : Node
 	}
 	public static void ReloadLeaderboard(int BeatmapID)
 	{
-		LeaderboardAPI.Request(SettingsOperator.GetSetting("api") + "apiv2/getleaderboard", new string[] { $"BEATMAPID: {BeatmapID}" });
-		LeaderboardStatus = 1; // Set status to loading
+		if (SettingsOperator.LeaderboardType == 1)
+		{
+			LeaderboardAPI.Request(SettingsOperator.GetSetting("api") + "apiv2/getleaderboard", new string[] { $"BEATMAPID: {BeatmapID}" });
+			LeaderboardStatus = 1; // Set status to loading
+		}
+		else
+		{
+			LeaderboardList.Clear();
+			LeaderboardList = Replay.Search(BeatmapID);
+			LeaderboardStatus = 2; // Set status to Loaded
+		}
 	}
 	public static int LeaderboardStatus = 0; // 0 = Not loaded, 1 = Loading, 2 = Loaded
 	public override void _Ready()
