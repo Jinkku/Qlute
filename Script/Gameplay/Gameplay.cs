@@ -257,7 +257,7 @@ public partial class Gameplay : Control
 			SettingsOperator.SpectatorMode = true; // Enables Spectator Mode to play the Replay, without this it won't know it even existed lol :p
 			foreach (NotesEn note in Notes)
 			{
-				var time = -note.timing;
+				var time = -note.timing - 50;
 				var key = note.NoteSection;
 				Replay.AddReplay(time, key); // Adds the input into the Replay Cache.
 			}
@@ -355,7 +355,7 @@ public partial class Gameplay : Control
 
 
     /// <summary>
-    /// If SettingsOperator.ReplayMode is enabled, this will check at the specified index of the replay cache to simulate a keypress in Replay Mode.
+    /// If SettingsOperator.ReplayMode is enabled, this will check at the specified index of the replay cache to simulate a keypress in Spectator Mode.
     /// </summary>
 	private void CheckReplayKey(int est)
 	{
@@ -363,12 +363,14 @@ public partial class Gameplay : Control
 		if (SettingsOperator.SpectatorMode && Replay.ReplayCache.Count >0)
 		{
 			var Replayindex = Replay.ReplayCache[Math.Min(ReplayINT,Replay.ReplayCache.Count-1)];
-			if (est > Replayindex.Time - 50) // Hardcoding this until further notice....
+			if (est > Replayindex.Time)
 			{
 				if (ReplayINT < Replay.ReplayCache.Count())
 				{
 					hitnote(Replayindex.NoteTap, true, est);
 					ReplayINT++;
+				} else if (ReplayINT > 0 && Keys[Replay.ReplayCache[ReplayINT-1].NoteTap].hit) {
+					hitnote(Replay.ReplayCache[ReplayINT-1].NoteTap, false, est);
 				}
 			}
 		}
@@ -393,7 +395,6 @@ public partial class Gameplay : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-
 		SettingsOperator.Gameplaycfg.Score = scoreint; // Set the score of the player
 		try
 		{
@@ -529,10 +530,10 @@ public partial class Gameplay : Control
 							CheckNPCValues();
 
 							mshitold = HitPoint + 5;
-							Keys[(int)Note.Node.GetMeta("part")].hit = false;
 							mshit = notex;
 							SettingsOperator.Addms(mshitold - mshit - 50);
 							SettingsOperator.Gameplaycfg.ms = SettingsOperator.Getms();
+							Keys[(int)Note.Node.GetMeta("part")].hit = false;
 
 							scoretween?.Kill();
 							scoretween = CreateTween();
@@ -543,9 +544,14 @@ public partial class Gameplay : Control
 							Note.Node.QueueFree();
 							Note.Node = null;
 						}
+						else
+						{
+							Keys[(int)Note.Node.GetMeta("part")].hit = false;
+						}
 					}
 				}
 			}
+
 		}
 		catch (Exception e)
 		{

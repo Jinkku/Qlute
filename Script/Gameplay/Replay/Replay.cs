@@ -8,7 +8,7 @@ public class ReplayLegend
 }
 public static class Replay
 {
-	public static string FilePath { get; set; }
+    public static string FilePath { get; set; }
     public static List<ReplayLegend> ReplayCache = new List<ReplayLegend>();
 
     /// <summary>
@@ -33,25 +33,28 @@ public static class Replay
             NoteTap = NoteTap
         });
     }
-/// <summary>
-/// Saves the replay file to it's desired path.
-/// </summary>
+    /// <summary>
+    /// Saves the replay file to it's desired path.
+    /// </summary>
     public static void SaveReplay()
     {
-        GD.Print("[Qlute] Saving Replay...");
-        var cache = $"#Qlute Version: {ProjectSettings.GetSetting("application/config/version")}-{ProjectSettings.GetSetting("application/config/branch")}\n";
-        cache += $"#Username: {ApiOperator.Username}\n";
-        cache += $"#osuBeatmapID: {SettingsOperator.Sessioncfg["osubeatid"]}\n";
-        cache += $"#osuBeatmapSetID: {SettingsOperator.Sessioncfg["osubeatidset"]}\n";
-        foreach (ReplayLegend entry in ReplayCache)
+        if (!SettingsOperator.SpectatorMode)
         {
-            cache += $"{entry.Time},{entry.NoteTap}\n";
+            GD.Print("[Qlute] Saving Replay...");
+            var cache = $"#Qlute Version: {ProjectSettings.GetSetting("application/config/version")}-{ProjectSettings.GetSetting("application/config/branch")}\n";
+            cache += $"#Username: {ApiOperator.Username}\n";
+            cache += $"#osuBeatmapID: {SettingsOperator.Sessioncfg["osubeatid"]}\n";
+            cache += $"#osuBeatmapSetID: {SettingsOperator.Sessioncfg["osubeatidset"]}\n";
+            foreach (ReplayLegend entry in ReplayCache)
+            {
+                cache += $"{entry.Time},{entry.NoteTap}\n";
+            }
+            using var file = FileAccess.Open(FilePath, FileAccess.ModeFlags.Write);
+            file.StoreString(cache);
+            cache = "";
+            GD.Print("[Qlute] Completed Successfully!");
         }
-        using var file = FileAccess.Open(FilePath, FileAccess.ModeFlags.Write);
-        file.StoreString(cache);
-        cache = "";
-        GD.Print("[Qlute] Completed Successfully!");
-	}
+    }
     /// <summary>
     /// Load the replay file from it's desired path.
     /// </summary>
@@ -71,7 +74,6 @@ public static class Replay
                     int time = int.Parse(note[0].Trim());
                     int noteTap = int.Parse(note[1].Trim());
                     AddReplay(time, noteTap);
-                    GD.Print(time,"-", noteTap);
                 }
             }
             catch (Exception x)
