@@ -15,7 +15,7 @@ config/name_localized={
 "ja": "名無し"
 }
 config/description="Your Keys // Your Rhythm"
-config/version="2025.07.17"
+config/version="2025.07.29"
 run/main_scene="res://Panels/Screens/bootstrap.tscn"
 run/print_header=false
 config/use_custom_user_dir=true
