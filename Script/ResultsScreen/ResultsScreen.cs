@@ -31,6 +31,7 @@ public partial class ResultsScreen : Control
 	private PanelContainer AlertBox { get; set; }
 	private PanelContainer LeaderboardList { get; set; }
 	private GridContainer Grid { get; set; }
+	private Button WatchReplay { get; set; }
 	private void _watchreplay()
 	{
 		GD.Print(Replay.FilePath);
@@ -120,6 +121,21 @@ public partial class ResultsScreen : Control
 		Tween.Parallel().TweenProperty(LeaderboardList, "position", new Vector2(0, LeaderboardList.Position.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		// Set the Rank medal text
 		AccuracyMedal.Text = AccM;
+
+
+		WatchReplay = GetNode<Button>("PlayerButtons/Options/Replay");
+		// Checks if the replay file is in replay folder (temp until have backend support replay downloading :p)
+		if (FileAccess.FileExists(Replay.FilePath) && Replay.FilePath != "")
+		{
+			WatchReplay.Disabled = false;
+		}
+		else
+		{
+			WatchReplay.Disabled = true;
+		}
+
+
+
 	}
 	private void _resetreplay()
 	{
@@ -134,6 +150,7 @@ public partial class ResultsScreen : Control
 	{
 		SettingsOperator.ResetRank();
 		AudioPlayer.Instance.Play();
+		Replay.FilePath = "";
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
