@@ -87,8 +87,51 @@ public partial class ModsOperator : Node
 		}
 		return modalias;
 	}
+
+
+	public static void SetMods(string modalias)
+	{
+		Reset();
+		ModsEnabled.Clear();
+		if (modalias == "AT")
+		{
+			Mods["auto"] = true;
+			ModsEnabled.Add("AT");
+		}
+		else if (modalias == "DT")
+		{
+			Mods["dt"] = true;
+			ModsEnabled.Add("DT");
+		}
+		else if (modalias == "HT")
+		{
+			Mods["ht"] = true;
+			ModsEnabled.Add("HT");
+		}
+		else if (modalias == "END")
+		{
+			Mods["random"] = true;
+			ModsEnabled.Add("RND");
+		}
+		else if (modalias == "SL")
+		{
+			Mods["slice"] = true;
+			ModsEnabled.Add("SL");
+		}
+		else if (modalias == "BT")
+		{
+			Mods["black-out"] = true;
+			ModsEnabled.Add("BT");
+		}
+		else if (modalias == "NF")
+		{
+			Mods["no-fail"] = true;
+			ModsEnabled.Add("NF");
+		}
+		Refresh();
+	}
     public static Dictionary<string, bool> Mods { get; set; } = new Dictionary<string, bool>
-    {
+	{
 		{"auto", false},
 		{"no-fail", false},
 		{"dt", false},

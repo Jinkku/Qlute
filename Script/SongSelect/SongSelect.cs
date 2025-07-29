@@ -274,7 +274,8 @@ public partial class SongSelect : Control
 	private void _leaderboardmode(int index)
 	{
 		SettingsOperator.SetSetting("leaderboardtype", index);
-		_reloadLeaderboard();
+		SettingsOperator.LeaderboardType = index;
+		SettingsOperator.Start_reloadLeaderboard = true;
 	}
 
 	private void _reloadLeaderboard()
@@ -323,7 +324,7 @@ public partial class SongSelect : Control
 			}
 		}
 
-		if (SettingsOperator.Start_reloadLeaderboard && ApiOperator.LeaderboardStatus == 0 && SettingsOperator.Beatmaps.Count > 0)
+		if (SettingsOperator.Start_reloadLeaderboard && SettingsOperator.Beatmaps.Count > 0)
 		{
 			SettingsOperator.Start_reloadLeaderboard = false;
 			GD.Print("Loading Leaderboard for: " + SettingsOperator.Sessioncfg["osubeatid"]);

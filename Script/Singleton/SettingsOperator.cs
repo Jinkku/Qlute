@@ -511,6 +511,7 @@ public partial class SettingsOperator : Node
         var resolutionIndex = int.TryParse(GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
         changeres(resolutionIndex);
         RefreshFPS();
+        Replay.Init();
         LeaderboardType = int.TryParse(GetSetting("leaderboardtype").ToString(), out int lbtm) ? (int)lbtm : 1;
 		if (LeaderboardType < 0 && LeaderboardType > 1) LeaderboardType = 1;
     }

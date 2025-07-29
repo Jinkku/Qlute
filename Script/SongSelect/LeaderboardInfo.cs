@@ -38,16 +38,7 @@ public partial class LeaderboardInfo : ScrollContainer
 			foreach (var entry in ApiOperator.LeaderboardList)
 			{
 				var leaderboardEntry = GD.Load<PackedScene>("res://Panels/SongSelectButtons/Leaderboard.tscn").Instantiate().GetNode<Button>(".");
-				leaderboardEntry.SetMeta("username", entry.username);
-				leaderboardEntry.SetMeta("points", entry.points);
-				leaderboardEntry.SetMeta("score", entry.score);
-				leaderboardEntry.SetMeta("combo", entry.combo);
-				leaderboardEntry.SetMeta("max", entry.MAX);
-				leaderboardEntry.SetMeta("good", entry.GOOD);
-				leaderboardEntry.SetMeta("meh", entry.MEH);
-				leaderboardEntry.SetMeta("bad", entry.BAD);
-				leaderboardEntry.SetMeta("mods", entry.mods);
-				leaderboardEntry.SetMeta("time", entry.time);
+				leaderboardEntry.SetMeta("ID", ranknum-1);
 				leaderboardEntry.SetMeta("rank", ranknum);
 				Leaderboards.AddChild(leaderboardEntry);
 				ranknum++;

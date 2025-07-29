@@ -14,78 +14,62 @@ public partial class Leaderboard : Button
 	private Label Mods { get; set; }
 	private Label pp { get; set; }
 	private Label Time { get; set; }
+	private LeaderboardEntry Info { get; set; }
 	public void _stats()
 	{
 		SettingsOperator.ResetScore();
-		SettingsOperator.Gameplaycfg.Max = (int)GetMeta("max");
-		SettingsOperator.Gameplaycfg.Great = (int)GetMeta("good");
-		SettingsOperator.Gameplaycfg.Meh = (int)GetMeta("meh");
-		SettingsOperator.Gameplaycfg.Bad = (int)GetMeta("bad");
-		SettingsOperator.Gameplaycfg.Score = (int)GetMeta("score");
-		SettingsOperator.Gameplaycfg.MaxCombo = (int)GetMeta("combo");
-		SettingsOperator.Gameplaycfg.pp = (float)GetMeta("points");
+
+		SettingsOperator.Gameplaycfg.Max = Info.MAX;
+		SettingsOperator.Gameplaycfg.Great = Info.GOOD;
+		SettingsOperator.Gameplaycfg.Meh = Info.MEH;
+		SettingsOperator.Gameplaycfg.Bad = Info.BAD;
+		SettingsOperator.Gameplaycfg.Score = Info.score;
+		SettingsOperator.Gameplaycfg.MaxCombo = Info.combo;
+		SettingsOperator.Gameplaycfg.pp = Info.points;
 		SettingsOperator.Gameplaycfg.Accuracy = Gameplay.ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
+		if (Info.FilePath != "")
+		{
+			Replay.FilePath = Info.FilePath;
+		}
+		ModsOperator.SetMods(Info.mods);
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultsScreen.tscn");
 	}
 	public override void _Ready()
 	{
+		Info = ApiOperator.LeaderboardList[(int)GetMeta("ID")];
 		Username = GetNode<Label>("HBoxContainer/UserInfo/Username");
 		Score = GetNode<Label>("HBoxContainer/UserInfo/PlayScore/Score");
 		Combo = GetNode<Label>("HBoxContainer/UserInfo/PlayScore/Combo");
 		Time = GetNode<Label>("created");
-		if (!HasMeta("username"))
-		{
-			Username.Text = "Unknown";
-		}
-		else
-		{
-			Username.Text = GetMeta("username").ToString();
-		}
-		if (!HasMeta("score"))
-		{
-			Score.Text = "0";
-		}
-		else
-		{
-			Score.Text = string.Format("{0:N0}", (int)GetMeta("score"));
-		}
-		if (!HasMeta("combo"))
-		{
-			Combo.Text = "0x";
-		}
-		else
-		{
-			Combo.Text = GetMeta("combo") + "x";
-		}
+		Username.Text = Info.username;
+		Score.Text = Info.score.ToString("N0");
+		Combo.Text = Info.combo.ToString("N0") + "x";
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	long _lastTime = 0;
 	public override void _Process(double _delta)
 	{
-		if (HasMeta("time"))
+		int seconds = (int)(DateTimeOffset.Now.ToUnixTimeSeconds() - Info.time);
+		if (_lastTime != seconds)
 		{
-			int seconds = (int)(DateTimeOffset.UtcNow.ToUnixTimeSeconds() - (long)GetMeta("time"));
-			if (_lastTime != seconds)
-			{
-				_lastTime = seconds;
-				string formattedTime;
-				if (seconds < 60)
-					formattedTime = $"{seconds}s";
-				else if (seconds < 3600)
-					formattedTime = $"{seconds / 60}m";
-				else if (seconds < 86400)
-					formattedTime = $"{seconds / 3600}h";
-				else if (seconds < 2592000)
-					formattedTime = $"{seconds / 86400}d";
-				else if (seconds < 2419200) // 4 weeks
-					formattedTime = $"{seconds / 604800}w";
-				else if (seconds < 31557600) // 12 months
-					formattedTime = $"{seconds / 31557600}m";
-				else
-					formattedTime = $"{seconds / 31557600}y";
-				Time.Text = formattedTime;
-			}
+			_lastTime = seconds;
+			string formattedTime;
+			if (seconds < 60)
+				formattedTime = $"{seconds}s";
+			else if (seconds < 3600)
+				formattedTime = $"{seconds / 60}m";
+			else if (seconds < 86400)
+				formattedTime = $"{seconds / 3600}h";
+			else if (seconds < 2592000)
+				formattedTime = $"{seconds / 86400}d";
+			else if (seconds < 2419200) // 4 weeks
+				formattedTime = $"{seconds / 604800}w";
+			else if (seconds < 31557600) // 12 months
+				formattedTime = $"{seconds / 31557600}m";
+			else
+				formattedTime = $"{seconds / 31557600}y";
+			Time.Text = formattedTime;
 		}
 	}
 }

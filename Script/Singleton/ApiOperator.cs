@@ -19,6 +19,7 @@ public class LeaderboardEntry
 	public int BAD { get; set; }
 	public string mods { get; set; }
 	public long time { get; set; }
+	public string FilePath { get; set; }
 	public bool Active { get; set; }
 }
 public partial class ApiOperator : Node
@@ -87,8 +88,17 @@ public partial class ApiOperator : Node
 	}
 	public static void ReloadLeaderboard(int BeatmapID)
 	{
-		LeaderboardAPI.Request(SettingsOperator.GetSetting("api") + "apiv2/getleaderboard", new string[] { $"BEATMAPID: {BeatmapID}" });
-		LeaderboardStatus = 1; // Set status to loading
+		if (SettingsOperator.LeaderboardType == 1)
+		{
+			LeaderboardAPI.Request(SettingsOperator.GetSetting("api") + "apiv2/getleaderboard", new string[] { $"BEATMAPID: {BeatmapID}" });
+			LeaderboardStatus = 1; // Set status to loading
+		}
+		else
+		{
+			LeaderboardList.Clear();
+			LeaderboardList = Replay.Search(BeatmapID);
+			LeaderboardStatus = 2; // Set status to Loaded
+		}
 	}
 	public static int LeaderboardStatus = 0; // 0 = Not loaded, 1 = Loading, 2 = Loaded
 	public override void _Ready()
