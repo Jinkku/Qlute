@@ -1,43 +1,34 @@
-[gd_scene load_steps=17 format=3 uid="uid://b8wmh5ui3lgly"]
+[gd_scene load_steps=18 format=3 uid="uid://b8wmh5ui3lgly"]
 
 [ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Skin/System/guest.png" id="1_kgn3a"]
+[ext_resource type="Texture2D" uid="uid://d6kftyv57ew2" path="res://Skin/System/SongSelect/Leaderboard/Leaderboardbackground.png" id="1_vt3mq"]
 [ext_resource type="Script" uid="uid://bp6h74gm3lwau" path="res://Script/SongSelect/Leaderboard.cs" id="1_ysfsi"]
 [ext_resource type="Script" uid="uid://r1nchdkq185" path="res://Script/SongSelect/LeaderboardRank.cs" id="2_wkrig"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ysfsi"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6nid0"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.248337, 0.371101, 0.605469, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wbm6w"]
+texture = ExtResource("1_vt3mq")
+texture_margin_left = 15.0
+texture_margin_top = 15.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
+modulate_color = Color(1.25, 1.25, 1.25, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wkrig"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.265732, 0.489994, 0.839844, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1bkjm"]
+texture = ExtResource("1_vt3mq")
+texture_margin_left = 15.0
+texture_margin_top = 15.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
+modulate_color = Color(0.266667, 0.490196, 0.839216, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aqjbx"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.208333, 0.208333, 0.208333, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y1q14"]
+texture = ExtResource("1_vt3mq")
+texture_margin_left = 15.0
+texture_margin_top = 15.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wkrig"]
 content_margin_left = 3.0
@@ -58,10 +49,6 @@ corner_radius_bottom_left = 10
 content_margin_top = 5.0
 content_margin_bottom = 5.0
 
-[sub_resource type="LabelSettings" id="LabelSettings_1bkjm"]
-line_spacing = 0.0
-font_size = 14
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vt3mq"]
 content_margin_left = 5.0
 content_margin_top = 5.0
@@ -74,6 +61,8 @@ corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1bkjm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y1q14"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d0w7j"]
 bg_color = Color(0.5, 0.5, 0.5, 1)
@@ -90,9 +79,9 @@ custom_minimum_size = Vector2(335, 60)
 offset_right = 8.0
 offset_bottom = 8.0
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ysfsi")
-theme_override_styles/hover = SubResource("StyleBoxFlat_6nid0")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_wkrig")
-theme_override_styles/normal = SubResource("StyleBoxFlat_aqjbx")
+theme_override_styles/hover = SubResource("StyleBoxTexture_wbm6w")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_1bkjm")
+theme_override_styles/normal = SubResource("StyleBoxTexture_y1q14")
 script = ExtResource("1_ysfsi")
 
 [node name="created" type="Label" parent="."]
@@ -119,6 +108,7 @@ grow_vertical = 2
 
 [node name="Rank" type="Label" parent="HBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxEmpty_wkrig")
 text = "#1"
 horizontal_alignment = 1
@@ -151,9 +141,9 @@ alignment = 1
 [node name="Username" type="Label" parent="HBoxContainer/UserInfo"]
 layout_mode = 2
 size_flags_vertical = 6
+theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxEmpty_wbm6w")
 text = "aquapoki"
-label_settings = SubResource("LabelSettings_1bkjm")
 vertical_alignment = 1
 clip_text = true
 text_overrun_behavior = 3
@@ -164,24 +154,41 @@ layout_mode = 2
 [node name="Score" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
 layout_mode = 2
 size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_vt3mq")
 text = "1,000,000"
-label_settings = SubResource("LabelSettings_1bkjm")
 vertical_alignment = 1
 
 [node name="Combo" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
 layout_mode = 2
 size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_vt3mq")
 text = "0x"
-label_settings = SubResource("LabelSettings_1bkjm")
 vertical_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="HBoxContainer/UserInfo"]
 layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxEmpty_1bkjm")
 
-[node name="Medal" type="PanelContainer" parent="HBoxContainer"]
+[node name="Col2" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Mods" type="Label" parent="HBoxContainer/Col2"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_y1q14")
+text = "Mods: "
+horizontal_alignment = 2
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Medal" type="PanelContainer" parent="HBoxContainer/Col2"]
 visible = false
 self_modulate = Color(0, 0.695312, 1, 1)
 clip_children = 2
@@ -192,7 +199,7 @@ size_flags_vertical = 4
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_d0w7j")
 
-[node name="Rank" type="Label" parent="HBoxContainer/Medal"]
+[node name="Rank" type="Label" parent="HBoxContainer/Col2/Medal"]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_vt3mq")
 text = "SS"

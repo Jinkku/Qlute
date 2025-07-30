@@ -129,11 +129,15 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_5o4qg")
 
 [node name="RankText" type="Label" parent="MarginContainer/VBoxContainer/InfoBox/Ranked"]
 layout_mode = 2
+size_flags_vertical = 8
 theme_override_font_sizes/font_size = 10
 text = "Unknown"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Rating" type="Label" parent="MarginContainer/VBoxContainer/InfoBox"]
 layout_mode = 2
+size_flags_vertical = 8
 theme_override_font_sizes/font_size = 10
 theme_override_styles/normal = SubResource("StyleBoxFlat_ykgkk")
 text = "Lv. 69"
@@ -142,6 +146,7 @@ script = ExtResource("5_y5yk1")
 
 [node name="Version" type="Label" parent="MarginContainer/VBoxContainer/InfoBox"]
 layout_mode = 2
+size_flags_vertical = 8
 theme_override_font_sizes/font_size = 10
 theme_override_styles/normal = SubResource("StyleBoxFlat_552jq")
 text = "Difficulty Name"

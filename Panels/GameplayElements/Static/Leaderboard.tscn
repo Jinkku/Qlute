@@ -7,11 +7,16 @@
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_s3ted"]
 texture = ExtResource("1_otw38")
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dltue"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7vqku"]
 content_margin_left = 10.0
 content_margin_top = 5.0
 content_margin_right = 10.0
 content_margin_bottom = 5.0
+draw_center = false
+skew = Vector2(0.5, 0)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7vqku"]
 content_margin_top = 3.0
@@ -35,14 +40,14 @@ script = ExtResource("1_a5nx3")
 
 [node name="LeaderboardColumns" type="HBoxContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 10
 
 [node name="Rank" type="Label" parent="LeaderboardColumns"]
-custom_minimum_size = Vector2(40, 30)
+custom_minimum_size = Vector2(60, 30)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 1
 size_flags_stretch_ratio = 0.5
-theme_override_styles/normal = SubResource("StyleBoxEmpty_dltue")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7vqku")
 text = "#999"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -68,7 +73,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxEmpty_7vqku")
-text = "Username"
+text = "REALLYBIGNAMEEE"
 vertical_alignment = 2
 clip_text = true
 text_overrun_behavior = 3

@@ -78,6 +78,7 @@ content_margin_top = 2.0
 content_margin_right = 2.0
 content_margin_bottom = 2.0
 bg_color = Color(1, 1, 1, 0.2)
+draw_center = false
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
@@ -125,6 +126,7 @@ alignment = 1
 [node name="Close" type="Button" parent="Info/V"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_font_sizes/font_size = 12
 theme_override_styles/focus = SubResource("StyleBoxEmpty_36gcf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5g2n4")

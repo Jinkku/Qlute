@@ -1,10 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://oru46ou3jfjl"]
+[gd_scene load_steps=18 format=3 uid="uid://oru46ou3jfjl"]
 
 [ext_resource type="Script" uid="uid://bj6kjjp2yikxr" path="res://Script/ResultsScreen/ResultsScreen.cs" id="1_e0sg4"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="1_xhck8"]
 [ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Skin/System/guest.png" id="3_1di71"]
-[ext_resource type="Texture2D" uid="uid://bryjqoryjlktq" path="res://Skin/System/ResultsScreen/foregroundrank.png" id="3_3q470"]
-[ext_resource type="Texture2D" uid="uid://1ctvubu5pjib" path="res://Skin/System/ResultsScreen/GameInfo.svg" id="3_m0l06"]
+[ext_resource type="Texture2D" uid="uid://qol7kqw0iopm" path="res://Skin/System/ResultsScreen/Gameinfo.png" id="3_2ryxt"]
+[ext_resource type="Texture2D" uid="uid://c3qy7vl54kmf1" path="res://Skin/System/ResultsScreen/backgroundrank.png" id="5_38vqk"]
 [ext_resource type="Script" uid="uid://d1r50u4kxwpbl" path="res://Script/SongSelect/LeaderboardInfo.cs" id="6_2ryxt"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2ryxt"]
@@ -12,8 +12,11 @@ content_margin_left = 15.0
 content_margin_top = 15.0
 content_margin_right = 15.0
 content_margin_bottom = 25.0
-texture = ExtResource("3_m0l06")
-modulate_color = Color(0.133333, 0.152941, 0.243137, 0.588235)
+texture = ExtResource("3_2ryxt")
+texture_margin_left = 15.0
+texture_margin_top = 15.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m0l06"]
 bg_color = Color(0.5, 0.5, 0.5, 1)
@@ -21,11 +24,6 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-
-[sub_resource type="FontVariation" id="FontVariation_csg6c"]
-variation_opentype = {
-2003265652: 700
-}
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5cm84"]
 content_margin_top = 5.0
@@ -171,17 +169,19 @@ custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
-texture = ExtResource("3_3q470")
+texture = ExtResource("5_38vqk")
 
 [node name="Medal" type="Label" parent="AlertBox/Box/Rank"]
-layout_mode = 2
-offset_top = 31.0
-offset_right = 100.0
-offset_bottom = 68.0
-theme_override_fonts/font = SubResource("FontVariation_csg6c")
-theme_override_font_sizes/font_size = 32
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 48
 text = "SS"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Score" type="Label" parent="AlertBox/Box"]
 layout_mode = 2
