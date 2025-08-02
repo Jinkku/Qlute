@@ -117,7 +117,7 @@ public partial class SongSelect : Control
 	{
 		SettingsOperator.loopaudio = true;
 		scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
-		RankedStatus = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box1/RankedStatus");
+		RankedStatus = GetNode<Label>("SongDetails/SongPanelInfo/Box1/RankedStatus");
 		ContextMenu = GetNode<PanelContainer>("ContextMenu");
 		ContextMenu.Visible = false;
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
@@ -128,19 +128,19 @@ public partial class SongSelect : Control
 
 
 		SettingsOperator.Marathon = false;
-		Diff = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box5/Difficulty");
+		Diff = GetNode<Label>("SongDetails/SongPanelInfo/Box5/Difficulty");
 		ModScreen = GetNode<Control>("ModsScreen");
 		ModScreen.Visible = true;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SongTitle = GetNode<Label>("SongControl/AmazingPillar/Title");
-		LevelRating = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box5/Level");
-		RankStatus = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box1/RankedStatus");
-		SongArtist = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box1/Artist");
-		Songpp = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box2/Points");
-		SongBPM = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box3/BPM");
-		SongLen = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box3/Length");
-		SongMapper = GetNode<Label>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box2/Mapper");
-		LeaderboardType = GetNode<OptionButton>("SongDetails/SongPanelInfoSpacer/SongPanelInfo/Box4/Leaderboards");
+		LevelRating = GetNode<Label>("SongDetails/SongPanelInfo/Box5/Level");
+		RankStatus = GetNode<Label>("SongDetails/SongPanelInfo/Box1/RankedStatus");
+		SongArtist = GetNode<Label>("SongDetails/SongPanelInfo/Box1/Artist");
+		Songpp = GetNode<Label>("SongDetails/SongPanelInfo/Box2/Points");
+		SongBPM = GetNode<Label>("SongDetails/SongPanelInfo/Box3/BPM");
+		SongLen = GetNode<Label>("SongDetails/SongPanelInfo/Box3/Length");
+		SongMapper = GetNode<Label>("SongDetails/SongPanelInfo/Box2/Mapper");
+		LeaderboardType = GetNode<OptionButton>("SongDetails/SongPanelInfo/Box4/Leaderboards");
 		StartButton = GetNode<Button>("BottomBar/Start");
 		StartButton.Visible = false; // Start the button off with being hidden.
 		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
@@ -453,7 +453,7 @@ public partial class SongSelect : Control
 		}
 
 		
-		var SongDetails = GetNode<TextureRect>("SongDetails");
+		var SongDetails = GetNode<PanelContainer>("SongDetails");
 		var SongPanel = GetNode<Control>("SongPanel");
 		var BottomBar = GetNode<Control>("BottomBar");
 		var SongControl = GetNode<PanelContainer>("SongControl");
