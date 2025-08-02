@@ -467,13 +467,15 @@ public partial class Gameplay : Control
 
 
 
-			if ((int)est > dance.ElementAt(DanceIndex).time)
+			if ((int)est >= dance.ElementAt(DanceIndex).time - BeatmapBackground.bpm && BeatmapBackground.FlashEnable)
 			{
-				BeatmapBackground.FlashEnable = dance.ElementAt(DanceIndex).flash;
-				if (DanceIndex + 1 < dance.Count())
-				{
-					DanceIndex++;
-				}
+				Transitioning(dance.ElementAt(DanceIndex).flash);
+				IncreaseDanceIndex();
+			}
+			else if ((int)est >= dance.ElementAt(DanceIndex).time && !BeatmapBackground.FlashEnable)
+			{
+				Transitioning(dance.ElementAt(DanceIndex).flash);
+				IncreaseDanceIndex();
 			}
 
 			PlayerKeyCheck((int)est);
@@ -564,6 +566,35 @@ public partial class Gameplay : Control
 				BeatmapBackground.FlashEnable = true;
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 			}
+		}
+	}
+
+	private void IncreaseDanceIndex()
+	{
+		if (DanceIndex + 1 < dance.Count())
+		{
+			DanceIndex++;
+		}
+	}
+	private Tween DancePrepare { get; set; }
+	private void Transitioning(bool value)
+	{
+		if (value)
+		{
+			DancePrepare?.Kill();
+			DancePrepare = GetTree().CreateTween();
+			DancePrepare.TweenProperty(GetTree().CurrentScene, "modulate", new Color(1f, 1f, 1f, 0.6f), BeatmapBackground.bpm)
+					.SetTrans(Tween.TransitionType.Cubic)
+					.SetEase(Tween.EaseType.Out);
+			DancePrepare.TweenCallback(Callable.From(() => BeatmapBackground.FlashEnable = true));
+			DancePrepare.TweenProperty(GetTree().CurrentScene, "modulate", new Color(1f, 1f, 1f, 1f), 0.5)
+					.SetTrans(Tween.TransitionType.Cubic)
+					.SetEase(Tween.EaseType.Out);
+			DancePrepare.Play();
+		}
+		else
+		{
+			BeatmapBackground.FlashEnable = value;
 		}
 	}
 	private bool erroredout = false;
