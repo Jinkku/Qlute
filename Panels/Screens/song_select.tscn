@@ -87,16 +87,17 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7pw6v"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pgcs5"]
 content_margin_left = 5.0
 content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
-bg_color = Color(0.557292, 0.12481, 0.12481, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+bg_color = Color(1, 1, 1, 0.2)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xmk5a"]
 
@@ -219,7 +220,6 @@ layout_mode = 1
 
 [node name="WEEE" type="GPUParticles2D" parent="."]
 position = Vector2(1276, 387)
-emitting = false
 amount = 40
 texture = ExtResource("12_5rktx")
 lifetime = 5.0
@@ -356,8 +356,9 @@ Text = "Lv. 97"
 
 [node name="RankedStatus" type="Label" parent="SongDetails/SongInfo/Rows/Misc"]
 layout_mode = 2
+size_flags_vertical = 1
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_7pw6v")
+theme_override_styles/normal = SubResource("StyleBoxFlat_pgcs5")
 text = "Unranked"
 horizontal_alignment = 1
 vertical_alignment = 1
