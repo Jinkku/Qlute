@@ -225,6 +225,6 @@ F2 to view Replay"
 [connection signal="focus_exited" from="PanelContainer/VBoxContainer/Exit" to="PanelContainer/VBoxContainer/Exit" method="_unfocus"]
 [connection signal="mouse_entered" from="PanelContainer/VBoxContainer/Exit" to="PanelContainer/VBoxContainer/Exit" method="_focus"]
 [connection signal="mouse_exited" from="PanelContainer/VBoxContainer/Exit" to="PanelContainer/VBoxContainer/Exit" method="_unfocus"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/Exit" to="." method="_resetreplay"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Exit" to="." method="_exit"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Exit" to="." method="_resetreplay"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Exit" to="PanelContainer/VBoxContainer/Exit" method="_click"]

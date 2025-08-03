@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://ce4jpc6edc2re"]
+[gd_scene load_steps=7 format=3 uid="uid://ce4jpc6edc2re"]
 
 [ext_resource type="Script" uid="uid://fndjbbpbehge" path="res://Script/SongSelect/InfoBox.gd" id="1_bux6j"]
 
@@ -19,6 +19,9 @@ corner_radius_bottom_left = 5
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_bux6j"]
 gradient = SubResource("Gradient_mhmad")
 
+[sub_resource type="FontVariation" id="FontVariation_mhmad"]
+spacing_bottom = -10
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mhmad"]
 content_margin_left = 5.0
 content_margin_top = 5.0
@@ -38,7 +41,7 @@ Text = "Dummy Text"
 layout_mode = 2
 
 [node name="Icon" type="TextureRect" parent="Columns"]
-custom_minimum_size = Vector2(30, 30)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
@@ -48,6 +51,7 @@ stretch_mode = 4
 
 [node name="Label" type="Label" parent="Columns"]
 layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_mhmad")
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("StyleBoxEmpty_mhmad")
 text = "Dummy Text"
