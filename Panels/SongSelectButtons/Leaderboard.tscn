@@ -1,47 +1,37 @@
-[gd_scene load_steps=18 format=3 uid="uid://b8wmh5ui3lgly"]
+[gd_scene load_steps=16 format=3 uid="uid://b8wmh5ui3lgly"]
 
 [ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Skin/System/guest.png" id="1_kgn3a"]
-[ext_resource type="Texture2D" uid="uid://d6kftyv57ew2" path="res://Skin/System/SongSelect/Leaderboard/Leaderboardbackground.png" id="1_vt3mq"]
 [ext_resource type="Script" uid="uid://bp6h74gm3lwau" path="res://Script/SongSelect/Leaderboard.cs" id="1_ysfsi"]
 [ext_resource type="Script" uid="uid://r1nchdkq185" path="res://Script/SongSelect/LeaderboardRank.cs" id="2_wkrig"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ysfsi"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wbm6w"]
-texture = ExtResource("1_vt3mq")
-texture_margin_left = 15.0
-texture_margin_top = 15.0
-texture_margin_right = 15.0
-texture_margin_bottom = 15.0
-modulate_color = Color(1.25, 1.25, 1.25, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wkrig"]
+bg_color = Color(0.4, 0.4, 0.4, 0.8)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1bkjm"]
-texture = ExtResource("1_vt3mq")
-texture_margin_left = 15.0
-texture_margin_top = 15.0
-texture_margin_right = 15.0
-texture_margin_bottom = 15.0
-modulate_color = Color(0.266667, 0.490196, 0.839216, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1bkjm"]
+bg_color = Color(0.2, 0.2, 0.4, 0.8)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y1q14"]
-texture = ExtResource("1_vt3mq")
-texture_margin_left = 15.0
-texture_margin_top = 15.0
-texture_margin_right = 15.0
-texture_margin_bottom = 15.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wbm6w"]
+bg_color = Color(0.2, 0.2, 0.2, 0.8)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wkrig"]
 content_margin_left = 3.0
 content_margin_top = 3.0
 content_margin_right = 3.0
 content_margin_bottom = 3.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ysfsi"]
-bg_color = Color(0.5, 0.5, 0.5, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6nid0"]
 
@@ -75,28 +65,15 @@ corner_radius_bottom_left = 10
 content_margin_top = 3.0
 
 [node name="Leaderboard" type="Button"]
-custom_minimum_size = Vector2(335, 60)
-offset_right = 8.0
-offset_bottom = 8.0
+custom_minimum_size = Vector2(330, 60)
+offset_left = 5.0
+offset_right = 335.0
+offset_bottom = 60.0
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ysfsi")
-theme_override_styles/hover = SubResource("StyleBoxTexture_wbm6w")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_1bkjm")
-theme_override_styles/normal = SubResource("StyleBoxTexture_y1q14")
+theme_override_styles/hover = SubResource("StyleBoxFlat_wkrig")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_1bkjm")
+theme_override_styles/normal = SubResource("StyleBoxFlat_wbm6w")
 script = ExtResource("1_ysfsi")
-
-[node name="created" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 345.0
-offset_top = -9.5
-offset_right = 385.0
-offset_bottom = 9.5
-grow_horizontal = 0
-grow_vertical = 2
-text = "---"
-vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -114,14 +91,8 @@ text = "#1"
 horizontal_alignment = 1
 script = ExtResource("2_wkrig")
 
-[node name="Profile" type="PanelContainer" parent="HBoxContainer"]
-clip_children = 1
-custom_minimum_size = Vector2(60, 0)
-layout_mode = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_ysfsi")
-
-[node name="Picture" type="TextureRect" parent="HBoxContainer/Profile"]
+[node name="Picture" type="TextureRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("1_kgn3a")
@@ -187,6 +158,14 @@ horizontal_alignment = 2
 vertical_alignment = 1
 clip_text = true
 text_overrun_behavior = 3
+
+[node name="created" type="Label" parent="HBoxContainer/Col2"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+text = "---"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="Medal" type="PanelContainer" parent="HBoxContainer/Col2"]
 visible = false

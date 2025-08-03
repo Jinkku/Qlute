@@ -41,7 +41,7 @@ public partial class Leaderboard : Button
 		Score = GetNode<Label>("HBoxContainer/UserInfo/PlayScore/Score");
 		Combo = GetNode<Label>("HBoxContainer/UserInfo/PlayScore/Combo");
 		Mods = GetNode<Label>("HBoxContainer/Col2/Mods");
-		Time = GetNode<Label>("created");
+		Time = GetNode<Label>("HBoxContainer/Col2/created");
 		Username.Text = Info.username;
 		Score.Text = Info.score.ToString("N0");
 		Combo.Text = Info.combo.ToString("N0") + "x";

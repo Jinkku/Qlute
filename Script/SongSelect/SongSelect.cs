@@ -37,7 +37,8 @@ public partial class SongSelect : Control
 	private bool ContextMenuActive {get;set;}
 	private Tween ContextMenuAni {get;set;}
 	private PanelContainer ContextMenu {get;set;}
-	private OptionButton LeaderboardType {get;set;}
+	private Button LeaderboardLocal { get; set; }
+	private Button LeaderboardGlobal { get; set; }
 	
 
     int startposition = 0;
@@ -62,9 +63,6 @@ public partial class SongSelect : Control
 	public void _res_resize(){
 		var window_size = GetViewportRect().Size;
 		Control SongPanel = GetNode<Control>("SongPanel");
-		Control SongDetails = GetNode<Control>("SongDetails");
-		SongDetails.Size = new Vector2(SongDetails.Size.X, window_size.Y-100-50);
-		SongDetails.Position = new Vector2(0, 100);
 		SongPanel.Size = new Vector2(window_size.X/2.5f, window_size.Y-150);
 		SongPanel.Position = new Vector2(window_size.X-(window_size.X/2.5f), 105);
 	}
@@ -117,7 +115,7 @@ public partial class SongSelect : Control
 	{
 		SettingsOperator.loopaudio = true;
 		scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
-		RankedStatus = GetNode<Label>("SongDetails/SongPanelInfo/Box1/RankedStatus");
+		RankedStatus = GetNode<Label>("SongDetails/SongInfo/Rows/Box1/RankedStatus");
 		ContextMenu = GetNode<PanelContainer>("ContextMenu");
 		ContextMenu.Visible = false;
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
@@ -128,23 +126,24 @@ public partial class SongSelect : Control
 
 
 		SettingsOperator.Marathon = false;
-		Diff = GetNode<Label>("SongDetails/SongPanelInfo/Box5/Difficulty");
+		Diff = GetNode<Label>("SongDetails/SongInfo/Rows/Box5/Difficulty");
 		ModScreen = GetNode<Control>("ModsScreen");
 		ModScreen.Visible = true;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		SongTitle = GetNode<Label>("SongControl/AmazingPillar/Title");
-		LevelRating = GetNode<Label>("SongDetails/SongPanelInfo/Box5/Level");
-		RankStatus = GetNode<Label>("SongDetails/SongPanelInfo/Box1/RankedStatus");
-		SongArtist = GetNode<Label>("SongDetails/SongPanelInfo/Box1/Artist");
-		Songpp = GetNode<Label>("SongDetails/SongPanelInfo/Box2/Points");
-		SongBPM = GetNode<Label>("SongDetails/SongPanelInfo/Box3/BPM");
-		SongLen = GetNode<Label>("SongDetails/SongPanelInfo/Box3/Length");
-		SongMapper = GetNode<Label>("SongDetails/SongPanelInfo/Box2/Mapper");
-		LeaderboardType = GetNode<OptionButton>("SongDetails/SongPanelInfo/Box4/Leaderboards");
+		SongTitle = GetNode<Label>("SongDetails/SongInfo/Rows/Title");
+		LevelRating = GetNode<Label>("SongDetails/SongInfo/Rows/Box5/Level");
+		RankStatus = GetNode<Label>("SongDetails/SongInfo/Rows/Box1/RankedStatus");
+		SongArtist = GetNode<Label>("SongDetails/SongInfo/Rows/Box1/Artist");
+		Songpp = GetNode<Label>("SongDetails/SongInfo/Rows/Box2/Points");
+		SongBPM = GetNode<Label>("SongDetails/SongInfo/Rows/Box3/BPM");
+		SongLen = GetNode<Label>("SongDetails/SongInfo/Rows/Box3/Length");
+		SongMapper = GetNode<Label>("SongDetails/SongInfo/Rows/Box2/Mapper");
+		LeaderboardGlobal = GetNode<Button>("SongDetails/Leaderboard Panel/Rows/Box4/Global");
+		LeaderboardLocal = GetNode<Button>("SongDetails/Leaderboard Panel/Rows/Box4/Local");
 		StartButton = GetNode<Button>("BottomBar/Start");
 		StartButton.Visible = false; // Start the button off with being hidden.
 		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
-		LeaderboardType.Selected = SettingsOperator.LeaderboardType;
+		CheckLeaderboardMode();
 
 
 		check_modscreen();
@@ -289,9 +288,26 @@ public partial class SongSelect : Control
 			GD.PrintErr("No osubeatid found in Sessioncfg, cannot reload leaderboard.");
 		}
 	}
+
+	private void CheckLeaderboardMode()
+	{
+		if (SettingsOperator.LeaderboardType == 0)
+		{
+			LeaderboardGlobal.ButtonPressed = false;
+			LeaderboardLocal.ButtonPressed = true;
+		}
+		else
+		{
+			LeaderboardGlobal.ButtonPressed = true;
+			LeaderboardLocal.ButtonPressed = false;
+		}
+	}
+
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
+		CheckLeaderboardMode();
+
 		// Show Play button if SongID is set.
 		StartButton.Visible = ((int)SettingsOperator.Sessioncfg["SongID"] != -1);
 		NoBeatmap.Visible = (SettingsOperator.Beatmaps.Count < 1);
@@ -453,10 +469,10 @@ public partial class SongSelect : Control
 		}
 
 		
-		var SongDetails = GetNode<PanelContainer>("SongDetails");
+		var SongDetails = GetNode<VBoxContainer>("SongDetails");
 		var SongPanel = GetNode<Control>("SongPanel");
 		var BottomBar = GetNode<Control>("BottomBar");
-		var SongControl = GetNode<PanelContainer>("SongControl");
+		var SongControl = GetNode<PanelContainer>("ControlBar");
 		var LoadScreen = GD.Load<PackedScene>("res://Panels/Screens/SongLoadingScreen.tscn").Instantiate().GetNode<Control>(".");
 		LoadScreen.Modulate = new Color(0,0,0,0);
 		GetTree().CurrentScene.AddChild(LoadScreen);

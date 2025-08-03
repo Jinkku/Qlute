@@ -467,7 +467,7 @@ public partial class Gameplay : Control
 
 
 
-			if ((int)est >= dance.ElementAt(DanceIndex).time - BeatmapBackground.bpm && BeatmapBackground.FlashEnable)
+			if ((int)est >= dance.ElementAt(DanceIndex).time + BeatmapBackground.bpm && BeatmapBackground.FlashEnable)
 			{
 				Transitioning(dance.ElementAt(DanceIndex).flash);
 				IncreaseDanceIndex();

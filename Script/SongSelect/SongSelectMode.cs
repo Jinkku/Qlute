@@ -9,12 +9,10 @@ public partial class SongSelectMode : Label
 		if (SettingsOperator.CreateSelectingBeatmap || SettingsOperator.MultiSelectingBeatmap)
 		{
 			Text = "Select a beatmap to use";
-			Visible = true;
 		}
 		else
 		{
 			Text = "";
-			Visible = false;
 		}
 	}
 }

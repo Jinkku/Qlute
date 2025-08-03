@@ -17,6 +17,23 @@ public partial class LeaderboardInfo : ScrollContainer
 	}
 	private void refreshl(){
 		oldLeaderboardList = ApiOperator.LeaderboardList;
+		Random randomizer = new Random();
+		for (int i = 0; i < 101; i++)
+		{
+			ApiOperator.LeaderboardList.Add(new LeaderboardEntry
+			{
+				username = $"Player{i.ToString("N0")}",
+				points = randomizer.Next(1, 1000),
+				score = randomizer.Next(1, 1823476),
+				combo = randomizer.Next(1, 3265),
+				MAX = randomizer.Next(1, 1000),
+				GOOD = randomizer.Next(1, 1000),
+				MEH = randomizer.Next(1, 1000),
+				BAD = randomizer.Next(1, 1000),
+				mods = "HD",
+				time = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+			});
+		}
 		foreach (var child in Leaderboards.GetChildren())
 		{
 			if (child is Button button)
