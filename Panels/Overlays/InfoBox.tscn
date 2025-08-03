@@ -1,0 +1,55 @@
+[gd_scene load_steps=6 format=3 uid="uid://ce4jpc6edc2re"]
+
+[ext_resource type="Script" uid="uid://fndjbbpbehge" path="res://Script/SongSelect/InfoBox.gd" id="1_bux6j"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bux6j"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.2)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Gradient" id="Gradient_mhmad"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bux6j"]
+gradient = SubResource("Gradient_mhmad")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mhmad"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[node name="InfoBox" type="PanelContainer"]
+custom_minimum_size = Vector2(80, 0)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bux6j")
+script = ExtResource("1_bux6j")
+Icon = SubResource("GradientTexture2D_bux6j")
+Text = "Dummy Text"
+
+[node name="Columns" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="Columns"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture = SubResource("GradientTexture2D_bux6j")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="Columns"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxEmpty_mhmad")
+text = "Dummy Text"
+horizontal_alignment = 1
+vertical_alignment = 1

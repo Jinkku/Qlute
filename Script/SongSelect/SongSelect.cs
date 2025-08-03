@@ -3,49 +3,58 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+public class InfoBox
+{
+	public static void Text(Node Node,string value)
+	{
+		Node.Set("Text", value);
+	}
+}
+
 public partial class SongSelect : Control
 {
 	// Called when the node enters the scene tree for the first time.
-	 [Export] private TextureRect textureRect;
+	[Export] private TextureRect textureRect;
 	public SettingsOperator SettingsOperator { get; set; }
 	public PackedScene musiccardtemplate;
 	public Label SongTitle { get; set; }
 	public Label SongArtist { get; set; }
 	public Label SongMapper { get; set; }
-	private Label LevelRating { get; set; }
+	private PanelContainer LevelRating { get; set; }
 	private Label RankStatus { get; set; }
 	private Label NoBeatmap { get; set; }
-	public Label Songpp { get; set; }
+	public PanelContainer Songpp { get; set; }
 	public Label Debugtext { get; set; }
-	public Label SongBPM { get; set; }
-	public Label SongLen { get; set; }
+	public PanelContainer SongBPM { get; set; }
+	public PanelContainer SongLen { get; set; }
 	public Button StartButton { get; set; }
 	public List<object> SongEntry = new List<object>();
 	public int SongETick { get; set; }
-	public Texture2D ImageCache {get;set;}
-	public string ImageURL {get;set;}
+	public Texture2D ImageCache { get; set; }
+	public string ImageURL { get; set; }
 	public Control ModScreen { get; set; }
 	public Tween ModScreen_Tween { get; set; }
 	public Label Diff { get; set; }
 	public ScrollBar scrollBar { get; set; }
-	public PanelContainer Info {get;set;}
-    public Tween scrolltween { get; private set; }
-	private int scrollvelocity {get;set;}
-	public Label RankedStatus {get;set;}
-	private bool AnimationSong {get;set;}
-	private int SongLoaded {get;set;}
-	private bool ContextMenuActive {get;set;}
-	private Tween ContextMenuAni {get;set;}
-	private PanelContainer ContextMenu {get;set;}
+	public PanelContainer Info { get; set; }
+	public Tween scrolltween { get; private set; }
+	private int scrollvelocity { get; set; }
+	public Label RankedStatus { get; set; }
+	private bool AnimationSong { get; set; }
+	private int SongLoaded { get; set; }
+	private bool ContextMenuActive { get; set; }
+	private Tween ContextMenuAni { get; set; }
+	private PanelContainer ContextMenu { get; set; }
 	private Button LeaderboardLocal { get; set; }
 	private Button LeaderboardGlobal { get; set; }
-	
 
-    int startposition = 0;
-	int scrolloldvalue {get;set;}
-	private void _valuechangedscroll(float value){ // Part of the loading Beatmaps
+
+	int startposition = 0;
+	int scrolloldvalue { get; set; }
+	private void _valuechangedscroll(float value)
+	{ // Part of the loading Beatmaps
 		SongETick = 0;
-		startposition = ((int)GetViewportRect().Size.Y/2) - 166;
+		startposition = ((int)GetViewportRect().Size.Y / 2) - 166;
 		//Debugtext.Text = $"{value.ToString()}/{SongLoaded.ToString()}";
 		ScrollSongs();
 	}
@@ -60,11 +69,12 @@ public partial class SongSelect : Control
 		scrolltween.TweenProperty(scrollBar, "value", value, 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		scrolltween.Play();
 	}
-	public void _res_resize(){
+	public void _res_resize()
+	{
 		var window_size = GetViewportRect().Size;
 		Control SongPanel = GetNode<Control>("SongPanel");
-		SongPanel.Size = new Vector2(window_size.X/2.5f, window_size.Y-150);
-		SongPanel.Position = new Vector2(window_size.X-(window_size.X/2.5f), 105);
+		SongPanel.Size = new Vector2(window_size.X / 2.5f, window_size.Y - 150);
+		SongPanel.Position = new Vector2(window_size.X - (window_size.X / 2.5f), 105);
 	}
 	public void AddSongList(int id)
 	{
@@ -76,7 +86,7 @@ public partial class SongSelect : Control
 		var TextureRect = button.GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
 		var Rating = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBox/Rating");
 		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBox/Version");
-		button.Position = new Vector2(0, startposition + (83*id));
+		button.Position = new Vector2(0, startposition + (83 * id));
 		SongTitle.Text = SettingsOperator.Beatmaps[id].Title;
 		SongArtist.Text = SettingsOperator.Beatmaps[id].Artist;
 		SongMapper.Text = "Created by " + SettingsOperator.Beatmaps[id].Mapper;
@@ -93,21 +103,23 @@ public partial class SongSelect : Control
 		//}
 		//TextureRect.Texture = ImageCache;
 	}
-	private void _on_random(){
+	private void _on_random()
+	{
 		SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
 		scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
 	}
 
 
 	// used later
-	private void startanimation(){
+	private void startanimation()
+	{
 		var SongDetails = GetNode<TextureRect>("SongDetails");
-		SongDetails.Position = new Vector2(-SongDetails.Size.X,SongDetails.Position.Y);
-		SongDetails.Modulate = new Color(0f,0f,0f,0f);
+		SongDetails.Position = new Vector2(-SongDetails.Size.X, SongDetails.Position.Y);
+		SongDetails.Modulate = new Color(0f, 0f, 0f, 0f);
 		var SongSelectAnimation = CreateTween();
 		SongSelectAnimation.SetParallel(true);
-		SongSelectAnimation.TweenProperty(SongDetails, "position", new Vector2(0,SongDetails.Position.Y), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-		SongSelectAnimation.TweenProperty(SongDetails, "modulate", new Color(1f,1f,1f,1f), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		SongSelectAnimation.TweenProperty(SongDetails, "position", new Vector2(0, SongDetails.Position.Y), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		SongSelectAnimation.TweenProperty(SongDetails, "modulate", new Color(1f, 1f, 1f, 1f), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		SongSelectAnimation.Play();
 	}
 
@@ -115,29 +127,31 @@ public partial class SongSelect : Control
 	{
 		SettingsOperator.loopaudio = true;
 		scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
-		RankedStatus = GetNode<Label>("SongDetails/SongInfo/Rows/Box1/RankedStatus");
+		RankedStatus = GetNode<Label>("SongDetails/SongInfo/Rows/Misc/RankedStatus");
 		ContextMenu = GetNode<PanelContainer>("ContextMenu");
 		ContextMenu.Visible = false;
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		NoBeatmap = GetNode<Label>("SongPanel/NoBeatmap");
 		NoBeatmap.Visible = true;
 		SongETick = 0;
-		startposition = ((int)GetViewportRect().Size.Y/2) - 166;
+		startposition = ((int)GetViewportRect().Size.Y / 2) - 166;
 
 
 		SettingsOperator.Marathon = false;
-		Diff = GetNode<Label>("SongDetails/SongInfo/Rows/Box5/Difficulty");
 		ModScreen = GetNode<Control>("ModsScreen");
 		ModScreen.Visible = true;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SongTitle = GetNode<Label>("SongDetails/SongInfo/Rows/Title");
-		LevelRating = GetNode<Label>("SongDetails/SongInfo/Rows/Box5/Level");
-		RankStatus = GetNode<Label>("SongDetails/SongInfo/Rows/Box1/RankedStatus");
-		SongArtist = GetNode<Label>("SongDetails/SongInfo/Rows/Box1/Artist");
-		Songpp = GetNode<Label>("SongDetails/SongInfo/Rows/Box2/Points");
-		SongBPM = GetNode<Label>("SongDetails/SongInfo/Rows/Box3/BPM");
-		SongLen = GetNode<Label>("SongDetails/SongInfo/Rows/Box3/Length");
-		SongMapper = GetNode<Label>("SongDetails/SongInfo/Rows/Box2/Mapper");
+		SongArtist = GetNode<Label>("SongDetails/SongInfo/Rows/Artist");
+		SongMapper = GetNode<Label>("SongDetails/SongInfo/Rows/Mapper");
+		Diff = GetNode<Label>("SongDetails/SongInfo/Rows/Difficulty");
+
+
+		LevelRating = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/Level");
+		RankStatus = GetNode<Label>("SongDetails/SongInfo/Rows/Misc/RankedStatus");
+		Songpp = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/Points");
+		SongBPM = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/BPM");
+		SongLen = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/Length");
 		LeaderboardGlobal = GetNode<Button>("SongDetails/Leaderboard Panel/Rows/Box4/Global");
 		LeaderboardLocal = GetNode<Button>("SongDetails/Leaderboard Panel/Rows/Box4/Local");
 		StartButton = GetNode<Button>("BottomBar/Start");
@@ -147,15 +161,15 @@ public partial class SongSelect : Control
 
 
 		check_modscreen();
-		
+
 
 		_res_resize();
 		checksongpanel();
 	}
 	// Animation for Start Button DUH
 
-	public Tween StartTween {get;set;}
-	private Color idlestartcolour = new Color(0.5f,0.5f,0.5f,0.5f);
+	public Tween StartTween { get; set; }
+	private Color idlestartcolour = new Color(0.5f, 0.5f, 0.5f, 0.5f);
 	private Color focuscolour = new Color(0.270f, 0.549f, 1f);
 	private Color startpress = new Color(0.44f, 0.53f, 0.5f);
 	private void _start_down()
@@ -172,7 +186,8 @@ public partial class SongSelect : Control
 		StartTween.TweenProperty(StartButton, "self_modulate", focuscolour, 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		StartTween.Play();
 	}
-	private void _start_unfocus(){
+	private void _start_unfocus()
+	{
 		StartTween?.Kill();
 		StartTween = StartButton.CreateTween();
 		StartTween.TweenProperty(StartButton, "self_modulate", idlestartcolour, 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
@@ -180,40 +195,40 @@ public partial class SongSelect : Control
 	}
 	private void ScrollSongs()
 	{
-			// Calculate visible range with larger buffer to reduce flickering
-			float viewportHeight = GetViewportRect().Size.Y;
-			int visibleItemCount = (int)(viewportHeight / 83); // Increased buffer items
-			int startIndex = Math.Max(0, (int)scrollBar.Value - (visibleItemCount / 2) - 1);
-			int endIndex = Math.Min(SettingsOperator.Beatmaps.Count, startIndex + visibleItemCount + 1);
+		// Calculate visible range with larger buffer to reduce flickering
+		float viewportHeight = GetViewportRect().Size.Y;
+		int visibleItemCount = (int)(viewportHeight / 83); // Increased buffer items
+		int startIndex = Math.Max(0, (int)scrollBar.Value - (visibleItemCount / 2) - 1);
+		int endIndex = Math.Min(SettingsOperator.Beatmaps.Count, startIndex + visibleItemCount + 1);
 
-			// Remove items outside visible range
-			for (int i = SongEntry.Count - 1; i >= 0; i--)
+		// Remove items outside visible range
+		for (int i = SongEntry.Count - 1; i >= 0; i--)
+		{
+			if (SongEntry[i] is Button button)
 			{
-				if (SongEntry[i] is Button button)
+				int buttonIndex = int.Parse(button.Name);
+				if (buttonIndex < startIndex || buttonIndex >= endIndex)
 				{
-					int buttonIndex = int.Parse(button.Name);
-					if (buttonIndex < startIndex || buttonIndex >= endIndex)
-					{
-						button.QueueFree();
-						SongEntry.RemoveAt(i);
-					}
+					button.QueueFree();
+					SongEntry.RemoveAt(i);
 				}
 			}
+		}
 
-			// Add missing visible items
-			for (int i = startIndex; i < endIndex; i++)
+		// Add missing visible items
+		for (int i = startIndex; i < endIndex; i++)
+		{
+			if (!SongEntry.Any(entry => entry is Button btn && btn.Name == i.ToString()))
 			{
-				if (!SongEntry.Any(entry => entry is Button btn && btn.Name == i.ToString()))
-				{
-					AddSongList(i);
-				}
-				// Update positions of existing entries
-				if (SongEntry.FirstOrDefault(e => e is Button btn && btn.Name == i.ToString()) is Button entry)
-				{
-					entry.ZIndex = 0; // Ensure proper layering
-					entry.Position = new Vector2(0, startposition + (83 * i) - (83 * (float)scrollBar.Value));
-				}
+				AddSongList(i);
 			}
+			// Update positions of existing entries
+			if (SongEntry.FirstOrDefault(e => e is Button btn && btn.Name == i.ToString()) is Button entry)
+			{
+				entry.ZIndex = 0; // Ensure proper layering
+				entry.Position = new Vector2(0, startposition + (83 * i) - (83 * (float)scrollBar.Value));
+			}
+		}
 	}
 	// Manages SongDetails
 
@@ -224,11 +239,11 @@ public partial class SongSelect : Control
 		{
 			// Update song details
 			SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
-			Songpp.Text = "+" + (SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier).ToString("N0") + "pp";
 			SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
-			LevelRating.Text = "Lv. " + SettingsOperator.LevelRating.ToString("N0") ?? "Lv. 0";
-			SongBPM.Text = "BPM - " + ((int)SettingsOperator.Sessioncfg["beatmapbpm"] * AudioPlayer.Instance.PitchScale).ToString("N0") ?? "";
-			SongLen.Text = TimeSpan.FromMilliseconds((SettingsOperator.Gameplaycfg.TimeTotalGame / 0.001f) / AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00";
+			InfoBox.Text(Songpp,"+" + (SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier).ToString("N0") + "pp");
+			InfoBox.Text(LevelRating, "Lv. " + SettingsOperator.LevelRating.ToString("N0") ?? "Lv. 0");
+			InfoBox.Text(SongBPM, ((int)SettingsOperator.Sessioncfg["beatmapbpm"] * AudioPlayer.Instance.PitchScale).ToString("N0") ?? "???");
+			InfoBox.Text(SongLen, TimeSpan.FromMilliseconds((SettingsOperator.Gameplaycfg.TimeTotalGame / 0.001f) / AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00");
 
 
 			SetControlsVisibility(true);
@@ -264,9 +279,11 @@ public partial class SongSelect : Control
 		LevelRating.Visible = visible;
 		RankStatus.Visible = visible;
 	}
-	public void check_modscreen(){
-		if (!ModsScreenActive){
-			ModScreen.Position = new Vector2(0,GetViewportRect().Size.Y);
+	public void check_modscreen()
+	{
+		if (!ModsScreenActive)
+		{
+			ModScreen.Position = new Vector2(0, GetViewportRect().Size.Y);
 		}
 	}
 
@@ -421,7 +438,7 @@ public partial class SongSelect : Control
 			MusicCard.Connection_Button = false;
 		}
 	}
-	
+
 	private bool ModsScreenActive = false;
 	private bool SongPanelAccess = false;
 	private void _songenter()
@@ -431,24 +448,29 @@ public partial class SongSelect : Control
 	private void _songexit()
 	{
 		SongPanelAccess = false;
-	 }
-	private void _Mods_show(){
-		if (ModScreen_Tween != null){
+	}
+	private void _Mods_show()
+	{
+		if (ModScreen_Tween != null)
+		{
 			ModScreen_Tween.Kill();
 		}
 		ModScreen_Tween = ModScreen.CreateTween();
-		var colour = new Color(1f,1f,1f,1f);
-		var pos = new Vector2(0,0);
-		if (ModsScreenActive) {
+		var colour = new Color(1f, 1f, 1f, 1f);
+		var pos = new Vector2(0, 0);
+		if (ModsScreenActive)
+		{
 			ModsScreenActive = false;
-			colour = new Color(0f,0f,0f,0f);
-			pos = new Vector2(0,GetViewportRect().Size.Y);
-		}else {
+			colour = new Color(0f, 0f, 0f, 0f);
+			pos = new Vector2(0, GetViewportRect().Size.Y);
+		}
+		else
+		{
 			ModsScreenActive = true;
-			ModScreen.Position = new Vector2(0,GetViewportRect().Size.Y);
+			ModScreen.Position = new Vector2(0, GetViewportRect().Size.Y);
 		}
 		ModScreen_Tween.SetParallel(true);
-		ModScreen_Tween.TweenProperty(ModScreen, "position", pos , 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		ModScreen_Tween.TweenProperty(ModScreen, "position", pos, 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		ModScreen_Tween.Play();
 	}
 	private void _resetreplay()
@@ -456,8 +478,10 @@ public partial class SongSelect : Control
 		SettingsOperator.SpectatorMode = false;
 	}
 
-	private void _Start(){
-		if (ModsScreenActive){
+	private void _Start()
+	{
+		if (ModsScreenActive)
+		{
 			_Mods_show();
 		}
 		Sample.PlaySample("res://Skin/Sounds/play.wav");
@@ -468,26 +492,27 @@ public partial class SongSelect : Control
 			Gameplay.reload_npcleaderboard();
 		}
 
-		
+
 		var SongDetails = GetNode<VBoxContainer>("SongDetails");
 		var SongPanel = GetNode<Control>("SongPanel");
 		var BottomBar = GetNode<Control>("BottomBar");
 		var SongControl = GetNode<PanelContainer>("ControlBar");
 		var LoadScreen = GD.Load<PackedScene>("res://Panels/Screens/SongLoadingScreen.tscn").Instantiate().GetNode<Control>(".");
-		LoadScreen.Modulate = new Color(0,0,0,0);
+		LoadScreen.Modulate = new Color(0, 0, 0, 0);
 		GetTree().CurrentScene.AddChild(LoadScreen);
 		var Ani = CreateTween();
 		Ani.SetParallel(true);
-		Ani.TweenProperty(SongDetails, "position", new Vector2(-SongDetails.Size.X,SongDetails.Position.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-		Ani.TweenProperty(SongPanel, "position", new Vector2(SongPanel.Position.X+SongPanel.Size.X,SongPanel.Position.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-		Ani.TweenProperty(SongPanel, "modulate", new Color(0,0,0,0), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-		Ani.TweenProperty(BottomBar, "position", new Vector2(BottomBar.Position.X,BottomBar.Position.Y+BottomBar.Size.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-		Ani.TweenProperty(SongControl, "position", new Vector2(SongControl.Position.X,-SongControl.Size.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-		Ani.TweenProperty(LoadScreen, "modulate", new Color(1,1,1,1), 0.5f).SetTrans(Tween.TransitionType.Linear);
+		Ani.TweenProperty(SongDetails, "position", new Vector2(-SongDetails.Size.X, SongDetails.Position.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		Ani.TweenProperty(SongPanel, "position", new Vector2(SongPanel.Position.X + SongPanel.Size.X, SongPanel.Position.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		Ani.TweenProperty(SongPanel, "modulate", new Color(0, 0, 0, 0), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		Ani.TweenProperty(BottomBar, "position", new Vector2(BottomBar.Position.X, BottomBar.Position.Y + BottomBar.Size.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		Ani.TweenProperty(SongControl, "position", new Vector2(SongControl.Position.X, -SongControl.Size.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		Ani.TweenProperty(LoadScreen, "modulate", new Color(1, 1, 1, 1), 0.5f).SetTrans(Tween.TransitionType.Linear);
 		Ani.Play();
 		SettingsOperator.loopaudio = false;
 	}
-	private void _on_back_pressed(){
+	private void _on_back_pressed()
+	{
 		if (SettingsOperator.CreateSelectingBeatmap) GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
 		else GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
 	}
