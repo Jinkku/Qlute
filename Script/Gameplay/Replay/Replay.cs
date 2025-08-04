@@ -233,7 +233,7 @@ public static class Replay
     /// <summary>
     /// Saves the replay file to it's desired path.
     /// </summary>
-    public static void SaveReplay()
+    public static void SaveReplay(int ID)
     {
         if (!SettingsOperator.SpectatorMode)
         {
@@ -244,14 +244,14 @@ public static class Replay
             cache += $"#osuBeatmapSetID: {SettingsOperator.Sessioncfg["osubeatidset"]}\n";
             cache += $"#QluteBeatmapID: 0\n";
             cache += $"#QluteBeatmapSetID: 0\n";
-            cache += $"#Score: {SettingsOperator.Gameplaycfg.Score}\n";
-            cache += $"#Max: {SettingsOperator.Gameplaycfg.Max}\n";
-            cache += $"#Great: {SettingsOperator.Gameplaycfg.Great}\n";
-            cache += $"#Meh: {SettingsOperator.Gameplaycfg.Meh}\n";
-            cache += $"#Bad: {SettingsOperator.Gameplaycfg.Bad}\n";
-            cache += $"#Accuracy: {SettingsOperator.Gameplaycfg.Accuracy * 100.00}\n";
-            cache += $"#Max Combo: {SettingsOperator.Gameplaycfg.MaxCombo}\n";
-            cache += $"#Average ms: {SettingsOperator.Gameplaycfg.ms}\n";
+            cache += $"#Score: {SettingsOperator.GameplayInfo[ID].Score}\n";
+            cache += $"#Max: {SettingsOperator.GameplayInfo[ID].Max}\n";
+            cache += $"#Great: {SettingsOperator.GameplayInfo[ID].Great}\n";
+            cache += $"#Meh: {SettingsOperator.GameplayInfo[ID].Meh}\n";
+            cache += $"#Bad: {SettingsOperator.GameplayInfo[ID].Bad}\n";
+            cache += $"#Accuracy: {SettingsOperator.GameplayInfo[ID].Accuracy * 100.00}\n";
+            cache += $"#Max Combo: {SettingsOperator.GameplayInfo[ID].MaxCombo}\n";
+            cache += $"#Average ms: {SettingsOperator.GameplayInfo[ID].ms}\n";
             cache += $"#Mods: {ModsOperator.GetModAlias()}\n";
             foreach (ReplayLegend entry in ReplayCache)
             {

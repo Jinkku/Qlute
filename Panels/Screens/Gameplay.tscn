@@ -22,6 +22,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_33mgo")
+metadata/GameID = 0
 
 [node name="TimeKeeper" type="Node" parent="."]
 process_mode = 4

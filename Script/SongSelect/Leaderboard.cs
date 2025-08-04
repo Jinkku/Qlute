@@ -17,16 +17,16 @@ public partial class Leaderboard : Button
 	private LeaderboardEntry Info { get; set; }
 	public void _stats()
 	{
-		SettingsOperator.ResetScore();
+		SettingsOperator.ResetScore(0);
 
-		SettingsOperator.Gameplaycfg.Max = Info.MAX;
-		SettingsOperator.Gameplaycfg.Great = Info.GOOD;
-		SettingsOperator.Gameplaycfg.Meh = Info.MEH;
-		SettingsOperator.Gameplaycfg.Bad = Info.BAD;
-		SettingsOperator.Gameplaycfg.Score = Info.score;
-		SettingsOperator.Gameplaycfg.MaxCombo = Info.combo;
-		SettingsOperator.Gameplaycfg.pp = Info.points;
-		SettingsOperator.Gameplaycfg.Accuracy = Gameplay.ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
+		SettingsOperator.GameplayInfo[0].Max = Info.MAX;
+		SettingsOperator.GameplayInfo[0].Great = Info.GOOD;
+		SettingsOperator.GameplayInfo[0].Meh = Info.MEH;
+		SettingsOperator.GameplayInfo[0].Bad = Info.BAD;
+		SettingsOperator.GameplayInfo[0].Score = Info.score;
+		SettingsOperator.GameplayInfo[0].MaxCombo = Info.combo;
+		SettingsOperator.GameplayInfo[0].pp = Info.points;
+		SettingsOperator.GameplayInfo[0].Accuracy = Gameplay.ReloadAccuracy(SettingsOperator.GameplayInfo[0].Max, SettingsOperator.GameplayInfo[0].Great, SettingsOperator.GameplayInfo[0].Meh, SettingsOperator.GameplayInfo[0].Bad);
 		if (Info.FilePath != "")
 		{
 			Replay.FilePath = Info.FilePath;

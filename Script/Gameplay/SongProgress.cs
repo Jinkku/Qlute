@@ -16,9 +16,9 @@ public partial class SongProgress : ProgressBar
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		timeTotal = SettingsOperator.Gameplaycfg.TimeTotal;
+		timeTotal = SongInfo.TimeTotal;
 		MaxValue = timeTotal;
-		timeCurrent = SettingsOperator.Gameplaycfg.Time;
+		timeCurrent = SongInfo.Time;
 		Value = timeCurrent;
 	}
 }

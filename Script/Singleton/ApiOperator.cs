@@ -35,18 +35,18 @@ public partial class ApiOperator : Node
 	private SettingsOperator SettingsOperator { get; set; }
 	public static ApiOperator Instance { get; set; }
 	public static string Beatmapapi = "https://catboy.best";
-	public void SubmitScore()
+	public void SubmitScore(int ID)
 	{
 		if (!SettingsOperator.SpectatorMode)
 		{
 			int BeatmapID = (int)SettingsOperator.Sessioncfg["osubeatid"];
 			int BeatmapSetID = (int)SettingsOperator.Sessioncfg["osubeatidset"];
-			double MAX = SettingsOperator.Gameplaycfg.Max;
-			double GREAT = SettingsOperator.Gameplaycfg.Great;
-			double MEH = SettingsOperator.Gameplaycfg.Meh;
-			double BAD = SettingsOperator.Gameplaycfg.Bad;
-			double COMBO = SettingsOperator.Gameplaycfg.MaxCombo;
-			double timetotal = SettingsOperator.Gameplaycfg.TimeTotal;
+			double MAX = SettingsOperator.GameplayInfo[ID].Max;
+			double GREAT = SettingsOperator.GameplayInfo[ID].Great;
+			double MEH = SettingsOperator.GameplayInfo[ID].Meh;
+			double BAD = SettingsOperator.GameplayInfo[ID].Bad;
+			double COMBO = SettingsOperator.GameplayInfo[ID].MaxCombo;
+			double timetotal = SettingsOperator.GameplayInfo[ID].TimeTotal;
 			string[] Headers = new string[] {
 			$"BeatmapID: {BeatmapID}",
 			$"BeatmapSetID: {BeatmapSetID}",

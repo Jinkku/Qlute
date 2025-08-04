@@ -12,32 +12,60 @@ public class DanceCounter {
         public bool flash {get;set;}
 }
 
+    public class Gameplaycfg
+    {
+        public int Score { get; set; }
+        public double Timeframe { get; set; }
+        public double pp { get; set; }
+        public float Time { get; set; }
+        public float TimeTotal { get; set; }
+        public float TimeTotalGame { get; set; }
+        public float Accuracy { get; set; }
+        public int Combo { get; set; }
+        public int MaxCombo { get; set; }
+        public int Max { get; set; }
+        public int Great { get; set; }
+        public int Meh { get; set; }
+        public int Bad { get; set; }
+        public float ms { get; set; }
+        public int Avgms { get; set; }
+
+    }
+public class SongInfo
+{
+        public static float Time { get; set; }
+        public static float TimeTotal { get; set; }
+        public static float GameTimeTotal { get; set; }
+        public static double maxpp { get; set; }
+}
+
 public partial class SettingsOperator : Node
 {
     public static string UpdatedRank = "#0";
     public static string Updatedpp = "0pp";
     public static string homedir = OS.GetUserDataDir().Replace("\\", "/");
-	public static string tempdir => homedir + "/temp";
-	public static string beatmapsdir => homedir + "/beatmaps";
+    public static string tempdir => homedir + "/temp";
+    public static string beatmapsdir => homedir + "/beatmaps";
     public static float ppbase = 0.035f;
-	public static string downloadsdir => homedir + "/downloads";
-	public static string replaydir => homedir + "/replays";
-	public static string screenshotdir => homedir + "/screenshots";
-	public static string skinsdir => homedir + "/skins";
+    public static string downloadsdir => homedir + "/downloads";
+    public static string replaydir => homedir + "/replays";
+    public static string screenshotdir => homedir + "/screenshots";
+    public static string skinsdir => homedir + "/skins";
     public static string settingsfile => homedir + "/settings.cfg";
     public static string Qlutedb => homedir + "/qlute.db";
     public static bool loopaudio = false;
     public static bool jukebox = false;
-    public int backgrounddim {get;set;}
-    public int MasterVol {get;set;}
-    public int SampleVol {get;set;}
-    public int scrollspeed {get;set;}
+    public int backgrounddim { get; set; }
+    public int MasterVol { get; set; }
+    public int SampleVol { get; set; }
+    public int scrollspeed { get; set; }
     public static bool SpectatorMode { get; set; } = false;
     public static float AllMiliSecondsFromBeatmap { get; set; }
-    public static float MiliSecondsFromBeatmap {get;set;}
-    public static int MiliSecondsFromBeatmapTimes {get;set;}
+    public static float MiliSecondsFromBeatmap { get; set; }
+    public static int MiliSecondsFromBeatmapTimes { get; set; }
     public static List<BeatmapLegend> Beatmaps = new List<BeatmapLegend>();
-	public static float AudioOffset { get; set; } = 0;
+    public static List<Gameplaycfg> GameplayInfo = new List<Gameplaycfg>();
+    public static float AudioOffset { get; set; } = 0;
     public static int LeaderboardType = 1;
     public static void ResetRank()
     {
@@ -93,7 +121,7 @@ public partial class SettingsOperator : Node
         { "showfps", false },
         { "leaderboardtype", 1 },
     };
-    public Dictionary<string, object> Configurationbk {get; set;}
+    public Dictionary<string, object> Configurationbk { get; set; }
 
 
     public static Texture2D LoadImage(string path) // I am going to make this better and not lag the game when loading images
@@ -115,13 +143,14 @@ public partial class SettingsOperator : Node
             return null;
         }
     }
-    public static int RndSongID(){
+    public static int RndSongID()
+    {
         int id = new Random().Next(0, Beatmaps.Count);
         return id;
     }
     public static bool CreateSelectingBeatmap { get; set; }
     public static bool MultiSelectingBeatmap { get; set; }
-    public static bool Start_reloadLeaderboard {get; set; } = false;
+    public static bool Start_reloadLeaderboard { get; set; } = false;
     public static List<int> MarathonMapPaths { get; set; } = new List<int>();
     public static bool Marathon { get; set; } = false; // Marathon mode flag
     public static int MarathonID { get; set; } = -1; // ID of the current marathon song
@@ -143,7 +172,7 @@ public partial class SettingsOperator : Node
             Sessioncfg["beatmapartist"] = beatmap.Artist;
             Sessioncfg["beatmapdiff"] = beatmap.Version;
             Sessioncfg["beatmapbpm"] = (int)beatmap.Bpm;
-            Gameplaycfg.TimeTotalGame = beatmap.Timetotal * 0.001f;
+            SongInfo.GameTimeTotal = beatmap.Timetotal * 0.001f;
             Sessioncfg["beatmapmapper"] = beatmap.Mapper;
             Sessioncfg["beatmapaccuracy"] = (int)beatmap.Accuracy;
             LevelRating = (int)Math.Round(beatmap.Levelrating);
@@ -151,7 +180,7 @@ public partial class SettingsOperator : Node
             Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
             var Texture = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
             Sessioncfg["background"] = (Texture2D)Texture;
-            Gameplaycfg.maxpp = beatmap.pp;
+            SongInfo.maxpp = beatmap.pp;
             string audioPath = beatmap.Path + "" + beatmap.Audio;
             if (System.IO.File.Exists(audioPath))
             {
@@ -178,18 +207,20 @@ public partial class SettingsOperator : Node
         }
         else { GD.PrintErr("Can't select a song that don't exist :/"); }
     }
-    public static double Get_ppvalue(int max, int great, int meh, int bad, float multiplier = 1,int combo = 0){
+    public static double Get_ppvalue(int max, int great, int meh, int bad, float multiplier = 1, int combo = 0)
+    {
         //bad = Math.Max(1,bad);
         var ppvalue = 0.0;
         ppvalue = max * ppbase;
-        ppvalue -= ppbase/2 * great;
-        ppvalue -= ppbase/3 * meh;
+        ppvalue -= ppbase / 2 * great;
+        ppvalue -= ppbase / 3 * meh;
         ppvalue -= ppbase * bad;
         ppvalue += combo * ppbase;
-        ppvalue *=multiplier;
-        return Math.Max(0,ppvalue);
-        }
-    public static void Parse_Beatmapfile(string filename, int SetID = 0){
+        ppvalue *= multiplier;
+        return Math.Max(0, ppvalue);
+    }
+    public static void Parse_Beatmapfile(string filename, int SetID = 0)
+    {
         using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
         var text = file.GetAsText();
         var lines = text.Split("\n");
@@ -213,83 +244,85 @@ public partial class SettingsOperator : Node
         var hitob = 0;
         List<DanceCounter> dance = [];
         var isHitObjectSection = false;
-        string path = filename.Replace(filename.Split("/").Last(),"");
+        string path = filename.Replace(filename.Split("/").Last(), "");
         int keycount = 4;
         foreach (var line in lines)
         {
             if (line.StartsWith("Title:"))
             {
-            songtitle = line.Split(":")[1].Trim();
+                songtitle = line.Split(":")[1].Trim();
             }
             if (line.StartsWith("Artist:"))
             {
-            artist = line.Split(":")[1].Trim();
+                artist = line.Split(":")[1].Trim();
             }
             if (line.StartsWith("CircleSize:"))
             {
-            //keycount = (int)float.Parse(line.Split(":")[1].Trim());
-            keycount = float.TryParse(line.Split(":")[1].Trim(), out float keycountv) ? (int)keycountv : 4;
-            }if (line.StartsWith("OverallDifficulty:"))
+                //keycount = (int)float.Parse(line.Split(":")[1].Trim());
+                keycount = float.TryParse(line.Split(":")[1].Trim(), out float keycountv) ? (int)keycountv : 4;
+            }
+            if (line.StartsWith("OverallDifficulty:"))
             {
-            //keycount = (int)float.Parse(line.Split(":")[1].Trim());
-            accuracy = float.TryParse(line.Split(":")[1].Trim(), out float accuracyv ) ? (int)accuracyv : 0;
+                //keycount = (int)float.Parse(line.Split(":")[1].Trim());
+                accuracy = float.TryParse(line.Split(":")[1].Trim(), out float accuracyv) ? (int)accuracyv : 0;
             }
             if (line.StartsWith("AudioFilename:"))
             {
-            audio = line.Split(":")[1].Trim();
+                audio = line.Split(":")[1].Trim();
             }
             if (line.StartsWith("BeatmapID:"))
             {
-            osubeatid = int.TryParse(line.Split(":")[1].Trim(), out int osubeatidv) ? (int)osubeatidv : 0;
+                osubeatid = int.TryParse(line.Split(":")[1].Trim(), out int osubeatidv) ? (int)osubeatidv : 0;
             }
             if (line.StartsWith("BeatmapSetID:"))
             {
-            osubeatidset = int.TryParse(line.Split(":")[1].Trim(), out int osubeatidsetv) ? (int)osubeatidsetv : 0;
+                osubeatidset = int.TryParse(line.Split(":")[1].Trim(), out int osubeatidsetv) ? (int)osubeatidsetv : 0;
             }
             if (line.StartsWith("QluteBeatID:"))
             {
-            qlbeatid = int.TryParse(line.Split(":")[1].Trim(), out int qlbeatidv) ? (int)qlbeatidv : 0;
+                qlbeatid = int.TryParse(line.Split(":")[1].Trim(), out int qlbeatidv) ? (int)qlbeatidv : 0;
             }
             if (line.StartsWith("QluteBeatIDSet:"))
             {
-            qlbeatidset = int.TryParse(line.Split(":")[1].Trim(), out int qlbeatidsetv) ? (int)qlbeatidsetv : 0;
+                qlbeatidset = int.TryParse(line.Split(":")[1].Trim(), out int qlbeatidsetv) ? (int)qlbeatidsetv : 0;
             }
             if (line.StartsWith("Creator:"))
             {
-            mapper = line.Split(":")[1].Trim();
+                mapper = line.Split(":")[1].Trim();
             }
             if (line.StartsWith("Version:"))
             {
-            version = line.Split(":")[1].Trim();
+                version = line.Split(":")[1].Trim();
             }
             if (line.StartsWith("0,0,\"") && line.Contains("\""))
             {
-            var parts = line.Split("\"");
-            if (parts.Length > 1)
-            {
-                background = parts[1].Trim();
-            }
+                var parts = line.Split("\"");
+                if (parts.Length > 1)
+                {
+                    background = parts[1].Trim();
+                }
             }
             if (line.StartsWith("[TimingPoints]"))
             {
-            var timingPointLines = lines.SkipWhile(l => !l.StartsWith("[TimingPoints]")).Skip(1);
-            bool foundbpm = false;
-            foreach (var timingLine in timingPointLines)
-            {
-                if (string.IsNullOrWhiteSpace(timingLine) || timingLine.StartsWith("["))
-                break;
-
-                var timingParts = timingLine.Split(",");
-                if (timingParts.Length > 1 && float.TryParse(timingParts[1], out float bpmValue) && !foundbpm)
+                var timingPointLines = lines.SkipWhile(l => !l.StartsWith("[TimingPoints]")).Skip(1);
+                bool foundbpm = false;
+                foreach (var timingLine in timingPointLines)
                 {
-                bpmValue = 60000 / bpmValue;
-                bpm = (int)bpmValue;
-                foundbpm = true;
+                    if (string.IsNullOrWhiteSpace(timingLine) || timingLine.StartsWith("["))
+                        break;
+
+                    var timingParts = timingLine.Split(",");
+                    if (timingParts.Length > 1 && float.TryParse(timingParts[1], out float bpmValue) && !foundbpm)
+                    {
+                        bpmValue = 60000 / bpmValue;
+                        bpm = (int)bpmValue;
+                        foundbpm = true;
+                    }
+                    if (timingParts.Length > 1 && int.TryParse(timingParts.First(), out int timecount) && int.TryParse(timingParts.Last(), out int flashtime))
+                    {
+                        dance.Add(new DanceCounter { time = timecount, flash = flashtime == 1 });
+                    }
                 }
-                if (timingParts.Length > 1 && int.TryParse(timingParts.First(), out int timecount) && int.TryParse(timingParts.Last(), out int flashtime)){
-                    dance.Add(new DanceCounter { time = timecount, flash = flashtime == 1 });
-                }
-            }
             }
             if (line.Trim() == "[HitObjects]")
             {
@@ -302,7 +335,7 @@ public partial class SettingsOperator : Node
                 // Break if we reach an empty line or another section
                 if (string.IsNullOrWhiteSpace(line) || line.StartsWith('['))
                 {
-                    ppvalue = Get_ppvalue(hitob,0,0,0,combo: hitob);
+                    ppvalue = Get_ppvalue(hitob, 0, 0, 0, combo: hitob);
                     isHitObjectSection = !isHitObjectSection;
                     levelrating = hitob * 0.005f;
                     timetotal = notetime;
@@ -348,51 +381,24 @@ public partial class SettingsOperator : Node
         MiliSecondsFromBeatmapTimes++;
         UnstableRate.Rate.Add(ms);
     }
-    public static float Getms(){
-        return AllMiliSecondsFromBeatmap/MiliSecondsFromBeatmapTimes;
+    public static float Getms()
+    {
+        return AllMiliSecondsFromBeatmap / MiliSecondsFromBeatmapTimes;
     }
-    public static void Resetms(){
+    public static void Resetms()
+    {
         AllMiliSecondsFromBeatmap = 0;
         MiliSecondsFromBeatmapTimes = 0;
     }
-    public static void ResetScore(){
-        Gameplaycfg.Score = 0;
-        Gameplaycfg.pp = 0;
-        Gameplaycfg.Max = 0;
-        Gameplaycfg.Great = 0;
-        Gameplaycfg.Meh = 0;
-        Gameplaycfg.Bad = 0;
-        Gameplaycfg.Accuracy = 100;
-        Gameplaycfg.Time = 0;
-        Gameplaycfg.Combo = 0;
-        Gameplaycfg.MaxCombo = 0;
-        Gameplaycfg.Avgms = 0;
-        Gameplaycfg.ms = 0;
-        Gameplaycfg.Timeframe = 0;
-    }
-    public static class Gameplaycfg
+    public static void ResetScore(int ID)
     {
-        public static int Score { get; set; }
-        public static double Timeframe { get; set; }
-        public static double pp { get; set; }
-        public static double maxpp { get; set; }
-        public static float Time { get; set; }
-        public static float TimeTotal { get; set; }
-        public static float TimeTotalGame { get; set; }
-        public static float Accuracy { get; set; }
-        public static int Combo { get; set; }
-        public static int MaxCombo { get; set; }
-        public static int Max { get; set; }
-        public static int Great { get; set; }
-        public static int Meh { get; set; }
-        public static int Bad { get; set; }
-        public static float ms { get; set; }
-        public static int Avgms { get; set; }
-
-
+        SettingsOperator.GameplayInfo.Clear();
+        for (int i = 0; i < ID + 1;i++) {
+            SettingsOperator.GameplayInfo.Add(new Gameplaycfg());
+        }
     }
     public static int ranked_points { get; set; }
-    
+
     public static int SongIDHighlighted { get; set; } = -1; // Highlighted song ID for the song select screen
     public static int LevelRating { get; set; } = -1; // Highlighted song ID for the song select screen
     public static Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
@@ -429,10 +435,12 @@ public partial class SettingsOperator : Node
         { "client-id", null },
         { "client-secret", null },
     };
-    public void toppaneltoggle(){
-		Sessioncfg["toppanelhide"] = !(bool)Sessioncfg["toppanelhide"];
-		AnimationPlayer Ana = GetTree().Root.GetNode<AnimationPlayer>("TopPanelOnTop/TopPanel/Wabamp");
-		if (((bool)Sessioncfg["toppanelhide"] == true)) Ana.PlayBackwards("Bootup"); else Ana.Play("Bootup");}
+    public void toppaneltoggle()
+    {
+        Sessioncfg["toppanelhide"] = !(bool)Sessioncfg["toppanelhide"];
+        AnimationPlayer Ana = GetTree().Root.GetNode<AnimationPlayer>("TopPanelOnTop/TopPanel/Wabamp");
+        if (((bool)Sessioncfg["toppanelhide"] == true)) Ana.PlayBackwards("Bootup"); else Ana.Play("Bootup");
+    }
     public static float TopPanelPosition { get; set; } = 0.0f;
     private double oldtime = 0.0f;
 
@@ -502,7 +510,7 @@ public partial class SettingsOperator : Node
                 }
             }
         }
-        
+
 
         backgrounddim = int.TryParse(GetSetting("backgrounddim").ToString(), out int bkd) ? bkd : 70;
         SampleVol = int.TryParse(GetSetting("sample").ToString(), out int smp) ? smp : 80;
@@ -513,7 +521,7 @@ public partial class SettingsOperator : Node
         RefreshFPS();
         Replay.Init();
         LeaderboardType = int.TryParse(GetSetting("leaderboardtype").ToString(), out int lbtm) ? (int)lbtm : 1;
-		if (LeaderboardType < 0 && LeaderboardType > 1) LeaderboardType = 1;
+        if (LeaderboardType < 0 && LeaderboardType > 1) LeaderboardType = 1;
     }
     public void ResetVol()
     {
@@ -542,16 +550,16 @@ public partial class SettingsOperator : Node
     {
         if (Configuration.ContainsKey(key))
             Configuration[key] = value;
-            SaveSettings();
+        SaveSettings();
     }
 
     // Save settings to file
     public void SaveSettings()
     {
-    using var saveFile = FileAccess.Open(settingsfile, FileAccess.ModeFlags.Write);
-    var json = JsonSerializer.Serialize(Configuration);
-    saveFile.StoreString(json);
-    saveFile.Close();
+        using var saveFile = FileAccess.Open(settingsfile, FileAccess.ModeFlags.Write);
+        var json = JsonSerializer.Serialize(Configuration);
+        saveFile.StoreString(json);
+        saveFile.Close();
     }
 
     // Get a setting

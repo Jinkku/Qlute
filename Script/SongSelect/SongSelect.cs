@@ -240,10 +240,10 @@ public partial class SongSelect : Control
 			// Update song details
 			SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
 			SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
-			InfoBox.Text(Songpp,"+" + (SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier).ToString("N0") + "pp");
+			InfoBox.Text(Songpp,"+" + (SongInfo.maxpp * ModsMulti.multiplier).ToString("N0") + "pp");
 			InfoBox.Text(LevelRating, "Lv. " + SettingsOperator.LevelRating.ToString("N0") ?? "Lv. 0");
 			InfoBox.Text(SongBPM, ((int)SettingsOperator.Sessioncfg["beatmapbpm"] * AudioPlayer.Instance.PitchScale).ToString("N0") ?? "???");
-			InfoBox.Text(SongLen, TimeSpan.FromMilliseconds((SettingsOperator.Gameplaycfg.TimeTotalGame / 0.001f) / AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00");
+			InfoBox.Text(SongLen, TimeSpan.FromMilliseconds((SongInfo.GameTimeTotal / 0.001f) / AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00");
 
 
 			SetControlsVisibility(true);

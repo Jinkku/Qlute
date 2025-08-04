@@ -18,7 +18,7 @@ public class KeyL
 
 public partial class Gameplay : Control
 {
-	// Called when the node enters the scene tree for the first time.
+	private int ID { get; set; }
 	private SettingsOperator SettingsOperator { get; set; }
 	public static ApiOperator ApiOperator { get; set; }
 	//public static Label Ttiming { get; set; }
@@ -113,7 +113,7 @@ public partial class Gameplay : Control
 				entry.combo = Math.Max(entry.rcombo, entry.combo);
 				entry.Accuracy = ReloadAccuracy(entry.MAX, entry.GOOD, entry.MEH, entry.BAD);
 
-				entry.score = Get_Score(SettingsOperator.Get_ppvalue(entry.MAX, entry.GOOD, entry.MEH, entry.BAD, ModsMulti.multiplier, entry.combo), SettingsOperator.Gameplaycfg.maxpp, ModsMulti.multiplier) / (1 + i);
+				entry.score = Get_Score(SettingsOperator.Get_ppvalue(entry.MAX, entry.GOOD, entry.MEH, entry.BAD, ModsMulti.multiplier, entry.combo), SongInfo.maxpp, ModsMulti.multiplier) / (1 + i);
 			}
 		}
 	}
@@ -184,6 +184,8 @@ public partial class Gameplay : Control
 	}
 	public override void _Ready()
 	{
+		ID = (int)GetMeta("ID");
+
 		ReplayINT = 0;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SpectatorPanel = GD.Load<PackedScene>("res://Panels/Overlays/SpectatorSettings.tscn").Instantiate().GetNode<Control>(".");
@@ -246,7 +248,7 @@ public partial class Gameplay : Control
 
 		maxrndvalue = (int)(1000000 * ModsMulti.multiplier);
 
-		SettingsOperator.ResetScore();
+		SettingsOperator.ResetScore(ID);
 		SettingsOperator.Resetms();
 		ReloadBeatmap(SettingsOperator.Sessioncfg["beatmapurl"].ToString());
 
@@ -309,9 +311,14 @@ public partial class Gameplay : Control
 		return ((float)max + ((float)great / 2) + ((float)meh / 3)) / ((float)max + (float)great + (float)meh + (float)bad);
 	}
 
-	public static void ReloadppCounter()
+	public void ReloadppCounter()
 	{
-		SettingsOperator.Gameplaycfg.pp = SettingsOperator.Get_ppvalue(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, ModsMulti.multiplier, SettingsOperator.Gameplaycfg.MaxCombo);
+		var MAX = SettingsOperator.GameplayInfo[ID].Max;
+		var GREAT = SettingsOperator.GameplayInfo[ID].Great;
+		var MEH = SettingsOperator.GameplayInfo[ID].Meh;
+		var BAD = SettingsOperator.GameplayInfo[ID].Bad;
+		var MAXCOMBO = SettingsOperator.GameplayInfo[ID].MaxCombo;
+		SettingsOperator.GameplayInfo[ID].pp = SettingsOperator.Get_ppvalue(MAX,GREAT,MEH,BAD, ModsMulti.multiplier, MAXCOMBO);
 	}
 	private float smoothedPlaybackPosition = 0f;
 
@@ -326,14 +333,14 @@ public partial class Gameplay : Control
     /// </summary>
 	public float GetRemainingTime(bool GameMode = false, float delta = 1f)
 	{
-		SettingsOperator.Gameplaycfg.Timeframe = -WaitClock.TimeLeft +
+		SettingsOperator.GameplayInfo[ID].Timeframe = -WaitClock.TimeLeft +
 			SmoothPosition(AudioPlayer.Instance.GetPlaybackPosition(), ref smoothedPlaybackPosition, delta);
 
 		var AudioOffset = GameMode ? SettingsOperator.AudioOffset * 0.001f : 0f;
 
-		SettingsOperator.Gameplaycfg.Timeframe = SettingsOperator.Gameplaycfg.Timeframe - startedtime + AudioOffset;
+		SettingsOperator.GameplayInfo[ID].Timeframe = SettingsOperator.GameplayInfo[ID].Timeframe - startedtime + AudioOffset;
 
-		return (float)(SettingsOperator.Gameplaycfg.Timeframe);
+		return (float)(SettingsOperator.GameplayInfo[ID].Timeframe);
 	}
     /// <summary>
     /// Get's the Score calculated
@@ -395,7 +402,7 @@ public partial class Gameplay : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		SettingsOperator.Gameplaycfg.Score = scoreint; // Set the score of the player
+		SettingsOperator.GameplayInfo[ID].Score = scoreint; // Set the score of the player
 		try
 		{
 			float est = GetRemainingTime(GameMode: true, delta: (float)delta) / 0.001f;
@@ -412,11 +419,11 @@ public partial class Gameplay : Control
 
 			// End Game
 
-			if (SettingsOperator.Gameplaycfg.TimeTotalGame - SettingsOperator.Gameplaycfg.Time < 0 && !Finished)
+			if (SettingsOperator.GameplayInfo[ID].TimeTotalGame - SettingsOperator.GameplayInfo[ID].Time < 0 && !Finished)
 			{
 				Finished = true;
-				ApiOperator.SubmitScore();
-				Replay.SaveReplay();
+				ApiOperator.SubmitScore(ID);
+				Replay.SaveReplay(ID);
 				if (!SettingsOperator.Marathon)
 				{
 					AddChild(GD.Load<PackedScene>("res://Panels/Screens/EndScreen.tscn").Instantiate());
@@ -430,14 +437,14 @@ public partial class Gameplay : Control
 				}
 			}
 
-			if (SettingsOperator.Gameplaycfg.Combo > SettingsOperator.Gameplaycfg.MaxCombo)
+			if (SettingsOperator.GameplayInfo[ID].Combo > SettingsOperator.GameplayInfo[ID].MaxCombo)
 			{
-				SettingsOperator.Gameplaycfg.MaxCombo = SettingsOperator.Gameplaycfg.Combo;
+				SettingsOperator.GameplayInfo[ID].MaxCombo = SettingsOperator.GameplayInfo[ID].Combo;
 			}
 
 
 			Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)));
-			SettingsOperator.Gameplaycfg.Accuracy = ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
+			SettingsOperator.GameplayInfo[ID].Accuracy = ReloadAccuracy(SettingsOperator.GameplayInfo[ID].Max, SettingsOperator.GameplayInfo[ID].Great, SettingsOperator.GameplayInfo[ID].Meh, SettingsOperator.GameplayInfo[ID].Bad);
 			ReloadppCounter();
 			int Ttick = 0;
 			if (Input.IsActionJustPressed("pausemenu") && SettingsOperator.SpectatorMode)
@@ -534,12 +541,12 @@ public partial class Gameplay : Control
 							mshitold = HitPoint + 5;
 							mshit = notex;
 							SettingsOperator.Addms(mshitold - mshit - 50);
-							SettingsOperator.Gameplaycfg.ms = SettingsOperator.Getms();
+							SettingsOperator.GameplayInfo[ID].ms = SettingsOperator.Getms();
 							Keys[(int)Note.Node.GetMeta("part")].hit = false;
 
 							scoretween?.Kill();
 							scoretween = CreateTween();
-							scoretween.TweenProperty(this, "scoreint", Get_Score(SettingsOperator.Gameplaycfg.pp, SettingsOperator.Gameplaycfg.maxpp, ModsMulti.multiplier), 0.3f);
+							scoretween.TweenProperty(this, "scoreint", Get_Score(SettingsOperator.GameplayInfo[ID].pp, SongInfo.maxpp, ModsMulti.multiplier), 0.3f);
 							scoretween.Play();
 							Note.hit = true;
 							Note.Node.Visible = false;
@@ -618,16 +625,16 @@ public partial class Gameplay : Control
 	{
 		if (timing + nodeSize > HitPoint - SettingsOperator.PerfectJudge && timing + nodeSize < HitPoint + SettingsOperator.PerfectJudge && keyvalue && visibility)
 		{
-			SettingsOperator.Gameplaycfg.Max++;
-			SettingsOperator.Gameplaycfg.Combo++;
+			SettingsOperator.GameplayInfo[ID].Max++;
+			SettingsOperator.GameplayInfo[ID].Combo++;
 			Hittext("Perfect", new Color(0f, 0.71f, 1f));
 			HealthBar.Heal(5);
 			return 0;
 		}
 		else if (timing + nodeSize > HitPoint - (SettingsOperator.GreatJudge / 2) && timing + nodeSize < HitPoint + (SettingsOperator.GreatJudge / 2) && keyvalue && visibility)
 		{
-			SettingsOperator.Gameplaycfg.Great++;
-			SettingsOperator.Gameplaycfg.Combo++;
+			SettingsOperator.GameplayInfo[ID].Great++;
+			SettingsOperator.GameplayInfo[ID].Combo++;
 			Hittext("Great", new Color(0f, 1f, 0.03f));
 			HealthBar.Heal(3);
 			return 1;
@@ -635,17 +642,17 @@ public partial class Gameplay : Control
 		else if (timing + nodeSize > HitPoint - (SettingsOperator.MehJudge / 2) && timing + nodeSize < HitPoint + (SettingsOperator.MehJudge / 2) && keyvalue && visibility)
 		{
 			Hittext("Meh", new Color(1f, 0.66f, 0f));
-			SettingsOperator.Gameplaycfg.Meh++;
-			SettingsOperator.Gameplaycfg.Combo++;
+			SettingsOperator.GameplayInfo[ID].Meh++;
+			SettingsOperator.GameplayInfo[ID].Combo++;
 			HealthBar.Heal(1);
 			return 2;
 		}
 		else if (timing + nodeSize > GetViewportRect().Size.Y + 60 && visibility)
 		{
 			Hittext("Miss", new Color(1f, 0.28f, 0f));
-			SettingsOperator.Gameplaycfg.Bad++;
-			if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://Skin/Sounds/combobreak.wav");
-			SettingsOperator.Gameplaycfg.Combo = 0;
+			SettingsOperator.GameplayInfo[ID].Bad++;
+			if (SettingsOperator.GameplayInfo[ID].Combo > 50) Sample.PlaySample("res://Skin/Sounds/combobreak.wav");
+			SettingsOperator.GameplayInfo[ID].Combo = 0;
 			HealthBar.Damage(5);
 			if (HurtAnimation != null && HurtAnimation.IsRunning())
 			{
