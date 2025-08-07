@@ -93,6 +93,7 @@ offset_bottom = 80.0
 theme_override_constants/h_separation = 20
 theme_override_constants/icon_max_width = 30
 theme_override_constants/align_to_largest_stylebox = 1
+theme_override_constants/line_spacing = 5
 theme_override_font_sizes/font_size = 12
 theme_override_styles/focus = SubResource("StyleBoxEmpty_dt3ms")
 theme_override_styles/hover = SubResource("StyleBoxTexture_c7mxw")

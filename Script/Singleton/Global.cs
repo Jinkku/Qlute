@@ -74,6 +74,7 @@ public partial class Global : Node
 			var filename = "/screenshot_" + ((int)Directory.GetFiles(SettingsOperator.screenshotdir).Count() + 1) + ".jpg";
 			var image = GetViewport().GetTexture().GetImage();
 			image.SaveJpg(SettingsOperator.screenshotdir + filename);
+			Notify.Post($"saved as screenshot_{(int)Directory.GetFiles(SettingsOperator.screenshotdir).Count() + 1}",SettingsOperator.screenshotdir);
 			GD.Print(filename);
 		}
 		else if (Input.IsActionJustPressed("Skin Editor"))
