@@ -17,6 +17,7 @@ public partial class SongSelect : Control
 	[Export] private TextureRect textureRect;
 	public SettingsOperator SettingsOperator { get; set; }
 	public PackedScene musiccardtemplate;
+	private GpuParticles2D Particle { get; set; }
 	public Label SongTitle { get; set; }
 	public Label SongArtist { get; set; }
 	public Label SongMapper { get; set; }
@@ -28,7 +29,7 @@ public partial class SongSelect : Control
 	public PanelContainer SongBPM { get; set; }
 	public PanelContainer SongLen { get; set; }
 	public Button StartButton { get; set; }
-	public List<object> SongEntry = new List<object>();
+	public List<Button> SongEntry = new List<Button>();
 	public int SongETick { get; set; }
 	public Texture2D ImageCache { get; set; }
 	public string ImageURL { get; set; }
@@ -55,7 +56,6 @@ public partial class SongSelect : Control
 	{ // Part of the loading Beatmaps
 		SongETick = 0;
 		startposition = ((int)GetViewportRect().Size.Y / 2) - 166;
-		//Debugtext.Text = $"{value.ToString()}/{SongLoaded.ToString()}";
 		ScrollSongs();
 	}
 
@@ -75,11 +75,17 @@ public partial class SongSelect : Control
 		Control SongPanel = GetNode<Control>("SongPanel");
 		SongPanel.Size = new Vector2(window_size.X / 2.5f, window_size.Y - 150);
 		SongPanel.Position = new Vector2(window_size.X - (window_size.X / 2.5f), 105);
+		ScrollSongs();
 	}
+	///<summary>
+	/// Initiates Music Card then returns into a button.
+	/// </summary>
+	private Button InitiateMusicCard() => musiccardtemplate.Instantiate().GetNode<Button>(".");
+
 	public void AddSongList(int id)
 	{
 		var background = SettingsOperator.Beatmaps[id].Path + SettingsOperator.Beatmaps[id].Background;
-		var button = musiccardtemplate.Instantiate().GetNode<Button>(".");
+		Button button = InitiateMusicCard();
 		var SongTitle = button.GetNode<Label>("MarginContainer/VBoxContainer/SongTitle");
 		var SongArtist = button.GetNode<Label>("MarginContainer/VBoxContainer/SongArtist");
 		var SongMapper = button.GetNode<Label>("MarginContainer/VBoxContainer/SongMapper");
@@ -136,6 +142,10 @@ public partial class SongSelect : Control
 		SongETick = 0;
 		startposition = ((int)GetViewportRect().Size.Y / 2) - 166;
 
+		// Particle
+		Particle = GetNode<GpuParticles2D>("Particle");
+		Particle.Emitting = true; // Enables it
+
 
 		SettingsOperator.Marathon = false;
 		ModScreen = GetNode<Control>("ModsScreen");
@@ -161,7 +171,7 @@ public partial class SongSelect : Control
 
 
 		check_modscreen();
-
+		ScrollSongs();
 
 		_res_resize();
 		checksongpanel();
@@ -193,15 +203,16 @@ public partial class SongSelect : Control
 		StartTween.TweenProperty(StartButton, "self_modulate", idlestartcolour, 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		StartTween.Play();
 	}
+
 	private void ScrollSongs()
 	{
-		// Calculate visible range with larger buffer to reduce flickering
-		float viewportHeight = GetViewportRect().Size.Y;
-		int visibleItemCount = (int)(viewportHeight / 83); // Increased buffer items
-		int startIndex = Math.Max(0, (int)scrollBar.Value - (visibleItemCount / 2) - 1);
-		int endIndex = Math.Min(SettingsOperator.Beatmaps.Count, startIndex + visibleItemCount + 1);
-
-		// Remove items outside visible range
+		SongLoaded = 0;
+		float Height = GetViewportRect().Size.Y;
+		int CardHeight = (int)(InitiateMusicCard().Size.Y + 5);
+		int ItemCount = (int)(Height / CardHeight);
+		int startIndex = Math.Max(0, (int)scrollBar.Value - (ItemCount / 2));
+		int endIndex = Math.Min(SettingsOperator.Beatmaps.Count,  (int)scrollBar.Value + (ItemCount / 2) + 2);
+		// This will check if the Node is off screen.
 		for (int i = SongEntry.Count - 1; i >= 0; i--)
 		{
 			if (SongEntry[i] is Button button)
@@ -211,6 +222,7 @@ public partial class SongSelect : Control
 				{
 					button.QueueFree();
 					SongEntry.RemoveAt(i);
+					SongLoaded--;
 				}
 			}
 		}
@@ -221,16 +233,17 @@ public partial class SongSelect : Control
 			if (!SongEntry.Any(entry => entry is Button btn && btn.Name == i.ToString()))
 			{
 				AddSongList(i);
+				SongLoaded++;
 			}
 			// Update positions of existing entries
 			if (SongEntry.FirstOrDefault(e => e is Button btn && btn.Name == i.ToString()) is Button entry)
 			{
 				entry.ZIndex = 0; // Ensure proper layering
 				entry.Position = new Vector2(0, startposition + (83 * i) - (83 * (float)scrollBar.Value));
+				SongLoaded++;
 			}
 		}
 	}
-	// Manages SongDetails
 
 	private void checksongpanel()
 	{
@@ -376,7 +389,6 @@ public partial class SongSelect : Control
 			AnimationSong = !AnimationSong;
 			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
 		}
-		ScrollSongs();
 		checksongpanel();
 
 		if (Input.IsActionJustPressed("Songup"))

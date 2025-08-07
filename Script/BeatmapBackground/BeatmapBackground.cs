@@ -3,7 +3,6 @@ using System;
 
 public partial class BeatmapBackground : TextureRect
 {
-	// Called when the node enters the scene tree for the first time.
 	private SettingsOperator SettingsOperator { get; set; }
 	public TextureRect self { get ;set; }
 	Texture2D bg {get;set;}
@@ -11,6 +10,16 @@ public partial class BeatmapBackground : TextureRect
 	public Tween _tween {get;set;}
 	public static bool FlashEnable {get;set;}
 	private bool flip { get; set; }
+	
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
+		FlashEnable = true;
+		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
+		Flash = GetNode<TextureRect>("Flash");
+		check_background();
+		resettime();
+	}
 	public void _flashstart()
 	{
 		flip = !flip;
@@ -27,16 +36,7 @@ public partial class BeatmapBackground : TextureRect
 		_tween.Play();
 	}
 	private Color oldmod { get; set; }
-	public override void _Ready()
-	{
-		FlashEnable = true;
-		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		Flash = GetNode<TextureRect>("Flash");
-		check_background();
-		resettime();
-	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	private void check_background(){
 		Vector2 mousePos = GetViewport().GetMousePosition();
 		Vector2 screenSize = GetViewportRect().Size;
@@ -58,6 +58,7 @@ public partial class BeatmapBackground : TextureRect
 	public void resettime(){
 		bpmtimewait = bpmtime + (bpm/0.001f);
 	}
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
 		oldmod = SelfModulate;

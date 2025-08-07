@@ -95,6 +95,7 @@ public partial class SettingsOperator : Node
     };
     public Dictionary<string, object> Configurationbk {get; set;}
 
+    public static Texture2D GetNullImage() => GD.Load<CompressedTexture2D>("/var/mnt/Storage/Documents/Qlute/Skin/System/SongSelect/NoBG.png");
 
     public static Texture2D LoadImage(string path) // I am going to make this better and not lag the game when loading images
     {
@@ -107,7 +108,14 @@ public partial class SettingsOperator : Node
         try
         {
             using var image = Image.LoadFromFile(path);
-            return ImageTexture.CreateFromImage(image);
+            if (image == null)
+            {
+                return GetNullImage();
+            }
+            else
+            {
+                return ImageTexture.CreateFromImage(image);
+            }
         }
         catch (Exception)
         {
@@ -149,8 +157,7 @@ public partial class SettingsOperator : Node
             LevelRating = (int)Math.Round(beatmap.Levelrating);
             Sessioncfg["osubeatid"] = (int)beatmap.Osubeatid;
             Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
-            var Texture = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
-            Sessioncfg["background"] = (Texture2D)Texture;
+            Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
             Gameplaycfg.maxpp = beatmap.pp;
             string audioPath = beatmap.Path + "" + beatmap.Audio;
             if (System.IO.File.Exists(audioPath))

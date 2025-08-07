@@ -14,12 +14,7 @@ public partial class MusicCard : Button
 	public TextureRect Preview { get; set; }
 	public int SongID { get; set; }
 	public int waitt = 0;
-	public static Task LoadImage(string path, Action<Texture2D> callback)
-	{
-		callback(SettingsOperator.LoadImage(path));
-		return Task.CompletedTask;
-	}
-	public async override void _Ready()
+	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		self = GetNode<Button>(".");
@@ -27,10 +22,7 @@ public partial class MusicCard : Button
 		Preview = GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
 		if (self.HasMeta("background"))
 		{
-			await LoadImage(self.GetMeta("background").ToString(), (Texture2D texture) =>
-			{
-				Preview.Texture = texture;
-			});
+			Preview.Texture = SettingsOperator.LoadImage(self.GetMeta("background").ToString());
 		}
 		// Check if "SongID" metadata exists, if not, set it to 0
 		if (!self.HasMeta("SongID"))

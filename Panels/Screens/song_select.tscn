@@ -219,8 +219,9 @@ self_modulate = Color(0.54902, 0.54902, 0.54902, 1)
 z_index = -5
 layout_mode = 1
 
-[node name="WEEE" type="GPUParticles2D" parent="."]
+[node name="Particle" type="GPUParticles2D" parent="."]
 position = Vector2(1276, 387)
+emitting = false
 amount = 40
 texture = ExtResource("12_5rktx")
 lifetime = 5.0
