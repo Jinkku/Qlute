@@ -10,14 +10,17 @@ public partial class BeatmapBackground : TextureRect
 	public Tween _tween {get;set;}
 	public static bool FlashEnable {get;set;}
 	private bool flip { get; set; }
-	
+	private TextureRect TempImage { get; set; }
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		FlashEnable = true;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		Flash = GetNode<TextureRect>("Flash");
-		check_background();
+		TempImage = GetNode<TextureRect>("TempImage");
+		Texture = (Texture2D)SettingsOperator.Sessioncfg["background"];
+		check_background(true);
 		resettime();
 	}
 	public void _flashstart()
@@ -36,20 +39,41 @@ public partial class BeatmapBackground : TextureRect
 		_tween.Play();
 	}
 	private Color oldmod { get; set; }
-
-	private void check_background(){
+	private Tween ImageTween { get; set; }
+	private void Switch_Background(Texture2D Image, bool Instant)
+	{
+		if (!Instant)
+		{
+			TempImage.Texture = Texture;
+			TempImage.Visible = true;
+			TempImage.Modulate = SelfModulate;
+			Texture = Image;
+			ImageTween?.Kill();
+			ImageTween = CreateTween();
+			ImageTween.TweenProperty(TempImage, "modulate", new Color(1f, 1f, 1f, 0f), 0.2f);
+			ImageTween.Play();
+			ImageTween.TweenCallback(Callable.From(() => TempImage.Hide()));
+		}
+		else
+		{
+			Texture = Image;
+		}
+	}
+	private void check_background(bool Instant = false)
+	{
 		Vector2 mousePos = GetViewport().GetMousePosition();
 		Vector2 screenSize = GetViewportRect().Size;
 
 		float offsetX = (mousePos.X / screenSize.X * 10) - 10;
 		float offsetY = (mousePos.Y / screenSize.Y * 10) - 10;
 
-		Position = new Vector2(offsetX, offsetY);
+		Position = new Vector2(offsetX, offsetY); // Sets the position via mouse movements.
 
-		if (Texture != SettingsOperator.Sessioncfg["background"] && (int)SettingsOperator.Sessioncfg["SongID"] != -1){
-			Texture = (Texture2D)SettingsOperator.Sessioncfg["background"];
-			Size = new Vector2(GetViewportRect().Size[0]+20,GetViewportRect().Size[1]+20);
-			Position = new Vector2(GetViewportRect().Size[0]-5,GetViewportRect().Size[1]-5);
+		if (Texture != SettingsOperator.Sessioncfg["background"] && (int)SettingsOperator.Sessioncfg["SongID"] != -1)
+		{
+			Switch_Background((Texture2D)SettingsOperator.Sessioncfg["background"],Instant);
+			Size = new Vector2(GetViewportRect().Size[0] + 20, GetViewportRect().Size[1] + 20);
+			Position = new Vector2(GetViewportRect().Size[0] - 5, GetViewportRect().Size[1] - 5);
 		}
 	}
 	public static float bpm {get;set;}
@@ -81,6 +105,6 @@ public partial class BeatmapBackground : TextureRect
 			Flash.Visible = false;
 		}
 
-		check_background();
+		check_background(Instant: false);
 	}
 }

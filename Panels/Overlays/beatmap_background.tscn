@@ -23,7 +23,7 @@ expand_mode = 1
 stretch_mode = 6
 script = ExtResource("2_0i5aa")
 
-[node name="Temp" type="TextureRect" parent="."]
+[node name="TempImage" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

@@ -58,6 +58,8 @@ public partial class ApiOperator : Node
 			$"MEH: {MEH}",
 			$"BAD: {BAD}",
 			$"COMBO: {COMBO}",
+			$"Version: {ProjectSettings.GetSetting("application/config/version")}",
+			$"Branch: {ProjectSettings.GetSetting("application/config/branch")}",
 			$"Mods: {ModsOperator.GetModAlias()}"
 		};
 			SubmitApi.Request(SettingsOperator.GetSetting("api") + "apiv2/submitscore", Headers);
