@@ -164,7 +164,7 @@ grow_vertical = 2
 
 [node name="Title" type="Label" parent="Header/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxEmpty_gt3n2")
 text = "Browse"
 
@@ -176,6 +176,7 @@ theme_override_constants/margin_right = 25
 theme_override_constants/margin_bottom = 10
 
 [node name="SearchBox" type="LineEdit" parent="Header/VBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_287m4")
 theme_override_styles/normal = SubResource("StyleBoxFlat_gt3n2")

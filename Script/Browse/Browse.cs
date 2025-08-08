@@ -186,6 +186,7 @@ public static async Task
 
 				// Call the callback function with the texture
 				callback(texture);
+				texture.Dispose();
 			}
 		}
 		catch (Exception e)
