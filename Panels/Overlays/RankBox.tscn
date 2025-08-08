@@ -1,0 +1,46 @@
+[gd_scene load_steps=8 format=3 uid="uid://do8d8d3w2frbv"]
+
+[ext_resource type="Script" uid="uid://clpsrmsin2y35" path="res://Script/SongSelect/RankBox.gd" id="1_jfl3l"]
+[ext_resource type="Shader" uid="uid://bslojkunjffws" path="res://Shaders/pushaend.gdshader" id="1_riajq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h1hbo"]
+shader = ExtResource("1_riajq")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bux6j"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.2)
+skew = Vector2(0.2, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ejjs7"]
+shader = ExtResource("1_riajq")
+
+[sub_resource type="FontVariation" id="FontVariation_mhmad"]
+spacing_bottom = -10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mhmad"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[node name="RankBox" type="PanelContainer"]
+material = SubResource("ShaderMaterial_h1hbo")
+custom_minimum_size = Vector2(80, 0)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bux6j")
+script = ExtResource("1_jfl3l")
+
+[node name="RankLabel" type="Label" parent="."]
+material = SubResource("ShaderMaterial_ejjs7")
+custom_minimum_size = Vector2(85, 0)
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_mhmad")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxEmpty_mhmad")
+text = "Unranked"
+horizontal_alignment = 1
+vertical_alignment = 1

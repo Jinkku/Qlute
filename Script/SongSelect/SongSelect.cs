@@ -22,7 +22,7 @@ public partial class SongSelect : Control
 	public Label SongArtist { get; set; }
 	public Label SongMapper { get; set; }
 	private PanelContainer LevelRating { get; set; }
-	private Label RankStatus { get; set; }
+	private PanelContainer RankStatus { get; set; }
 	private Label NoBeatmap { get; set; }
 	public PanelContainer Songpp { get; set; }
 	public Label Debugtext { get; set; }
@@ -132,7 +132,7 @@ public partial class SongSelect : Control
 	{
 		SettingsOperator.loopaudio = true;
 		scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
-		RankedStatus = GetNode<Label>("SongDetails/SongInfo/Rows/Misc/RankedStatus");
+		RankStatus = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Column1/RankBox");
 		ContextMenu = GetNode<PanelContainer>("ContextMenu");
 		ContextMenu.Visible = false;
 		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
@@ -150,14 +150,13 @@ public partial class SongSelect : Control
 		ModScreen = GetNode<Control>("ModsScreen");
 		ModScreen.Visible = true;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		SongTitle = GetNode<Label>("SongDetails/SongInfo/Rows/Title");
+		SongTitle = GetNode<Label>("SongDetails/SongInfo/Rows/Column1/Title");
 		SongArtist = GetNode<Label>("SongDetails/SongInfo/Rows/Artist");
 		SongMapper = GetNode<Label>("SongDetails/SongInfo/Rows/Mapper");
 		Diff = GetNode<Label>("SongDetails/SongInfo/Rows/Difficulty");
 
 
 		LevelRating = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/Level");
-		RankStatus = GetNode<Label>("SongDetails/SongInfo/Rows/Misc/RankedStatus");
 		Songpp = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/Points");
 		SongBPM = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/BPM");
 		SongLen = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/Length");
