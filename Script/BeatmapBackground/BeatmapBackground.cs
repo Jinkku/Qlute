@@ -11,10 +11,11 @@ public partial class BeatmapBackground : TextureRect
 	public static bool FlashEnable {get;set;}
 	private bool flip { get; set; }
 	private TextureRect TempImage { get; set; }
-
+	private Texture2D DefaultImage { get; set; }
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		DefaultImage = Texture;
 		FlashEnable = true;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		Flash = GetNode<TextureRect>("Flash");
@@ -69,11 +70,19 @@ public partial class BeatmapBackground : TextureRect
 
 		Position = new Vector2(offsetX, offsetY); // Sets the position via mouse movements.
 
-		if (Texture != SettingsOperator.Sessioncfg["background"] && (int)SettingsOperator.Sessioncfg["SongID"] != -1)
+		if (Texture != SettingsOperator.Sessioncfg["background"] && (int)SettingsOperator.Sessioncfg["SongID"] != -1 && SettingsOperator.Sessioncfg["background"] != null)
 		{
-			Switch_Background((Texture2D)SettingsOperator.Sessioncfg["background"],Instant);
+			GD.Print("[Qlute] Switching to Specified image");
+			Switch_Background((Texture2D)SettingsOperator.Sessioncfg["background"], Instant);
 			Size = new Vector2(GetViewportRect().Size[0] + 20, GetViewportRect().Size[1] + 20);
 			Position = new Vector2(GetViewportRect().Size[0] - 5, GetViewportRect().Size[1] - 5);
+		}
+		else if (Texture != DefaultImage && SettingsOperator.Sessioncfg["background"] == null)
+		{
+			GD.Print("[Qlute] Switching to Default background");
+			Switch_Background(DefaultImage, Instant);
+			Size = new Vector2(GetViewportRect().Size[0] + 20, GetViewportRect().Size[1] + 20);
+			Position = new Vector2(GetViewportRect().Size[0] - 5, GetViewportRect().Size[1] - 5);	
 		}
 	}
 	public static float bpm {get;set;}
