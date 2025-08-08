@@ -84,7 +84,6 @@ public partial class SongSelect : Control
 
 	public void AddSongList(int id)
 	{
-		var background = SettingsOperator.Beatmaps[id].Path + SettingsOperator.Beatmaps[id].Background;
 		Button button = InitiateMusicCard();
 		var SongTitle = button.GetNode<Label>("MarginContainer/VBoxContainer/SongTitle");
 		var SongArtist = button.GetNode<Label>("MarginContainer/VBoxContainer/SongArtist");
@@ -100,7 +99,7 @@ public partial class SongSelect : Control
 		Rating.Text = "Lv. " + SettingsOperator.Beatmaps[id].Levelrating.ToString("0");
 		button.Name = id.ToString();
 		button.ClipText = true;
-		button.SetMeta("background", background);
+		button.SetMeta("background", SettingsOperator.Beatmaps[id].Path + SettingsOperator.Beatmaps[id].Background);
 		button.SetMeta("SongID", id);
 		GetNode<Control>("SongPanel").AddChild(button);
 		SongEntry.Add(button);

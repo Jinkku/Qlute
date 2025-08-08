@@ -5,76 +5,93 @@ using System.Threading.Tasks;
 
 public partial class MusicCard : Button
 {
-	// Called when the node enters the scene tree for the first time.
 	private SettingsOperator SettingsOperator { get; set; }
-	
-	public Button self { get ;set; }
+
+	public Button self { get; set; }
 	public TextureRect Cover { get; set; }
 	public Timer Wait { get; set; }
 	public TextureRect Preview { get; set; }
 	public int SongID { get; set; }
 	public int waitt = 0;
+	private bool isLoadingImage = false;
+	private string BackgroundPath = null;
+
+	private async void LoadExternalImage(string path)
+	{
+		if (isLoadingImage || string.IsNullOrEmpty(path)) return;
+
+		isLoadingImage = true;
+
+		var texture = await Task.Run(() =>
+		{
+			
+            using var image = Image.LoadFromFile(path);
+            if (image == null)
+            {
+                return SettingsOperator.GetNullImage();
+            }
+            else
+            {
+                return ImageTexture.CreateFromImage(image);
+            }
+		});
+
+		if (texture != null && IsInstanceValid(Preview))
+		{
+			Preview.Texture = texture;
+		}
+
+		isLoadingImage = false;
+	}
+
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		self = GetNode<Button>(".");
 		Cover = GetTree().Root.GetNode<TextureRect>("Song Select/BeatmapBackground");
 		Preview = GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
+
 		if (self.HasMeta("background"))
 		{
-			Preview.Texture = SettingsOperator.LoadImage(self.GetMeta("background").ToString());
-		}
-		// Check if "SongID" metadata exists, if not, set it to 0
-		if (!self.HasMeta("SongID"))
-		{
-			self.SetMeta("SongID", 0);
+			BackgroundPath = self.GetMeta("background").ToString();
+			if (File.Exists(BackgroundPath))
+				LoadExternalImage(BackgroundPath);
+			else
+				GD.PrintErr("Background image not found: " + BackgroundPath);
 		}
 
-		if (Checkid())
-		{
-			SelfModulate = toggledcolour;
-		}
-		else
-		{
-			SelfModulate = Idlecolour;
-		}
+		if (!self.HasMeta("SongID"))
+			self.SetMeta("SongID", 0);
+
+		SelfModulate = Checkid() ? toggledcolour : Idlecolour;
 	}
-    private  Tween _focus_animation;
-    private void AnimationButton(Color colour)
-    {
-        if (_focus_animation != null)
-        {
-            _focus_animation.Kill();
-        }
-        _focus_animation = CreateTween();
-        _focus_animation.TweenProperty(this, "self_modulate", colour, 0.2f)
-            .SetTrans(Tween.TransitionType.Cubic)
-            .SetEase(Tween.EaseType.Out);
-        _focus_animation.Play();
-    }
-	private Color Idlecolour = new Color(0.20f, 0.20f, 0.20f, 1f); // Colour when idle
-	private Color Focuscolour = new Color(1f, 1f, 1f, 1f); // Colour when focused
-	private Color highlightcolour = new Color(0.19f, 0.37f, 0.65f, 1f); // Colour when highlighted	
-	private Color toggledcolour = new Color(0.09f, 0.38f, 0.85f, 1f); // Colour when toggled	
-	private void _highlight()
+
+	private Tween _focus_animation;
+	private void AnimationButton(Color colour)
 	{
-		AnimationButton(highlightcolour);
+		_focus_animation?.Kill();
+
+		_focus_animation = CreateTween();
+		_focus_animation.TweenProperty(this, "self_modulate", colour, 0.2f)
+			.SetTrans(Tween.TransitionType.Cubic)
+			.SetEase(Tween.EaseType.Out);
 	}
+
+	private Color Idlecolour = new Color(0.20f, 0.20f, 0.20f, 1f);
+	private Color Focuscolour = new Color(1f, 1f, 1f, 1f);
+	private Color highlightcolour = new Color(0.19f, 0.37f, 0.65f, 1f);
+	private Color toggledcolour = new Color(0.09f, 0.38f, 0.85f, 1f);
+
+	private void _highlight() => AnimationButton(highlightcolour);
 	private void _focus()
 	{
 		SettingsOperator.SongIDHighlighted = (int)self.GetMeta("SongID");
-        AnimationButton(Focuscolour);
-	}private void _unfocus()
+		AnimationButton(Focuscolour);
+	}
+	private void _unfocus()
 	{
 		SettingsOperator.SongIDHighlighted = -1;
-		if (Checkid())
-		{
-			AnimationButton(toggledcolour);
-		}
-		else
-		{
-			AnimationButton(Idlecolour);
-		}
+		AnimationButton(Checkid() ? toggledcolour : Idlecolour);
 	}
 	public void _on_pressed()
 	{
@@ -95,12 +112,12 @@ public partial class MusicCard : Button
 			ButtonPressed = Checkid();
 			Accessed = true;
 		}
-		if (ButtonPressed == true && Accessed)
+		if (ButtonPressed && Accessed)
 		{
 			AnimationButton(toggledcolour);
 			Accessed = false;
 		}
-		else if (ButtonPressed == false && Accessed)
+		else if (!ButtonPressed && Accessed)
 		{
 			AnimationButton(Idlecolour);
 			Accessed = false;

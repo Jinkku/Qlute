@@ -95,9 +95,9 @@ public partial class SettingsOperator : Node
     };
     public Dictionary<string, object> Configurationbk {get; set;}
 
-    public static Texture2D GetNullImage() => GD.Load<CompressedTexture2D>("/var/mnt/Storage/Documents/Qlute/Skin/System/SongSelect/NoBG.png");
+    public static Texture2D GetNullImage() => ResourceLoader.Load<CompressedTexture2D>("/var/mnt/Storage/Documents/Qlute/Skin/System/SongSelect/NoBG.png");
 
-    public static Texture2D LoadImage(string path) // I am going to make this better and not lag the game when loading images
+    public static Texture2D LoadImage(string path)
     {
         if (!FileAccess.FileExists(path))
         {
