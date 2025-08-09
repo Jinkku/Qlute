@@ -27,12 +27,14 @@ content_margin_right = 5.0
 content_margin_bottom = 5.0
 
 [node name="RankBox" type="PanelContainer"]
+self_modulate = Color(0, 0, 0, 1)
 material = SubResource("ShaderMaterial_h1hbo")
 custom_minimum_size = Vector2(80, 0)
 offset_right = 40.0
 offset_bottom = 40.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_bux6j")
 script = ExtResource("1_jfl3l")
+Rankid = -1
 
 [node name="RankLabel" type="Label" parent="."]
 material = SubResource("ShaderMaterial_ejjs7")
@@ -41,6 +43,6 @@ layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_mhmad")
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("StyleBoxEmpty_mhmad")
-text = "Unranked"
+text = "N/A"
 horizontal_alignment = 1
 vertical_alignment = 1

@@ -159,6 +159,8 @@ public partial class SettingsOperator : Node
             Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
             Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
             Gameplaycfg.maxpp = beatmap.pp;
+            ApiOperator.CheckBeatmapRankStatus();
+
             string audioPath = beatmap.Path + "" + beatmap.Audio;
             if (System.IO.File.Exists(audioPath))
             {

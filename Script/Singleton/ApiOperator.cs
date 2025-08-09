@@ -35,6 +35,9 @@ public partial class ApiOperator : Node
 	private SettingsOperator SettingsOperator { get; set; }
 	public static ApiOperator Instance { get; set; }
 	public static string Beatmapapi = "https://catboy.best";
+	/// <summary>
+	/// Submits a score to the dedicated server.
+	/// </summary>
 	public void SubmitScore()
 	{
 		if (!SettingsOperator.SpectatorMode)
@@ -115,6 +118,7 @@ public partial class ApiOperator : Node
 		SubmitApi = new HttpRequest();
 		LeaderboardAPI = new HttpRequest();
 		StatusChecker = new HttpRequest();
+		RankApi = new HttpRequest();
 		LoginApi.Timeout = 3;
 		InfoApi.Timeout = 3;
 		LeaderboardAPI.Timeout = 3;
@@ -123,6 +127,8 @@ public partial class ApiOperator : Node
 		AddChild(SubmitApi);
 		AddChild(LeaderboardAPI);
 		AddChild(StatusChecker);
+		AddChild(RankApi);
+		RankApi.Connect("request_completed",  new Callable(this, nameof(RankOutput)));
 		LoginApi.Connect("request_completed", new Callable(this, nameof(_on_login_api_request_completed)));
 		LeaderboardAPI.Connect("request_completed", new Callable(this, nameof(_LeaderboardAPIDone)));
 		InfoApi.Connect("request_completed", new Callable(this, nameof(_on_info_request_completed)));
@@ -167,6 +173,49 @@ public partial class ApiOperator : Node
 		SettingsOperator.Sessioncfg["ranknumber"] = n;
 		SettingsOperator.ranked_points = json["points"].AsInt32();
 	}
+
+	public static int RankedStatus { get; set; }
+
+	public static HttpRequest RankApi { get; set; }
+
+	public static void CheckBeatmapRankStatus()
+	{
+		RankApi?.CancelRequest();
+		if ((int)SettingsOperator.Sessioncfg["SongID"] != -1)
+		{
+			RankApi.Request($"https://catboy.best/api/s/{SettingsOperator.Sessioncfg["osubeatidset"]}");
+		}
+	}
+	/// <summary>
+	/// Produces an output of the RankedStatus (ex. 1 == Ranked, etc.)
+	/// </summary>
+	/// <param name="result"></param>
+	/// <param name="responseCode"></param>
+	/// <param name="headers"></param>
+	/// <param name="body"></param>
+	public void RankOutput(long result, long responseCode, string[] headers, byte[] body)
+	{
+		// Convert byte[] → string
+		string jsonString = Encoding.UTF8.GetString(body);
+
+		// Parse the JSON (returns Variant)
+		Variant parsed = Json.ParseString(jsonString);
+
+		// Cast Variant to Dictionary
+		var dict = (Godot.Collections.Dictionary)parsed;
+
+		// Get RankedStatus (Variant → long → int)
+		RankedStatus = (int)(long)dict["RankedStatus"];
+		if (RankedStatus == -1)
+		{
+			RankedStatus = 0;
+		}
+		else if (RankedStatus != 1)
+		{
+			RankedStatus = 2;
+		}
+	}
+
 	public void Check_Info(string Username)
 	{
 		GD.Print("Using Profile: " + Username);

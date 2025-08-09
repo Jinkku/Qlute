@@ -1,4 +1,5 @@
 using Godot;
+using Realms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,6 @@ public partial class SongSelect : Control
 	public PanelContainer Info { get; set; }
 	public Tween scrolltween { get; private set; }
 	private int scrollvelocity { get; set; }
-	public Label RankedStatus { get; set; }
 	private bool AnimationSong { get; set; }
 	private int SongLoaded { get; set; }
 	private bool ContextMenuActive { get; set; }
@@ -209,7 +209,7 @@ public partial class SongSelect : Control
 		int CardHeight = (int)(InitiateMusicCard().Size.Y + 5);
 		int ItemCount = (int)(Height / CardHeight);
 		int startIndex = Math.Max(0, (int)scrollBar.Value - (ItemCount / 2));
-		int endIndex = Math.Min(SettingsOperator.Beatmaps.Count,  (int)scrollBar.Value + (ItemCount / 2) + 2);
+		int endIndex = Math.Min(SettingsOperator.Beatmaps.Count, (int)scrollBar.Value + (ItemCount / 2) + 2);
 		// This will check if the Node is off screen.
 		for (int i = SongEntry.Count - 1; i >= 0; i--)
 		{
@@ -251,7 +251,7 @@ public partial class SongSelect : Control
 			// Update song details
 			SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
 			SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
-			InfoBox.Text(Songpp,"+" + (SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier).ToString("N0") + "pp");
+			InfoBox.Text(Songpp, "+" + (SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier).ToString("N0") + "pp");
 			InfoBox.Text(LevelRating, "Lv. " + SettingsOperator.LevelRating.ToString("N0") ?? "Lv. 0");
 			InfoBox.Text(SongBPM, ((int)SettingsOperator.Sessioncfg["beatmapbpm"] * AudioPlayer.Instance.PitchScale).ToString("N0") ?? "???");
 			InfoBox.Text(SongLen, TimeSpan.FromMilliseconds((SettingsOperator.Gameplaycfg.TimeTotalGame / 0.001f) / AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00");
@@ -335,7 +335,7 @@ public partial class SongSelect : Control
 	public override void _Process(double _delta)
 	{
 		CheckLeaderboardMode();
-
+		CheckRankStatus();
 		// Show Play button if SongID is set.
 		StartButton.Visible = ((int)SettingsOperator.Sessioncfg["SongID"] != -1);
 		NoBeatmap.Visible = (SettingsOperator.Beatmaps.Count < 1);
@@ -525,5 +525,14 @@ public partial class SongSelect : Control
 	{
 		if (SettingsOperator.CreateSelectingBeatmap) GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
 		else GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
+	}
+
+
+	///<summary>
+	/// Check Rank status
+	/// </summary>
+	private void CheckRankStatus()
+	{
+		RankStatus.Set("Rankid", ApiOperator.RankedStatus);
 	}
 }

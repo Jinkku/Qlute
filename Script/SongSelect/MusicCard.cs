@@ -38,12 +38,15 @@ public partial class MusicCard : Button
 
 		if (texture != null && IsInstanceValid(Preview))
 		{
+			LoadTween = CreateTween();
+			LoadTween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			LoadTween.Play();
 			Preview.Texture = texture;
 		}
 
 		isLoadingImage = false;
 	}
-
+	private Tween LoadTween { get; set; }
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -54,6 +57,7 @@ public partial class MusicCard : Button
 		if (self.HasMeta("background"))
 		{
 			BackgroundPath = self.GetMeta("background").ToString();
+			Modulate = new Color(1f, 1f, 1f, 0f);
 			if (File.Exists(BackgroundPath))
 				LoadExternalImage(BackgroundPath);
 			else

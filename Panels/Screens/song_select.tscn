@@ -290,7 +290,6 @@ text_overrun_behavior = 3
 [node name="RankBox" parent="SongDetails/SongInfo/Rows/Column1" instance=ExtResource("4_fb0k2")]
 layout_mode = 2
 size_flags_horizontal = 8
-Text = "Unranked"
 
 [node name="Artist" type="Label" parent="SongDetails/SongInfo/Rows"]
 layout_mode = 2
