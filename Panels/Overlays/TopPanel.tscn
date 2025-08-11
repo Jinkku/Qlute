@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bwpja5llmgtqo"]
+[gd_scene load_steps=30 format=3 uid="uid://bwpja5llmgtqo"]
 
 [ext_resource type="Script" uid="uid://borvy2xtb1o65" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
 [ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Skin/System/guest.png" id="2_4cvop"]
@@ -15,43 +15,6 @@
 [ext_resource type="Texture2D" uid="uid://4uedtgsvw7ep" path="res://Skin/System/TopPanel/Settings.svg" id="9_6quot"]
 [ext_resource type="Texture2D" uid="uid://dbrt8ltwm3upi" path="res://Skin/System/TopPanel/Notifications.svg" id="12_1qp4o"]
 [ext_resource type="Script" uid="uid://dp1rdt0w40nki" path="res://Script/TestMenu/Debugitem2.cs" id="13_1qp4o"]
-
-[sub_resource type="Animation" id="Animation_xvajm"]
-resource_name = "Bootup"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("InfoBar:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0, -50), Vector2(0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_k3xmf"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("InfoBar:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, -50)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_dtwww"]
-_data = {
-&"Bootup": SubResource("Animation_xvajm"),
-&"RESET": SubResource("Animation_k3xmf")
-}
 
 [sub_resource type="Gradient" id="Gradient_n7q28"]
 colors = PackedColorArray(0, 0, 0, 0.568627, 0, 0, 0, 0)
@@ -129,28 +92,9 @@ content_margin_top = 5.0
 content_margin_right = 10.0
 content_margin_bottom = 5.0
 
-[node name="TopPanel" type="Control"]
-process_mode = 3
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="Wabamp" type="AnimationPlayer" parent="."]
-unique_name_in_owner = true
-process_mode = 3
-libraries = {
-&"": SubResource("AnimationLibrary_dtwww")
-}
-
-[node name="InfoBar" type="ColorRect" parent="."]
-unique_name_in_owner = true
+[node name="InfoBar" type="ColorRect"]
 process_mode = 3
 z_index = 1
-layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_top = -50.0
@@ -158,7 +102,18 @@ grow_horizontal = 2
 color = Color(0.0383, 0.023, 0.05, 0.784314)
 script = ExtResource("1_bm6kj")
 
-[node name="Shadow" type="TextureRect" parent="InfoBar"]
+[node name="Debugitem2" type="Label" parent="."]
+process_mode = 3
+layout_mode = 0
+offset_left = 18.0
+offset_top = 70.0
+offset_right = 131.0
+offset_bottom = 89.0
+theme_override_font_sizes/font_size = 12
+text = "Debug infomation"
+script = ExtResource("13_1qp4o")
+
+[node name="Shadow" type="TextureRect" parent="."]
 process_mode = 3
 visible = false
 layout_mode = 1
@@ -172,7 +127,7 @@ grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_gkq3o")
 
-[node name="AccountButton" type="Button" parent="InfoBar"]
+[node name="AccountButton" type="Button" parent="."]
 process_mode = 3
 self_modulate = Color(0.5, 0, 0.421875, 1)
 layout_mode = 0
@@ -184,7 +139,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_qq0m8")
 theme_override_styles/normal = SubResource("StyleBoxFlat_fw7wp")
 alignment = 0
 
-[node name="ProfilePicture" type="TextureRect" parent="InfoBar/AccountButton"]
+[node name="ProfilePicture" type="TextureRect" parent="AccountButton"]
 unique_name_in_owner = true
 process_mode = 3
 layout_mode = 0
@@ -194,7 +149,7 @@ texture = ExtResource("2_4cvop")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="Ranking" type="Label" parent="InfoBar/AccountButton"]
+[node name="Ranking" type="Label" parent="AccountButton"]
 unique_name_in_owner = true
 process_mode = 3
 visible = false
@@ -206,7 +161,7 @@ offset_bottom = 44.0
 text = "#?"
 script = ExtResource("3_ggapr")
 
-[node name="UPlayerName" type="Label" parent="InfoBar/AccountButton"]
+[node name="UPlayerName" type="Label" parent="AccountButton"]
 unique_name_in_owner = true
 process_mode = 3
 layout_mode = 1
@@ -220,20 +175,20 @@ clip_text = true
 text_overrun_behavior = 3
 script = ExtResource("4_v36dv")
 
-[node name="Loadingicon" type="Sprite2D" parent="InfoBar/AccountButton"]
+[node name="Loadingicon" type="Sprite2D" parent="AccountButton"]
 process_mode = 3
 visible = false
 texture_filter = 1
 position = Vector2(175, 25)
 texture = ExtResource("5_3trnu")
 
-[node name="Loadinganimation" type="AnimationPlayer" parent="InfoBar/AccountButton/Loadingicon"]
+[node name="Loadinganimation" type="AnimationPlayer" parent="AccountButton/Loadingicon"]
 process_mode = 3
 libraries = {
 &"": SubResource("AnimationLibrary_1f8y5")
 }
 
-[node name="RankUpdate" type="Label" parent="InfoBar/AccountButton"]
+[node name="RankUpdate" type="Label" parent="AccountButton"]
 process_mode = 3
 layout_mode = 1
 anchors_preset = 6
@@ -253,7 +208,7 @@ text = "+#999,999,999
 vertical_alignment = 1
 script = ExtResource("6_3trnu")
 
-[node name="PerformanceUpdate" type="Label" parent="InfoBar/AccountButton/RankUpdate"]
+[node name="PerformanceUpdate" type="Label" parent="AccountButton/RankUpdate"]
 process_mode = 3
 layout_mode = 1
 anchors_preset = 6
@@ -271,7 +226,7 @@ text = "99,999pp
 -20"
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="InfoBar"]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 process_mode = 3
 layout_mode = 1
 anchors_preset = 11
@@ -283,7 +238,7 @@ grow_horizontal = 0
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="NowPlayer" type="Button" parent="InfoBar/HBoxContainer"]
+[node name="NowPlayer" type="Button" parent="HBoxContainer"]
 process_mode = 3
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
@@ -297,7 +252,7 @@ icon = ExtResource("7_bwtk2")
 icon_alignment = 1
 script = ExtResource("7_6quot")
 
-[node name="Browse" type="Button" parent="InfoBar/HBoxContainer"]
+[node name="Browse" type="Button" parent="HBoxContainer"]
 process_mode = 3
 layout_mode = 2
 theme_override_constants/icon_max_width = 28
@@ -309,7 +264,7 @@ keep_pressed_outside = true
 icon = ExtResource("7_1qp4o")
 icon_alignment = 1
 
-[node name="Chat" type="Button" parent="InfoBar/HBoxContainer"]
+[node name="Chat" type="Button" parent="HBoxContainer"]
 process_mode = 3
 layout_mode = 2
 theme_override_constants/icon_max_width = 28
@@ -321,7 +276,7 @@ keep_pressed_outside = true
 icon = ExtResource("8_1qp4o")
 icon_alignment = 1
 
-[node name="Settings" type="Button" parent="InfoBar/HBoxContainer"]
+[node name="Settings" type="Button" parent="HBoxContainer"]
 process_mode = 3
 layout_mode = 2
 theme_override_constants/icon_max_width = 28
@@ -334,7 +289,7 @@ icon = ExtResource("9_6quot")
 icon_alignment = 1
 script = ExtResource("2_6umcl")
 
-[node name="Clock" type="Label" parent="InfoBar/HBoxContainer"]
+[node name="Clock" type="Label" parent="HBoxContainer"]
 process_mode = 3
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
@@ -346,7 +301,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 script = ExtResource("7_fe0ly")
 
-[node name="Notifications" type="Button" parent="InfoBar/HBoxContainer"]
+[node name="Notifications" type="Button" parent="HBoxContainer"]
 process_mode = 3
 layout_mode = 2
 theme_override_constants/icon_max_width = 28
@@ -358,25 +313,12 @@ keep_pressed_outside = true
 icon = ExtResource("12_1qp4o")
 icon_alignment = 1
 
-[node name="Debugitem2" type="Label" parent="."]
-process_mode = 3
-layout_mode = 0
-offset_left = 18.0
-offset_top = 70.0
-offset_right = 58.0
-offset_bottom = 89.0
-theme_override_font_sizes/font_size = 12
-text = "Debug infomation"
-script = ExtResource("13_1qp4o")
-
-[connection signal="animation_finished" from="Wabamp" to="InfoBar" method="_Slidepanelfinished"]
-[connection signal="animation_started" from="Wabamp" to="InfoBar" method="_Slidepanelstart"]
-[connection signal="mouse_entered" from="InfoBar" to="InfoBar" method="_hovered"]
-[connection signal="mouse_exited" from="InfoBar" to="InfoBar" method="_unhover"]
-[connection signal="pressed" from="InfoBar/AccountButton" to="InfoBar/HBoxContainer/Settings" method="_on_AccountButton_pressed"]
-[connection signal="pressed" from="InfoBar/HBoxContainer/NowPlayer" to="InfoBar/HBoxContainer/NowPlayer" method="toggleaccountpanel"]
-[connection signal="pressed" from="InfoBar/HBoxContainer/Browse" to="InfoBar" method="_on_browse_pressed"]
-[connection signal="pressed" from="InfoBar/HBoxContainer/Chat" to="InfoBar" method="_ChatRoom"]
-[connection signal="pressed" from="InfoBar/HBoxContainer/Settings" to="InfoBar/HBoxContainer/Settings" method="_settings_pressed"]
-[connection signal="ready" from="InfoBar/HBoxContainer/Settings" to="InfoBar/HBoxContainer/Settings" method="ready"]
-[connection signal="pressed" from="InfoBar/HBoxContainer/Notifications" to="InfoBar/HBoxContainer/Settings" method="_on_notifications"]
+[connection signal="mouse_entered" from="." to="." method="_hovered"]
+[connection signal="mouse_exited" from="." to="." method="_unhover"]
+[connection signal="pressed" from="AccountButton" to="HBoxContainer/Settings" method="_on_AccountButton_pressed"]
+[connection signal="pressed" from="HBoxContainer/NowPlayer" to="HBoxContainer/NowPlayer" method="toggleaccountpanel"]
+[connection signal="pressed" from="HBoxContainer/Browse" to="." method="_on_browse_pressed"]
+[connection signal="pressed" from="HBoxContainer/Chat" to="." method="_ChatRoom"]
+[connection signal="pressed" from="HBoxContainer/Settings" to="HBoxContainer/Settings" method="_settings_pressed"]
+[connection signal="ready" from="HBoxContainer/Settings" to="HBoxContainer/Settings" method="ready"]
+[connection signal="pressed" from="HBoxContainer/Notifications" to="HBoxContainer/Settings" method="_on_notifications"]

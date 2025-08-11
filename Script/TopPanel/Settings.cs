@@ -19,7 +19,7 @@ public partial class Settings : Button
 	public override void _Ready(){
 		Instance = this;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		TopPanel = GetTree().Root.GetNode<ColorRect>("/root/TopPanelOnTop/TopPanel/InfoBar");
+		TopPanel = GetNode<ColorRect>("../../");
         PlayerName = GetNode<Label>("%UPlayerName");
 		Ranking = GetNode<Label>("%Ranking");
 	}

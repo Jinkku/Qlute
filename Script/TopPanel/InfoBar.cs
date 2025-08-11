@@ -14,7 +14,7 @@ public partial class InfoBar : ColorRect
 		Loadingicon = GetNode<Sprite2D>("AccountButton/Loadingicon");
 		Loadinganimation.Play("loading");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		TopPanel = GetTree().Root.GetNode<ColorRect>("/root/TopPanelOnTop/TopPanel/InfoBar");
+		TopPanel = this;
 	}
 	private void _Slidepanelstart(string ani){
 		SettingsOperator.Sessioncfg["TopPanelSlideip"] = true;
@@ -83,7 +83,8 @@ public partial class InfoBar : ColorRect
 	}
 	
 	private Control VolumePanel { get; set; }
-	public override void _Process(double _delta) {
+	public override void _Process(double _delta)
+	{
 		Loadingicon.Visible = (bool)SettingsOperator.Sessioncfg["loggingin"];
 
 		if (Input.IsActionJustPressed("Special"))

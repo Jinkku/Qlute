@@ -438,10 +438,23 @@ public partial class SettingsOperator : Node
         { "client-id", null },
         { "client-secret", null },
     };
-    public void toppaneltoggle(){
-		Sessioncfg["toppanelhide"] = !(bool)Sessioncfg["toppanelhide"];
-		AnimationPlayer Ana = GetTree().Root.GetNode<AnimationPlayer>("TopPanelOnTop/TopPanel/Wabamp");
-		if (((bool)Sessioncfg["toppanelhide"] == true)) Ana.PlayBackwards("Bootup"); else Ana.Play("Bootup");}
+    
+
+    private Tween TopPanelAnimation { get; set; }
+
+
+    public void toppaneltoggle()
+    {
+        TopPanelAnimation?.Kill();
+        TopPanelAnimation = CreateTween();
+        Sessioncfg["toppanelhide"] = !(bool)Sessioncfg["toppanelhide"];
+        var TopPanel = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar");
+        if (((bool)Sessioncfg["toppanelhide"] == true))
+            TopPanelAnimation.TweenProperty(TopPanel, "position", new Vector2(TopPanel.Position.X, -TopPanel.Size.Y), 0.3).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+        else
+            TopPanelAnimation.TweenProperty(TopPanel, "position", new Vector2(TopPanel.Position.X, 0), 0.3).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+        TopPanelAnimation.Play();
+    }
     public static float TopPanelPosition { get; set; } = 0.0f;
     private double oldtime = 0.0f;
 
@@ -452,7 +465,7 @@ public partial class SettingsOperator : Node
         else AudioOffset = float.Parse(aud);
 
 
-        TopPanelPosition = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/TopPanel/InfoBar").Position.Y + 50;
+        TopPanelPosition = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar").Position.Y + 50;
         if (Input.IsActionJustPressed("Hide Panel"))
         {
             toppaneltoggle();
