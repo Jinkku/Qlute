@@ -25,36 +25,30 @@ public partial class Global : Node
 		{
 			_skineditorEnabled = !_skineditorEnabled;
 			_SkinStart = false;
+			SkinEditorAni?.Kill();
+			SkinEditorAni = GetTree().CreateTween();
+			SkinEditorAni.SetParallel(true);
 			if (_skineditorEnabled)
 			{
-				if (SkinEditorAni != null)
-				{
-					SkinEditorAni.Kill();
-				}
 				_skineditorScene = GD.Load<PackedScene>("res://Panels/Screens/SkinEditor.tscn").Instantiate().GetNode<Control>(".");
+				var SideBarL = _skineditorScene.GetNode<PanelContainer>("Creativity");
+				var SideBarR = _skineditorScene.GetNode<PanelContainer>("Extras");
+				var ToolBar = _skineditorScene.GetNode<PanelContainer>("ToolBar");
+				var ControlPanel = _skineditorScene.GetNode<PanelContainer>("ControlPanel");
 				GetTree().Root.AddChild(_skineditorScene);
 				_skineditorScene.Modulate = new Color(1, 1, 1, 0);
-				SkinEditorAni = GetTree().CreateTween();
-				SkinEditorAni.SetParallel(true);
-				SkinEditorAni.TweenProperty(_CurrentScene, "size", new Vector2(GetViewport().GetVisibleRect().Size.X - _skineditorScene.GetNode<PanelContainer>("Creativity").Size.X, GetViewport().GetVisibleRect().Size.Y - _skineditorScene.GetNode<PanelContainer>("ToolBar").Size.Y - _skineditorScene.GetNode<PanelContainer>("ToolBar").Position.Y - _skineditorScene.GetNode<PanelContainer>("ControlPanel").Size.Y), 0.5f)
+				SkinEditorAni.TweenProperty(_CurrentScene, "size", new Vector2(GetViewport().GetVisibleRect().Size.X - SideBarL.Size.X - SideBarR.Size.X, GetViewport().GetVisibleRect().Size.Y - ToolBar.Size.Y - ToolBar.Position.Y - ControlPanel.Size.Y), 0.5f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
 				SkinEditorAni.TweenProperty(_skineditorScene, "modulate", new Color(1, 1, 1, 1), 0.5f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
-				SkinEditorAni.TweenProperty(_CurrentScene, "position", new Vector2(_skineditorScene.GetNode<PanelContainer>("Creativity").Size.X, _skineditorScene.GetNode<PanelContainer>("ToolBar").Size.Y + _skineditorScene.GetNode<PanelContainer>("ToolBar").Position.Y), 0.5f)
+				SkinEditorAni.TweenProperty(_CurrentScene, "position", new Vector2(SideBarL.Size.X, ToolBar.Size.Y + ToolBar.Position.Y), 0.5f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
-				SkinEditorAni.Play();
 			}
 			else
 			{
-				if (SkinEditorAni != null)
-				{
-					SkinEditorAni.Kill();
-				}
-				SkinEditorAni = GetTree().CreateTween();
-				SkinEditorAni.SetParallel(true);
 				SkinEditorAni.TweenProperty(_CurrentScene, "size", GetViewport().GetVisibleRect().Size, 0.5f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
@@ -64,9 +58,9 @@ public partial class Global : Node
 				SkinEditorAni.TweenProperty(_CurrentScene, "position", new Vector2(0, 0), 0.5f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
-				SkinEditorAni.Play();
 				SkinEditorAni.TweenCallback(Callable.From(() => _skineditorScene.QueueFree()));
 			}
+			SkinEditorAni.Play();
 		}
 
 		if (Input.IsActionJustPressed("screenshot"))
