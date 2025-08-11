@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dwwmfem52nyr"]
+
+[node name="TestBox" type="ColorRect"]
+custom_minimum_size = Vector2(100, 100)
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.875, 0, 1, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "TAKE
+A
+HINT"
+horizontal_alignment = 1
+vertical_alignment = 1
