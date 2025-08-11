@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://d0qmsp3ewrdj4"]
+[gd_scene load_steps=28 format=3 uid="uid://d0qmsp3ewrdj4"]
 
 [ext_resource type="Script" uid="uid://bcpf58suyr63f" path="res://Script/SettingsPanel/SettingsPanel.cs" id="1_gfh6f"]
 [ext_resource type="Texture2D" uid="uid://cj5ugwjbsax06" path="res://Skin/SettingsIcon/display.png" id="2_r347j"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://btixh3f5pu736" path="res://Script/SettingsPanel/FpsModes.cs" id="5_crlok"]
 [ext_resource type="Script" uid="uid://clv5506kqlat3" path="res://Script/SettingsPanel/Resolution.cs" id="5_h76q1"]
 [ext_resource type="Script" uid="uid://dp53wl7qkvxyq" path="res://Script/SettingsPanel/FpsShow.cs" id="6_o7dm5"]
+[ext_resource type="Script" uid="uid://csqtqnvdjslaf" path="res://Script/SettingsPanel/SkinMode.cs" id="8_bjgno"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5b8eh"]
 bg_color = Color(0, 0, 0, 0.392157)
@@ -336,10 +337,12 @@ layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_v1adg")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_svam5")
 theme_override_constants/arrow_margin = 10
+clip_text = true
 selected = 0
 item_count = 1
 popup/item_0/text = "Default Skin"
 popup/item_0/id = 0
+script = ExtResource("8_bjgno")
 
 [node name="Audio" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2

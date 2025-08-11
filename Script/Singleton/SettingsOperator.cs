@@ -524,7 +524,23 @@ public partial class SettingsOperator : Node
                 }
             }
         }
-        
+
+        if (System.IO.Directory.Exists(skinsdir))
+        {
+            Skin.List.Clear();
+            GD.Print("Checking for skins...");
+            var dirs = System.IO.Directory.GetDirectories(skinsdir);
+            foreach (var skin in dirs)
+            {
+                GD.Print($"Found {skin}");
+                Skin.List.Add(new Skinning
+                {
+                    Name = System.IO.Path.GetFileName(skin),
+                    SkinPath = skin
+                });
+            }
+        }
+
 
         backgrounddim = int.TryParse(GetSetting("backgrounddim").ToString(), out int bkd) ? bkd : 70;
         SampleVol = int.TryParse(GetSetting("sample").ToString(), out int smp) ? smp : 80;

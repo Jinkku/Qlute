@@ -119,8 +119,9 @@ script = ExtResource("1_wk53w")
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_top = 150.0
+offset_top = 100.0
 offset_right = 222.0
+offset_bottom = -50.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wk53w")
 
@@ -132,6 +133,19 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_ujy7e")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Creativity/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Layers"
+
+[node name="OptionButton" type="OptionButton" parent="Creativity/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Gameplay"
+popup/item_0/id = 0
+popup/item_1/text = "HUD"
+popup/item_1/id = 1
 
 [node name="SkinElement" type="Button" parent="Creativity/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(100, 200)
@@ -185,12 +199,42 @@ text = "Dummy Skin Image"
 horizontal_alignment = 1
 vertical_alignment = 2
 
+[node name="Extras" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -230.0
+offset_top = 100.0
+offset_bottom = -50.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wk53w")
+
+[node name="Scroll" type="ScrollContainer" parent="Extras"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ujy7e")
+
+[node name="Rows" type="VBoxContainer" parent="Extras/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Extras/Scroll/Rows"]
+layout_mode = 2
+text = "- Intension"
+
+[node name="HSlider" type="HSlider" parent="Extras/Scroll/Rows"]
+layout_mode = 2
+value = 33.0
+
 [node name="ToolBar" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 50.0
-offset_bottom = 150.0
+offset_bottom = 104.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jucc0")
 
@@ -326,6 +370,7 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 
 [node name="HomeScreen" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
+visible = false
 self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
@@ -347,6 +392,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="SongSelect" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
+visible = false
 self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
@@ -389,6 +435,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="GamePause" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
+visible = false
 self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
@@ -410,6 +457,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="GameOver" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
+visible = false
 self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
@@ -431,6 +479,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Results Screen" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
+visible = false
 self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
