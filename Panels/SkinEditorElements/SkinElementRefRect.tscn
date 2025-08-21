@@ -1,0 +1,176 @@
+[gd_scene load_steps=6 format=3 uid="uid://dwxq8yf8ah02k"]
+
+[ext_resource type="Texture2D" uid="uid://b6t07c5xye4i8" path="res://Skin/System/SkinRect/Circle.png" id="1_km0dv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uflj4"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_38pph"]
+texture = ExtResource("1_km0dv")
+texture_margin_left = 9.0
+texture_margin_top = 9.0
+texture_margin_right = 9.0
+texture_margin_bottom = 9.0
+modulate_color = Color(1, 0.616789, 0.078125, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qs4li"]
+texture = ExtResource("1_km0dv")
+texture_margin_left = 9.0
+texture_margin_top = 9.0
+texture_margin_right = 9.0
+texture_margin_bottom = 9.0
+modulate_color = Color(1, 0.663879, 0.191406, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4rw43"]
+texture = ExtResource("1_km0dv")
+texture_margin_left = 9.0
+texture_margin_top = 9.0
+texture_margin_right = 9.0
+texture_margin_bottom = 9.0
+modulate_color = Color(1, 0.584314, 0, 1)
+
+[node name="SkinElementRect" type="ReferenceRect"]
+offset_right = 100.0
+offset_bottom = 100.0
+border_color = Color(1, 0.585938, 0, 1)
+editor_only = false
+
+[node name="TopLeft" type="Button" parent="."]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+pivot_offset = Vector2(10, 10)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_uflj4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_38pph")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_qs4li")
+theme_override_styles/normal = SubResource("StyleBoxTexture_4rw43")
+
+[node name="TopCenter" type="Button" parent="."]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+pivot_offset = Vector2(10, 10)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_uflj4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_38pph")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_qs4li")
+theme_override_styles/normal = SubResource("StyleBoxTexture_4rw43")
+
+[node name="TopRight" type="Button" parent="."]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 0
+pivot_offset = Vector2(10, 10)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_uflj4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_38pph")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_qs4li")
+theme_override_styles/normal = SubResource("StyleBoxTexture_4rw43")
+
+[node name="CenterRight" type="Button" parent="."]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 0
+grow_vertical = 2
+pivot_offset = Vector2(10, 10)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_uflj4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_38pph")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_qs4li")
+theme_override_styles/normal = SubResource("StyleBoxTexture_4rw43")
+
+[node name="CenterLeft" type="Button" parent="."]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_vertical = 2
+pivot_offset = Vector2(10, 10)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_uflj4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_38pph")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_qs4li")
+theme_override_styles/normal = SubResource("StyleBoxTexture_4rw43")
+
+[node name="BottomRight" type="Button" parent="."]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(10, 10)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_uflj4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_38pph")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_qs4li")
+theme_override_styles/normal = SubResource("StyleBoxTexture_4rw43")
+
+[node name="BottomCenter" type="Button" parent="."]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(10, 10)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_uflj4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_38pph")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_qs4li")
+theme_override_styles/normal = SubResource("StyleBoxTexture_4rw43")
+
+[node name="BottomLeft" type="Button" parent="."]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_vertical = 0
+pivot_offset = Vector2(10, 10)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_uflj4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_38pph")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_qs4li")
+theme_override_styles/normal = SubResource("StyleBoxTexture_4rw43")
