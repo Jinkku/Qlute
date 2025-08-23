@@ -12,10 +12,12 @@ config_version=5
 
 config/name="Qlute"
 config/name_localized={
-"ja": "名無し"
+"ja": "キュルート",
+"ko_KR": "큐르트",
+"zh_CN": "丘律特"
 }
 config/description="Your Keys // Your Rhythm"
-config/version="2025.07.29"
+config/version="2025.08.22"
 run/main_scene="res://Panels/Screens/bootstrap.tscn"
 run/print_header=false
 config/use_custom_user_dir=true
