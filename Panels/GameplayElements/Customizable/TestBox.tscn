@@ -21,3 +21,6 @@ A
 HINT"
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 3
+clip_text = true
+text_overrun_behavior = 4
