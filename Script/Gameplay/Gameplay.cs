@@ -208,7 +208,6 @@ public partial class Gameplay : Control
 		hittext.ZIndex = 100;
 		GetNode<Control>("Playfield").AddChild(hittext);
 		hittextoldpos = hittext.Position;
-		reloadSkin();
 
 		SettingsOperator.PerfectJudge = 500 / (int)(SettingsOperator.Sessioncfg["beatmapaccuracy"]);
 		SettingsOperator.GreatJudge = (int)(SettingsOperator.PerfectJudge * 4);
@@ -281,12 +280,6 @@ public partial class Gameplay : Control
 	public Color chartbeam = new Color(0.20f, 0.0f, 0.20f, 0.78f);
 	public Color activehit = new Color(0.20f, 0.0f, 0.20f);
 	public Color idlehit = new Color(0.03f, 0.03f, 0.03f);
-	public void reloadSkin()
-	{
-		NoteSkinBack = GD.Load<Texture2D>("res://Skin/Game/Backgroundnote.png");
-		NoteSkinFore = GD.Load<Texture2D>("res://Skin/Game/Foregroundnote.png");
-		nodeSize = (int)NoteSkinBack.GetSize().Y;
-	}
 	public void hitnote(int Keyx, bool hit, int est)
 	{
 		var key = Keys[Keyx];
@@ -508,9 +501,6 @@ public partial class Gameplay : Control
 						Note.Node = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Sprite2D>(".");
 						Note.Node.SetMeta("part", Note.NoteSection);
 						Note.Node.SelfModulate = new Color(0.83f, 0f, 1f);
-						Note.Node.Texture = NoteSkinBack;
-						var notefront = Note.Node.GetNode<Sprite2D>("NoteFront");
-						notefront.Texture = NoteSkinFore;
 						playfieldpart.AddChild(Note.Node);
 					}
 					if (ModsOperator.Mods["slice"] && Note.Node != null)

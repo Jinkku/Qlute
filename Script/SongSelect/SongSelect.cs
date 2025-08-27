@@ -237,7 +237,8 @@ public partial class SongSelect : Control
 			if (SongEntry.FirstOrDefault(e => e is Button btn && btn.Name == i.ToString()) is Button entry)
 			{
 				entry.ZIndex = 0; // Ensure proper layering
-				entry.Position = new Vector2(0, startposition + (83 * i) - (83 * (float)scrollBar.Value));
+				entry.Position = new Vector2(entry.Position.X, startposition + (83 * i) - (83 * (float)scrollBar.Value));
+				entry.Rotation = entry.Position.Y / (GetViewportRect().Size.Y / 2 - 83) * -0.45f + 0.45f;
 				SongLoaded++;
 			}
 		}

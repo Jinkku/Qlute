@@ -49,7 +49,7 @@ public partial class Settings : Button
 	private bool chkaccountpos(){
 		return (bool)SettingsOperator.Sessioncfg["showaccountpro"];
 	}
-	private void togglesettingspanel(){
+	public void togglesettingspanel(){
 		if (chknotifv()){
 			togglenotificationpanel();
 		}
@@ -96,9 +96,6 @@ public partial class Settings : Button
 		}
 		SettingsOperator.Sessioncfg["settingspanelv"] = !(bool)SettingsOperator.Sessioncfg["settingspanelv"];
 	}
-	private void queue_free(Control Prog){
-			Prog.QueueFree();
-			}
 	private void togglenotificationpanel(){
 		if (chksettingsv()){
 			togglesettingspanel();

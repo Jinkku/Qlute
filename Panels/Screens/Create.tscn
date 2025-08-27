@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://dnxlc61trat1l"]
+[gd_scene load_steps=27 format=3 uid="uid://dnxlc61trat1l"]
 
 [ext_resource type="Script" uid="uid://cdhm1bqkq60y3" path="res://Script/LevelEditor/Create.cs" id="1_4dycg"]
 [ext_resource type="Script" uid="uid://hujhlkgh6dfp" path="res://Script/CreateEditor/ContextMenus.cs" id="2_pjdex"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="5_lwg7d"]
 [ext_resource type="PackedScene" uid="uid://c2ouvq16jls8u" path="res://Panels/Overlays/BottomPanelButtons.tscn" id="6_lwg7d"]
 [ext_resource type="PackedScene" uid="uid://chb8dgjfmmjgt" path="res://Panels/GameplayElements/Customizable/Playfield.tscn" id="6_vy1ai"]
+[ext_resource type="PackedScene" uid="uid://bdd2o3q0q03xf" path="res://Panels/Overlays/MissingFunction.tscn" id="7_vy1ai"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jucc0"]
 bg_color = Color(0, 0, 0, 0.568627)
@@ -377,6 +378,20 @@ size_flags_horizontal = 8
 
 [node name="Label" parent="ControlPanel/Box/Next" index="0"]
 text = "Test"
+
+[node name="MissingFunction" parent="." instance=ExtResource("7_vy1ai")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [connection signal="mouse_entered" from="Ground/Playfield/ChartSections/Section1" to="." method="_enter" binds= [0]]
 [connection signal="mouse_exited" from="Ground/Playfield/ChartSections/Section1" to="." method="_off" binds= [0]]

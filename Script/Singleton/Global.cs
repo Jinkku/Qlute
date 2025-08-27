@@ -13,6 +13,16 @@ public partial class Global : Node
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 	}
 
+	/// <summary>
+	/// This is to check if it's closed because the function don't have that function yet o-o
+	/// </summary>
+	private void StartTopPanelOpen()
+	{
+		if (SettingsOperator.TopPanelPosition < 50)
+		{
+			SettingsOperator.toppaneltoggle();
+		}
+	}
 	private Node _CurrentScene { get; set; }
 	public bool _skineditorEnabled = false;
 	public static bool _SkinStart = false;
@@ -30,6 +40,7 @@ public partial class Global : Node
 			SkinEditorAni.SetParallel(true);
 			if (_skineditorEnabled)
 			{
+				if (IsInstanceValid(_skineditorScene)) _skineditorScene?.QueueFree();
 				_skineditorScene = GD.Load<PackedScene>("res://Panels/Screens/SkinEditor.tscn").Instantiate().GetNode<Control>(".");
 				var SideBarL = _skineditorScene.GetNode<PanelContainer>("Creativity");
 				var SideBarR = _skineditorScene.GetNode<PanelContainer>("Extras");
@@ -52,15 +63,18 @@ public partial class Global : Node
 				SkinEditorAni.TweenProperty(_CurrentScene, "size", GetViewport().GetVisibleRect().Size, 0.5f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
-				SkinEditorAni.TweenProperty(_skineditorScene, "modulate", new Color(1, 1, 1, 0), 0.5f)
+				SkinEditorAni.TweenProperty(_skineditorScene, "modulate", new Color(1, 1, 1, 0.5f), 0.5f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
 				SkinEditorAni.TweenProperty(_CurrentScene, "position", new Vector2(0, 0), 0.5f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
+				SkinEditorAni.TweenCallback(Callable.From(() => StartTopPanelOpen()));
 				SkinEditorAni.TweenCallback(Callable.From(() => _skineditorScene.QueueFree()));
+				
 			}
 			SkinEditorAni.Play();
+
 		}
 
 		if (Input.IsActionJustPressed("screenshot"))

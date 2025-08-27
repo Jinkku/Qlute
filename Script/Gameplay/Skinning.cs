@@ -2,11 +2,12 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class Skinning
+public partial class Skinning : Resource
 {
-    public string Name { get; set; } = "Untitled";
-    public string SkinPath { get; set; }
-    public Texture2D Note { get; set; }
+    [Export] public string Name { get; set; } = "Untitled";
+    [Export] public string SkinPath { get; set; }
+    [Export] public Texture2D NoteBack { get; set; }
+    [Export] public Texture2D NoteFore { get; set; }
 }
 public static class Skin
 {

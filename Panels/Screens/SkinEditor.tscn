@@ -1,7 +1,8 @@
-[gd_scene load_steps=29 format=3 uid="uid://beeu7jswbwsts"]
+[gd_scene load_steps=30 format=3 uid="uid://beeu7jswbwsts"]
 
 [ext_resource type="Script" uid="uid://do76anrqegieu" path="res://Script/SkinEditor/SkinEditor.cs" id="1_wk53w"]
 [ext_resource type="Texture2D" uid="uid://dhtk4mxqohiru" path="res://Skin/System/Heart.svg" id="2_imael"]
+[ext_resource type="PackedScene" uid="uid://b2e8p1wdvyvhw" path="res://Panels/SkinEditorElements/SkinElementDemo.tscn" id="2_ujy7e"]
 [ext_resource type="Script" uid="uid://hujhlkgh6dfp" path="res://Script/CreateEditor/ContextMenus.cs" id="2_wk53w"]
 [ext_resource type="Script" uid="uid://cmqncf5p3shyd" path="res://Script/CreateEditor/FileMenu.cs" id="3_imael"]
 [ext_resource type="Texture2D" uid="uid://ctnqrw3he2egt" path="res://Skin/System/backicon.svg" id="4_ujy7e"]
@@ -147,31 +148,8 @@ popup/item_0/id = 0
 popup/item_1/text = "HUD"
 popup/item_1/id = 1
 
-[node name="SkinElement" type="Button" parent="Creativity/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(100, 200)
+[node name="SkinElement" parent="Creativity/ScrollContainer/VBoxContainer" instance=ExtResource("2_ujy7e")]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_yvt2e")
-
-[node name="Label" type="Label" parent="Creativity/ScrollContainer/VBoxContainer/SkinElement"]
-layout_mode = 2
-offset_left = 5.0
-offset_top = 90.0
-offset_right = 187.0
-offset_bottom = 109.0
-text = "Test Skin"
-horizontal_alignment = 1
-
-[node name="SkinText" type="Label" parent="Creativity/ScrollContainer/VBoxContainer/SkinElement"]
-layout_mode = 2
-offset_left = 5.0
-offset_top = 166.0
-offset_right = 187.0
-offset_bottom = 195.0
-size_flags_vertical = 8
-theme_override_styles/normal = SubResource("StyleBoxEmpty_q65qw")
-text = "Dummy Skin Element"
-horizontal_alignment = 1
-vertical_alignment = 2
 
 [node name="SkinElement2" type="Button" parent="Creativity/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(100, 200)
@@ -369,50 +347,6 @@ theme_override_constants/margin_bottom = 10
 [node name="Screens" type="HBoxContainer" parent="ToolBar/VBoxContainer/PartB/ScreensParts"]
 layout_mode = 2
 
-[node name="HomeScreen" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
-visible = false
-self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_yvt2e")
-theme_override_styles/hover = SubResource("StyleBoxFlat_imael")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_imael")
-theme_override_styles/normal = SubResource("StyleBoxFlat_imael")
-script = ExtResource("5_imael")
-
-[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Home Screen"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="SongSelect" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
-visible = false
-self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_yvt2e")
-theme_override_styles/hover = SubResource("StyleBoxFlat_imael")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_imael")
-theme_override_styles/normal = SubResource("StyleBoxFlat_imael")
-script = ExtResource("5_imael")
-
-[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Song Select"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Gameplay" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
 self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
 custom_minimum_size = Vector2(150, 0)
@@ -431,72 +365,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Gameplay"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="GamePause" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
-visible = false
-self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_yvt2e")
-theme_override_styles/hover = SubResource("StyleBoxFlat_imael")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_imael")
-theme_override_styles/normal = SubResource("StyleBoxFlat_imael")
-script = ExtResource("5_imael")
-
-[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Pause Screen"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="GameOver" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
-visible = false
-self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_yvt2e")
-theme_override_styles/hover = SubResource("StyleBoxFlat_imael")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_imael")
-theme_override_styles/normal = SubResource("StyleBoxFlat_imael")
-script = ExtResource("5_imael")
-
-[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Fail Screen"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Results Screen" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
-visible = false
-self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_yvt2e")
-theme_override_styles/hover = SubResource("StyleBoxFlat_imael")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_imael")
-theme_override_styles/normal = SubResource("StyleBoxFlat_imael")
-script = ExtResource("5_imael")
-
-[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Results Screen"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -526,34 +394,9 @@ icon = ExtResource("4_ujy7e")
 
 [connection signal="toggled" from="ToolBar/VBoxContainer/PartA/File" to="." method="_pressed"]
 [connection signal="toggled" from="ToolBar/VBoxContainer/PartA/File/ContextMenu/ContextSections/New" to="ToolBar/VBoxContainer/PartA/File/ContextMenu" method="_new"]
-[connection signal="button_down" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" method="_highlight"]
-[connection signal="button_up" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" method="_focus"]
-[connection signal="mouse_entered" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" method="_focus"]
-[connection signal="mouse_exited" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" method="_unfocus"]
-[connection signal="pressed" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/HomeScreen" method="_element"]
-[connection signal="button_down" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" method="_highlight"]
-[connection signal="button_up" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" method="_focus"]
-[connection signal="mouse_entered" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" method="_focus"]
-[connection signal="mouse_exited" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" method="_unfocus"]
-[connection signal="pressed" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/SongSelect" method="_element"]
 [connection signal="button_down" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" method="_highlight"]
 [connection signal="button_up" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" method="_focus"]
 [connection signal="mouse_entered" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" method="_focus"]
 [connection signal="mouse_exited" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" method="_unfocus"]
 [connection signal="pressed" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" method="_element"]
-[connection signal="button_down" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" method="_highlight"]
-[connection signal="button_up" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" method="_focus"]
-[connection signal="mouse_entered" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" method="_focus"]
-[connection signal="mouse_exited" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" method="_unfocus"]
-[connection signal="pressed" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GamePause" method="_element"]
-[connection signal="button_down" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" method="_highlight"]
-[connection signal="button_up" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" method="_focus"]
-[connection signal="mouse_entered" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" method="_focus"]
-[connection signal="mouse_exited" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" method="_unfocus"]
-[connection signal="pressed" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/GameOver" method="_element"]
-[connection signal="button_down" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" method="_highlight"]
-[connection signal="button_up" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" method="_focus"]
-[connection signal="mouse_entered" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" method="_focus"]
-[connection signal="mouse_exited" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" method="_unfocus"]
-[connection signal="pressed" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Results Screen" method="_element"]
 [connection signal="pressed" from="ControlPanel/Box/Button" to="." method="_on_back"]

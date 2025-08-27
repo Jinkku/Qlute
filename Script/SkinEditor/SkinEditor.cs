@@ -3,7 +3,19 @@ using System;
 
 public partial class SkinEditor : Control
 {
-	// Called when the node enters the scene tree for the first time.
+	Node currentScene;
+	private SettingsOperator SettingsOperator { get; set; }
+	public override void _Ready()
+	{
+		currentScene = GetTree().CurrentScene;
+		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
+		if (SettingsOperator.TopPanelPosition > 49)
+		{
+			SettingsOperator.toppaneltoggle();
+		}
+		
+	}
+
 	private void _on_back()
 	{
 		Global._SkinStart = !Global._SkinStart;
