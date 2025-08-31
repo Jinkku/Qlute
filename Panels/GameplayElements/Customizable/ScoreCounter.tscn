@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://bxuldgxk1wtiu"]
+
+[ext_resource type="FontFile" uid="uid://26bmgi83sgtv" path="res://Fonts/score.ttf" id="1_2x87l"]
+[ext_resource type="Script" uid="uid://b02tcqu16lnvw" path="res://Script/Gameplay/ScoreCounter.cs" id="2_81wvh"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_lvexv"]
+font = ExtResource("1_2x87l")
+font_size = 30
+shadow_color = Color(0, 0, 0, 0.403922)
+shadow_offset = Vector2(0, 0)
+
+[node name="Score" type="Label"]
+custom_minimum_size = Vector2(230, 40)
+text = "00000000"
+label_settings = SubResource("LabelSettings_lvexv")
+clip_text = true
+script = ExtResource("2_81wvh")
