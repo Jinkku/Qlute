@@ -73,7 +73,7 @@ public partial class SongSelect : Control
 	{
 		var window_size = GetViewportRect().Size;
 		Control SongPanel = GetNode<Control>("SongPanel");
-		SongPanel.Size = new Vector2(window_size.X / 2.5f, window_size.Y - 150);
+		SongPanel.Size = new Vector2(window_size.X / 2.5f + 40, window_size.Y - 150);
 		SongPanel.Position = new Vector2(window_size.X - (window_size.X / 2.5f), 105);
 		ScrollSongs();
 	}
@@ -238,7 +238,6 @@ public partial class SongSelect : Control
 			{
 				entry.ZIndex = 0; // Ensure proper layering
 				entry.Position = new Vector2(entry.Position.X, startposition + (83 * i) - (83 * (float)scrollBar.Value));
-				entry.Rotation = entry.Position.Y / (GetViewportRect().Size.Y / 2 - 83) * -0.45f + 0.45f;
 				SongLoaded++;
 			}
 		}

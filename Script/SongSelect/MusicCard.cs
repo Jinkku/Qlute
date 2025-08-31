@@ -86,16 +86,10 @@ public partial class MusicCard : Button
 			_focus_animation.TweenProperty(this, "position:x", -40, 0.2f)
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
-			_focus_animation.TweenProperty(this, "size:x", Size.X + 40, 0.2f)
-				.SetTrans(Tween.TransitionType.Cubic)
-				.SetEase(Tween.EaseType.Out);
 		}
 		else
 		{
 			_focus_animation.TweenProperty(this, "position:x", 0, 0.2f)
-				.SetTrans(Tween.TransitionType.Cubic)
-				.SetEase(Tween.EaseType.Out);
-			_focus_animation.TweenProperty(this, "size:x", Size.X - 40, 0.2f)
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
 			
