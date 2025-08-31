@@ -1,35 +1,19 @@
-[gd_scene load_steps=30 format=3 uid="uid://beeu7jswbwsts"]
+[gd_scene load_steps=28 format=3 uid="uid://beeu7jswbwsts"]
 
 [ext_resource type="Script" uid="uid://do76anrqegieu" path="res://Script/SkinEditor/SkinEditor.cs" id="1_wk53w"]
-[ext_resource type="Texture2D" uid="uid://dhtk4mxqohiru" path="res://Skin/System/Heart.svg" id="2_imael"]
-[ext_resource type="PackedScene" uid="uid://b2e8p1wdvyvhw" path="res://Panels/SkinEditorElements/SkinElementDemo.tscn" id="2_ujy7e"]
+[ext_resource type="Script" uid="uid://bnanjd0tugo0w" path="res://Script/SkinEditor/elementslist.gd" id="2_ujy7e"]
 [ext_resource type="Script" uid="uid://hujhlkgh6dfp" path="res://Script/CreateEditor/ContextMenus.cs" id="2_wk53w"]
 [ext_resource type="Script" uid="uid://cmqncf5p3shyd" path="res://Script/CreateEditor/FileMenu.cs" id="3_imael"]
 [ext_resource type="Texture2D" uid="uid://ctnqrw3he2egt" path="res://Skin/System/backicon.svg" id="4_ujy7e"]
 [ext_resource type="Script" uid="uid://blbe3d2880su3" path="res://Script/Effects/ScreenElementButton.cs" id="5_imael"]
+[ext_resource type="Script" uid="uid://dqaskqiatn3fn" path="res://Script/SkinEditor/missing.gd" id="8_yvt2e"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wk53w"]
-bg_color = Color(0.0784314, 0.0980392, 0.129412, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ujy7e"]
 content_margin_left = 15.0
 content_margin_top = 15.0
 content_margin_right = 15.0
 content_margin_bottom = 15.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yvt2e"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(0, 0, 0, 0.196078)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q65qw"]
-content_margin_bottom = 10.0
+bg_color = Color(0.0784314, 0.0980392, 0.129412, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jucc0"]
 bg_color = Color(0.0790558, 0.0977497, 0.128906, 1)
@@ -106,7 +90,11 @@ content_margin_left = 10.0
 content_margin_right = 20.0
 bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q65qw"]
+bg_color = Color(0.047, 0.059, 0.078, 0.8)
+
 [node name="Skin Editor" type="Control"]
+z_index = 1000
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -126,56 +114,33 @@ offset_bottom = -50.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wk53w")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Creativity"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_ujy7e")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Creativity/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Creativity"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Creativity/ScrollContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="Creativity/VBoxContainer"]
 layout_mode = 2
 text = "Layers"
 
-[node name="OptionButton" type="OptionButton" parent="Creativity/ScrollContainer/VBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="Creativity/VBoxContainer"]
 layout_mode = 2
 selected = 0
 item_count = 2
-popup/item_0/text = "Gameplay"
+popup/item_0/text = "HUD"
 popup/item_0/id = 0
-popup/item_1/text = "HUD"
+popup/item_1/text = "Gameplay"
 popup/item_1/id = 1
 
-[node name="SkinElement" parent="Creativity/ScrollContainer/VBoxContainer" instance=ExtResource("2_ujy7e")]
+[node name="ScrollContainer" type="ScrollContainer" parent="Creativity/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
 
-[node name="SkinElement2" type="Button" parent="Creativity/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(100, 200)
+[node name="Elements" type="VBoxContainer" parent="Creativity/VBoxContainer/ScrollContainer"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_yvt2e")
-
-[node name="Label" type="TextureRect" parent="Creativity/ScrollContainer/VBoxContainer/SkinElement2"]
-layout_mode = 1
-offset_left = 5.0
-offset_top = 90.0
-offset_right = 187.0
-offset_bottom = 109.0
-texture = ExtResource("2_imael")
-stretch_mode = 3
-
-[node name="SkinText" type="Label" parent="Creativity/ScrollContainer/VBoxContainer/SkinElement2"]
-layout_mode = 2
-offset_left = 5.0
-offset_top = 166.0
-offset_right = 187.0
-offset_bottom = 195.0
-size_flags_vertical = 8
-theme_override_styles/normal = SubResource("StyleBoxEmpty_q65qw")
-text = "Dummy Skin Image"
-horizontal_alignment = 1
-vertical_alignment = 2
+script = ExtResource("2_ujy7e")
 
 [node name="Extras" type="PanelContainer" parent="."]
 custom_minimum_size = Vector2(230, 0)
@@ -193,7 +158,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_wk53w")
 
 [node name="Scroll" type="ScrollContainer" parent="Extras"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_ujy7e")
 
 [node name="Rows" type="VBoxContainer" parent="Extras/Scroll"]
 layout_mode = 2
@@ -391,6 +355,28 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_ul0k5")
 theme_override_styles/normal = SubResource("StyleBoxFlat_724hy")
 text = "  Back"
 icon = ExtResource("4_ujy7e")
+
+[node name="Missing" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 220.0
+offset_top = 100.0
+offset_right = -230.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_q65qw")
+script = ExtResource("8_yvt2e")
+
+[node name="Label" type="Label" parent="Missing"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Skinning not supported on this menu
+ono"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="toggled" from="ToolBar/VBoxContainer/PartA/File" to="." method="_pressed"]
 [connection signal="toggled" from="ToolBar/VBoxContainer/PartA/File/ContextMenu/ContextSections/New" to="ToolBar/VBoxContainer/PartA/File/ContextMenu" method="_new"]

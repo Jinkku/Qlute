@@ -1,4 +1,30 @@
-[gd_scene load_steps=4 format=3 uid="uid://b2e8p1wdvyvhw"]
+[gd_scene load_steps=8 format=3 uid="uid://b2e8p1wdvyvhw"]
+
+[ext_resource type="Script" uid="uid://c3t3ny6qsgn4b" path="res://Script/SkinEditor/skin_element_demo.gd" id="1_ucx6g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ucx6g"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wtve1"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.4)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6ct35"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.6)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yvt2e"]
 content_margin_left = 5.0
@@ -19,7 +45,12 @@ content_margin_bottom = 10.0
 
 [node name="SkinElement" type="Button"]
 custom_minimum_size = Vector2(200, 200)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ucx6g")
+theme_override_styles/hover = SubResource("StyleBoxFlat_wtve1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6ct35")
 theme_override_styles/normal = SubResource("StyleBoxFlat_yvt2e")
+script = ExtResource("1_ucx6g")
+metadata/ScenePath = ""
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -34,6 +65,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("ViewportTexture_g5662")
 expand_mode = 1
+stretch_mode = 5
 
 [node name="SkinText" type="Label" parent="."]
 layout_mode = 1
@@ -54,3 +86,5 @@ horizontal_alignment = 1
 vertical_alignment = 2
 
 [node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+gui_disable_input = true

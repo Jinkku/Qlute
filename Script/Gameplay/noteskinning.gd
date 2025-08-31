@@ -1,7 +1,7 @@
 extends Sprite2D
 
-var BackgroundNote = texture
-var ForegroundNote = $NoteFront.texture
+#var BackgroundNote = texture
+#var ForegroundNote = $NoteFront.texture
 var colour = self.self_modulate
 
 
