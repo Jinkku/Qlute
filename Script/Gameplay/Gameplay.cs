@@ -201,7 +201,6 @@ public partial class Gameplay : Control
 		HealthBar.Reset();
 		Control P = GetNode<Control>("Playfield");
 		Chart = GetNode<HBoxContainer>("Playfield/ChartSections");
-		HitPoint = (int)Chart.Size.Y - 150;
 		hittext = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/hittext.tscn").Instantiate().GetNode<Label>(".");
 		hittextinit = true;
 		hittext.Modulate = new Color(1f, 1f, 1f, 0f);
@@ -389,6 +388,7 @@ public partial class Gameplay : Control
 	public override void _Process(double delta)
 	{
 		SettingsOperator.Gameplaycfg.Score = scoreint; // Set the score of the player
+		HitPoint = (int)Chart.Size.Y - 150;
 		try
 		{
 			float est = GetRemainingTime(GameMode: true, delta: (float)delta) / 0.001f;
