@@ -89,8 +89,8 @@ public partial class SongSelect : Control
 		var SongArtist = button.GetNode<Label>("MarginContainer/VBoxContainer/SongArtist");
 		var SongMapper = button.GetNode<Label>("MarginContainer/VBoxContainer/SongMapper");
 		var TextureRect = button.GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
-		var Rating = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBox/Rating");
-		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBox/Version");
+		var Rating = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Rating");
+		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Version");
 		button.Position = new Vector2(0, startposition + (83 * id));
 		SongTitle.Text = SettingsOperator.Beatmaps[id].Title;
 		SongArtist.Text = SettingsOperator.Beatmaps[id].Artist;

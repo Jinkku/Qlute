@@ -12,38 +12,27 @@ bg_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 15
 corner_radius_bottom_left = 15
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w67jm"]
+bg_color = Color(0, 0, 0, 0.4)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5o4qg"]
 content_margin_left = 5.0
 content_margin_top = 3.0
 content_margin_right = 5.0
 content_margin_bottom = 3.0
-bg_color = Color(0, 0, 0, 1)
+bg_color = Color(0.5, 0.5, 0.5, 1)
 corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ykgkk"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p0ncd"]
 content_margin_left = 5.0
 content_margin_top = 3.0
 content_margin_right = 5.0
 content_margin_bottom = 3.0
-bg_color = Color(0, 0, 0, 0.54902)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_552jq"]
-content_margin_left = 5.0
-content_margin_top = 3.0
-content_margin_right = 5.0
-content_margin_bottom = 3.0
-bg_color = Color(0, 0, 0, 0.54902)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
 
 [node name="MusicCard" type="Button"]
 custom_minimum_size = Vector2(350, 78)
@@ -119,15 +108,22 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.588235)
 theme_override_font_sizes/font_size = 12
 text = "mapped by idiot"
 
-[node name="InfoBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="InfoBoxBG" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 5
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_w67jm")
 
-[node name="Ranked" type="PanelContainer" parent="MarginContainer/VBoxContainer/InfoBox"]
+[node name="InfoBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer/InfoBoxBG"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 0
+
+[node name="Ranked" type="PanelContainer" parent="MarginContainer/VBoxContainer/InfoBoxBG/InfoBox"]
+self_modulate = Color(0, 0, 0, 1)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5o4qg")
 
-[node name="RankText" type="Label" parent="MarginContainer/VBoxContainer/InfoBox/Ranked"]
+[node name="RankText" type="Label" parent="MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Ranked"]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_font_sizes/font_size = 10
@@ -135,20 +131,20 @@ text = "Unknown"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Rating" type="Label" parent="MarginContainer/VBoxContainer/InfoBox"]
+[node name="Rating" type="Label" parent="MarginContainer/VBoxContainer/InfoBoxBG/InfoBox"]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_font_sizes/font_size = 10
-theme_override_styles/normal = SubResource("StyleBoxFlat_ykgkk")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_p0ncd")
 text = "Lv. 69"
 horizontal_alignment = 1
 script = ExtResource("5_y5yk1")
 
-[node name="Version" type="Label" parent="MarginContainer/VBoxContainer/InfoBox"]
+[node name="Version" type="Label" parent="MarginContainer/VBoxContainer/InfoBoxBG/InfoBox"]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_font_sizes/font_size = 10
-theme_override_styles/normal = SubResource("StyleBoxFlat_552jq")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_p0ncd")
 text = "Difficulty Name"
 
 [connection signal="button_down" from="." to="." method="_highlight"]
