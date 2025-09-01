@@ -6,6 +6,9 @@
 [ext_resource type="Script" uid="uid://blbe3d2880su3" path="res://Script/Effects/ScreenElementButton.cs" id="5_imael"]
 [ext_resource type="Script" uid="uid://dqaskqiatn3fn" path="res://Script/SkinEditor/missing.gd" id="8_yvt2e"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q65qw"]
+bg_color = Color(0.047, 0.059, 0.078, 0.8)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wk53w"]
 content_margin_left = 15.0
 content_margin_top = 15.0
@@ -52,9 +55,6 @@ content_margin_left = 10.0
 content_margin_right = 20.0
 bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q65qw"]
-bg_color = Color(0.047, 0.059, 0.078, 0.8)
-
 [node name="Skin Editor" type="Control"]
 z_index = 1000
 layout_mode = 3
@@ -65,6 +65,28 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_wk53w")
+
+[node name="Missing" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 220.0
+offset_top = 100.0
+offset_right = -230.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_q65qw")
+script = ExtResource("8_yvt2e")
+
+[node name="Label" type="Label" parent="Missing"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Skinning not supported on this menu
+ono"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Creativity" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -82,10 +104,12 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="Creativity/VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "Layers"
 
 [node name="OptionButton" type="OptionButton" parent="Creativity/VBoxContainer"]
+visible = false
 layout_mode = 2
 selected = 0
 item_count = 2
@@ -261,28 +285,6 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_ul0k5")
 theme_override_styles/normal = SubResource("StyleBoxFlat_724hy")
 text = "  Back"
 icon = ExtResource("4_ujy7e")
-
-[node name="Missing" type="PanelContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 220.0
-offset_top = 100.0
-offset_right = -230.0
-offset_bottom = -50.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_q65qw")
-script = ExtResource("8_yvt2e")
-
-[node name="Label" type="Label" parent="Missing"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Skinning not supported on this menu
-ono"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [connection signal="button_down" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" method="_highlight"]
 [connection signal="button_up" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" method="_focus"]
