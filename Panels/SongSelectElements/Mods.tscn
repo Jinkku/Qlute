@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dpjsc7sxiwkm7"]
+[gd_scene load_steps=15 format=3 uid="uid://dpjsc7sxiwkm7"]
 
 [ext_resource type="Script" uid="uid://dxbbl1s8m45so" path="res://Script/Mods/Mods.cs" id="1_7gucc"]
 [ext_resource type="Script" uid="uid://b4xchyvoqsbhp" path="res://Script/Mods/CustomizeMenu.cs" id="1_u70wj"]
@@ -39,55 +39,6 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4kah8"]
-bg_color = Color(1, 1, 1, 0.0980392)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g6tdb"]
-content_margin_left = 5.0
-content_margin_top = 10.0
-content_margin_right = 5.0
-content_margin_bottom = 10.0
-bg_color = Color(0.427451, 0.643137, 0.992157, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-shadow_color = Color(0.341797, 0.509643, 0.78125, 1)
-shadow_size = 1
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tykkm"]
-content_margin_left = 5.0
-content_margin_top = 10.0
-content_margin_right = 5.0
-content_margin_bottom = 10.0
-bg_color = Color(0.307617, 0.729167, 0.478872, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-shadow_color = Color(0.23801, 0.557292, 0.31783, 1)
-shadow_size = 1
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oxxgw"]
-content_margin_left = 5.0
-content_margin_top = 10.0
-content_margin_right = 5.0
-content_margin_bottom = 10.0
-bg_color = Color(0.307617, 0.478872, 0.729167, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-shadow_color = Color(0.23801, 0.366319, 0.557292, 1)
-shadow_size = 1
-shadow_offset = Vector2(0, 4)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_133ox"]
 content_margin_left = 15.0
@@ -192,10 +143,6 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
-theme_override_styles/focus = SubResource("StyleBoxFlat_4kah8")
-theme_override_styles/hover = SubResource("StyleBoxFlat_g6tdb")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_tykkm")
-theme_override_styles/normal = SubResource("StyleBoxFlat_oxxgw")
 text = "Reset"
 
 [node name="Customize" type="Button" parent="Title/Info"]
@@ -204,10 +151,6 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
 tooltip_text = "Later release"
-theme_override_styles/focus = SubResource("StyleBoxFlat_4kah8")
-theme_override_styles/hover = SubResource("StyleBoxFlat_g6tdb")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_tykkm")
-theme_override_styles/normal = SubResource("StyleBoxFlat_oxxgw")
 disabled = true
 text = "Customize"
 script = ExtResource("5_b2hs3")

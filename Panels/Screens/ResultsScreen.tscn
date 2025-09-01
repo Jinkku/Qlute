@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://oru46ou3jfjl"]
+[gd_scene load_steps=16 format=3 uid="uid://oru46ou3jfjl"]
 
 [ext_resource type="Script" uid="uid://bj6kjjp2yikxr" path="res://Script/ResultsScreen/ResultsScreen.cs" id="1_e0sg4"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="1_xhck8"]
@@ -61,55 +61,6 @@ content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 10.0
 bg_color = Color(0, 0, 0, 0.196078)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c82el"]
-bg_color = Color(1, 1, 1, 0.0980392)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uquna"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.427451, 0.643137, 0.992157, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-shadow_color = Color(0.341797, 0.509643, 0.78125, 1)
-shadow_size = 1
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f25vf"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.307617, 0.729167, 0.478872, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-shadow_color = Color(0.23801, 0.557292, 0.31783, 1)
-shadow_size = 1
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rvt4u"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.307617, 0.478872, 0.729167, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-shadow_color = Color(0.23801, 0.366319, 0.557292, 1)
-shadow_size = 1
-shadow_offset = Vector2(0, 4)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4q8ht"]
 texture = ExtResource("6_38vqk")
@@ -443,38 +394,22 @@ alignment = 1
 [node name="Replay" type="Button" parent="PlayerButtons/Options"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
-theme_override_styles/hover = SubResource("StyleBoxFlat_uquna")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_f25vf")
-theme_override_styles/normal = SubResource("StyleBoxFlat_rvt4u")
 text = "Watch Replay"
 
 [node name="Retry" type="Button" parent="PlayerButtons/Options"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
-theme_override_styles/hover = SubResource("StyleBoxFlat_uquna")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_f25vf")
-theme_override_styles/normal = SubResource("StyleBoxFlat_rvt4u")
 text = "Retry"
 
 [node name="Continue" type="Button" parent="PlayerButtons/Options"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
-theme_override_styles/hover = SubResource("StyleBoxFlat_uquna")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_f25vf")
-theme_override_styles/normal = SubResource("StyleBoxFlat_rvt4u")
 text = "Continue"
 
 [node name="AddCollection" type="Button" parent="PlayerButtons/Options"]
 visible = false
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_c82el")
-theme_override_styles/hover = SubResource("StyleBoxFlat_uquna")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_f25vf")
-theme_override_styles/normal = SubResource("StyleBoxFlat_rvt4u")
 text = "+"
 
 [node name="LeaderboardList" type="PanelContainer" parent="."]
@@ -509,7 +444,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="pressed" from="PlayerButtons/Options/Replay" to="." method="_watchreplay"]
-[connection signal="pressed" from="PlayerButtons/Options/Retry" to="." method="_resetreplay"]
 [connection signal="pressed" from="PlayerButtons/Options/Retry" to="." method="_retry"]
+[connection signal="pressed" from="PlayerButtons/Options/Retry" to="." method="_resetreplay"]
 [connection signal="pressed" from="PlayerButtons/Options/Continue" to="." method="_continue"]
 [connection signal="pressed" from="PlayerButtons/Options/AddCollection" to="." method="_continue"]
