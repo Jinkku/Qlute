@@ -428,7 +428,7 @@ public partial class SettingsOperator : Node
         { "beatmapbpm", (int)160 },
         { "osubeatid", 0 },
         { "osubeatidset", 0 },
-        { "beatmapaccuracy", (int)0 },
+        { "beatmapaccuracy", (int)1 },
         { "beatmapdiff", null },
         { "customapi", false},
         { "multiplier" , 1.0f},

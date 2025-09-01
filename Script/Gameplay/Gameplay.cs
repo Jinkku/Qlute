@@ -207,7 +207,6 @@ public partial class Gameplay : Control
 		hittext.ZIndex = 100;
 		GetNode<Control>("Playfield").AddChild(hittext);
 		hittextoldpos = hittext.Position;
-
 		SettingsOperator.PerfectJudge = 500 / (int)(SettingsOperator.Sessioncfg["beatmapaccuracy"]);
 		SettingsOperator.GreatJudge = (int)(SettingsOperator.PerfectJudge * 4);
 		SettingsOperator.MehJudge = (int)(SettingsOperator.PerfectJudge * 6);
@@ -246,7 +245,7 @@ public partial class Gameplay : Control
 
 		SettingsOperator.ResetScore();
 		SettingsOperator.Resetms();
-		ReloadBeatmap(SettingsOperator.Sessioncfg["beatmapurl"].ToString());
+		if (SettingsOperator.Sessioncfg["beatmapurl"] != null) ReloadBeatmap(SettingsOperator.Sessioncfg["beatmapurl"].ToString());
 
 		// If auto is enabled, it will make a Replay file with Auto being the player playing the beatmap. Before this it didn't make the replay file, it just plays.
 		// I am doing this because it's more simpler for me and don't have to worry about breaking auto (Qlutina)
@@ -551,6 +550,7 @@ public partial class Gameplay : Control
 			{
 				erroredout = true;
 				GD.PrintErr(e);
+				GD.PushError(e);
 				Notify.Post("Can't play the bestmap because\n" + e.Message);
 				SettingsOperator.toppaneltoggle();
 				BeatmapBackground.FlashEnable = true;
