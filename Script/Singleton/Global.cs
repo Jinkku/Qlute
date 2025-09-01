@@ -46,15 +46,33 @@ public partial class Global : Node
 				var SideBarR = _skineditorScene.GetNode<PanelContainer>("Extras");
 				var ToolBar = _skineditorScene.GetNode<PanelContainer>("ToolBar");
 				var ControlPanel = _skineditorScene.GetNode<PanelContainer>("ControlPanel");
+				var Error = _skineditorScene.GetNode<PanelContainer>("Missing");
 				GetTree().Root.AddChild(_skineditorScene);
-				_skineditorScene.Modulate = new Color(1, 1, 1, 0);
-				SkinEditorAni.TweenProperty(_CurrentScene, "size", new Vector2(GetViewport().GetVisibleRect().Size.X - SideBarL.Size.X - SideBarR.Size.X, GetViewport().GetVisibleRect().Size.Y - ToolBar.Size.Y - ToolBar.Position.Y - ControlPanel.Size.Y), 0.5f)
+				var aftercontrol = ControlPanel.Position;
+				ControlPanel.Position = new Vector2(ControlPanel.Position.X, ControlPanel.Position.Y + ControlPanel.Size.Y);
+				ToolBar.Position = new Vector2(0, ToolBar.Position.Y - ToolBar.Size.Y);
+				SideBarL.Position = new Vector2(-SideBarL.Size.X, ToolBar.Size.Y);
+				SideBarR.Position = new Vector2(SideBarR.Position.X + SideBarR.Size.X, ToolBar.Size.Y);
+				Error.Position = new Vector2(Error.Position.X, Error.Position.Y - Error.Size.Y);
+				SkinEditorAni.TweenProperty(SideBarL, "position:x", 0, 0.5f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
-				SkinEditorAni.TweenProperty(_skineditorScene, "modulate", new Color(1, 1, 1, 1), 0.5f)
+				SkinEditorAni.TweenProperty(SideBarR, "position:x", SideBarR.Position.X - SideBarR.Size.X, 0.5f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
-				SkinEditorAni.TweenProperty(_CurrentScene, "position", new Vector2(SideBarL.Size.X, ToolBar.Size.Y + ToolBar.Position.Y), 0.5f)
+				SkinEditorAni.TweenProperty(ToolBar, "position:y", 0, 0.5f)
+					.SetTrans(Tween.TransitionType.Cubic)
+					.SetEase(Tween.EaseType.Out);
+				SkinEditorAni.TweenProperty(ControlPanel, "position:y", aftercontrol.Y, 0.5f)
+					.SetTrans(Tween.TransitionType.Cubic)
+					.SetEase(Tween.EaseType.Out);
+				SkinEditorAni.TweenProperty(_CurrentScene, "size", new Vector2(GetViewport().GetVisibleRect().Size.X - SideBarL.Size.X - SideBarR.Size.X, GetViewport().GetVisibleRect().Size.Y - ToolBar.Size.Y - ControlPanel.Size.Y), 0.5f)
+					.SetTrans(Tween.TransitionType.Cubic)
+					.SetEase(Tween.EaseType.Out);
+				SkinEditorAni.TweenProperty(_CurrentScene, "position", new Vector2(SideBarL.Size.X, ToolBar.Size.Y), 0.5f)
+					.SetTrans(Tween.TransitionType.Cubic)
+					.SetEase(Tween.EaseType.Out);
+				SkinEditorAni.TweenProperty(Error, "position:y", Error.Position.Y + Error.Size.Y, 0.5f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
 			}
