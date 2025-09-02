@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://do76anrqegieu" path="res://Script/SkinEditor/SkinEditor.cs" id="1_wk53w"]
 [ext_resource type="Script" uid="uid://bnanjd0tugo0w" path="res://Script/SkinEditor/elementslist.gd" id="2_ujy7e"]
-[ext_resource type="Texture2D" uid="uid://ctnqrw3he2egt" path="res://Skin/System/backicon.svg" id="4_ujy7e"]
+[ext_resource type="Texture2D" uid="uid://ctnqrw3he2egt" path="res://Resources/System/backicon.svg" id="4_ujy7e"]
 [ext_resource type="Script" uid="uid://blbe3d2880su3" path="res://Script/Effects/ScreenElementButton.cs" id="5_imael"]
 [ext_resource type="Script" uid="uid://dqaskqiatn3fn" path="res://Script/SkinEditor/missing.gd" id="8_yvt2e"]
 

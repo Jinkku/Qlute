@@ -634,7 +634,7 @@ public partial class Gameplay : Control
 		{
 			Hittext("Miss", new Color(1f, 0.28f, 0f));
 			SettingsOperator.Gameplaycfg.Bad++;
-			if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://Skin/Sounds/combobreak.wav");
+			if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
 			SettingsOperator.Gameplaycfg.Combo = 0;
 			HealthBar.Damage(5);
 			if (HurtAnimation != null && HurtAnimation.IsRunning())

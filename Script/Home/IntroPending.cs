@@ -35,8 +35,8 @@ public partial class IntroPending : Control
 
 	private void _tick()
 	{
-		if (HeartbeatHover && beattick < 4) Sample.PlaySample("res://Skin/Sounds/heartbeat.wav");
-		if (HeartbeatHover && beattick == 4) Sample.PlaySample("res://Skin/Sounds/downbeat.wav");
+		if (HeartbeatHover && beattick < 4) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/heartbeat.wav");
+		if (HeartbeatHover && beattick == 4) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/downbeat.wav");
 		if (beattick > 3) beattick = 1;
 		else beattick++; // for the feedback of hovering the Qlute logo
 

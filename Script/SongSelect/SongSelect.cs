@@ -494,7 +494,7 @@ public partial class SongSelect : Control
 		{
 			_Mods_show();
 		}
-		Sample.PlaySample("res://Skin/Sounds/play.wav");
+		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/play.wav");
 
 
 		if (ModsOperator.Mods["npc"])

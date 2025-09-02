@@ -64,7 +64,7 @@ project/assembly_name="Qlute"
 
 [gui]
 
-theme/custom="res://Skin/System/theme.tres"
+theme/custom="res://Resources/System/theme.tres"
 theme/custom_font="res://Fonts/font.ttf"
 theme/default_font_hinting=2
 theme/default_font_multichannel_signed_distance_field=true

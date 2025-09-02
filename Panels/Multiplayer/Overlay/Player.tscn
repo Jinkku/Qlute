@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cg1d7mkb34w3e"]
 
-[ext_resource type="Texture2D" uid="uid://dgks5gkrmoe4k" path="res://Skin/System/Masks/circle.png" id="1_mffyp"]
-[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Skin/System/guest.png" id="2_mffyp"]
+[ext_resource type="Texture2D" uid="uid://dgks5gkrmoe4k" path="res://Resources/System/Masks/circle.png" id="1_mffyp"]
+[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="2_mffyp"]
 
 [node name="Player" type="TextureRect"]
 clip_children = 1

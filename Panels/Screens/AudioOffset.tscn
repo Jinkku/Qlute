@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://cc0dggpxt8tor"]
 
 [ext_resource type="Script" uid="uid://bgw67yc46dtkf" path="res://Script/SongOffset/SongOffset.cs" id="1_rjlvf"]
-[ext_resource type="AudioStream" uid="uid://c24x4j8einf4u" path="res://Skin/Sounds/audiooffset.mp3" id="2_kuc6s"]
+[ext_resource type="AudioStream" uid="uid://c24x4j8einf4u" path="res://SelectableSkins/Slia/Sounds/audiooffset.mp3" id="2_kuc6s"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2j6ug"]
 content_margin_left = 5.0

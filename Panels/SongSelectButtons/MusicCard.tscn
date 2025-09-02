@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://b2lw0mmphsddc"]
 
 [ext_resource type="Script" uid="uid://dye2ljj2ycrnx" path="res://Script/SongSelect/MusicCard.cs" id="1_aa04f"]
-[ext_resource type="StyleBox" uid="uid://fxawsqvq06j4" path="res://Skin/System/buttonidle.tres" id="2_nf3oy"]
+[ext_resource type="StyleBox" uid="uid://fxawsqvq06j4" path="res://Resources/System/buttonidle.tres" id="2_nf3oy"]
 [ext_resource type="Texture2D" uid="uid://sfbrs7c6t7dr" path="res://DefaultWallpaper/future.png" id="5_q6s5x"]
 [ext_resource type="Script" uid="uid://buiifhesbwgmp" path="res://Script/SongSelect/RatingCard.cs" id="5_y5yk1"]
 

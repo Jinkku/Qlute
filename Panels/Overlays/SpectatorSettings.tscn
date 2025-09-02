@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://bbglg2yq3l8dt"]
 
-[ext_resource type="Texture2D" uid="uid://4uedtgsvw7ep" path="res://Skin/System/TopPanel/Settings.svg" id="1_n2d5a"]
+[ext_resource type="Texture2D" uid="uid://4uedtgsvw7ep" path="res://Resources/System/TopPanel/Settings.svg" id="1_n2d5a"]
 [ext_resource type="Script" uid="uid://c6hj7yvehepy" path="res://Script/Spectator/SpectatorSettings.cs" id="1_uk8rj"]
 [ext_resource type="Script" uid="uid://dctbv0d1u4vpa" path="res://Script/Spectator/SpeedPanel.cs" id="2_lnka0"]
 [ext_resource type="Script" uid="uid://ctgdfml2vqvm0" path="res://Script/Spectator/misc.gd" id="3_lnka0"]

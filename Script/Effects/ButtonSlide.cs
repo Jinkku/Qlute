@@ -5,7 +5,7 @@ public partial class ButtonSlide : Button
 {
 	private void _focus()
 	{
-		Sample.PlaySample("res://Skin/Sounds/hover.wav");
+		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/hover.wav");
 		var _tween = CreateTween();
 		_tween.TweenProperty(this, "custom_minimum_size", new Vector2(900, 50), 0.2f)
 			.SetTrans(Tween.TransitionType.Bounce)
@@ -22,11 +22,11 @@ public partial class ButtonSlide : Button
 	}
 	private void _click()
 	{
-		Sample.PlaySample("res://Skin/Sounds/selected.wav");
+		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/selected.wav");
 	}
 	
 	private void _down()
 	{
-		Sample.PlaySample("res://Skin/Sounds/hover.wav");
+		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/hover.wav");
 	}
 }

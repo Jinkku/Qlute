@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://hbkr7peitwa8"]
 
-[ext_resource type="Texture2D" uid="uid://dnnbwt8nqekwl" path="res://Skin/System/Notification/NotificationApplet.png" id="1_c7mxw"]
-[ext_resource type="Texture2D" uid="uid://b000ela4rhy4h" path="res://Skin/NotificationIcons/warning.svg" id="1_l5pyg"]
+[ext_resource type="Texture2D" uid="uid://dnnbwt8nqekwl" path="res://Resources/System/Notification/NotificationApplet.png" id="1_c7mxw"]
+[ext_resource type="Texture2D" uid="uid://b000ela4rhy4h" path="res://Resources/NotificationIcons/warning.svg" id="1_l5pyg"]
 [ext_resource type="Script" uid="uid://cvflkvt032pog" path="res://Script/TopPanel/Overlays/NotificationApplet.cs" id="2_2gkms"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dt3ms"]

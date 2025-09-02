@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cfg55dbl1ip8a"]
 
-[ext_resource type="Texture2D" uid="uid://la23771nkff3" path="res://Skin/Game/Backgroundnote.png" id="1_8hoci"]
-[ext_resource type="Texture2D" uid="uid://dfpwg60xx2rsd" path="res://Skin/Game/Foregroundnote.png" id="2_02252"]
+[ext_resource type="Texture2D" uid="uid://la23771nkff3" path="res://SelectableSkins/Slia/Backgroundnote.png" id="1_8hoci"]
+[ext_resource type="Texture2D" uid="uid://dfpwg60xx2rsd" path="res://SelectableSkins/Slia/Foregroundnote.png" id="2_02252"]
 [ext_resource type="Script" uid="uid://bsp67nu20on5o" path="res://Script/Gameplay/noteskinning.gd" id="2_syjvn"]
 
 [node name="NoteBack" type="Sprite2D"]
