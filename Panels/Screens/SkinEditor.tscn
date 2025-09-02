@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://beeu7jswbwsts"]
+[gd_scene load_steps=21 format=3 uid="uid://beeu7jswbwsts"]
 
 [ext_resource type="Script" uid="uid://do76anrqegieu" path="res://Script/SkinEditor/SkinEditor.cs" id="1_wk53w"]
 [ext_resource type="Script" uid="uid://bnanjd0tugo0w" path="res://Script/SkinEditor/elementslist.gd" id="2_ujy7e"]
@@ -21,6 +21,17 @@ bg_color = Color(0.0790558, 0.0977497, 0.128906, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ee5vh"]
 content_margin_left = 25.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wk53w"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ujy7e"]
+bg_color = Color(1, 1, 1, 0.2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yvt2e"]
+bg_color = Color(1, 1, 1, 0.3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_17725"]
+bg_color = Color(1, 1, 1, 0.1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yvt2e"]
 
@@ -122,7 +133,6 @@ popup/item_1/id = 1
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
-vertical_scroll_mode = 2
 
 [node name="Elements" type="VBoxContainer" parent="Creativity/VBoxContainer/ScrollContainer"]
 layout_mode = 2
@@ -149,14 +159,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="Label" type="Label" parent="Extras/Scroll/Rows"]
-layout_mode = 2
-text = "- Intension"
-
-[node name="HSlider" type="HSlider" parent="Extras/Scroll/Rows"]
-layout_mode = 2
-value = 33.0
 
 [node name="ToolBar" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -214,12 +216,58 @@ popup/item_1/id = 1
 popup/item_2/text = "Paste"
 popup/item_2/id = 2
 
-[node name="View" type="MenuButton" parent="ToolBar/VBoxContainer/PartA"]
-custom_minimum_size = Vector2(80, 50)
+[node name="ViewPoints" type="HBoxContainer" parent="ToolBar/VBoxContainer/PartA"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
-text = "View"
-item_count = 1
-popup/item_0/id = 0
+size_flags_horizontal = 10
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartA/ViewPoints"]
+layout_mode = 2
+text = "View Points"
+
+[node name="MarginContainer" type="MarginContainer" parent="ToolBar/VBoxContainer/PartA/ViewPoints"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="GameplayViewpoints" type="HBoxContainer" parent="ToolBar/VBoxContainer/PartA/ViewPoints"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Main" type="Button" parent="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+tooltip_text = "View the preview of the game."
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wk53w")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ujy7e")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_yvt2e")
+theme_override_styles/normal = SubResource("StyleBoxFlat_17725")
+toggle_mode = true
+text = "Game"
+
+[node name="Sprites" type="Button" parent="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+tooltip_text = "Change the feel."
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wk53w")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ujy7e")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_yvt2e")
+theme_override_styles/normal = SubResource("StyleBoxFlat_17725")
+toggle_mode = true
+text = "Sprites"
+
+[node name="Settings" type="Button" parent="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+tooltip_text = "Tweak skin settings"
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wk53w")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ujy7e")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_yvt2e")
+theme_override_styles/normal = SubResource("StyleBoxFlat_17725")
+toggle_mode = true
+text = "Skin
+Settings"
 
 [node name="PartB" type="HBoxContainer" parent="ToolBar/VBoxContainer"]
 custom_minimum_size = Vector2(0, 50)
@@ -286,6 +334,8 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_724hy")
 text = "  Back"
 icon = ExtResource("4_ujy7e")
 
+[connection signal="pressed" from="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints/Main" to="." method="_Game"]
+[connection signal="pressed" from="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints/Settings" to="." method="_Settings"]
 [connection signal="button_down" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" method="_highlight"]
 [connection signal="button_up" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" method="_focus"]
 [connection signal="mouse_entered" from="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" to="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" method="_focus"]
