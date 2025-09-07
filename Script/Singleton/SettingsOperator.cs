@@ -85,7 +85,7 @@ public partial class SettingsOperator : Node
         { "username", null },
         { "password", null },
         { "stayloggedin", true },
-        { "api", "https://qlute.pxki.us.to/" },
+        { "api", "https://qlute.jinkku.moe/" },
         { "client-id", null },
         { "client-secret", null },
         { "scrollspeed", (int)1346 }, // 11485 ms max
@@ -480,6 +480,18 @@ public partial class SettingsOperator : Node
 
 
     }
+
+    private void CheckOldSiteUrl()
+    {
+        GD.Print("Checking if your using the old api...");
+        if (GetSetting("api").ToString().Contains("qlute.pxki.us.to"))
+        {
+            Notify.Post("We changed the game servers so that you will not have interuptions <3");
+            SetSetting("api", Configurationbk["api"]);
+        }
+    }
+
+
     public override void _Ready()
     {
         Configurationbk = new Dictionary<string, object>(Configuration);
@@ -552,7 +564,8 @@ public partial class SettingsOperator : Node
         RefreshFPS();
         Replay.Init();
         LeaderboardType = int.TryParse(GetSetting("leaderboardtype").ToString(), out int lbtm) ? (int)lbtm : 1;
-		if (LeaderboardType < 0 && LeaderboardType > 1) LeaderboardType = 1;
+        if (LeaderboardType < 0 && LeaderboardType > 1) LeaderboardType = 1;
+        CheckOldSiteUrl();
     }
     public void ResetVol()
     {
