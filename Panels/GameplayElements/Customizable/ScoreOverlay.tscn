@@ -56,3 +56,4 @@ theme_override_constants/margin_bottom = 5
 
 [node name="HealthBar" parent="ScoreBarBack/ScoreInfo" instance=ExtResource("4_046dq")]
 layout_mode = 2
+value = 43.0
