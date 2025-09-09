@@ -111,6 +111,7 @@ text = "mapped by idiot"
 [node name="InfoBoxBG" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_w67jm")
 
 [node name="InfoBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer/InfoBoxBG"]

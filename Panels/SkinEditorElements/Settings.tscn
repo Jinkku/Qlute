@@ -1,11 +1,29 @@
-[gd_scene load_steps=2 format=3 uid="uid://i4vg7ngv32fp"]
+[gd_scene load_steps=7 format=3 uid="uid://i4vg7ngv32fp"]
+
+[ext_resource type="Script" uid="uid://p2oy5l327fs" path="res://Script/SkinEditor/SettingsSkinning.cs" id="1_2x1ew"]
+[ext_resource type="PackedScene" uid="uid://chb8dgjfmmjgt" path="res://Panels/GameplayElements/Customizable/Playfield.tscn" id="2_rmy11"]
+[ext_resource type="PackedScene" uid="uid://cfg55dbl1ip8a" path="res://Panels/GameplayElements/Static/note.tscn" id="3_rhii7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2w2hw"]
+content_margin_left = 25.0
+content_margin_top = 25.0
+content_margin_right = 25.0
+content_margin_bottom = 25.0
+bg_color = Color(0.0784314, 0.0980392, 0.129412, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yo81l"]
 content_margin_left = 15.0
 content_margin_top = 15.0
 content_margin_right = 15.0
 content_margin_bottom = 15.0
-bg_color = Color(0.0784314, 0.0980392, 0.129412, 1)
+bg_color = Color(0, 0, 0, 0.4)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_a0i2m"]
+viewport_path = NodePath("SubViewport")
 
 [node name="PanelContainer" type="PanelContainer"]
 anchors_preset = 15
@@ -14,128 +32,224 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_2w2hw")
+script = ExtResource("1_2x1ew")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
 custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_yo81l")
+horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 15
 alignment = 1
 
-[node name="Skin Name" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="Section1" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.765625, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "- Infomation"
+
+[node name="Skin Name" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/Skin Name"]
+[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/Skin Name"]
 layout_mode = 2
 text = "Skin Name"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Name" type="LineEdit" parent="ScrollContainer/VBoxContainer/Skin Name"]
+[node name="Name" type="LineEdit" parent="HBoxContainer/ScrollContainer/VBoxContainer/Skin Name"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Funny Name"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="Section2" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.765625, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "- Gameplay"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
 visible = false
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Skin Name"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Name" type="LineEdit" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="Name" type="LineEdit" parent="HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Funny Name"
 
-[node name="NoteColour" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="NoteLaneColour1" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/NoteColour"]
-layout_mode = 2
-text = "Note Colour"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ColorPickerButton" type="ColorPickerButton" parent="ScrollContainer/VBoxContainer/NoteColour"]
-layout_mode = 2
-size_flags_horizontal = 3
-edit_alpha = false
-
-[node name="NoteLaneColour1" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 45)
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/NoteLaneColour1"]
+[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour1"]
 layout_mode = 2
 text = "Note Lane Colour  #1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="ScrollContainer/VBoxContainer/NoteLaneColour1"]
+[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour1"]
 layout_mode = 2
 size_flags_horizontal = 3
 edit_alpha = false
 
-[node name="NoteLaneColour2" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="NoteLaneColour1Idle" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/NoteLaneColour2"]
+[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour1Idle"]
+layout_mode = 2
+text = "Note Lane Colour  #1 Idle"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour1Idle"]
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="NoteLaneColour2" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour2"]
 layout_mode = 2
 text = "Note Lane Colour  #2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="ScrollContainer/VBoxContainer/NoteLaneColour2"]
+[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour2"]
 layout_mode = 2
 size_flags_horizontal = 3
 edit_alpha = false
 
-[node name="NoteLaneColour3" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="NoteLaneColour2Idle" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/NoteLaneColour3"]
+[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour2Idle"]
+layout_mode = 2
+text = "Note Lane Colour  #2 Idle"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour2Idle"]
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="NoteLaneColour3" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour3"]
 layout_mode = 2
 text = "Note Lane Colour  #3"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="ScrollContainer/VBoxContainer/NoteLaneColour3"]
+[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour3"]
 layout_mode = 2
 size_flags_horizontal = 3
 edit_alpha = false
 
-[node name="NoteLaneColour4" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="NoteLaneColour3Idle" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/NoteLaneColour4"]
+[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour3Idle"]
+layout_mode = 2
+text = "Note Lane Colour  #3 Idle"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour3Idle"]
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="NoteLaneColour4" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour4"]
 layout_mode = 2
 text = "Note Lane Colour  #4"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="ScrollContainer/VBoxContainer/NoteLaneColour4"]
+[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour4"]
 layout_mode = 2
 size_flags_horizontal = 3
 edit_alpha = false
+
+[node name="NoteLaneColour4Idle" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour4Idle"]
+layout_mode = 2
+text = "Note Lane Colour  #4 Idle"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour4Idle"]
+layout_mode = 2
+size_flags_horizontal = 3
+edit_alpha = false
+
+[node name="Button" type="Button" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Save Changes"
+
+[node name="Preview" type="TextureRect" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = SubResource("ViewportTexture_a0i2m")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+gui_disable_input = true
+
+[node name="Playfield" parent="SubViewport" instance=ExtResource("2_rmy11")]
+
+[node name="NoteBack" parent="SubViewport" instance=ExtResource("3_rhii7")]
+position = Vector2(50, 0)
+
+[node name="NoteBack3" parent="SubViewport" instance=ExtResource("3_rhii7")]
+position = Vector2(50, 197.65)
+
+[node name="NoteBack4" parent="SubViewport" instance=ExtResource("3_rhii7")]
+position = Vector2(362, 197.65)
+
+[node name="NoteBack2" parent="SubViewport" instance=ExtResource("3_rhii7")]
+position = Vector2(154, 100)

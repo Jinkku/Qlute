@@ -546,11 +546,7 @@ public partial class SettingsOperator : Node
             foreach (var skin in dirs)
             {
                 GD.Print($"Found {skin}");
-                Skin.List.Add(new Skinning
-                {
-                    Name = System.IO.Path.GetFileName(skin),
-                    SkinPath = skin
-                });
+                Skin.LoadSkin(skin);
             }
         }
 

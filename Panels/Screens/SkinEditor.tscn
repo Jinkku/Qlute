@@ -243,7 +243,6 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_wk53w")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ujy7e")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yvt2e")
 theme_override_styles/normal = SubResource("StyleBoxFlat_17725")
-toggle_mode = true
 text = "Game"
 
 [node name="Sprites" type="Button" parent="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints"]
@@ -254,7 +253,6 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_wk53w")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ujy7e")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yvt2e")
 theme_override_styles/normal = SubResource("StyleBoxFlat_17725")
-toggle_mode = true
 text = "Sprites"
 
 [node name="Settings" type="Button" parent="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints"]
@@ -265,7 +263,6 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_wk53w")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ujy7e")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yvt2e")
 theme_override_styles/normal = SubResource("StyleBoxFlat_17725")
-toggle_mode = true
 text = "Skin
 Settings"
 
