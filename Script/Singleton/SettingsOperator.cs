@@ -537,19 +537,6 @@ public partial class SettingsOperator : Node
             }
         }
 
-        if (System.IO.Directory.Exists(skinsdir))
-        {
-            Skin.List.Clear();
-
-            GD.Print("Checking for skins...");
-            var dirs = System.IO.Directory.GetDirectories(skinsdir);
-            foreach (var skin in dirs)
-            {
-                GD.Print($"Found {skin}");
-                Skin.LoadSkin(skin);
-            }
-        }
-
 
         backgrounddim = int.TryParse(GetSetting("backgrounddim").ToString(), out int bkd) ? bkd : 70;
         SampleVol = int.TryParse(GetSetting("sample").ToString(), out int smp) ? smp : 80;
@@ -586,7 +573,7 @@ public partial class SettingsOperator : Node
         SetSetting("windowmode", index);
     }
     // Set a setting
-    public void SetSetting(string key, object value)
+    public static void SetSetting(string key, object value)
     {
         if (Configuration.ContainsKey(key))
             Configuration[key] = value;
@@ -594,7 +581,7 @@ public partial class SettingsOperator : Node
     }
 
     // Save settings to file
-    public void SaveSettings()
+    public static void SaveSettings()
     {
     using var saveFile = FileAccess.Open(settingsfile, FileAccess.ModeFlags.Write);
     var json = JsonSerializer.Serialize(Configuration);

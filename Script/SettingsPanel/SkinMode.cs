@@ -10,11 +10,16 @@ public partial class SkinMode : OptionButton
 		{
 			AddItem(skin.Name);
 		}
+		Selected = Skin.SkinIndex;
 	}
-
-	private void _LoadSkin()
+	/// <summary>
+	/// Loads the skin specified by the index (Used when opening settings.)
+	/// </summary>
+	/// <param name="index"></param>
+	private void _LoadSkin(int index)
 	{
-		
+		Skin.Element = Skin.List[index];
+		SettingsOperator.SetSetting("skin", index);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -75,7 +75,7 @@ public partial class SettingsPanel : Control
 	}
 	private void _backgrounddim_ended(int value)
 	{
-		SettingsOperator.SetSetting("backgrounddim", BackgroundDim.Value.ToString());
+		SettingsOperator.SetSetting("backgrounddim", BackgroundDim.Value);
 	}
 	private void _scroll_speed(float value)
 	{

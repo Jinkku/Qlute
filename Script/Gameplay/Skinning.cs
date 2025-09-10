@@ -4,13 +4,26 @@ using System.Collections.Generic;
 using System.IO;
 public partial class Skinning : Node
 {
-    
+
     public override void _Ready()
     {
         Skin.List.Add(new SkinningLegend
         {
             Name = "Slia (Qlute's Default skin 2025)"
         });
+
+        if (System.IO.Directory.Exists(SettingsOperator.skinsdir))
+        {
+            GD.Print("Checking for skins...");
+            var dirs = System.IO.Directory.GetDirectories(SettingsOperator.skinsdir);
+            foreach (var skin in dirs)
+            {
+                GD.Print($"Found {skin}");
+                Skin.LoadSkin(skin);
+            }
+        }
+        Skin.SkinIndex = int.TryParse(SettingsOperator.GetSetting("skin")?.ToString(), out int mode) ? mode : 0;
+        Skin.Element = Skin.List[Math.Max(0, Math.Min(Skin.List.Count,Skin.SkinIndex))];
     }
 }
 
@@ -29,7 +42,7 @@ public class SkinningLegend
 }
 public class Skin
 {
-    private string FindFile(string dir, string target)
+    private static string FindFile(string dir, string target)
     {
         try
         {
@@ -61,11 +74,15 @@ public class Skin
     }
     public static SkinningLegend Element = new SkinningLegend();
     public static List<SkinningLegend> List = new List<SkinningLegend>();
+    public static int SkinIndex { get; set; }
 
     public static void LoadSkin(string path)
     {
-        if (path.StartsWith("res://"))
-        {
-        }
+        SkinningLegend PreElement = new SkinningLegend();
+        PreElement.Name = Path.GetFileName(path);
+        PreElement.SkinPath = path;
+        PreElement.NoteBack = SettingsOperator.LoadImage(FindFile(path, "Backgroundnote.png")) ?? new SkinningLegend().NoteBack;
+        PreElement.NoteFore = SettingsOperator.LoadImage(FindFile(path, "Foregroundnote.png")) ?? new SkinningLegend().NoteFore;
+        List.Add(PreElement);
     }
 }

@@ -340,12 +340,10 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_svam5")
 theme_override_constants/arrow_margin = 10
 clip_text = true
 selected = 0
-item_count = 1
-popup/item_0/text = "Default Skin"
-popup/item_0/id = 0
 script = ExtResource("8_bjgno")
 
 [node name="Create" type="Button" parent="ColorRect/Panels/Scroll/Sections"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
@@ -353,6 +351,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
 text = "Open Skin Editor"
 
 [node name="SkinBox" type="HBoxContainer" parent="ColorRect/Panels/Scroll/Sections"]
+visible = false
 layout_mode = 2
 
 [node name="Create" type="Button" parent="ColorRect/Panels/Scroll/Sections/SkinBox"]

@@ -11,7 +11,7 @@ public partial class FpsModes : OptionButton
 	}
 	private void _fpsselected(int index)
 	{
-		GetNode<SettingsOperator>("/root/SettingsOperator").SetSetting("fpsmode", index);
+		SettingsOperator.SetSetting("fpsmode", index);
 		GetNode<SettingsOperator>("/root/SettingsOperator").RefreshFPS();
 	}
 }
