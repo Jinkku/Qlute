@@ -237,7 +237,7 @@ public partial class Gameplay : Control
 		{
 			var notet = GetNode<PanelContainer>("Playfield/ChartSections/Section" + i);
 			Keys.Add(new KeyL { Node = notet, hit = false });
-			notet.SelfModulate = Skin.Element.Lane1NoteIdle;
+			notet.SelfModulate = Skin.Element.LaneNotes[i - 1] / 2;
 		}
 
 
@@ -276,16 +276,17 @@ public partial class Gameplay : Control
 	public Texture2D NoteSkinFore { get; set; }
 	public Color chartclear = new Color(0.03f, 0.03f, 0.03f, 0.78f);
 	public Color chartbeam = new Color(0.20f, 0.0f, 0.20f, 0.78f);
+	
 	public void hitnote(int Keyx, bool hit, int est)
 	{
 		var key = Keys[Keyx];
 		if (hit)
 		{
 			if (!SettingsOperator.SpectatorMode) Replay.AddReplay(est, Keyx);
-			key.Node.SelfModulate = Skin.Element.Lane1Note;
+			key.Node.SelfModulate = Skin.Element.LaneNotes[Keyx];
 			key.Ani?.Kill(); // Abort the previous animation
 			key.Ani = Keys[Keyx].Node.CreateTween();
-			key.Ani.TweenProperty(Keys[Keyx].Node, "self_modulate", Skin.Element.Lane1NoteIdle, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+			key.Ani.TweenProperty(Keys[Keyx].Node, "self_modulate", Skin.Element.LaneNotes[Keyx] / 2, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			key.Ani.Play();
 		}
 		key.hit = hit;

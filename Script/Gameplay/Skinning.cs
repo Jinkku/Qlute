@@ -2,6 +2,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.Json;
 public partial class Skinning : Node
 {
 
@@ -33,12 +35,13 @@ public class SkinningLegend
     public string SkinPath { get; set; }
     public Texture2D NoteBack { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/Backgroundnote.png");
     public Texture2D NoteFore { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/Foregroundnote.png");
-    public Color Lane1Note { get; set; } = new Color(0.20f, 0.0f, 0.20f);
-    public Color Lane1NoteIdle => Lane1Note / 2;
-    
-    public Color Lane2Note { get; set; } = new Color(0.20f, 0.0f, 0.20f);
-    public Color Lane3Note { get; set; } = new Color(0.20f, 0.0f, 0.20f);
-    public Color Lane4Note { get; set; } = new Color(0.20f, 0.0f, 0.20f);
+    public List<Color> LaneNotes { get; set; } = new()
+    {
+        new Color(0.20f, 0.0f, 0.20f),
+        new Color(0.20f, 0.0f, 0.20f),
+        new Color(0.20f, 0.0f, 0.20f),
+        new Color(0.20f, 0.0f, 0.20f),
+    };
 }
 public class Skin
 {
@@ -79,6 +82,31 @@ public class Skin
     public static void LoadSkin(string path)
     {
         SkinningLegend PreElement = new SkinningLegend();
+        using var saveFile = Godot.FileAccess.Open(path.PathJoin("settings.json"), Godot.FileAccess.ModeFlags.Read) ?? null;
+        if (saveFile != null)
+        {
+            var prejson = saveFile.GetAsText();
+            var json = JsonSerializer.Deserialize<Dictionary<string, object>>(prejson);
+            PreElement.Name = json["Name"].ToString();
+            foreach (int i in Enumerable.Range(0, 4))
+            {
+                try
+                {
+                    string raw = json[$"NoteLane{i + 1}"]?.ToString();
+                    PreElement.LaneNotes[i] = !string.IsNullOrEmpty(raw)
+                        ? new Color(raw)
+                        : new SkinningLegend().LaneNotes[i];
+                }
+                catch
+                {
+                    PreElement.LaneNotes[i] = new SkinningLegend().LaneNotes[i];
+                }
+                if (PreElement.LaneNotes[i] == new SkinningLegend().LaneNotes[i])
+                {
+                    GD.Print($"[Qlute] [skin] Lane{i} is not coloured?");
+                }
+            }
+        }
         PreElement.Name = Path.GetFileName(path);
         PreElement.SkinPath = path;
         PreElement.NoteBack = SettingsOperator.LoadImage(FindFile(path, "Backgroundnote.png")) ?? new SkinningLegend().NoteBack;

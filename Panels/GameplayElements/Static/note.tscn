@@ -8,6 +8,7 @@
 texture = ExtResource("1_8hoci")
 centered = false
 script = ExtResource("2_syjvn")
+metadata/part = 0
 
 [node name="NoteFront" type="Sprite2D" parent="."]
 texture = ExtResource("2_02252")

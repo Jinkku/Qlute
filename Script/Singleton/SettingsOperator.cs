@@ -583,10 +583,10 @@ public partial class SettingsOperator : Node
     // Save settings to file
     public static void SaveSettings()
     {
-    using var saveFile = FileAccess.Open(settingsfile, FileAccess.ModeFlags.Write);
-    var json = JsonSerializer.Serialize(Configuration);
-    saveFile.StoreString(json);
-    saveFile.Close();
+        using var saveFile = FileAccess.Open(settingsfile, FileAccess.ModeFlags.Write);
+        var json = JsonSerializer.Serialize(Configuration);
+        saveFile.StoreString(json);
+        saveFile.Close();
     }
 
     // Get a setting

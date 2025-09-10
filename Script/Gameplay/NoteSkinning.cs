@@ -13,9 +13,9 @@ public partial class NoteSkinning : Sprite2D
 	/// </summary>
 	private void CheckSkinNote()
 	{
-		if (Skin.Element.Lane1Note * 2 != NoteColour)
+		if (Skin.Element.LaneNotes[(int)GetMeta("part")] * 2 != NoteColour)
 		{
-			NoteColour = Skin.Element.Lane1Note * 3;
+			NoteColour = Skin.Element.LaneNotes[(int)GetMeta("part")] * 3;
 			SelfModulate = new Color(NoteColour.R, NoteColour.G, NoteColour.B, SelfModulate.A);
 		}
 		if (Skin.Element.NoteBack != Back)

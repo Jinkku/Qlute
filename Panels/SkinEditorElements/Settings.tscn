@@ -25,7 +25,7 @@ corner_radius_bottom_left = 15
 [sub_resource type="ViewportTexture" id="ViewportTexture_a0i2m"]
 viewport_path = NodePath("SubViewport")
 
-[node name="PanelContainer" type="PanelContainer"]
+[node name="SkinSettings" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -34,206 +34,134 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_2w2hw")
 script = ExtResource("1_2x1ew")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="Panel" type="HBoxContainer" parent="."]
 layout_mode = 2
 theme_override_constants/separation = 25
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
+[node name="Scrolls" type="ScrollContainer" parent="Panel"]
 custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_yo81l")
 horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ScrollContainer"]
+[node name="SettingsRows" type="VBoxContainer" parent="Panel/Scrolls"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 15
 alignment = 1
 
-[node name="Section1" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="Section1" type="Label" parent="Panel/Scrolls/SettingsRows"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.765625, 1, 1)
 theme_override_font_sizes/font_size = 24
 text = "- Infomation"
 
-[node name="Skin Name" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="Skin Name" type="HBoxContainer" parent="Panel/Scrolls/SettingsRows"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/Skin Name"]
+[node name="Label" type="Label" parent="Panel/Scrolls/SettingsRows/Skin Name"]
 layout_mode = 2
 text = "Skin Name"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Name" type="LineEdit" parent="HBoxContainer/ScrollContainer/VBoxContainer/Skin Name"]
+[node name="Name" type="LineEdit" parent="Panel/Scrolls/SettingsRows/Skin Name"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Funny Name"
 
-[node name="Section2" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="Section2" type="Label" parent="Panel/Scrolls/SettingsRows"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.765625, 1, 1)
 theme_override_font_sizes/font_size = 24
 text = "- Gameplay"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/Scrolls/SettingsRows"]
 visible = false
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="Panel/Scrolls/SettingsRows/HBoxContainer"]
 layout_mode = 2
 text = "Skin Name"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Name" type="LineEdit" parent="HBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="Name" type="LineEdit" parent="Panel/Scrolls/SettingsRows/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Funny Name"
 
-[node name="NoteLaneColour1" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="NoteLaneColour1" type="HBoxContainer" parent="Panel/Scrolls/SettingsRows"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour1"]
+[node name="Label" type="Label" parent="Panel/Scrolls/SettingsRows/NoteLaneColour1"]
 layout_mode = 2
 text = "Note Lane Colour  #1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour1"]
+[node name="Color" type="ColorPickerButton" parent="Panel/Scrolls/SettingsRows/NoteLaneColour1"]
 layout_mode = 2
 size_flags_horizontal = 3
 edit_alpha = false
 
-[node name="NoteLaneColour1Idle" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
-visible = false
+[node name="NoteLaneColour2" type="HBoxContainer" parent="Panel/Scrolls/SettingsRows"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour1Idle"]
-layout_mode = 2
-text = "Note Lane Colour  #1 Idle"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour1Idle"]
-layout_mode = 2
-size_flags_horizontal = 3
-edit_alpha = false
-
-[node name="NoteLaneColour2" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 45)
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour2"]
+[node name="Label" type="Label" parent="Panel/Scrolls/SettingsRows/NoteLaneColour2"]
 layout_mode = 2
 text = "Note Lane Colour  #2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour2"]
+[node name="Color" type="ColorPickerButton" parent="Panel/Scrolls/SettingsRows/NoteLaneColour2"]
 layout_mode = 2
 size_flags_horizontal = 3
 edit_alpha = false
 
-[node name="NoteLaneColour2Idle" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
-visible = false
+[node name="NoteLaneColour3" type="HBoxContainer" parent="Panel/Scrolls/SettingsRows"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour2Idle"]
-layout_mode = 2
-text = "Note Lane Colour  #2 Idle"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour2Idle"]
-layout_mode = 2
-size_flags_horizontal = 3
-edit_alpha = false
-
-[node name="NoteLaneColour3" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 45)
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour3"]
+[node name="Label" type="Label" parent="Panel/Scrolls/SettingsRows/NoteLaneColour3"]
 layout_mode = 2
 text = "Note Lane Colour  #3"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour3"]
+[node name="Color" type="ColorPickerButton" parent="Panel/Scrolls/SettingsRows/NoteLaneColour3"]
 layout_mode = 2
 size_flags_horizontal = 3
 edit_alpha = false
 
-[node name="NoteLaneColour3Idle" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
-visible = false
+[node name="NoteLaneColour4" type="HBoxContainer" parent="Panel/Scrolls/SettingsRows"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour3Idle"]
-layout_mode = 2
-text = "Note Lane Colour  #3 Idle"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour3Idle"]
-layout_mode = 2
-size_flags_horizontal = 3
-edit_alpha = false
-
-[node name="NoteLaneColour4" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 45)
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour4"]
+[node name="Label" type="Label" parent="Panel/Scrolls/SettingsRows/NoteLaneColour4"]
 layout_mode = 2
 text = "Note Lane Colour  #4"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour4"]
+[node name="Color" type="ColorPickerButton" parent="Panel/Scrolls/SettingsRows/NoteLaneColour4"]
 layout_mode = 2
 size_flags_horizontal = 3
 edit_alpha = false
 
-[node name="NoteLaneColour4Idle" type="HBoxContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(0, 45)
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour4Idle"]
-layout_mode = 2
-text = "Note Lane Colour  #4 Idle"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Color" type="ColorPickerButton" parent="HBoxContainer/ScrollContainer/VBoxContainer/NoteLaneColour4Idle"]
-layout_mode = 2
-size_flags_horizontal = 3
-edit_alpha = false
-
-[node name="Button" type="Button" parent="HBoxContainer/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-text = "Save Changes"
-
-[node name="Preview" type="TextureRect" parent="HBoxContainer"]
+[node name="Preview" type="TextureRect" parent="Panel"]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = SubResource("ViewportTexture_a0i2m")
@@ -254,6 +182,13 @@ position = Vector2(50, 197.65)
 
 [node name="NoteBack4" parent="SubViewport" instance=ExtResource("3_rhii7")]
 position = Vector2(362, 197.65)
+metadata/part = 3
 
 [node name="NoteBack2" parent="SubViewport" instance=ExtResource("3_rhii7")]
 position = Vector2(154, 100)
+metadata/part = 1
+
+[connection signal="color_changed" from="Panel/Scrolls/SettingsRows/NoteLaneColour1/Color" to="." method="NoteLane1Color"]
+[connection signal="color_changed" from="Panel/Scrolls/SettingsRows/NoteLaneColour2/Color" to="." method="NoteLane2Color"]
+[connection signal="color_changed" from="Panel/Scrolls/SettingsRows/NoteLaneColour3/Color" to="." method="NoteLane3Color"]
+[connection signal="color_changed" from="Panel/Scrolls/SettingsRows/NoteLaneColour4/Color" to="." method="NoteLane4Color"]

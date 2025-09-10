@@ -339,7 +339,6 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_v1adg")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_svam5")
 theme_override_constants/arrow_margin = 10
 clip_text = true
-selected = 0
 script = ExtResource("8_bjgno")
 
 [node name="Create" type="Button" parent="ColorRect/Panels/Scroll/Sections"]

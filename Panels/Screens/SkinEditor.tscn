@@ -211,10 +211,13 @@ text = "Edit"
 item_count = 3
 popup/item_0/text = "Cut"
 popup/item_0/id = 0
+popup/item_0/disabled = true
 popup/item_1/text = "Copy"
 popup/item_1/id = 1
+popup/item_1/disabled = true
 popup/item_2/text = "Paste"
 popup/item_2/id = 2
+popup/item_2/disabled = true
 
 [node name="ViewPoints" type="HBoxContainer" parent="ToolBar/VBoxContainer/PartA"]
 custom_minimum_size = Vector2(0, 50)
@@ -287,6 +290,7 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 
 [node name="Gameplay" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
+visible = false
 self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
