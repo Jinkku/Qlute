@@ -443,7 +443,21 @@ public partial class SettingsOperator : Node
 
     private Tween TopPanelAnimation { get; set; }
 
+    public void TopPanelOpen()
+    {
+        TopPanelAnimation?.Kill();
+        Sessioncfg["toppanelhide"] = true;
+        var TopPanel = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar");
+        TopPanelAnimation.TweenProperty(TopPanel, "position", new Vector2(TopPanel.Position.X, 0), 0.3).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+    }
 
+    public void TopPanelClose()
+    {
+        TopPanelAnimation?.Kill();
+        Sessioncfg["toppanelhide"] = false;
+        var TopPanel = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar");
+        TopPanelAnimation.TweenProperty(TopPanel, "position", new Vector2(TopPanel.Position.X, -TopPanel.Size.Y), 0.3).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+    }
     public void toppaneltoggle()
     {
         TopPanelAnimation?.Kill();
