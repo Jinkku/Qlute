@@ -37,7 +37,7 @@ public partial class SkinEditor : Control
 			path = SettingsOperator.skinsdir.PathJoin(Skin.Element.Name);
 		}
 		ZipFile.CreateFromDirectory(path, SettingsOperator.exportdir.PathJoin($"{Skin.Element.Name}.qsk"), CompressionLevel.Optimal, true);
-		Notify.Post($"Exported {Skin.Element.Name}.\nClick to view.", $"{Skin.Element.Name}.qsk");
+		Notify.Post($"Exported {Skin.Element.Name}.\nClick to view.", $"file://{SettingsOperator.exportdir}");
 
 	}
 	private void SaveChanges()
@@ -120,6 +120,16 @@ public partial class SkinEditor : Control
 		else if (index == 1)
 		{
 			Export();
+		}
+		else if (index == 2)
+		{
+			string uri = "file://" + Skin.Element.SkinPath;
+        	OS.ShellOpen(uri);
+		}
+		else if (index == 3)
+		{
+			Skin.ReloadSkin(Skin.Element.SkinPath);
+			Notify.Post($"Reloaded {Skin.Element.Name}");
 		}
 	}
 	private PanelContainer Settings { get; set; }

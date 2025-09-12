@@ -80,7 +80,7 @@ public class Skin
     public static List<SkinningLegend> List = new List<SkinningLegend>();
     public static int SkinIndex { get; set; }
     public static List<string> ImageNames = new List<string>(["Backgroundnote.png","Foregroundnote.png","cursor.png"]);
-    public static void LoadSkin(string path)
+    public static SkinningLegend ReloadSkin(string path)
     {
         SkinningLegend PreElement = new SkinningLegend();
         using var saveFile = Godot.FileAccess.Open(path.PathJoin("settings.json"), Godot.FileAccess.ModeFlags.Read) ?? null;
@@ -108,10 +108,13 @@ public class Skin
                 }
             }
         }
-        PreElement.Name = Path.GetFileName(path);
         PreElement.SkinPath = path;
         PreElement.NoteBack = SettingsOperator.LoadImage(FindFile(path, "Backgroundnote.png")) ?? new SkinningLegend().NoteBack;
         PreElement.NoteFore = SettingsOperator.LoadImage(FindFile(path, "Foregroundnote.png")) ?? new SkinningLegend().NoteFore;
-        List.Add(PreElement);
+        return PreElement;
+    }
+    public static void LoadSkin(string path)
+    {
+        List.Add(ReloadSkin(path));
     }
 }
