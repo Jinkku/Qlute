@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="1_vdvmb"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yln2i"]
-bg_color = Color(1, 1, 1, 0.15)
+bg_color = Color(0.14902, 0.14902, 0.14902, 1)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15

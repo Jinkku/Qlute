@@ -70,6 +70,7 @@ public partial class RankUpdate : Control
 		OperatorPerformance = UserCard.GetNode<Label>("SplitV/BottomPart/Sections/Performance/Operation");
 		OperatorRank.Visible = true;
 		OperatorPerformance.Visible = true;
+		Modulate = new Color(1f, 1f, 1f, 0f);
 
 	}
 
