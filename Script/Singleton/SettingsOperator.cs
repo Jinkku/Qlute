@@ -446,6 +446,7 @@ public partial class SettingsOperator : Node
     public void TopPanelOpen()
     {
         TopPanelAnimation?.Kill();
+        TopPanelAnimation = CreateTween();
         Sessioncfg["toppanelhide"] = true;
         var TopPanel = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar");
         TopPanelAnimation.TweenProperty(TopPanel, "position", new Vector2(TopPanel.Position.X, 0), 0.3).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
@@ -454,6 +455,7 @@ public partial class SettingsOperator : Node
     public void TopPanelClose()
     {
         TopPanelAnimation?.Kill();
+        TopPanelAnimation = CreateTween();
         Sessioncfg["toppanelhide"] = false;
         var TopPanel = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar");
         TopPanelAnimation.TweenProperty(TopPanel, "position", new Vector2(TopPanel.Position.X, -TopPanel.Size.Y), 0.3).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
