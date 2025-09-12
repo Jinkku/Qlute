@@ -19,6 +19,7 @@ public partial class SettingsOperator : Node
     public static string homedir = OS.GetUserDataDir().Replace("\\", "/");
 	public static string tempdir => homedir + "/temp";
 	public static string beatmapsdir => homedir + "/beatmaps";
+	public static string exportdir => homedir + "/exports";
     public static float ppbase = 0.035f;
 	public static string downloadsdir => homedir + "/downloads";
 	public static string replaydir => homedir + "/replays";

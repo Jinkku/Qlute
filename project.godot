@@ -17,7 +17,7 @@ config/name_localized={
 "zh_CN": "丘律特"
 }
 config/description="Your Keys // Your Rhythm"
-config/version="2025.08.22"
+config/version="2025.09.12"
 run/main_scene="res://Panels/Screens/bootstrap.tscn"
 run/print_header=false
 config/use_custom_user_dir=true
@@ -36,12 +36,12 @@ config/branch="beta"
 
 Kiko="*res://Script/Updater/Kiko.cs"
 SettingsOperator="*res://Script/Singleton/SettingsOperator.cs"
+TopPanelOnTop="*res://Script/Singleton/OnTopOverlays.cs"
 Skinning="*res://Script/Gameplay/Skinning.cs"
 Global="*res://Script/Singleton/Global.cs"
 Transition="*res://Panels/Overlays/SceneTransition.tscn"
 BeatmapListener="*res://Script/Singleton/BeatmapListener.cs"
 AudioPlayer="*res://Script/Singleton/AudioPlayer.cs"
-TopPanelOnTop="*res://Script/Singleton/OnTopOverlays.cs"
 ModsOperator="*res://Script/Singleton/ModsOperator.cs"
 Sample="*res://Script/Singleton/Sample.cs"
 ApiOperator="*res://Script/Singleton/ApiOperator.cs"

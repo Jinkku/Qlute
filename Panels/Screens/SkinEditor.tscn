@@ -190,19 +190,15 @@ theme_override_constants/margin_right = 10
 custom_minimum_size = Vector2(80, 50)
 layout_mode = 2
 text = "File"
-item_count = 6
-popup/item_0/text = "New"
+item_count = 4
+popup/item_0/text = "Save"
 popup/item_0/id = 0
-popup/item_1/text = "Save"
+popup/item_1/text = "Export"
 popup/item_1/id = 1
-popup/item_2/text = "Save as new skin"
+popup/item_2/text = "Open selected skin folder"
 popup/item_2/id = 2
-popup/item_3/text = "Export"
+popup/item_3/text = "Reload skin"
 popup/item_3/id = 3
-popup/item_4/text = "Open selected skin folder"
-popup/item_4/id = 4
-popup/item_5/text = "Reload skin"
-popup/item_5/id = 5
 
 [node name="Edit" type="MenuButton" parent="ToolBar/VBoxContainer/PartA"]
 custom_minimum_size = Vector2(80, 50)

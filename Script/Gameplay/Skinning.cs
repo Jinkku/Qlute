@@ -79,7 +79,7 @@ public class Skin
     public static SkinningLegend Element = new SkinningLegend();
     public static List<SkinningLegend> List = new List<SkinningLegend>();
     public static int SkinIndex { get; set; }
-
+    public static List<string> ImageNames = new List<string>(["Backgroundnote.png","Foregroundnote.png","cursor.png"]);
     public static void LoadSkin(string path)
     {
         SkinningLegend PreElement = new SkinningLegend();

@@ -2,6 +2,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.IO.Compression;
+using System.IO;
 
 public partial class SkinEditor : Control
 {
@@ -24,6 +26,20 @@ public partial class SkinEditor : Control
 		}
 		Check();
 	}
+	private void Export()
+	{
+		GD.Print("Save changes before exporting");
+		SaveChanges();
+		GD.Print("Should be saved..");
+		var path = Skin.Element.SkinPath;
+		if (Skin.Element.SkinPath == null)
+		{
+			path = SettingsOperator.skinsdir.PathJoin(Skin.Element.Name);
+		}
+		ZipFile.CreateFromDirectory(path, SettingsOperator.exportdir.PathJoin($"{Skin.Element.Name}.qsk"), CompressionLevel.Optimal, true);
+		Notify.Post($"Exported {Skin.Element.Name}.\nClick to view.", $"{Skin.Element.Name}.qsk");
+
+	}
 	private void SaveChanges()
 	{
 		Dictionary<string, object> SkinSettings = new Dictionary<string, object> // Settings for the skin!!!!
@@ -34,12 +50,33 @@ public partial class SkinEditor : Control
 			{"NoteLane3" , Skin.Element.LaneNotes[2].ToHtml(false)},
 			{"NoteLane4" , Skin.Element.LaneNotes[3].ToHtml(false)},
 		};
-
-
-		using var saveFile = FileAccess.Open(Skin.Element.SkinPath.PathJoin("settings.json"), FileAccess.ModeFlags.Write);
-        var json = JsonSerializer.Serialize(SkinSettings);
-        saveFile.StoreString(json);
-        saveFile.Close();
+		var path = Skin.Element.SkinPath;
+		if (Skin.Element.SkinPath == null)
+		{
+			path = SettingsOperator.skinsdir.PathJoin(Skin.Element.Name);
+		}
+		if (!Directory.Exists(path))
+		{
+			System.IO.Directory.CreateDirectory(path);
+		}
+		var index = 0;
+		foreach (Texture2D img in new List<Texture2D>([Skin.Element.NoteBack, Skin.Element.NoteFore, Skin.Element.Cursor]))
+		{
+			Error resultPng = img.GetImage().SavePng(path.PathJoin(Skin.ImageNames[index]));
+			if (resultPng == Error.Ok)
+			{
+				GD.Print($"Image saved successfully to: {path.PathJoin(Skin.ImageNames[index])}");
+			}
+			else
+			{
+				GD.PrintErr($"Failed to save image to PNG: {resultPng}");
+			}
+			index++;
+		}
+		using var saveFile = Godot.FileAccess.Open(path.PathJoin("settings.json"), Godot.FileAccess.ModeFlags.Write);
+		var json = JsonSerializer.Serialize(SkinSettings);
+		saveFile.StoreString(json);
+		saveFile.Close();
 		Notify.Post($"Saved {Skin.Element.Name}");
 	}
 	private bool MissingFunction { get; set; } = false;
@@ -75,9 +112,14 @@ public partial class SkinEditor : Control
 	}
 	private void FileID(int index)
 	{
-		if (index == 1)
+		GD.Print(index);
+		if (index == 0)
 		{
 			SaveChanges();
+		}
+		else if (index == 1)
+		{
+			Export();
 		}
 	}
 	private PanelContainer Settings { get; set; }

@@ -77,7 +77,7 @@ public partial class BeatmapListener : Node
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		GD.Print(SettingsOperator.beatmapsdir);
-		string[] directories = { SettingsOperator.homedir,SettingsOperator.tempdir, SettingsOperator.beatmapsdir, SettingsOperator.downloadsdir, SettingsOperator.replaydir, SettingsOperator.screenshotdir, SettingsOperator.skinsdir };
+		string[] directories = { SettingsOperator.homedir,SettingsOperator.tempdir, SettingsOperator.beatmapsdir, SettingsOperator.downloadsdir, SettingsOperator.replaydir, SettingsOperator.screenshotdir, SettingsOperator.skinsdir, SettingsOperator.exportdir };
 		foreach (string tmp in directories)
 		{
 			if (Directory.Exists(tmp))
