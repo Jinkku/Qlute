@@ -188,43 +188,14 @@ libraries = {
 &"": SubResource("AnimationLibrary_1f8y5")
 }
 
-[node name="RankUpdate" type="Label" parent="AccountButton"]
+[node name="Placeholder" type="Control" parent="AccountButton"]
 process_mode = 3
+custom_minimum_size = Vector2(69, 60)
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 10.0
-offset_top = -20.5
-offset_right = 90.0
-offset_bottom = 20.5
-grow_horizontal = 0
-grow_vertical = 2
-theme_override_font_sizes/font_size = 10
-text = "+#999,999,999
-3"
-vertical_alignment = 1
+anchors_preset = 0
+offset_right = 80.0
+offset_bottom = 41.0
 script = ExtResource("6_3trnu")
-
-[node name="PerformanceUpdate" type="Label" parent="AccountButton/RankUpdate"]
-process_mode = 3
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -20.5
-offset_right = 107.0
-offset_bottom = 20.5
-grow_horizontal = 0
-grow_vertical = 2
-theme_override_font_sizes/font_size = 10
-text = "99,999pp
--20"
-vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 process_mode = 3

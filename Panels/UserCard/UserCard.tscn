@@ -118,6 +118,16 @@ vertical_alignment = 1
 clip_text = true
 text_overrun_behavior = 3
 
+[node name="Operation" type="Label" parent="SplitV/BottomPart/Sections/Rank"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "+100"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
 [node name="Performance" type="VBoxContainer" parent="SplitV/BottomPart/Sections"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -136,6 +146,16 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.785156, 0.828796, 1, 1)
 theme_override_font_sizes/font_size = 13
 text = "999,999,999pp"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Operation" type="Label" parent="SplitV/BottomPart/Sections/Performance"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "-"
 horizontal_alignment = 1
 vertical_alignment = 1
 clip_text = true
