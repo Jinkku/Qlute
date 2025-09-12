@@ -1,7 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://b4ys2qwkqf5m5"]
+[gd_scene load_steps=7 format=3 uid="uid://b4ys2qwkqf5m5"]
 
 [ext_resource type="Script" uid="uid://dqgueg320i7t2" path="res://Script/TopPanel/AccountPrompt.cs" id="1_ppf2d"]
-[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="3_wfy6k"]
+[ext_resource type="PackedScene" uid="uid://q1un3bv5kmm0" path="res://Panels/UserCard/UserCard.tscn" id="2_8mlqu"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_golg1"]
 
@@ -9,40 +9,13 @@
 Button/styles/focus = SubResource("StyleBoxEmpty_golg1")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_onmcp"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
 bg_color = Color(0.160784, 0.160784, 0.160784, 1)
 border_width_bottom = 3
 border_color = Color(0.498039, 0.415686, 0.952941, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wyaj1"]
-bg_color = Color(0.265625, 0.265625, 0.265625, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x18gb"]
-bg_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ffnv7"]
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 15
-corner_radius_bottom_right = 15
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xp6j2"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lcq45"]
-bg_color = Color(0.126738, 0.39375, 0.268588, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 15
-corner_radius_bottom_right = 15
-expand_margin_left = 5.0
-expand_margin_right = 5.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6jcst"]
 
@@ -60,25 +33,18 @@ offset_right = 300.0
 offset_bottom = 3.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_onmcp")
 
-[node name="Notlog" type="MarginContainer" parent="AccPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="AccPanel/Notlog"]
+[node name="NotLog" type="VBoxContainer" parent="AccPanel"]
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="AccPanel/Notlog/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="AccPanel/NotLog"]
 layout_mode = 2
 
-[node name="UsernameNotice" type="Label" parent="AccPanel/Notlog/VBoxContainer/HBoxContainer"]
+[node name="UsernameNotice" type="Label" parent="AccPanel/NotLog/HBoxContainer"]
 layout_mode = 2
 text = "Username"
 
-[node name="Notice" type="Label" parent="AccPanel/Notlog/VBoxContainer/HBoxContainer"]
+[node name="Notice" type="Label" parent="AccPanel/NotLog/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.921875, 1, 0, 1)
@@ -87,179 +53,54 @@ horizontal_alignment = 2
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="Username" type="LineEdit" parent="AccPanel/Notlog/VBoxContainer"]
+[node name="Username" type="LineEdit" parent="AccPanel/NotLog"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 placeholder_text = "Username here..."
 
-[node name="PasswordNotice" type="Label" parent="AccPanel/Notlog/VBoxContainer"]
+[node name="PasswordNotice" type="Label" parent="AccPanel/NotLog"]
 layout_mode = 2
 text = "Password"
 
-[node name="Password" type="LineEdit" parent="AccPanel/Notlog/VBoxContainer"]
+[node name="Password" type="LineEdit" parent="AccPanel/NotLog"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 placeholder_text = "Very secret password..."
 secret = true
 
-[node name="CheckButton" type="CheckButton" parent="AccPanel/Notlog/VBoxContainer"]
+[node name="CheckButton" type="CheckButton" parent="AccPanel/NotLog"]
 layout_mode = 2
 text = "Stay logged in"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="AccPanel/Notlog/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="AccPanel/NotLog"]
 layout_mode = 2
 
-[node name="Login" type="Button" parent="AccPanel/Notlog/VBoxContainer/HBoxContainer2"]
+[node name="Login" type="Button" parent="AccPanel/NotLog/HBoxContainer2"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Login"
 
-[node name="Create" type="Button" parent="AccPanel/Notlog/VBoxContainer/HBoxContainer2"]
+[node name="Create" type="Button" parent="AccPanel/NotLog/HBoxContainer2"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Create"
 
-[node name="Log" type="Control" parent="AccPanel"]
+[node name="Log" type="VBoxContainer" parent="AccPanel"]
 visible = false
-custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="AccPanel/Log"]
-self_modulate = Color(1, 1, 1, 0.568627)
-layout_mode = 0
-offset_left = 10.0
-offset_top = 17.5
-offset_right = 290.0
-offset_bottom = 137.5
-theme_override_styles/panel = SubResource("StyleBoxFlat_wyaj1")
-
-[node name="UsernameSection" type="Panel" parent="AccPanel/Log/Panel"]
-self_modulate = Color(1, 1, 1, 0.568627)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -140.0
-offset_top = -60.0
-offset_right = 140.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_x18gb")
-
-[node name="RoundPicture" type="PanelContainer" parent="AccPanel/Log/Panel/UsernameSection"]
-clip_children = 2
-layout_mode = 0
-offset_right = 60.0
-offset_bottom = 60.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_ffnv7")
-
-[node name="ProfilePicture" type="TextureRect" parent="AccPanel/Log/Panel/UsernameSection/RoundPicture"]
-unique_name_in_owner = true
+[node name="UserCard" parent="AccPanel/Log" instance=ExtResource("2_8mlqu")]
 layout_mode = 2
-texture = ExtResource("3_wfy6k")
-expand_mode = 1
-stretch_mode = 4
-
-[node name="Username" type="Label" parent="AccPanel/Log/Panel/UsernameSection"]
-visibility_layer = 2
-layout_mode = 1
-offset_left = 70.0
-offset_top = 20.0
-offset_right = 270.0
-offset_bottom = 39.0
-text = "ProfileUserName"
-horizontal_alignment = 2
-clip_text = true
-text_overrun_behavior = 3
-text_direction = 2
-
-[node name="RankNotice" type="Label" parent="AccPanel/Log/Panel"]
-layout_mode = 0
-offset_left = 10.0
-offset_top = 66.0
-offset_right = 111.0
-offset_bottom = 94.0
-theme_override_font_sizes/font_size = 16
-text = "Global Rank"
-
-[node name="RankingNumber" type="Label" parent="AccPanel/Log/Panel"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 9.0
-offset_top = -31.0
-offset_right = 152.0
-offset_bottom = -3.0
-grow_vertical = 0
-theme_override_font_sizes/font_size = 18
-text = "#999,999,999"
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="PerformanceNotice" type="Label" parent="AccPanel/Log/Panel"]
-layout_mode = 0
-offset_left = 163.0
-offset_top = 66.0
-offset_right = 270.0
-offset_bottom = 94.0
-theme_override_font_sizes/font_size = 16
-text = "Performance"
-horizontal_alignment = 2
-
-[node name="PerformanceNumber" type="Label" parent="AccPanel/Log/Panel"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 156.0
-offset_top = -31.0
-offset_right = 270.0
-offset_bottom = -3.0
-grow_vertical = 0
-theme_override_font_sizes/font_size = 18
-text = "99,523pp"
-horizontal_alignment = 2
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="PanelContainer" type="PanelContainer" parent="AccPanel/Log/Panel"]
-visible = false
-material = SubResource("ShaderMaterial_xp6j2")
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -54.0
-offset_top = -53.0
-offset_right = -16.0
-offset_bottom = -8.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_lcq45")
-
-[node name="RankingNumber2" type="Label" parent="AccPanel/Log/Panel/PanelContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "999"
-horizontal_alignment = 1
+size_flags_vertical = 0
 
 [node name="Logout" type="Button" parent="AccPanel/Log"]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 144.0
-offset_right = 289.0
-offset_bottom = 189.0
+layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6jcst")
 text = "Log out"
 
 [connection signal="draw" from="." to="." method="_on_draw"]
-[connection signal="pressed" from="AccPanel/Notlog/VBoxContainer/HBoxContainer2/Login" to="." method="_on_login_pressed"]
-[connection signal="pressed" from="AccPanel/Notlog/VBoxContainer/HBoxContainer2/Create" to="." method="_create"]
+[connection signal="pressed" from="AccPanel/NotLog/HBoxContainer2/Login" to="." method="_on_login_pressed"]
+[connection signal="pressed" from="AccPanel/NotLog/HBoxContainer2/Create" to="." method="_create"]
 [connection signal="pressed" from="AccPanel/Log/Logout" to="." method="_logout"]

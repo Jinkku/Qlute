@@ -11,8 +11,8 @@ public partial class AccountPrompt : Control
 	public static HttpRequest RankingApi { get; set; }
 	public string Username = "Guest";
 	public string PasswordHash = null;
-	public Control Log {get;set;}
-	public MarginContainer NotLog {get;set;}
+	public VBoxContainer Log {get;set;}
+	public VBoxContainer NotLog {get;set;}
 	public Label Ranking {get;set;}
 	public Label PerformanceNumber {get;set;}
 	public Label PlayerName {get;set;}
@@ -35,25 +35,18 @@ public partial class AccountPrompt : Control
 			Log.Visible = false;
 			NotLog.Visible = true;
 		}
-		Ranking = GetNode<Label>("AccPanel/Log/Panel/RankingNumber");
-		PerformanceNumber = GetNode<Label>("AccPanel/Log/Panel/PerformanceNumber");
-		PlayerName = GetNode<Label>("AccPanel/Log/Panel/UsernameSection/Username");
-		PlayerName.Text = SettingsOperator.GetSetting("username")?.ToString();
-		Ranking.Text = "#" + SettingsOperator.Sessioncfg["ranknumber"]?.ToString();
-		PerformanceNumber.Text = $"{SettingsOperator.ranked_points.ToString("N0")}pp";
 	}
 	public override void _Ready()
 	{
+		NotLog = GetNode<VBoxContainer>("AccPanel/NotLog");
+		Log = GetNode<VBoxContainer>("AccPanel/Log");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		Password = GetNode<LineEdit>("AccPanel/Notlog/VBoxContainer/Password");
-		User = GetNode<LineEdit>("AccPanel/Notlog/VBoxContainer/Username");
-		NotLog = GetNode<MarginContainer>("AccPanel/Notlog");
-		Log = GetNode<Control>("AccPanel/Log");
-		User.Text = SettingsOperator.GetSetting("username")?.ToString();
+		Password = NotLog.GetNode<LineEdit>("Password");
+		User = NotLog.GetNode<LineEdit>("Username");
 	}
 	private void _on_login_pressed(){
 		PasswordHash = ApiOperator.ComputeSha256Hash(Password.Text);   
-		Label Notice = GetNode<Label>("AccPanel/Notlog/VBoxContainer/HBoxContainer/Notice");
+		Label Notice = NotLog.GetNode<Label>("HBoxContainer/Notice");
 		Notice.Text = "Connecting...";
 		Username = User.Text;
 		Notice.Text = ApiOperator.Login(Username,PasswordHash);

@@ -4,8 +4,10 @@ using System;
 public partial class ButtonBounce : Button
 {
 	[Export]
-	public string Text { get; set; } = "Dummy Button";
-	[Export]
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
+    public string Text { get; set; } = "Dummy Button";
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
+    [Export]
 	public Texture2D Texture { get; set; } = null;
 
 	private TextureRect TextureNode { get; set; }
