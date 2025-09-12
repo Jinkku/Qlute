@@ -3,8 +3,21 @@
 [ext_resource type="Texture2D" uid="uid://b4xgcysrsgvmn" path="res://SelectableSkins/Slia/System/cursor.png" id="1_w7w2v"]
 [ext_resource type="Script" uid="uid://c1364cqyxj4pt" path="res://Script/Singleton/Cursor.cs" id="2_7nv5n"]
 
-[node name="Cursor" type="Sprite2D"]
+[node name="Popup" type="Window"]
+physics_interpolation_mode = 2
+transparent_bg = true
+handle_input_locally = false
+gui_disable_input = true
+mode = 4
+borderless = true
+always_on_top = true
+transparent = true
+unfocusable = true
+popup_window = true
+
+[node name="Cursor" type="Sprite2D" parent="."]
 self_modulate = Color(1, 1, 1, 0.8)
+top_level = true
 z_index = 4096
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_w7w2v")
