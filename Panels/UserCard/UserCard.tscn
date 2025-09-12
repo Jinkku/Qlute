@@ -78,7 +78,7 @@ custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ri41b")
 text = "funny guy"
 vertical_alignment = 1
@@ -103,7 +103,7 @@ alignment = 1
 [node name="Name" type="Label" parent="SplitV/BottomPart/Sections/Rank"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.546875, 0.861938, 1, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "Global Rank"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -111,7 +111,7 @@ vertical_alignment = 1
 [node name="Value" type="Label" parent="SplitV/BottomPart/Sections/Rank"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.785156, 0.828796, 1, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "#999,999,999"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -126,7 +126,7 @@ alignment = 1
 [node name="Name" type="Label" parent="SplitV/BottomPart/Sections/Performance"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.546875, 0.861938, 1, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "Performance"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -134,7 +134,7 @@ vertical_alignment = 1
 [node name="Value" type="Label" parent="SplitV/BottomPart/Sections/Performance"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.785156, 0.828796, 1, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "999,999,999pp"
 horizontal_alignment = 1
 vertical_alignment = 1

@@ -18,7 +18,7 @@ public partial class UserCard : PanelContainer
     public override void _Process(double delta)
     {
         Username.Text = ApiOperator.Username;
-        if (PauseRealTime)
+        if (!PauseRealTime)
         {
             Rank.Text = "#" + SettingsOperator.Sessioncfg["ranknumber"]?.ToString();
             Performance.Text = $"{SettingsOperator.ranked_points.ToString("N0")}pp";
