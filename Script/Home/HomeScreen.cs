@@ -40,10 +40,6 @@ public partial class HomeScreen : Control
 		SongIndicator.Position = new Vector2(SongIndicator.Position.X, SettingsOperator.TopPanelPosition + 10);
 		_subunf();
 	}
-	private void _test()
-	{
-		Notify.Post("Hai Hai! ;w;");
-	}
 	private void _marathonmode()
 	{ 
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MarathonMode.tscn");
