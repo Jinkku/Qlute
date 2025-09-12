@@ -51,7 +51,7 @@ public partial class Skinning : Node
                 using (ZipArchive archive = ZipFile.OpenRead(file))
                 {
                     // find the first directory at zip root
-                    string? rootDir = archive.Entries
+                    string rootDir = archive.Entries
                         .Select(e => e.FullName.Split('/')[0]) // first segment before slash
                         .Where(s => !string.IsNullOrEmpty(s))
                         .Distinct()
