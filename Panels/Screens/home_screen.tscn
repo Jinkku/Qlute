@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene load_steps=34 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" uid="uid://bxurggbxgjswg" path="res://Script/Home/HomeScreen.cs" id="1_vj7aj"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://ci24g7ndyah7y" path="res://Resources/System/MainMenu/Browse.svg" id="11_ohewd"]
 [ext_resource type="Script" uid="uid://0xn63uccdk6j" path="res://Script/TimerwithBPM/Bpmtick.cs" id="14_1vpa7"]
 [ext_resource type="Texture2D" uid="uid://boh4sdsnp0kqo" path="res://Resources/System/mainmenulogo.svg" id="14_bh2cj"]
+[ext_resource type="Texture2D" uid="uid://dhtk4mxqohiru" path="res://Resources/System/Heart.svg" id="14_ohewd"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1gbip"]
 content_margin_left = 10.0
@@ -459,7 +460,7 @@ Texture = ExtResource("9_bb0aq")
 [node name="Create" parent="HomeButtonBG/HomeButtons" instance=ExtResource("10_whutp")]
 self_modulate = Color(0.537255, 0.631373, 0.819608, 1)
 layout_mode = 2
-Text = "Play"
+Text = "Create"
 Texture = ExtResource("10_rmu25")
 
 [node name="Browse" parent="HomeButtonBG/HomeButtons" instance=ExtResource("10_whutp")]
@@ -473,6 +474,12 @@ self_modulate = Color(1, 0.443137, 0.443137, 1)
 layout_mode = 2
 Text = "Leave"
 Texture = ExtResource("11_ioq3m")
+
+[node name="Test" parent="HomeButtonBG/HomeButtons" instance=ExtResource("10_whutp")]
+self_modulate = Color(1, 0.443137, 0.443137, 1)
+layout_mode = 2
+Text = "Test"
+Texture = ExtResource("14_ohewd")
 
 [node name="IntroPending" type="Control" parent="."]
 visible = false
@@ -590,6 +597,7 @@ vertical_alignment = 1
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Create" to="." method="_create"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Browse" to="." method="_browse"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Leave" to="." method="_leave"]
+[connection signal="pressed" from="HomeButtonBG/HomeButtons/Test" to="." method="_test"]
 [connection signal="pressed" from="IntroPending/Bomb" to="IntroPending" method="_on_bomb_pressed"]
 [connection signal="mouse_entered" from="IntroPending/logo" to="IntroPending" method="_hover"]
 [connection signal="mouse_exited" from="IntroPending/logo" to="IntroPending" method="_unhover"]
