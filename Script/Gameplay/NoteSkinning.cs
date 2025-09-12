@@ -27,6 +27,9 @@ public partial class NoteSkinning : Sprite2D
 		{
 			Fore = Skin.Element.NoteFore;
 			ForeNote.Texture = Fore;
+			var backsize = Back.GetSize();
+			var foresize = Fore.GetSize();
+			ForeNote.Position = new Vector2(Math.Max(0, backsize.X - foresize.X), Math.Max(0, backsize.Y - foresize.Y));
 		}
 	}
 	// Called when the node enters the scene tree for the first time.
