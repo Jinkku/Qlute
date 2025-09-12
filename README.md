@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="231" alt="Qlute Logo" src="https://github.com/Jinkku/Qlute/blob/Skin_Processing/Resources/System/mainmenulogo.svg?raw=true">
+  <img width="231" alt="Qlute Logo" src="https://github.com/Jinkku/Qlute/blob/master/Resources/System/mainmenulogo.svg?raw=true">
 </p>
 
 > [!WARNING]
@@ -10,7 +10,7 @@
 # Qlute
 Embrace your Imagination
 
-[![CodeFactor](https://www.codefactor.io/repository/github/Jinkkuu/qlute/badge)](https://www.codefactor.io/repository/github/Jinkkuu/qlute)
+[![CodeFactor](https://www.codefactor.io/repository/github/Jinkku/qlute/badge)](https://www.codefactor.io/repository/github/Jinkkuu/qlute)
 
 # Downloads
 
