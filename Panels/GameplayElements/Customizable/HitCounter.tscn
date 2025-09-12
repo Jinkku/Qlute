@@ -1,12 +1,14 @@
-[gd_scene format=3 uid="uid://i34tydvuou86"]
+[gd_scene load_steps=2 format=3 uid="uid://i34tydvuou86"]
 
-[node name="Hits" type="Label"]
-visible = false
-offset_left = 19.0
-offset_top = 183.0
-offset_right = 141.0
-offset_bottom = 202.0
-text = "0
-0
-0
-0"
+[ext_resource type="Script" uid="uid://i4jv56448sp8" path="res://Script/Gameplay/HitCounter.cs" id="1_kw2u5"]
+
+[node name="Hits" type="RichTextLabel"]
+offset_right = 122.0
+offset_bottom = 82.3333
+bbcode_enabled = true
+text = "[color=#00B5FF]0[/color]
+[color=#00ff08]0[/color]
+[color=#FFA800]0[/color]
+[color=#FF4700]0[/color]
+"
+script = ExtResource("1_kw2u5")
