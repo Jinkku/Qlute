@@ -22,7 +22,7 @@ public partial class SettingsSkinning : PanelContainer
 		NoteLane2.Color = Skin.Element.LaneNotes[1];
 		NoteLane3.Color = Skin.Element.LaneNotes[2];
 		NoteLane4.Color = Skin.Element.LaneNotes[3];
-		
+
 	}
 	private void NoteLane1Color(Color Color)
 	{
@@ -39,5 +39,9 @@ public partial class SettingsSkinning : PanelContainer
 	private void NoteLane4Color(Color Color)
 	{
 		Skin.Element.LaneNotes[3] = Color;
+	}
+	private void NameChange(string text)
+	{
+		Skin.Element.Name = text;
 	}
 }

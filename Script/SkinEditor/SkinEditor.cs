@@ -42,6 +42,10 @@ public partial class SkinEditor : Control
 	}
 	private void SaveChanges()
 	{
+		if (Skin.Element.Name.Length < 1)
+		{
+			Skin.Element.Name = new SkinningLegend().Name;
+		}
 		Dictionary<string, object> SkinSettings = new Dictionary<string, object> // Settings for the skin!!!!
 		{
 			{"Name" , Skin.Element.Name},
@@ -129,6 +133,7 @@ public partial class SkinEditor : Control
 		else if (index == 3)
 		{
 			Skin.ReloadSkin(Skin.Element.SkinPath);
+			Skin.Element = Skin.List[Skin.SkinIndex];
 			Notify.Post($"Reloaded {Skin.Element.Name}");
 		}
 	}

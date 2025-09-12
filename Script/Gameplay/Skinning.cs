@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
 public partial class Skinning : Node
@@ -9,6 +10,7 @@ public partial class Skinning : Node
 
     public override void _Ready()
     {
+        GetWindow().FilesDropped += ImportSkin;
         Skin.List.Add(new SkinningLegend
         {
             Name = "Slia (Qlute's Default skin 2025)"
@@ -25,7 +27,43 @@ public partial class Skinning : Node
             }
         }
         Skin.SkinIndex = int.TryParse(SettingsOperator.GetSetting("skin")?.ToString(), out int mode) ? mode : 0;
-        Skin.Element = Skin.List[Math.Max(0, Math.Min(Skin.List.Count,Skin.SkinIndex))];
+        try
+        {
+            Skin.Element = Skin.List[Math.Max(0, Math.Min(Skin.List.Count, Skin.SkinIndex))];
+        }
+        catch
+        {
+            Notify.Post($"Skin disappeared, defaulting to {Skin.List[0].Name}.");
+            Skin.SkinIndex = 0;
+            SettingsOperator.SetSetting("skin", 0);
+        }
+    }
+
+    private void ImportSkin(string[] files)
+    {
+        foreach (string file in files)
+        {
+            GD.Print(file);
+            if (file.EndsWith(".qsk"))
+            {
+                ZipFile.ExtractToDirectory(file, SettingsOperator.skinsdir);
+                Notify.Post($"Imported skin {file}");
+                using (ZipArchive archive = ZipFile.OpenRead(file))
+                {
+                    // find the first directory at zip root
+                    string? rootDir = archive.Entries
+                        .Select(e => e.FullName.Split('/')[0]) // first segment before slash
+                        .Where(s => !string.IsNullOrEmpty(s))
+                        .Distinct()
+                        .FirstOrDefault();
+
+                    if (rootDir != null)
+                        Skin.LoadSkin(SettingsOperator.skinsdir.PathJoin(rootDir));
+                    else
+                        GD.Print("No directory found in zip root 😬");
+                }
+            }
+        }
     }
 }
 
