@@ -20,6 +20,7 @@ public partial class SkinMode : OptionButton
 	{
 		Skin.Element = Skin.List[index];
 		SettingsOperator.SetSetting("skin", index);
+		Selected = index;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
