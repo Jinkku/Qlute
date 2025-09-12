@@ -131,7 +131,7 @@ public partial class RankUpdate : Control
 			SettingsOperator.ranked_points = PerfDisplay;
 
 
-			Performance.Text = $"#{(PerfDisplay).ToString("N0")}pp";
+			Performance.Text = $"{(PerfDisplay).ToString("N0")}pp";
 			OperatorPerformance.Text = $"{prefixPerformance} {OPerfDisplay.ToString("N0")}pp";
 		}
 	}
