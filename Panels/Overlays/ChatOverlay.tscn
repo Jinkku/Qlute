@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://d3gt5fc6h256t"]
 
-[ext_resource type="Texture2D" uid="uid://cpp14plc7cctp" path="res://Skin/System/TopPanel/Chat.svg" id="1_0r8ct"]
+[ext_resource type="Texture2D" uid="uid://cpp14plc7cctp" path="res://Resources/System/TopPanel/Chat.svg" id="1_0r8ct"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wb4tt"]
 bg_color = Color(0.176471, 0.137255, 0.407843, 1)

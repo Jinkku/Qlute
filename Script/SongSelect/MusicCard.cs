@@ -49,6 +49,7 @@ public partial class MusicCard : Button
 	private Tween LoadTween { get; set; }
 	public override void _Ready()
 	{
+		PivotOffset = new Vector2(Size.X / 2, Size.Y / 2);
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		self = GetNode<Button>(".");
 		Cover = GetTree().Root.GetNode<TextureRect>("Song Select/BeatmapBackground");
@@ -71,14 +72,28 @@ public partial class MusicCard : Button
 	}
 
 	private Tween _focus_animation;
-	private void AnimationButton(Color colour)
+	private void AnimationButton(Color colour, bool clicked=false)
 	{
 		_focus_animation?.Kill();
 
 		_focus_animation = CreateTween();
+		_focus_animation.SetParallel(true);
 		_focus_animation.TweenProperty(this, "self_modulate", colour, 0.2f)
 			.SetTrans(Tween.TransitionType.Cubic)
 			.SetEase(Tween.EaseType.Out);
+		if (clicked)
+		{
+			_focus_animation.TweenProperty(this, "position:x", -40, 0.2f)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+		}
+		else
+		{
+			_focus_animation.TweenProperty(this, "position:x", 0, 0.2f)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			
+		}
 	}
 
 	private Color Idlecolour = new Color(0.20f, 0.20f, 0.20f, 1f);
@@ -90,12 +105,12 @@ public partial class MusicCard : Button
 	private void _focus()
 	{
 		SettingsOperator.SongIDHighlighted = (int)self.GetMeta("SongID");
-		AnimationButton(Focuscolour);
+		AnimationButton(Focuscolour, true);
 	}
 	private void _unfocus()
 	{
 		SettingsOperator.SongIDHighlighted = -1;
-		AnimationButton(Checkid() ? toggledcolour : Idlecolour);
+		AnimationButton(Checkid() ? toggledcolour : Idlecolour, false);
 	}
 	public void _on_pressed()
 	{

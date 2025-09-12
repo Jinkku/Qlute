@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://bdd2o3q0q03xf"]
+
+[ext_resource type="Script" uid="uid://jfhqocofexm1" path="res://Script/MissingFunction/MissingFunction.gd" id="1_a3s3e"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8u7pu"]
+content_margin_left = 25.0
+content_margin_top = 25.0
+content_margin_right = 25.0
+content_margin_bottom = 25.0
+bg_color = Color(0.129, 0.129, 0.129, 0.8)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="MissingFunction" type="PanelContainer"]
+custom_minimum_size = Vector2(400, 400)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_8u7pu")
+script = ExtResource("1_a3s3e")
+
+[node name="Message" type="Label" parent="."]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 24
+text = "This haven't been implemented yet o-o
+
+Check back later!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3

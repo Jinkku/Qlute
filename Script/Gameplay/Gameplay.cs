@@ -60,6 +60,7 @@ public partial class Gameplay : Control
 	private Tween scoretween { get; set; }
 	private void ShowPauseMenu()
 	{
+		Cursor.CursorVisible = true;
 		PauseMenu = GD.Load<PackedScene>("res://Panels/Screens/PauseMenu.tscn").Instantiate().GetNode<Control>(".");
 		GetTree().Root.AddChild(PauseMenu);
 	}
@@ -201,15 +202,12 @@ public partial class Gameplay : Control
 		HealthBar.Reset();
 		Control P = GetNode<Control>("Playfield");
 		Chart = GetNode<HBoxContainer>("Playfield/ChartSections");
-		HitPoint = (int)Chart.Size.Y - 150;
 		hittext = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/hittext.tscn").Instantiate().GetNode<Label>(".");
 		hittextinit = true;
 		hittext.Modulate = new Color(1f, 1f, 1f, 0f);
 		hittext.ZIndex = 100;
 		GetNode<Control>("Playfield").AddChild(hittext);
 		hittextoldpos = hittext.Position;
-		reloadSkin();
-
 		SettingsOperator.PerfectJudge = 500 / (int)(SettingsOperator.Sessioncfg["beatmapaccuracy"]);
 		SettingsOperator.GreatJudge = (int)(SettingsOperator.PerfectJudge * 4);
 		SettingsOperator.MehJudge = (int)(SettingsOperator.PerfectJudge * 6);
@@ -240,7 +238,7 @@ public partial class Gameplay : Control
 		{
 			var notet = GetNode<PanelContainer>("Playfield/ChartSections/Section" + i);
 			Keys.Add(new KeyL { Node = notet, hit = false });
-			notet.SelfModulate = idlehit;
+			notet.SelfModulate = Skin.Element.LaneNotes[i - 1] / 2;
 		}
 
 
@@ -248,7 +246,7 @@ public partial class Gameplay : Control
 
 		SettingsOperator.ResetScore();
 		SettingsOperator.Resetms();
-		ReloadBeatmap(SettingsOperator.Sessioncfg["beatmapurl"].ToString());
+		if (SettingsOperator.Sessioncfg["beatmapurl"] != null) ReloadBeatmap(SettingsOperator.Sessioncfg["beatmapurl"].ToString());
 
 		// If auto is enabled, it will make a Replay file with Auto being the player playing the beatmap. Before this it didn't make the replay file, it just plays.
 		// I am doing this because it's more simpler for me and don't have to worry about breaking auto (Qlutina)
@@ -266,10 +264,15 @@ public partial class Gameplay : Control
 
 
 		if (SettingsOperator.SpectatorMode)
-			{
-				AddChild(SpectatorPanel);
-			}
-			else Replay.ResetReplay();
+		{
+			AddChild(SpectatorPanel);
+			Cursor.CursorVisible = true;
+		}
+		else
+		{
+			Replay.ResetReplay();
+			Cursor.CursorVisible = false;
+		}
 		GD.Print($"Spectator mode: {SettingsOperator.SpectatorMode}");
 	}
 
@@ -279,24 +282,17 @@ public partial class Gameplay : Control
 	public Texture2D NoteSkinFore { get; set; }
 	public Color chartclear = new Color(0.03f, 0.03f, 0.03f, 0.78f);
 	public Color chartbeam = new Color(0.20f, 0.0f, 0.20f, 0.78f);
-	public Color activehit = new Color(0.20f, 0.0f, 0.20f);
-	public Color idlehit = new Color(0.03f, 0.03f, 0.03f);
-	public void reloadSkin()
-	{
-		NoteSkinBack = GD.Load<Texture2D>("res://Skin/Game/Backgroundnote.png");
-		NoteSkinFore = GD.Load<Texture2D>("res://Skin/Game/Foregroundnote.png");
-		nodeSize = (int)NoteSkinBack.GetSize().Y;
-	}
+	
 	public void hitnote(int Keyx, bool hit, int est)
 	{
 		var key = Keys[Keyx];
 		if (hit)
 		{
 			if (!SettingsOperator.SpectatorMode) Replay.AddReplay(est, Keyx);
-			key.Node.SelfModulate = activehit;
+			key.Node.SelfModulate = Skin.Element.LaneNotes[Keyx];
 			key.Ani?.Kill(); // Abort the previous animation
 			key.Ani = Keys[Keyx].Node.CreateTween();
-			key.Ani.TweenProperty(Keys[Keyx].Node, "self_modulate", idlehit, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+			key.Ani.TweenProperty(Keys[Keyx].Node, "self_modulate", Skin.Element.LaneNotes[Keyx] / 2, 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			key.Ani.Play();
 		}
 		key.hit = hit;
@@ -392,10 +388,15 @@ public partial class Gameplay : Control
 				}
 			}}
 
+    public override void _ExitTree()
+    {
+		Cursor.CursorVisible = true;
+    }
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		SettingsOperator.Gameplaycfg.Score = scoreint; // Set the score of the player
+		HitPoint = (int)Chart.Size.Y - 150;
 		try
 		{
 			float est = GetRemainingTime(GameMode: true, delta: (float)delta) / 0.001f;
@@ -448,10 +449,12 @@ public partial class Gameplay : Control
 			}
 			else if (Input.IsActionJustPressed("pausemenu") && !SettingsOperator.Marathon)
 			{
+				Cursor.CursorVisible = true;
 				ShowPauseMenu();
 			}
 			else if (Input.IsActionJustPressed("pausemenu") && SettingsOperator.Marathon)
 			{
+				Cursor.CursorVisible = true;
 				SettingsOperator.toppaneltoggle();
 				BeatmapBackground.FlashEnable = true;
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MarathonMode.tscn");
@@ -508,9 +511,6 @@ public partial class Gameplay : Control
 						Note.Node = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Sprite2D>(".");
 						Note.Node.SetMeta("part", Note.NoteSection);
 						Note.Node.SelfModulate = new Color(0.83f, 0f, 1f);
-						Note.Node.Texture = NoteSkinBack;
-						var notefront = Note.Node.GetNode<Sprite2D>("NoteFront");
-						notefront.Texture = NoteSkinFore;
 						playfieldpart.AddChild(Note.Node);
 					}
 					if (ModsOperator.Mods["slice"] && Note.Node != null)
@@ -561,6 +561,7 @@ public partial class Gameplay : Control
 			{
 				erroredout = true;
 				GD.PrintErr(e);
+				GD.PushError(e);
 				Notify.Post("Can't play the bestmap because\n" + e.Message);
 				SettingsOperator.toppaneltoggle();
 				BeatmapBackground.FlashEnable = true;
@@ -644,7 +645,7 @@ public partial class Gameplay : Control
 		{
 			Hittext("Miss", new Color(1f, 0.28f, 0f));
 			SettingsOperator.Gameplaycfg.Bad++;
-			if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://Skin/Sounds/combobreak.wav");
+			if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
 			SettingsOperator.Gameplaycfg.Combo = 0;
 			HealthBar.Damage(5);
 			if (HurtAnimation != null && HurtAnimation.IsRunning())

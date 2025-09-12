@@ -14,8 +14,8 @@ public partial class NowPlaying : PanelContainer
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		Background = GetNode<TextureRect>("V/Banner");
 		Pause = GetNode<Button>("V/PlayerControls/Play");
-		PlayIcon = GD.Load<Texture2D>("res://Skin/System/MusicPlayer/Play.png");
-		PauseIcon = GD.Load<Texture2D>("res://Skin/System/MusicPlayer/Pause.png");
+		PlayIcon = GD.Load<Texture2D>("res://Resources/System/MusicPlayer/Play.png");
+		PauseIcon = GD.Load<Texture2D>("res://Resources/System/MusicPlayer/Pause.png");
 	}
 
 	private void Play()

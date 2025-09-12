@@ -19,6 +19,7 @@ public partial class SettingsOperator : Node
     public static string homedir = OS.GetUserDataDir().Replace("\\", "/");
 	public static string tempdir => homedir + "/temp";
 	public static string beatmapsdir => homedir + "/beatmaps";
+	public static string exportdir => homedir + "/exports";
     public static float ppbase = 0.035f;
 	public static string downloadsdir => homedir + "/downloads";
 	public static string replaydir => homedir + "/replays";
@@ -95,7 +96,7 @@ public partial class SettingsOperator : Node
     };
     public Dictionary<string, object> Configurationbk {get; set;}
 
-    public static Texture2D GetNullImage() => ResourceLoader.Load<CompressedTexture2D>("/var/mnt/Storage/Documents/Qlute/Skin/System/SongSelect/NoBG.png");
+    public static Texture2D GetNullImage() => ResourceLoader.Load<CompressedTexture2D>("/var/mnt/Storage/Documents/Qlute/Resources/System/SongSelect/NoBG.png");
 
     public static Texture2D LoadImage(string path)
     {
@@ -428,7 +429,7 @@ public partial class SettingsOperator : Node
         { "beatmapbpm", (int)160 },
         { "osubeatid", 0 },
         { "osubeatidset", 0 },
-        { "beatmapaccuracy", (int)0 },
+        { "beatmapaccuracy", (int)1 },
         { "beatmapdiff", null },
         { "customapi", false},
         { "multiplier" , 1.0f},
@@ -537,22 +538,6 @@ public partial class SettingsOperator : Node
             }
         }
 
-        if (System.IO.Directory.Exists(skinsdir))
-        {
-            Skin.List.Clear();
-            GD.Print("Checking for skins...");
-            var dirs = System.IO.Directory.GetDirectories(skinsdir);
-            foreach (var skin in dirs)
-            {
-                GD.Print($"Found {skin}");
-                Skin.List.Add(new Skinning
-                {
-                    Name = System.IO.Path.GetFileName(skin),
-                    SkinPath = skin
-                });
-            }
-        }
-
 
         backgrounddim = int.TryParse(GetSetting("backgrounddim").ToString(), out int bkd) ? bkd : 70;
         SampleVol = int.TryParse(GetSetting("sample").ToString(), out int smp) ? smp : 80;
@@ -589,7 +574,7 @@ public partial class SettingsOperator : Node
         SetSetting("windowmode", index);
     }
     // Set a setting
-    public void SetSetting(string key, object value)
+    public static void SetSetting(string key, object value)
     {
         if (Configuration.ContainsKey(key))
             Configuration[key] = value;
@@ -597,12 +582,12 @@ public partial class SettingsOperator : Node
     }
 
     // Save settings to file
-    public void SaveSettings()
+    public static void SaveSettings()
     {
-    using var saveFile = FileAccess.Open(settingsfile, FileAccess.ModeFlags.Write);
-    var json = JsonSerializer.Serialize(Configuration);
-    saveFile.StoreString(json);
-    saveFile.Close();
+        using var saveFile = FileAccess.Open(settingsfile, FileAccess.ModeFlags.Write);
+        var json = JsonSerializer.Serialize(Configuration);
+        saveFile.StoreString(json);
+        saveFile.Close();
     }
 
     // Get a setting

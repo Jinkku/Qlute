@@ -73,7 +73,7 @@ public partial class SongSelect : Control
 	{
 		var window_size = GetViewportRect().Size;
 		Control SongPanel = GetNode<Control>("SongPanel");
-		SongPanel.Size = new Vector2(window_size.X / 2.5f, window_size.Y - 150);
+		SongPanel.Size = new Vector2(window_size.X / 2.5f + 40, window_size.Y - 150);
 		SongPanel.Position = new Vector2(window_size.X - (window_size.X / 2.5f), 105);
 		ScrollSongs();
 	}
@@ -89,8 +89,8 @@ public partial class SongSelect : Control
 		var SongArtist = button.GetNode<Label>("MarginContainer/VBoxContainer/SongArtist");
 		var SongMapper = button.GetNode<Label>("MarginContainer/VBoxContainer/SongMapper");
 		var TextureRect = button.GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
-		var Rating = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBox/Rating");
-		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBox/Version");
+		var Rating = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Rating");
+		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Version");
 		button.Position = new Vector2(0, startposition + (83 * id));
 		SongTitle.Text = SettingsOperator.Beatmaps[id].Title;
 		SongArtist.Text = SettingsOperator.Beatmaps[id].Artist;
@@ -237,7 +237,7 @@ public partial class SongSelect : Control
 			if (SongEntry.FirstOrDefault(e => e is Button btn && btn.Name == i.ToString()) is Button entry)
 			{
 				entry.ZIndex = 0; // Ensure proper layering
-				entry.Position = new Vector2(0, startposition + (83 * i) - (83 * (float)scrollBar.Value));
+				entry.Position = new Vector2(entry.Position.X, startposition + (83 * i) - (83 * (float)scrollBar.Value));
 				SongLoaded++;
 			}
 		}
@@ -494,7 +494,7 @@ public partial class SongSelect : Control
 		{
 			_Mods_show();
 		}
-		Sample.PlaySample("res://Skin/Sounds/play.wav");
+		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/play.wav");
 
 
 		if (ModsOperator.Mods["npc"])

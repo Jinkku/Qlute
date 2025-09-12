@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://dwxq8yf8ah02k"]
+[gd_scene load_steps=7 format=3 uid="uid://dwxq8yf8ah02k"]
 
-[ext_resource type="Texture2D" uid="uid://b6t07c5xye4i8" path="res://Skin/System/SkinRect/Circle.png" id="1_km0dv"]
+[ext_resource type="Texture2D" uid="uid://b6t07c5xye4i8" path="res://Resources/System/SkinRect/Circle.png" id="1_km0dv"]
+[ext_resource type="Script" uid="uid://xv8pk37isk4h" path="res://Script/SkinEditor/SkinElementRefRect.cs" id="1_uflj4"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uflj4"]
 
@@ -33,6 +34,7 @@ offset_right = 100.0
 offset_bottom = 100.0
 border_color = Color(1, 0.585938, 0, 1)
 editor_only = false
+script = ExtResource("1_uflj4")
 
 [node name="TopLeft" type="Button" parent="."]
 custom_minimum_size = Vector2(20, 20)

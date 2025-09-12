@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=3 uid="uid://dk7xg5s8rl7nm"]
 
 [ext_resource type="Script" uid="uid://co734v8nma0jo" path="res://Script/Gameplay/LeaderboardGameplay.cs" id="1_a5nx3"]
-[ext_resource type="Texture2D" uid="uid://byuqumvg4808m" path="res://Skin/Game/Leaderboard/LeaderboardApplet.png" id="1_otw38"]
-[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Skin/System/guest.png" id="3_s3ted"]
+[ext_resource type="Texture2D" uid="uid://byuqumvg4808m" path="res://SelectableSkins/Slia/Game/Leaderboard/LeaderboardApplet.png" id="1_otw38"]
+[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="3_s3ted"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_s3ted"]
 texture = ExtResource("1_otw38")

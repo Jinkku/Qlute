@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://cwouhf00ofyuh"]
+
+[ext_resource type="FontFile" uid="uid://26bmgi83sgtv" path="res://Fonts/score.ttf" id="1_3hcnu"]
+[ext_resource type="Script" uid="uid://btoh5n2oidb56" path="res://Script/Gameplay/PpCounter.cs" id="2_4s2kp"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_0ag8s"]
+
+[node name="pp" type="Label"]
+custom_minimum_size = Vector2(100, 0)
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_3hcnu")
+text = "9,999pp"
+label_settings = SubResource("LabelSettings_0ag8s")
+horizontal_alignment = 2
+clip_text = true
+script = ExtResource("2_4s2kp")

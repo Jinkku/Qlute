@@ -4,13 +4,20 @@ using System.Collections.Generic;
 
 public partial class PauseMenu : Control
 {
-	// Called when the node enters the scene tree for the first time.
+	
 	private SettingsOperator SettingsOperator { get; set; }
 	private Tween PauseTween { get; set; }
 	private int MaxChild {get;set;}
 	private int Childint { get; set; }
+    public override void _ExitTree()
+    {
+        Cursor.CursorVisible = false;
+    }
+	
+	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		Cursor.CursorVisible = true;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		GetTree().Paused = true;
 		Modulate = new Color(0f, 0f, 0f, 0f);

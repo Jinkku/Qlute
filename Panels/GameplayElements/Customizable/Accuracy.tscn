@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://b1jyvopphjv4v"]
+
+[ext_resource type="FontFile" uid="uid://26bmgi83sgtv" path="res://Fonts/score.ttf" id="1_2wegb"]
+[ext_resource type="Script" uid="uid://de2o23edh2twr" path="res://Script/Gameplay/Accuracy.cs" id="2_ppu87"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_0ag8s"]
+
+[node name="Accuracy" type="Label"]
+custom_minimum_size = Vector2(100, 0)
+theme_override_fonts/font = ExtResource("1_2wegb")
+text = "100.00%"
+label_settings = SubResource("LabelSettings_0ag8s")
+clip_text = true
+script = ExtResource("2_ppu87")

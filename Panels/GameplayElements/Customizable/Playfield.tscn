@@ -92,11 +92,14 @@ position = Vector2(0, -45)
 [node name="Note2" parent="Guard" instance=ExtResource("1_6jlou")]
 self_modulate = Color(1, 1, 1, 0.05)
 position = Vector2(104, -45)
+metadata/part = 1
 
 [node name="Note3" parent="Guard" instance=ExtResource("1_6jlou")]
 self_modulate = Color(1, 1, 1, 0.05)
 position = Vector2(208, -45)
+metadata/part = 2
 
 [node name="Note4" parent="Guard" instance=ExtResource("1_6jlou")]
 self_modulate = Color(1, 1, 1, 0.05)
 position = Vector2(312, -45)
+metadata/part = 3

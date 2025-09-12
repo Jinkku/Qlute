@@ -5,9 +5,9 @@
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="3_h74x6"]
 [ext_resource type="Script" uid="uid://bkssygfdsllly" path="res://Script/Home/SongIndication.cs" id="3_wsnno"]
 [ext_resource type="Script" uid="uid://covi80vxoi1m7" path="res://Script/Gameplay/SongProgress.cs" id="4_h74x6"]
-[ext_resource type="Texture2D" uid="uid://djva7iioax2sy" path="res://Skin/System/MusicPlayer/Play.png" id="6_2pwl0"]
-[ext_resource type="Texture2D" uid="uid://c14lwc8d3sqpi" path="res://Skin/System/MusicPlayer/Prev.png" id="6_pkmya"]
-[ext_resource type="Texture2D" uid="uid://7jh4dm1rrsff" path="res://Skin/System/MusicPlayer/Next.png" id="8_617ia"]
+[ext_resource type="Texture2D" uid="uid://djva7iioax2sy" path="res://Resources/System/MusicPlayer/Play.png" id="6_2pwl0"]
+[ext_resource type="Texture2D" uid="uid://c14lwc8d3sqpi" path="res://Resources/System/MusicPlayer/Prev.png" id="6_pkmya"]
+[ext_resource type="Texture2D" uid="uid://7jh4dm1rrsff" path="res://Resources/System/MusicPlayer/Next.png" id="8_617ia"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wsnno"]
 content_margin_bottom = 15.0

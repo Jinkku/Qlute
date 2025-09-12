@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://b4ys2qwkqf5m5"]
 
 [ext_resource type="Script" uid="uid://dqgueg320i7t2" path="res://Script/TopPanel/AccountPrompt.cs" id="1_ppf2d"]
-[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Skin/System/guest.png" id="3_wfy6k"]
+[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="3_wfy6k"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_golg1"]
 

@@ -126,7 +126,7 @@ public partial class InfoBar : ColorRect
 		{
 			if (!NotiInfo.Finished)
 			{
-				Sample.PlaySample("res://Skin/Sounds/notification.wav");
+				Sample.PlaySample("res://SelectableSkins/Slia/Sounds/notification.wav");
 				var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/Notification.tscn").Instantiate().GetNode<Button>(".");
 				NotificationListener.NotificationCards.Add(NotiCard);
 				AddChild(NotiCard);

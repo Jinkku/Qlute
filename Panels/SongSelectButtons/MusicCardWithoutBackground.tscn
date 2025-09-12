@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://452cy32t37m7"]
 
-[ext_resource type="StyleBox" uid="uid://fxawsqvq06j4" path="res://Skin/System/buttonidle.tres" id="1_effgq"]
+[ext_resource type="StyleBox" uid="uid://fxawsqvq06j4" path="res://Resources/System/buttonidle.tres" id="1_effgq"]
 [ext_resource type="Script" uid="uid://dye2ljj2ycrnx" path="res://Script/SongSelect/MusicCard.cs" id="2_o61lg"]
 [ext_resource type="Script" uid="uid://buiifhesbwgmp" path="res://Script/SongSelect/RatingCard.cs" id="4_0nngi"]
 

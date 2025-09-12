@@ -30,7 +30,7 @@ public partial class EndScreen : ColorRect
 
 	private void FC()
 	{
-		ComboScreen.Texture = GD.Load<Texture2D>("res://Skin/Game/EndScreen/FC.png");
+		ComboScreen.Texture = GD.Load<Texture2D>("res://SelectableSkins/Slia/EndScreen/FC.png");
 		Modulate = new Color(0f, 0f, 0f, 0f);
 		Tween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		Tween.TweenInterval(3);
@@ -38,7 +38,7 @@ public partial class EndScreen : ColorRect
 	private void Bad()
 	{
 		Modulate = new Color(0f, 0f, 0f, 0f);
-		ComboScreen.Texture = GD.Load<Texture2D>("res://Skin/Game/EndScreen/Bad.png");
+		ComboScreen.Texture = GD.Load<Texture2D>("res://SelectableSkins/Slia/EndScreen/Bad.png");
 		Tween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f),1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		Tween.TweenProperty(ComboScreen, "rotation", 0.25f,0.4f).SetTrans(Tween.TransitionType.Bounce).SetEase(Tween.EaseType.Out);
 		Tween.TweenInterval(3);
@@ -46,14 +46,14 @@ public partial class EndScreen : ColorRect
 	private void Good()
 	{
 		Modulate = new Color(0f, 0f, 0f, 0f);
-		ComboScreen.Texture = GD.Load<Texture2D>("res://Skin/Game/EndScreen/Good.png");
+		ComboScreen.Texture = GD.Load<Texture2D>("res://SelectableSkins/Slia/EndScreen/Good.png");
 		Tween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		Tween.TweenInterval(3);
 	}
 	private void MAX()
 	{
 		Modulate = new Color(0f, 0f, 0f, 0f);
-		ComboScreen.Texture = GD.Load<Texture2D>("res://Skin/Game/EndScreen/MAX.png");
+		ComboScreen.Texture = GD.Load<Texture2D>("res://SelectableSkins/Slia/EndScreen/MAX.png");
 		Tween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		Tween.TweenInterval(3);
 	}
