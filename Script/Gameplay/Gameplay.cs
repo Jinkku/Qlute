@@ -60,6 +60,7 @@ public partial class Gameplay : Control
 	private Tween scoretween { get; set; }
 	private void ShowPauseMenu()
 	{
+		Cursor.CursorVisible = true;
 		PauseMenu = GD.Load<PackedScene>("res://Panels/Screens/PauseMenu.tscn").Instantiate().GetNode<Control>(".");
 		GetTree().Root.AddChild(PauseMenu);
 	}
@@ -263,10 +264,15 @@ public partial class Gameplay : Control
 
 
 		if (SettingsOperator.SpectatorMode)
-			{
-				AddChild(SpectatorPanel);
-			}
-			else Replay.ResetReplay();
+		{
+			AddChild(SpectatorPanel);
+			Cursor.CursorVisible = true;
+		}
+		else
+		{
+			Replay.ResetReplay();
+			Cursor.CursorVisible = false;
+		}
 		GD.Print($"Spectator mode: {SettingsOperator.SpectatorMode}");
 	}
 
@@ -382,6 +388,10 @@ public partial class Gameplay : Control
 				}
 			}}
 
+    public override void _ExitTree()
+    {
+		Cursor.CursorVisible = true;
+    }
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
@@ -439,10 +449,12 @@ public partial class Gameplay : Control
 			}
 			else if (Input.IsActionJustPressed("pausemenu") && !SettingsOperator.Marathon)
 			{
+				Cursor.CursorVisible = true;
 				ShowPauseMenu();
 			}
 			else if (Input.IsActionJustPressed("pausemenu") && SettingsOperator.Marathon)
 			{
+				Cursor.CursorVisible = true;
 				SettingsOperator.toppaneltoggle();
 				BeatmapBackground.FlashEnable = true;
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MarathonMode.tscn");

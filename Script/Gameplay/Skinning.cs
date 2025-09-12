@@ -42,6 +42,7 @@ public class SkinningLegend
         new Color(0.20f, 0.0f, 0.20f),
         new Color(0.20f, 0.0f, 0.20f),
     };
+    public Texture2D Cursor { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/System/cursor.png");
 }
 public class Skin
 {
