@@ -1,0 +1,71 @@
+[gd_scene load_steps=7 format=3 uid="uid://b6nsgo8yvtu0m"]
+
+[ext_resource type="Script" uid="uid://btpasgcq7n7n6" path="res://Script/Effects/ButtonBounce.cs" id="1_7h7yx"]
+[ext_resource type="Texture2D" uid="uid://b2ef26vxyoi26" path="res://Resources/System/MainMenu/Play.svg" id="2_ae3t0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qejje"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e1jv3"]
+content_margin_left = 0.0
+bg_color = Color(0.705882, 0.705882, 0.705882, 1)
+skew = Vector2(0.5, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nwgwj"]
+content_margin_left = 0.0
+bg_color = Color(0.54902, 0.54902, 0.54902, 1)
+skew = Vector2(0.5, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nktxj"]
+content_margin_left = 0.0
+bg_color = Color(0.588235, 0.588235, 0.588235, 1)
+skew = Vector2(0.5, 0)
+
+[node name="Blade Button" type="Button"]
+self_modulate = Color(0.414497, 0.650241, 0.994792, 1)
+custom_minimum_size = Vector2(154, 95)
+theme_override_constants/icon_max_width = 32
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
+theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
+theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
+icon_alignment = 1
+script = ExtResource("1_7h7yx")
+metadata/home = true
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -37.0
+offset_top = -25.0
+offset_right = 13.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 14
+text = "Dummy Button"
+horizontal_alignment = 1
+
+[node name="Pic" type="TextureRect" parent="Label"]
+texture_filter = 2
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -15.0
+offset_top = -40.0
+offset_right = 15.0
+offset_bottom = -10.0
+grow_horizontal = 2
+mouse_filter = 2
+texture = ExtResource("2_ae3t0")
+expand_mode = 1
+
+[connection signal="button_down" from="." to="." method="_down"]
+[connection signal="button_up" from="." to="." method="_up"]
+[connection signal="mouse_entered" from="." to="." method="_focus"]
+[connection signal="mouse_exited" from="." to="." method="_unfocus"]

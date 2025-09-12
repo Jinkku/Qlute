@@ -12,12 +12,12 @@
 [ext_resource type="Script" uid="uid://btpasgcq7n7n6" path="res://Script/Effects/ButtonBounce.cs" id="8_qhwge"]
 [ext_resource type="Texture2D" uid="uid://b2ef26vxyoi26" path="res://Resources/System/MainMenu/Play.svg" id="9_bb0aq"]
 [ext_resource type="Texture2D" uid="uid://b1puke3u03rm6" path="res://Resources/System/MainMenu/Edit.svg" id="10_rmu25"]
+[ext_resource type="PackedScene" uid="uid://b6nsgo8yvtu0m" path="res://Panels/Overlays/HomeBladeButton.tscn" id="10_whutp"]
 [ext_resource type="Script" uid="uid://dlmyeuotf5af7" path="res://Script/Home/IntroPending.cs" id="11_gngjn"]
 [ext_resource type="Texture2D" uid="uid://detqod6pcb68a" path="res://Resources/System/MainMenu/Exit.svg" id="11_ioq3m"]
 [ext_resource type="Texture2D" uid="uid://ci24g7ndyah7y" path="res://Resources/System/MainMenu/Browse.svg" id="11_ohewd"]
 [ext_resource type="Script" uid="uid://0xn63uccdk6j" path="res://Script/TimerwithBPM/Bpmtick.cs" id="14_1vpa7"]
 [ext_resource type="Texture2D" uid="uid://boh4sdsnp0kqo" path="res://Resources/System/mainmenulogo.svg" id="14_bh2cj"]
-[ext_resource type="Texture2D" uid="uid://dhtk4mxqohiru" path="res://Resources/System/Heart.svg" id="14_ohewd"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1gbip"]
 content_margin_left = 10.0
@@ -451,231 +451,28 @@ layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Play" type="Button" parent="HomeButtonBG/HomeButtons"]
-self_modulate = Color(0.414497, 0.650241, 0.994792, 1)
-custom_minimum_size = Vector2(154, 95)
+[node name="Play" parent="HomeButtonBG/HomeButtons" instance=ExtResource("10_whutp")]
 layout_mode = 2
-theme_override_constants/icon_max_width = 32
-theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
-theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
-theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
-icon_alignment = 1
-script = ExtResource("8_qhwge")
+Text = "Play"
+Texture = ExtResource("9_bb0aq")
 
-[node name="Label" type="Label" parent="HomeButtonBG/HomeButtons/Play"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -37.0
-offset_top = -25.0
-offset_right = 13.0
-offset_bottom = 3.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 14
-text = "Play"
-horizontal_alignment = 1
-
-[node name="Pic" type="TextureRect" parent="HomeButtonBG/HomeButtons/Play/Label"]
-texture_filter = 2
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -15.0
-offset_top = -40.0
-offset_right = 15.0
-offset_bottom = -10.0
-grow_horizontal = 2
-mouse_filter = 2
-texture = ExtResource("9_bb0aq")
-expand_mode = 1
-
-[node name="Create" type="Button" parent="HomeButtonBG/HomeButtons"]
-self_modulate = Color(0.536621, 0.633245, 0.817708, 1)
-custom_minimum_size = Vector2(154, 95)
+[node name="Create" parent="HomeButtonBG/HomeButtons" instance=ExtResource("10_whutp")]
+self_modulate = Color(0.537255, 0.631373, 0.819608, 1)
 layout_mode = 2
-theme_override_constants/icon_max_width = 32
-theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
-theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
-theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
-icon_alignment = 1
-script = ExtResource("8_qhwge")
+Text = "Play"
+Texture = ExtResource("10_rmu25")
 
-[node name="Label" type="Label" parent="HomeButtonBG/HomeButtons/Create"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -54.0
-offset_top = -25.0
-offset_right = 29.0
-offset_bottom = 3.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 14
-text = "Create"
-horizontal_alignment = 1
-
-[node name="Pic" type="TextureRect" parent="HomeButtonBG/HomeButtons/Create/Label"]
-texture_filter = 2
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -15.0
-offset_top = -40.0
-offset_right = 15.0
-offset_bottom = -10.0
-grow_horizontal = 2
-mouse_filter = 2
-texture = ExtResource("10_rmu25")
-expand_mode = 1
-
-[node name="Browse" type="Button" parent="HomeButtonBG/HomeButtons"]
-self_modulate = Color(0.317393, 0.640625, 0.306966, 1)
-custom_minimum_size = Vector2(154, 95)
+[node name="Browse" parent="HomeButtonBG/HomeButtons" instance=ExtResource("10_whutp")]
+self_modulate = Color(0.317647, 0.639216, 0.305882, 1)
 layout_mode = 2
-theme_override_constants/icon_max_width = 32
-theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
-theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
-theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
-icon_alignment = 1
-script = ExtResource("8_qhwge")
+Text = "Browse"
+Texture = ExtResource("11_ohewd")
 
-[node name="Label" type="Label" parent="HomeButtonBG/HomeButtons/Browse"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -54.0
-offset_top = -25.0
-offset_right = 34.0
-offset_bottom = 3.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 14
-text = "Browse"
-horizontal_alignment = 1
-
-[node name="Pic" type="TextureRect" parent="HomeButtonBG/HomeButtons/Browse/Label"]
-texture_filter = 2
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -15.0
-offset_top = -40.0
-offset_right = 15.0
-offset_bottom = -10.0
-grow_horizontal = 2
-mouse_filter = 2
-texture = ExtResource("11_ohewd")
-expand_mode = 1
-
-[node name="Leave" type="Button" parent="HomeButtonBG/HomeButtons"]
-self_modulate = Color(1, 0.442708, 0.442708, 1)
-custom_minimum_size = Vector2(154, 95)
+[node name="Leave" parent="HomeButtonBG/HomeButtons" instance=ExtResource("10_whutp")]
+self_modulate = Color(1, 0.443137, 0.443137, 1)
 layout_mode = 2
-theme_override_constants/icon_max_width = 32
-theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
-theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
-theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
-icon_alignment = 1
-script = ExtResource("8_qhwge")
-
-[node name="Label" type="Label" parent="HomeButtonBG/HomeButtons/Leave"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -54.0
-offset_top = -25.0
-offset_right = 18.0
-offset_bottom = 3.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 14
-text = "Leave"
-horizontal_alignment = 1
-
-[node name="Pic" type="TextureRect" parent="HomeButtonBG/HomeButtons/Leave/Label"]
-texture_filter = 2
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -15.0
-offset_top = -40.0
-offset_right = 15.0
-offset_bottom = -10.0
-grow_horizontal = 2
-mouse_filter = 2
-texture = ExtResource("11_ioq3m")
-expand_mode = 1
-
-[node name="Test" type="Button" parent="HomeButtonBG/HomeButtons"]
-visible = false
-self_modulate = Color(0.812785, 0.442708, 1, 1)
-custom_minimum_size = Vector2(154, 95)
-layout_mode = 2
-theme_override_constants/icon_max_width = 32
-theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
-theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
-theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
-icon_alignment = 1
-script = ExtResource("8_qhwge")
-
-[node name="Label" type="Label" parent="HomeButtonBG/HomeButtons/Test"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -54.0
-offset_top = -25.0
-offset_right = 18.0
-offset_bottom = 3.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 14
-text = "Test"
-horizontal_alignment = 1
-
-[node name="Pic" type="TextureRect" parent="HomeButtonBG/HomeButtons/Test/Label"]
-texture_filter = 2
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -15.0
-offset_top = -40.0
-offset_right = 15.0
-offset_bottom = -10.0
-grow_horizontal = 2
-mouse_filter = 2
-texture = ExtResource("14_ohewd")
-expand_mode = 1
+Text = "Leave"
+Texture = ExtResource("11_ioq3m")
 
 [node name="IntroPending" type="Control" parent="."]
 visible = false
@@ -789,35 +586,10 @@ vertical_alignment = 1
 [connection signal="mouse_entered" from="SubButton/SubButtons/Create_Skin" to="SubButton/SubButtons/Create_Skin" method="_focus"]
 [connection signal="mouse_exited" from="SubButton/SubButtons/Create_Skin" to="SubButton/SubButtons/Create_Skin" method="_unfocus"]
 [connection signal="pressed" from="SubButton/SubButtons/Create_Skin" to="." method="_marathonmode"]
-[connection signal="button_down" from="HomeButtonBG/HomeButtons/Play" to="HomeButtonBG/HomeButtons/Play" method="_down"]
-[connection signal="button_up" from="HomeButtonBG/HomeButtons/Play" to="HomeButtonBG/HomeButtons/Play" method="_up"]
-[connection signal="mouse_entered" from="HomeButtonBG/HomeButtons/Play" to="." method="_playf"]
-[connection signal="mouse_entered" from="HomeButtonBG/HomeButtons/Play" to="HomeButtonBG/HomeButtons/Play" method="_focus"]
-[connection signal="mouse_exited" from="HomeButtonBG/HomeButtons/Play" to="HomeButtonBG/HomeButtons/Play" method="_unfocus"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Play" to="." method="_play"]
-[connection signal="button_down" from="HomeButtonBG/HomeButtons/Create" to="HomeButtonBG/HomeButtons/Create" method="_down"]
-[connection signal="button_up" from="HomeButtonBG/HomeButtons/Create" to="HomeButtonBG/HomeButtons/Create" method="_up"]
-[connection signal="mouse_entered" from="HomeButtonBG/HomeButtons/Create" to="." method="_createf"]
-[connection signal="mouse_entered" from="HomeButtonBG/HomeButtons/Create" to="HomeButtonBG/HomeButtons/Create" method="_focus"]
-[connection signal="mouse_exited" from="HomeButtonBG/HomeButtons/Create" to="HomeButtonBG/HomeButtons/Create" method="_unfocus"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Create" to="." method="_create"]
-[connection signal="button_down" from="HomeButtonBG/HomeButtons/Browse" to="HomeButtonBG/HomeButtons/Browse" method="_down"]
-[connection signal="button_up" from="HomeButtonBG/HomeButtons/Browse" to="HomeButtonBG/HomeButtons/Browse" method="_up"]
-[connection signal="mouse_entered" from="HomeButtonBG/HomeButtons/Browse" to="." method="_browsef"]
-[connection signal="mouse_entered" from="HomeButtonBG/HomeButtons/Browse" to="HomeButtonBG/HomeButtons/Browse" method="_focus"]
-[connection signal="mouse_exited" from="HomeButtonBG/HomeButtons/Browse" to="HomeButtonBG/HomeButtons/Browse" method="_unfocus"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Browse" to="." method="_browse"]
-[connection signal="button_down" from="HomeButtonBG/HomeButtons/Leave" to="HomeButtonBG/HomeButtons/Leave" method="_down"]
-[connection signal="button_up" from="HomeButtonBG/HomeButtons/Leave" to="HomeButtonBG/HomeButtons/Leave" method="_up"]
-[connection signal="mouse_entered" from="HomeButtonBG/HomeButtons/Leave" to="." method="_leavef"]
-[connection signal="mouse_entered" from="HomeButtonBG/HomeButtons/Leave" to="HomeButtonBG/HomeButtons/Leave" method="_focus"]
-[connection signal="mouse_exited" from="HomeButtonBG/HomeButtons/Leave" to="HomeButtonBG/HomeButtons/Leave" method="_unfocus"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Leave" to="." method="_leave"]
-[connection signal="button_down" from="HomeButtonBG/HomeButtons/Test" to="HomeButtonBG/HomeButtons/Test" method="_down"]
-[connection signal="button_up" from="HomeButtonBG/HomeButtons/Test" to="HomeButtonBG/HomeButtons/Test" method="_up"]
-[connection signal="mouse_entered" from="HomeButtonBG/HomeButtons/Test" to="HomeButtonBG/HomeButtons/Test" method="_focus"]
-[connection signal="mouse_exited" from="HomeButtonBG/HomeButtons/Test" to="HomeButtonBG/HomeButtons/Test" method="_unfocus"]
-[connection signal="pressed" from="HomeButtonBG/HomeButtons/Test" to="." method="_test"]
 [connection signal="pressed" from="IntroPending/Bomb" to="IntroPending" method="_on_bomb_pressed"]
 [connection signal="mouse_entered" from="IntroPending/logo" to="IntroPending" method="_hover"]
 [connection signal="mouse_exited" from="IntroPending/logo" to="IntroPending" method="_unhover"]
