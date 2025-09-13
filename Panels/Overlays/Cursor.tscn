@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://c1364cqyxj4pt" path="res://Script/Singleton/Cursor.cs" id="2_7nv5n"]
 
 [node name="Popup" type="Window"]
+process_mode = 3
 physics_interpolation_mode = 2
 transparent_bg = true
 handle_input_locally = false
