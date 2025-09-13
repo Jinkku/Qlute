@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://452cy32t37m7"]
+
+[ext_resource type="StyleBox" uid="uid://fxawsqvq06j4" path="res://Resources/System/buttonidle.tres" id="1_effgq"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i3see"]
+
+[node name="MusicCard" type="Button"]
+custom_minimum_size = Vector2(350, 78)
+anchors_preset = 10
+anchor_right = 1.0
+offset_right = 20.0
+offset_bottom = 78.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i3see")
+theme_override_styles/hover = ExtResource("1_effgq")
+theme_override_styles/pressed = ExtResource("1_effgq")
+theme_override_styles/normal = ExtResource("1_effgq")
+toggle_mode = true
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 18.3333
+text = "Dummy"

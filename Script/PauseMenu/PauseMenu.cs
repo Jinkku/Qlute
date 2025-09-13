@@ -13,7 +13,11 @@ public partial class PauseMenu : Control
     {
         Cursor.CursorVisible = false;
     }
-	
+	private void Countdownshow()
+	{
+		var countdown = GD.Load<PackedScene>("res://Panels/Screens/Countdown.tscn").Instantiate();
+		GetTree().Root.AddChild(countdown);
+	}
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -38,7 +42,6 @@ public partial class PauseMenu : Control
 	private void FadeOut() // Using this later, it's supposed to be a fade out animation for when you press the pause button but this is glitchy right now.
 	{
         ModsOperator.Refresh();
-		GetTree().Paused = false;
 		QueueFree();
 		PauseTween?.Kill();
 		PauseTween = CreateTween();
@@ -48,7 +51,7 @@ public partial class PauseMenu : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	private void _continue()
 	{
-		Visible = false;
+		Countdownshow();
 		FadeOut();
 	}
 	private void _resetreplay()
@@ -57,6 +60,7 @@ public partial class PauseMenu : Control
 	}
 	private void _retry()
 	{
+		GetTree().Paused = false;
 		FadeOut();
 		BeatmapBackground.FlashEnable = true;
 		SettingsOperator.toppaneltoggle();
@@ -111,6 +115,7 @@ public partial class PauseMenu : Control
 		}
 	}
 	private void _exit(){
+			GetTree().Paused = false;
 			FadeOut();
 			BeatmapBackground.FlashEnable = true;
 			SettingsOperator.toppaneltoggle();
