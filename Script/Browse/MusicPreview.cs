@@ -4,17 +4,25 @@ using System.IO;
 
 public partial class MusicPreview : TextureButton
 {
-    // Use animation for Preview Button
-    private  Tween _focus_animation;
-    private Color Idlecolour = new Color(1f, 1f, 1f, 0.5f); // Colour when idle
-    private Color Focuscolour = new Color(1f, 1f, 1f, 0.8f); // Colour when focused
-    private Color Highlight = new Color(0.6f, 0.6f, 1f, 1); // Colour when highlight/clicked
+	// Use animation for Preview Button
+	private Tween _focus_animation;
+	private Color Idlecolour = new Color(1f, 1f, 1f, 0.5f); // Colour when idle
+	private Color Focuscolour = new Color(1f, 1f, 1f, 0.8f); // Colour when focused
+	private Color Highlight = new Color(0.6f, 0.6f, 1f, 1); // Colour when highlight/clicked
+	private int PreviewID { get; set; }
+	private TextureProgressBar MusicProgress;
 	public override void _Ready()
 	{
+		var Root = GetNode<Button>("../../");
+		if (Root.HasMeta("beatmap"))
+		{
+			PreviewID = (int)Root.GetMeta("beatmap");
+		}
 		SelfModulate = Idlecolour;
 		audioPath = GetMeta("preview_url").ToString();
+		MusicProgress = GetNode<TextureProgressBar>("SongProgress");
 	}
-    private void AnimationButton(Color colour)
+	private void AnimationButton(Color colour)
 	{
 		if (_focus_animation != null)
 		{
@@ -26,11 +34,10 @@ public partial class MusicPreview : TextureButton
 			.SetEase(Tween.EaseType.Out);
 		_focus_animation.Play();
 	}
-	private AudioStreamPlayer AudioPreview { get; set; }
 	private HttpRequest AudioPreviewData { get; set; }
-    HttpRequest downloadRequest { get; set; }
-	string audioPath {get; set; }
-	string fileName {get; set; }
+	HttpRequest downloadRequest { get; set; }
+	string audioPath { get; set; }
+	string fileName { get; set; }
 	private bool Loaded { get; set; } = false;
 	private void _PlayPreview(long result, long responseCode, string[] headers, byte[] body)
 	{
@@ -42,11 +49,8 @@ public partial class MusicPreview : TextureButton
 			existingPreviewB.QueueFree();
 		}
 
-		AudioPlayer.Instance.Playing = false;
+		AudioPlayer.Instance.StreamPaused = true;
 		AudioStream filestream = null;
-		AudioPreview = new AudioStreamPlayer();
-		GetTree().CurrentScene.AddChild(AudioPreview);
-		AudioPreview.Name = "DownloadedMusicPreviewB";
 
 		if (audioPath.EndsWith(".mp3"))
 		{
@@ -60,12 +64,21 @@ public partial class MusicPreview : TextureButton
 		{
 			filestream = AudioPlayer.LoadOGG(Path.Combine(SettingsOperator.tempdir, $"musicpreview_{fileName}"));
 		}
-
-		AudioPreview.Stream = filestream;
-		AudioPreview.Play();
+		AudioPlayer.PreviewID = PreviewID;
+		AudioPlayer.BrowsePreview.Stream = filestream;
+		AudioPlayer.BrowsePreview.Play();
 	}
-	
-    private void _pressed()
+	public override void _ExitTree()
+	{
+		AudioPlayer.BrowsePreview.Stop();
+		if (AudioPlayer.Instance.Stream != null)
+		{
+			GD.Print("[Qlute] Should continue playing...");
+			AudioPlayer.Instance.StreamPaused = false;
+		}
+
+	}
+	private void _pressed()
 	{
 		if (string.IsNullOrEmpty(audioPath))
 		{
@@ -75,16 +88,16 @@ public partial class MusicPreview : TextureButton
 		}
 		else if (ButtonPressed)
 		{
-			if (AudioPreview != null && AudioPreview.Playing)
+			if (AudioPlayer.BrowsePreview != null && AudioPlayer.BrowsePreview.Playing)
 			{
-				AudioPreview.Stop();
+				AudioPlayer.BrowsePreview.Stop();
 				return;
 			}
 			else
 			{
 				var existingPreviewA = GetTree().CurrentScene.GetNodeOrNull("DownloadMusicPreviewA");
 
-				if (existingPreviewA != null)	
+				if (existingPreviewA != null)
 				{
 					existingPreviewA.QueueFree();
 				}
@@ -102,24 +115,35 @@ public partial class MusicPreview : TextureButton
 		}
 		else
 		{
-			if (AudioPreview != null && AudioPreview.Playing)
+			if (AudioPlayer.BrowsePreview != null && AudioPlayer.BrowsePreview.Playing)
 			{
-				AudioPreview.Stop();
-				AudioPlayer.Instance.Playing = false;
+				AudioPlayer.BrowsePreview.Stop();
+				AudioPlayer.Instance.StreamPaused = false;
 			}
 		}
 		AnimationButton(Focuscolour);
 	}
-    private void _focus()
-    {
-        AnimationButton(Focuscolour);
-    }
-    private void _unfocus()
-    {
-        AnimationButton(Idlecolour);
-    }
-    private void _highlight()
-    {
-        AnimationButton(Highlight);
+	private void _focus()
+	{
+		AnimationButton(Focuscolour);
+	}
+	private void _unfocus()
+	{
+		AnimationButton(Idlecolour);
+	}
+	private void _highlight()
+	{
+		AnimationButton(Highlight);
+	}
+
+	public override void _Process(double delta)
+	{
+		ButtonPressed = AudioPlayer.PreviewID == PreviewID && AudioPlayer.BrowsePreview.Playing;
+		MusicProgress.Visible = AudioPlayer.PreviewID == PreviewID && AudioPlayer.BrowsePreview.Playing;
+		if (AudioPlayer.BrowsePreview.Playing)
+		{
+			MusicProgress.MaxValue = AudioPlayer.BrowsePreview.Stream?.GetLength() ?? 0;
+			MusicProgress.Value = AudioPlayer.BrowsePreview.GetPlaybackPosition();
+		}
     }
 }

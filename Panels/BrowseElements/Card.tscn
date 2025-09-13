@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://b2pypl6ci4s6g"]
+[gd_scene load_steps=24 format=3 uid="uid://b2pypl6ci4s6g"]
 
 [ext_resource type="Script" uid="uid://da5wukscc4c75" path="res://Script/Browse/CardFunctions.cs" id="1_pttee"]
 [ext_resource type="Texture2D" uid="uid://46vt33hasgbd" path="res://Resources/System/TopPanel/Download.svg" id="2_ilrch"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cix7tpqhp0qkf" path="res://Resources/System/Browse/playidle.png" id="5_ilrch"]
 [ext_resource type="Texture2D" uid="uid://q500uwy2anai" path="res://Resources/System/Browse/playing.png" id="6_c4wxm"]
 [ext_resource type="Script" uid="uid://dwam3ny8h332d" path="res://Script/Browse/MusicPreview.cs" id="7_1lgpj"]
+[ext_resource type="Texture2D" uid="uid://cithc25njijd0" path="res://Resources/System/Browse/ring.png" id="8_c4wxm"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i3see"]
 
@@ -284,8 +285,23 @@ layout_mode = 2
 toggle_mode = true
 texture_normal = ExtResource("5_ilrch")
 texture_pressed = ExtResource("6_c4wxm")
-stretch_mode = 3
+ignore_texture_size = true
+stretch_mode = 0
 script = ExtResource("7_1lgpj")
+
+[node name="SongProgress" type="TextureProgressBar" parent="SongBackgroundPreview/Playbutton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+step = 0.01
+value = 89.0
+fill_mode = 4
+nine_patch_stretch = true
+texture_progress = ExtResource("8_c4wxm")
+tint_progress = Color(0.580627, 0.691027, 0.984375, 1)
 
 [connection signal="draw" from="." to="." method="_on_draw"]
 [connection signal="hidden" from="." to="." method="_on_hidden"]

@@ -5,18 +5,34 @@ using NVorbis;
 public partial class AudioPlayer : AudioStreamPlayer
 {
     public static AudioStreamPlayer Instance;
+    public static AudioStreamPlayer BrowsePreview;
     private bool _isPlaying = false;
     public static bool _isogg = false;
     private float _seekPosition = 0.0f;
+    public static int PreviewID { get; set; } = 0;
 
     public override void _Ready()
     {
         Instance = this;
+        BrowsePreview = new AudioStreamPlayer();
+        BrowsePreview.Finished += OnAudioFinished;
+        AddChild(BrowsePreview);
         Instance.Bus = "Master";
+
+    }
+
+    private void OnAudioFinished()
+    {
+        if (Stream != null)
+        {
+            GD.Print("[Qlute] Should continue playing...");
+            StreamPaused = false;
+        }
     }
     public override void _Process(double delta)
     {
         if (SettingsOperator.loopaudio) AudioLoop();
+        BrowsePreview.VolumeDb = VolumeDb;
         SettingsOperator.Gameplaycfg.Time = GetPlaybackPosition();
         SettingsOperator.Gameplaycfg.TimeTotal = (float)(Stream?.GetLength() ?? 0);
     }
