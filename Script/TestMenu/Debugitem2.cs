@@ -43,6 +43,7 @@ public partial class Debugitem2 : Label
 				"Max pp: " + SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier + "\n" +
 				"Score: " + SettingsOperator.Gameplaycfg.Score + "\n" +
 				"Timeframe: " + AudioPlayer.Instance.GetPlaybackPosition() / 0.001 + "\n" +
+				"Object: " + Performance.GetMonitor(Performance.Monitor.ObjectCount) + "\n" +
 				"Replay file index: " + moka;
 		}
 	}

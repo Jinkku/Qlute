@@ -15,7 +15,6 @@ public class InfoBox
 public partial class SongSelect : Control
 {
 	// Called when the node enters the scene tree for the first time.
-	[Export] private TextureRect textureRect;
 	public SettingsOperator SettingsOperator { get; set; }
 	public PackedScene musiccardtemplate;
 	private GpuParticles2D Particle { get; set; }
@@ -48,6 +47,7 @@ public partial class SongSelect : Control
 	private PanelContainer ContextMenu { get; set; }
 	private Button LeaderboardLocal { get; set; }
 	private Button LeaderboardGlobal { get; set; }
+	private Vector2 CardSize { get; set; }
 
 
 	int startposition = 0;
@@ -94,7 +94,7 @@ public partial class SongSelect : Control
 		var TextureRect = button.GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
 		var Rating = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Rating");
 		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Version");
-		button.Position = new Vector2(0, startposition + (83 * id));
+		button.Position = new Vector2(0, startposition + (CardSize.Y * id));
 		SongTitle.Text = SettingsOperator.Beatmaps[id].Title;
 		SongArtist.Text = SettingsOperator.Beatmaps[id].Artist;
 		SongMapper.Text = "Created by " + SettingsOperator.Beatmaps[id].Mapper;
@@ -154,6 +154,8 @@ public partial class SongSelect : Control
 		SongMapper = GetNode<Label>("SongDetails/SongInfo/Rows/Mapper");
 		Diff = GetNode<Label>("SongDetails/SongInfo/Rows/Difficulty");
 
+		CardSize = InitiateMusicCard().Size;
+		CardSize = new Vector2(CardSize.X, CardSize.Y + 5);
 
 		LevelRating = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/Level");
 		Songpp = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/Points");
@@ -205,7 +207,7 @@ public partial class SongSelect : Control
 	{
 		SongLoaded = 0;
 		float Height = GetViewportRect().Size.Y;
-		int CardHeight = (int)(InitiateMusicCard().Size.Y + 5);
+		int CardHeight = (int)(CardSize.Y + 5);
 		int ItemCount = (int)(Height / CardHeight);
 		int startIndex = Math.Max(0, (int)scrollBar.Value - (ItemCount / 2));
 		int endIndex = Math.Min(SettingsOperator.Beatmaps.Count, (int)scrollBar.Value + (ItemCount / 2) + 2);
@@ -236,7 +238,7 @@ public partial class SongSelect : Control
 			if (SongEntry.FirstOrDefault(e => e is Button btn && btn.Name == i.ToString()) is Button entry)
 			{
 				entry.ZIndex = 0; // Ensure proper layering
-				entry.Position = new Vector2(entry.Position.X, startposition + (83 * i) - (83 * (float)scrollBar.Value));
+				entry.Position = new Vector2(entry.Position.X, startposition + (CardSize.Y * i) - (CardSize.Y * (float)scrollBar.Value));
 				SongLoaded++;
 			}
 		}
