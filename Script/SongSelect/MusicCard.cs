@@ -15,37 +15,63 @@ public partial class MusicCard : Button
 	public int waitt = 0;
 	private bool isLoadingImage = false;
 	private string BackgroundPath = null;
+	private Texture2D texture { get; set; }
+	public override void _ExitTree()
+	{
+		if (texture != null)
+		{
+			texture.Dispose();
+			texture = null;
+		}
+		GC.Collect(); 
+		GC.WaitForPendingFinalizers();
+	}
 
 	private async void LoadExternalImage(string path)
 	{
-		if (isLoadingImage || string.IsNullOrEmpty(path)) return;
+		if (isLoadingImage || string.IsNullOrEmpty(path)) 
+			return;
 
 		isLoadingImage = true;
 
-		var texture = await Task.Run(() =>
+		// Load image off-thread
+		var data = await Task.Run(() =>
 		{
-			
-            using var image = Image.LoadFromFile(path);
-            if (image == null)
-            {
-                return SettingsOperator.GetNullImage();
-            }
-            else
-            {
-                return ImageTexture.CreateFromImage(image);
-            }
+			return Image.LoadFromFile(path);
 		});
 
+		// Dispose the old texture before replacing
+		if (texture != null)
+		{
+			texture.Dispose();
+			texture = null;
+		}
+
+		if (data == null)
+		{
+			texture = SettingsOperator.GetNullImage();
+		}
+		else
+		{
+			texture = ImageTexture.CreateFromImage(data);
+			data.Dispose(); // free the Image after creating texture
+		}
+
+		// Assign to the Preview node if it's still valid
 		if (texture != null && IsInstanceValid(Preview))
 		{
 			LoadTween = CreateTween();
-			LoadTween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			LoadTween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f)
+					.SetEase(Tween.EaseType.Out)
+					.SetTrans(Tween.TransitionType.Cubic);
 			LoadTween.Play();
+
 			Preview.Texture = texture;
 		}
 
 		isLoadingImage = false;
 	}
+
 	private Tween LoadTween { get; set; }
 	public override void _Ready()
 	{

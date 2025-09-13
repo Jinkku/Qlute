@@ -80,7 +80,10 @@ public partial class SongSelect : Control
 	///<summary>
 	/// Initiates Music Card then returns into a button.
 	/// </summary>
-	private Button InitiateMusicCard() => musiccardtemplate.Instantiate().GetNode<Button>(".");
+	private Button InitiateMusicCard()
+	{
+		return musiccardtemplate.Instantiate().GetNode<Button>(".");
+	}
 
 	public void AddSongList(int id)
 	{
@@ -103,10 +106,6 @@ public partial class SongSelect : Control
 		button.SetMeta("SongID", id);
 		GetNode<Control>("SongPanel").AddChild(button);
 		SongEntry.Add(button);
-		//if (background != ImageURL){
-		//	ImageCache = SettingsOperator.LoadImage(background);
-		//}
-		//TextureRect.Texture = ImageCache;
 	}
 	private void _on_random()
 	{
@@ -135,7 +134,7 @@ public partial class SongSelect : Control
 		RankStatus = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Column1/RankBox");
 		ContextMenu = GetNode<PanelContainer>("ContextMenu");
 		ContextMenu.Visible = false;
-		musiccardtemplate = GD.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
+		musiccardtemplate = ResourceLoader.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		NoBeatmap = GetNode<Label>("SongPanel/NoBeatmap");
 		NoBeatmap.Visible = true;
 		SongETick = 0;
