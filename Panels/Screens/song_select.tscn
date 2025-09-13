@@ -73,11 +73,16 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 expand_margin_left = 35.0
+expand_margin_right = 15.0
 expand_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4dbpu"]
 bg_color = Color(1, 1, 1, 0.2)
 skew = Vector2(0.2, 0)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 expand_margin_left = 38.0
 expand_margin_right = 27.0
 
@@ -319,7 +324,6 @@ text_overrun_behavior = 3
 
 [node name="Misc" type="HBoxContainer" parent="SongDetails/SongInfo/Rows"]
 layout_mode = 2
-size_flags_horizontal = 0
 
 [node name="BPM" parent="SongDetails/SongInfo/Rows/Misc" instance=ExtResource("4_5rktx")]
 layout_mode = 2
