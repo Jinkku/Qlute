@@ -70,6 +70,7 @@ public partial class RankUpdate : Control
 		OperatorPerformance = UserCard.GetNode<Label>("SplitV/BottomPart/Sections/Performance/Operation");
 		OperatorRank.Visible = true;
 		OperatorPerformance.Visible = true;
+		UserCard.Visible = false;
 		Modulate = new Color(1f, 1f, 1f, 0f);
 
 	}
@@ -109,10 +110,12 @@ public partial class RankUpdate : Control
 			tween?.Kill();
 			tween = CreateTween();
 			tween.SetParallel(true);
+			tween.TweenCallback(Callable.From(UserCard.Show));
 			tween.TweenProperty(this, "position", tmppos, 0.3f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			tween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), 0.3f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			tween.TweenProperty(this, "position", backpos, 0.3f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(5);
 			tween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 0f), 0.3f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(5);
+			tween.TweenCallback(Callable.From(UserCard.Hide)).SetDelay(6);
 			tween.Play();
 		}
 
