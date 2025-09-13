@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://dws3b3xugyk3o"]
+
+[ext_resource type="Texture2D" uid="uid://dk6q3l8r3s8h6" path="res://Resources/System/GamemodeIcons/standard.png" id="1_3kehh"]
+
+[node name="StandardButton" type="TextureButton"]
+custom_minimum_size = Vector2(50, 50)
+offset_right = 40.0
+offset_bottom = 40.0
+texture_normal = ExtResource("1_3kehh")
+texture_pressed = ExtResource("1_3kehh")
+texture_hover = ExtResource("1_3kehh")
+ignore_texture_size = true
+stretch_mode = 0

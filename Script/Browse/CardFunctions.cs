@@ -75,9 +75,10 @@ public partial class CardFunctions : Button
             var Animation = CreateTween();
             var BeatmapInfoCard = GD.Load<PackedScene>("res://Panels/BrowseElements/BeatmapInfo.tscn").Instantiate().GetNode<Control>(".");
             BeatmapInfoCard.Position = new Vector2(0, GetViewportRect().Size.Y);
-            BeatmapInfoCard.GetNode<Label>("Pill/Padding/Info/SongTitle").Text = GetNode<Label>("SongTitle").Text;
-            BeatmapInfoCard.GetNode<Label>("Pill/Padding/Info/SongArtist").Text = GetNode<Label>("SongArtist").Text;
+            BeatmapInfoCard.GetNode<Label>("Pill/Padding/Info/Columns/Info/SongTitle").Text = GetNode<Label>("Info/SongTitle").Text;
+            BeatmapInfoCard.GetNode<Label>("Pill/Padding/Info/Columns/Info/SongArtist").Text = GetNode<Label>("Info/SongArtist").Text;
             BeatmapInfoCard.GetNode<TextureRect>("Pill/Poster").Texture = GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview").Texture;
+            BeatmapInfoCard.SetMeta("index", GetMeta("index"));
             var Back = BeatmapInfoCard.GetNode<Button>("Back");
             Back.Position = new Vector2(0, Back.Position.Y);
             var Blank = new ColorRect();
@@ -88,7 +89,7 @@ public partial class CardFunctions : Button
             Blank.AnchorBottom = 1;
             Blank.Modulate = new Color(0, 0, 0, 0f);
             Blank.Name = "Blank-Chan";
-            BeatmapInfoCard.GetNode<Button>("Pill/Padding/Info/HBoxContainer/Download").SetMeta("beatmap", GetMeta("beatmap"));
+            BeatmapInfoCard.GetNode<Button>("Pill/Padding/Info/Columns/Info/HBoxContainer/Download").SetMeta("beatmap", GetMeta("beatmap"));
             GetTree().CurrentScene.AddChild(Blank);
             GetTree().CurrentScene.AddChild(BeatmapInfoCard);
             Animation.SetParallel(true);

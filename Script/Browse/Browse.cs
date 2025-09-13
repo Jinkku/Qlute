@@ -22,6 +22,7 @@ public class CatalogBeatmapInfoLegend {
 	public int count_sliders { get; set; }
 	public int? max_combo { get; set; }
 	public int ranked { get; set; }
+	public int total_length { get; set; }
 }
 public class BrowseCatalogLegend {
 	public int id { get; set; }
@@ -36,7 +37,8 @@ public class BrowseCatalogLegend {
 public partial class Browse : Control
 {
 	// Called when the node enters the scene tree for the first time.
-    public static List<Dictionary<string,object>> BrowseCatalog = new List<Dictionary<string,object>>();
+    public static List<BrowseCatalogLegend> BrowseCatalog = new List<BrowseCatalogLegend>();
+	public static List<CatalogBeatmapInfoLegend> BrowseCatalogInfo = new List<CatalogBeatmapInfoLegend>();
 	public static HttpRequest BrowseApi { get; set; }
 	public int CardSizeX { get; set; }
 	public AnimationPlayer Loadinganimation {get ; set; }
@@ -48,6 +50,8 @@ public partial class Browse : Control
 	public ColorRect Blank {get ; set; }
 	public override void _Ready()
 	{
+		BrowseCatalog.Clear();
+		BrowseCatalogInfo.Clear();
 		BrowseApi = new HttpRequest();
 		BrowseApi.Timeout = 60;
 		AddChild(BrowseApi);
@@ -197,6 +201,8 @@ public static async Task
 	private void _BrowseAPI_finished(long result, long responseCode, string[] headers, byte[] body){
 		string BrowseEntries = (string)Encoding.UTF8.GetString(body);
 		List<BrowseCatalogLegend> items = JsonSerializer.Deserialize<List<BrowseCatalogLegend>>(BrowseEntries);
+		var index = BrowseCatalog.Count;
+		BrowseCatalog.AddRange(items);
 		Loadingicon.Visible = false;
 		Loadinganimation.Stop();
 		if (BlankAni != null)
@@ -221,20 +227,22 @@ public static async Task
 			{
 				var Element = GD.Load<PackedScene>("res://Panels/BrowseElements/Card.tscn").Instantiate().GetNode<Button>(".");
 				CardSizeX = (int)Element.Size.X + 5;
-				Element.GetNode<Label>("SongTitle").Text = line.title;
-				Element.GetNode<Label>("SongArtist").Text = line.artist;
-				Element.GetNode<Label>("SongMapper").Text = "mapped by " + line.creator;
+				Element.GetNode<Label>("Info/SongTitle").Text = line.title;
+				Element.GetNode<Label>("Info/SongArtist").Text = line.artist;
+				Element.GetNode<Label>("Info/SongMapper").Text = "mapped by " + line.creator;
 				Element.GetNode<PanelContainer>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor").SelfModulate = ConvertTypetoColor(line.beatmaps.First().ranked);
 				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor/RankText").Text = ConvertTypetoRank(line.beatmaps.First().ranked);
 				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor/RankText").TooltipText = line.beatmaps.First().difficulty_rating.ToString("0.00");
-				
+
 				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvStartColor/LvStartText").Text = "Lv. " + ((line.beatmaps.First().count_circles + line.beatmaps.First().count_sliders) * SettingsOperator.ppbase).ToString("0");
 				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvEndColor/LvEndText").Text = "Lv. " + ((line.beatmaps.Last().count_circles + line.beatmaps.Last().count_sliders) * SettingsOperator.ppbase).ToString("0");
 				Element.SetMeta("pic", line.covers.card);
 				Element.SetMeta("beatmap", line.id);
+				Element.SetMeta("index", index);
 				Element.GetNode<TextureButton>("SongBackgroundPreview/Playbutton").SetMeta("preview_url", "https:" + line.preview_url);
 				Element.Modulate = new Color(1f, 1f, 1f, 0f);
 				GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps").AddChild(Element);
+				index++;
 			}
 		}
 		catch (Exception e)

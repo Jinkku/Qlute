@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://b2pypl6ci4s6g"]
+[gd_scene load_steps=22 format=3 uid="uid://b2pypl6ci4s6g"]
 
 [ext_resource type="Script" uid="uid://da5wukscc4c75" path="res://Script/Browse/CardFunctions.cs" id="1_pttee"]
 [ext_resource type="Texture2D" uid="uid://46vt33hasgbd" path="res://Resources/System/TopPanel/Download.svg" id="2_ilrch"]
@@ -25,22 +25,15 @@ corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ilrch"]
 content_margin_left = 10.0
-content_margin_top = 0.0
+content_margin_top = 3.0
 content_margin_right = 10.0
-content_margin_bottom = 0.0
+content_margin_bottom = 3.0
 bg_color = Color(0.785156, 0.785156, 0.785156, 1)
 skew = Vector2(0.5, 0)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
-
-[sub_resource type="FontVariation" id="FontVariation_i800q"]
-variation_embolden = 1.0
-
-[sub_resource type="LabelSettings" id="LabelSettings_bwdvf"]
-font = SubResource("FontVariation_i800q")
-font_size = 14
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pttee"]
 content_margin_left = 5.0
@@ -113,36 +106,48 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_cufpe")
 theme_override_styles/normal = SubResource("StyleBoxFlat_cufpe")
 script = ExtResource("1_pttee")
 
-[node name="SongTitle" type="Label" parent="."]
+[node name="Info" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 121.0
 offset_top = 7.0
-offset_right = 351.0
-offset_bottom = 26.0
+offset_right = 353.0
+offset_bottom = 80.0
+alignment = 1
+
+[node name="SongTitle" type="Label" parent="Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.609375, 0.908447, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 14
 text = "Mystery Song"
+vertical_alignment = 1
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="SongArtist" type="Label" parent="."]
-layout_mode = 0
-offset_left = 121.0
-offset_top = 28.0
-offset_right = 351.0
-offset_bottom = 47.0
+[node name="SongArtist" type="Label" parent="Info"]
+layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 12
 text = "idiotiplier"
+vertical_alignment = 1
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="SongMapper" type="Label" parent="."]
-layout_mode = 0
-offset_left = 121.0
-offset_top = 49.0
-offset_right = 351.0
-offset_bottom = 68.0
+[node name="SongMapper" type="Label" parent="Info"]
+layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 12
 text = "mapped by idiot"
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="SongReleaseDate" type="Label" parent="Info"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_font_sizes/font_size = 12
+text = "submitted at 12th Dec 2025"
+vertical_alignment = 1
 clip_text = true
 text_overrun_behavior = 3
 
@@ -168,6 +173,7 @@ theme_override_constants/margin_bottom = 5
 
 [node name="InfoBar" type="HBoxContainer" parent="InfoBar-Base/InfoBar-Space"]
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_constants/separation = 5
 
 [node name="RankColor" type="PanelContainer" parent="InfoBar-Base/InfoBar-Space/InfoBar"]
@@ -180,9 +186,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ilrch")
 layout_mode = 2
 mouse_filter = 1
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 12
 text = "Ranked"
-label_settings = SubResource("LabelSettings_bwdvf")
+vertical_alignment = 1
 
 [node name="LvStartColor" type="PanelContainer" parent="InfoBar-Base/InfoBar-Space/InfoBar"]
 self_modulate = Color(0.339844, 0.339844, 0.339844, 1)
@@ -194,9 +200,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ilrch")
 layout_mode = 2
 mouse_filter = 1
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 12
 text = "Lv. 2"
-label_settings = SubResource("LabelSettings_bwdvf")
+vertical_alignment = 1
 
 [node name="LvEndColor" type="PanelContainer" parent="InfoBar-Base/InfoBar-Space/InfoBar"]
 self_modulate = Color(0.488281, 0.488281, 0.488281, 1)
@@ -208,9 +214,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ilrch")
 layout_mode = 2
 mouse_filter = 1
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 12
 text = "Lv. 37"
-label_settings = SubResource("LabelSettings_bwdvf")
+vertical_alignment = 1
 
 [node name="DownloadBar" type="PanelContainer" parent="."]
 z_index = 1
