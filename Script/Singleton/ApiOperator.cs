@@ -42,6 +42,7 @@ public partial class ApiOperator : Node
 	{
 		if (!SettingsOperator.SpectatorMode)
 		{
+			GD.Print("Submitting score....");
 			int BeatmapID = (int)SettingsOperator.Sessioncfg["osubeatid"];
 			int BeatmapSetID = (int)SettingsOperator.Sessioncfg["osubeatidset"];
 			double MAX = SettingsOperator.Gameplaycfg.Max;
@@ -151,6 +152,10 @@ public partial class ApiOperator : Node
 		{
 			RankUpdate.Update((int)json["rank"], (int)json["points"]);
 		}
+		if (json["msg"].ToString() != "")
+		{
+			Notify.Post(json["msg"].ToString());
+		}
 	}
 	private void _on_info_request_completed(long result, long responseCode, string[] headers, byte[] body)
 	{
@@ -158,7 +163,7 @@ public partial class ApiOperator : Node
 
 		Ranking.Instance.Text = "#" + json["rank"].AsInt32().ToString("N0");
 		Ranking.Instance.Visible = true;
-		string Ranknum = json["rank"].AsInt32().ToString("N0");
+		string Ranknum = json["rank"].AsInt32().ToString("");
 		if (int.TryParse(Ranknum, out int n))
 		{
 			if (n == 0)
@@ -224,7 +229,7 @@ public partial class ApiOperator : Node
 
 	private string _on_login_api_request_completed(long result, long responseCode, string[] headers, byte[] body)
 	{
-		GD.Print("Login API Response: " + body.ToString());
+		GD.Print("Login API Response: " + Encoding.UTF8.GetString(body));
 		try
 		{
 			Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();

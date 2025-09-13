@@ -20,7 +20,7 @@ public partial class UserCard : PanelContainer
         Username.Text = ApiOperator.Username;
         if (!PauseRealTime)
         {
-            Rank.Text = "#" + SettingsOperator.Sessioncfg["ranknumber"]?.ToString();
+            Rank.Text = "#" + ((int)SettingsOperator.Sessioncfg["ranknumber"]).ToString("N0");
             Performance.Text = $"{SettingsOperator.ranked_points.ToString("N0")}pp";
         }
     }

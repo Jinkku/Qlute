@@ -28,7 +28,7 @@ public partial class Settings : Button
 			togglesettingspanel();
 		}
 		string username = SettingsOperator.GetSetting("username")?.ToString();
-		string ranking = SettingsOperator.Sessioncfg["ranknumber"]?.ToString();
+		string ranking = ((int)SettingsOperator.Sessioncfg["ranknumber"]).ToString("N0");
 		if (username != null){
 			PlayerName.Text = username;
 			if (ranking != null && ranking != "0"){

@@ -418,7 +418,7 @@ public partial class SettingsOperator : Node
         { "settingspanelv", false },
         { "chatboxv", false },
         { "notificationpanelv", false },
-        { "ranknumber", null },
+        { "ranknumber", 0 },
         { "playercolour", null },
         { "SongID", -1 },
         { "totalbeatmaps", 0 },
