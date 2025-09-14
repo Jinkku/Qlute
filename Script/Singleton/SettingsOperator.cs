@@ -27,7 +27,7 @@ public partial class SettingsOperator : Node
     public static string skinsdir => homedir + "/skins";
     public static string settingsfile => homedir + "/settings.cfg";
     public static string Qlutedb => homedir + "/qlute.db";
-    public static float levelweight = 0.005f;
+    public static float levelweight = 0.0084f;
     public static bool loopaudio = false;
     public static bool jukebox = false;
     public int backgrounddim { get; set; }
@@ -156,7 +156,7 @@ public partial class SettingsOperator : Node
             Gameplaycfg.TimeTotalGame = beatmap.Timetotal * 0.001f;
             Sessioncfg["beatmapmapper"] = beatmap.Mapper;
             Sessioncfg["beatmapaccuracy"] = (int)beatmap.Accuracy;
-            LevelRating = (int)Math.Round(beatmap.Levelrating);
+            LevelRating = beatmap.Levelrating;
             Sessioncfg["osubeatid"] = (int)beatmap.Osubeatid;
             Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
             Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
@@ -454,7 +454,7 @@ public partial class SettingsOperator : Node
     public static int ranked_points { get; set; }
     
     public static int SongIDHighlighted { get; set; } = -1; // Highlighted song ID for the song select screen
-    public static int LevelRating { get; set; } = -1; // Highlighted song ID for the song select screen
+    public static double LevelRating { get; set; } = -1;
     public static Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
     {
         { "TopPanelSlideip", false },
