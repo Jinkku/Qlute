@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 public class BeatmapLegend
@@ -85,7 +86,12 @@ public partial class BeatmapListener : Node
 				if (tmp == SettingsOperator.beatmapsdir)
 				{
 					GD.Print("Checking for beatmaps...");
-					foreach (string Dir in Directory.GetDirectories(SettingsOperator.beatmapsdir))
+					string[] dirs = Directory.GetDirectories(SettingsOperator.beatmapsdir)
+					.Select(d => new DirectoryInfo(d))      // convert to DirectoryInfo
+					.OrderBy(d => d.CreationTime)          // sort oldest → newest
+					.Select(d => d.FullName)               // convert back to string paths
+					.ToArray();                            // get string array
+					foreach (string Dir in dirs)
 					{
 						var newDir = Dir.Replace("\\", "/");
 						GD.Print(newDir);
