@@ -31,6 +31,7 @@ public class BrowseCatalogLegend {
 	public string creator { get; set; }
 	public string source { get; set; }
 	public string preview_url { get; set; }
+	public double last_updated { get; set; }
 	public CatalogCardLegend covers { get; set; }
 	public List<CatalogBeatmapInfoLegend> beatmaps { get; set; }
 }
@@ -234,8 +235,8 @@ public static async Task
 				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor/RankText").Text = ConvertTypetoRank(line.beatmaps.First().ranked);
 				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor/RankText").TooltipText = line.beatmaps.First().difficulty_rating.ToString("0.00");
 
-				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvStartColor/LvStartText").Text = "Lv. " + ((line.beatmaps.First().count_circles + line.beatmaps.First().count_sliders) * SettingsOperator.ppbase).ToString("0");
-				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvEndColor/LvEndText").Text = "Lv. " + ((line.beatmaps.Last().count_circles + line.beatmaps.Last().count_sliders) * SettingsOperator.ppbase).ToString("0");
+				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvStartColor/LvStartText").Text = "Lv. " + ((line.beatmaps.First().count_circles + line.beatmaps.First().count_sliders) * SettingsOperator.levelweight).ToString("0");
+				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvEndColor/LvEndText").Text = "Lv. " + ((line.beatmaps.Last().count_circles + line.beatmaps.Last().count_sliders) * SettingsOperator.levelweight).ToString("0");
 				Element.SetMeta("pic", line.covers.card);
 				Element.SetMeta("beatmap", line.id);
 				Element.SetMeta("index", index);

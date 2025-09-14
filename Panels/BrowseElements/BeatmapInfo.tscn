@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://ddoobud01aev"]
+[gd_scene load_steps=22 format=3 uid="uid://ddoobud01aev"]
 
 [ext_resource type="Texture2D" uid="uid://fgbtqxkt8lm" path="res://DefaultWallpaper/attack.png" id="1_8h4jc"]
 [ext_resource type="Script" uid="uid://csn1oydkld5la" path="res://Script/Browse/BeatmapInfo.cs" id="1_60ltk"]
@@ -51,19 +51,7 @@ content_margin_top = 10.0
 content_margin_right = 10.0
 content_margin_bottom = 10.0
 bg_color = Color(0, 0, 0, 0.5)
-draw_center = false
 border_color = Color(1, 1, 1, 0.2)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8b8m7"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(0, 0, 0, 0.5)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8h4jc"]
 
@@ -134,7 +122,7 @@ modulate = Color(1, 1, 1, 0.501961)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 320.0
+offset_bottom = 340.0
 grow_horizontal = 2
 texture = ExtResource("1_8h4jc")
 expand_mode = 1
@@ -160,12 +148,16 @@ theme_override_constants/separation = 15
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 
+[node name="Difficulty" type="Label" parent="Pill/Padding/Info"]
+layout_mode = 2
+text = "More infomation hereeeeeee"
+
 [node name="Columns" type="HBoxContainer" parent="Pill/Padding/Info"]
 layout_mode = 2
 
 [node name="Info" type="VBoxContainer" parent="Pill/Padding/Info/Columns"]
 layout_mode = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 10
 
 [node name="SongTitle" type="Label" parent="Pill/Padding/Info/Columns/Info"]
 layout_mode = 2
@@ -176,6 +168,16 @@ text = "Song Title"
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Song Artist"
+
+[node name="SongMapper" type="Label" parent="Pill/Padding/Info/Columns/Info"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "mapped by idiotplier"
+
+[node name="SongRelease" type="Label" parent="Pill/Padding/Info/Columns/Info"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "submitted at 12th Dec 2025"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Pill/Padding/Info/Columns/Info"]
 custom_minimum_size = Vector2(0, 50)
@@ -212,24 +214,46 @@ layout_mode = 2
 size_flags_horizontal = 10
 theme_override_styles/panel = SubResource("StyleBoxFlat_7hhbs")
 
-[node name="GridContainer" type="GridContainer" parent="Pill/Padding/Info/Columns/Details"]
+[node name="Row" type="VBoxContainer" parent="Pill/Padding/Info/Columns/Details"]
 layout_mode = 2
-columns = 4
 
-[node name="Length" type="Label" parent="Pill/Padding/Info/Columns/Details/GridContainer"]
+[node name="Name" type="Label" parent="Pill/Padding/Info/Columns/Details/Row"]
 layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 0
-theme_override_styles/normal = SubResource("StyleBoxFlat_8b8m7")
-text = "Length: 00:00"
+text = "Additional Info
+"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="ppcounter" type="Label" parent="Pill/Padding/Info/Columns/Details/GridContainer"]
+[node name="Column1" type="HBoxContainer" parent="Pill/Padding/Info/Columns/Details/Row"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Name" type="Label" parent="Pill/Padding/Info/Columns/Details/Row/Column1"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Length"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="Pill/Padding/Info/Columns/Details/Row/Column1"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_8b8m7")
-text = "pp: 1,000pp"
-horizontal_alignment = 1
+text = "00:00"
+vertical_alignment = 1
+
+[node name="Column2" type="HBoxContainer" parent="Pill/Padding/Info/Columns/Details/Row"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Name" type="Label" parent="Pill/Padding/Info/Columns/Details/Row/Column2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="Pill/Padding/Info/Columns/Details/Row/Column2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "00:00"
+vertical_alignment = 1
 
 [node name="VSeparator" type="HSeparator" parent="Pill/Padding/Info"]
 layout_mode = 2

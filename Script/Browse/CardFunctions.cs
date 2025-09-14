@@ -75,8 +75,6 @@ public partial class CardFunctions : Button
             var Animation = CreateTween();
             var BeatmapInfoCard = GD.Load<PackedScene>("res://Panels/BrowseElements/BeatmapInfo.tscn").Instantiate().GetNode<Control>(".");
             BeatmapInfoCard.Position = new Vector2(0, GetViewportRect().Size.Y);
-            BeatmapInfoCard.GetNode<Label>("Pill/Padding/Info/Columns/Info/SongTitle").Text = GetNode<Label>("Info/SongTitle").Text;
-            BeatmapInfoCard.GetNode<Label>("Pill/Padding/Info/Columns/Info/SongArtist").Text = GetNode<Label>("Info/SongArtist").Text;
             BeatmapInfoCard.GetNode<TextureRect>("Pill/Poster").Texture = GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview").Texture;
             BeatmapInfoCard.SetMeta("index", GetMeta("index"));
             var Back = BeatmapInfoCard.GetNode<Button>("Back");

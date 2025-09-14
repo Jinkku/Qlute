@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://b2pypl6ci4s6g"]
+[gd_scene load_steps=23 format=3 uid="uid://b2pypl6ci4s6g"]
 
 [ext_resource type="Script" uid="uid://da5wukscc4c75" path="res://Script/Browse/CardFunctions.cs" id="1_pttee"]
 [ext_resource type="Texture2D" uid="uid://46vt33hasgbd" path="res://Resources/System/TopPanel/Download.svg" id="2_ilrch"]
@@ -34,6 +34,18 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1lgpj"]
+draw_center = false
+border_width_left = 3
+border_width_top = 5
+border_width_right = 40
+border_width_bottom = 5
+border_color = Color(0.470588, 0.803922, 0.364706, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pttee"]
 content_margin_left = 5.0
@@ -218,6 +230,18 @@ theme_override_font_sizes/font_size = 12
 text = "Lv. 37"
 vertical_alignment = 1
 
+[node name="Existed" type="PanelContainer" parent="."]
+visible = false
+z_index = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1lgpj")
+
 [node name="DownloadBar" type="PanelContainer" parent="."]
 z_index = 1
 custom_minimum_size = Vector2(40, 0)
@@ -250,6 +274,20 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_pjk7l")
 icon = ExtResource("2_ilrch")
 icon_alignment = 1
 script = ExtResource("3_i800q")
+
+[node name="Play" type="Button" parent="DownloadBar/VBoxContainer"]
+visible = false
+z_index = 1
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/icon_max_width = 24
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wsj5f")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_c4wxm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_i800q")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bwdvf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_pjk7l")
+icon = ExtResource("5_ilrch")
+icon_alignment = 1
 
 [node name="Favorite" type="Button" parent="DownloadBar/VBoxContainer"]
 z_index = 1
@@ -318,6 +356,10 @@ tint_progress = Color(0.580627, 0.691027, 0.984375, 1)
 [connection signal="mouse_exited" from="DownloadBar/VBoxContainer/Download" to="." method="_buttoncardup"]
 [connection signal="pressed" from="DownloadBar/VBoxContainer/Download" to="." method="_setid"]
 [connection signal="pressed" from="DownloadBar/VBoxContainer/Download" to="DownloadBar/VBoxContainer/Download" method="_download"]
+[connection signal="mouse_entered" from="DownloadBar/VBoxContainer/Play" to="." method="_buttoncard"]
+[connection signal="mouse_exited" from="DownloadBar/VBoxContainer/Play" to="." method="_buttoncardup"]
+[connection signal="pressed" from="DownloadBar/VBoxContainer/Play" to="." method="_play"]
+[connection signal="pressed" from="DownloadBar/VBoxContainer/Play" to="." method="_setid"]
 [connection signal="mouse_entered" from="DownloadBar/VBoxContainer/Favorite" to="." method="_buttoncard"]
 [connection signal="mouse_exited" from="DownloadBar/VBoxContainer/Favorite" to="." method="_buttoncardup"]
 [connection signal="pressed" from="DownloadBar/VBoxContainer/Favorite" to="." method="_favorite"]

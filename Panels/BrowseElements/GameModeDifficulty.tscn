@@ -1,13 +1,42 @@
-[gd_scene load_steps=2 format=3 uid="uid://dws3b3xugyk3o"]
+[gd_scene load_steps=4 format=3 uid="uid://dws3b3xugyk3o"]
 
-[ext_resource type="Texture2D" uid="uid://dk6q3l8r3s8h6" path="res://Resources/System/GamemodeIcons/standard.png" id="1_3kehh"]
+[ext_resource type="Texture2D" uid="uid://buu1hgta1clli" path="res://Resources/System/Browse/difficultyrank.png" id="1_snpcb"]
+[ext_resource type="Script" uid="uid://d1oq4vgt2re0v" path="res://Script/Browse/GameModeDifficulty.cs" id="2_snpcb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vki16"]
 
 [node name="StandardButton" type="TextureButton"]
 custom_minimum_size = Vector2(50, 50)
 offset_right = 40.0
 offset_bottom = 40.0
-texture_normal = ExtResource("1_3kehh")
-texture_pressed = ExtResource("1_3kehh")
-texture_hover = ExtResource("1_3kehh")
+texture_normal = ExtResource("1_snpcb")
+texture_pressed = ExtResource("1_snpcb")
+texture_hover = ExtResource("1_snpcb")
 ignore_texture_size = true
 stretch_mode = 0
+script = ExtResource("2_snpcb")
+metadata/infomation = ""
+
+[node name="Num" type="Label" parent="."]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.5
+offset_top = -11.5
+offset_right = 12.5
+offset_bottom = 13.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_vki16")
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="button_down" from="." to="." method="_highlight"]
+[connection signal="button_up" from="." to="." method="_focus"]
+[connection signal="mouse_entered" from="." to="." method="_focus"]
+[connection signal="mouse_exited" from="." to="." method="_unfocus"]

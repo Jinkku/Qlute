@@ -58,6 +58,7 @@ window/size/mode=4
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/vsync/vsync_mode=0
+mouse_cursor/tooltip_position_offset=Vector2(30, 30)
 
 [dotnet]
 
