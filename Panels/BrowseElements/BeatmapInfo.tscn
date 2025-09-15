@@ -151,33 +151,44 @@ layout_mode = 2
 [node name="Difficulty" type="Label" parent="Pill/Padding/Info"]
 layout_mode = 2
 text = "More infomation hereeeeeee"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="Columns" type="HBoxContainer" parent="Pill/Padding/Info"]
 layout_mode = 2
 
 [node name="Info" type="VBoxContainer" parent="Pill/Padding/Info/Columns"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 10
 
 [node name="SongTitle" type="Label" parent="Pill/Padding/Info/Columns/Info"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Song Title"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="SongArtist" type="Label" parent="Pill/Padding/Info/Columns/Info"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Song Artist"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="SongMapper" type="Label" parent="Pill/Padding/Info/Columns/Info"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "mapped by idiotplier"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="SongRelease" type="Label" parent="Pill/Padding/Info/Columns/Info"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "submitted at 12th Dec 2025"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Pill/Padding/Info/Columns/Info"]
 custom_minimum_size = Vector2(0, 50)
