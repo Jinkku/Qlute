@@ -38,13 +38,20 @@ public partial class GameModeDifficulty : TextureButton
 	private Color Idlecolour = new Color(0.20f, 0.20f, 0.20f, 1f);
 	private Color Focuscolour = new Color(1f, 1f, 1f, 1f);
 	private Color highlightcolour = new Color(0.19f, 0.37f, 0.65f, 1f);
-	private void _highlight() => AnimationButton(highlightcolour);
+	private void _highlight() {
+
+		BeatmapInfo.BeatmapIndex = index;
+		AnimationButton(highlightcolour);
+
+	}
 	private void _focus()
 	{
+		BeatmapInfo.BeatmapIndexH = index;
 		AnimationButton(Focuscolour);
 	}
 	private void _unfocus()
 	{
+		BeatmapInfo.BeatmapIndexH = -1;
 		AnimationButton(Idlecolour);
 	}
 

@@ -247,12 +247,61 @@ theme_override_constants/separation = 15
 [node name="Name" type="Label" parent="Pill/Padding/Info/Columns/Details/Row/Column2"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+text = "BPM"
 vertical_alignment = 1
 
 [node name="Value" type="Label" parent="Pill/Padding/Info/Columns/Details/Row/Column2"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "00:00"
+text = "0"
+vertical_alignment = 1
+
+[node name="Column3" type="HBoxContainer" parent="Pill/Padding/Info/Columns/Details/Row"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Name" type="Label" parent="Pill/Padding/Info/Columns/Details/Row/Column3"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Note Count"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="Pill/Padding/Info/Columns/Details/Row/Column3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+vertical_alignment = 1
+
+[node name="Column4" type="HBoxContainer" parent="Pill/Padding/Info/Columns/Details/Row"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Name" type="Label" parent="Pill/Padding/Info/Columns/Details/Row/Column4"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Max PP"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="Pill/Padding/Info/Columns/Details/Row/Column4"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0pp"
+vertical_alignment = 1
+
+[node name="Column5" type="HBoxContainer" parent="Pill/Padding/Info/Columns/Details/Row"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Name" type="Label" parent="Pill/Padding/Info/Columns/Details/Row/Column5"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Level Rating"
+vertical_alignment = 1
+
+[node name="Value" type="Label" parent="Pill/Padding/Info/Columns/Details/Row/Column5"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
 vertical_alignment = 1
 
 [node name="VSeparator" type="HSeparator" parent="Pill/Padding/Info"]

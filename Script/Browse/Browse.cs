@@ -15,7 +15,8 @@ public class CatalogCardLegend {
 	public string list { get; set; }
 	public string slimcover { get; set; }
 }
-public class CatalogBeatmapInfoLegend {
+public class CatalogBeatmapInfoLegend
+{
 	public int id { get; set; }
 	public double difficulty_rating { get; set; }
 	public int count_circles { get; set; }
@@ -23,6 +24,8 @@ public class CatalogBeatmapInfoLegend {
 	public int? max_combo { get; set; }
 	public int ranked { get; set; }
 	public int total_length { get; set; }
+	public string version { get; set; }
+	public double bpm { get; set; }
 }
 public class BrowseCatalogLegend {
 	public int id { get; set; }
@@ -39,7 +42,6 @@ public partial class Browse : Control
 {
 	// Called when the node enters the scene tree for the first time.
     public static List<BrowseCatalogLegend> BrowseCatalog = new List<BrowseCatalogLegend>();
-	public static List<CatalogBeatmapInfoLegend> BrowseCatalogInfo = new List<CatalogBeatmapInfoLegend>();
 	public static HttpRequest BrowseApi { get; set; }
 	public int CardSizeX { get; set; }
 	public AnimationPlayer Loadinganimation {get ; set; }
@@ -52,7 +54,6 @@ public partial class Browse : Control
 	public override void _Ready()
 	{
 		BrowseCatalog.Clear();
-		BrowseCatalogInfo.Clear();
 		BrowseApi = new HttpRequest();
 		BrowseApi.Timeout = 60;
 		AddChild(BrowseApi);
@@ -145,6 +146,7 @@ public partial class Browse : Control
 		Blank.Modulate = new Color(0, 0, 0, 0f);
 		Blank.Name = "Blanko-Chan";
 		AddChild(Blank);
+		Blank.Size = new Vector2(Blank.Size.X, Blank.Size.Y - 50);
 		if (BlankAni != null)
 		{
 			BlankAni.Kill();
@@ -202,6 +204,7 @@ public static async Task
 	private void _BrowseAPI_finished(long result, long responseCode, string[] headers, byte[] body){
 		string BrowseEntries = (string)Encoding.UTF8.GetString(body);
 		List<BrowseCatalogLegend> items = JsonSerializer.Deserialize<List<BrowseCatalogLegend>>(BrowseEntries);
+
 		var index = BrowseCatalog.Count;
 		BrowseCatalog.AddRange(items);
 		Loadingicon.Visible = false;
@@ -221,11 +224,19 @@ public static async Task
 		{
 			beatmapsContainer.RemoveChild(child);
 			child.QueueFree();
-		}
+		} // Clears up the browse page.
+		
+
+
 		try
 		{
 			foreach (BrowseCatalogLegend line in items)
 			{
+
+
+				List<CatalogBeatmapInfoLegend> beatmaps = (List<CatalogBeatmapInfoLegend>)line.beatmaps.OrderBy(d => d.count_circles + d.count_sliders).ToList();
+				line.beatmaps = beatmaps;
+
 				var Element = GD.Load<PackedScene>("res://Panels/BrowseElements/Card.tscn").Instantiate().GetNode<Button>(".");
 				CardSizeX = (int)Element.Size.X + 5;
 				Element.GetNode<Label>("Info/SongTitle").Text = line.title;
