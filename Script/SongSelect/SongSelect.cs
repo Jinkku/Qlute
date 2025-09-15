@@ -444,7 +444,18 @@ public partial class SongSelect : Control
 			scrollvelocity = Math.Max(scrollvelocity - 1, -2);
 			scrollmode(-1 + scrollvelocity);
 		}
-		else if (MusicCard.Connection_Button)
+		else if (Input.IsActionJustPressed("ui_accept") && SettingsOperator.Beatmaps.Count > 0)
+		{
+
+			_Start();
+
+		}
+		else if (MusicCard.Connection_Button && scrollBar.Value == (int)SettingsOperator.Sessioncfg["SongID"])
+		{
+			_Start();
+			MusicCard.Connection_Button = false;
+		}
+		else if (MusicCard.Connection_Button && scrollBar.Value != (int)SettingsOperator.Sessioncfg["SongID"])
 		{
 			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
 			MusicCard.Connection_Button = false;
