@@ -43,6 +43,7 @@ public partial class Browse : Control
 	// Called when the node enters the scene tree for the first time.
     public static List<BrowseCatalogLegend> BrowseCatalog = new List<BrowseCatalogLegend>();
 	public static HttpRequest BrowseApi { get; set; }
+	public static int ScrollVertical { get; set; }
 	public int CardSizeX { get; set; }
 	public AnimationPlayer Loadinganimation {get ; set; }
 	private Tween BlankAni { get; set; }
@@ -51,8 +52,17 @@ public partial class Browse : Control
 	// It will be centered on the screen
 	public Sprite2D Loadingicon { get; set; }
 	public ColorRect Blank {get ; set; }
+	private int page { get; set; } = 0;
+	private GridContainer BeatmapGrid { get; set; }
+	private ScrollContainer BeatmapScroll { get; set; }
+	private int BeatmapScrollHalfwayPoint { get; set; }
+	private bool ContinuePage { get; set; }
+	private bool Empty { get; set; }
+	
 	public override void _Ready()
 	{
+		BeatmapScroll = GetNode<ScrollContainer>("BeatmapSec/Scroll");
+		BeatmapGrid = GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps");
 		BrowseCatalog.Clear();
 		BrowseApi = new HttpRequest();
 		BrowseApi.Timeout = 60;
@@ -60,12 +70,13 @@ public partial class Browse : Control
 		BrowseApi.Connect("request_completed", new Callable(this, nameof(_BrowseAPI_finished)));
 		StartBrowse();
 	}
+	
 	private string _searchText { get; set; } = "";
 	private int _ranktype { get; set; }
 	private double timetext { get; set; }
 	private double timetextnow { get; set; }
 	private bool textchanging { get; set; }
-	
+	private bool isLoading { get; set; }
 	private void _textchanged(string searchText)
 	{
 		textchanging = true;
@@ -76,11 +87,17 @@ public partial class Browse : Control
 	{
 		textchanging = false;
 		_searchText = searchText;
+		BrowseCatalog.Clear();
+		page = 0;
+		Empty = false;
 		StartBrowse();
 	}
 	private void _rankchanged(int rank)
 	{
 		_ranktype = rank;
+		BrowseCatalog.Clear();
+		page = 0;
+		Empty = false;
 		StartBrowse();
 	}
 
@@ -112,8 +129,9 @@ public partial class Browse : Control
 				return new Color(0.5f, 0.5f, 0.5f, 1f); // Gray for Unknown
 		}
 	}
-	public void StartBrowse()
+	public void StartBrowse(bool noani = false)
 	{
+		isLoading = true;
 		var ranktype = -3;
 		if (_ranktype == 0)
 		{
@@ -135,39 +153,46 @@ public partial class Browse : Control
 		{
 			GD.Print("Guessing it already been freed: " + e.Message);
 		}
-
-		Blank = new ColorRect();
-		Blank.Color = new Color(0, 0, 0, 0.5f);
-		Blank.AnchorLeft = 0;
-		Blank.AnchorTop = 0;
-		Blank.AnchorRight = 1;
-		Blank.AnchorBottom = 1;
-		Blank.ZIndex = 4; // Ensure it is on top of everything
-		Blank.Modulate = new Color(0, 0, 0, 0f);
-		Blank.Name = "Blanko-Chan";
-		AddChild(Blank);
-		Blank.Size = new Vector2(Blank.Size.X, Blank.Size.Y - 50);
-		if (BlankAni != null)
+		if (!noani)
 		{
-			BlankAni.Kill();
+			Blank = new ColorRect();
+			Blank.Color = new Color(0, 0, 0, 0.5f);
+			Blank.AnchorLeft = 0;
+			Blank.AnchorTop = 0;
+			Blank.AnchorRight = 1;
+			Blank.AnchorBottom = 1;
+			Blank.ZIndex = 4; // Ensure it is on top of everything
+			Blank.Modulate = new Color(0, 0, 0, 0f);
+			Blank.Name = "Blanko-Chan";
+			AddChild(Blank);
+			Blank.Size = new Vector2(Blank.Size.X, Blank.Size.Y - 50);
+			if (BlankAni != null)
+			{
+				BlankAni.Kill();
+			}
+			BlankAni = CreateTween();
+			BlankAni.TweenProperty(Blank, "modulate", new Color(1f, 1f, 1f, 0.5f), 0.5f)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			BlankAni.Play();
+			Loadingicon = GetNode<Sprite2D>("Loadingicon");
+			Loadinganimation = GetNode<AnimationPlayer>("Loadingicon/Loadinganimation");
+			Loadingicon.Position = new Vector2((GetViewportRect().Size.X / 2) - (Loadingicon.Texture.GetSize().X / 2), (GetViewportRect().Size.Y / 2) - (Loadingicon.Texture.GetSize().Y / 2)); // Get size of the Loading Icon and center it
+			Loadingicon.Visible = true;
+			Loadinganimation.Play("loading");
 		}
-		BlankAni = CreateTween();
-		BlankAni.TweenProperty(Blank, "modulate", new Color(1f, 1f, 1f, 0.5f), 0.5f)
-			.SetTrans(Tween.TransitionType.Cubic)
-			.SetEase(Tween.EaseType.Out);
-		BlankAni.Play();
-		Loadingicon = GetNode<Sprite2D>("Loadingicon");
-		Loadinganimation = GetNode<AnimationPlayer>("Loadingicon/Loadinganimation");
-		Loadingicon.Position = new Vector2((GetViewportRect().Size.X / 2) - (Loadingicon.Texture.GetSize().X / 2), (GetViewportRect().Size.Y / 2) - (Loadingicon.Texture.GetSize().Y / 2)); // Get size of the Loading Icon and center it
-		Loadingicon.Visible = true;
-		Loadinganimation.Play("loading");
+		else
+		{
+			Blank = null;
+		}
 		var uritext = "";
 		if (_searchText != "")
 		{
 			uritext = Uri.EscapeDataString(_searchText);
 		}
-		GD.Print("Looking up with: " + ApiOperator.Beatmapapi + "/api/v2/search?query=" + uritext + "&status=" + ranktype + "&mode=3");
-		BrowseApi.Request(ApiOperator.Beatmapapi + "/api/v2/search?query=" + uritext + "&status=" + ranktype + "&mode=3");
+		var uri = $"{ApiOperator.Beatmapapi}/api/v2/search?query={uritext}&status={ranktype}&mode=3&page={page}";
+		GD.Print($"Looking up with: {uri}");
+		BrowseApi.Request(uri);
 	}
 
 public static async Task
@@ -201,31 +226,41 @@ public static async Task
 			GD.PrintErr("Error downloading or processing image: " + e.Message);
 		}
 	}
-	private void _BrowseAPI_finished(long result, long responseCode, string[] headers, byte[] body){
+	private void _BrowseAPI_finished(long result, long responseCode, string[] headers, byte[] body)
+	{
 		string BrowseEntries = (string)Encoding.UTF8.GetString(body);
 		List<BrowseCatalogLegend> items = JsonSerializer.Deserialize<List<BrowseCatalogLegend>>(BrowseEntries);
 
 		var index = BrowseCatalog.Count;
 		BrowseCatalog.AddRange(items);
-		Loadingicon.Visible = false;
-		Loadinganimation.Stop();
-		if (BlankAni != null)
+		if (Blank != null)
 		{
-			BlankAni.Kill();
+			Loadingicon.Visible = false;
+			Loadinganimation.Stop();
+			if (BlankAni != null)
+			{
+				BlankAni.Kill();
+			}
+			BlankAni = CreateTween();
+			BlankAni.TweenProperty(Blank, "modulate", new Color(0f, 0f, 0f, 0f), 0.5f)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			BlankAni.Play();
+			BlankAni.TweenCallback(Callable.From(() => Blank.QueueFree()));
 		}
-		BlankAni = CreateTween();
-		BlankAni.TweenProperty(Blank, "modulate", new Color(0f, 0f, 0f, 0f), 0.5f)
-			.SetTrans(Tween.TransitionType.Cubic)
-			.SetEase(Tween.EaseType.Out);
-		BlankAni.Play();
-		BlankAni.TweenCallback(Callable.From(() => Blank.QueueFree()));
+
 		var beatmapsContainer = GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps");
-		foreach (Node child in beatmapsContainer.GetChildren())
+		if (page < 1)
 		{
-			beatmapsContainer.RemoveChild(child);
-			child.QueueFree();
-		} // Clears up the browse page.
-		
+
+			foreach (Node child in beatmapsContainer.GetChildren())
+			{
+				beatmapsContainer.RemoveChild(child);
+				child.QueueFree();
+			} // Clears up the browse page.
+
+		}
+
 
 
 		try
@@ -261,6 +296,11 @@ public static async Task
 		{
 			GD.Print(e);
 		}
+		if (index < 1)
+		{
+			Empty = true;
+		}
+		isLoading = false;
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	private void _on_back(){
@@ -276,6 +316,14 @@ public static async Task
 		{
 			textchanging = false;
 			_submit(_searchText);
+		}
+		ScrollVertical = BeatmapScroll.ScrollVertical;
+		if (ScrollVertical > BeatmapGrid.Size.Y / 2 && !isLoading && !Empty)
+		{
+
+			page++;
+			StartBrowse(noani: true);
+			
 		}
 		GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps").Columns = waba;
 	}

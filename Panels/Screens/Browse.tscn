@@ -373,4 +373,5 @@ libraries = {
 [connection signal="text_changed" from="Header/VBoxContainer/MarginContainer/SearchBox" to="." method="_textchanged"]
 [connection signal="text_submitted" from="Header/VBoxContainer/MarginContainer/SearchBox" to="." method="_submit"]
 [connection signal="item_selected" from="Header/VBoxContainer/SearchFilters/Tabs/RankButton" to="." method="_rankchanged"]
+[connection signal="scroll_started" from="BeatmapSec/Scroll" to="." method="_scroll"]
 [connection signal="pressed" from="BottomBar/ControlPanel/Box/Button" to="." method="_on_back"]
