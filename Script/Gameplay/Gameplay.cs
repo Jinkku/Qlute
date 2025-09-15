@@ -20,6 +20,7 @@ public partial class Gameplay : Control
 {
 	// Called when the node enters the scene tree for the first time.
 	private SettingsOperator SettingsOperator { get; set; }
+	private int BadCombo { get; set; }
 	public static ApiOperator ApiOperator { get; set; }
 	//public static Label Ttiming { get; set; }
 	//public static Label Hits { get; set; }
@@ -621,16 +622,18 @@ public partial class Gameplay : Control
 		{
 			SettingsOperator.Gameplaycfg.Max++;
 			SettingsOperator.Gameplaycfg.Combo++;
+			BadCombo = 0;
 			Hittext("Perfect", new Color(0f, 0.71f, 1f));
-			HealthBar.Heal(5);
+			HealthBar.Heal((5 * (SettingsOperator.Gameplaycfg.Combo / 100)) + 1);
 			return 0;
 		}
 		else if (timing + nodeSize > HitPoint - (SettingsOperator.GreatJudge / 2) && timing + nodeSize < HitPoint + (SettingsOperator.GreatJudge / 2) && keyvalue && visibility)
 		{
 			SettingsOperator.Gameplaycfg.Great++;
 			SettingsOperator.Gameplaycfg.Combo++;
+			BadCombo = 0;
 			Hittext("Great", new Color(0f, 1f, 0.03f));
-			HealthBar.Heal(3);
+			HealthBar.Heal((3 * (SettingsOperator.Gameplaycfg.Combo / 300)) + 1);
 			return 1;
 		}
 		else if (timing + nodeSize > HitPoint - (SettingsOperator.MehJudge / 2) && timing + nodeSize < HitPoint + (SettingsOperator.MehJudge / 2) && keyvalue && visibility)
@@ -638,7 +641,8 @@ public partial class Gameplay : Control
 			Hittext("Meh", new Color(1f, 0.66f, 0f));
 			SettingsOperator.Gameplaycfg.Meh++;
 			SettingsOperator.Gameplaycfg.Combo++;
-			HealthBar.Heal(1);
+			BadCombo = 0;
+			HealthBar.Heal((1 * (SettingsOperator.Gameplaycfg.Combo / 500)) + 1);
 			return 2;
 		}
 		else if (timing + nodeSize > GetViewportRect().Size.Y + 60 && visibility)
@@ -647,7 +651,8 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg.Bad++;
 			if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
 			SettingsOperator.Gameplaycfg.Combo = 0;
-			HealthBar.Damage(5);
+			BadCombo++;
+			HealthBar.Damage(5 * BadCombo);
 			if (HurtAnimation != null && HurtAnimation.IsRunning())
 			{
 				HurtAnimation.Stop();
