@@ -188,7 +188,7 @@ public partial class ApiOperator : Node
 		RankApi?.CancelRequest();
 		if ((int)SettingsOperator.Sessioncfg["SongID"] != -1)
 		{
-			RankApi.Request($"https://catboy.best/api/s/{SettingsOperator.Sessioncfg["osubeatidset"]}");
+			RankApi.Request($"{Beatmapapi}/api/s/{SettingsOperator.Sessioncfg["osubeatidset"]}");
 		}
 	}
 	/// <summary>
