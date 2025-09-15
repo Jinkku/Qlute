@@ -30,22 +30,22 @@ public partial class NowPlaying : PanelContainer
 		
 		if ((int)SettingsOperator.Sessioncfg["SongID"] - 1 >= 0 && (int)SettingsOperator.Sessioncfg["SongID"] != -1)
 		{
-			SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"] - 1);
+			SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"] - 1,seek: 0);
 		}
 		else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1)
 		{
-			SettingsOperator.SelectSongID((int)SettingsOperator.Beatmaps.Count - 1);
+			SettingsOperator.SelectSongID((int)SettingsOperator.Beatmaps.Count - 1,seek: 0);
 		}
 	}
 	private void Next()
 	{
 		if ((int)SettingsOperator.Sessioncfg["SongID"] + 1 < (int)SettingsOperator.Beatmaps.Count && (int)SettingsOperator.Sessioncfg["SongID"] != -1)
 		{
-			SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"] + 1);
+			SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"] + 1,seek: 0);
 		}
 		else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1)
 		{
-			SettingsOperator.SelectSongID(0);
+			SettingsOperator.SelectSongID(0,seek: 0);
 		}
 	}
 

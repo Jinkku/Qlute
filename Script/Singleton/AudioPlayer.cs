@@ -8,6 +8,7 @@ public partial class AudioPlayer : AudioStreamPlayer
     public static AudioStreamPlayer BrowsePreview;
     private bool _isPlaying = false;
     public static bool _isogg = false;
+    public static string checksum { get; set; }
     private float _seekPosition = 0.0f;
     public static int PreviewID { get; set; } = 0;
 

@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text;
 using System.Collections.Generic;
+using System.IO;
 
 public class LeaderboardEntry
 {
@@ -274,7 +275,6 @@ public partial class ApiOperator : Node
 		}
 		return builder.ToString();
 	}
-
 	public static string Login(string username, string password)
 	{
 		SettingsOperator.Sessioncfg["loggingin"] = true;

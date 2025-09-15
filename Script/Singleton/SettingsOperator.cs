@@ -138,7 +138,7 @@ public partial class SettingsOperator : Node
     public static int PerfectJudge { get; set; } = 500; // Judge Perfect
     public static int GreatJudge { get; set; } = -1; // Judge Great
     public static int MehJudge { get; set; } = -1; // Judge Meh
-    public void SelectSongID(int id)
+    public void SelectSongID(int id, float seek = -1)
     {
         if (Beatmaps.ElementAt(id) != null)
         {
@@ -160,10 +160,16 @@ public partial class SettingsOperator : Node
             Sessioncfg["osubeatid"] = (int)beatmap.Osubeatid;
             Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
             Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
+            if (seek == -1)
+            {
+                seek = beatmap.PreviewTime;
+            }
             Gameplaycfg.maxpp = beatmap.pp;
             ApiOperator.CheckBeatmapRankStatus();
 
+
             string audioPath = beatmap.Path + "" + beatmap.Audio;
+            string chk = ChecksumUtil.GetSha256(audioPath);
             if (System.IO.File.Exists(audioPath))
             {
                 AudioStream filestream = null;
@@ -179,8 +185,12 @@ public partial class SettingsOperator : Node
                 {
                     filestream = AudioPlayer.LoadOGG(audioPath);
                 }
-                AudioPlayer.Instance.Stream = filestream;
-                AudioPlayer.Instance.Play();
+                if (AudioPlayer.checksum != chk)
+                {
+                    AudioPlayer.checksum = chk;
+                    AudioPlayer.Instance.Stream = filestream;
+                    AudioPlayer.Instance.Play(seek);
+                }
             }
             else
             {
@@ -214,6 +224,7 @@ public partial class SettingsOperator : Node
         int osubeatidset = 0;
         int qlbeatid = 0;
         int qlbeatidset = 0;
+        float previewtime = 0;
         double ppvalue = 0;
         string mapper = "";
         float levelrating = 0;
@@ -281,6 +292,10 @@ public partial class SettingsOperator : Node
                     background = parts[1].Trim();
                 }
             }
+            if (line.StartsWith("PreviewTime:"))
+            {
+                previewtime = (float.TryParse(line.Split(":")[1].Trim(), out float previewtimev) ? (float)previewtimev : 0) * 0.001f;
+            }
             if (line.StartsWith("[TimingPoints]"))
             {
                 var timingPointLines = lines.SkipWhile(l => !l.StartsWith("[TimingPoints]")).Skip(1);
@@ -344,6 +359,7 @@ public partial class SettingsOperator : Node
                 Bpm = bpm,
                 Dance = dance,
                 Timetotal = timetotal,
+                PreviewTime = previewtime,
                 Levelrating = levelrating,
                 Accuracy = accuracy,
                 Background = background,
