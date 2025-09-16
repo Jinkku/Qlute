@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://6jynhanbmv0b" path="res://Script/Effects/testbox.gd" id="1_mgy5b"]
 
-[node name="TestBox" type="ColorRect"]
+[node name="TestBox" type="ColorRect" groups=["Gameplay"]]
 custom_minimum_size = Vector2(100, 100)
 offset_right = 40.0
 offset_bottom = 40.0

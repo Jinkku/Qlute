@@ -19,7 +19,7 @@ expand_margin_left = 45.0
 expand_margin_right = 25.0
 expand_margin_bottom = 5.0
 
-[node name="FullScoreOverlay" type="Control"]
+[node name="FullScoreOverlay" type="Control" groups=["Gameplay"]]
 process_mode = 3
 process_priority = 1
 custom_minimum_size = Vector2(420, 100)

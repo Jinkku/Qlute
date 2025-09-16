@@ -3,7 +3,7 @@
 [ext_resource type="FontFile" uid="uid://26bmgi83sgtv" path="res://Fonts/score.ttf" id="1_k55c1"]
 [ext_resource type="Script" uid="uid://cud76jctgrcxo" path="res://Script/Gameplay/Comboa.cs" id="2_jxbfk"]
 
-[node name="Combo" type="Label"]
+[node name="Combo" type="Label" groups=["Gameplay"]]
 z_index = 1000
 offset_right = 84.0
 offset_bottom = 62.0

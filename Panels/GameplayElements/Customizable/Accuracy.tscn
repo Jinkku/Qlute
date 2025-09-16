@@ -5,7 +5,7 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_0ag8s"]
 
-[node name="Accuracy" type="Label"]
+[node name="Accuracy" type="Label" groups=["Gameplay"]]
 custom_minimum_size = Vector2(100, 0)
 theme_override_fonts/font = ExtResource("1_2wegb")
 text = "100.00%"

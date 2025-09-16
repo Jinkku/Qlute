@@ -1,12 +1,12 @@
 [gd_scene load_steps=4 format=3 uid="uid://bj38y6tgytge3"]
 
 [ext_resource type="Script" uid="uid://b6fptxqus0hc6" path="res://Script/Gameplay/LeaderboardPanel.cs" id="1_t8lab"]
-[ext_resource type="Texture2D" uid="uid://ey0q5n5ojnr" path="res://SelectableSkins/Slia/Game/Leaderboard/LeaderboardMask.png" id="1_ty6eh"]
+[ext_resource type="Texture2D" uid="uid://ey0q5n5ojnr" path="res://Resources/Game/Leaderboard/LeaderboardMask.png" id="1_ty6eh"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fdekv"]
 texture = ExtResource("1_ty6eh")
 
-[node name="Leaderboard" type="PanelContainer"]
+[node name="Leaderboard" type="PanelContainer" groups=["Gameplay"]]
 process_priority = 1
 clip_children = 1
 clip_contents = true

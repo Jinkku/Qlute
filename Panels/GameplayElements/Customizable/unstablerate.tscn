@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d3y0ptqpoy34h" path="res://Script/Gameplay/UnstableRate.cs" id="1_w667o"]
 
-[node name="UR" type="ColorRect"]
+[node name="UR" type="ColorRect" groups=["Gameplay"]]
 custom_minimum_size = Vector2(5, 0)
 offset_right = 5.0
 offset_bottom = 200.0

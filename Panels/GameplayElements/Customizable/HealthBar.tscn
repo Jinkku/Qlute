@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ciyf4fe8ewa6e" path="res://Script/Gameplay/HealthBar.cs" id="1_qwfoy"]
 
-[node name="HealthBar" type="ProgressBar"]
+[node name="HealthBar" type="ProgressBar" groups=["Gameplay"]]
 custom_minimum_size = Vector2(100, 20)
 show_percentage = false
 script = ExtResource("1_qwfoy")

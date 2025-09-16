@@ -5,7 +5,7 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_0ag8s"]
 
-[node name="pp" type="Label"]
+[node name="pp" type="Label" groups=["Gameplay"]]
 custom_minimum_size = Vector2(100, 0)
 size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("1_3hcnu")

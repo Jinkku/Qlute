@@ -64,6 +64,10 @@ mouse_cursor/tooltip_position_offset=Vector2(30, 30)
 
 project/assembly_name="Qlute"
 
+[global_group]
+
+Gameplay=""
+
 [gui]
 
 theme/custom="uid://cu8ap5uak1q6c"

@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://lrt0fe12jham" path="res://Script/Gameplay/CurrentTime.cs" id="2_s7jbt"]
 [ext_resource type="Script" uid="uid://b5cki5a0hjvn6" path="res://Script/Gameplay/TimeLeft.cs" id="3_annr6"]
 
-[node name="SongProgress" type="ProgressBar"]
+[node name="SongProgress" type="ProgressBar" groups=["Gameplay"]]
 custom_minimum_size = Vector2(0, 19)
 anchors_preset = 10
 anchor_right = 1.0
