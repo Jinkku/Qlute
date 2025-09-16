@@ -14,7 +14,7 @@ func _process(delta: float) -> void:
 				var node = load("res://Panels/SkinEditorElements/SkinElementDemo.tscn").instantiate().get_node(".")
 				node.set_meta("ScenePath", path + file)
 				add_child(node)
-	elif scenename != get_tree().current_scene.name:
+	elif get_tree().current_scene != null and scenename != get_tree().current_scene.name:
 		for scene in get_children():
 			scene.queue_free()
 	
