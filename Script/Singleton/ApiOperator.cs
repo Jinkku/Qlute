@@ -35,7 +35,7 @@ public partial class ApiOperator : Node
 	public static string PasswordHash = null;
 	private SettingsOperator SettingsOperator { get; set; }
 	public static ApiOperator Instance { get; set; }
-	public static string Beatmapapi = "https://catboy.best";
+	public static string Beatmapapi = "https://us.catboy.best";
 	/// <summary>
 	/// Submits a score to the dedicated server.
 	/// </summary>
