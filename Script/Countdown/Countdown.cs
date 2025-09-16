@@ -29,10 +29,11 @@ public partial class Countdown : TextureProgressBar
 			GetTree().Paused = false;
 		}
 		TickValue= newval;
+		var vaka = ((float)TickValue / (float)MaxTick) * 1f;
 		Tween?.Kill();
 		Tween = CreateTween();
 		Tween.SetParallel(true);
-		Tween.TweenProperty(CountdownProgress, "modulate:a", ((float)TickValue / (float)MaxTick) * 1f, Wait.WaitTime).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		Tween.TweenProperty(CountdownProgress, "modulate", new Color(vaka,vaka,vaka,vaka), Wait.WaitTime).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		Tween.TweenProperty(CountdownProgress, "value", TickValue, Wait.WaitTime).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		Tween.Play();
 	}
