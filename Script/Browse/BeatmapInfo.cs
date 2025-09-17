@@ -54,7 +54,6 @@ public partial class BeatmapInfo : Control
 		foreach (var beat in BeatmapList)
 		{
 			var icon = GD.Load<PackedScene>("res://Panels/BrowseElements/GameModeDifficulty.tscn").Instantiate().GetNode<TextureButton>(".");
-			icon.TooltipText = $"Lv. {(beat.count_circles + beat.count_sliders) * SettingsOperator.levelweight}";
 			icon.SetMeta("index", ind);
 			icon.SetMeta("rootindex", index);
 			Beatmaps.AddChild(icon);
@@ -84,9 +83,9 @@ public partial class BeatmapInfo : Control
 			string formatted = $"{Extras.GetDayWithSuffix(date.Day)} {date:MMM yyyy}";
 			Length.Text = $"{TimeSpan.FromSeconds(BeatmapList[BeatmapIndex].total_length):mm\\:ss}";
 			BPM.Text = BeatmapList[BeatmapIndex].bpm.ToString("N0");
-			MaxPP.Text = $"{SettingsOperator.Get_ppvalue(NoteCountTotal,0,0,0,1,NoteCountTotal).ToString("N0")}pp";
+			MaxPP.Text = $"{SettingsOperator.Get_ppvalue(NoteCountTotal,0,0,0,1,NoteCountTotal, BeatmapList[BeatmapIndex].total_length).ToString("N0")}pp";
 			NoteCount.Text = NoteCountTotal.ToString("N0");
-			LevelRating.Text = (NoteCountTotal * SettingsOperator.levelweight).ToString("N0");
+			LevelRating.Text = (SettingsOperator.GetLevelRating(NoteCountTotal, BeatmapList[BeatmapIndex].total_length)).ToString("N0");
 			Title.Text = cache.title;
 			Artist.Text = cache.artist;
 			Mapper.Text = $"mapped by {cache.creator}";

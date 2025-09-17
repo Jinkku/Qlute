@@ -115,7 +115,7 @@ public partial class Gameplay : Control
 				entry.combo = Math.Max(entry.rcombo, entry.combo);
 				entry.Accuracy = ReloadAccuracy(entry.MAX, entry.GOOD, entry.MEH, entry.BAD);
 
-				entry.score = Get_Score(SettingsOperator.Get_ppvalue(entry.MAX, entry.GOOD, entry.MEH, entry.BAD, ModsMulti.multiplier, entry.combo), SettingsOperator.Gameplaycfg.maxpp, ModsMulti.multiplier) / (1 + i);
+				entry.score = Get_Score(SettingsOperator.Get_ppvalue(entry.MAX, entry.GOOD, entry.MEH, entry.BAD, ModsMulti.multiplier, entry.combo, SettingsOperator.Gameplaycfg.TimeTotalGame), SettingsOperator.Gameplaycfg.maxpp, ModsMulti.multiplier) / (1 + i);
 			}
 		}
 	}
@@ -308,7 +308,7 @@ public partial class Gameplay : Control
 
 	public static void ReloadppCounter()
 	{
-		SettingsOperator.Gameplaycfg.pp = SettingsOperator.Get_ppvalue(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, ModsMulti.multiplier, SettingsOperator.Gameplaycfg.MaxCombo);
+		SettingsOperator.Gameplaycfg.pp = SettingsOperator.Get_ppvalue(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, ModsMulti.multiplier, SettingsOperator.Gameplaycfg.MaxCombo,SettingsOperator.Gameplaycfg.TimeTotalGame);
 	}
 	private float smoothedPlaybackPosition = 0f;
 

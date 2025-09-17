@@ -199,7 +199,13 @@ public partial class SettingsOperator : Node
         }
         else { GD.PrintErr("Can't select a song that don't exist :/"); }
     }
-    public static double Get_ppvalue(int max, int great, int meh, int bad, float multiplier = 1, int combo = 0) {
+
+    public static float TimeCap = 120;
+
+
+    public static float GetLevelRating(int Objects, float TimeTotal) => (Objects * levelweight) / (TimeTotal / TimeCap);
+    public static double Get_ppvalue(int max, int great, int meh, int bad, float multiplier = 1, int combo = 0, float TimeTotal = 0)
+    {
         //bad = Math.Max(1,bad);
         var ppvalue = 0.0;
         ppvalue = max * ppbase;
@@ -208,6 +214,7 @@ public partial class SettingsOperator : Node
         ppvalue -= ppbase * bad;
         ppvalue += combo * ppbase;
         ppvalue *= multiplier;
+        //ppvalue /= 1 + (int)(TimeTotal / TimeCap); FutureRelease
         return Math.Max(0, ppvalue);
     }
     public static void Parse_Beatmapfile(string filename, int SetID = 0) {
@@ -328,10 +335,10 @@ public partial class SettingsOperator : Node
                 // Break if we reach an empty line or another section
                 if (string.IsNullOrWhiteSpace(line) || line.StartsWith('['))
                 {
-                    ppvalue = Get_ppvalue(hitob, 0, 0, 0, combo: hitob);
                     isHitObjectSection = !isHitObjectSection;
-                    levelrating = hitob * levelweight;
                     timetotal = notetime;
+                    levelrating = GetLevelRating(hitob, timetotal * 0.001f);
+                    ppvalue = Get_ppvalue(hitob, 0, 0, 0, combo: hitob, TimeTotal: timetotal * 0.001f);
                     break;
                 }
                 var notecfg = line.Split(new[] { ',', ':' });

@@ -15,7 +15,7 @@ public partial class GameModeDifficulty : TextureButton
 			rootindex = (int)GetMeta("rootindex");
 			Num = GetNode<Label>("Num");
 			var cache = Browse.BrowseCatalog[rootindex].beatmaps;
-			var level = (cache[index].count_circles + cache[index].count_sliders) * SettingsOperator.levelweight;
+			var level = SettingsOperator.GetLevelRating(cache[index].count_circles + cache[index].count_sliders, cache[index].total_length);
 			Num.Text = $"{(level).ToString("N0")}";
 			SelfModulate = SettingsOperator.ReturnLevelColour((int)level);
 			Idlecolour = SelfModulate;
