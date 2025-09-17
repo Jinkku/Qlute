@@ -20,7 +20,7 @@ Embrace your Imagination
 
 ## Compiling the game
 Requirements:
-- Have Godot 4.4+ Installed
+- Have Godot 4.5+ Installed
 - Dotnet 8.0 is recommended
 - git binary for cloning and syncing the repository
 
@@ -28,7 +28,7 @@ Preparation:
 
 Paste this command  ```git clone https://github.com/Jinkkuu/Qlute``` then it should sync with this repo.
 
-Then open up Godot 4.4 and import it to the game engine.
+Then open up Godot 4.5 and import it to the game engine.
 
 In the Editor go to Project > Export > Any platform you want then export.
 

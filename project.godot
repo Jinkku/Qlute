@@ -22,7 +22,7 @@ run/main_scene="res://Panels/Screens/bootstrap.tscn"
 run/print_header=false
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Qlute"
-config/features=PackedStringArray("4.4", "C#", "Mobile")
+config/features=PackedStringArray("4.5", "C#", "Mobile")
 run/flush_stdout_on_print=true
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
@@ -70,11 +70,11 @@ Gameplay=""
 
 [gui]
 
-theme/custom="uid://cu8ap5uak1q6c"
-theme/custom_font="res://Fonts/font.ttf"
 theme/default_font_hinting=2
 theme/default_font_multichannel_signed_distance_field=true
 theme/lcd_subpixel_layout=0
+theme/custom="uid://cu8ap5uak1q6c"
+theme/custom_font="res://Fonts/font.ttf"
 
 [input]
 
