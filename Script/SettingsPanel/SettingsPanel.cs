@@ -28,10 +28,21 @@ public partial class SettingsPanel : Control
 		GetNode<Label>("ColorRect/Panels/Scroll/Sections/GodotEngineVersion").Text = $"Godot Version {Engine.GetVersionInfo()["major"]}.{Engine.GetVersionInfo()["minor"]}";
 		BackgroundDim.Value = SettingsOperator.backgrounddim;
 		OffsetButton.Text = "Set offset by last played song (" + SettingsOperator.Getms().ToString("0.00") + "ms)";
-		var offset = SettingsOperator.GetSetting("audiooffset") != null ? 11485 / float.Parse(SettingsOperator.GetSetting("audiooffset").ToString()) : 0;
 		ScrollSpeedt.Text = $"Scroll Speed ({(11485 / (SettingsOperator.GetSetting("scrollspeed") != null ? int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString()) : 1346)).ToString()})";
 		ScrollSpeed.Value = 11485 / (SettingsOperator.GetSetting("scrollspeed") != null ? int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString()) : 1346);
+
+		var offset = float.Parse(SettingsOperator.GetSetting("audiooffset").ToString());
+		if (offset != 0)
+		{
+			offset = SettingsOperator.GetSetting("audiooffset") != null ? 11485 / float.Parse(SettingsOperator.GetSetting("audiooffset").ToString()) : 0;
+		}
+		else
+		{
+			offset = 0;
+		}
 		OffsetSlider.Value = 200 - offset;
+
+
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	private void _display()
@@ -57,7 +68,7 @@ public partial class SettingsPanel : Control
 	private void _on_audio_offset_value_changed(float value)
 	{
 		SettingsOperator.SetSetting("audiooffset", 200 - value);
-		OffsetTicker.Text = "Audio offset - " + (OffsetSlider.Value - 200).ToString("0") + "ms";
+		OffsetTicker.Text = "Audio offset - " + (value - 200).ToString("0") + "ms";
 	}
 	private void _aow()
 	{
