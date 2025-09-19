@@ -310,27 +310,35 @@ public partial class Gameplay : Control
 	{
 		SettingsOperator.Gameplaycfg.pp = SettingsOperator.Get_ppvalue(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, ModsMulti.multiplier, SettingsOperator.Gameplaycfg.MaxCombo,SettingsOperator.Gameplaycfg.TimeTotalGame);
 	}
-	private float smoothedPlaybackPosition = 0f;
+	
+	private float smoothTime = 0f;
 
     /// <summary>
-    /// Smooths position of the playback
-    /// </summary>
-	private float SmoothPosition(float current, ref float previous, float delta) =>
-		previous = Mathf.Lerp(previous, current, delta * 10f);
+	/// Game Clock
+	/// </summary>
 
-    /// <summary>
-    /// Game Clock
-    /// </summary>
 	public float GetRemainingTime(bool GameMode = false, float delta = 1f)
 	{
-		SettingsOperator.Gameplaycfg.Timeframe = -WaitClock.TimeLeft +
-			SmoothPosition(AudioPlayer.Instance.GetPlaybackPosition(), ref smoothedPlaybackPosition, delta);
+		if (AudioPlayer.Instance.Playing)
+		{
+			// increment smoothly
+			smoothTime += delta * AudioPlayer.Instance.PitchScale;
 
-		var AudioOffset = GameMode ? SettingsOperator.AudioOffset * 0.001f : 0f;
+			// occasional hard resync if drift gets big
+			float truePos = AudioPlayer.Instance.GetPlaybackPosition()
+						+ (float)AudioServer.GetTimeSinceLastMix();
 
-		SettingsOperator.Gameplaycfg.Timeframe = SettingsOperator.Gameplaycfg.Timeframe - startedtime + AudioOffset;
+			if (Mathf.Abs(truePos - smoothTime) > 0.05f) // 50ms tolerance
+				smoothTime = truePos;
+		}
 
-		return (float)(SettingsOperator.Gameplaycfg.Timeframe);
+		var audioOffset = GameMode ? SettingsOperator.AudioOffset * 0.001f : 0f;
+
+		SettingsOperator.Gameplaycfg.Timeframe = -WaitClock.TimeLeft + smoothTime;
+		SettingsOperator.Gameplaycfg.Timeframe -= startedtime;
+		SettingsOperator.Gameplaycfg.Timeframe += audioOffset;
+
+		return (float)SettingsOperator.Gameplaycfg.Timeframe;
 	}
     /// <summary>
     /// Get's the Score calculated
@@ -340,9 +348,11 @@ public partial class Gameplay : Control
 		double finalScore = baseScore * multiplier;
 		return (int)finalScore;
 	}
-    /// <summary>
-    /// Starts Playback
-    /// </summary>
+	
+
+	/// <summary>
+	/// Starts Playback
+	/// </summary>
 
 	private void StartPlay()
 	{
@@ -396,6 +406,7 @@ public partial class Gameplay : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+
 		SettingsOperator.Gameplaycfg.Score = scoreint; // Set the score of the player
 		HitPoint = (int)Chart.Size.Y - 150;
 		try

@@ -18,7 +18,10 @@ public partial class SpeedPanel : PanelContainer
 	}
 	private void _speed_change(float value)
 	{
-		AudioPlayer.Instance.PitchScale = value;
+		if (AudioPlayer.Instance.Playing)
+		{
+			AudioPlayer.Instance.PitchScale = value;
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
