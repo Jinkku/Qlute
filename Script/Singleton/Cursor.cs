@@ -14,8 +14,9 @@ public partial class Cursor : Sprite2D
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	private Vector2 oldpos { get; set; }
-	public override void _Process(double delta)
-	{
+
+    public override void _PhysicsProcess(double delta)
+    {
 		var pos = GetTree().Root.GetViewport().GetMousePosition();
 		if (oldpos != pos)
 		{
@@ -23,8 +24,7 @@ public partial class Cursor : Sprite2D
 		}
 		Visible = CursorVisible;
 		Popup.Visible = CursorVisible;
-
-	}
+    }
 
     public override void _ExitTree()
     {

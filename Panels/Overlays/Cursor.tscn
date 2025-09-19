@@ -4,11 +4,11 @@
 [ext_resource type="Script" uid="uid://c1364cqyxj4pt" path="res://Script/Singleton/Cursor.cs" id="2_7nv5n"]
 
 [node name="Popup" type="Window"]
-process_mode = 3
-physics_interpolation_mode = 2
+process_mode = 4
 transparent_bg = true
 handle_input_locally = false
 gui_disable_input = true
+oversampling_override = 1.0
 mode = 4
 borderless = true
 always_on_top = true
@@ -17,6 +17,7 @@ unfocusable = true
 popup_window = true
 
 [node name="Cursor" type="Sprite2D" parent="."]
+physics_interpolation_mode = 1
 self_modulate = Color(1, 1, 1, 0.8)
 top_level = true
 z_index = 4096

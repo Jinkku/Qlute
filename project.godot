@@ -28,7 +28,6 @@ boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
 boot_splash/fullsize=false
 boot_splash/use_filter=false
-boot_splash/image="/home/evelyn/Downloads/Qlute Full Logo v3.png"
 config/icon="res://Icons/logo.png"
 config/branch="beta"
 
@@ -58,6 +57,7 @@ window/size/mode=4
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/vsync/vsync_mode=0
+mouse_cursor/custom_image="uid://b4xgcysrsgvmn"
 mouse_cursor/tooltip_position_offset=Vector2(30, 30)
 
 [dotnet]
