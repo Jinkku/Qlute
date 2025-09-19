@@ -1,31 +1,63 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
 public partial class Skinning : Node
 {
+    public List<string> GetDirectoriesInPath(string path)
+    {
+        List<string> directories = new List<string>();
+        DirAccess dirAccess = DirAccess.Open(path);
 
+        if (dirAccess != null)
+        {
+            dirAccess.ListDirBegin();
+            string fileName = dirAccess.GetNext();
+
+            while (fileName != "")
+            {
+                if (dirAccess.CurrentIsDir())
+                {
+                    // Exclude "." and ".." which represent current and parent directories
+                    if (fileName != "." && fileName != "..")
+                    {
+                        directories.Add(fileName);
+                    }
+                }
+                fileName = dirAccess.GetNext();
+            }
+            dirAccess.ListDirEnd();
+        }
+        else
+        {
+            GD.PrintErr($"Could not open directory: {path}");
+        }
+
+        return directories;
+    }
     public override void _Ready()
     {
         GetWindow().FilesDropped += ImportSkin;
-        Skin.List.Add(new SkinningLegend
+        
+        foreach (var skin in GetDirectoriesInPath("res://SelectableSkins/"))
         {
-            Name = "Slia (Qlute's Default skin 2025)"
-        });
+            GD.Print($"Found {skin}");
+            Skin.LoadSkin(skin);
+        }
+
 
         if (System.IO.Directory.Exists(SettingsOperator.skinsdir))
         {
             GD.Print("Checking for skins...");
-            var dirs = System.IO.Directory.GetDirectories(SettingsOperator.skinsdir);
-            foreach (var skin in dirs)
+            foreach (var skin in GetDirectoriesInPath(SettingsOperator.skinsdir))
             {
                 GD.Print($"Found {skin}");
                 Skin.LoadSkin(skin);
             }
         }
+
         Skin.SkinIndex = int.TryParse(SettingsOperator.GetSetting("skin")?.ToString(), out int mode) ? mode : 0;
         try
         {
@@ -83,34 +115,33 @@ public class SkinningLegend
     public Texture2D Cursor { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/System/cursor.png");
 }
 public class Skin
-{
-    private static string FindFile(string dir, string target)
+{    public static string FindFile(string dir, string target)
     {
-        try
+        DirAccess d = DirAccess.Open(dir);
+        if (d == null)
+            return null;
+
+        d.ListDirBegin();
+        string fileName = d.GetNext();
+        while (fileName != "")
         {
-            foreach (string file in Directory.GetFiles(dir))
+            if (!d.CurrentIsDir())
             {
-                if (Path.GetFileName(file).Equals(target, StringComparison.OrdinalIgnoreCase))
+                if (fileName.Equals(target, StringComparison.OrdinalIgnoreCase))
                 {
-                    return file;
+                    return dir + "/" + fileName;
                 }
             }
-
-            foreach (string subDir in Directory.GetDirectories(dir))
+            else if (fileName != "." && fileName != "..")
             {
-                string result = FindFile(subDir, target);
+                string result = FindFile(dir + "/" + fileName, target);
                 if (result != null)
                     return result;
             }
+
+            fileName = d.GetNext();
         }
-        catch (UnauthorizedAccessException)
-        {
-            // skip folders without perms
-        }
-        catch (PathTooLongException)
-        {
-            // skip cursed long paths
-        }
+        d.ListDirEnd();
 
         return null;
     }
@@ -121,7 +152,7 @@ public class Skin
     public static SkinningLegend ReloadSkin(string path)
     {
         SkinningLegend PreElement = new SkinningLegend();
-        using var saveFile = Godot.FileAccess.Open(path.PathJoin("settings.json"), Godot.FileAccess.ModeFlags.Read) ?? null;
+        using var saveFile = FileAccess.Open(path.PathJoin("settings.json"), FileAccess.ModeFlags.Read) ?? null;
         if (saveFile != null)
         {
             var prejson = saveFile.GetAsText();
@@ -147,6 +178,7 @@ public class Skin
             }
         }
         PreElement.SkinPath = path;
+        GD.Print(FindFile(path, "Backgroundnote.png"));
         PreElement.NoteBack = SettingsOperator.LoadImage(FindFile(path, "Backgroundnote.png")) ?? new SkinningLegend().NoteBack;
         PreElement.NoteFore = SettingsOperator.LoadImage(FindFile(path, "Foregroundnote.png")) ?? new SkinningLegend().NoteFore;
         return PreElement;
