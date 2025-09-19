@@ -99,22 +99,12 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ndor5"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aosrv"]
-bg_color = Color(0.2, 0.2, 0.2, 0.3)
-skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fb0k2"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ihwey"]
 content_margin_left = 10.0
 content_margin_top = 5.0
 content_margin_right = 10.0
 content_margin_bottom = 5.0
-bg_color = Color(0.4, 0.4, 0.4, 0.8)
+bg_color = Color(0.2, 0.2, 0.2, 0.5)
 skew = Vector2(0.5, 0)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
@@ -133,21 +123,29 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ihwey"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fb0k2"]
 content_margin_left = 10.0
 content_margin_top = 5.0
 content_margin_right = 10.0
 content_margin_bottom = 5.0
-bg_color = Color(0.2, 0.2, 0.2, 0.5)
+bg_color = Color(0.4, 0.4, 0.4, 0.8)
 skew = Vector2(0.5, 0)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p2axe"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aosrv"]
+bg_color = Color(0.2, 0.2, 0.2, 0.3)
+skew = Vector2(0.5, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5rktx"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ndor5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2gjtq"]
 content_margin_left = 5.0
 content_margin_top = 5.0
 content_margin_right = 5.0
@@ -159,13 +157,13 @@ content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2gjtq"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5rktx"]
 content_margin_left = 5.0
 content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llhhs"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p2axe"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cv1hb"]
 bg_color = Color(1, 1, 1, 1)
@@ -175,6 +173,8 @@ corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llhhs"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ixo7g"]
 bg_color = Color(0.078, 0.078, 0.078, 0.8)
@@ -227,7 +227,7 @@ grow_vertical = 2
 [node name="VScrollBar" type="VScrollBar" parent="SongPanel"]
 top_level = true
 z_index = 2
-layout_mode = 2
+layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -367,36 +367,72 @@ custom_minimum_size = Vector2(370, 0)
 layout_mode = 2
 theme_override_constants/separation = 10
 
+[node name="Details" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_ihwey")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_0g2hw")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fb0k2")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_aosrv")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
+toggle_mode = true
+text = "Details"
+
 [node name="Local" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_aosrv")
-theme_override_styles/hover = SubResource("StyleBoxFlat_fb0k2")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_0g2hw")
 theme_override_styles/normal = SubResource("StyleBoxFlat_ihwey")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_0g2hw")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fb0k2")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_aosrv")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
 toggle_mode = true
 text = "Local"
 
 [node name="Global" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_aosrv")
-theme_override_styles/hover = SubResource("StyleBoxFlat_fb0k2")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_0g2hw")
 theme_override_styles/normal = SubResource("StyleBoxFlat_ihwey")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_0g2hw")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fb0k2")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_aosrv")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
 toggle_mode = true
 text = "Global"
+
+[node name="Country" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_ihwey")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_0g2hw")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fb0k2")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_aosrv")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
+toggle_mode = true
+text = "Country"
+
+[node name="Teams" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_ihwey")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_0g2hw")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fb0k2")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_aosrv")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
+toggle_mode = true
+text = "Teams"
 
 [node name="OpenExternal" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4"]
 custom_minimum_size = Vector2(22, 22)
 layout_mode = 2
 tooltip_text = "Open in browser"
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
-theme_override_styles/hover = SubResource("StyleBoxFlat_fb0k2")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_0g2hw")
 theme_override_styles/normal = SubResource("StyleBoxFlat_ihwey")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_0g2hw")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fb0k2")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
 icon = ExtResource("3_javs2")
 
 [node name="LeaderboardInfo" type="ScrollContainer" parent="SongDetails/Leaderboard Panel/Rows"]
@@ -449,10 +485,10 @@ theme_override_constants/separation = 5
 custom_minimum_size = Vector2(108, 50)
 layout_mode = 2
 size_flags_horizontal = 0
-theme_override_styles/focus = SubResource("StyleBoxEmpty_p2axe")
-theme_override_styles/hover = SubResource("StyleBoxFlat_5rktx")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_xmk5a")
 theme_override_styles/normal = SubResource("StyleBoxFlat_2gjtq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_xmk5a")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5rktx")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_p2axe")
 script = ExtResource("8_5rktx")
 metadata/unfocus = Color(0.0784314, 0.0784314, 0.0784314, 1)
 metadata/focus = Color(0.21875, 0.21875, 0.21875, 1)
@@ -473,10 +509,10 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(108, 50)
 layout_mode = 2
 size_flags_horizontal = 0
-theme_override_styles/focus = SubResource("StyleBoxEmpty_p2axe")
-theme_override_styles/hover = SubResource("StyleBoxFlat_5rktx")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_xmk5a")
 theme_override_styles/normal = SubResource("StyleBoxFlat_2gjtq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_xmk5a")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5rktx")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_p2axe")
 script = ExtResource("8_5rktx")
 metadata/unfocus = Color(0.0784314, 0.0784314, 0.0784314, 1)
 metadata/focus = Color(0.21875, 0.21875, 0.21875, 1)
@@ -498,10 +534,10 @@ visible = false
 custom_minimum_size = Vector2(108, 50)
 layout_mode = 2
 size_flags_horizontal = 0
-theme_override_styles/focus = SubResource("StyleBoxEmpty_p2axe")
-theme_override_styles/hover = SubResource("StyleBoxFlat_5rktx")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_xmk5a")
 theme_override_styles/normal = SubResource("StyleBoxFlat_2gjtq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_xmk5a")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5rktx")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_p2axe")
 script = ExtResource("8_5rktx")
 metadata/unfocus = Color(0.0784314, 0.0784314, 0.0784314, 1)
 metadata/focus = Color(0.21875, 0.21875, 0.21875, 1)
@@ -523,10 +559,10 @@ offset_bottom = -20.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 20
-theme_override_styles/focus = SubResource("StyleBoxEmpty_llhhs")
-theme_override_styles/hover = SubResource("StyleBoxFlat_cv1hb")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_cv1hb")
 theme_override_styles/normal = SubResource("StyleBoxFlat_cv1hb")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cv1hb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cv1hb")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_llhhs")
 
 [node name="StartText" type="Label" parent="BottomBar/Start"]
 layout_mode = 1
@@ -615,8 +651,12 @@ offset_bottom = 427.0
 [connection signal="mouse_entered" from="SongPanel" to="." method="_songenter"]
 [connection signal="mouse_exited" from="SongPanel" to="." method="_songexit"]
 [connection signal="value_changed" from="SongPanel/VScrollBar" to="." method="_valuechangedscroll"]
+[connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Details" to="." method="_leaderboardmode" binds= [0]]
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Local" to="." method="_leaderboardmode" binds= [0]]
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Global" to="." method="_leaderboardmode" binds= [1]]
+[connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Country" to="." method="_leaderboardmode" binds= [0]]
+[connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Teams" to="." method="_leaderboardmode" binds= [0]]
+[connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/OpenExternal" to="." method="_openexternal"]
 [connection signal="pressed" from="BottomBar/ControlPanel/Box/BackButton" to="." method="_on_back_pressed"]
 [connection signal="button_down" from="BottomBar/ControlPanel/Box/Mod" to="BottomBar/ControlPanel/Box/Mod" method="_highlight"]
 [connection signal="button_up" from="BottomBar/ControlPanel/Box/Mod" to="BottomBar/ControlPanel/Box/Mod" method="_focus"]
@@ -636,7 +676,7 @@ offset_bottom = 427.0
 [connection signal="button_up" from="BottomBar/Start" to="." method="_start_focus"]
 [connection signal="mouse_entered" from="BottomBar/Start" to="." method="_start_focus"]
 [connection signal="mouse_exited" from="BottomBar/Start" to="." method="_start_unfocus"]
-[connection signal="pressed" from="BottomBar/Start" to="." method="_resetreplay"]
 [connection signal="pressed" from="BottomBar/Start" to="." method="_Start"]
+[connection signal="pressed" from="BottomBar/Start" to="." method="_resetreplay"]
 
 [editable path="BottomBar/ControlPanel"]

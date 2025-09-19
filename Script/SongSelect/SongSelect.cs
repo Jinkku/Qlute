@@ -540,7 +540,10 @@ public partial class SongSelect : Control
 		else GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
 	}
 
-
+	private void _openexternal()
+	{
+		OS.ShellOpen(SettingsOperator.Configuration["api"] + "beatmap/" + SettingsOperator.Sessioncfg["osubeatid"]);
+	}
 	///<summary>
 	/// Check Rank status
 	/// </summary>
