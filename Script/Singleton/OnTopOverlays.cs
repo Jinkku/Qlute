@@ -10,6 +10,7 @@ public partial class OnTopOverlays : CanvasLayer
                 AddChild(TopPanel); // Adds the Top Panel indicator
                 Node FpsIndicator = GD.Load<PackedScene>("res://Panels/Overlays/fps_counter.tscn").Instantiate();
                 AddChild(FpsIndicator); // Adds FPS Counter
+                ProcessMode = ProcessModeEnum.Always;
         }
 
         private int tick { get; set; } = -1;
