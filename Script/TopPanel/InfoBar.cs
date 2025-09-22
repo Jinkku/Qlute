@@ -71,6 +71,9 @@ public partial class InfoBar : ColorRect
 			_tween.TweenProperty(GetTree().CurrentScene, "modulate", new Color(1f, 1f, 1f, 1f), 0.3f)
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
+			_tween.TweenProperty(ChatBox, "modulate", new Color(1f, 1f, 1f, 0f), 0.3f)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
 			_tween.Play();
 		}
 		SettingsOperator.Sessioncfg["chatboxv"] = !(bool)SettingsOperator.Sessioncfg["chatboxv"];
