@@ -135,7 +135,8 @@ public partial class SettingsOperator : Node
     public static List<int> MarathonMapPaths { get; set; } = new List<int>();
     public static bool Marathon { get; set; } = false; // Marathon mode flag
     public static int MarathonID { get; set; } = -1; // ID of the current marathon song
-    public static int PerfectJudge { get; set; } = 500; // Judge Perfect
+    public static int PerfectJudge { get; set; } = 105; // Judge Perfect
+    public static readonly int PerfectJudgeMin = PerfectJudge;
     public static int GreatJudge { get; set; } = -1; // Judge Great
     public static int MehJudge { get; set; } = -1; // Judge Meh
     public void SelectSongID(int id, float seek = -1)
@@ -155,7 +156,7 @@ public partial class SettingsOperator : Node
             Sessioncfg["beatmapbpm"] = (int)beatmap.Bpm;
             Gameplaycfg.TimeTotalGame = beatmap.Timetotal * 0.001f;
             Sessioncfg["beatmapmapper"] = beatmap.Mapper;
-            Sessioncfg["beatmapaccuracy"] = (int)beatmap.Accuracy;
+            Gameplaycfg.Accuracy = (int)beatmap.Accuracy;
             LevelRating = beatmap.Levelrating;
             Sessioncfg["osubeatid"] = (int)beatmap.Osubeatid;
             Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
@@ -471,6 +472,7 @@ public partial class SettingsOperator : Node
         public static int Bad { get; set; }
         public static float ms { get; set; }
         public static int Avgms { get; set; }
+        public static float BeatmapAccuracy { get; set; } = 1;
 
 
     }
@@ -637,13 +639,13 @@ public partial class SettingsOperator : Node
         RefreshFPS();
         Replay.Init();
         LeaderboardType = int.TryParse(GetSetting("leaderboardtype").ToString(), out int lbtm) ? (int)lbtm : 1;
-        if (LeaderboardType < 0 && LeaderboardType > 1) LeaderboardType = 1;
+        if (LeaderboardType < 0 && LeaderboardType > 2) LeaderboardType = 1;
         CheckOldSiteUrl();
     }
     public void ResetVol()
     {
-        AudioPlayer.Instance.VolumeDb = (int)(Math.Log10(MasterVol / 100.0) * 20) - 5; // -5 to adjust the volume to a more NOT loud level and cap it
-        Sample.Instance.VolumeDb = (int)(Math.Log10(SampleVol / 100.0) * 20) - 5;
+        if (AudioPlayer.Instance != null) AudioPlayer.Instance.VolumeDb = (int)(Math.Log10(MasterVol / 100.0) * 20) - 5; // -5 to adjust the volume to a more NOT loud level and cap it
+        if (Sample.Instance != null) Sample.Instance.VolumeDb = (int)(Math.Log10(SampleVol / 100.0) * 20) - 5;
     }
     public void changeres(int index)
     {

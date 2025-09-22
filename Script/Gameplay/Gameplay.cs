@@ -209,28 +209,28 @@ public partial class Gameplay : Control
 		hittext.ZIndex = 100;
 		GetNode<Control>("Playfield").AddChild(hittext);
 		hittextoldpos = hittext.Position;
-		SettingsOperator.PerfectJudge = 500 / (int)(SettingsOperator.Sessioncfg["beatmapaccuracy"]);
+		SettingsOperator.PerfectJudge = (int)(SettingsOperator.PerfectJudgeMin -Math.Min( 5 * SettingsOperator.Gameplaycfg.BeatmapAccuracy,50));
 		SettingsOperator.GreatJudge = (int)(SettingsOperator.PerfectJudge * 4);
 		SettingsOperator.MehJudge = (int)(SettingsOperator.PerfectJudge * 6);
 
 		meh = new ColorRect();
-		meh.Size = new Vector2(400, SettingsOperator.MehJudge);
+		meh.Size = new Vector2(450, SettingsOperator.MehJudge);
 		meh.Position = new Vector2(0, -SettingsOperator.MehJudge / 2);
-		meh.Color = new Color(0.5f, 0f, 0f, 0.1f);
+		meh.Color = new Color(0.5f, 0f, 0f, 0.3f);
 		meh.Visible = false;
 		GetNode<ColorRect>("Playfield/Guard").AddChild(meh);
 
 		great = new ColorRect();
-		great.Size = new Vector2(400, SettingsOperator.GreatJudge);
+		great.Size = new Vector2(450, SettingsOperator.GreatJudge);
 		great.Position = new Vector2(0, -SettingsOperator.GreatJudge / 2);
-		great.Color = new Color(0f, 0.5f, 0f, 0.1f);
+		great.Color = new Color(0f, 0.5f, 0f, 0.3f);
 		great.Visible = false;
 		GetNode<ColorRect>("Playfield/Guard").AddChild(great);
 
 		perfect = new ColorRect();
-		perfect.Size = new Vector2(400, SettingsOperator.PerfectJudge * 2);
+		perfect.Size = new Vector2(450, SettingsOperator.PerfectJudge * 2);
 		perfect.Position = new Vector2(0, -SettingsOperator.PerfectJudge);
-		perfect.Color = new Color(0f, 0f, 0.5f, 0.1f);
+		perfect.Color = new Color(0f, 0f, 0.5f, 0.3f);
 		perfect.Visible = false;
 		GetNode<ColorRect>("Playfield/Guard").AddChild(perfect);
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://coyf2teo5g6nm"]
+[gd_scene load_steps=42 format=3 uid="uid://coyf2teo5g6nm"]
 
 [ext_resource type="Script" uid="uid://bqj04u64e106v" path="res://Script/SongSelect/SongSelect.cs" id="1_fin0e"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://c1aa8tscp5u6p" path="res://Panels/Overlays/BeatmapContextMenu.tscn" id="9_1t01f"]
 [ext_resource type="Script" uid="uid://b7udx8fmtfcbg" path="res://Script/SongSelect/SongSelectMode.cs" id="9_p2axe"]
 [ext_resource type="Texture2D" uid="uid://dhtk4mxqohiru" path="res://Resources/System/Heart.svg" id="12_5rktx"]
+[ext_resource type="Script" uid="uid://jiq8w3wo2uhl" path="res://Script/SongSelect/SongDetails/Details.cs" id="12_fb0k2"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5rktx"]
 particle_flag_rotate_y = true
@@ -76,15 +77,7 @@ expand_margin_left = 35.0
 expand_margin_right = 15.0
 expand_margin_bottom = 5.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4dbpu"]
-bg_color = Color(1, 1, 1, 0.2)
-skew = Vector2(0.2, 0)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-expand_margin_left = 38.0
-expand_margin_right = 27.0
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0g2hw"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xmk5a"]
 
@@ -144,6 +137,20 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ndor5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pgcs5"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.078431375, 0.078431375, 0.078431375, 0.8)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_left = 65.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0g2hw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2gjtq"]
 content_margin_left = 5.0
@@ -277,7 +284,7 @@ theme_override_constants/separation = 10
 
 [node name="Column1" type="PanelContainer" parent="SongDetails/SongInfo/Rows"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_4dbpu")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0g2hw")
 
 [node name="Title" type="Label" parent="SongDetails/SongInfo/Rows/Column1"]
 custom_minimum_size = Vector2(360, 40)
@@ -368,7 +375,6 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="Details" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_ihwey")
@@ -436,6 +442,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
 icon = ExtResource("3_javs2")
 
 [node name="LeaderboardInfo" type="ScrollContainer" parent="SongDetails/Leaderboard Panel/Rows"]
+visible = false
 custom_minimum_size = Vector2(370, 320)
 layout_mode = 2
 size_flags_vertical = 3
@@ -456,6 +463,67 @@ size_flags_vertical = 6
 text = "No scores set on this beatmap!"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Details" type="PanelContainer" parent="SongDetails/Leaderboard Panel/Rows"]
+custom_minimum_size = Vector2(0, 350)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pgcs5")
+script = ExtResource("12_fb0k2")
+
+[node name="Info" type="VBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Row1" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details/Info"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.4
+text = "Accuracy"
+
+[node name="ProgressBar" type="ProgressBar" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row1"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 10.0
+value = 1.0
+show_percentage = false
+
+[node name="Row2" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details/Info"]
+material = SubResource("ShaderMaterial_0g2hw")
+layout_mode = 2
+
+[node name="Title" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.4
+text = "Difficulty"
+
+[node name="ProgressBar" type="ProgressBar" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row2"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+show_percentage = false
+
+[node name="Row3" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details/Info"]
+visible = false
+material = SubResource("ShaderMaterial_0g2hw")
+layout_mode = 2
+
+[node name="Title" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.4
+text = "Note Count"
+
+[node name="Value" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row3"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 2
 
 [node name="BottomBar" type="Control" parent="."]
 z_index = 2
@@ -651,7 +719,7 @@ offset_bottom = 427.0
 [connection signal="mouse_entered" from="SongPanel" to="." method="_songenter"]
 [connection signal="mouse_exited" from="SongPanel" to="." method="_songexit"]
 [connection signal="value_changed" from="SongPanel/VScrollBar" to="." method="_valuechangedscroll"]
-[connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Details" to="." method="_leaderboardmode" binds= [0]]
+[connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Details" to="." method="_leaderboardmode" binds= [2]]
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Local" to="." method="_leaderboardmode" binds= [0]]
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Global" to="." method="_leaderboardmode" binds= [1]]
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Country" to="." method="_leaderboardmode" binds= [0]]

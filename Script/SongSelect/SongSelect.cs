@@ -47,6 +47,9 @@ public partial class SongSelect : Control
 	private PanelContainer ContextMenu { get; set; }
 	private Button LeaderboardLocal { get; set; }
 	private Button LeaderboardGlobal { get; set; }
+	private Button LeaderboardDetails { get; set; }
+	private PanelContainer DetailsExtended { get; set; }
+	private ScrollContainer Leaderboardinfo { get; set; }
 	private Vector2 CardSize { get; set; }
 
 
@@ -163,6 +166,9 @@ public partial class SongSelect : Control
 		SongLen = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/Length");
 		LeaderboardGlobal = GetNode<Button>("SongDetails/Leaderboard Panel/Rows/Box4/Global");
 		LeaderboardLocal = GetNode<Button>("SongDetails/Leaderboard Panel/Rows/Box4/Local");
+		LeaderboardDetails = GetNode<Button>("SongDetails/Leaderboard Panel/Rows/Box4/Details");
+		DetailsExtended = GetNode<PanelContainer>("SongDetails/Leaderboard Panel/Rows/Details");
+		Leaderboardinfo = GetNode<ScrollContainer>("SongDetails/Leaderboard Panel/Rows/LeaderboardInfo");
 		StartButton = GetNode<Button>("BottomBar/Start");
 		StartButton.Visible = false; // Start the button off with being hidden.
 		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
@@ -302,9 +308,13 @@ public partial class SongSelect : Control
 
 	private void _leaderboardmode(int index)
 	{
+		GD.Print(index);
 		SettingsOperator.SetSetting("leaderboardtype", index);
 		SettingsOperator.LeaderboardType = index;
-		SettingsOperator.Start_reloadLeaderboard = true;
+		if (index != 2)
+		{
+			SettingsOperator.Start_reloadLeaderboard = true;
+		}
 	}
 
 	private void _reloadLeaderboard()
@@ -325,11 +335,25 @@ public partial class SongSelect : Control
 		{
 			LeaderboardGlobal.ButtonPressed = false;
 			LeaderboardLocal.ButtonPressed = true;
+			LeaderboardDetails.ButtonPressed = false;
+			Leaderboardinfo.Visible = true;
+			DetailsExtended.Visible = false;
 		}
-		else
+		else if (SettingsOperator.LeaderboardType == 1)
 		{
 			LeaderboardGlobal.ButtonPressed = true;
 			LeaderboardLocal.ButtonPressed = false;
+			LeaderboardDetails.ButtonPressed = false;
+			Leaderboardinfo.Visible = true;
+			DetailsExtended.Visible = false;
+		}
+		else
+		{
+			LeaderboardGlobal.ButtonPressed = false;
+			LeaderboardLocal.ButtonPressed = false;
+			LeaderboardDetails.ButtonPressed = true;
+			Leaderboardinfo.Visible = false;
+			DetailsExtended.Visible = true;
 		}
 	}
 
