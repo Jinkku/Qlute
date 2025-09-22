@@ -5,8 +5,32 @@ using System.Collections.Generic;
 public partial class UnstableRate : ColorRect
 {
 	public static List<float> Rate = new List<float>();
+	private float Space { get; set; }
+	private float SMG { get; set; }
+	private ColorRect Perfect { get; set; }
+	private ColorRect Great { get; set; }
 	public override void _Ready()
 	{
+		SMG = (float)SettingsOperator.PerfectJudge / (float)SettingsOperator.PerfectJudgeMin;
+		Space = (float)SMG * Size.Y / 6;
+		Perfect = GetNode<ColorRect>("Perfect");
+		Great = GetNode<ColorRect>("Great");
+		Size = new Vector2(Size.X, Space * 6);
+		Great.Size = new Vector2(Size.X, Space * 4);
+		Perfect.Size = new Vector2(Size.X, Space);
+
+		Great.Position = new Vector2(
+			0,
+			(Size.Y / 2f) - (Great.Size.Y / 2f)
+		);
+
+		Perfect.Position = new Vector2(
+			0,
+			(Size.Y / 2f) - (Perfect.Size.Y / 2f)
+		);
+
+
+
 		Rate.Clear();
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
