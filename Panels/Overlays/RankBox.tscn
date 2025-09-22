@@ -13,10 +13,10 @@ content_margin_right = 5.0
 content_margin_bottom = 5.0
 bg_color = Color(0.5, 0.5, 0.5, 1)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ejjs7"]
 shader = ExtResource("1_riajq")
