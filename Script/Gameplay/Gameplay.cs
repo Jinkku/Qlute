@@ -403,6 +403,91 @@ public partial class Gameplay : Control
     {
 		Cursor.CursorVisible = true;
     }
+
+	private float est { get; set; }
+
+	private void _GameNoteTick(double delta)
+	{
+		est = GetRemainingTime(GameMode: true, delta: (float)delta) / 0.001f;
+
+		var timepart = 0;
+		//var scrollspeed = ComputeScrollTime(int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString())); // Scroll speed for the notes
+		var scrollspeed = 1;
+		int Ttick = 0;
+		// Gamenotes
+
+		var viewportSize = 0f;
+		if (IsInsideTree())
+		{
+			viewportSize = GetViewportRect().Size.Y;
+		}
+
+		for (int i = 0; i < Notes.Count; i++)
+		{
+			var Note = Notes[i];
+			var notex = Note.timing + est + HitPoint;
+			if (timepart != Note.timing)
+			{
+				Noteindex++;
+				timepart = Note.timing;
+			}
+			if (notex > -150 && notex < viewportSize + 150 && !Note.hit)
+			{
+				if (!Note.hit && Note.Node == null)
+				{
+					var playfieldpart = GetNode<Control>($"Playfield/ChartSections/Section{Note.NoteSection + 1}/Control");
+					Note.Node = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Sprite2D>(".");
+					Note.Node.SetMeta("part", Note.NoteSection);
+					Note.Node.SelfModulate = new Color(0.83f, 0f, 1f);
+					playfieldpart.AddChild(Note.Node);
+				}
+				if (ModsOperator.Mods["slice"] && Note.Node != null)
+				{
+					Note.Node.Modulate = new Color(1f, 1f, 1f, Math.Min(HitPoint, Note.Node.Position.Y - 200) / HitPoint);
+				}
+				else if (ModsOperator.Mods["black-out"] && Note.Node != null)
+				{
+					Note.Node.Modulate = new Color(0f, 0f, 0f, 0f);
+				}
+				if (Note.Node != null)
+				{
+					Note.Node.Position = new Vector2(0, (notex * scrollspeed) - (HitPoint * (scrollspeed - 1)));
+					Ttick++;
+					JudgeResult = checkjudge((int)notex, Keys[(int)Note.Node.GetMeta("part")].hit, Note.Node, Note.Node.Visible);
+					if (JudgeResult < 4)
+					{
+						// NPC Part
+						CheckNPCValues();
+
+						mshitold = HitPoint + 5;
+						mshit = notex;
+						SettingsOperator.Addms(mshitold - mshit - 50);
+						SettingsOperator.Gameplaycfg.ms = SettingsOperator.Getms();
+						Keys[(int)Note.Node.GetMeta("part")].hit = false;
+
+						scoretween?.Kill();
+						scoretween = CreateTween();
+						scoretween.TweenProperty(this, "scoreint", Get_Score(SettingsOperator.Gameplaycfg.pp, SettingsOperator.Gameplaycfg.maxpp, ModsMulti.multiplier), 0.3f);
+						scoretween.Play();
+						Note.hit = true;
+						Note.Node.Visible = false;
+						Note.Node.QueueFree();
+						Note.Node = null;
+					}
+					else
+					{
+						Keys[(int)Note.Node.GetMeta("part")].hit = false;
+					}
+				}
+			}
+		}
+	}
+
+    public override void _PhysicsProcess(double delta)
+	{
+		_GameNoteTick(delta);
+	}
+
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
@@ -411,7 +496,6 @@ public partial class Gameplay : Control
 		HitPoint = (int)Chart.Size.Y - 150;
 		try
 		{
-			float est = GetRemainingTime(GameMode: true, delta: (float)delta) / 0.001f;
 
 
 			// DEATH
@@ -438,7 +522,7 @@ public partial class Gameplay : Control
 				{
 					SettingsOperator.MarathonID++;
 					if (SettingsOperator.MarathonID >= SettingsOperator.MarathonMapPaths.Count) GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultsScreen.tscn");
-					SettingsOperator.SelectSongID(SettingsOperator.MarathonMapPaths[SettingsOperator.MarathonID],seek: 0);
+					SettingsOperator.SelectSongID(SettingsOperator.MarathonMapPaths[SettingsOperator.MarathonID], seek: 0);
 					GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/LoadingMarathonScreen.tscn");
 				}
 			}
@@ -452,7 +536,6 @@ public partial class Gameplay : Control
 			Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)));
 			SettingsOperator.Gameplaycfg.Accuracy = ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 			ReloadppCounter();
-			int Ttick = 0;
 			if (Input.IsActionJustPressed("pausemenu") && SettingsOperator.SpectatorMode)
 			{
 				BeatmapBackground.FlashEnable = true;
@@ -495,76 +578,6 @@ public partial class Gameplay : Control
 
 			PlayerKeyCheck((int)est);
 			CheckReplayKey((int)est);
-			// Gamenotes
-
-			var viewportSize = 0f;
-			if (IsInsideTree())
-			{
-				viewportSize = GetViewportRect().Size.Y;
-			}
-			var timepart = 0;
-			//var scrollspeed = ComputeScrollTime(int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString())); // Scroll speed for the notes
-			var scrollspeed = 1;
-
-			for (int i = 0; i < Notes.Count; i++)
-			{
-				var Note = Notes[i];
-				var notex = Note.timing + est + HitPoint;
-				if (timepart != Note.timing)
-				{
-					Noteindex++;
-					timepart = Note.timing;
-				}
-				if (notex > -150 && notex < viewportSize + 150 && !Note.hit)
-				{
-					if (!Note.hit && Note.Node == null)
-					{
-						var playfieldpart = GetNode<Control>($"Playfield/ChartSections/Section{Note.NoteSection + 1}/Control");
-						Note.Node = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Sprite2D>(".");
-						Note.Node.SetMeta("part", Note.NoteSection);
-						Note.Node.SelfModulate = new Color(0.83f, 0f, 1f);
-						playfieldpart.AddChild(Note.Node);
-					}
-					if (ModsOperator.Mods["slice"] && Note.Node != null)
-					{
-						Note.Node.Modulate = new Color(1f, 1f, 1f, Math.Min(HitPoint, Note.Node.Position.Y - 200) / HitPoint);
-					}
-					else if (ModsOperator.Mods["black-out"] && Note.Node != null)
-					{
-						Note.Node.Modulate = new Color(0f, 0f, 0f, 0f);
-					}
-					if (Note.Node != null)
-					{
-						Note.Node.Position = new Vector2(0, (notex * scrollspeed) - (HitPoint * (scrollspeed - 1)));
-						Ttick++;
-						JudgeResult = checkjudge((int)notex, Keys[(int)Note.Node.GetMeta("part")].hit, Note.Node, Note.Node.Visible);
-						if (JudgeResult < 4)
-						{
-							// NPC Part
-							CheckNPCValues();
-
-							mshitold = HitPoint + 5;
-							mshit = notex;
-							SettingsOperator.Addms(mshitold - mshit - 50);
-							SettingsOperator.Gameplaycfg.ms = SettingsOperator.Getms();
-							Keys[(int)Note.Node.GetMeta("part")].hit = false;
-
-							scoretween?.Kill();
-							scoretween = CreateTween();
-							scoretween.TweenProperty(this, "scoreint", Get_Score(SettingsOperator.Gameplaycfg.pp, SettingsOperator.Gameplaycfg.maxpp, ModsMulti.multiplier), 0.3f);
-							scoretween.Play();
-							Note.hit = true;
-							Note.Node.Visible = false;
-							Note.Node.QueueFree();
-							Note.Node = null;
-						}
-						else
-						{
-							Keys[(int)Note.Node.GetMeta("part")].hit = false;
-						}
-					}
-				}
-			}
 
 		}
 		catch (Exception e)
