@@ -46,7 +46,6 @@ public partial class Gameplay : Control
 	public Vector2 hittextoldpos { get; set; }
 	public Timer WaitClock { get; set; }
 	public static List<NotesEn> Notes = new List<NotesEn>();
-	public int Noteindex = 1;
 	public TextureRect Beatmap_Background { get; set; }
 	private Node PauseMenu { get; set; }
 	private bool Finished { get; set; }
@@ -412,7 +411,6 @@ public partial class Gameplay : Control
 	{
 		est = GetRemainingTime(GameMode: true, delta: (float)delta) / 0.001f;
 
-		var timepart = 0;
 		//var scrollspeed = ComputeScrollTime(int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString())); // Scroll speed for the notes
 		var scrollspeed = 1;
 		int Ttick = 0;
@@ -424,15 +422,10 @@ public partial class Gameplay : Control
 			viewportSize = GetViewportRect().Size.Y;
 		}
 
-		for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256) ; i++)
+		for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
 		{
 			var Note = Notes[i];
 			var notex = Note.timing + est + HitPoint;
-			if (timepart != Note.timing)
-			{
-				Noteindex++;
-				timepart = Note.timing;
-			}
 			if (notex > -150 && notex < viewportSize + 150 && !Note.hit)
 			{
 				if (!Note.hit && Note.Node == null)
@@ -473,15 +466,23 @@ public partial class Gameplay : Control
 						scoretween.Play();
 						Note.hit = true;
 						Note.Node.Visible = false;
-						Note.Node.QueueFree();
-						Note.Node = null;
-						NoteTick++;
 					}
 					else
 					{
 						Keys[(int)Note.Node.GetMeta("part")].hit = false;
 					}
 				}
+
+			}
+			else if (notex > viewportSize + 150 && Note.Node != null)
+			{
+				NoteTick++;
+				Note.Node.QueueFree();
+				Note.Node = null;
+			}
+			else if (Note.Node != null && Note.hit)
+			{
+				Note.Node.Position = new Vector2(0, (notex * scrollspeed) - (HitPoint * (scrollspeed - 1)));
 			}
 		}
 	}

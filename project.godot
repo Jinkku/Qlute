@@ -17,7 +17,7 @@ config/name_localized={
 "zh_CN": "丘律特"
 }
 config/description="Your Keys // Your Rhythm"
-config/version="2025.09.12"
+config/version="2025.09.22"
 run/main_scene="res://Panels/Screens/bootstrap.tscn"
 run/print_header=false
 config/use_custom_user_dir=true
@@ -197,6 +197,10 @@ locale/locale_filter_mode=0
 
 3d/rendering_method.mobile="mobile"
 3d/rendering_method="forward_plus"
+
+[physics]
+
+2d/run_on_separate_thread=true
 
 [rendering]
 

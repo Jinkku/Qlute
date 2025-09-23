@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://c16pqa7hfr2s8" path="res://Script/Gameplay/NoteSkinning.cs" id="2_syjvn"]
 
 [node name="NoteBack" type="Sprite2D"]
-process_mode = 4
+process_mode = 3
 texture = ExtResource("1_8hoci")
 centered = false
 script = ExtResource("2_syjvn")
