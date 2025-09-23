@@ -17,7 +17,7 @@ config/name_localized={
 "zh_CN": "丘律特"
 }
 config/description="Your Keys // Your Rhythm"
-config/version="2025.09.22"
+config/version="0.0.0"
 run/main_scene="res://Panels/Screens/bootstrap.tscn"
 run/print_header=false
 config/use_custom_user_dir=true
@@ -29,7 +29,7 @@ boot_splash/show_image=false
 boot_splash/fullsize=false
 boot_splash/use_filter=false
 config/icon="res://Icons/logo.png"
-config/branch="beta"
+config/branch="dev"
 
 [autoload]
 
