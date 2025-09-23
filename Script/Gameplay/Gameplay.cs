@@ -59,6 +59,7 @@ public partial class Gameplay : Control
 	private int scoreint { get; set; }
 	private Control SpectatorPanel { get; set; }
 	private Tween scoretween { get; set; }
+	private int MaxNotes { get; set; }
 	private void ShowPauseMenu()
 	{
 		Cursor.CursorVisible = true;
@@ -143,7 +144,7 @@ public partial class Gameplay : Control
 		}
 	}
 
-	public static void ReloadBeatmap(string filepath)
+	public void ReloadBeatmap(string filepath)
 	{
 		Notes.Clear();
 		using var file = FileAccess.Open(filepath, FileAccess.ModeFlags.Read);
@@ -183,6 +184,7 @@ public partial class Gameplay : Control
 				Notes.Add(new NotesEn { timing = timen, NoteSection = part });
 			}
 		}
+		MaxNotes = Notes.Count;
 	}
 	public override void _Ready()
 	{
@@ -405,7 +407,7 @@ public partial class Gameplay : Control
     }
 
 	private float est { get; set; }
-
+	private int NoteTick { get; set; }
 	private void _GameNoteTick(double delta)
 	{
 		est = GetRemainingTime(GameMode: true, delta: (float)delta) / 0.001f;
@@ -422,7 +424,7 @@ public partial class Gameplay : Control
 			viewportSize = GetViewportRect().Size.Y;
 		}
 
-		for (int i = 0; i < Notes.Count; i++)
+		for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256) ; i++)
 		{
 			var Note = Notes[i];
 			var notex = Note.timing + est + HitPoint;
@@ -473,6 +475,7 @@ public partial class Gameplay : Control
 						Note.Node.Visible = false;
 						Note.Node.QueueFree();
 						Note.Node = null;
+						NoteTick++;
 					}
 					else
 					{
