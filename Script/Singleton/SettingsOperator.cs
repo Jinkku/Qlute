@@ -41,6 +41,7 @@ public partial class SettingsOperator : Node
     public static List<BeatmapLegend> Beatmaps = new List<BeatmapLegend>();
     public static float AudioOffset { get; set; } = 0;
     public static int LeaderboardType = 1;
+    public static bool NoConnectionToGameServer { get; set; }
     public static void ResetRank()
     {
         UpdatedRank = "#0";

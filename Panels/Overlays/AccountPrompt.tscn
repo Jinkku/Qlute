@@ -48,7 +48,6 @@ text = "Username"
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.921875, 1, 0, 1)
-text = "Test"
 horizontal_alignment = 2
 clip_text = true
 text_overrun_behavior = 3
@@ -100,7 +99,25 @@ layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6jcst")
 text = "Log out"
 
+[node name="Retring" type="VBoxContainer" parent="AccPanel"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="AccPanel/Retring"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+text = "Can't connect to game servers
+We will keep retring! :D"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Logout" type="Button" parent="AccPanel/Retring"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6jcst")
+text = "Log out"
+
 [connection signal="draw" from="." to="." method="_on_draw"]
 [connection signal="pressed" from="AccPanel/NotLog/HBoxContainer2/Login" to="." method="_on_login_pressed"]
 [connection signal="pressed" from="AccPanel/NotLog/HBoxContainer2/Create" to="." method="_create"]
 [connection signal="pressed" from="AccPanel/Log/Logout" to="." method="_logout"]
+[connection signal="pressed" from="AccPanel/Retring/Logout" to="." method="_logout"]

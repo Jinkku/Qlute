@@ -25,7 +25,7 @@ public class LeaderboardEntry
 }
 public partial class ApiOperator : Node
 {
-	// Called when the node enters the scene tree for the first time.
+	
 	public static HttpRequest LoginApi { get; set; }
 	public  HttpRequest InfoApi { get; set; }
 	public  HttpRequest SubmitApi { get; set; }
@@ -34,6 +34,7 @@ public partial class ApiOperator : Node
 	public static string Username = "Guest";
 	public static string PasswordHash = null;
 	private SettingsOperator SettingsOperator { get; set; }
+	public static string NoticeText { get; set; }
 	public static ApiOperator Instance { get; set; }
 	public static string Beatmapapi = "https://central.catboy.best";
 	/// <summary>
@@ -109,6 +110,7 @@ public partial class ApiOperator : Node
 		}
 	}
 	public static int LeaderboardStatus = 0; // 0 = Not loaded, 1 = Loading, 2 = Loaded
+	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -130,7 +132,7 @@ public partial class ApiOperator : Node
 		AddChild(LeaderboardAPI);
 		AddChild(StatusChecker);
 		AddChild(RankApi);
-		RankApi.Connect("request_completed",  new Callable(this, nameof(RankOutput)));
+		RankApi.Connect("request_completed", new Callable(this, nameof(RankOutput)));
 		LoginApi.Connect("request_completed", new Callable(this, nameof(_on_login_api_request_completed)));
 		LeaderboardAPI.Connect("request_completed", new Callable(this, nameof(_LeaderboardAPIDone)));
 		InfoApi.Connect("request_completed", new Callable(this, nameof(_on_info_request_completed)));
@@ -139,6 +141,7 @@ public partial class ApiOperator : Node
 		{
 			GD.Print("Attempting to login with username: " + Username);
 			UPlayerName.Instance.Text = Username;
+
 			ApiOperator.Login(Username, PasswordHash);
 		}
 		else
@@ -228,32 +231,42 @@ public partial class ApiOperator : Node
 		InfoApi.Request(SettingsOperator.GetSetting("api") + "apiv2/getstat/full", new string[] { $"USERNAME: {Username}" });
 	}
 
-	private string _on_login_api_request_completed(long result, long responseCode, string[] headers, byte[] body)
+	private void _on_login_api_request_completed(long result, long responseCode, string[] headers, byte[] body)
 	{
-		GD.Print("Login API Response: " + Encoding.UTF8.GetString(body));
 		try
 		{
-			Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
-			if (json["notification"].ToString() != "")
+			Godot.Collections.Dictionary json = new Godot.Collections.Dictionary();
+			json.Add("notification", "");
+			json.Add("success", 0);
+			if (responseCode == 200) json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
+
+			if (responseCode == 200 && json["notification"].ToString() != "")
 			{
 				Notify.Post(json["notification"].ToString());
 			}
 			SettingsOperator.Sessioncfg["loggingin"] = false;
 			if ((bool)json["success"] && responseCode == 200)
 			{
+				SettingsOperator.NoConnectionToGameServer = false;
 				Check_Info(Username);
 				SettingsOperator.SetSetting("username", Username);
 				Username = SettingsOperator.GetSetting("username")?.ToString();
 				UPlayerName.Instance.Text = Username;
 				SettingsOperator.SetSetting("password", PasswordHash);
 				PasswordHash = SettingsOperator.GetSetting("password")?.ToString();
-				//			}
 				SettingsOperator.Sessioncfg["loggedin"] = true;
-				return "Logged in!";
+				NoticeText = "";
+			}
+			else if (Username != "Guest" && PasswordHash != null && responseCode != 200)
+			{
+				NoticeText = "Retring...";
+				SettingsOperator.NoConnectionToGameServer = true;
+				ApiOperator.Login(Username, PasswordHash);
 			}
 			else
 			{
-				return "Incorrect Credentials";
+				SettingsOperator.NoConnectionToGameServer = false;
+				NoticeText = "Incorrect Credentials";
 			}
 		}
 		catch (Exception e)
@@ -262,7 +275,6 @@ public partial class ApiOperator : Node
 			Notify.Post("Error parsing JSON: " + e.Message);
 			SettingsOperator.Sessioncfg["loggingin"] = false;
 			SettingsOperator.Sessioncfg["loggedin"] = false;
-			return "Error parsing JSON";
 		}
 	}
 	public static string ComputeSha256Hash(string rawData)
@@ -275,7 +287,7 @@ public partial class ApiOperator : Node
 		}
 		return builder.ToString();
 	}
-	public static string Login(string username, string password)
+	public static void Login(string username, string password)
 	{
 		SettingsOperator.Sessioncfg["loggingin"] = true;
 		Username = username;
@@ -284,8 +296,8 @@ public partial class ApiOperator : Node
 			$"USERNAME: {username}",
 			$"PASSWORD: {password}"
 		};
+		NoticeText = "Connecting...";
 		var msg = LoginApi.Request(SettingsOperator.GetSetting("api") + "apiv2/chkprofile", Headers);
-		return msg.ToString();
 	}
 	
 	private long Timer { get; set; }
