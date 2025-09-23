@@ -75,10 +75,10 @@ public class SkinningLegend
     public Texture2D NoteFore { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/Foregroundnote.png");
     public List<Color> LaneNotes { get; set; } = new()
     {
-        new Color(0.20f, 0.0f, 0.20f),
-        new Color(0.20f, 0.0f, 0.20f),
-        new Color(0.20f, 0.0f, 0.20f),
-        new Color(0.20f, 0.0f, 0.20f),
+        new Color("8f00ff"),
+        new Color("8f00ff"),
+        new Color("8f00ff"),
+        new Color("8f00ff"),
     };
     public Texture2D Cursor { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/System/cursor.png");
 }
