@@ -6,32 +6,28 @@
 [ext_resource type="Texture2D" uid="uid://ccai8irwy3t26" path="res://Resources/SettingsIcon/debug.png" id="4_b8fcs"]
 [ext_resource type="Script" uid="uid://btixh3f5pu736" path="res://Script/SettingsPanel/FpsModes.cs" id="5_crlok"]
 [ext_resource type="Script" uid="uid://clv5506kqlat3" path="res://Script/SettingsPanel/Resolution.cs" id="5_h76q1"]
+[ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="5_k6nch"]
 [ext_resource type="Script" uid="uid://dp53wl7qkvxyq" path="res://Script/SettingsPanel/FpsShow.cs" id="6_o7dm5"]
 [ext_resource type="Script" uid="uid://csqtqnvdjslaf" path="res://Script/SettingsPanel/SkinMode.cs" id="8_bjgno"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5b8eh"]
 bg_color = Color(0, 0, 0, 0.392157)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n2spt"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_crlok"]
-bg_color = Color(1, 1, 1, 0.156863)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_k6nch"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjgno"]
 bg_color = Color(1, 1, 1, 0.235294)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_k6nch"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_crlok"]
+bg_color = Color(1, 1, 1, 0.156863)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n2spt"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rfoxt"]
 content_margin_left = 10.0
 content_margin_top = 10.0
 content_margin_right = 10.0
 content_margin_bottom = 10.0
-
-[sub_resource type="FontVariation" id="FontVariation_tvan6"]
-variation_opentype = {
-2003265652: 700
-}
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llstv"]
 content_margin_left = 0.0
@@ -55,7 +51,15 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o7dm5"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bjgno"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_crlok"]
+content_margin_left = 5.0
+content_margin_right = 5.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o7dm5"]
 content_margin_left = 5.0
@@ -66,17 +70,7 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_crlok"]
-content_margin_left = 5.0
-content_margin_right = 5.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bjgno"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m56sc"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o7dm5"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3de0r"]
 content_margin_top = 10.0
@@ -87,7 +81,7 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_db3eo"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m56sc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_32tni"]
 content_margin_left = 8.0
@@ -99,6 +93,8 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_db3eo"]
 
 [node name="SettingsPanel" type="Control"]
 z_index = 3
@@ -144,30 +140,30 @@ alignment = 1
 [node name="Display" type="Button" parent="ColorRect/Panels/Catagories/Cata"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
-theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
+theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
 icon = ExtResource("2_r347j")
 icon_alignment = 1
 
 [node name="Audio" type="Button" parent="ColorRect/Panels/Catagories/Cata"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
-theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
+theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
 icon = ExtResource("3_tkltb")
 icon_alignment = 1
 
 [node name="Debug" type="Button" parent="ColorRect/Panels/Catagories/Cata"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
-theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
+theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
 icon = ExtResource("4_b8fcs")
 icon_alignment = 1
 
@@ -176,7 +172,6 @@ clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rfoxt")
-scroll_vertical = 100
 
 [node name="Sections" type="VBoxContainer" parent="ColorRect/Panels/Scroll"]
 layout_mode = 2
@@ -187,8 +182,9 @@ theme_override_constants/separation = 15
 [node name="Name" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
 mouse_filter = 0
-theme_override_fonts/font = SubResource("FontVariation_tvan6")
-theme_override_font_sizes/font_size = 48
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_k6nch")
+theme_override_font_sizes/font_size = 36
 theme_override_styles/normal = SubResource("StyleBoxEmpty_llstv")
 text = "Settings"
 
@@ -254,8 +250,8 @@ text = "Limit FPS"
 
 [node name="FPSModes" type="OptionButton" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_v1adg")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_svam5")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_v1adg")
 theme_override_constants/arrow_margin = 10
 selected = 1
 item_count = 5
@@ -289,11 +285,11 @@ script = ExtResource("5_h76q1")
 
 [node name="FPSShow" type="CheckButton" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_o7dm5")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_o7dm5")
-theme_override_styles/hover = SubResource("StyleBoxFlat_o7dm5")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_crlok")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_bjgno")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_crlok")
+theme_override_styles/hover = SubResource("StyleBoxFlat_o7dm5")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_o7dm5")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_o7dm5")
 text = "Show FPS"
 script = ExtResource("6_o7dm5")
 
@@ -335,8 +331,8 @@ text = "Skinning"
 
 [node name="SkinMode" type="OptionButton" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_v1adg")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_svam5")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_v1adg")
 theme_override_constants/arrow_margin = 10
 clip_text = true
 script = ExtResource("8_bjgno")
@@ -345,8 +341,8 @@ script = ExtResource("8_bjgno")
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
 theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
 text = "Open Skin Editor"
 
 [node name="SkinBox" type="HBoxContainer" parent="ColorRect/Panels/Scroll/Sections"]
@@ -356,22 +352,22 @@ layout_mode = 2
 [node name="Create" type="Button" parent="ColorRect/Panels/Scroll/Sections/SkinBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
 theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
 text = "Create Skin"
 
 [node name="Edit" type="Button" parent="ColorRect/Panels/Scroll/Sections/SkinBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
 theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
 text = "Edit Skin"
 
 [node name="Delete" type="Button" parent="ColorRect/Panels/Scroll/Sections/SkinBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
 theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
 text = "Delete Skin"
 
 [node name="Audio" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
@@ -390,8 +386,8 @@ text = "Audio device"
 [node name="AudioSelector" type="OptionButton" parent="ColorRect/Panels/Scroll/Sections"]
 visible = false
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_db3eo")
 theme_override_styles/normal = SubResource("StyleBoxFlat_32tni")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_db3eo")
 theme_override_constants/arrow_margin = 10
 item_count = 3
 popup/item_0/text = "Audio Device 1"
@@ -413,25 +409,25 @@ value = 200.0
 
 [node name="AudioOffsetAuto" type="Button" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
 theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
 text = "Set offset by last played song (0ms)"
 
 [node name="AudioOffsetWizard2" type="Button" parent="ColorRect/Panels/Scroll/Sections"]
 visible = false
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
 theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
 text = "Audio Offset Wizard"
 
 [node name="Bypass" type="CheckButton" parent="ColorRect/Panels/Scroll/Sections"]
 visible = false
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_o7dm5")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_o7dm5")
-theme_override_styles/hover = SubResource("StyleBoxFlat_o7dm5")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_crlok")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_bjgno")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_crlok")
+theme_override_styles/hover = SubResource("StyleBoxFlat_o7dm5")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_o7dm5")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_o7dm5")
 text = "Bypass audio effects"
 
 [node name="Debug" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
