@@ -1,14 +1,18 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 public partial class Kiko : Node
 {
     private HttpRequest KikoApi { get; set; }
-    private string VersionCode { get; set; }
+    private Version VersionCode { get; set; }
     public static bool UsingExternalPCK { get; set; }
+    private Version Version { get; set; }
     public override void _Ready()
     {
+        Version = new Version(ProjectSettings.GetSetting("application/config/version").ToString());
+
         if (FileAccess.FileExists(SettingsOperator.homedir + "/update.pck"))
         {
             GD.Print("File updated");
@@ -24,8 +28,8 @@ public partial class Kiko : Node
     {
         if (responseCode == 200)
         {
-            VersionCode = Encoding.UTF8.GetString(body).TrimEnd( System.Environment.NewLine.ToCharArray());
-            if (VersionCode != ProjectSettings.GetSetting("application/config/version").ToString())
+            VersionCode = new Version(Encoding.UTF8.GetString(body).TrimEnd( System.Environment.NewLine.ToCharArray()));
+            if (VersionCode > Version)
             {
                 Notify.Post("New update is avaliable!\n" + VersionCode + " is available, click to view.",uri: "https://jinkku.itch.io/qlute");   
             }
