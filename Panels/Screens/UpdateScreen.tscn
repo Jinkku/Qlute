@@ -1,8 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://cyif8xpux3t7u"]
 
-[ext_resource type="Script" uid="uid://bkw8pddq6x1lk" path="res://Script/Updater/updatescreen.gd" id="1_lbgum"]
+[ext_resource type="Script" uid="uid://cncmt8rx1imt" path="res://Script/Updater/UpdateScreen.cs" id="1_lbgum"]
 
-[node name="Control" type="Control"]
+[node name="UpdateQlute" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -72,6 +73,5 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Updater" type="HTTPRequest" parent="."]
-download_chunk_size = 1024
 
 [connection signal="request_completed" from="Updater" to="." method="_reload_game"]

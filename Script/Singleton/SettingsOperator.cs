@@ -14,6 +14,7 @@ public class DanceCounter {
 
 public partial class SettingsOperator : Node
 {
+    public static string[] args { get; set; }
     public static string UpdatedRank = "#0";
     public static string Updatedpp = "0pp";
     public static string homedir = OS.GetUserDataDir().Replace("\\", "/");
@@ -94,6 +95,7 @@ public partial class SettingsOperator : Node
         { "scrollspeed", (int)1346 }, // 11485 ms max
         { "fpsmode", 1 },
         { "showfps", false },
+        { "gamepath", "" },
         { "leaderboardtype", 1 },
     };
     public Dictionary<string, object> Configurationbk { get; set; }
@@ -591,6 +593,7 @@ public partial class SettingsOperator : Node
 
     public override void _Ready()
     {
+        args = OS.GetCmdlineArgs();
         Configurationbk = new Dictionary<string, object>(Configuration);
         GD.Print("Please wait...");
         GD.Print("Checking if config file is saved...");
@@ -644,6 +647,12 @@ public partial class SettingsOperator : Node
         RefreshFPS();
         Replay.Init();
         LeaderboardType = int.TryParse(GetSetting("leaderboardtype").ToString(), out int lbtm) ? (int)lbtm : 1;
+        string exePath = OS.GetExecutablePath();
+        string folderPath = System.IO.Path.GetDirectoryName(exePath);
+        if (!args.Contains("--update"))
+        {
+            SetSetting("gamepath", folderPath);
+        }
         if (LeaderboardType < 0 && LeaderboardType > 2) LeaderboardType = 1;
         CheckOldSiteUrl();
     }
