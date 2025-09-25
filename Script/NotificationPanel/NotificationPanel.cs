@@ -10,14 +10,18 @@ public partial class NotificationPanel : ColorRect
 		for (int i = NotificationListener.NotificationList.Count - 1; i >= 0; i--)
 		{
 			var NotiInfo = NotificationListener.NotificationList[i];
-			var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/Notification.tscn").Instantiate().GetNode<Button>(".");
-			NotiCard.SetMeta("is_popup", false);
-			GetNode<VBoxContainer>("MarginContainer/ScrollContainer/VBoxContainer").AddChild(NotiCard);
-			NotiCard.SetMeta("id", Math.Max(0, (int)NotiInfo.id));
-			NotiCard.Text = NotiInfo.Title;
-			ClearAll = GetNode<Button>("MarginContainer/ScrollContainer/VBoxContainer/ClearAll Button");
-			ClearAll.Disabled = true;
+			if (NotiInfo.ShowProgress == false)
+			{
+				var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/Notification.tscn").Instantiate().GetNode<Button>(".");
+				NotiCard.SetMeta("is_popup", false);
+				NotiCard.SetMeta("listid", Math.Max(0, (int)NotiInfo.id));
+				GetNode<VBoxContainer>("MarginContainer/ScrollContainer/VBoxContainer").AddChild(NotiCard);
+				NotiCard.Text = NotiInfo.Title;
+				
+			}
 		}
+		ClearAll = GetNode<Button>("MarginContainer/ScrollContainer/VBoxContainer/ClearAll Button");
+		ClearAll.Disabled = true;
 	}
 
 	private void _ClearAll()

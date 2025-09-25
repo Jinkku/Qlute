@@ -8,20 +8,6 @@
 content_margin_left = 25.0
 content_margin_top = 25.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_287m4"]
-content_margin_left = 10.0
-content_margin_top = 5.0
-content_margin_right = 10.0
-content_margin_bottom = 5.0
-bg_color = Color(0.176471, 0.176471, 0.176471, 0.392157)
-skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-expand_margin_top = 5.0
-expand_margin_bottom = 5.0
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gt3n2"]
 content_margin_left = 10.0
 content_margin_top = 5.0
@@ -36,14 +22,26 @@ corner_radius_bottom_left = 5
 expand_margin_top = 5.0
 expand_margin_bottom = 5.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_287m4"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_287m4"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(0.176471, 0.176471, 0.176471, 0.392157)
+skew = Vector2(0.5, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vgk5y"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npcsy"]
 content_margin_left = 15.0
 content_margin_top = 5.0
 content_margin_right = 15.0
 content_margin_bottom = 5.0
-bg_color = Color(0.269531, 0.269531, 0.269531, 0.392157)
+bg_color = Color(0, 0, 0, 0.392157)
 skew = Vector2(0.5, 0)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
@@ -62,17 +60,19 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npcsy"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vgk5y"]
 content_margin_left = 15.0
 content_margin_top = 5.0
 content_margin_right = 15.0
 content_margin_bottom = 5.0
-bg_color = Color(0, 0, 0, 0.392157)
+bg_color = Color(0.269531, 0.269531, 0.269531, 0.392157)
 skew = Vector2(0.5, 0)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_287m4"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vgk5y"]
 content_margin_left = 15.0
@@ -80,22 +80,22 @@ content_margin_left = 15.0
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_61puy"]
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_82bl1"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ftq75"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v4oe2"]
 content_margin_left = 10.0
 content_margin_right = 20.0
-bg_color = Color(0.92549, 0.294118, 0.180392, 1)
+bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lwdlb"]
 content_margin_left = 10.0
 content_margin_right = 20.0
 bg_color = Color(0.666667, 0.222387, 0.142361, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v4oe2"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ftq75"]
 content_margin_left = 10.0
 content_margin_right = 20.0
-bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
+bg_color = Color(0.92549, 0.294118, 0.180392, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_82bl1"]
 
 [sub_resource type="Animation" id="Animation_1f010"]
 length = 0.001
@@ -178,8 +178,8 @@ theme_override_constants/margin_bottom = 10
 [node name="SearchBox" type="LineEdit" parent="Header/VBoxContainer/MarginContainer"]
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_287m4")
 theme_override_styles/normal = SubResource("StyleBoxFlat_gt3n2")
+theme_override_styles/focus = SubResource("StyleBoxFlat_287m4")
 placeholder_text = "Search here"
 
 [node name="SearchFilters" type="MarginContainer" parent="Header/VBoxContainer"]
@@ -193,10 +193,10 @@ layout_mode = 2
 
 [node name="RankButton" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs"]
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_287m4")
-theme_override_styles/hover = SubResource("StyleBoxFlat_vgk5y")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_rkh30")
 theme_override_styles/normal = SubResource("StyleBoxFlat_npcsy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rkh30")
+theme_override_styles/hover = SubResource("StyleBoxFlat_vgk5y")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_287m4")
 selected = 0
 item_count = 3
 popup/item_0/text = "Ranked"
@@ -209,10 +209,10 @@ popup/item_2/id = 2
 [node name="Genre" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs"]
 visible = false
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_287m4")
-theme_override_styles/hover = SubResource("StyleBoxFlat_vgk5y")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_rkh30")
 theme_override_styles/normal = SubResource("StyleBoxFlat_npcsy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rkh30")
+theme_override_styles/hover = SubResource("StyleBoxFlat_vgk5y")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_287m4")
 selected = 0
 item_count = 14
 popup/item_0/text = "Any"
@@ -247,10 +247,10 @@ popup/item_13/id = 13
 [node name="Language" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs"]
 visible = false
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_287m4")
-theme_override_styles/hover = SubResource("StyleBoxFlat_vgk5y")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_rkh30")
 theme_override_styles/normal = SubResource("StyleBoxFlat_npcsy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rkh30")
+theme_override_styles/hover = SubResource("StyleBoxFlat_vgk5y")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_287m4")
 selected = 0
 item_count = 14
 popup/item_0/text = "Any"
@@ -352,10 +352,10 @@ theme_override_constants/separation = 0
 [node name="Button" type="Button" parent="BottomBar/ControlPanel/Box"]
 custom_minimum_size = Vector2(108, 50)
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_82bl1")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ftq75")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_lwdlb")
 theme_override_styles/normal = SubResource("StyleBoxFlat_v4oe2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_lwdlb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ftq75")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_82bl1")
 text = "  Back"
 icon = ExtResource("2_gtswx")
 

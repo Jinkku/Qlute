@@ -4,9 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b000ela4rhy4h" path="res://Resources/NotificationIcons/warning.svg" id="1_l5pyg"]
 [ext_resource type="Script" uid="uid://cvflkvt032pog" path="res://Script/TopPanel/Overlays/NotificationApplet.cs" id="2_2gkms"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dt3ms"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c7mxw"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_36gcf"]
 content_margin_left = 15.0
 content_margin_top = 15.0
 content_margin_right = 50.0
@@ -16,7 +14,6 @@ texture_margin_left = 55.0
 texture_margin_top = 15.0
 texture_margin_right = 15.0
 texture_margin_bottom = 15.0
-modulate_color = Color(1.1, 1.1, 1.1, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5g2n4"]
 content_margin_left = 15.0
@@ -30,7 +27,7 @@ texture_margin_right = 15.0
 texture_margin_bottom = 15.0
 modulate_color = Color(1.3, 1.3, 1.3, 1)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_36gcf"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c7mxw"]
 content_margin_left = 15.0
 content_margin_top = 15.0
 content_margin_right = 50.0
@@ -40,6 +37,9 @@ texture_margin_left = 55.0
 texture_margin_top = 15.0
 texture_margin_right = 15.0
 texture_margin_bottom = 15.0
+modulate_color = Color(1.1, 1.1, 1.1, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dt3ms"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7mxw"]
 content_margin_left = 5.0
@@ -48,14 +48,13 @@ content_margin_right = 5.0
 content_margin_bottom = 5.0
 bg_color = Color(1, 1, 1, 0.1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_36gcf"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5g2n4"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fso4t"]
 content_margin_left = 2.0
 content_margin_top = 2.0
 content_margin_right = 2.0
 content_margin_bottom = 2.0
-bg_color = Color(1, 1, 1, 0.235294)
+bg_color = Color(1, 1, 1, 0.2)
+draw_center = false
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
@@ -72,21 +71,21 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fso4t"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5g2n4"]
 content_margin_left = 2.0
 content_margin_top = 2.0
 content_margin_right = 2.0
 content_margin_bottom = 2.0
-bg_color = Color(1, 1, 1, 0.2)
-draw_center = false
+bg_color = Color(1, 1, 1, 0.235294)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_36gcf"]
+
 [node name="Notification" type="Button"]
 clip_children = 2
-z_index = 1
 custom_minimum_size = Vector2(338, 80)
 offset_right = 303.0
 offset_bottom = 80.0
@@ -95,10 +94,10 @@ theme_override_constants/icon_max_width = 30
 theme_override_constants/align_to_largest_stylebox = 1
 theme_override_constants/line_spacing = 5
 theme_override_font_sizes/font_size = 12
-theme_override_styles/focus = SubResource("StyleBoxEmpty_dt3ms")
-theme_override_styles/hover = SubResource("StyleBoxTexture_c7mxw")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_5g2n4")
 theme_override_styles/normal = SubResource("StyleBoxTexture_36gcf")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_5g2n4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_c7mxw")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_dt3ms")
 text = "There is a beatmap that needs an update!"
 icon = ExtResource("1_l5pyg")
 alignment = 0
@@ -129,10 +128,10 @@ custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 12
-theme_override_styles/focus = SubResource("StyleBoxEmpty_36gcf")
-theme_override_styles/hover = SubResource("StyleBoxFlat_5g2n4")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_f6r5x")
 theme_override_styles/normal = SubResource("StyleBoxFlat_fso4t")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_f6r5x")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5g2n4")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_36gcf")
 text = "X"
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
@@ -144,12 +143,11 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -5.0
-offset_right = 35.0
+offset_top = -4.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 value = 54.0
 show_percentage = false
 
-[connection signal="pressed" from="." to="." method="_pressed"]
 [connection signal="pressed" from="Info/V/Close" to="." method="_close"]

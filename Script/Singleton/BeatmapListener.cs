@@ -34,16 +34,18 @@ public partial class BeatmapListener : Node
 {
 	private SettingsOperator SettingsOperator { get; set; }
 	public int SetID { get; set; } = 0; // Set ID for the beatmap, used for grouping beatmaps together
-	public void Parse_BeatmapDir(string dir)
+	public string Parse_BeatmapDir(string dir)
 	{
+		var Name = "";
 		var files = Directory.GetFiles(dir, "*.osu");
 		Array.Sort(files, (x, y) => new FileInfo(x).Length.CompareTo(new FileInfo(y).Length));
 		foreach (string file in files)
 		{
-			SettingsOperator.Parse_Beatmapfile(file.Replace("\\","/"),SetID: SetID); // Parse the beatmap file and add it to the beatmaps list
+			Name = SettingsOperator.Parse_Beatmapfile(file.Replace("\\", "/"), SetID: SetID); // Parse the beatmap file and add it to the beatmaps list
 			SettingsOperator.Sessioncfg["reloaddb"] = true;
 		}
 		SetID++; // Increment SetID for each beatmap directory parsed
+		return Name;
 	}
 
 	public void CheckAndExtractOszFiles()
@@ -65,9 +67,9 @@ public partial class BeatmapListener : Node
 			File.Delete(file);
 			GD.Print("Extracted and moved " + file + " to " + beatmapDir);
 			GD.Print("Parsing " + beatmapDir);
-			Parse_BeatmapDir(beatmapDir);
+			var Name = Parse_BeatmapDir(beatmapDir);
 			GD.Print("Parsed...");
-			Notify.Post("Imported " + Path.GetFileName(file));
+			Notify.Post("Imported\n" + Name);
 		}
 		foreach (string file in Directory.GetFiles(SettingsOperator.downloadsdir, "*.zip")){
 			System.IO.Compression.ZipFile.ExtractToDirectory(file, SettingsOperator.downloadsdir);

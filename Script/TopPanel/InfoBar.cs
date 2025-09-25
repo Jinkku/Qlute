@@ -132,13 +132,14 @@ public partial class InfoBar : ColorRect
 				Sample.PlaySample("res://SelectableSkins/Slia/Sounds/notification.wav");
 				var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/Notification.tscn").Instantiate().GetNode<Button>(".");
 				NotificationListener.NotificationCards.Add(NotiCard);
-				AddChild(NotiCard);
 				NotiCard.Position = new Vector2(GetViewportRect().Size.X, 60 + ((NotiCard.Size.Y + 10) * NotificationListener.Count));
 				NotiCard.Text = NotiInfo.Title;
 				NotiCard.SetMeta("id", NotificationListener.Count);
+				NotiCard.SetMeta("listid", NotificationListener.NotificationList.Count - 1);
 				NotiCard.SetMeta("time", NotiInfo.Time);
+				AddChild(NotiCard);
 				var tween = NotiCard.CreateTween();
-				tween.TweenProperty(NotiCard, "position", new Vector2(GetViewportRect().Size.X - NotiCard.Size.X - 10, NotiCard.Position.Y), 0.2f)
+				tween.TweenProperty(NotiCard, "position:x", GetViewportRect().Size.X - NotiCard.Size.X - 10, 0.2f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
 				tween.Play();

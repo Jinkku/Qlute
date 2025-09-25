@@ -219,7 +219,8 @@ public partial class SettingsOperator : Node
         //ppvalue /= 1 + (int)(TimeTotal / TimeCap); FutureRelease
         return Math.Max(0, ppvalue);
     }
-    public static void Parse_Beatmapfile(string filename, int SetID = 0) {
+    public static string Parse_Beatmapfile(string filename, int SetID = 0)
+    {
         using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
         var text = file.GetAsText();
         var lines = text.Split("\n");
@@ -260,7 +261,8 @@ public partial class SettingsOperator : Node
             {
                 //keycount = (int)float.Parse(line.Split(":")[1].Trim());
                 keycount = float.TryParse(line.Split(":")[1].Trim(), out float keycountv) ? (int)keycountv : 4;
-            } if (line.StartsWith("OverallDifficulty:"))
+            }
+            if (line.StartsWith("OverallDifficulty:"))
             {
                 //keycount = (int)float.Parse(line.Split(":")[1].Trim());
                 accuracy = float.TryParse(line.Split(":")[1].Trim(), out float accuracyv) ? (int)accuracyv : 0;
@@ -321,7 +323,8 @@ public partial class SettingsOperator : Node
                         bpm = (int)bpmValue;
                         foundbpm = true;
                     }
-                    if (timingParts.Length > 1 && int.TryParse(timingParts.First(), out int timecount) && int.TryParse(timingParts.Last(), out int flashtime)) {
+                    if (timingParts.Length > 1 && int.TryParse(timingParts.First(), out int timecount) && int.TryParse(timingParts.Last(), out int flashtime))
+                    {
                         dance.Add(new DanceCounter { time = timecount, flash = flashtime == 1 });
                     }
                 }
@@ -377,6 +380,7 @@ public partial class SettingsOperator : Node
                 Path = path
             });
         }
+        return $"{artist} - {songtitle} from {mapper}";
     }
     public static void Addms(float ms)
     {

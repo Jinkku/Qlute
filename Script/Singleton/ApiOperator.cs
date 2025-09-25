@@ -6,6 +6,14 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 
+
+public class BeatmapDownloader
+{
+	public HttpRequest Request { get; set; }
+	public string Url { get; set; }
+	public string Info { get; set; }
+	public int BeatmapID { get; set; }
+}
 public class LeaderboardEntry
 {
 	public string username { get; set; }
@@ -225,6 +233,61 @@ public partial class ApiOperator : Node
 		}
 	}
 
+	public static void DownloadBeatmap(int id, int index)
+	{
+		BrowseCatalogLegend BeatmapInfo = Browse.BrowseCatalog[index];
+		var Artist = BeatmapInfo.artist;
+		var Title = BeatmapInfo.title;
+		var Creator = BeatmapInfo.creator;
+		var Info = $"{Artist} - {Title} from {Creator}";
+		string url = Beatmapapi + "/d/" + id;
+		if (DownloadList.Exists(d => d.Url == url))
+		{
+			Notify.Post("This beatmap is already being downloaded.");
+			return;
+		}
+		DownloadList.Add(new BeatmapDownloader
+		{
+			Url = url,
+			Info = Info,
+			BeatmapID = id
+		});
+
+	}
+
+	public static List<BeatmapDownloader> DownloadList = new List<BeatmapDownloader>();
+
+	private void _on_download_completed(long result, long responseCode, string[] headers, byte[] body, int beatmap = 0)
+	{
+		
+		if (responseCode == 200)
+		{
+			try
+			{
+				int id = beatmap; // Assuming ID is passed in headers
+				string tempFilePath = Path.Combine(SettingsOperator.downloadsdir, $"{id}.osz.tmp");
+				string finalFilePath = Path.Combine(SettingsOperator.downloadsdir, $"{id}.osz");
+
+				if (File.Exists(tempFilePath))
+				{
+					File.Move(tempFilePath, finalFilePath);
+				}
+
+				GD.Print($"Beatmap downloaded successfully to: {finalFilePath}");
+			}
+			catch (Exception ex)
+			{
+				Notify.Post($"Error saving beatmap: {ex.Message}");
+			}
+		}
+		else
+		{
+			Notify.Post($"Failed to download beatmap. HTTP Status: {responseCode}. You might be throttled ;w;");
+		}
+	}
+
+
+
 	public void Check_Info(string Username)
 	{
 		GD.Print("Using Profile: " + Username);
@@ -334,6 +397,28 @@ public partial class ApiOperator : Node
 		{
 			Timer = DateTimeOffset.Now.ToUnixTimeSeconds();
 			CheckStatus();
+		}
+
+		foreach (var downloader in DownloadList)
+		{
+			if (downloader.Request == null)
+			{
+				int id = int.Parse(downloader.Url.Substring(downloader.Url.LastIndexOf('/') + 1));
+				string url = downloader.Url;
+				GD.Print(url);
+				string Info = downloader.Info;
+
+				var downloadRequest = new HttpRequest();
+				AddChild(downloadRequest);
+				downloadRequest.Timeout = 60;
+				downloadRequest.RequestCompleted += (long result, long responseCode, string[] headers, byte[] body) => _on_download_completed(result, responseCode, headers, body, id);
+				downloadRequest.DownloadFile = Path.Combine(SettingsOperator.downloadsdir, $"{id}.osz.tmp");
+				downloadRequest.Request(url, null, Godot.HttpClient.Method.Get);
+
+				downloader.Request = downloadRequest;
+
+				Notify.Post($"Downloading {Info}", ProgressGetter: () => downloadRequest.GetDownloadedBytes(), Max: () => downloadRequest.GetBodySize());
+			}
 		}
 	}
 }

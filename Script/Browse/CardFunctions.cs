@@ -1,8 +1,10 @@
 using Godot;
 using System;
+using System.IO;
 
 public partial class CardFunctions : Button
 {
+    private Button Download { get; set; }
     public async override void _Ready()
     {
         if (this != null)
@@ -11,6 +13,11 @@ public partial class CardFunctions : Button
             {
                 GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview").Texture = texture;
             });
+            Download = GetNode<Button>("DownloadBar/VBoxContainer/Download");
+
+
+
+
             SelfModulate = Idlecolour;
             var StartAnimation = CreateTween();
             StartAnimation.TweenProperty(this, "modulate", new Color(1, 1, 1, 1), 1f)
@@ -19,19 +26,21 @@ public partial class CardFunctions : Button
             StartAnimation.Play();
         }
     }
+
+        private void _download()
+    {
+        ApiOperator.DownloadBeatmap(int.Parse(GetMeta("beatmap").ToString()), (int)GetMeta("index"));
+    }
+
+
+
+
+
+
+
+
     private Color Idlecolour = new Color(0.20f, 0.20f, 0.20f, 0.5f); // Colour when idle
     private Color Focuscolour = new Color(0.5f, 0.5f, 0.5f, 1); // Colour when focused
-    private void _setid()
-    {
-        if (HasMeta("beatmap"))
-        {
-            GetNode<Button>("DownloadBar/VBoxContainer/Download").SetMeta("beatmap", GetMeta("beatmap"));
-        }
-        else
-        {
-            GD.PrintErr("Meta key 'beatmap' does not exist.");
-        }
-    }
 
     // Use focus for animation for the card
     private  Tween _focus_animation;
@@ -87,7 +96,8 @@ public partial class CardFunctions : Button
             Blank.AnchorBottom = 1;
             Blank.Modulate = new Color(0, 0, 0, 0f);
             Blank.Name = "Blank-Chan";
-            BeatmapInfoCard.GetNode<Button>("Pill/Padding/Info/Columns/Info/HBoxContainer/Download").SetMeta("beatmap", GetMeta("beatmap"));
+            BeatmapInfoCard.SetMeta("index", GetMeta("index"));
+            BeatmapInfoCard.SetMeta("beatmap", GetMeta("beatmap"));
             GetTree().CurrentScene.AddChild(Blank);
             GetTree().CurrentScene.AddChild(BeatmapInfoCard);
             Animation.SetParallel(true);

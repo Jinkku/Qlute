@@ -1,27 +1,15 @@
-[gd_scene load_steps=22 format=3 uid="uid://ddoobud01aev"]
+[gd_scene load_steps=21 format=3 uid="uid://ddoobud01aev"]
 
 [ext_resource type="Texture2D" uid="uid://fgbtqxkt8lm" path="res://DefaultWallpaper/attack.png" id="1_8h4jc"]
 [ext_resource type="Script" uid="uid://csn1oydkld5la" path="res://Script/Browse/BeatmapInfo.cs" id="1_60ltk"]
 [ext_resource type="Texture2D" uid="uid://46vt33hasgbd" path="res://Resources/System/TopPanel/Download.svg" id="1_on5xq"]
 [ext_resource type="Texture2D" uid="uid://dhtk4mxqohiru" path="res://Resources/System/Heart.svg" id="2_8h4jc"]
-[ext_resource type="Script" uid="uid://cdcldgnst0tvx" path="res://Script/Browse/DownloadProcess.cs" id="4_5idjq"]
 [ext_resource type="Texture2D" uid="uid://ctnqrw3he2egt" path="res://Resources/System/backicon.svg" id="4_osl5l"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_osl5l"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eeb1h"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_at4uj"]
 content_margin_left = 10.0
 content_margin_right = 10.0
-bg_color = Color(0.160236, 0.131882, 0.167969, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_60ltk"]
-content_margin_left = 10.0
-content_margin_right = 10.0
-bg_color = Color(0.601858, 0.531326, 0.621094, 1)
+bg_color = Color(0.472839, 0.387573, 0.496094, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -36,14 +24,25 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_at4uj"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_60ltk"]
 content_margin_left = 10.0
 content_margin_right = 10.0
-bg_color = Color(0.472839, 0.387573, 0.496094, 1)
+bg_color = Color(0.601858, 0.531326, 0.621094, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eeb1h"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.160236, 0.131882, 0.167969, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_osl5l"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7hhbs"]
 content_margin_left = 10.0
@@ -79,22 +78,22 @@ corner_radius_top_right = 15
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7hhbs"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_60ltk"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b8x4y"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_secoq"]
 content_margin_left = 10.0
 content_margin_right = 20.0
-bg_color = Color(0.92549, 0.294118, 0.180392, 1)
+bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qw74s"]
 content_margin_left = 10.0
 content_margin_right = 20.0
 bg_color = Color(0.666667, 0.222387, 0.142361, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_secoq"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b8x4y"]
 content_margin_left = 10.0
 content_margin_right = 20.0
-bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
+bg_color = Color(0.92549, 0.294118, 0.180392, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_60ltk"]
 
 [node name="BeatmapInfo" type="Control"]
 z_index = 4
@@ -198,23 +197,22 @@ theme_override_constants/separation = 10
 [node name="Download" type="Button" parent="Pill/Padding/Info/Columns/Info/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/icon_max_width = 26
-theme_override_styles/focus = SubResource("StyleBoxEmpty_osl5l")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_eeb1h")
-theme_override_styles/hover = SubResource("StyleBoxFlat_60ltk")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_5idjq")
 theme_override_styles/normal = SubResource("StyleBoxFlat_at4uj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5idjq")
+theme_override_styles/hover = SubResource("StyleBoxFlat_60ltk")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_eeb1h")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_osl5l")
 text = "Download"
 icon = ExtResource("1_on5xq")
-script = ExtResource("4_5idjq")
 
 [node name="Favorite" type="Button" parent="Pill/Padding/Info/Columns/Info/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/icon_max_width = 26
-theme_override_styles/focus = SubResource("StyleBoxEmpty_osl5l")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_eeb1h")
-theme_override_styles/hover = SubResource("StyleBoxFlat_60ltk")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_5idjq")
 theme_override_styles/normal = SubResource("StyleBoxFlat_at4uj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5idjq")
+theme_override_styles/hover = SubResource("StyleBoxFlat_60ltk")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_eeb1h")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_osl5l")
 disabled = true
 text = "Favorite"
 icon = ExtResource("2_8h4jc")
@@ -385,12 +383,12 @@ anchor_bottom = 1.0
 offset_top = -50.0
 offset_right = 108.0
 grow_vertical = 0
-theme_override_styles/focus = SubResource("StyleBoxEmpty_60ltk")
-theme_override_styles/hover = SubResource("StyleBoxFlat_b8x4y")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_qw74s")
 theme_override_styles/normal = SubResource("StyleBoxFlat_secoq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_qw74s")
+theme_override_styles/hover = SubResource("StyleBoxFlat_b8x4y")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_60ltk")
 text = "  Back"
 icon = ExtResource("4_osl5l")
 
-[connection signal="pressed" from="Pill/Padding/Info/Columns/Info/HBoxContainer/Download" to="Pill/Padding/Info/Columns/Info/HBoxContainer/Download" method="_download"]
+[connection signal="pressed" from="Pill/Padding/Info/Columns/Info/HBoxContainer/Download" to="." method="_download"]
 [connection signal="pressed" from="Back" to="." method="_close"]

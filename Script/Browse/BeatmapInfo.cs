@@ -71,6 +71,11 @@ public partial class BeatmapInfo : Control
 		ReloadStats();
 	}
 
+	private void _download()
+	{
+		ApiOperator.DownloadBeatmap((int)GetMeta("beatmap"), (int)GetMeta("index"));
+	}
+
 	private void ReloadStats()
 	{
 		var cache = Browse.BrowseCatalog[index];
@@ -83,14 +88,14 @@ public partial class BeatmapInfo : Control
 			string formatted = $"{Extras.GetDayWithSuffix(date.Day)} {date:MMM yyyy}";
 			Length.Text = $"{TimeSpan.FromSeconds(BeatmapList[BeatmapIndex].total_length):mm\\:ss}";
 			BPM.Text = BeatmapList[BeatmapIndex].bpm.ToString("N0");
-			MaxPP.Text = $"{SettingsOperator.Get_ppvalue(NoteCountTotal,0,0,0,1,NoteCountTotal, BeatmapList[BeatmapIndex].total_length).ToString("N0")}pp";
+			MaxPP.Text = $"{SettingsOperator.Get_ppvalue(NoteCountTotal, 0, 0, 0, 1, NoteCountTotal, BeatmapList[BeatmapIndex].total_length).ToString("N0")}pp";
 			NoteCount.Text = NoteCountTotal.ToString("N0");
 			LevelRating.Text = (SettingsOperator.GetLevelRating(NoteCountTotal, BeatmapList[BeatmapIndex].total_length)).ToString("N0");
 			Title.Text = cache.title;
 			Artist.Text = cache.artist;
 			Mapper.Text = $"mapped by {cache.creator}";
 			Submitted.Text = $"submitted at {formatted}";
-			
+
 		}
 	}
 
