@@ -8,6 +8,7 @@ using System.IO.Compression;
 
 public partial class Kiko : Node
 {
+    public string[] args { get; set; }
     private HttpRequest KikoApi { get; set; }
     public static Version VersionCode { get; set; }
     private Version Version { get; set; }
@@ -74,14 +75,15 @@ public partial class Kiko : Node
 
     public override void _Ready()
     {
-        if (SettingsOperator.args.Contains("--update"))
+        args = OS.GetCmdlineArgs();
+        if (args.Contains("--update"))
         {
             GD.Print("Updating...");
             InitUpdateProcess();
         }
-        else if (!SettingsOperator.args.Contains("--ignore-update"))
+        else if (!args.Contains("--ignore-update"))
         {
-        #if !DEBUG
+#if !DEBUG
             GD.Print("Checking for updates....");
             isUpdating = true;
             // Remove extractPath directory if it exists
@@ -99,9 +101,12 @@ public partial class Kiko : Node
             KikoApi.Timeout = 30;
             KikoApi.Connect("request_completed", new Callable(this, nameof(_KikoApiDone)));
             KikoApi.Request("https://github.com/Jinkkuu/Qlute/releases/latest/download/RELEASE");
-        #endif
+#endif
+#if DEBUG
+            GD.Print("Skipping checking for updates because debug tick is enabled.");
+#endif
         }
-        else if (SettingsOperator.args.Contains("--ignore-update"))
+        else if (args.Contains("--ignore-update"))
         {
             GD.Print("Ignored updates for now...");
         }

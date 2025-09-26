@@ -14,7 +14,7 @@ public class DanceCounter {
 
 public partial class SettingsOperator : Node
 {
-    public static string[] args { get; set; }
+    public string[] args { get; set; }
     public static string UpdatedRank = "#0";
     public static string Updatedpp = "0pp";
     public static string homedir = OS.GetUserDataDir().Replace("\\", "/");
