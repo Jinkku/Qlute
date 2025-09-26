@@ -7,20 +7,23 @@ public partial class Bootstrap : Control
 	public  SettingsOperator SettingsOperator { get; set; }
 	private AnimationPlayer animationPlayer { get; set; }
 	public Control Home { get; set; }
+	private Label Welcome { get; set; }
 	public override void _Ready()
 	{
 		Cursor.CursorVisible = false;
+		Welcome = GetNode<Label>("Welcome");
+		Welcome.PivotOffset = Welcome.Size / 2;
 		animationPlayer = GetNode<AnimationPlayer>("./AnimationPlayer");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SettingsOperator.Sessioncfg["toppanelhide"] = true;
 		db = AudioPlayer.Instance.VolumeDb;
 	}
-
+	private bool Finished { get; set;}
     public override void _Process(double delta)
     {
-		if (!Kiko.isUpdating && !animationPlayer.IsPlaying())
+		if (!Kiko.isUpdating && !animationPlayer.IsPlaying() && !Finished)
 		{
-			animationPlayer.Play("Intro");	
+			animationPlayer.Play("Intro");
 		}
     }
 	private Tween NewTween { get; set; }
@@ -45,8 +48,9 @@ public partial class Bootstrap : Control
 	}
 	public void _intro_finished(string animationame)
 	{
+		Finished = true;
 		Cursor.CursorVisible = true;
 		SettingsOperator.toppaneltoggle();
-		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn",false,SceneTransition.TransitionMode.FadeToWhite);
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn",_mode: SceneTransition.TransitionMode.CrossFade,time: 0.3f);
 	}
 }

@@ -33,34 +33,45 @@ public partial class SceneTransition : Control
 			_stillRender = GetNode<TextureRect>("StillRender");
 			_stillRender.Modulate = new Color(1, 1, 1, 0);
 		}
-		
-		public async void Switch(string sceneName, bool Fadein = true, TransitionMode _mode = TransitionMode.FadeToBlack) {
+		public async void Switch(string sceneName, bool Fadein = true, TransitionMode _mode = TransitionMode.FadeToBlack, float time = 0) {
+			if (time == 0) time = _time;
+			Node oldScene = GetTree().CurrentScene;
 			if (Fadein)
 			{
-				await _TransitionIn();		
+				await _TransitionIn(sceneName,_mode,time);
 			}
-			GetTree().ChangeSceneToFile(sceneName);
-			_TransitionOut(_mode);
+			if (_mode != TransitionMode.CrossFade)
+				GetTree().ChangeSceneToFile(sceneName);
+			_TransitionOut(_mode, oldScene,time);
 		}
 
-		private async Task _TransitionIn() {
+		private async Task _TransitionIn(string sceneName, TransitionMode _mode, float _time) {
 			if (_mode == TransitionMode.FadeToBlack) {
 				Tween t = GetTree().CreateTween();
 				t.TweenProperty(_black, "modulate:a", 1.0f, _time / 2f);
 				await ToSignal(t, Tween.SignalName.Finished);
 			} else {
-				_stillRender.Texture = ImageTexture.CreateFromImage(GetViewport().GetTexture().GetImage());
-				_stillRender.Modulate = new Color(1, 1, 1, 1);
-				_stillRender.Position = Vector2.Zero;
 
-				if (_mode == TransitionMode.CrossFade)
-					return;
+				if (_mode != TransitionMode.CrossFade)
+				{
+					_stillRender.Texture = ImageTexture.CreateFromImage(GetViewport().GetTexture().GetImage());
+					_stillRender.Modulate = new Color(1, 1, 1, 1);
+					_stillRender.Position = Vector2.Zero;
+				}
 
 				Vector2 size = _stillRender.Size;
 				Tween t = GetTree().CreateTween();
 				switch (_mode) {
 					case TransitionMode.SlideLeft:
 						t.TweenProperty(_stillRender, "position:x", -size.X, _time)
+							.SetEase(_easeType).SetTrans(_transitionType);
+						break;
+					case TransitionMode.CrossFade:
+						var Scene = GD.Load<PackedScene>(sceneName).Instantiate();
+						GetTree().Root.AddChild(Scene);
+						GetTree().CurrentScene = Scene;
+						t.TweenProperty(Scene, "modulate:a", 0f, 0f);
+						t.TweenProperty(Scene, "modulate:a", 1f, _time)
 							.SetEase(_easeType).SetTrans(_transitionType);
 						break;
 					case TransitionMode.SlideRight:
@@ -79,7 +90,7 @@ public partial class SceneTransition : Control
 			}
 		}
 
-		private void _TransitionOut(TransitionMode _mode) {
+		private void _TransitionOut(TransitionMode _mode, Node oldScene,float _time) {
 			if (
 				_mode == TransitionMode.SlideLeft ||
 				_mode == TransitionMode.SlideRight ||
@@ -98,7 +109,8 @@ public partial class SceneTransition : Control
 					t.TweenProperty(_white, "modulate:a", 0.0f, _time);
 					break;
 				case TransitionMode.CrossFade:
-					t.TweenProperty(_stillRender, "modulate:a", 0.0f, _time);
+					t.TweenProperty(oldScene, "modulate:a", 0.0f, _time);
+					t.TweenCallback(Callable.From(() => oldScene.QueueFree()));
 					break;
 				default:
 					break;

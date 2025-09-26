@@ -8,7 +8,7 @@
 
 [sub_resource type="Animation" id="Animation_v5m8g"]
 resource_name = "Intro"
-length = 5.0
+length = 5.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -67,36 +67,39 @@ tracks/4/path = NodePath("../../Welcome:self_modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0.033333335, 2.9667, 3.3066669),
+"times": PackedFloat32Array(0.033333335, 2.8, 3.5333333),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(0, 0, 0, 0), Color(1, 1, 1, 1)]
 }
-tracks/5/type = "method"
+tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("../..")
+tracks/5/path = NodePath("../../Welcome:scale")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(2.9666667),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"_StartPreview"
-}]
+"times": PackedFloat32Array(2.9666667, 3.4666667, 5.4666667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.7, 0.5), Vector2(0.8, 0.8), Vector2(1.2, 1.2)]
 }
-tracks/6/type = "value"
+tracks/6/type = "method"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("../../Welcome:scale")
+tracks/6/path = NodePath("../..")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(2.9066668, 2.9233336, 2.94, 2.956667, 2.9733334, 2.9900002, 3.0066667, 3.0233335, 3.04, 3.0566669, 3.0733333, 3.0900002, 3.1066666, 3.1233335, 3.1399999, 3.1566668, 3.1733336, 3.19, 3.206667, 3.2233334, 3.2400002, 3.2566667, 3.2733335, 3.29, 3.3066669, 3.3233333, 3.3400002, 3.3566666, 3.3733335, 3.3899999, 3.4066668, 3.4233336, 3.44, 3.456667, 3.4733334, 3.4900002, 3.5066667, 3.5233335, 3.54, 3.5566669, 3.5733333, 3.5900002, 3.6066666, 3.6233335, 3.6399999, 3.6566668, 3.6733336, 3.69, 3.706667, 3.7233334, 3.7400002, 3.7566667, 3.7733335, 3.79, 3.8066669),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(0.5545331, 0.5545331), Vector2(0.6070466, 0.6070466), Vector2(0.65757895, 0.65757895), Vector2(0.7061678, 0.7061678), Vector2(0.7528514, 0.7528514), Vector2(0.79766804, 0.79766804), Vector2(0.84065557, 0.84065557), Vector2(0.8818523, 0.8818523), Vector2(0.9212962, 0.9212962), Vector2(0.9590256, 0.9590256), Vector2(0.9950782, 0.9950782), Vector2(1.0294924, 1.0294924), Vector2(1.0623063, 1.0623063), Vector2(1.0935578, 1.0935578), Vector2(1.1232853, 1.1232853), Vector2(1.1515266, 1.1515266), Vector2(1.1783202, 1.1783202), Vector2(1.2037036, 1.2037036), Vector2(1.2277155, 1.2277155), Vector2(1.2503936, 1.2503936), Vector2(1.2717763, 1.2717763), Vector2(1.2919016, 1.2919016), Vector2(1.3108075, 1.3108075), Vector2(1.3285322, 1.3285322), Vector2(1.3451138, 1.3451138), Vector2(1.3605903, 1.3605903), Vector2(1.375, 1.375), Vector2(1.3883808, 1.3883808), Vector2(1.4007709, 1.4007709), Vector2(1.4122086, 1.4122086), Vector2(1.4227315, 1.4227315), Vector2(1.4323782, 1.4323782), Vector2(1.4411865, 1.4411865), Vector2(1.4491947, 1.4491947), Vector2(1.4564408, 1.4564408), Vector2(1.4629629, 1.4629629), Vector2(1.4687992, 1.4687992), Vector2(1.4739877, 1.4739877), Vector2(1.4785665, 1.4785665), Vector2(1.4825737, 1.4825737), Vector2(1.4860475, 1.4860475), Vector2(1.4890261, 1.4890261), Vector2(1.4915473, 1.4915473), Vector2(1.4936494, 1.4936494), Vector2(1.4953704, 1.4953704), Vector2(1.4967484, 1.4967484), Vector2(1.4978218, 1.4978218), Vector2(1.4986283, 1.4986283), Vector2(1.4992062, 1.4992062), Vector2(1.4995935, 1.4995935), Vector2(1.4998286, 1.4998286), Vector2(1.4999492, 1.4999492), Vector2(1.4999936, 1.4999936), Vector2(1.5, 1.5)]
+"times": PackedFloat32Array(2.9667, 5),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"_StartPreview"
+}, {
+"args": ["Intro"],
+"method": &"_intro_finished"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_s0vrs"]
@@ -128,26 +131,26 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("../../Welcome:self_modulate")
+tracks/2/path = NodePath("../../Welcome:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 0)]
+"values": [Vector2(1, 1)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("../../Welcome:scale")
+tracks/3/path = NodePath("../../Welcome:self_modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 1)]
+"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rpwbx"]
@@ -196,12 +199,20 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Welcome" type="Label" parent="."]
+modulate = Color(0.86816406, 0.82421875, 1, 1)
 self_modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_left = 494.0
-offset_top = 323.0
-offset_right = 785.0
-offset_bottom = 396.33334
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -145.5
+offset_top = -36.66667
+offset_right = 145.5
+offset_bottom = 36.66667
+grow_horizontal = 2
+grow_vertical = 2
 pivot_offset = Vector2(145.5, 36.65)
 theme_override_font_sizes/font_size = 64
 text = "Welcome"
@@ -209,6 +220,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DisclaimerEpilepsy" type="VBoxContainer" parent="."]
+modulate = Color(0, 0, 0, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
