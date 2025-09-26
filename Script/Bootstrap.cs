@@ -16,7 +16,7 @@ public partial class Bootstrap : Control
 		animationPlayer = GetNode<AnimationPlayer>("./AnimationPlayer");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SettingsOperator.Sessioncfg["toppanelhide"] = true;
-		db = AudioPlayer.Instance.VolumeDb;
+		db = (int)(Math.Log10(SettingsOperator.MasterVol / 100.0) * 20) - 5;
 	}
 	private bool Finished { get; set;}
     public override void _Process(double delta)
