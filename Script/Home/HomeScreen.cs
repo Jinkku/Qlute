@@ -12,6 +12,7 @@ public static class HomeButtonID
 }
 public partial class HomeScreen : Control
 {
+	public static bool StayOpen { get; set; }
 	public Label SongIndicator { get; set; }
 	public SettingsOperator SettingsOperator { get; set; }
 	public PanelContainer SubButtons { get; set; } // For more buttons for more playability
@@ -61,16 +62,13 @@ public partial class HomeScreen : Control
 	private void _leave() {
 		var tween = CreateTween();
 		tween.SetParallel(true);
-		tween.TweenProperty(this, "modulate", new Color(0f, 0f, 0f, 0f), 1f)
+		tween.TweenProperty(GetTree().CurrentScene, "modulate:a", 0f, 1f)
 			.SetTrans(Tween.TransitionType.Linear)
 			.SetEase(Tween.EaseType.Out);
 		tween.TweenProperty(AudioPlayer.Instance, "volume_db", -80f, 1f)
 			.SetTrans(Tween.TransitionType.Linear)
 			.SetEase(Tween.EaseType.Out);
-		tween.Connect("finished", new Callable(this, nameof(_leavesignal)));
-	}
-	private void _leavesignal() {
-		GetTree().Quit();
+		tween.Connect("finished", Callable.From(() => GetTree().Quit()));
 	}
 	private void _playf()
 	{
