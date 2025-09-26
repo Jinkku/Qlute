@@ -25,8 +25,6 @@ public partial class HomeScreen : Control
 		SongIndicator = GetNode<Label>("SongIndication");
 		AnimationPlayer ani = GetNode<AnimationPlayer>("Flash/AnimationPlayer");
 		HomeButtonID.ID = -1;
-		//ani.Play("Flash");
-		_Process(0);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

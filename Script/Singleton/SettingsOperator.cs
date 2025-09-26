@@ -569,11 +569,6 @@ public partial class SettingsOperator : Node
         {
             toppaneltoggle();
         }
-        if (DateTimeOffset.UtcNow.ToUnixTimeSeconds() - oldtime > 2)
-        {
-            oldtime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            ResetVol();
-        }
 
 
 

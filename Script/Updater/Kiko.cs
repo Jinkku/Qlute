@@ -11,6 +11,7 @@ public partial class Kiko : Node
     private HttpRequest KikoApi { get; set; }
     public static Version VersionCode { get; set; }
     private Version Version { get; set; }
+    public static bool isUpdating { get; set; }
 	public static readonly string extractPath = Path.Combine(Path.GetTempPath(), "QluteUpdateFile");
 	private void CopyDirectory(string sourceDir, string destDir)
 		{
@@ -80,19 +81,25 @@ public partial class Kiko : Node
         }
         else if (!SettingsOperator.args.Contains("--ignore-update"))
         {
-    #if !DEBUG
+        #if !DEBUG
             GD.Print("Checking for updates....");
+            isUpdating = true;
             // Remove extractPath directory if it exists
             if (Directory.Exists(extractPath))
             {
                 Directory.Delete(extractPath, true);
             }
+            if (File.Exists(Path.Combine(Path.GetTempPath(), UpdateScreen.platformZip)))
+            {
+                File.Delete(Path.Combine(Path.GetTempPath(), UpdateScreen.platformZip));
+            }
             Version = new Version(ProjectSettings.GetSetting("application/config/version").ToString());
             KikoApi = new HttpRequest();
             AddChild(KikoApi);
+            KikoApi.Timeout = 30;
             KikoApi.Connect("request_completed", new Callable(this, nameof(_KikoApiDone)));
             KikoApi.Request("https://github.com/Jinkkuu/Qlute/releases/latest/download/RELEASE");
-    #endif
+        #endif
         }
         else if (SettingsOperator.args.Contains("--ignore-update"))
         {
@@ -103,11 +110,12 @@ public partial class Kiko : Node
     {
         if (responseCode == 200)
         {
-            VersionCode = new Version(Encoding.UTF8.GetString(body).TrimEnd( System.Environment.NewLine.ToCharArray()));
+            isUpdating = false;
+            VersionCode = new Version(Encoding.UTF8.GetString(body).TrimEnd(System.Environment.NewLine.ToCharArray()));
             if (VersionCode > Version)
             {
-                Notify.Post("New update is avaliable!\n" + VersionCode + " is available, click to view.",uri: "https://jinkku.itch.io/qlute"); 
-                GetTree().ChangeSceneToFile("res://Panels/Screens/UpdateScreen.tscn");  
+                Notify.Post("New update is avaliable!\n" + VersionCode + " is available, click to view.", uri: "https://jinkku.itch.io/qlute");
+                GetTree().ChangeSceneToFile("res://Panels/Screens/UpdateScreen.tscn");
             }
         }
         else

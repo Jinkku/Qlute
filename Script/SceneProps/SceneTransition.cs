@@ -8,6 +8,7 @@ public partial class SceneTransition : Control
 		{
 			FadeToBlack,
 			CrossFade,
+			FadeToWhite,
 
 			SlideLeft,
 			SlideRight,
@@ -21,19 +22,25 @@ public partial class SceneTransition : Control
 		[Export] private Tween.TransitionType _transitionType = Tween.TransitionType.Linear;
 
 		private ColorRect _black;
+		private ColorRect _white;
 		private TextureRect _stillRender;
 
 		public override void _Ready() {
 			_black = GetNode<ColorRect>("Black");
 			_black.Modulate = new Color(0, 0, 0, 0);
+			_white = GetNode<ColorRect>("White");
+			_white.Modulate = new Color(0, 0, 0, 0);
 			_stillRender = GetNode<TextureRect>("StillRender");
 			_stillRender.Modulate = new Color(1, 1, 1, 0);
 		}
 		
-		public async void Switch(string sceneName) {
-			await _TransitionIn();
+		public async void Switch(string sceneName, bool Fadein = true, TransitionMode _mode = TransitionMode.FadeToBlack) {
+			if (Fadein)
+			{
+				await _TransitionIn();		
+			}
 			GetTree().ChangeSceneToFile(sceneName);
-			_TransitionOut();
+			_TransitionOut(_mode);
 		}
 
 		private async Task _TransitionIn() {
@@ -72,7 +79,7 @@ public partial class SceneTransition : Control
 			}
 		}
 
-		private void _TransitionOut() {
+		private void _TransitionOut(TransitionMode _mode) {
 			if (
 				_mode == TransitionMode.SlideLeft ||
 				_mode == TransitionMode.SlideRight ||
@@ -85,6 +92,10 @@ public partial class SceneTransition : Control
 			switch (_mode) {
 				case TransitionMode.FadeToBlack:
 					t.TweenProperty(_black, "modulate:a", 0.0f, _time / 2f);
+					break;
+				case TransitionMode.FadeToWhite:
+					_white.Modulate = new Color(1f, 1f, 1f, 1f);
+					t.TweenProperty(_white, "modulate:a", 0.0f, _time);
 					break;
 				case TransitionMode.CrossFade:
 					t.TweenProperty(_stillRender, "modulate:a", 0.0f, _time);

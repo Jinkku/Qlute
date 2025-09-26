@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dvm81no14tisl"]
+[gd_scene load_steps=9 format=3 uid="uid://boxlrxvat7un5"]
 
 [ext_resource type="Script" uid="uid://dqwx101tkdgo3" path="res://Script/Bootstrap.cs" id="1_26srq"]
 [ext_resource type="Texture2D" uid="uid://dnv3u531u322i" path="res://Resources/System/highlightlogo.png" id="2_abd43"]
@@ -11,7 +11,7 @@ resource_name = "Intro"
 length = 7.0
 tracks/0/type = "value"
 tracks/0/imported = false
-tracks/0/enabled = true
+tracks/0/enabled = false
 tracks/0/path = NodePath(".:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
@@ -72,6 +72,44 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0.533333)
 }
 tracks/4/use_blend = true
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../../Welcome:self_modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.033333335, 5.66, 6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(0, 0, 0, 0), Color(1, 1, 1, 1)]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("../..")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(5.66),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_StartPreview"
+}]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("../../Welcome:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(5.6, 5.616667, 5.633333, 5.65, 5.6666665, 5.6833334, 5.7, 5.7166667, 5.733333, 5.75, 5.7666664, 5.7833333, 5.7999997, 5.8166666, 5.833333, 5.85, 5.866667, 5.883333, 5.9, 5.9166665, 5.9333334, 5.95, 5.9666667, 5.983333, 6, 6.0166664, 6.0333333, 6.0499997, 6.0666666, 6.083333, 6.1, 6.116667, 6.133333, 6.15, 6.1666665, 6.1833334, 6.2, 6.2166667, 6.233333, 6.25, 6.2666664, 6.2833333, 6.2999997, 6.3166666, 6.333333, 6.35, 6.366667, 6.383333, 6.4, 6.4166665, 6.4333334, 6.45, 6.4666667, 6.483333, 6.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(0.5545331, 0.5545331), Vector2(0.6070466, 0.6070466), Vector2(0.65757895, 0.65757895), Vector2(0.7061678, 0.7061678), Vector2(0.7528514, 0.7528514), Vector2(0.79766804, 0.79766804), Vector2(0.84065557, 0.84065557), Vector2(0.8818523, 0.8818523), Vector2(0.9212962, 0.9212962), Vector2(0.9590256, 0.9590256), Vector2(0.9950782, 0.9950782), Vector2(1.0294924, 1.0294924), Vector2(1.0623063, 1.0623063), Vector2(1.0935578, 1.0935578), Vector2(1.1232853, 1.1232853), Vector2(1.1515266, 1.1515266), Vector2(1.1783202, 1.1783202), Vector2(1.2037036, 1.2037036), Vector2(1.2277155, 1.2277155), Vector2(1.2503936, 1.2503936), Vector2(1.2717763, 1.2717763), Vector2(1.2919016, 1.2919016), Vector2(1.3108075, 1.3108075), Vector2(1.3285322, 1.3285322), Vector2(1.3451138, 1.3451138), Vector2(1.3605903, 1.3605903), Vector2(1.375, 1.375), Vector2(1.3883808, 1.3883808), Vector2(1.4007709, 1.4007709), Vector2(1.4122086, 1.4122086), Vector2(1.4227315, 1.4227315), Vector2(1.4323782, 1.4323782), Vector2(1.4411865, 1.4411865), Vector2(1.4491947, 1.4491947), Vector2(1.4564408, 1.4564408), Vector2(1.4629629, 1.4629629), Vector2(1.4687992, 1.4687992), Vector2(1.4739877, 1.4739877), Vector2(1.4785665, 1.4785665), Vector2(1.4825737, 1.4825737), Vector2(1.4860475, 1.4860475), Vector2(1.4890261, 1.4890261), Vector2(1.4915473, 1.4915473), Vector2(1.4936494, 1.4936494), Vector2(1.4953704, 1.4953704), Vector2(1.4967484, 1.4967484), Vector2(1.4978218, 1.4978218), Vector2(1.4986283, 1.4986283), Vector2(1.4992062, 1.4992062), Vector2(1.4995935, 1.4995935), Vector2(1.4998286, 1.4998286), Vector2(1.4999492, 1.4999492), Vector2(1.4999936, 1.4999936), Vector2(1.5, 1.5)]
+}
 
 [sub_resource type="Animation" id="Animation_s0vrs"]
 length = 0.001
@@ -110,6 +148,30 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../../Welcome:self_modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../../Welcome:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rpwbx"]
@@ -157,6 +219,19 @@ text = "Loli"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Welcome" type="Label" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 494.0
+offset_top = 323.0
+offset_right = 785.0
+offset_bottom = 396.33334
+pivot_offset = Vector2(145.5, 36.65)
+theme_override_font_sizes/font_size = 64
+text = "Welcome"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -166,6 +241,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="logo" type="TextureRect" parent="CenterContainer"]
+visible = false
 layout_mode = 2
 texture = ExtResource("2_abd43")
 
@@ -234,10 +310,4 @@ Feel free to contribute, give feedback, or just vibe with us. <3"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 3.0
-one_shot = true
-autostart = true
-
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_intro_finished"]
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
