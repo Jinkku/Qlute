@@ -5,7 +5,8 @@ public partial class IntroPending : Control
 {
 	// Called when the node enters the scene tree for the first time.
 	public PanelContainer HomeButtons {get;set;}
-	public static Vector2 HomeButtonsPOS {get;set;}
+	public static bool JustStarted { get; set; }
+	public static Vector2 HomeButtonsPOS { get; set; }
 	private Vector2 HomeLogoSize {get;set;}
 	private Vector2 HomeLogoPos {get;set;}
 	private TextureButton Logo {get;set;}
@@ -20,7 +21,11 @@ public partial class IntroPending : Control
 		Logo.PivotOffset = Logo.Size / 2;
 		Visible = true;
 		HomeButtons.Visible = false;
-		AnimationTick(HomeScreen.StayOpen);
+		if (JustStarted)
+		{
+			AnimationTick(HomeScreen.StayOpen);	
+		}
+		JustStarted = true;
 	}
 	private void _hover()
 	{
