@@ -24,13 +24,14 @@ public partial class Bootstrap : Control
 		}
     }
 	private Tween NewTween { get; set; }
-	private float time { get; set; } = 1.4f;
+	private float time { get; set; } = 2.0333f;
 	private float db { get; set; }
 	private void _StartPreview()
 	{
 
 		if (SettingsOperator.Beatmaps.Count > 0)
 		{
+			AudioPlayer.Instance.VolumeDb = -40;
 			NewTween = CreateTween();
 			NewTween.TweenProperty(AudioPlayer.Instance, "volume_db", db, time).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			NewTween.Play();

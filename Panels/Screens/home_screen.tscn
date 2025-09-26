@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene load_steps=36 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" uid="uid://bxurggbxgjswg" path="res://Script/Home/HomeScreen.cs" id="1_vj7aj"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
@@ -17,7 +17,8 @@
 [ext_resource type="Texture2D" uid="uid://detqod6pcb68a" path="res://Resources/System/MainMenu/Exit.svg" id="11_ioq3m"]
 [ext_resource type="Texture2D" uid="uid://ci24g7ndyah7y" path="res://Resources/System/MainMenu/Browse.svg" id="11_ohewd"]
 [ext_resource type="Script" uid="uid://0xn63uccdk6j" path="res://Script/TimerwithBPM/Bpmtick.cs" id="14_1vpa7"]
-[ext_resource type="Texture2D" uid="uid://boh4sdsnp0kqo" path="res://Resources/System/mainmenulogo.svg" id="14_bh2cj"]
+[ext_resource type="Texture2D" uid="uid://bthaemtfa0cbe" path="res://Resources/System/mainmenulogo.png" id="16_ohewd"]
+[ext_resource type="Texture2D" uid="uid://dyrairg2m2il6" path="res://Resources/System/emit.png" id="19_whutp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1gbip"]
 content_margin_left = 10.0
@@ -140,6 +141,22 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+
+[sub_resource type="CurveTexture" id="CurveTexture_jpc6g"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ldbht"]
+particle_flag_align_y = true
+particle_flag_rotate_y = true
+particle_flag_disable_z = true
+angle_min = -720.0
+angle_max = 720.0
+angle_curve = SubResource("CurveTexture_jpc6g")
+direction = Vector3(-1, 0, 0)
+spread = 20.0
+initial_velocity_max = 591.95
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 0.5
 
 [node name="Home Screen" type="Control"]
 layout_mode = 3
@@ -432,6 +449,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="HomeButtonBG" type="PanelContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -475,7 +493,6 @@ Text = "Leave"
 Texture = ExtResource("11_ioq3m")
 
 [node name="IntroPending" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -496,6 +513,7 @@ flat = true
 
 [node name="logo" type="TextureButton" parent="IntroPending"]
 z_index = 3
+custom_minimum_size = Vector2(360, 148)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -508,7 +526,8 @@ offset_right = 164.0
 offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_normal = ExtResource("14_bh2cj")
+texture_normal = ExtResource("16_ohewd")
+ignore_texture_size = true
 stretch_mode = 5
 
 [node name="Label" type="Label" parent="IntroPending"]
@@ -558,6 +577,28 @@ grow_vertical = 2
 text = "Jinkku Productions
 2023-2025"
 vertical_alignment = 1
+
+[node name="Blast1" type="GPUParticles2D" parent="."]
+modulate = Color(1, 1, 1, 0.3)
+position = Vector2(426, 720)
+rotation = 0.87266463
+emitting = false
+amount = 45
+texture = ExtResource("19_whutp")
+lifetime = 3.0
+fixed_fps = 15
+process_material = SubResource("ParticleProcessMaterial_ldbht")
+
+[node name="Blast2" type="GPUParticles2D" parent="."]
+modulate = Color(1, 1, 1, 0.3)
+position = Vector2(852, 720)
+rotation = 2.0943952
+emitting = false
+amount = 45
+texture = ExtResource("19_whutp")
+lifetime = 3.0
+fixed_fps = 15
+process_material = SubResource("ParticleProcessMaterial_ldbht")
 
 [connection signal="timeout" from="SongIndication/MenuNotice/Timer" to="SongIndication/MenuNotice/HTTPRequest" method="_on_timer_timeout"]
 [connection signal="request_completed" from="SongIndication/MenuNotice/HTTPRequest" to="SongIndication/MenuNotice/HTTPRequest" method="_on_request_completed"]

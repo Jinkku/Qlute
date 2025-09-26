@@ -8,27 +8,27 @@
 
 [sub_resource type="Animation" id="Animation_v5m8g"]
 resource_name = "Intro"
-length = 7.0
+length = 5.0
 tracks/0/type = "value"
 tracks/0/imported = false
-tracks/0/enabled = false
-tracks/0/path = NodePath(".:self_modulate")
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../DisclaimerEpilepsy:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(5.66666, 5.93333),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(3, 3.5, 4.233333, 4.733333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1)]
+"values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(0, 0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../DisclaimerEpilepsy:modulate")
+tracks/1/path = NodePath("../ExperimentalDisclaimer:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(3.13333, 3.63333, 5.16666, 5.66666),
+"times": PackedFloat32Array(0, 0.5, 2.03333, 2.53333),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(0, 0, 0, 0)]
@@ -36,34 +36,22 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("../ExperimentalDisclaimer:modulate")
+tracks/2/path = NodePath("../ExperimentalDisclaimer/Expeeee/RotatingBox/HeartHeartHeart:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.5, 2.03333, 2.53333),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(0, 0, 0, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../ExperimentalDisclaimer/Expeeee/RotatingBox/HeartHeartHeart:rotation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0.0333333, 0.5, 0.666667, 0.8),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [0.0, 0.610865, -0.610865, 0.0]
 }
-tracks/4/type = "audio"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("../ExperimentalDisclaimer/Expeeee/Jingle")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
+tracks/3/type = "audio"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../ExperimentalDisclaimer/Expeeee/Jingle")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.0,
@@ -71,41 +59,41 @@ tracks/4/keys = {
 }],
 "times": PackedFloat32Array(0.533333)
 }
-tracks/4/use_blend = true
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("../../Welcome:self_modulate")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0.033333335, 5.66, 6),
+tracks/3/use_blend = true
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../../Welcome:self_modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.033333335, 2.9667, 3.3066669),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(0, 0, 0, 0), Color(1, 1, 1, 1)]
 }
-tracks/6/type = "method"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("../..")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(5.66),
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../..")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(2.9666667),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
 "method": &"_StartPreview"
 }]
 }
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("../../Welcome:scale")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(5.6, 5.616667, 5.633333, 5.65, 5.6666665, 5.6833334, 5.7, 5.7166667, 5.733333, 5.75, 5.7666664, 5.7833333, 5.7999997, 5.8166666, 5.833333, 5.85, 5.866667, 5.883333, 5.9, 5.9166665, 5.9333334, 5.95, 5.9666667, 5.983333, 6, 6.0166664, 6.0333333, 6.0499997, 6.0666666, 6.083333, 6.1, 6.116667, 6.133333, 6.15, 6.1666665, 6.1833334, 6.2, 6.2166667, 6.233333, 6.25, 6.2666664, 6.2833333, 6.2999997, 6.3166666, 6.333333, 6.35, 6.366667, 6.383333, 6.4, 6.4166665, 6.4333334, 6.45, 6.4666667, 6.483333, 6.5),
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("../../Welcome:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(2.9066668, 2.9233336, 2.94, 2.956667, 2.9733334, 2.9900002, 3.0066667, 3.0233335, 3.04, 3.0566669, 3.0733333, 3.0900002, 3.1066666, 3.1233335, 3.1399999, 3.1566668, 3.1733336, 3.19, 3.206667, 3.2233334, 3.2400002, 3.2566667, 3.2733335, 3.29, 3.3066669, 3.3233333, 3.3400002, 3.3566666, 3.3733335, 3.3899999, 3.4066668, 3.4233336, 3.44, 3.456667, 3.4733334, 3.4900002, 3.5066667, 3.5233335, 3.54, 3.5566669, 3.5733333, 3.5900002, 3.6066666, 3.6233335, 3.6399999, 3.6566668, 3.6733336, 3.69, 3.706667, 3.7233334, 3.7400002, 3.7566667, 3.7733335, 3.79, 3.8066669),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(0.5, 0.5), Vector2(0.5545331, 0.5545331), Vector2(0.6070466, 0.6070466), Vector2(0.65757895, 0.65757895), Vector2(0.7061678, 0.7061678), Vector2(0.7528514, 0.7528514), Vector2(0.79766804, 0.79766804), Vector2(0.84065557, 0.84065557), Vector2(0.8818523, 0.8818523), Vector2(0.9212962, 0.9212962), Vector2(0.9590256, 0.9590256), Vector2(0.9950782, 0.9950782), Vector2(1.0294924, 1.0294924), Vector2(1.0623063, 1.0623063), Vector2(1.0935578, 1.0935578), Vector2(1.1232853, 1.1232853), Vector2(1.1515266, 1.1515266), Vector2(1.1783202, 1.1783202), Vector2(1.2037036, 1.2037036), Vector2(1.2277155, 1.2277155), Vector2(1.2503936, 1.2503936), Vector2(1.2717763, 1.2717763), Vector2(1.2919016, 1.2919016), Vector2(1.3108075, 1.3108075), Vector2(1.3285322, 1.3285322), Vector2(1.3451138, 1.3451138), Vector2(1.3605903, 1.3605903), Vector2(1.375, 1.375), Vector2(1.3883808, 1.3883808), Vector2(1.4007709, 1.4007709), Vector2(1.4122086, 1.4122086), Vector2(1.4227315, 1.4227315), Vector2(1.4323782, 1.4323782), Vector2(1.4411865, 1.4411865), Vector2(1.4491947, 1.4491947), Vector2(1.4564408, 1.4564408), Vector2(1.4629629, 1.4629629), Vector2(1.4687992, 1.4687992), Vector2(1.4739877, 1.4739877), Vector2(1.4785665, 1.4785665), Vector2(1.4825737, 1.4825737), Vector2(1.4860475, 1.4860475), Vector2(1.4890261, 1.4890261), Vector2(1.4915473, 1.4915473), Vector2(1.4936494, 1.4936494), Vector2(1.4953704, 1.4953704), Vector2(1.4967484, 1.4967484), Vector2(1.4978218, 1.4978218), Vector2(1.4986283, 1.4986283), Vector2(1.4992062, 1.4992062), Vector2(1.4995935, 1.4995935), Vector2(1.4998286, 1.4998286), Vector2(1.4999492, 1.4999492), Vector2(1.4999936, 1.4999936), Vector2(1.5, 1.5)]
@@ -116,7 +104,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:self_modulate")
+tracks/0/path = NodePath("../../DisclaimerEpilepsy:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -128,46 +116,34 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../DisclaimerEpilepsy:self_modulate")
+tracks/1/path = NodePath("../ExperimentalDisclaimer/Expeeee/RotatingBox/HeartHeartHeart:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [0.0]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("../ExperimentalDisclaimer/Expeeee/RotatingBox/HeartHeartHeart:rotation")
+tracks/2/path = NodePath("../../Welcome:self_modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("../../Welcome:self_modulate")
+tracks/3/path = NodePath("../../Welcome:scale")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("../../Welcome:scale")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -232,6 +208,35 @@ text = "Welcome"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="DisclaimerEpilepsy" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -260.0
+offset_right = 210.0
+offset_bottom = -147.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Warning" type="TextureRect" parent="DisclaimerEpilepsy"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("4_yphwi")
+stretch_mode = 2
+
+[node name="DisclaimerText" type="Label" parent="DisclaimerEpilepsy"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Disclaimer
+This game can have rapidly changing colours
+Please take caution if you are affected by epilepsy "
+horizontal_alignment = 1
+
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -244,25 +249,6 @@ grow_vertical = 2
 visible = false
 layout_mode = 2
 texture = ExtResource("2_abd43")
-
-[node name="DisclaimerEpilepsy" type="VBoxContainer" parent="CenterContainer"]
-modulate = Color(0, 0, 0, 0)
-layout_mode = 2
-alignment = 1
-
-[node name="Warning" type="TextureRect" parent="CenterContainer/DisclaimerEpilepsy"]
-layout_mode = 2
-size_flags_horizontal = 4
-texture = ExtResource("4_yphwi")
-stretch_mode = 2
-
-[node name="DisclaimerText" type="Label" parent="CenterContainer/DisclaimerEpilepsy"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "Disclaimer
-This game can have rapidly changing colours
-Please take caution if you are affected by epilepsy "
-horizontal_alignment = 1
 
 [node name="ExperimentalDisclaimer" type="Control" parent="CenterContainer"]
 modulate = Color(0, 0, 0, 0)
