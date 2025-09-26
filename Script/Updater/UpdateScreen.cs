@@ -10,7 +10,7 @@ public partial class UpdateScreen : Control
 	public static readonly string platformZip = OS.GetName() switch
 		{
 			"Windows" => "Windows.zip",
-			"Linux" => "Linuxx.zip",
+			"Linux" => "Linux.zip",
 			_ => "unknown.zip"
 		};
 	public static readonly string executableName = OS.GetName() switch
