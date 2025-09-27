@@ -101,7 +101,7 @@ public partial class SettingsOperator : Node
     };
     public Dictionary<string, object> Configurationbk { get; set; }
 
-    public static Texture2D GetNullImage() => ResourceLoader.Load<CompressedTexture2D>("/var/mnt/Storage/Documents/Qlute/Resources/System/SongSelect/NoBG.png");
+    public static Texture2D GetNullImage() => ResourceLoader.Load<CompressedTexture2D>("res://Resources/System/SongSelect/NoBG.png");
 
     public static Texture2D LoadImage(string path)
     {
