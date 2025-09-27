@@ -50,7 +50,7 @@ public partial class Gameplay : Control
 	private Node PauseMenu { get; set; }
 	private bool Finished { get; set; }
 	private int score { get; set; }
-	public static IEnumerable<DanceCounter> dance { get; set; }
+	public static List<DanceCounter> dance { get; set; }
 	private int DanceIndex { get; set; }
 	private Label debugtext { get; set; }
 	public static int ReplayINT { get; set;} // Track the progress of replay...
@@ -154,7 +154,7 @@ public partial class Gameplay : Control
 		var t = "";
 		var timen = -1;
 		var isHitObjectSection = false;
-		dance = (IEnumerable<DanceCounter>)SettingsOperator.Beatmaps[SettingsOperator.SongID].Dance;
+		dance = SettingsOperator.Beatmaps[SettingsOperator.SongID].Dance;
 		foreach (string line in lines)
 		{
 			if (line.Trim() == "[HitObjects]")
@@ -249,7 +249,6 @@ public partial class Gameplay : Control
 		SettingsOperator.ResetScore();
 		SettingsOperator.Resetms();
 		if (SettingsOperator.Sessioncfg["beatmapurl"] != null) ReloadBeatmap(SettingsOperator.Sessioncfg["beatmapurl"].ToString());
-
 		// If auto is enabled, it will make a Replay file with Auto being the player playing the beatmap. Before this it didn't make the replay file, it just plays.
 		// I am doing this because it's more simpler for me and don't have to worry about breaking auto (Qlutina)
 		if (ModsOperator.Mods["auto"]) {
@@ -560,18 +559,18 @@ public partial class Gameplay : Control
 				SettingsOperator.toppaneltoggle();
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 			}
-			//debugtext.Text = $"est: {est}\nDanceIndex:{DanceIndex}\nTimeindex:{dance.ElementAt(DanceIndex).time}";
+			//debugtext.Text = $"est: {est}\nDanceIndex:{DanceIndex}\nTimeindex:{dance[DanceIndex].time}";
 
 
 
-			if ((int)est >= dance.ElementAt(DanceIndex).time + BeatmapBackground.bpm && BeatmapBackground.FlashEnable)
+			if ((int)est >= dance[DanceIndex].time + BeatmapBackground.bpm && BeatmapBackground.FlashEnable)
 			{
-				Transitioning(dance.ElementAt(DanceIndex).flash);
+				Transitioning(dance[DanceIndex].flash);
 				IncreaseDanceIndex();
 			}
-			else if ((int)est >= dance.ElementAt(DanceIndex).time && !BeatmapBackground.FlashEnable)
+			else if ((int)est >= dance[DanceIndex].time && !BeatmapBackground.FlashEnable)
 			{
-				Transitioning(dance.ElementAt(DanceIndex).flash);
+				Transitioning(dance[DanceIndex].flash);
 				IncreaseDanceIndex();
 			}
 

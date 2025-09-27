@@ -334,10 +334,11 @@ public partial class SettingsOperator : Node
     legend.Levelrating = GetLevelRating(hitCount, lastNoteTime * 0.001f);
     legend.pp = Get_ppvalue(hitCount, 0, 0, 0, combo: hitCount, TimeTotal: lastNoteTime * 0.001f);
     legend.Path = filename.Replace(filename.Split("/").Last(), "");
+    legend.Rawurl = filename;
     if (legend.KeyCount == 4)
-    {
+        {
             Beatmaps.Add(legend);
-    }
+        }
     return $"{legend.Artist} - {legend.Title} from {legend.Mapper}";
     }
 
