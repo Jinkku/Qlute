@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene load_steps=33 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" uid="uid://bxurggbxgjswg" path="res://Script/Home/HomeScreen.cs" id="1_vj7aj"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
@@ -22,14 +22,14 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1gbip"]
 content_margin_left = 10.0
-content_margin_top = 5.0
+content_margin_top = 10.0
 content_margin_right = 10.0
-content_margin_bottom = 5.0
+content_margin_bottom = 10.0
 bg_color = Color(0, 0, 0, 0.568627)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="Gradient" id="Gradient_5vo6i"]
 colors = PackedColorArray(0, 0, 0, 0.568627, 0, 0, 0, 0)
@@ -66,8 +66,6 @@ skew = Vector2(0.5, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yu1gh"]
 bg_color = Color(0, 0, 0, 0.588235)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m6dsd"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_doo6x"]
 content_margin_left = 5.0
@@ -115,14 +113,34 @@ script = ExtResource("1_vj7aj")
 [node name="BeatmapBackground" parent="." instance=ExtResource("2_ouv1d")]
 layout_mode = 1
 
-[node name="Control" type="Control" parent="."]
-visible = false
+[node name="MenuNotice" type="PanelContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = -91.0
+offset_top = -120.0
+offset_right = 91.0
+offset_bottom = -71.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_1gbip")
+
+[node name="Timer" type="Timer" parent="MenuNotice"]
+wait_time = 5.0
+autostart = true
+
+[node name="NoticeText" type="Label" parent="MenuNotice"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Example Text"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HTTPRequest" type="HTTPRequest" parent="MenuNotice"]
+script = ExtResource("4_7kbet")
 
 [node name="SongIndication" parent="." instance=ExtResource("3_bb0aq")]
 layout_mode = 1
@@ -133,32 +151,6 @@ offset_left = -212.0
 offset_right = -10.0
 offset_bottom = 29.0
 grow_horizontal = 0
-
-[node name="MenuNotice" type="PanelContainer" parent="SongIndication"]
-visible = false
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -190.0
-offset_top = 50.0
-offset_right = -10.0
-offset_bottom = 90.0
-grow_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_1gbip")
-
-[node name="Timer" type="Timer" parent="SongIndication/MenuNotice"]
-wait_time = 5.0
-autostart = true
-
-[node name="NoticeText" type="Label" parent="SongIndication/MenuNotice"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Example Text"
-horizontal_alignment = 1
-
-[node name="HTTPRequest" type="HTTPRequest" parent="SongIndication/MenuNotice"]
-script = ExtResource("4_7kbet")
 
 [node name="Shadow" type="TextureRect" parent="."]
 layout_mode = 1
@@ -431,16 +423,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("11_gngjn")
 
-[node name="Bomb" type="Button" parent="IntroPending"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_m6dsd")
-flat = true
-
 [node name="logo" type="TextureButton" parent="IntroPending"]
 z_index = 3
 custom_minimum_size = Vector2(360, 148)
@@ -530,8 +512,8 @@ lifetime = 3.0
 fixed_fps = 15
 process_material = SubResource("ParticleProcessMaterial_ldbht")
 
-[connection signal="timeout" from="SongIndication/MenuNotice/Timer" to="SongIndication/MenuNotice/HTTPRequest" method="_on_timer_timeout"]
-[connection signal="request_completed" from="SongIndication/MenuNotice/HTTPRequest" to="SongIndication/MenuNotice/HTTPRequest" method="_on_request_completed"]
+[connection signal="timeout" from="MenuNotice/Timer" to="MenuNotice/HTTPRequest" method="_on_timer_timeout"]
+[connection signal="request_completed" from="MenuNotice/HTTPRequest" to="MenuNotice/HTTPRequest" method="_on_request_completed"]
 [connection signal="button_down" from="SubButton/SubButtons/Play_Solo" to="SubButton/SubButtons/Play_Solo" method="_down"]
 [connection signal="button_up" from="SubButton/SubButtons/Play_Solo" to="SubButton/SubButtons/Play_Solo" method="_up"]
 [connection signal="mouse_entered" from="SubButton/SubButtons/Play_Solo" to="SubButton/SubButtons/Play_Solo" method="_focus"]
@@ -561,7 +543,6 @@ process_material = SubResource("ParticleProcessMaterial_ldbht")
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Create" to="." method="_create"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Browse" to="." method="_browse"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Leave" to="." method="_leave"]
-[connection signal="pressed" from="IntroPending/Bomb" to="IntroPending" method="_on_bomb_pressed"]
 [connection signal="mouse_entered" from="IntroPending/logo" to="IntroPending" method="_hover"]
 [connection signal="mouse_exited" from="IntroPending/logo" to="IntroPending" method="_unhover"]
 [connection signal="pressed" from="IntroPending/logo" to="IntroPending" method="_on_bomb_pressed"]
