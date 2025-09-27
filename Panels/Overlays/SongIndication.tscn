@@ -1,23 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://i4ipbotu77y8"]
+[gd_scene load_steps=2 format=3 uid="uid://i4ipbotu77y8"]
 
 [ext_resource type="Script" uid="uid://bkssygfdsllly" path="res://Script/Home/SongIndication.cs" id="1_rnwln"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rnwln"]
-content_margin_left = 10.0
-content_margin_top = 5.0
-content_margin_right = 10.0
-content_margin_bottom = 5.0
-bg_color = Color(0, 0, 0, 0.588235)
-skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
 
 [node name="SongIndication" type="Label"]
 offset_right = 40.0
 offset_bottom = 19.0
-theme_override_styles/normal = SubResource("StyleBoxFlat_rnwln")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.354)
+theme_override_constants/outline_size = 30
 text = "Song Artist - Song Title"
 horizontal_alignment = 2
 vertical_alignment = 1
