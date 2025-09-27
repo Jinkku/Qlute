@@ -252,179 +252,95 @@ public partial class SettingsOperator : Node
     }
     public static string Parse_Beatmapfile(string filename, int SetID = 0)
     {
-        using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
-        var text = file.GetAsText();
-        var lines = text.Split("\n");
-        string songtitle = "";
-        string songtitleu = "";
-        string artist = "";
-        string artistu = "";
-        string version = "";
-        float timetotal = 0;
-        int bpm = 0;
-        int osubeatid = 0;
-        int accuracy = 0;
-        int osubeatidset = 0;
-        int qlbeatid = 0;
-        int qlbeatidset = 0;
-        float previewtime = 0;
-        double ppvalue = 0;
-        string mapper = "";
-        float levelrating = 0;
-        int notetime = 0;
-        string background = "";
-        string audio = "";
-        string rawurl = filename;
-        var hitob = 0;
-        List<DanceCounter> dance = [];
-        var isHitObjectSection = false;
-        string path = filename.Replace(filename.Split("/").Last(), "");
-        int keycount = 4;
-        foreach (var line in lines)
+    var legend = new BeatmapLegend { SetID = SetID };
+    using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
+    var lines = file.GetAsText().Split("\n");
+    bool inHitObjects = false;
+    bool inTimingPoints = false;
+    int hitCount = 0;
+    float lastNoteTime = 0;
+
+    foreach (var lineRaw in lines)
+    {
+        var line = lineRaw.Trim();
+        if (string.IsNullOrWhiteSpace(line)) continue;
+
+        // Handle section switches
+        if (line == "[TimingPoints]") { inTimingPoints = true; continue; }
+        if (line == "[HitObjects]") { inTimingPoints = false; inHitObjects = true; continue; }
+        if (line.StartsWith("[")) { inTimingPoints = false; inHitObjects = false; continue; }
+
+        // --- key: value pairs ---
+        if (!inTimingPoints && !inHitObjects && line.Contains(":"))
         {
-            if (line.StartsWith("Title:"))
-            {
-                songtitle = line.Split(":")[1].Trim();
-            }
-            if (line.StartsWith("TitleUnicode:"))
-            {
-                songtitleu = line.Split(":")[1].Trim();
-            }
-            if (line.StartsWith("Artist:"))
-            {
-                artist = line.Split(":")[1].Trim();
-            }
-            if (line.StartsWith("ArtistUnicode:"))
-            {
-                artistu = line.Split(":")[1].Trim();
-            }
-            if (line.StartsWith("CircleSize:"))
-            {
-                //keycount = (int)float.Parse(line.Split(":")[1].Trim());
-                keycount = float.TryParse(line.Split(":")[1].Trim(), out float keycountv) ? (int)keycountv : 4;
-            }
-            if (line.StartsWith("OverallDifficulty:"))
-            {
-                //keycount = (int)float.Parse(line.Split(":")[1].Trim());
-                accuracy = float.TryParse(line.Split(":")[1].Trim(), out float accuracyv) ? (int)accuracyv : 0;
-            }
-            if (line.StartsWith("AudioFilename:"))
-            {
-                audio = line.Split(":")[1].Trim();
-            }
-            if (line.StartsWith("BeatmapID:"))
-            {
-                osubeatid = int.TryParse(line.Split(":")[1].Trim(), out int osubeatidv) ? (int)osubeatidv : 0;
-            }
-            if (line.StartsWith("BeatmapSetID:"))
-            {
-                osubeatidset = int.TryParse(line.Split(":")[1].Trim(), out int osubeatidsetv) ? (int)osubeatidsetv : 0;
-            }
-            if (line.StartsWith("QluteBeatID:"))
-            {
-                qlbeatid = int.TryParse(line.Split(":")[1].Trim(), out int qlbeatidv) ? (int)qlbeatidv : 0;
-            }
-            if (line.StartsWith("QluteBeatIDSet:"))
-            {
-                qlbeatidset = int.TryParse(line.Split(":")[1].Trim(), out int qlbeatidsetv) ? (int)qlbeatidsetv : 0;
-            }
-            if (line.StartsWith("Creator:"))
-            {
-                mapper = line.Split(":")[1].Trim();
-            }
-            if (line.StartsWith("Version:"))
-            {
-                version = line.Split(":")[1].Trim();
-            }
-            if (line.StartsWith("0,0,\"") && line.Contains("\""))
-            {
-                var parts = line.Split("\"");
-                if (parts.Length > 1)
-                {
-                    background = parts[1].Trim();
-                }
-            }
-            if (line.StartsWith("PreviewTime:"))
-            {
-                previewtime = (float.TryParse(line.Split(":")[1].Trim(), out float previewtimev) ? (float)previewtimev : 0) * 0.001f;
-            }
-            if (line.StartsWith("[TimingPoints]"))
-            {
-                var timingPointLines = lines.SkipWhile(l => !l.StartsWith("[TimingPoints]")).Skip(1);
-                bool foundbpm = false;
-                foreach (var timingLine in timingPointLines)
-                {
-                    if (string.IsNullOrWhiteSpace(timingLine) || timingLine.StartsWith("["))
-                        break;
+            var parts = line.Split(":", 2);
+            var key = parts[0].Trim();
+            var value = parts[1].Trim();
 
-                    var timingParts = timingLine.Split(",");
-                    if (timingParts.Length > 1 && float.TryParse(timingParts[1], out float bpmValue) && !foundbpm)
-                    {
-                        bpmValue = 60000 / bpmValue;
-                        bpm = (int)bpmValue;
-                        foundbpm = true;
-                    }
-                    if (timingParts.Length > 1 && int.TryParse(timingParts.First(), out int timecount) && int.TryParse(timingParts.Last(), out int flashtime))
-                    {
-                        dance.Add(new DanceCounter { time = timecount, flash = flashtime == 1 });
-                    }
-                }
-            }
-            if (line.Trim() == "[HitObjects]")
+            switch (key)
             {
-                isHitObjectSection = true;
-                continue;
-            }
-
-            if (isHitObjectSection)
-            {
-                // Break if we reach an empty line or another section
-                if (string.IsNullOrWhiteSpace(line) || line.StartsWith('['))
-                {
-                    isHitObjectSection = !isHitObjectSection;
-                    timetotal = notetime;
-                    levelrating = GetLevelRating(hitob, timetotal * 0.001f);
-                    ppvalue = Get_ppvalue(hitob, 0, 0, 0, combo: hitob, TimeTotal: timetotal * 0.001f);
-                    break;
-                }
-                var notecfg = line.Split(new[] { ',', ':' });
-                notetime = float.TryParse(notecfg[2], out float notetimev) ? (int)notetimev : 0;
-                var notesect = notecfg[0];
-                hitob++;
+                case "Title": legend.Title = value; break;
+                case "TitleUnicode": legend.TitleUnicode = value; break;
+                case "Artist": legend.Artist = value; break;
+                case "ArtistUnicode": legend.ArtistUnicode = value; break;
+                case "Creator": legend.Mapper = value; break;
+                case "Version": legend.Version = value; break;
+                case "CircleSize": legend.KeyCount = (int)(float.TryParse(value, out var cs) ? cs : 4); break;
+                case "OverallDifficulty": legend.Accuracy = float.TryParse(value, out var od) ? od : 0; break;
+                case "AudioFilename": legend.Audio = value; break;
+                case "BeatmapID": legend.Osubeatid = int.TryParse(value, out var bid) ? bid : -1; break;
+                case "BeatmapSetID": legend.Osubeatidset = int.TryParse(value, out var bset) ? bset : -1; break;
+                case "QluteBeatID": legend.Beatid = int.TryParse(value, out var qbid) ? qbid : -1; break;
+                case "QluteBeatIDSet": legend.Beatidset = int.TryParse(value, out var qbset) ? qbset : -1; break;
+                case "PreviewTime": legend.PreviewTime = (float.TryParse(value, out var pt) ? pt : 0) * 0.001f; break;
             }
         }
-        if (keycount == 4)
+
+        // --- background ---
+        if (line.StartsWith("0,0,\"") && line.Contains("\""))
         {
-            Beatmaps.Add(new BeatmapLegend
-            {
-                ID = Beatmaps.Count,
-                SetID = SetID,
-                Title = songtitle,
-                TitleUnicode = songtitleu,
-                Artist = artist,
-                ArtistUnicode = artistu,
-                Mapper = mapper,
-                KeyCount = keycount,
-                Version = version,
-                pp = ppvalue,
-                Osubeatid = osubeatid,
-                Osubeatidset = osubeatidset,
-                Beatid = qlbeatid,
-                Beatidset = qlbeatidset,
-                Bpm = bpm,
-                Dance = dance,
-                Timetotal = timetotal,
-                PreviewTime = previewtime,
-                Levelrating = levelrating,
-                Accuracy = accuracy,
-                Background = background,
-                Audio = audio,
-                Rawurl = rawurl,
-                Path = path
-            });
+            var parts = line.Split("\"");
+            if (parts.Length > 1) legend.Background = parts[1].Trim();
         }
-        return $"{artist} - {songtitle} from {mapper}";
+
+        // --- timing points ---
+        if (inTimingPoints)
+        {
+            var parts = line.Split(",");
+            if (parts.Length < 2) continue;
+
+            if (float.TryParse(parts[1], out var mpb) && legend.Bpm == 0) // first BPM
+                legend.Bpm = 60000f / mpb;
+
+            if (int.TryParse(parts[0], out var time) && int.TryParse(parts.Last(), out var flash))
+                legend.Dance.Add(new DanceCounter { time = time, flash = flash == 1 });
+        }
+
+        // --- hitobjects ---
+        if (inHitObjects)
+        {
+            var parts = line.Split(new[] { ',', ':' });
+            if (parts.Length < 3) continue;
+
+            if (float.TryParse(parts[2], out var noteTime))
+            {
+                lastNoteTime = noteTime;
+                hitCount++;
+            }
+        }
     }
+
+    legend.Timetotal = lastNoteTime;
+    legend.Levelrating = GetLevelRating(hitCount, lastNoteTime * 0.001f);
+    legend.pp = Get_ppvalue(hitCount, 0, 0, 0, combo: hitCount, TimeTotal: lastNoteTime * 0.001f);
+    legend.Path = filename.Replace(filename.Split("/").Last(), "");
+    if (legend.KeyCount == 4)
+    {
+            Beatmaps.Add(legend);
+    }
+    return $"{legend.Artist} - {legend.Title} from {legend.Mapper}";
+    }
+
     public static void Addms(float ms)
     {
         AllMiliSecondsFromBeatmap += ms;
