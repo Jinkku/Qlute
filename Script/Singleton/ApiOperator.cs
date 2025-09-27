@@ -198,7 +198,7 @@ public partial class ApiOperator : Node
 	public static void CheckBeatmapRankStatus()
 	{
 		RankApi?.CancelRequest();
-		if ((int)SettingsOperator.Sessioncfg["SongID"] != -1)
+		if (SettingsOperator.SongID != -1)
 		{
 			RankApi.Request($"{Beatmapapi}/api/s/{SettingsOperator.Sessioncfg["osubeatidset"]}");
 		}

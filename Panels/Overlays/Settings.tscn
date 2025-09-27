@@ -172,6 +172,7 @@ clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_rfoxt")
+vertical_scroll_mode = 3
 
 [node name="Sections" type="VBoxContainer" parent="ColorRect/Panels/Scroll"]
 layout_mode = 2
@@ -312,6 +313,10 @@ text = "Disable flashing effects"
 visible = false
 layout_mode = 2
 text = "Switch to 24-Hour Clock"
+
+[node name="OriginalLanguage" type="CheckButton" parent="ColorRect/Panels/Scroll/Sections"]
+layout_mode = 2
+text = "Use original language for beatmaps"
 
 [node name="WindowNotice2" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
@@ -460,6 +465,7 @@ text = "0.0.0 Development Build"
 [connection signal="item_selected" from="ColorRect/Panels/Scroll/Sections/WindowSelector" to="." method="_changed_resolution"]
 [connection signal="item_selected" from="ColorRect/Panels/Scroll/Sections/FPSModes" to="ColorRect/Panels/Scroll/Sections/FPSModes" method="_fpsselected"]
 [connection signal="pressed" from="ColorRect/Panels/Scroll/Sections/FPSShow" to="ColorRect/Panels/Scroll/Sections/FPSShow" method="_toggled"]
+[connection signal="pressed" from="ColorRect/Panels/Scroll/Sections/OriginalLanguage" to="." method="_originallanguage"]
 [connection signal="drag_ended" from="ColorRect/Panels/Scroll/Sections/BackgroundDim" to="." method="_backgrounddim_ended"]
 [connection signal="value_changed" from="ColorRect/Panels/Scroll/Sections/BackgroundDim" to="." method="_backgrounddim_started"]
 [connection signal="item_selected" from="ColorRect/Panels/Scroll/Sections/SkinMode" to="ColorRect/Panels/Scroll/Sections/SkinMode" method="_LoadSkin"]

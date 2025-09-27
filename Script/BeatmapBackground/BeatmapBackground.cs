@@ -70,7 +70,7 @@ public partial class BeatmapBackground : TextureRect
 
 		Position = new Vector2(offsetX, offsetY); // Sets the position via mouse movements.
 
-		if (Texture != SettingsOperator.Sessioncfg["background"] && (int)SettingsOperator.Sessioncfg["SongID"] != -1 && SettingsOperator.Sessioncfg["background"] != null)
+		if (Texture != SettingsOperator.Sessioncfg["background"] && SettingsOperator.SongID != -1 && SettingsOperator.Sessioncfg["background"] != null)
 		{
 			GD.Print("[Qlute] Switching to Specified image");
 			Switch_Background((Texture2D)SettingsOperator.Sessioncfg["background"], Instant);

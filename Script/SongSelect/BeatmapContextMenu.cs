@@ -27,11 +27,11 @@ public partial class BeatmapContextMenu : PanelContainer
 			SettingsOperator.Beatmaps.RemoveAll(beatmap => beatmap.SetID == SetID);
 			SettingsOperator.Sessioncfg["reloaddb"] = true;
 
-			if ((int)SettingsOperator.Sessioncfg["SongID"] >= SettingsOperator.Beatmaps.Count - 1)
+			if (SettingsOperator.SongID >= SettingsOperator.Beatmaps.Count - 1)
 			{
-				SettingsOperator.Sessioncfg["SongID"] = SettingsOperator.Beatmaps.Count - 1;
+				SettingsOperator.SongID = SettingsOperator.Beatmaps.Count - 1;
 			}
-			SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"]);
+			SettingsOperator.SelectSongID(SettingsOperator.SongID);
 		}
 	}
 	private void _delete()
@@ -51,11 +51,11 @@ public partial class BeatmapContextMenu : PanelContainer
 				File.Delete(beatmap.Rawurl);
 			}
 
-			if ((int)SettingsOperator.Sessioncfg["SongID"] >= SettingsOperator.Beatmaps.Count - 1)
+			if (SettingsOperator.SongID >= SettingsOperator.Beatmaps.Count - 1)
 			{
-				SettingsOperator.Sessioncfg["SongID"] = SettingsOperator.Beatmaps.Count - 1;
+				SettingsOperator.SongID = SettingsOperator.Beatmaps.Count - 1;
 			}
-			SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"]);
+			SettingsOperator.SelectSongID(SettingsOperator.SongID);
 		}
 	}
 }

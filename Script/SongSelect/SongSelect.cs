@@ -51,6 +51,7 @@ public partial class SongSelect : Control
 	private PanelContainer DetailsExtended { get; set; }
 	private ScrollContainer Leaderboardinfo { get; set; }
 	private Vector2 CardSize { get; set; }
+	private bool Update { get; set; }
 
 
 	int startposition = 0;
@@ -91,18 +92,9 @@ public partial class SongSelect : Control
 	public void AddSongList(int id)
 	{
 		Button button = InitiateMusicCard();
-		var SongTitle = button.GetNode<Label>("MarginContainer/VBoxContainer/SongTitle");
-		var SongArtist = button.GetNode<Label>("MarginContainer/VBoxContainer/SongArtist");
-		var SongMapper = button.GetNode<Label>("MarginContainer/VBoxContainer/SongMapper");
-		var TextureRect = button.GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
 		var Rating = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Rating");
 		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Version");
 		button.Position = new Vector2(0, startposition + (CardSize.Y * id));
-		SongTitle.Text = SettingsOperator.Beatmaps[id].Title;
-		SongArtist.Text = SettingsOperator.Beatmaps[id].Artist;
-		SongMapper.Text = "Created by " + SettingsOperator.Beatmaps[id].Mapper;
-		Version.Text = SettingsOperator.Beatmaps[id].Version.ToString();
-		Rating.Text = "Lv. " + SettingsOperator.Beatmaps[id].Levelrating.ToString("0");
 		button.Name = id.ToString();
 		button.ClipText = true;
 		button.SetMeta("background", SettingsOperator.Beatmaps[id].Path + SettingsOperator.Beatmaps[id].Background);
@@ -113,7 +105,7 @@ public partial class SongSelect : Control
 	private void _on_random()
 	{
 		SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
-		scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
+		scrollmode(exactvalue: SettingsOperator.SongID);
 	}
 
 
@@ -171,7 +163,7 @@ public partial class SongSelect : Control
 		Leaderboardinfo = GetNode<ScrollContainer>("SongDetails/Leaderboard Panel/Rows/LeaderboardInfo");
 		StartButton = GetNode<Button>("BottomBar/Start");
 		StartButton.Visible = false; // Start the button off with being hidden.
-		scrollBar.Value = (int)SettingsOperator.Sessioncfg["SongID"];
+		scrollBar.Value = SettingsOperator.SongID;
 		CheckLeaderboardMode();
 
 
@@ -281,10 +273,10 @@ public partial class SongSelect : Control
 			Diff.Text = "";
 		}
 
-		if (SettingsOperator.Beatmaps.Count > 0 && (int)SettingsOperator.Sessioncfg["SongID"] == -1)
+		if (SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.SongID == -1)
 		{
 			SettingsOperator.SelectSongID(0);
-			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
+			scrollmode(exactvalue: SettingsOperator.SongID);
 		}
 	}
 
@@ -363,7 +355,7 @@ public partial class SongSelect : Control
 		CheckLeaderboardMode();
 		CheckRankStatus();
 		// Show Play button if SongID is set.
-		StartButton.Visible = ((int)SettingsOperator.Sessioncfg["SongID"] != -1);
+		StartButton.Visible = (SettingsOperator.SongID != -1);
 		NoBeatmap.Visible = (SettingsOperator.Beatmaps.Count < 1);
 
 		if (Input.IsMouseButtonPressed(MouseButton.Right) && SettingsOperator.SongIDHighlighted != -1)
@@ -411,33 +403,33 @@ public partial class SongSelect : Control
 		if (!AnimationSong)
 		{
 			AnimationSong = !AnimationSong;
-			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
+			scrollmode(exactvalue: SettingsOperator.SongID);
 		}
 		checksongpanel();
 
 		if (Input.IsActionJustPressed("Songup"))
 		{
-			if ((int)SettingsOperator.Sessioncfg["SongID"] - 1 >= 0 && (int)SettingsOperator.Sessioncfg["SongID"] != -1)
+			if (SettingsOperator.SongID - 1 >= 0 && SettingsOperator.SongID != -1)
 			{
-				SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"] - 1);
+				SettingsOperator.SelectSongID(SettingsOperator.SongID - 1);
 			}
-			else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1)
+			else if (SettingsOperator.SongID != -1)
 			{
 				SettingsOperator.SelectSongID((int)SettingsOperator.Beatmaps.Count - 1);
 			}
-			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
+			scrollmode(exactvalue: SettingsOperator.SongID);
 		}
 		else if (Input.IsActionJustPressed("Songdown"))
 		{
-			if ((int)SettingsOperator.Sessioncfg["SongID"] + 1 < (int)SettingsOperator.Beatmaps.Count && (int)SettingsOperator.Sessioncfg["SongID"] != -1)
+			if (SettingsOperator.SongID + 1 < (int)SettingsOperator.Beatmaps.Count && SettingsOperator.SongID != -1)
 			{
-				SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"] + 1);
+				SettingsOperator.SelectSongID(SettingsOperator.SongID + 1);
 			}
-			else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1)
+			else if (SettingsOperator.SongID != -1)
 			{
 				SettingsOperator.SelectSongID(0);
 			}
-			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
+			scrollmode(exactvalue: SettingsOperator.SongID);
 		}
 		else if (Input.IsActionJustPressed("Mod"))
 		{
@@ -474,14 +466,14 @@ public partial class SongSelect : Control
 			_Start();
 
 		}
-		else if (MusicCard.Connection_Button && scrollBar.Value == (int)SettingsOperator.Sessioncfg["SongID"])
+		else if (MusicCard.Connection_Button && scrollBar.Value == SettingsOperator.SongID)
 		{
 			_Start();
 			MusicCard.Connection_Button = false;
 		}
-		else if (MusicCard.Connection_Button && scrollBar.Value != (int)SettingsOperator.Sessioncfg["SongID"])
+		else if (MusicCard.Connection_Button && scrollBar.Value != SettingsOperator.SongID)
 		{
-			scrollmode(exactvalue: (int)SettingsOperator.Sessioncfg["SongID"]);
+			scrollmode(exactvalue: SettingsOperator.SongID);
 			MusicCard.Connection_Button = false;
 		}
 	}

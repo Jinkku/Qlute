@@ -10,7 +10,9 @@ public class BeatmapLegend
 	public int ID { get; set; } = 0;
 	public int SetID { get; set; } = 0;
 	public string Title { get; set; } = null;
+	public string TitleUnicode { get; set; } = null;
 	public string Artist { get; set; } = null;
+	public string ArtistUnicode { get; set; } = null;
 	public string Mapper { get; set; } = null;
 	public int KeyCount { get; set; } = 4;
 	public string Version { get; set; } = null;

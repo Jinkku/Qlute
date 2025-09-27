@@ -11,11 +11,16 @@ public partial class MusicCard : Button
 	public TextureRect Cover { get; set; }
 	public Timer Wait { get; set; }
 	public TextureRect Preview { get; set; }
-	public int SongID { get; set; }
+	private int SongID { get; set; }
 	public int waitt = 0;
 	private bool isLoadingImage = false;
 	private string BackgroundPath = null;
 	private Texture2D texture { get; set; }
+	private Label Title { get; set; }
+	private Label Artist { get; set; }
+	private Label Mapper { get; set; }
+	private Label Version { get; set; }
+	private bool Update { get; set; }
 	public override void _ExitTree()
 	{
 		if (texture != null)
@@ -23,7 +28,7 @@ public partial class MusicCard : Button
 			texture.Dispose();
 			texture = null;
 		}
-		GC.Collect(); 
+		GC.Collect();
 		GC.WaitForPendingFinalizers();
 	}
 
@@ -73,6 +78,26 @@ public partial class MusicCard : Button
 	}
 
 	private Tween LoadTween { get; set; }
+
+	private void ReloadInfo()
+	{
+		Update = Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString());
+		var cache = SettingsOperator.Beatmaps[SongID];
+		if (Update)
+		{
+			Title.Text = cache.TitleUnicode;
+			Artist.Text = cache.ArtistUnicode;
+		}
+		else
+		{
+			Title.Text = cache.Title;
+			Artist.Text = cache.Artist;
+		}
+		
+		Mapper.Text = cache.Mapper;
+		Version.Text = "Created by " + cache.Version;
+	}
+
 	public override void _Ready()
 	{
 		PivotOffset = new Vector2(Size.X / 2, Size.Y / 2);
@@ -80,6 +105,21 @@ public partial class MusicCard : Button
 		self = GetNode<Button>(".");
 		Cover = GetTree().Root.GetNode<TextureRect>("Song Select/BeatmapBackground");
 		Preview = GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
+		Title = GetNode<Label>("MarginContainer/VBoxContainer/SongTitle");
+		Artist = GetNode<Label>("MarginContainer/VBoxContainer/SongArtist");
+		Mapper = GetNode<Label>("MarginContainer/VBoxContainer/SongMapper");
+		Version = GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Version");
+
+		if (!self.HasMeta("SongID"))
+			self.SetMeta("SongID", 0);
+
+		SongID = (int)GetMeta("SongID");
+
+		ReloadInfo();
+
+
+
+
 
 		if (self.HasMeta("background"))
 		{
@@ -90,9 +130,6 @@ public partial class MusicCard : Button
 			else
 				GD.PrintErr("Background image not found: " + BackgroundPath);
 		}
-
-		if (!self.HasMeta("SongID"))
-			self.SetMeta("SongID", 0);
 
 		SelfModulate = Checkid() ? toggledcolour : Idlecolour;
 	}
@@ -140,16 +177,26 @@ public partial class MusicCard : Button
 	}
 	public void _on_pressed()
 	{
-		int songID = (int)self.GetMeta("SongID");
 		Connection_Button = true;
-		SettingsOperator.SelectSongID(songID);
+		SettingsOperator.SelectSongID(SongID);
 	}
 	private bool Accessed = false;
 	public static bool Connection_Button = false;
 	public bool Checkid()
 	{
-		return SettingsOperator.Sessioncfg["SongID"].ToString().Equals(self.GetMeta("SongID").ToString());
+		return SettingsOperator.SongID.ToString().Equals(self.GetMeta("SongID").ToString());
 	}
+
+	public override void _PhysicsProcess(double delta)
+	{
+		if (Update != Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString()))
+		{
+			ReloadInfo();
+		}
+    }
+
+
+
 	public override void _Process(double _delta)
 	{
 		if (ButtonPressed != Checkid())
