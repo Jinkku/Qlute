@@ -3,7 +3,12 @@ using System;
 
 public partial class SettingsPanel : Control
 {
-	// Called when the node enters the scene tree for the first time.
+
+
+	[Signal]
+	public delegate void UpdateInfoEventHandler();
+
+
 	private SettingsOperator SettingsOperator { get; set; }
 	public OptionButton Windowmode { get; set; }
 	public HSlider BackgroundDim { get; set; }
@@ -11,8 +16,10 @@ public partial class SettingsPanel : Control
 	public HSlider OffsetSlider { get; set; }
 	public Label OffsetTicker { get; set; }
 	public Label ScrollSpeedt { get; set; }
+	private CheckButton ShowUnicode { get; set; }
 	public HSlider ScrollSpeed { get; set; }
 	public ScrollContainer Scrolls { get; set; }
+
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -22,6 +29,7 @@ public partial class SettingsPanel : Control
 		OffsetButton = GetNode<Button>("ColorRect/Panels/Scroll/Sections/AudioOffsetAuto");
 		OffsetSlider = GetNode<HSlider>("ColorRect/Panels/Scroll/Sections/AudioOffset");
 		ScrollSpeed = GetNode<HSlider>("ColorRect/Panels/Scroll/Sections/ScrollSpeed");
+		ShowUnicode = GetNode<CheckButton>("ColorRect/Panels/Scroll/Sections/OriginalLanguage");
 		OffsetTicker = GetNode<Label>("ColorRect/Panels/Scroll/Sections/AudioNotice2");
 		Scrolls = GetNode<ScrollContainer>("ColorRect/Panels/Scroll");
 		ScrollSpeedt = GetNode<Label>("ColorRect/Panels/Scroll/Sections/ScrollSpeedn");
@@ -41,14 +49,22 @@ public partial class SettingsPanel : Control
 			offset = 0;
 		}
 		OffsetSlider.Value = 200 - offset;
+		ShowUnicode.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString());
+
 
 
 	}
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	private void _display()
 	{
 		Scrolls.GetVScrollBar().Value = GetNode<Label>("ColorRect/Panels/Scroll/Sections/Display").Position.Y;
 	}
+
+	private void _originallanguage()
+	{
+		SettingsOperator.SetSetting("showunicode", ShowUnicode.ButtonPressed);
+		SettingsOperator.ReloadInfo();
+	}
+
 	private void _audio()
 	{
 		Scrolls.GetVScrollBar().Value = GetNode<Label>("ColorRect/Panels/Scroll/Sections/Audio").Position.Y;

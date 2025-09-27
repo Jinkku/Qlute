@@ -28,22 +28,22 @@ public partial class NowPlaying : PanelContainer
 	private void Prev()
 	{
 		
-		if ((int)SettingsOperator.Sessioncfg["SongID"] - 1 >= 0 && (int)SettingsOperator.Sessioncfg["SongID"] != -1)
+		if (SettingsOperator.SongID - 1 >= 0 && SettingsOperator.SongID != -1)
 		{
-			SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"] - 1,seek: 0);
+			SettingsOperator.SelectSongID(SettingsOperator.SongID - 1,seek: 0);
 		}
-		else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1)
+		else if (SettingsOperator.SongID != -1)
 		{
 			SettingsOperator.SelectSongID((int)SettingsOperator.Beatmaps.Count - 1,seek: 0);
 		}
 	}
 	private void Next()
 	{
-		if ((int)SettingsOperator.Sessioncfg["SongID"] + 1 < (int)SettingsOperator.Beatmaps.Count && (int)SettingsOperator.Sessioncfg["SongID"] != -1)
+		if (SettingsOperator.SongID + 1 < (int)SettingsOperator.Beatmaps.Count && SettingsOperator.SongID != -1)
 		{
-			SettingsOperator.SelectSongID((int)SettingsOperator.Sessioncfg["SongID"] + 1,seek: 0);
+			SettingsOperator.SelectSongID(SettingsOperator.SongID + 1,seek: 0);
 		}
-		else if ((int)SettingsOperator.Sessioncfg["SongID"] != -1)
+		else if (SettingsOperator.SongID != -1)
 		{
 			SettingsOperator.SelectSongID(0,seek: 0);
 		}
@@ -60,7 +60,7 @@ public partial class NowPlaying : PanelContainer
 		{
 			Pause.Icon = PauseIcon;
 		}
-		if (Background.Texture != SettingsOperator.Sessioncfg["background"] && (int)SettingsOperator.Sessioncfg["SongID"] != -1)
+		if (Background.Texture != SettingsOperator.Sessioncfg["background"] && SettingsOperator.SongID != -1)
 		{
 			Background.Texture = (Texture2D)SettingsOperator.Sessioncfg["background"];
 		}

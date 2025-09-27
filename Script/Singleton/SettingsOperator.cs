@@ -95,6 +95,7 @@ public partial class SettingsOperator : Node
         { "scrollspeed", (int)1346 }, // 11485 ms max
         { "fpsmode", 1 },
         { "showfps", false },
+        { "showunicode", false },
         { "gamepath", "" },
         { "leaderboardtype", 1 },
     };
@@ -142,6 +143,26 @@ public partial class SettingsOperator : Node
     public static readonly int PerfectJudgeMin = PerfectJudge;
     public static int GreatJudge { get; set; } = -1; // Judge Great
     public static int MehJudge { get; set; } = -1; // Judge Meh
+
+    public static void ReloadInfo()
+    {
+        if (Beatmaps.Count > 0 && SongID != -1)
+        {
+            GD.Print("change");
+            var beatmap = Beatmaps[SongID];
+            if (!Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString()))
+            {
+                Sessioncfg["beatmaptitle"] = beatmap.Title;
+                Sessioncfg["beatmapartist"] = beatmap.Artist;
+            }
+            else
+            {
+                Sessioncfg["beatmaptitle"] = beatmap.TitleUnicode;
+                Sessioncfg["beatmapartist"] = beatmap.ArtistUnicode;
+            }
+        }
+        
+    }
     public void SelectSongID(int id, float seek = -1)
     {
         if (Beatmaps.ElementAt(id) != null)
@@ -151,10 +172,18 @@ public partial class SettingsOperator : Node
             if (!Marathon) MarathonMapPaths.Clear(); // Clear marathon map paths if not in marathon mode
             Start_reloadLeaderboard = true;
             var beatmap = Beatmaps[id];
-            Sessioncfg["SongID"] = id;
+            SongID = id;
             Sessioncfg["beatmapurl"] = beatmap.Rawurl;
-            Sessioncfg["beatmaptitle"] = beatmap.Title;
-            Sessioncfg["beatmapartist"] = beatmap.Artist;
+            if (!Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString()))
+            {
+                Sessioncfg["beatmaptitle"] = beatmap.Title;
+                Sessioncfg["beatmapartist"] = beatmap.Artist;
+            }
+            else
+            {
+                Sessioncfg["beatmaptitle"] = beatmap.TitleUnicode;
+                Sessioncfg["beatmapartist"] = beatmap.ArtistUnicode;
+            }
             Sessioncfg["beatmapdiff"] = beatmap.Version;
             Sessioncfg["beatmapbpm"] = (int)beatmap.Bpm;
             Gameplaycfg.TimeTotalGame = beatmap.Timetotal * 0.001f;
@@ -227,7 +256,9 @@ public partial class SettingsOperator : Node
         var text = file.GetAsText();
         var lines = text.Split("\n");
         string songtitle = "";
+        string songtitleu = "";
         string artist = "";
+        string artistu = "";
         string version = "";
         float timetotal = 0;
         int bpm = 0;
@@ -255,9 +286,17 @@ public partial class SettingsOperator : Node
             {
                 songtitle = line.Split(":")[1].Trim();
             }
+            if (line.StartsWith("TitleUnicode:"))
+            {
+                songtitleu = line.Split(":")[1].Trim();
+            }
             if (line.StartsWith("Artist:"))
             {
                 artist = line.Split(":")[1].Trim();
+            }
+            if (line.StartsWith("ArtistUnicode:"))
+            {
+                artistu = line.Split(":")[1].Trim();
             }
             if (line.StartsWith("CircleSize:"))
             {
@@ -361,7 +400,9 @@ public partial class SettingsOperator : Node
                 ID = Beatmaps.Count,
                 SetID = SetID,
                 Title = songtitle,
+                TitleUnicode = songtitleu,
                 Artist = artist,
+                ArtistUnicode = artistu,
                 Mapper = mapper,
                 KeyCount = keycount,
                 Version = version,
@@ -484,7 +525,8 @@ public partial class SettingsOperator : Node
 
     }
     public static int ranked_points { get; set; }
-    
+
+    public static int SongID { get; set; } = -1;
     public static int SongIDHighlighted { get; set; } = -1; // Highlighted song ID for the song select screen
     public static double LevelRating { get; set; } = -1;
     public static Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
@@ -502,7 +544,6 @@ public partial class SettingsOperator : Node
         { "notificationpanelv", false },
         { "ranknumber", 0 },
         { "playercolour", null },
-        { "SongID", -1 },
         { "totalbeatmaps", 0 },
         { "beatmapurl", null },
         { "beatmaptitle", null },

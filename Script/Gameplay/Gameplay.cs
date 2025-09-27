@@ -154,7 +154,7 @@ public partial class Gameplay : Control
 		var t = "";
 		var timen = -1;
 		var isHitObjectSection = false;
-		dance = (IEnumerable<DanceCounter>)SettingsOperator.Beatmaps[(int)SettingsOperator.Sessioncfg["SongID"]].Dance;
+		dance = (IEnumerable<DanceCounter>)SettingsOperator.Beatmaps[SettingsOperator.SongID].Dance;
 		foreach (string line in lines)
 		{
 			if (line.Trim() == "[HitObjects]")
