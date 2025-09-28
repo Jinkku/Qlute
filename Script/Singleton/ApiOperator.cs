@@ -44,7 +44,7 @@ public partial class ApiOperator : Node
 	private SettingsOperator SettingsOperator { get; set; }
 	public static string NoticeText { get; set; }
 	public static ApiOperator Instance { get; set; }
-	public static string Beatmapapi = "https://central.catboy.best";
+	public static string Beatmapapi = "https://catboy.best";
 	/// <summary>
 	/// Submits a score to the dedicated server.
 	/// </summary>
