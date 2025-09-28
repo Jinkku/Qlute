@@ -94,8 +94,8 @@ public partial class MusicCard : Button
 			Artist.Text = cache.Artist;
 		}
 		
-		Mapper.Text = cache.Mapper;
-		Version.Text = "Created by " + cache.Version;
+		Mapper.Text = "Created by " + cache.Mapper;
+		Version.Text = cache.Version;
 	}
 
 	public override void _Ready()
