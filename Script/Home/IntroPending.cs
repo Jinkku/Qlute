@@ -136,7 +136,6 @@ public partial class IntroPending : Control
 					.SetEase(Tween.EaseType.Out);
 			_tween.TweenCallback(Callable.From(() => hidden = false));
 			_tween.TweenCallback(Callable.From(() => HomeScreen.StayOpen = false));
-			
 		}
 		_tween.Play();
 	}

@@ -252,13 +252,11 @@ public static async Task
 		var beatmapsContainer = GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps");
 		if (page < 1)
 		{
-
 			foreach (Node child in beatmapsContainer.GetChildren())
 			{
 				beatmapsContainer.RemoveChild(child);
 				child.QueueFree();
 			} // Clears up the browse page.
-
 		}
 
 
@@ -267,8 +265,6 @@ public static async Task
 		{
 			foreach (BrowseCatalogLegend line in items)
 			{
-
-
 				List<CatalogBeatmapInfoLegend> beatmaps = (List<CatalogBeatmapInfoLegend>)line.beatmaps.OrderBy(d => d.count_circles + d.count_sliders).ToList();
 				line.beatmaps = beatmaps;
 
@@ -320,10 +316,8 @@ public static async Task
 		ScrollVertical = BeatmapScroll.ScrollVertical;
 		if (ScrollVertical > BeatmapGrid.Size.Y / 2 && !isLoading && !Empty)
 		{
-
 			page++;
 			StartBrowse(noani: true);
-			
 		}
 		GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps").Columns = waba;
 	}

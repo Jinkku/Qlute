@@ -27,5 +27,4 @@ public partial class OnTopOverlays : CanvasLayer
                         Input.SetMouseMode(Input.MouseModeEnum.Hidden);
                 }
         }
-
 }

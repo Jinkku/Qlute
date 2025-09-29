@@ -77,7 +77,7 @@ public partial class SongSelect : Control
 	{
 		var window_size = GetViewportRect().Size;
 		Control SongPanel = GetNode<Control>("SongPanel");
-		SongPanel.Size = new Vector2(window_size.X / 2.5f + 40, window_size.Y - 150);
+		SongPanel.Size = new Vector2((window_size.X / 2.5f) + 40, window_size.Y - 150);
 		SongPanel.Position = new Vector2(window_size.X - (window_size.X / 2.5f), 105);
 		ScrollSongs();
 	}
@@ -462,9 +462,7 @@ public partial class SongSelect : Control
 		}
 		else if (Input.IsActionJustPressed("ui_accept") && SettingsOperator.Beatmaps.Count > 0)
 		{
-
 			_Start();
-
 		}
 		else if (MusicCard.Connection_Button && scrollBar.Value == SettingsOperator.SongID)
 		{

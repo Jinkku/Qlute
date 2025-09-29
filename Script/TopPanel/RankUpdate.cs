@@ -72,7 +72,6 @@ public partial class RankUpdate : Control
 		OperatorPerformance.Visible = true;
 		UserCard.Visible = false;
 		Modulate = new Color(1f, 1f, 1f, 0f);
-
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

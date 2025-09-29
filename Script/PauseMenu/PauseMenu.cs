@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public partial class PauseMenu : Control
 {
-	
 	private SettingsOperator SettingsOperator { get; set; }
 	private Tween PauseTween { get; set; }
 	private int MaxChild {get;set;}
@@ -69,7 +68,6 @@ public partial class PauseMenu : Control
 	private Control FocusOwner { get; set; }
 	public override void _Process(double delta)
 	{
-
 		if (Input.IsActionJustPressed("Save Replay"))
 		{
 			Replay.SaveReplay();
@@ -99,7 +97,6 @@ public partial class PauseMenu : Control
 		if (Input.IsActionJustPressed("pausemenu") && !Gameplay.Dead)
 		{
 			_continue();
-
 		}
 		else if (Input.IsActionJustPressed("pausemenu") && Gameplay.Dead)
 		{
@@ -120,6 +117,5 @@ public partial class PauseMenu : Control
 			BeatmapBackground.FlashEnable = true;
 			SettingsOperator.toppaneltoggle();
 			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
-			
 	}
 }

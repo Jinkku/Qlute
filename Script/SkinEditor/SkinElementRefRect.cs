@@ -31,6 +31,5 @@ public partial class SkinElementRefRect : ReferenceRect
 
     public override void _Process(double delta)
     {
-        
     }
 }

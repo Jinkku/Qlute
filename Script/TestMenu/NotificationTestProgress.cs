@@ -17,5 +17,4 @@ public partial class NotificationTestProgress : Control
 	{
 		Slider = GetNode<HSlider>("HSlider");
 	}
-
 }

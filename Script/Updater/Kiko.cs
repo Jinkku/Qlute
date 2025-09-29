@@ -64,8 +64,6 @@ public partial class Kiko : Node
             {
                 GD.PrintErr($"Executable not found: {executablePath}");
             }
-
-
         }
         else
         {

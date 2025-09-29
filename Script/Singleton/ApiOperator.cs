@@ -34,7 +34,6 @@ public class LeaderboardEntry
 }
 public partial class ApiOperator : Node
 {
-	
 	public static HttpRequest LoginApi { get; set; }
 	public  HttpRequest InfoApi { get; set; }
 	public  HttpRequest SubmitApi { get; set; }
@@ -253,14 +252,12 @@ public partial class ApiOperator : Node
 			Info = Info,
 			BeatmapID = id
 		});
-
 	}
 
 	public static List<BeatmapDownloader> DownloadList = new List<BeatmapDownloader>();
 
 	private void _on_download_completed(long result, long responseCode, string[] headers, byte[] body, int beatmap = 0)
 	{
-		
 		if (responseCode == 200)
 		{
 			try

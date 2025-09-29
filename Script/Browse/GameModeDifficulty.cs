@@ -21,7 +21,6 @@ public partial class GameModeDifficulty : TextureButton
 			Idlecolour = SelfModulate;
 			Focuscolour = SelfModulate * 1.5f;
 			highlightcolour = SelfModulate * 2;
-
 		}
 	}
 	private Tween _focus_animation;
@@ -39,10 +38,8 @@ public partial class GameModeDifficulty : TextureButton
 	private Color Focuscolour = new Color(1f, 1f, 1f, 1f);
 	private Color highlightcolour = new Color(0.19f, 0.37f, 0.65f, 1f);
 	private void _highlight() {
-
 		BeatmapInfo.BeatmapIndex = index;
 		AnimationButton(highlightcolour);
-
 	}
 	private void _focus()
 	{

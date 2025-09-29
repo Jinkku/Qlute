@@ -33,5 +33,4 @@ public partial class ScoreTest : ColorRect
 		Gameplay.ReloadppCounter();
 		SettingsOperator.Gameplaycfg.Accuracy = Gameplay.ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 	}
-
 }

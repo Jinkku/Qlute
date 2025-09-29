@@ -52,7 +52,6 @@ public static class Replay
             GD.Print(replay);
             Parse(replay);
         }
-
     }
     /// <summary>
     /// Finds the replay with the specified ID example: Replay.Search(192834)
@@ -79,11 +78,9 @@ public static class Replay
                 mods = Entry.Mods,
                 time = Time,
                 FilePath = Entry.Filepath
-
             });
         }
         return List;
-
     }
     /// <summary>
     /// Parses to Replay Storage.
@@ -192,7 +189,6 @@ public static class Replay
                             Avgms = AverageMs,
                             Mods = Mods,
                             Filepath = file
-
                         });
                         break;
                     }

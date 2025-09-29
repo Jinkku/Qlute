@@ -15,7 +15,6 @@ public partial class SpectatorSettings : Control
 		idle = new Vector2(GetViewportRect().Size.X, SpectatorMenu.Position.Y);
 		focused = new Vector2(GetViewportRect().Size.X - SpectatorMenu.Size.X, SpectatorMenu.Position.Y);
 		SpectatorMenu.Position = idle;
-
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -27,7 +26,6 @@ public partial class SpectatorSettings : Control
 			Tween = CreateTween();
 			Tween.TweenProperty(SpectatorMenu, "position", focused, 0.2f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			Tween.Play();
-
 		}
 		else
 		{

@@ -155,7 +155,6 @@ public partial class MusicCard : Button
 			_focus_animation.TweenProperty(this, "position:x", 0, 0.2f)
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
-			
 		}
 	}
 
