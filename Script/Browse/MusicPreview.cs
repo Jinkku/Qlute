@@ -76,7 +76,6 @@ public partial class MusicPreview : TextureButton
 			GD.Print("[Qlute] Should continue playing...");
 			AudioPlayer.Instance.StreamPaused = false;
 		}
-
 	}
 	private void _pressed()
 	{

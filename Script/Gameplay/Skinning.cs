@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text.Json;
 public partial class Skinning : Node
 {
-
     public override void _Ready()
     {
         GetWindow().FilesDropped += ImportSkin;

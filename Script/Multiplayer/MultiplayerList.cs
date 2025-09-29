@@ -3,7 +3,6 @@ using System;
 
 public partial class MultiplayerList : PanelContainer
 {
-
 	[Export]
 	PacketPeerUdp broadcaster;
 	[Export]

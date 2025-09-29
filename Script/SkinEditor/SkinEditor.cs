@@ -38,7 +38,6 @@ public partial class SkinEditor : Control
 		}
 		ZipFile.CreateFromDirectory(path, SettingsOperator.exportdir.PathJoin($"{Skin.Element.Name}.qsk"), CompressionLevel.Optimal, true);
 		Notify.Post($"Exported {Skin.Element.Name}.\nClick to view.", $"file://{SettingsOperator.exportdir}");
-
 	}
 	private void SaveChanges()
 	{
@@ -107,7 +106,6 @@ public partial class SkinEditor : Control
 	public override void _Process(double delta)
 	{
 		Check();
-
 	}
 
 	private void _on_back()
@@ -156,5 +154,4 @@ public partial class SkinEditor : Control
 			Settings.Position = new Vector2(Settings.Position.X, 100);
 		}
 	}
-	
 }

@@ -161,7 +161,6 @@ public partial class SettingsOperator : Node
                 Sessioncfg["beatmapartist"] = beatmap.ArtistUnicode;
             }
         }
-        
     }
     public void SelectSongID(int id, float seek = -1)
     {
@@ -362,45 +361,31 @@ public partial class SettingsOperator : Node
     {
         if (level > 100)
         {
-
             return LevelColours.Last();
-            
         }
         else if (level > 70)
         {
-
             return LevelColours[5];
-
         }
         else if (level >50)
         {
-
             return LevelColours[4];
-
         }
         else if (level > 36)
         {
-
             return LevelColours[3];
-
         }
         else if (level > 20)
         {
-
             return LevelColours[2];
-
         }
         else if (level > 10)
         {
-
             return LevelColours[1];
-
         }
         else
         {
-
             return LevelColours.First();
-
         }
     }
     public static void ResetScore()
@@ -438,8 +423,6 @@ public partial class SettingsOperator : Node
         public static float ms { get; set; }
         public static int Avgms { get; set; }
         public static float BeatmapAccuracy { get; set; } = 1;
-
-
     }
     public static int ranked_points { get; set; }
 
@@ -527,10 +510,6 @@ public partial class SettingsOperator : Node
         {
             toppaneltoggle();
         }
-
-
-
-
     }
 
     private void CheckOldSiteUrl()

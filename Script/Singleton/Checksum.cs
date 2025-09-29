@@ -76,6 +76,6 @@ public static class ChecksumUtil
 
     static string BytesToHex(byte[] bytes)
     {
-        return BitConverter.ToString(bytes).Replace("-", "").ToLowerInvariant();
+        return Convert.ToHexString(bytes).ToLowerInvariant();
     }
 }

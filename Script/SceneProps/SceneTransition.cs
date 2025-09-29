@@ -51,7 +51,6 @@ public partial class SceneTransition : Control
 				t.TweenProperty(_black, "modulate:a", 1.0f, _time / 2f);
 				await ToSignal(t, Tween.SignalName.Finished);
 			} else {
-
 				if (_mode != TransitionMode.CrossFade)
 				{
 					_stillRender.Texture = ImageTexture.CreateFromImage(GetViewport().GetTexture().GetImage());

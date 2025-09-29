@@ -65,7 +65,6 @@ public partial class BeatmapInfo : Control
 			BeatmapIndex = 0;
 			NoteCountTotal = BeatmapList[BeatmapIndex].count_circles + BeatmapList[BeatmapIndex].count_sliders;
 		}
-		;
 
 
 		ReloadStats();
@@ -95,7 +94,6 @@ public partial class BeatmapInfo : Control
 			Artist.Text = cache.artist;
 			Mapper.Text = $"mapped by {cache.creator}";
 			Submitted.Text = $"submitted at {formatted}";
-
 		}
 	}
 

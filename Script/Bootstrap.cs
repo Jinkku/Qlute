@@ -31,7 +31,6 @@ public partial class Bootstrap : Control
 	private float db { get; set; }
 	private void _StartPreview()
 	{
-
 		if (SettingsOperator.Beatmaps.Count > 0)
 		{
 			AudioPlayer.Instance.VolumeDb = -40;
@@ -43,8 +42,6 @@ public partial class Bootstrap : Control
 			SettingsOperator.SelectSongID(num, PreviewTime);
 			AudioPlayer.Instance.Play(PreviewTime);
 		}
-
-
 	}
 	public void _intro_finished(string animationame)
 	{

@@ -28,7 +28,6 @@ public partial class RatingnPointsTest : ColorRect
 			Row.AddChild(Label2);
 			Row.AddChild(Label3);
 			Table.AddChild(Row);
-			
 		}
 	}
 

@@ -3,8 +3,6 @@ using System;
 
 public partial class SettingsPanel : Control
 {
-
-
 	[Signal]
 	public delegate void UpdateInfoEventHandler();
 
@@ -50,9 +48,6 @@ public partial class SettingsPanel : Control
 		}
 		OffsetSlider.Value = 200 - offset;
 		ShowUnicode.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString());
-
-
-
 	}
 	private void _display()
 	{

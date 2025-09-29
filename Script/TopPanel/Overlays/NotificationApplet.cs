@@ -46,8 +46,6 @@ public partial class NotificationApplet : Button
 			tween.Connect("finished", new Callable(this, nameof(_anifin)));
 			tween.Play();
 		}
-		
-
 	}
 	private void _close()
 	{
@@ -56,7 +54,6 @@ public partial class NotificationApplet : Button
 	}
 	private void _pressed()
 	{
-
 		// Check if uri is set, if so, open it
 		if (NotificationListener.NotificationList.ElementAt<NotificationLegend>(ID).uri != "")
 		{
@@ -99,7 +96,7 @@ public partial class NotificationApplet : Button
 		for (int i = 0; i < NotificationListener.NotificationCards.Count; i++)
 		{
 			var tempcard = NotificationListener.NotificationCards[i];
-			float targetY = 60 + (Size.Y + 10) * i;
+			float targetY = 60 + ((Size.Y + 10) * i);
 
 			// Smoothly interpolate Y position if card is moving
 			float currentY = tempcard.Position.Y;

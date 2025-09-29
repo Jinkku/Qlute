@@ -27,7 +27,6 @@ public partial class NowPlaying : PanelContainer
 	}
 	private void Prev()
 	{
-		
 		if (SettingsOperator.SongID - 1 >= 0 && SettingsOperator.SongID != -1)
 		{
 			SettingsOperator.SelectSongID(SettingsOperator.SongID - 1,seek: 0);

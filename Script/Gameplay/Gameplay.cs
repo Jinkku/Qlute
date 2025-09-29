@@ -139,7 +139,6 @@ public partial class Gameplay : Control
 				time = 0,
 				Active = true
 			});
-
 		}
 	}
 
@@ -316,7 +315,6 @@ public partial class Gameplay : Control
     /// <summary>
 	/// Game Clock
 	/// </summary>
-
 	public float GetRemainingTime(bool GameMode = false, float delta = 1f)
 	{
 		if (AudioPlayer.Instance.Playing)
@@ -353,7 +351,6 @@ public partial class Gameplay : Control
 	/// <summary>
 	/// Starts Playback
 	/// </summary>
-
 	private void StartPlay()
 	{
 		songstarted = true;
@@ -385,7 +382,6 @@ public partial class Gameplay : Control
     /// <summary>
     /// This is the one that controls the Player input.
     /// </summary>
-
 	private void PlayerKeyCheck(int est){
 			for (int i = 0; i < 4; i++)
 			{
@@ -471,7 +467,6 @@ public partial class Gameplay : Control
 						Keys[(int)Note.Node.GetMeta("part")].hit = false;
 					}
 				}
-
 			}
 			else if (notex > viewportSize + 150 && Note.Node != null)
 			{
@@ -489,13 +484,10 @@ public partial class Gameplay : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-
 		SettingsOperator.Gameplaycfg.Score = scoreint; // Set the score of the player
 		HitPoint = (int)Chart.Size.Y - 150;
 		try
 		{
-
-
 			// DEATH
 
 			if (HealthBar.Health == 0 && !Dead && !ModsOperator.Mods["no-fail"])
@@ -577,7 +569,6 @@ public partial class Gameplay : Control
 			PlayerKeyCheck((int)est);
 			CheckReplayKey((int)est);
 			_GameNoteTick(delta);
-
 		}
 		catch (Exception e)
 		{

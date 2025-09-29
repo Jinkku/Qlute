@@ -17,7 +17,6 @@ public partial class NotificationPanel : ColorRect
 				NotiCard.SetMeta("listid", Math.Max(0, (int)NotiInfo.id));
 				GetNode<VBoxContainer>("MarginContainer/ScrollContainer/VBoxContainer").AddChild(NotiCard);
 				NotiCard.Text = NotiInfo.Title;
-				
 			}
 		}
 		ClearAll = GetNode<Button>("MarginContainer/ScrollContainer/VBoxContainer/ClearAll Button");

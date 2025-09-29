@@ -121,10 +121,8 @@ public partial class Global : Node
 					.SetEase(Tween.EaseType.Out);
 				SkinEditorAni.TweenCallback(Callable.From(() => StartTopPanelOpen()));
 				SkinEditorAni.Chain().TweenCallback(Callable.From(() => _skineditorScene.QueueFree()));
-
 			}
 			SkinEditorAni.Play();
-
 		}
 
 		if (Input.IsActionJustPressed("screenshot"))
