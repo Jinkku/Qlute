@@ -19,13 +19,25 @@ public partial class Bootstrap : Control
 		db = (int)(Math.Log10(SettingsOperator.MasterVol / 100.0) * 20) - 5;
 	}
 	private bool Finished { get; set;}
-    public override void _Process(double delta)
-    {
-		if (!Kiko.isUpdating && !animationPlayer.IsPlaying() && !Finished)
+
+	private void PlayIntro()
+	{
+		if (Check.CheckBoolValue(SettingsOperator.GetSetting("hidedevintro").ToString()))
 		{
 			animationPlayer.Play("Intro");
 		}
-    }
+		else
+		{
+			animationPlayer.Play("IntroDev");
+		}
+	}
+    public override void _Process(double delta)
+	{
+		if (!Kiko.isUpdating && !animationPlayer.IsPlaying() && !Finished)
+		{
+			PlayIntro();
+		}
+	}
 	private Tween NewTween { get; set; }
 	private float time { get; set; } = 2.0333f;
 	private float db { get; set; }

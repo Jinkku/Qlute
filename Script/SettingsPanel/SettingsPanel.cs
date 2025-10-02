@@ -15,6 +15,7 @@ public partial class SettingsPanel : Control
 	public Label OffsetTicker { get; set; }
 	public Label ScrollSpeedt { get; set; }
 	private CheckButton ShowUnicode { get; set; }
+	private CheckButton DevHide { get; set; }
 	public HSlider ScrollSpeed { get; set; }
 	public ScrollContainer Scrolls { get; set; }
 
@@ -27,6 +28,7 @@ public partial class SettingsPanel : Control
 		OffsetButton = GetNode<Button>("ColorRect/Panels/Scroll/Sections/AudioOffsetAuto");
 		OffsetSlider = GetNode<HSlider>("ColorRect/Panels/Scroll/Sections/AudioOffset");
 		ScrollSpeed = GetNode<HSlider>("ColorRect/Panels/Scroll/Sections/ScrollSpeed");
+		DevHide = GetNode<CheckButton>("ColorRect/Panels/Scroll/Sections/HideDevDisclaimer");
 		ShowUnicode = GetNode<CheckButton>("ColorRect/Panels/Scroll/Sections/OriginalLanguage");
 		OffsetTicker = GetNode<Label>("ColorRect/Panels/Scroll/Sections/AudioNotice2");
 		Scrolls = GetNode<ScrollContainer>("ColorRect/Panels/Scroll");
@@ -48,6 +50,7 @@ public partial class SettingsPanel : Control
 		}
 		OffsetSlider.Value = 200 - offset;
 		ShowUnicode.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString());
+		DevHide.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("hidedevintro").ToString());
 	}
 	private void _display()
 	{
@@ -58,6 +61,10 @@ public partial class SettingsPanel : Control
 	{
 		SettingsOperator.SetSetting("showunicode", ShowUnicode.ButtonPressed);
 		SettingsOperator.ReloadInfo();
+	}
+	private void _devsel()
+	{
+		SettingsOperator.SetSetting("hidedevintro", DevHide.ButtonPressed);
 	}
 
 	private void _audio()

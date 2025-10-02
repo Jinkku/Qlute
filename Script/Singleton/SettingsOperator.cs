@@ -96,6 +96,7 @@ public partial class SettingsOperator : Node
         { "fpsmode", 1 },
         { "showfps", false },
         { "showunicode", false },
+        { "hidedevintro", false },
         { "gamepath", "" },
         { "leaderboardtype", 1 },
     };
