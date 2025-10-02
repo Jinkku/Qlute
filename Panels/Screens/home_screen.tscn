@@ -456,7 +456,7 @@ offset_bottom = 109.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_doo6x")
-text = "Press any button to play!"
+text = "Click anywhere to play!"
 horizontal_alignment = 1
 
 [node name="Bpmtick" type="Timer" parent="IntroPending"]
