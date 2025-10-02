@@ -19,8 +19,7 @@ public partial class SongSelect : Control
 	public PackedScene musiccardtemplate;
 	private GpuParticles2D Particle { get; set; }
 	public Label SongTitle { get; set; }
-	public Label SongArtist { get; set; }
-	public Label SongMapper { get; set; }
+	public Label ExSongInfo { get; set; }
 	private PanelContainer LevelRating { get; set; }
 	private PanelContainer RankStatus { get; set; }
 	private Label NoBeatmap { get; set; }
@@ -35,7 +34,6 @@ public partial class SongSelect : Control
 	public string ImageURL { get; set; }
 	public Control ModScreen { get; set; }
 	public Tween ModScreen_Tween { get; set; }
-	public Label Diff { get; set; }
 	public ScrollBar scrollBar { get; set; }
 	public PanelContainer Info { get; set; }
 	public Tween scrolltween { get; private set; }
@@ -145,9 +143,7 @@ public partial class SongSelect : Control
 		ModScreen.Visible = true;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SongTitle = GetNode<Label>("SongDetails/SongInfo/Rows/Column1/Title");
-		SongArtist = GetNode<Label>("SongDetails/SongInfo/Rows/Artist");
-		SongMapper = GetNode<Label>("SongDetails/SongInfo/Rows/Mapper");
-		Diff = GetNode<Label>("SongDetails/SongInfo/Rows/Difficulty");
+		ExSongInfo = GetNode<Label>("SongDetails/SongInfo/Rows/ExSongInfo");
 
 		CardSize = InitiateMusicCard().Size;
 		CardSize = new Vector2(CardSize.X, CardSize.Y + 5);
@@ -248,8 +244,7 @@ public partial class SongSelect : Control
 		if (SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.Sessioncfg["beatmaptitle"] != null)
 		{
 			// Update song details
-			SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
-			SongMapper.Text = "Created by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
+			ExSongInfo.Text = $"{SettingsOperator.Sessioncfg["beatmapartist"]}\n{SettingsOperator.Sessioncfg["beatmapdiff"]}\n{SettingsOperator.Sessioncfg["beatmapmapper"]}";
 			InfoBox.Text(Songpp, "+" + (SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier).ToString("N0") + "pp");
 			InfoBox.Text(LevelRating, "Lv. " + (SettingsOperator.LevelRating * ModsMulti.multiplier).ToString("N0") ?? "Lv. 0");
 			LevelRating.SelfModulate = SettingsOperator.ReturnLevelColour((int)(SettingsOperator.LevelRating * ModsMulti.multiplier));
@@ -264,15 +259,6 @@ public partial class SongSelect : Control
 			SetControlsVisibility(false);
 		}
 
-		if (SettingsOperator.Sessioncfg["beatmapdiff"] != null)
-		{
-			Diff.Text = SettingsOperator.Sessioncfg["beatmapdiff"].ToString();
-		}
-		else
-		{
-			Diff.Text = "";
-		}
-
 		if (SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.SongID == -1)
 		{
 			SettingsOperator.SelectSongID(0);
@@ -282,9 +268,8 @@ public partial class SongSelect : Control
 
 	private void SetControlsVisibility(bool visible)
 	{
-		SongArtist.Visible = visible;
 		Songpp.Visible = visible;
-		SongMapper.Visible = visible;
+		ExSongInfo.Visible = visible;
 		SongLen.Visible = visible;
 		SongBPM.Visible = visible;
 		LevelRating.Visible = visible;

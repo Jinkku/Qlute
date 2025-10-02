@@ -304,30 +304,17 @@ text_overrun_behavior = 3
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Artist" type="Label" parent="SongDetails/SongInfo/Rows"]
+[node name="ExSongInfo" type="Label" parent="SongDetails/SongInfo/Rows"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
+theme_override_constants/line_spacing = 5
 theme_override_font_sizes/font_size = 12
-text = "Artist Name"
-text_overrun_behavior = 3
-
-[node name="Difficulty" type="Label" parent="SongDetails/SongInfo/Rows"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 12
-text = "Difficulty Name"
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="Mapper" type="Label" parent="SongDetails/SongInfo/Rows"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 12
-text = "mapped by idiotplier"
-clip_text = true
+text = "Nyama Shikima
+Shinji Kaoma
+mapped by Naoma"
+vertical_alignment = 1
 text_overrun_behavior = 3
 
 [node name="Misc" type="HBoxContainer" parent="SongDetails/SongInfo/Rows"]
