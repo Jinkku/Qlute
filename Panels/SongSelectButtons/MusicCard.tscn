@@ -35,7 +35,7 @@ content_margin_right = 5.0
 content_margin_bottom = 3.0
 
 [node name="MusicCard" type="Button"]
-custom_minimum_size = Vector2(350, 78)
+custom_minimum_size = Vector2(350, 88)
 anchors_preset = 10
 anchor_right = 1.0
 offset_right = 20.0
@@ -53,7 +53,7 @@ script = ExtResource("1_aa04f")
 [node name="SongBackgroundPreview" type="PanelContainer" parent="."]
 modulate = Color(0.901961, 0.901961, 0.901961, 1)
 clip_children = 1
-z_as_relative = false
+z_index = -1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -73,39 +73,37 @@ stretch_mode = 6
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -82.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="SongTitle" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="SongInfo" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.588235)
-theme_override_font_sizes/font_size = 14
-text = "Mystery Song"
-
-[node name="SongArtist" type="Label" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.588235)
-theme_override_font_sizes/font_size = 10
-text = "idiotiplier"
-
-[node name="SongMapper" type="Label" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.588235)
-theme_override_font_sizes/font_size = 10
-text = "mapped by idiot"
+mouse_filter = 1
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 10
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "[font_size=14]Mystery Song[/font_size]
+[font_size=10]idiotiplier[/font_size]
+[font_size=10]mapped by idiot[/font_size]
+"
+scroll_active = false
+vertical_alignment = 1
+threaded = true
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
 
 [node name="InfoBoxBG" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -146,6 +144,18 @@ size_flags_vertical = 8
 theme_override_font_sizes/font_size = 10
 theme_override_styles/normal = SubResource("StyleBoxEmpty_p0ncd")
 text = "Difficulty Name"
+
+[node name="Handle" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -9.5
+offset_right = 40.0
+offset_bottom = 9.5
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "|"
 
 [connection signal="button_down" from="." to="." method="_highlight"]
 [connection signal="button_up" from="." to="." method="_focus"]

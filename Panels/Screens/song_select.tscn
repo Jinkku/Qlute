@@ -208,11 +208,12 @@ grow_vertical = 2
 script = ExtResource("1_fin0e")
 
 [node name="BeatmapBackground" parent="." instance=ExtResource("2_wg4n2")]
-self_modulate = Color(0.54902, 0.54902, 0.54902, 1)
+self_modulate = Color(0.9063318, 0.9063318, 0.9063318, 1)
 z_index = -5
 layout_mode = 1
 
 [node name="Particle" type="GPUParticles2D" parent="."]
+z_index = -1
 position = Vector2(1276, 387)
 emitting = false
 amount = 40

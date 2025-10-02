@@ -16,11 +16,9 @@ public partial class MusicCard : Button
 	private bool isLoadingImage = false;
 	private string BackgroundPath = null;
 	private Texture2D texture { get; set; }
-	private Label Title { get; set; }
-	private Label Artist { get; set; }
-	private Label Mapper { get; set; }
+	private RichTextLabel SongInfo { get; set; }
 	private Label Version { get; set; }
-	private bool Update { get; set; }
+	private BeatmapLegend Beatmap { get; set; }
 	public override void _ExitTree()
 	{
 		if (texture != null)
@@ -66,7 +64,7 @@ public partial class MusicCard : Button
 		if (texture != null && IsInstanceValid(Preview))
 		{
 			LoadTween = CreateTween();
-			LoadTween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f)
+			LoadTween.TweenProperty(Preview, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f)
 					.SetEase(Tween.EaseType.Out)
 					.SetTrans(Tween.TransitionType.Cubic);
 			LoadTween.Play();
@@ -78,24 +76,32 @@ public partial class MusicCard : Button
 	}
 
 	private Tween LoadTween { get; set; }
+	private bool Unicode { get; set; }
 
-	private void ReloadInfo()
+
+	private void CheckUnicode()
 	{
-		Update = Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString());
-		var cache = SettingsOperator.Beatmaps[SongID];
-		if (Update)
+		string text = "";
+		if (Unicode)
 		{
-			Title.Text = cache.TitleUnicode;
-			Artist.Text = cache.ArtistUnicode;
+			text = $"[font_size=14]{Beatmap.TitleUnicode}[/font_size]\n[font_size=10]{Beatmap.ArtistUnicode}[/font_size]\n[font_size=10]mapped by {Beatmap.Mapper}[/font_size]";
 		}
 		else
 		{
-			Title.Text = cache.Title;
-			Artist.Text = cache.Artist;
+			text = $"[font_size=14]{Beatmap.Title}[/font_size]\n[font_size=10]{Beatmap.Artist}[/font_size]\n[font_size=10]mapped by {Beatmap.Mapper}[/font_size]";
 		}
-		
-		Mapper.Text = "Created by " + cache.Mapper;
-		Version.Text = cache.Version;
+		SongInfo.Text = text;
+	}
+
+	private void ReloadInfo(bool force = false)
+	{
+		var newUnicode = Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString());
+		if (Unicode != newUnicode || force)
+		{
+			Unicode = newUnicode;
+			CheckUnicode();
+			Version.Text = Beatmap.Version;
+		}
 	}
 
 	public override void _Ready()
@@ -105,17 +111,16 @@ public partial class MusicCard : Button
 		self = GetNode<Button>(".");
 		Cover = GetTree().Root.GetNode<TextureRect>("Song Select/BeatmapBackground");
 		Preview = GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
-		Title = GetNode<Label>("MarginContainer/VBoxContainer/SongTitle");
-		Artist = GetNode<Label>("MarginContainer/VBoxContainer/SongArtist");
-		Mapper = GetNode<Label>("MarginContainer/VBoxContainer/SongMapper");
+		SongInfo = GetNode<RichTextLabel>("MarginContainer/VBoxContainer/SongInfo");
 		Version = GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Version");
 
 		if (!self.HasMeta("SongID"))
 			self.SetMeta("SongID", 0);
 
 		SongID = (int)GetMeta("SongID");
+		Beatmap = SettingsOperator.Beatmaps[SongID];
 
-		ReloadInfo();
+		ReloadInfo(force: true);
 
 
 
@@ -124,7 +129,7 @@ public partial class MusicCard : Button
 		if (self.HasMeta("background"))
 		{
 			BackgroundPath = self.GetMeta("background").ToString();
-			Modulate = new Color(1f, 1f, 1f, 0f);
+			Preview.Modulate = new Color(0f, 0f, 0f, 1f);
 			if (File.Exists(BackgroundPath))
 				LoadExternalImage(BackgroundPath);
 			else
@@ -188,10 +193,7 @@ public partial class MusicCard : Button
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (Update != Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString()))
-		{
 			ReloadInfo();
-		}
     }
 
 
