@@ -8,8 +8,11 @@ public partial class InfoBar : ColorRect
 	public AnimationPlayer Loadinganimation {get ; set; }
 	public ColorRect TopPanel {get;set;}
 	public Sprite2D Loadingicon {get ; set; }
+	private TextureRect Shadow { get; set; }
+	private Tween ShadowT { get; set; }
 	public override void _Ready()
 	{
+		Shadow = GetNode<TextureRect>("Shadow");
 		Loadinganimation = GetNode<AnimationPlayer>("AccountButton/Loadingicon/Loadinganimation");
 		Loadingicon = GetNode<Sprite2D>("AccountButton/Loadingicon");
 		Loadinganimation.Play("loading");
@@ -22,13 +25,21 @@ public partial class InfoBar : ColorRect
 	private void _Slidepanelfinished(string ani){
 		SettingsOperator.Sessioncfg["TopPanelSlideip"] = false;
 	}
-	public void _hovered(){
-		TextureRect Ana = GetNode<TextureRect>("Shadow");
-		Ana.Visible = true;
+
+	private void ShadowAni(int opt)
+	{
+		ShadowT?.Kill();
+		ShadowT = CreateTween();
+		ShadowT.TweenProperty(Shadow, "modulate:a", opt, 0.2f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		ShadowT.Play();
+	}
+
+	public void _hovered()
+	{
+		ShadowAni(1);
 	}
 	public void _unhover(){
-		TextureRect Ana = GetNode<TextureRect>("Shadow");
-		Ana.Visible = false;
+		ShadowAni(0);
 	}
 	
 	public PanelContainer ChatBox {get;set;}
