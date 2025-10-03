@@ -56,7 +56,7 @@ public partial class SongLoadingScreen : Control
 		else GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 	}
 	private void _Timer_load(){
-		SettingsOperator.toppaneltoggle();
+		SettingsOperator.toppaneltoggle(false);
 		ArtificialLoad.Stop();
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Gameplay.tscn");
 	}

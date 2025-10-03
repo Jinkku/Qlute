@@ -14,7 +14,7 @@ public partial class MarathonLoading : Control
 		ArtificialLoad=GetNode<Timer>("./Timer");
 		Animation=GetNode<AnimationPlayer>("./Wafuk");
 		Animation.Play("AnimationSongTick");
-		SettingsOperator.toppaneltoggle();
+		SettingsOperator.toppaneltoggle(true);
     }
 	private void _Animationf(string ani){
 		ArtificialLoad.Start();

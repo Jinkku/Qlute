@@ -20,10 +20,7 @@ public partial class SkinEditor : Control
 		ViewPoints = GetNode<HBoxContainer>("ToolBar/VBoxContainer/PartA/ViewPoints");
 		FileMenu = GetNode<MenuButton>("ToolBar/VBoxContainer/PartA/File").GetPopup();
 		FileMenu.Connect("id_pressed", new Callable(this, nameof(FileID)));
-		if (SettingsOperator.TopPanelPosition > 49)
-		{
-			SettingsOperator.toppaneltoggle();
-		}
+		SettingsOperator.toppaneltoggle(false);
 		Check();
 	}
 	private void Export()

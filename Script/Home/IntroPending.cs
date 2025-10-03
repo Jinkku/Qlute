@@ -3,7 +3,7 @@ using System;
 
 public partial class IntroPending : Control
 {
-	// Called when the node enters the scene tree for the first time.
+	public  SettingsOperator SettingsOperator { get; set; }
 	public PanelContainer HomeButtons {get;set;}
 	public static bool JustStarted { get; set; }
 	public static Vector2 HomeButtonsPOS { get; set; }
@@ -13,9 +13,12 @@ public partial class IntroPending : Control
 	private Tween LogoTween {get;set;}
 	private bool HeartbeatHover { get; set; }
 	private int beattick = 1;
+	
+	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		HomeButtons = GetNode<PanelContainer>("../HomeButtonBG");
+		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		HomeButtonsPOS = HomeButtons.Position;
 		Logo = GetNode<TextureButton>("logo");
 		Logo.PivotOffset = Logo.Size / 2;
@@ -23,7 +26,7 @@ public partial class IntroPending : Control
 		HomeButtons.Visible = false;
 		if (JustStarted)
 		{
-			AnimationTick(HomeScreen.StayOpen);	
+			AnimationTick(HomeScreen.StayOpen);
 		}
 		JustStarted = true;
 	}
@@ -45,23 +48,24 @@ public partial class IntroPending : Control
 		if (Input.IsActionJustPressed("ui_cancel") && hidden)
 		{
 			AnimationTick(false);
+			SettingsOperator.toppaneltoggle(false);
 		}
 		else if (Input.IsActionJustPressed("ui_cancel") && !hidden)
 		{
 			GetTree().CurrentScene.SetProcessInput(false);
 			var tween = CreateTween();
 			tween.SetParallel(true);
-			tween.TweenProperty(GetTree().CurrentScene, "modulate:a", 0f, 1f)
+			tween.TweenProperty(GetTree().CurrentScene, "modulate:a", 0f, 0.2f)
 				.SetTrans(Tween.TransitionType.Linear)
 				.SetEase(Tween.EaseType.Out);
-			tween.TweenProperty(AudioPlayer.Instance, "volume_db", -80f, 1f)
+			tween.TweenProperty(AudioPlayer.Instance, "volume_db", -40f, 0.2f)
 				.SetTrans(Tween.TransitionType.Linear)
 				.SetEase(Tween.EaseType.Out);
 			tween.Connect("finished", Callable.From(() => GetTree().Quit()));
 		}
 		else if (@event.IsPressed() && !hidden)
 		{
-			_on_bomb_pressed(); // or QueueFree() if you wanna delete it instead
+			_on_bomb_pressed();
 		}
     }
 
@@ -167,6 +171,7 @@ public partial class IntroPending : Control
 	}
 	private void _on_bomb_pressed()
 	{
+		SettingsOperator.toppaneltoggle(true);
 		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/play.wav");
 		AnimationTick(true);
 	}

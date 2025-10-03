@@ -12,17 +12,6 @@ public partial class Global : Node
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 	}
-
-	/// <summary>
-	/// This is to check if it's closed because the function don't have that function yet o-o
-	/// </summary>
-	private void StartTopPanelOpen()
-	{
-		if (SettingsOperator.TopPanelPosition < 50)
-		{
-			SettingsOperator.toppaneltoggle();
-		}
-	}
 	private Node _CurrentScene { get; set; }
 	public bool _skineditorEnabled = false;
 	public static bool _SkinStart = false;
@@ -119,7 +108,7 @@ public partial class Global : Node
 				SkinEditorAni.TweenProperty(_CurrentScene, "position", new Vector2(0, 0), 0.5f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
-				SkinEditorAni.TweenCallback(Callable.From(() => StartTopPanelOpen()));
+				SkinEditorAni.TweenCallback(Callable.From(() => SettingsOperator.toppaneltoggle(true)));
 				SkinEditorAni.Chain().TweenCallback(Callable.From(() => _skineditorScene.QueueFree()));
 			}
 			SkinEditorAni.Play();

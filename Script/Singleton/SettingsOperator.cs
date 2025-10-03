@@ -466,31 +466,13 @@ public partial class SettingsOperator : Node
     
 
     private Tween TopPanelAnimation { get; set; }
-
-    public void TopPanelOpen()
+    public void toppaneltoggle(bool value)
     {
+        ColorRect TopPanel = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar");
         TopPanelAnimation?.Kill();
         TopPanelAnimation = CreateTween();
-        Sessioncfg["toppanelhide"] = true;
-        var TopPanel = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar");
-        TopPanelAnimation.TweenProperty(TopPanel, "position", new Vector2(TopPanel.Position.X, 0), 0.3).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-    }
-
-    public void TopPanelClose()
-    {
-        TopPanelAnimation?.Kill();
-        TopPanelAnimation = CreateTween();
-        Sessioncfg["toppanelhide"] = false;
-        var TopPanel = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar");
-        TopPanelAnimation.TweenProperty(TopPanel, "position", new Vector2(TopPanel.Position.X, -TopPanel.Size.Y), 0.3).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-    }
-    public void toppaneltoggle()
-    {
-        TopPanelAnimation?.Kill();
-        TopPanelAnimation = CreateTween();
-        Sessioncfg["toppanelhide"] = !(bool)Sessioncfg["toppanelhide"];
-        var TopPanel = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar");
-        if (((bool)Sessioncfg["toppanelhide"] == true))
+        Sessioncfg["toppanelhide"] = !value;
+        if (!value)
             TopPanelAnimation.TweenProperty(TopPanel, "position", new Vector2(TopPanel.Position.X, -TopPanel.Size.Y), 0.3).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
         else
             TopPanelAnimation.TweenProperty(TopPanel, "position", new Vector2(TopPanel.Position.X, 0), 0.3).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
@@ -509,7 +491,7 @@ public partial class SettingsOperator : Node
         TopPanelPosition = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar").Position.Y + 50;
         if (Input.IsActionJustPressed("Hide Panel"))
         {
-            toppaneltoggle();
+            toppaneltoggle((bool)Sessioncfg["toppanelhide"]);
         }
     }
 

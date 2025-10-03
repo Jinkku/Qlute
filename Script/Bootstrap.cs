@@ -59,7 +59,6 @@ public partial class Bootstrap : Control
 	{
 		Finished = true;
 		Cursor.CursorVisible = true;
-		SettingsOperator.toppaneltoggle();
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn",_mode: SceneTransition.TransitionMode.CrossFade,time: 0.3f);
 	}
 }

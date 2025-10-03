@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://bwpja5llmgtqo"]
+[gd_scene load_steps=31 format=3 uid="uid://bwpja5llmgtqo"]
 
 [ext_resource type="Script" uid="uid://borvy2xtb1o65" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
 [ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="2_4cvop"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://b2fdn4oh7m0p8" path="res://Script/TopPanel/NowPlayer.cs" id="7_6quot"]
 [ext_resource type="Texture2D" uid="uid://dnhwv61vkgn0d" path="res://Resources/System/TopPanel/NowPlaying.png" id="7_bwtk2"]
 [ext_resource type="Script" uid="uid://cmb50kh06rh1x" path="res://Script/TopPanel/Overlays/Clock.cs" id="7_fe0ly"]
+[ext_resource type="Texture2D" uid="uid://xt04iwux1uyt" path="res://Resources/System/TopPanel/Changelog.png" id="7_w554c"]
 [ext_resource type="Texture2D" uid="uid://cpp14plc7cctp" path="res://Resources/System/TopPanel/Chat.svg" id="8_1qp4o"]
 [ext_resource type="Texture2D" uid="uid://4uedtgsvw7ep" path="res://Resources/System/TopPanel/Settings.svg" id="9_6quot"]
 [ext_resource type="Texture2D" uid="uid://dbrt8ltwm3upi" path="res://Resources/System/TopPanel/Notifications.svg" id="12_1qp4o"]
@@ -104,6 +105,7 @@ script = ExtResource("1_bm6kj")
 
 [node name="Shadow" type="TextureRect" parent="."]
 process_mode = 3
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -186,7 +188,7 @@ offset_right = 80.0
 offset_bottom = 41.0
 script = ExtResource("6_3trnu")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="Widgets" type="HBoxContainer" parent="."]
 process_mode = 3
 layout_mode = 1
 anchors_preset = 11
@@ -198,7 +200,22 @@ grow_horizontal = 0
 grow_vertical = 2
 theme_override_constants/separation = 0
 
-[node name="NowPlayer" type="Button" parent="HBoxContainer"]
+[node name="ChangeLog" type="Button" parent="Widgets"]
+process_mode = 3
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/icon_max_width = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
+keep_pressed_outside = true
+icon = ExtResource("7_w554c")
+icon_alignment = 1
+script = ExtResource("7_6quot")
+
+[node name="NowPlayer" type="Button" parent="Widgets"]
 process_mode = 3
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
@@ -213,7 +230,7 @@ icon = ExtResource("7_bwtk2")
 icon_alignment = 1
 script = ExtResource("7_6quot")
 
-[node name="Browse" type="Button" parent="HBoxContainer"]
+[node name="Browse" type="Button" parent="Widgets"]
 process_mode = 3
 layout_mode = 2
 mouse_filter = 1
@@ -226,7 +243,7 @@ keep_pressed_outside = true
 icon = ExtResource("7_1qp4o")
 icon_alignment = 1
 
-[node name="Chat" type="Button" parent="HBoxContainer"]
+[node name="Chat" type="Button" parent="Widgets"]
 process_mode = 3
 layout_mode = 2
 mouse_filter = 1
@@ -239,7 +256,7 @@ keep_pressed_outside = true
 icon = ExtResource("8_1qp4o")
 icon_alignment = 1
 
-[node name="Settings" type="Button" parent="HBoxContainer"]
+[node name="Settings" type="Button" parent="Widgets"]
 process_mode = 3
 layout_mode = 2
 mouse_filter = 1
@@ -253,7 +270,7 @@ icon = ExtResource("9_6quot")
 icon_alignment = 1
 script = ExtResource("2_6umcl")
 
-[node name="Clock" type="Label" parent="HBoxContainer"]
+[node name="Clock" type="Label" parent="Widgets"]
 process_mode = 3
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
@@ -266,7 +283,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 script = ExtResource("7_fe0ly")
 
-[node name="Notifications" type="Button" parent="HBoxContainer"]
+[node name="Notifications" type="Button" parent="Widgets"]
 process_mode = 3
 layout_mode = 2
 mouse_filter = 1
@@ -281,6 +298,7 @@ icon_alignment = 1
 
 [node name="Debugitem2" type="Label" parent="."]
 process_mode = 3
+visible = false
 layout_mode = 0
 offset_left = 18.0
 offset_top = 70.0
@@ -290,12 +308,29 @@ theme_override_font_sizes/font_size = 12
 text = "Debug infomation"
 script = ExtResource("13_1qp4o")
 
+[node name="ToolTip" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 10.0
+offset_top = 60.0
+offset_right = 95.0
+offset_bottom = 79.0
+text = "Play more!"
+
 [connection signal="mouse_entered" from="." to="." method="_hovered"]
 [connection signal="mouse_exited" from="." to="." method="_unhover"]
-[connection signal="pressed" from="AccountButton" to="HBoxContainer/Settings" method="_on_AccountButton_pressed"]
-[connection signal="pressed" from="HBoxContainer/NowPlayer" to="HBoxContainer/NowPlayer" method="toggleaccountpanel"]
-[connection signal="pressed" from="HBoxContainer/Browse" to="." method="_on_browse_pressed"]
-[connection signal="pressed" from="HBoxContainer/Chat" to="." method="_ChatRoom"]
-[connection signal="pressed" from="HBoxContainer/Settings" to="HBoxContainer/Settings" method="_settings_pressed"]
-[connection signal="ready" from="HBoxContainer/Settings" to="HBoxContainer/Settings" method="ready"]
-[connection signal="pressed" from="HBoxContainer/Notifications" to="HBoxContainer/Settings" method="_on_notifications"]
+[connection signal="pressed" from="AccountButton" to="Widgets/Settings" method="_on_AccountButton_pressed"]
+[connection signal="mouse_entered" from="Widgets/ChangeLog" to="." method="CL"]
+[connection signal="mouse_exited" from="Widgets/ChangeLog" to="." method="_hidetooltip"]
+[connection signal="pressed" from="Widgets/ChangeLog" to="Widgets/ChangeLog" method="toggleaccountpanel"]
+[connection signal="mouse_exited" from="Widgets/NowPlayer" to="." method="_hidetooltip"]
+[connection signal="pressed" from="Widgets/NowPlayer" to="Widgets/NowPlayer" method="toggleaccountpanel"]
+[connection signal="mouse_exited" from="Widgets/Browse" to="." method="_hidetooltip"]
+[connection signal="pressed" from="Widgets/Browse" to="." method="_on_browse_pressed"]
+[connection signal="mouse_exited" from="Widgets/Chat" to="." method="_hidetooltip"]
+[connection signal="pressed" from="Widgets/Chat" to="." method="_ChatRoom"]
+[connection signal="mouse_exited" from="Widgets/Settings" to="." method="_hidetooltip"]
+[connection signal="pressed" from="Widgets/Settings" to="Widgets/Settings" method="_settings_pressed"]
+[connection signal="ready" from="Widgets/Settings" to="Widgets/Settings" method="ready"]
+[connection signal="mouse_exited" from="Widgets/Notifications" to="." method="_hidetooltip"]
+[connection signal="pressed" from="Widgets/Notifications" to="Widgets/Settings" method="_on_notifications"]

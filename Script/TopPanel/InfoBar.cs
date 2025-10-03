@@ -10,6 +10,8 @@ public partial class InfoBar : ColorRect
 	public Sprite2D Loadingicon {get ; set; }
 	private TextureRect Shadow { get; set; }
 	private Tween ShadowT { get; set; }
+	private Label Tooltip { get; set; }
+	private Tween TooltipT { get; set; }
 	public override void _Ready()
 	{
 		Shadow = GetNode<TextureRect>("Shadow");
@@ -32,6 +34,11 @@ public partial class InfoBar : ColorRect
 		ShadowT = CreateTween();
 		ShadowT.TweenProperty(Shadow, "modulate:a", opt, 0.2f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		ShadowT.Play();
+	}
+
+	private void _hidetooltip()
+	{
+		
 	}
 
 	public void _hovered()

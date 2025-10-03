@@ -25,7 +25,7 @@ public partial class EndScreen : ColorRect
     }
 	private void done()
 	{
-		SettingsOperator.toppaneltoggle();
+		SettingsOperator.toppaneltoggle(true);
 		BeatmapBackground.FlashEnable = true;
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultsScreen.tscn");
 	}

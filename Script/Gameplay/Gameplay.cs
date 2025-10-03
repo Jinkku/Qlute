@@ -529,7 +529,7 @@ public partial class Gameplay : Control
 			if (Input.IsActionJustPressed("pausemenu") && SettingsOperator.SpectatorMode)
 			{
 				BeatmapBackground.FlashEnable = true;
-				SettingsOperator.toppaneltoggle();
+				SettingsOperator.toppaneltoggle(true);
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 			}
 			else if (Input.IsActionJustPressed("pausemenu") && !SettingsOperator.Marathon)
@@ -540,7 +540,7 @@ public partial class Gameplay : Control
 			else if (Input.IsActionJustPressed("pausemenu") && SettingsOperator.Marathon)
 			{
 				Cursor.CursorVisible = true;
-				SettingsOperator.toppaneltoggle();
+				SettingsOperator.toppaneltoggle(true);
 				BeatmapBackground.FlashEnable = true;
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MarathonMode.tscn");
 				SettingsOperator.Marathon = false;
@@ -548,7 +548,7 @@ public partial class Gameplay : Control
 			else if (Input.IsActionJustPressed("retry") && !SettingsOperator.Marathon)
 			{
 				BeatmapBackground.FlashEnable = true;
-				SettingsOperator.toppaneltoggle();
+				SettingsOperator.toppaneltoggle(true);
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 			}
 			//debugtext.Text = $"est: {est}\nDanceIndex:{DanceIndex}\nTimeindex:{dance[DanceIndex].time}";
@@ -578,7 +578,7 @@ public partial class Gameplay : Control
 				GD.PrintErr(e);
 				GD.PushError(e);
 				Notify.Post("Can't play the bestmap because\n" + e.Message);
-				SettingsOperator.toppaneltoggle();
+				SettingsOperator.toppaneltoggle(true);
 				BeatmapBackground.FlashEnable = true;
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 			}

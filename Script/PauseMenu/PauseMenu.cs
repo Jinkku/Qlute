@@ -62,7 +62,7 @@ public partial class PauseMenu : Control
 		GetTree().Paused = false;
 		FadeOut();
 		BeatmapBackground.FlashEnable = true;
-		SettingsOperator.toppaneltoggle();
+		SettingsOperator.toppaneltoggle(true);
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 	}
 	private Control FocusOwner { get; set; }
@@ -115,7 +115,7 @@ public partial class PauseMenu : Control
 			GetTree().Paused = false;
 			FadeOut();
 			BeatmapBackground.FlashEnable = true;
-			SettingsOperator.toppaneltoggle();
+			SettingsOperator.toppaneltoggle(true);
 			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 	}
 }
