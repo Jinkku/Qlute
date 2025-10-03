@@ -322,7 +322,6 @@ text = "Play more!"
 [connection signal="pressed" from="AccountButton" to="Widgets/Settings" method="_on_AccountButton_pressed"]
 [connection signal="mouse_entered" from="Widgets/ChangeLog" to="." method="CL"]
 [connection signal="mouse_exited" from="Widgets/ChangeLog" to="." method="_hidetooltip"]
-[connection signal="pressed" from="Widgets/ChangeLog" to="Widgets/ChangeLog" method="toggleaccountpanel"]
 [connection signal="mouse_exited" from="Widgets/NowPlayer" to="." method="_hidetooltip"]
 [connection signal="pressed" from="Widgets/NowPlayer" to="Widgets/NowPlayer" method="toggleaccountpanel"]
 [connection signal="mouse_exited" from="Widgets/Browse" to="." method="_hidetooltip"]
