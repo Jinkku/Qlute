@@ -30,11 +30,15 @@ public partial class IntroPending : Control
 	private void _hover()
 	{
 		HeartbeatHover = true;
+		Scale = HoverScale;
+		HoverChg();
 	}
 
 	private void _unhover()
 	{
 		HeartbeatHover = false;
+		Scale = IdleScale;
+		HoverChg();
 	}
     public override void _Input(InputEvent @event)
     {
@@ -61,6 +65,38 @@ public partial class IntroPending : Control
 		}
     }
 
+	private Vector2 Scale { get; set; } = new Vector2(1f, 1f);
+	private Vector2 IdleScale { get; set; } = new Vector2(1f, 1f);
+	private Vector2 HoverScale { get; set; } = new Vector2(1.1f, 1.1f);
+
+	private void HoverChg()
+	{
+		if (LogoTween != null)
+		{
+			LogoTween.Kill();
+		}
+		LogoTween = Logo.CreateTween();
+		LogoTween.Parallel().TweenProperty(Logo, "scale", Scale, 0.2f)
+			.SetTrans(Tween.TransitionType.Bounce)
+			.SetEase(Tween.EaseType.Out);
+		LogoTween.Play();
+	}
+	/// <summary>
+	/// Logo Bounce system.
+	/// </summary>
+	private void StartLogoBounce()
+	{
+		Logo.Scale = new Vector2(Scale.X + 0.02777777778f, Scale.Y + 0.02777777778f);
+		if (LogoTween != null)
+		{
+			LogoTween.Kill();
+		}
+		LogoTween = Logo.CreateTween();
+		LogoTween.Parallel().TweenProperty(Logo, "scale", Scale, 60000 / ((int)SettingsOperator.Sessioncfg["beatmapbpm"] * AudioPlayer.Instance.PitchScale) * 0.001)
+			.SetTrans(Tween.TransitionType.Cubic)
+			.SetEase(Tween.EaseType.Out);
+		LogoTween.Play();
+	}
 
 	private void _tick()
 	{
@@ -68,17 +104,7 @@ public partial class IntroPending : Control
 		if (HeartbeatHover && beattick == 4) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/downbeat.wav");
 		if (beattick > 3) beattick = 1;
 		else beattick++; // for the feedback of hovering the Qlute logo
-
-		Logo.Scale = new Vector2(1.02777777778f, 1.02777777778f);
-		if (LogoTween != null)
-		{
-			LogoTween.Kill();
-		}
-		LogoTween = Logo.CreateTween();
-		LogoTween.Parallel().TweenProperty(Logo, "scale", new Vector2(1f, 1f), 60000 / ((int)SettingsOperator.Sessioncfg["beatmapbpm"] * AudioPlayer.Instance.PitchScale) * 0.001)
-			.SetTrans(Tween.TransitionType.Cubic)
-			.SetEase(Tween.EaseType.Out);
-		LogoTween.Play();
+		StartLogoBounce();
 	}
 	private bool hidden { get; set; }
 	private float time { get; set; } = 0.3f;
@@ -141,6 +167,7 @@ public partial class IntroPending : Control
 	}
 	private void _on_bomb_pressed()
 	{
+		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/play.wav");
 		AnimationTick(true);
 	}
     public override void _PhysicsProcess(double delta)

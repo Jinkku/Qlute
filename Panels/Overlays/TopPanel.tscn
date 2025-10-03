@@ -24,16 +24,16 @@ gradient = SubResource("Gradient_n7q28")
 fill_from = Vector2(0.993865, 0)
 fill_to = Vector2(1, 0.996933)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yewru"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pg4ve"]
-bg_color = Color(0.25, 0.25, 0.25, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fw7wp"]
+bg_color = Color(0.231373, 0.231373, 0.231373, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qq0m8"]
 bg_color = Color(0.369792, 0.369792, 0.369792, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fw7wp"]
-bg_color = Color(0.231373, 0.231373, 0.231373, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pg4ve"]
+bg_color = Color(0.25, 0.25, 0.25, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yewru"]
 
 [sub_resource type="Animation" id="Animation_1f010"]
 length = 0.001
@@ -73,18 +73,18 @@ _data = {
 &"loading": SubResource("Animation_tk3k2")
 }
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_56gsx"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3trnu"]
-bg_color = Color(1, 1, 1, 0.156863)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rix2n"]
-bg_color = Color(1, 1, 1, 0.34902)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0o1af"]
 content_margin_left = 12.0
 content_margin_right = 12.0
 bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rix2n"]
+bg_color = Color(1, 1, 1, 0.34902)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3trnu"]
+bg_color = Color(1, 1, 1, 0.156863)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_56gsx"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3trnu"]
 content_margin_left = 10.0
@@ -102,20 +102,8 @@ grow_horizontal = 2
 color = Color(0.0383, 0.023, 0.05, 0.784314)
 script = ExtResource("1_bm6kj")
 
-[node name="Debugitem2" type="Label" parent="."]
-process_mode = 3
-layout_mode = 0
-offset_left = 18.0
-offset_top = 70.0
-offset_right = 131.0
-offset_bottom = 89.0
-theme_override_font_sizes/font_size = 12
-text = "Debug infomation"
-script = ExtResource("13_1qp4o")
-
 [node name="Shadow" type="TextureRect" parent="."]
 process_mode = 3
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -133,10 +121,11 @@ self_modulate = Color(0.5, 0, 0.421875, 1)
 layout_mode = 0
 offset_right = 200.0
 offset_bottom = 50.0
-theme_override_styles/focus = SubResource("StyleBoxEmpty_yewru")
-theme_override_styles/hover = SubResource("StyleBoxFlat_pg4ve")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_qq0m8")
+mouse_filter = 1
 theme_override_styles/normal = SubResource("StyleBoxFlat_fw7wp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_qq0m8")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pg4ve")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yewru")
 alignment = 0
 
 [node name="ProfilePicture" type="TextureRect" parent="AccountButton"]
@@ -213,11 +202,12 @@ theme_override_constants/separation = 0
 process_mode = 3
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+mouse_filter = 1
 theme_override_constants/icon_max_width = 28
-theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
-theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
 keep_pressed_outside = true
 icon = ExtResource("7_bwtk2")
 icon_alignment = 1
@@ -226,11 +216,12 @@ script = ExtResource("7_6quot")
 [node name="Browse" type="Button" parent="HBoxContainer"]
 process_mode = 3
 layout_mode = 2
+mouse_filter = 1
 theme_override_constants/icon_max_width = 28
-theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
-theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
 keep_pressed_outside = true
 icon = ExtResource("7_1qp4o")
 icon_alignment = 1
@@ -238,11 +229,12 @@ icon_alignment = 1
 [node name="Chat" type="Button" parent="HBoxContainer"]
 process_mode = 3
 layout_mode = 2
+mouse_filter = 1
 theme_override_constants/icon_max_width = 28
-theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
-theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
 keep_pressed_outside = true
 icon = ExtResource("8_1qp4o")
 icon_alignment = 1
@@ -250,11 +242,12 @@ icon_alignment = 1
 [node name="Settings" type="Button" parent="HBoxContainer"]
 process_mode = 3
 layout_mode = 2
+mouse_filter = 1
 theme_override_constants/icon_max_width = 28
-theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
-theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
 keep_pressed_outside = true
 icon = ExtResource("9_6quot")
 icon_alignment = 1
@@ -264,6 +257,7 @@ script = ExtResource("2_6umcl")
 process_mode = 3
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
+mouse_filter = 1
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxEmpty_3trnu")
 text = "Time
@@ -275,14 +269,26 @@ script = ExtResource("7_fe0ly")
 [node name="Notifications" type="Button" parent="HBoxContainer"]
 process_mode = 3
 layout_mode = 2
+mouse_filter = 1
 theme_override_constants/icon_max_width = 28
-theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
-theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
 theme_override_styles/normal = SubResource("StyleBoxFlat_0o1af")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rix2n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3trnu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
 keep_pressed_outside = true
 icon = ExtResource("12_1qp4o")
 icon_alignment = 1
+
+[node name="Debugitem2" type="Label" parent="."]
+process_mode = 3
+layout_mode = 0
+offset_left = 18.0
+offset_top = 70.0
+offset_right = 131.0
+offset_bottom = 89.0
+theme_override_font_sizes/font_size = 12
+text = "Debug infomation"
+script = ExtResource("13_1qp4o")
 
 [connection signal="mouse_entered" from="." to="." method="_hovered"]
 [connection signal="mouse_exited" from="." to="." method="_unhover"]

@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://ci24g7ndyah7y" path="res://Resources/System/MainMenu/Browse.svg" id="11_ohewd"]
 [ext_resource type="Script" uid="uid://0xn63uccdk6j" path="res://Script/TimerwithBPM/Bpmtick.cs" id="14_1vpa7"]
 [ext_resource type="Texture2D" uid="uid://bthaemtfa0cbe" path="res://Resources/System/mainmenulogo.png" id="16_ohewd"]
+[ext_resource type="Texture2D" uid="uid://84eme8uqluil" path="res://Resources/System/MainMenu/santahat.png" id="17_jpc6g"]
 [ext_resource type="Texture2D" uid="uid://dyrairg2m2il6" path="res://Resources/System/emit.png" id="19_whutp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1gbip"]
@@ -66,18 +67,6 @@ skew = Vector2(0.5, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yu1gh"]
 bg_color = Color(0, 0, 0, 0.588235)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_doo6x"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(0, 0, 0, 0.156863)
-skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
 
 [sub_resource type="Curve" id="Curve_whutp"]
 _limits = [-360.0, 360.0, 0.0, 1.0]
@@ -442,22 +431,10 @@ texture_normal = ExtResource("16_ohewd")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="IntroPending"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -103.0
-offset_top = 90.0
-offset_right = 103.0
-offset_bottom = 109.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_doo6x")
-text = "Click anywhere to play!"
-horizontal_alignment = 1
+[node name="Accessory" type="Sprite2D" parent="IntroPending/logo"]
+visible = false
+texture = ExtResource("17_jpc6g")
+offset = Vector2(300, 20)
 
 [node name="Bpmtick" type="Timer" parent="IntroPending"]
 wait_time = 0.375
