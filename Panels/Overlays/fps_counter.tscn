@@ -3,15 +3,16 @@
 [ext_resource type="Script" uid="uid://b1bto8b25fr5r" path="res://Script/Singleton/FpsCounter.cs" id="1_8u44f"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nt8dy"]
-bg_color = Color(0, 0, 0, 0.568627)
+content_margin_left = 5.0
+content_margin_top = 2.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+bg_color = Color(0.24269372, 0.24269372, 0.24269372, 0.5)
+skew = Vector2(0.2, 0)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-expand_margin_left = 5.0
-expand_margin_top = 5.0
-expand_margin_right = 5.0
-expand_margin_bottom = 5.0
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(0, 4)
 
@@ -42,21 +43,22 @@ mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_nt8dy")
 script = ExtResource("1_8u44f")
 
-[node name="FPS" type="Label" parent="."]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "a
-"
-label_settings = SubResource("LabelSettings_u8wtu")
-horizontal_alignment = 1
-
 [node name="Latency" type="Label" parent="."]
 layout_mode = 2
+size_flags_vertical = 1
 theme_override_font_sizes/font_size = 12
-text = "a
-"
+text = "10.67ms"
 label_settings = SubResource("LabelSettings_u8wtu")
-horizontal_alignment = 1
+horizontal_alignment = 2
+
+[node name="FPS" type="Label" parent="."]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 12
+text = "1006fps"
+label_settings = SubResource("LabelSettings_u8wtu")
+horizontal_alignment = 2
+vertical_alignment = 2
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
