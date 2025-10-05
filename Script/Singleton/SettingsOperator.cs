@@ -189,6 +189,8 @@ public partial class SettingsOperator : Node
             Gameplaycfg.TimeTotalGame = beatmap.Timetotal * 0.001f;
             Sessioncfg["beatmapmapper"] = beatmap.Mapper;
             Gameplaycfg.Accuracy = (int)beatmap.Accuracy;
+            //Gameplaycfg.SampleSet = beatmap.SampleSet;
+            Gameplaycfg.SampleSet = SampleSet.Type[1];
             LevelRating = beatmap.Levelrating;
             Sessioncfg["osubeatid"] = (int)beatmap.Osubeatid;
             Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
@@ -270,30 +272,31 @@ public partial class SettingsOperator : Node
         if (line == "[HitObjects]") { inTimingPoints = false; inHitObjects = true; continue; }
         if (line.StartsWith("[")) { inTimingPoints = false; inHitObjects = false; continue; }
 
-        // --- key: value pairs ---
-        if (!inTimingPoints && !inHitObjects && line.Contains(":"))
-        {
-            var parts = line.Split(":", 2);
-            var key = parts[0].Trim();
-            var value = parts[1].Trim();
-
-            switch (key)
+            // --- key: value pairs ---
+            if (!inTimingPoints && !inHitObjects && line.Contains(":"))
             {
-                case "Title": legend.Title = value; break;
-                case "TitleUnicode": legend.TitleUnicode = value; break;
-                case "Artist": legend.Artist = value; break;
-                case "ArtistUnicode": legend.ArtistUnicode = value; break;
-                case "Creator": legend.Mapper = value; break;
-                case "Version": legend.Version = value; break;
-                case "CircleSize": legend.KeyCount = (int)(float.TryParse(value, out var cs) ? cs : 4); break;
-                case "OverallDifficulty": legend.Accuracy = float.TryParse(value, out var od) ? od : 0; break;
-                case "AudioFilename": legend.Audio = value; break;
-                case "BeatmapID": legend.Osubeatid = int.TryParse(value, out var bid) ? bid : -1; break;
-                case "BeatmapSetID": legend.Osubeatidset = int.TryParse(value, out var bset) ? bset : -1; break;
-                case "QluteBeatID": legend.Beatid = int.TryParse(value, out var qbid) ? qbid : -1; break;
-                case "QluteBeatIDSet": legend.Beatidset = int.TryParse(value, out var qbset) ? qbset : -1; break;
-                case "PreviewTime": legend.PreviewTime = (float.TryParse(value, out var pt) ? pt : 0) * 0.001f; break;
-            }
+                var parts = line.Split(":", 2);
+                var key = parts[0].Trim();
+                var value = parts[1].Trim();
+
+                switch (key)
+                {
+                    case "Title": legend.Title = value; break;
+                    case "TitleUnicode": legend.TitleUnicode = value; break;
+                    case "Artist": legend.Artist = value; break;
+                    case "ArtistUnicode": legend.ArtistUnicode = value; break;
+                    case "SampleSet": legend.SampleSet = value; break;
+                    case "Creator": legend.Mapper = value; break;
+                    case "Version": legend.Version = value; break;
+                    case "CircleSize": legend.KeyCount = (int)(float.TryParse(value, out var cs) ? cs : 4); break;
+                    case "OverallDifficulty": legend.Accuracy = float.TryParse(value, out var od) ? od : 0; break;
+                    case "AudioFilename": legend.Audio = value; break;
+                    case "BeatmapID": legend.Osubeatid = int.TryParse(value, out var bid) ? bid : -1; break;
+                    case "BeatmapSetID": legend.Osubeatidset = int.TryParse(value, out var bset) ? bset : -1; break;
+                    case "QluteBeatID": legend.Beatid = int.TryParse(value, out var qbid) ? qbid : -1; break;
+                    case "QluteBeatIDSet": legend.Beatidset = int.TryParse(value, out var qbset) ? qbset : -1; break;
+                    case "PreviewTime": legend.PreviewTime = (float.TryParse(value, out var pt) ? pt : 0) * 0.001f; break;
+                }
         }
 
         // --- background ---
@@ -328,6 +331,11 @@ public partial class SettingsOperator : Node
                 hitCount++;
             }
         }
+    }
+
+    if (!SampleSet.Type.Contains(legend.SampleSet))
+    {
+        legend.SampleSet = SampleSet.Type.First();
     }
 
     legend.Timetotal = lastNoteTime;
@@ -415,6 +423,7 @@ public partial class SettingsOperator : Node
         public static float TimeTotal { get; set; }
         public static float TimeTotalGame { get; set; }
         public static float Accuracy { get; set; }
+        public static string SampleSet { get; set; }
         public static int Combo { get; set; }
         public static int MaxCombo { get; set; }
         public static int Max { get; set; }

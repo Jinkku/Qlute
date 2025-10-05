@@ -13,6 +13,7 @@ public class BeatmapLegend
 	public string TitleUnicode { get; set; } = null;
 	public string Artist { get; set; } = null;
 	public string ArtistUnicode { get; set; } = null;
+	public string SampleSet { get; set; } = "Normal";
 	public string Mapper { get; set; } = null;
 	public int KeyCount { get; set; } = 4;
 	public string Version { get; set; } = null;
@@ -32,6 +33,15 @@ public class BeatmapLegend
 	public string Rawurl { get; set; } = null; // Raw URL for the beatmap, used for downloading
 	public string Path { get; set; } = null; // Path for the beatmap
 }
+
+public static class SampleSet
+{
+	public static List<string> Normal = new List<string>(["normal-hitnormal.wav", "normal-hitwhistle.wav", "normal-hitfinish.wav", "normal-hitclap.wav"]);
+	public static List<string> Soft = new List<string>(["soft-hitnormal.wav", "soft-hitwhistle.wav", "soft-hitfinish.wav", "soft-hitclap.wav"]);
+	public static List<string> Drum = new List<string>(["drum-hitnormal.wav", "drum-hitwhistle.wav", "drum-hitfinish.wav", "drum-hitclap.wav"]);
+	public static List<string> Type = new List<string>(["Normal", "Soft", "Drum"]);
+}
+
 public partial class BeatmapListener : Node
 {
 	private SettingsOperator SettingsOperator { get; set; }
@@ -73,7 +83,8 @@ public partial class BeatmapListener : Node
 			GD.Print("Parsed...");
 			Notify.Post("Imported\n" + Name);
 		}
-		foreach (string file in Directory.GetFiles(SettingsOperator.downloadsdir, "*.zip")){
+		foreach (string file in Directory.GetFiles(SettingsOperator.downloadsdir, "*.zip"))
+		{
 			System.IO.Compression.ZipFile.ExtractToDirectory(file, SettingsOperator.downloadsdir);
 			File.Delete(file);
 			GD.Print("Extracted pack" + file);
@@ -83,7 +94,7 @@ public partial class BeatmapListener : Node
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		GD.Print(SettingsOperator.beatmapsdir);
-		string[] directories = { SettingsOperator.homedir,SettingsOperator.tempdir, SettingsOperator.beatmapsdir, SettingsOperator.downloadsdir, SettingsOperator.replaydir, SettingsOperator.screenshotdir, SettingsOperator.skinsdir, SettingsOperator.exportdir };
+		string[] directories = { SettingsOperator.homedir, SettingsOperator.tempdir, SettingsOperator.beatmapsdir, SettingsOperator.downloadsdir, SettingsOperator.replaydir, SettingsOperator.screenshotdir, SettingsOperator.skinsdir, SettingsOperator.exportdir };
 		foreach (string tmp in directories)
 		{
 			if (Directory.Exists(tmp))
