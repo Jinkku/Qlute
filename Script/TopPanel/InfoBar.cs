@@ -41,6 +41,22 @@ public partial class InfoBar : ColorRect
 		
 	}
 
+	private Control ChangeLog { get; set; }
+	private void _ChangeLog()
+	{
+		if (ChangeLog != null)
+		{
+			GetTree().CurrentScene.GetNode<ColorRect>("Blank-Chan").QueueFree();
+			ChangeLog.QueueFree();
+			ChangeLog = null;
+		}
+		else
+		{
+			ChangeLog = GD.Load<PackedScene>("res://Panels/Overlays/Changelog.tscn").Instantiate().GetNode<Control>(".");
+			GetTree().CurrentScene.AddChild(ChangeLog);
+		}
+	}
+
 	public void _hovered()
 	{
 		ShadowAni(1);

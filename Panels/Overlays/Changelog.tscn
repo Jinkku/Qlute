@@ -1,0 +1,64 @@
+[gd_scene load_steps=4 format=3 uid="uid://bewcbghccdvxf"]
+
+[ext_resource type="Script" uid="uid://28tapmbq8w6k" path="res://Script/Changelog/Changelog.cs" id="1_rvpxu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tivcd"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.2627451, 0.21960784, 0.27450982, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d5ayf"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.101960786)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="ChangeLog" type="Control"]
+z_index = 4
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+mouse_behavior_recursive = 1
+script = ExtResource("1_rvpxu")
+
+[node name="Pill" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 140.0
+offset_right = -140.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_behavior_recursive = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tivcd")
+
+[node name="Scroll" type="ScrollContainer" parent="Pill"]
+layout_mode = 2
+
+[node name="Rows" type="VBoxContainer" parent="Pill/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 25
+
+[node name="Title" type="Label" parent="Pill/Scroll/Rows"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_d5ayf")
+text = "changelog"
+
+[node name="Request" type="HTTPRequest" parent="."]
+timeout = 10.0
+
+[connection signal="request_completed" from="Request" to="." method="completed"]

@@ -4,6 +4,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Markdig" Version="0.42.0" />
     <PackageReference Include="NVorbis" Version="0.10.5" />
     <PackageReference Include="realm" Version="20.1.0" />
   </ItemGroup>
