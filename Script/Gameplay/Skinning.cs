@@ -69,7 +69,7 @@ public partial class Skinning : Node
 public class SkinningLegend
 {
     public string Name { get; set; } = "Untitled";
-    public string SkinPath { get; set; }
+    public string SkinPath { get; set; } = "res://SelectableSkins/Slia/";
     public Texture2D NoteBack { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/Backgroundnote.png");
     public Texture2D NoteFore { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/Foregroundnote.png");
     public List<Color> LaneNotes { get; set; } = new()

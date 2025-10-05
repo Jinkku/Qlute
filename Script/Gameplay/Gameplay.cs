@@ -8,6 +8,7 @@ public class NotesEn {
 	public int NoteSection {get;set;}
 	public Sprite2D Node {get;set;}
 	public bool hit {get;set;}
+	public string Sample => SampleSet.Normal.First();
 }
 public class KeyL
 {
@@ -141,7 +142,6 @@ public partial class Gameplay : Control
 			});
 		}
 	}
-
 	public void ReloadBeatmap(string filepath)
 	{
 		Notes.Clear();
@@ -150,7 +150,7 @@ public partial class Gameplay : Control
 		var lines = text.Split("\n");
 		var part = 0;
 		var timing = 0;
-		var t = "";
+		var sampletype = 0;
 		var timen = -1;
 		var isHitObjectSection = false;
 		dance = SettingsOperator.Beatmaps[SettingsOperator.SongID].Dance;
@@ -167,9 +167,9 @@ public partial class Gameplay : Control
 				// Break if we reach an empty line or another section
 				if (string.IsNullOrWhiteSpace(line) || line.StartsWith('['))
 					break;
-				t = line;
-				timing = Convert.ToInt32(line.Split(",")[2]);
-				part = Convert.ToInt32(line.Split(",")[0]);
+				string[] section = line.Split(':',',');
+				timing = Convert.ToInt32(section[2]);
+				part = Convert.ToInt32(section[0]);
 				if (part == 64) { part = 0; }
 				else if (part == 192) { part = 1; }
 				else if (part == 320) { part = 2; }
@@ -288,6 +288,15 @@ public partial class Gameplay : Control
 		var key = Keys[Keyx];
 		if (hit)
 		{
+			var name = "";
+			if (SettingsOperator.Gameplaycfg.SampleSet == SampleSet.Type[0]) {
+				name = SampleSet.Normal.First();
+			} else if (SettingsOperator.Gameplaycfg.SampleSet == SampleSet.Type[1]) {
+				name = SampleSet.Soft.First();
+			} else if (SettingsOperator.Gameplaycfg.SampleSet == SampleSet.Type[2]) {
+				name = SampleSet.Drum.First();
+			}
+			Sample.PlaySample("res://SelectableSkins/Slia/Sounds/" + name);
 			if (!SettingsOperator.SpectatorMode) Replay.AddReplay(est, Keyx);
 			key.Node.SelfModulate = Skin.Element.LaneNotes[Keyx];
 			key.Ani?.Kill(); // Abort the previous animation
