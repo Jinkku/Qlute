@@ -87,5 +87,13 @@ grow_vertical = 2
 one_shot = true
 autostart = true
 
+[node name="Newpp" type="Label" parent="."]
+layout_mode = 0
+offset_left = 139.0
+offset_top = 305.0
+offset_right = 179.0
+offset_bottom = 324.0
+text = "0pp"
+
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="timeout" from="Wait" to="." method="StartPlay"]

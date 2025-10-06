@@ -21,7 +21,8 @@ public partial class SettingsOperator : Node
     public static string tempdir => homedir + "/temp";
     public static string beatmapsdir => homedir + "/beatmaps";
     public static string exportdir => homedir + "/exports";
-    public static float ppbase = 0.035f;
+    public static readonly float ppbase = 0.035f;
+    public static readonly float ppv2base = 0.0035f;
     public static string downloadsdir => homedir + "/downloads";
     public static string replaydir => homedir + "/replays";
     public static string screenshotdir => homedir + "/screenshots";
@@ -195,11 +196,13 @@ public partial class SettingsOperator : Node
             Sessioncfg["osubeatid"] = (int)beatmap.Osubeatid;
             Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
             Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
+            GD.Print($"ppv2:{beatmap.ppv2}pp");
             if (seek == -1)
             {
                 seek = beatmap.PreviewTime;
             }
             Gameplaycfg.maxpp = beatmap.pp;
+            Gameplaycfg.maxppv2 = beatmap.ppv2;
             ApiOperator.CheckBeatmapRankStatus();
 
 
@@ -254,23 +257,24 @@ public partial class SettingsOperator : Node
     }
     public static string Parse_Beatmapfile(string filename, int SetID = 0)
     {
-    var legend = new BeatmapLegend { SetID = SetID };
-    using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
-    var lines = file.GetAsText().Split("\n");
-    bool inHitObjects = false;
-    bool inTimingPoints = false;
-    int hitCount = 0;
-    float lastNoteTime = 0;
+        var legend = new BeatmapLegend { SetID = SetID };
+        using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
+        var lines = file.GetAsText().Split("\n");
+        bool inHitObjects = false;
+        bool inTimingPoints = false;
+        int hitCount = 0;
+        float lastNoteTime = 0;
+        int ppv2multi = 1;
+        int ppv2time = -1;
+        foreach (var lineRaw in lines)
+        {
+            var line = lineRaw.Trim();
+            if (string.IsNullOrWhiteSpace(line)) continue;
 
-    foreach (var lineRaw in lines)
-    {
-        var line = lineRaw.Trim();
-        if (string.IsNullOrWhiteSpace(line)) continue;
-
-        // Handle section switches
-        if (line == "[TimingPoints]") { inTimingPoints = true; continue; }
-        if (line == "[HitObjects]") { inTimingPoints = false; inHitObjects = true; continue; }
-        if (line.StartsWith("[")) { inTimingPoints = false; inHitObjects = false; continue; }
+            // Handle section switches
+            if (line == "[TimingPoints]") { inTimingPoints = true; continue; }
+            if (line == "[HitObjects]") { inTimingPoints = false; inHitObjects = true; continue; }
+            if (line.StartsWith("[")) { inTimingPoints = false; inHitObjects = false; continue; }
 
             // --- key: value pairs ---
             if (!inTimingPoints && !inHitObjects && line.Contains(":"))
@@ -297,57 +301,69 @@ public partial class SettingsOperator : Node
                     case "QluteBeatIDSet": legend.Beatidset = int.TryParse(value, out var qbset) ? qbset : -1; break;
                     case "PreviewTime": legend.PreviewTime = (float.TryParse(value, out var pt) ? pt : 0) * 0.001f; break;
                 }
-        }
+            }
 
-        // --- background ---
-        if (line.StartsWith("0,0,\"") && line.Contains("\""))
-        {
-            var parts = line.Split("\"");
-            if (parts.Length > 1) legend.Background = parts[1].Trim();
-        }
-
-        // --- timing points ---
-        if (inTimingPoints)
-        {
-            var parts = line.Split(",");
-            if (parts.Length < 2) continue;
-
-            if (float.TryParse(parts[1], out var mpb) && legend.Bpm == 0) // first BPM
-                legend.Bpm = 60000f / mpb;
-
-            if (int.TryParse(parts[0], out var time) && int.TryParse(parts.Last(), out var flash))
-                legend.Dance.Add(new DanceCounter { time = time, flash = flash == 1 });
-        }
-
-        // --- hitobjects ---
-        if (inHitObjects)
-        {
-            var parts = line.Split(new[] { ',', ':' });
-            if (parts.Length < 3) continue;
-
-            if (float.TryParse(parts[2], out var noteTime))
+            // --- background ---
+            if (line.StartsWith("0,0,\"") && line.Contains("\""))
             {
-                lastNoteTime = noteTime;
-                hitCount++;
+                var parts = line.Split("\"");
+                if (parts.Length > 1) legend.Background = parts[1].Trim();
+            }
+
+            // --- timing points ---
+            if (inTimingPoints)
+            {
+                var parts = line.Split(",");
+                if (parts.Length < 2) continue;
+
+                if (float.TryParse(parts[1], out var mpb) && legend.Bpm == 0) // first BPM
+                    legend.Bpm = 60000f / mpb;
+
+                if (int.TryParse(parts[0], out var time) && int.TryParse(parts.Last(), out var flash))
+                    legend.Dance.Add(new DanceCounter { time = time, flash = flash == 1 });
+            }
+
+            // --- hitobjects ---
+            if (inHitObjects)
+            {
+                var parts = line.Split(new[] { ',', ':' });
+                if (parts.Length < 3) continue;
+
+                if (int.TryParse(parts[2], out var noteTime))
+                {
+                    if (noteTime < ppv2time + (60000 / legend.Bpm))
+                    {
+                        ppv2multi++;
+                    }
+                    else
+                    {
+                        ppv2time = noteTime;
+                        ppv2multi = 1;
+                    }
+                    var ppv2value = SettingsOperator.ppbase * ppv2multi;
+                    legend.ppv2sets.Add(ppv2value);
+                    legend.ppv2 += ppv2value;
+                    lastNoteTime = noteTime;
+                    hitCount++;
+
+                }
             }
         }
-    }
+        if (!SampleSet.Type.Contains(legend.SampleSet))
+        {
+            legend.SampleSet = SampleSet.Type.First();
+        }
 
-    if (!SampleSet.Type.Contains(legend.SampleSet))
-    {
-        legend.SampleSet = SampleSet.Type.First();
-    }
-
-    legend.Timetotal = lastNoteTime;
-    legend.Levelrating = GetLevelRating(hitCount, lastNoteTime * 0.001f);
-    legend.pp = Get_ppvalue(hitCount, 0, 0, 0, combo: hitCount, TimeTotal: lastNoteTime * 0.001f);
-    legend.Path = filename.Replace(filename.Split("/").Last(), "");
-    legend.Rawurl = filename;
-    if (legend.KeyCount == 4)
+        legend.Timetotal = lastNoteTime;
+        legend.Levelrating = GetLevelRating(hitCount, lastNoteTime * 0.001f);
+        legend.pp = Get_ppvalue(hitCount, 0, 0, 0, combo: hitCount, TimeTotal: lastNoteTime * 0.001f);
+        legend.Path = filename.Replace(filename.Split("/").Last(), "");
+        legend.Rawurl = filename;
+        if (legend.KeyCount == 4)
         {
             Beatmaps.Add(legend);
         }
-    return $"{legend.Artist} - {legend.Title} from {legend.Mapper}";
+        return $"{legend.Artist} - {legend.Title} from {legend.Mapper}";
     }
 
     public static void Addms(float ms)
@@ -401,6 +417,7 @@ public partial class SettingsOperator : Node
     {
         Gameplaycfg.Score = 0;
         Gameplaycfg.pp = 0;
+        Gameplaycfg.ppv2 = 0;
         Gameplaycfg.Max = 0;
         Gameplaycfg.Great = 0;
         Gameplaycfg.Meh = 0;
@@ -419,6 +436,8 @@ public partial class SettingsOperator : Node
         public static double Timeframe { get; set; }
         public static double pp { get; set; }
         public static double maxpp { get; set; }
+        public static double ppv2 { get; set; }
+        public static double maxppv2 { get; set; }
         public static float Time { get; set; }
         public static float TimeTotal { get; set; }
         public static float TimeTotalGame { get; set; }
