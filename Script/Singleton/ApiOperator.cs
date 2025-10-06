@@ -105,7 +105,11 @@ public partial class ApiOperator : Node
 	}
 	public static void ReloadLeaderboard(int BeatmapID)
 	{
-		if (SettingsOperator.LeaderboardType == 1)
+		if (!SettingsOperator.NoConnectionToGameServer)
+		{
+			GD.Print("Skipping because connection to Game server is unverified");
+		}
+		else if (SettingsOperator.LeaderboardType == 1)
 		{
 			LeaderboardAPI.Request(SettingsOperator.GetSetting("api") + "apiv2/getleaderboard", new string[] { $"BEATMAPID: {BeatmapID}" });
 			LeaderboardStatus = 1; // Set status to loading
@@ -198,7 +202,7 @@ public partial class ApiOperator : Node
 	public static void CheckBeatmapRankStatus()
 	{
 		RankApi?.CancelRequest();
-		if (SettingsOperator.SongID != -1)
+		if (SettingsOperator.SongID != -1 && !SettingsOperator.NoConnectionToGameServer)
 		{
 			RankApi.Request($"{Beatmapapi}/api/s/{SettingsOperator.Sessioncfg["osubeatidset"]}");
 		}
@@ -370,6 +374,8 @@ public partial class ApiOperator : Node
 		var Artist = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
 		var Difficulty = SettingsOperator.Sessioncfg["beatmapdiff"]?.ToString() ?? "";
 		var Mapper = SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
+		if (GetTree().CurrentScene == null || !SettingsOperator.NoConnectionToGameServer) return; // Skips everything if these were triggered.
+		
 		if (GetTree().CurrentScene.Name == "Gameplay")
 		{
 			Status = $"Playing {Artist} - {Title} by {Mapper} [{Difficulty}]";
