@@ -199,6 +199,10 @@ public partial class SongSelect : Control
 
 	private void ScrollSongs()
 	{
+		if (scrollBar == null)
+		{
+			return;
+		}
 		SongLoaded = 0;
 		float Height = GetViewportRect().Size.Y;
 		int CardHeight = (int)(CardSize.Y + 5);
