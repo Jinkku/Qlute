@@ -407,6 +407,7 @@ public partial class Gameplay : Control
     public override void _ExitTree()
     {
 		Cursor.CursorVisible = true;
+		SettingsOperator.SpectatorMode = false; // Disables Spectator mode.
     }
 
 	private float est { get; set; }
