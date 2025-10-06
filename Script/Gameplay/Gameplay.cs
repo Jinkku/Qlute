@@ -391,18 +391,20 @@ public partial class Gameplay : Control
     /// <summary>
     /// This is the one that controls the Player input.
     /// </summary>
-	private void PlayerKeyCheck(int est){
-			for (int i = 0; i < 4; i++)
-			{
-				if (Input.IsActionJustPressed("Key" + (i + 1)) && !SettingsOperator.SpectatorMode)
-				{
-					hitnote(i, true, est);
-				}
-				else if (Input.IsActionJustReleased("Key" + (i + 1)) && !SettingsOperator.SpectatorMode)
-				{
-					hitnote(i, false, est);
-				}
-			}}
+    public override void _Input(InputEvent @event)
+    {
+	    if (SettingsOperator.SpectatorMode) return;
+
+	    for (int i = 0; i < 4; i++)
+	    {
+		    var keyName = "Key" + (i + 1);
+
+		    if (@event.IsActionPressed(keyName))
+			    hitnote(i, true, (int)est);
+		    else if (@event.IsActionReleased(keyName))
+			    hitnote(i, false, (int)est);
+	    }
+    }
 
     public override void _ExitTree()
     {
@@ -576,7 +578,6 @@ public partial class Gameplay : Control
 				IncreaseDanceIndex();
 			}
 
-			PlayerKeyCheck((int)est);
 			CheckReplayKey((int)est);
 			_GameNoteTick(delta);
 		}
