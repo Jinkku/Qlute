@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bwpja5llmgtqo"]
+[gd_scene load_steps=30 format=3 uid="uid://bwpja5llmgtqo"]
 
 [ext_resource type="Script" uid="uid://borvy2xtb1o65" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
 [ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="2_4cvop"]
@@ -15,7 +15,6 @@
 [ext_resource type="Texture2D" uid="uid://cpp14plc7cctp" path="res://Resources/System/TopPanel/Chat.svg" id="8_1qp4o"]
 [ext_resource type="Texture2D" uid="uid://4uedtgsvw7ep" path="res://Resources/System/TopPanel/Settings.svg" id="9_6quot"]
 [ext_resource type="Texture2D" uid="uid://dbrt8ltwm3upi" path="res://Resources/System/TopPanel/Notifications.svg" id="12_1qp4o"]
-[ext_resource type="Script" uid="uid://dp1rdt0w40nki" path="res://Script/TestMenu/Debugitem2.cs" id="13_1qp4o"]
 
 [sub_resource type="Gradient" id="Gradient_n7q28"]
 colors = PackedColorArray(0, 0, 0, 0.568627, 0, 0, 0, 0)
@@ -295,18 +294,6 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
 keep_pressed_outside = true
 icon = ExtResource("12_1qp4o")
 icon_alignment = 1
-
-[node name="Debugitem2" type="Label" parent="."]
-process_mode = 3
-visible = false
-layout_mode = 0
-offset_left = 18.0
-offset_top = 70.0
-offset_right = 131.0
-offset_bottom = 89.0
-theme_override_font_sizes/font_size = 12
-text = "Debug infomation"
-script = ExtResource("13_1qp4o")
 
 [node name="ToolTip" type="Label" parent="."]
 visible = false
