@@ -10,7 +10,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_m7k6x")
-_time = 0.5
+_time = 0.3
+_mode = 2
+_transitionType = 7
 
 [node name="Black" type="ColorRect" parent="."]
 z_index = 100

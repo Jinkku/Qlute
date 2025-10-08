@@ -106,22 +106,89 @@ public partial class SongSelect : Control
 		scrollmode(exactvalue: SettingsOperator.SongID);
 	}
 
-
-	// used later
-	private void startanimation()
+	private Tween Ani { get; set; }
+	
+	
+	
+	private void AnimationScene(int type)
 	{
-		var SongDetails = GetNode<TextureRect>("SongDetails");
-		SongDetails.Position = new Vector2(-SongDetails.Size.X, SongDetails.Position.Y);
-		SongDetails.Modulate = new Color(0f, 0f, 0f, 0f);
-		var SongSelectAnimation = CreateTween();
-		SongSelectAnimation.SetParallel(true);
-		SongSelectAnimation.TweenProperty(SongDetails, "position", new Vector2(0, SongDetails.Position.Y), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-		SongSelectAnimation.TweenProperty(SongDetails, "modulate", new Color(1f, 1f, 1f, 1f), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-		SongSelectAnimation.Play();
-	}
+		Ani?.Kill();
+		Ani = CreateTween();
+		Ani.SetParallel(true);
+		if (type == 1)
+		{
+			var LoadScreen = GD.Load<PackedScene>("res://Panels/Screens/SongLoadingScreen.tscn").Instantiate().GetNode<Control>(".");
+			LoadScreen.Modulate = new Color(0, 0, 0, 0);
+			GetTree().CurrentScene.AddChild(LoadScreen);
+			Ani.TweenProperty(SongDetails, "position", new Vector2(-SongDetails.Size.X, SongDetails.Position.Y), 0.5f)
+				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			Ani.TweenProperty(SongPanel, "position",
+					new Vector2(SongPanel.Position.X + SongPanel.Size.X, SongPanel.Position.Y), 0.5f)
+				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			Ani.TweenProperty(SongPanel, "modulate", new Color(0, 0, 0, 0), 0.5f).SetEase(Tween.EaseType.Out)
+				.SetTrans(Tween.TransitionType.Cubic);
+			Ani.TweenProperty(BottomBar, "position",
+					new Vector2(BottomBar.Position.X, BottomBar.Position.Y + BottomBar.Size.Y), 0.5f)
+				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			Ani.TweenProperty(SongControl, "position", new Vector2(SongControl.Position.X, -SongControl.Size.Y), 0.5f)
+				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			Ani.TweenProperty(LoadScreen, "modulate", new Color(1, 1, 1, 1), 0.5f)
+				.SetTrans(Tween.TransitionType.Linear);
+			Ani.Play();
+		}
+		else if (type == 2)
+		{
+			Ani.TweenProperty(SongDetails, "position", new Vector2(0, SongDetails.Position.Y), 0.5f)
+				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			Ani.TweenProperty(SongDetails, "modulate", new Color(1f,1f,1f,1f), 0.5f).SetEase(Tween.EaseType.Out)
+				.SetTrans(Tween.TransitionType.Cubic);
+			Ani.TweenProperty(SongPanel, "position",
+					new Vector2(GetViewportRect().Size.X - SongPanel.Size.X, SongPanel.Position.Y), 0.5f)
+				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			Ani.TweenProperty(SongPanel, "modulate", new Color(1f,1f,1f,1f), 0.5f).SetEase(Tween.EaseType.Out)
+				.SetTrans(Tween.TransitionType.Cubic);
+			Ani.TweenProperty(BottomBar, "position",
+					new Vector2(BottomBar.Position.X, GetViewportRect().Size.Y - BottomBar.Size.Y), 0.5f)
+				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			Ani.TweenProperty(BottomBar, "modulate", new Color(1f,1f,1f,1f), 0.5f).SetEase(Tween.EaseType.Out)
+				.SetTrans(Tween.TransitionType.Cubic);
+			Ani.TweenProperty(SongControl, "position", new Vector2(SongControl.Position.X, 0), 0.5f)
+				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			Ani.TweenProperty(SongControl, "modulate", new Color(1f,1f,1f,1f), 0.5f).SetEase(Tween.EaseType.Out)
+				.SetTrans(Tween.TransitionType.Cubic);
+			Ani.Play();
+			
+		}
+		else if (type == 0)
+		{
+			SongDetails.Position = new Vector2(-SongDetails.Size.X, SongDetails.Position.Y);
+			SongPanel.Position = new Vector2(SongPanel.Position.X + SongPanel.Size.X, SongPanel.Position.Y);
+			BottomBar.Position = new Vector2(BottomBar.Position.X, GetViewportRect().Size.Y + BottomBar.Size.Y);
+			SongControl.Position = new Vector2(SongControl.Position.X, -SongControl.Size.Y);
 
+			SongDetails.Modulate = new Color(0f, 0f, 0f, 0f);
+			SongPanel.Modulate = new Color(0f, 0f, 0f, 0f);
+			BottomBar.Modulate =  new Color(0f, 0f, 0f, 0f);
+			SongControl.Modulate = new Color(0f, 0f, 0f, 0f);
+		}
+}
+
+	private VBoxContainer SongDetails { get; set; }
+	private Control SongPanel { get; set; }
+	private Control BottomBar { get; set; }
+	private PanelContainer SongControl { get; set; }
+	private void PrepareMainComponents()
+	{
+		SongDetails = GetNode<VBoxContainer>("SongDetails");
+		SongPanel = GetNode<Control>("SongPanel");
+		BottomBar = GetNode<Control>("BottomBar");
+		SongControl = GetNode<PanelContainer>("ControlBar");
+	}
 	public override void _Ready()
 	{
+		PrepareMainComponents(); // Prepares Song Select v2 components.
+		AnimationScene(0); // Makes all elements invisible when ready to start.
+		
 		SettingsOperator.loopaudio = true;
 		scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
 		RankStatus = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Column1/RankBox");
@@ -168,6 +235,8 @@ public partial class SongSelect : Control
 
 		_res_resize();
 		checksongpanel();
+		
+		AnimationScene(2); // Starts Animation
 	}
 	// Animation for Start Button DUH
 
@@ -392,7 +461,7 @@ public partial class SongSelect : Control
 		if (!AnimationSong)
 		{
 			AnimationSong = !AnimationSong;
-			scrollmode(exactvalue: SettingsOperator.SongID);
+			scrollBar.Value = SettingsOperator.SongID;
 		}
 		checksongpanel();
 
@@ -518,27 +587,12 @@ public partial class SongSelect : Control
 			Gameplay.reload_npcleaderboard();
 		}
 
-
-		var SongDetails = GetNode<VBoxContainer>("SongDetails");
-		var SongPanel = GetNode<Control>("SongPanel");
-		var BottomBar = GetNode<Control>("BottomBar");
-		var SongControl = GetNode<PanelContainer>("ControlBar");
-		var LoadScreen = GD.Load<PackedScene>("res://Panels/Screens/SongLoadingScreen.tscn").Instantiate().GetNode<Control>(".");
-		LoadScreen.Modulate = new Color(0, 0, 0, 0);
-		GetTree().CurrentScene.AddChild(LoadScreen);
-		var Ani = CreateTween();
-		Ani.SetParallel(true);
-		Ani.TweenProperty(SongDetails, "position", new Vector2(-SongDetails.Size.X, SongDetails.Position.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-		Ani.TweenProperty(SongPanel, "position", new Vector2(SongPanel.Position.X + SongPanel.Size.X, SongPanel.Position.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-		Ani.TweenProperty(SongPanel, "modulate", new Color(0, 0, 0, 0), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-		Ani.TweenProperty(BottomBar, "position", new Vector2(BottomBar.Position.X, BottomBar.Position.Y + BottomBar.Size.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-		Ani.TweenProperty(SongControl, "position", new Vector2(SongControl.Position.X, -SongControl.Size.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-		Ani.TweenProperty(LoadScreen, "modulate", new Color(1, 1, 1, 1), 0.5f).SetTrans(Tween.TransitionType.Linear);
-		Ani.Play();
+		AnimationScene(1);
 		SettingsOperator.loopaudio = false;
 	}
 	private void _on_back_pressed()
 	{
+		AnimationScene(1);
 		if (SettingsOperator.CreateSelectingBeatmap) GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
 		else GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
 	}
