@@ -59,6 +59,6 @@ public partial class Bootstrap : Control
 	{
 		Finished = true;
 		Cursor.CursorVisible = true;
-		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn",_mode: SceneTransition.TransitionMode.CrossFade,time: 0.3f);
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn",mode: SceneTransition.TransitionMode.CrossFade,time: 0.3f);
 	}
 }
