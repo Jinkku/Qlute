@@ -31,6 +31,7 @@ public partial class SettingsOperator : Node
     public static float levelweight = 0.0084f;
     public static bool loopaudio = false;
     public static bool jukebox = false;
+    public static string GameChecksum { get; set; }
     public int backgrounddim { get; set; }
     public int MasterVol { get; set; }
     public int SampleVol { get; set; }
@@ -579,6 +580,7 @@ public partial class SettingsOperator : Node
         }
         if (LeaderboardType < 0 && LeaderboardType > 2) LeaderboardType = 1;
         CheckOldSiteUrl();
+        GameChecksum = ChecksumUtil.GetGameChecksum(); 
     }
     public void ResetVol()
     {
