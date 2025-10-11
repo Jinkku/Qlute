@@ -19,8 +19,6 @@ public class KeyL
 
 public partial class Gameplay : Control
 {
-	// Called when the node enters the scene tree for the first time.
-	private SettingsOperator SettingsOperator { get; set; }
 	private int BadCombo { get; set; }
 	public static ApiOperator ApiOperator { get; set; }
 	//public static Label Ttiming { get; set; }
@@ -184,14 +182,24 @@ public partial class Gameplay : Control
 		}
 		MaxNotes = Notes.Count;
 	}
-	public override void _Ready()
+	
+	private Control Playfield { get; set; }
+	private SettingsOperator SettingsOperator { get; set; }
+
+	private void PrepareBaseComponent()
 	{
-		ReplayINT = 0;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SpectatorPanel = GD.Load<PackedScene>("res://Panels/Overlays/SpectatorSettings.tscn").Instantiate().GetNode<Control>(".");
 		ApiOperator = GetNode<ApiOperator>("/root/ApiOperator");
 		Beatmap_Background = GetNode<TextureRect>("./Beatmap_Background");
 		WaitClock = GetNode<Timer>("Wait");
+		Playfield = GetNode<Control>("Playfield");
+	}
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
+		ReplayINT = 0;
+		PrepareBaseComponent();
 		AudioPlayer.Instance.Stop();
 		ClipContents = true;
 
@@ -201,13 +209,12 @@ public partial class Gameplay : Control
 
 
 		HealthBar.Reset();
-		Control P = GetNode<Control>("Playfield");
-		Chart = GetNode<HBoxContainer>("Playfield/ChartSections");
+		Chart = Playfield.GetNode<HBoxContainer>("ChartSections");
 		hittext = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/hittext.tscn").Instantiate().GetNode<Label>(".");
 		hittextinit = true;
 		hittext.Modulate = new Color(1f, 1f, 1f, 0f);
 		hittext.ZIndex = 100;
-		GetNode<Control>("Playfield").AddChild(hittext);
+		Playfield.AddChild(hittext);
 		hittextoldpos = hittext.Position;
 		SettingsOperator.PerfectJudge = (int)(SettingsOperator.PerfectJudgeMin -Math.Min( 5 * SettingsOperator.Gameplaycfg.BeatmapAccuracy,50));
 		SettingsOperator.GreatJudge = (int)(SettingsOperator.PerfectJudge * 4);
@@ -218,26 +225,26 @@ public partial class Gameplay : Control
 		meh.Position = new Vector2(0, -SettingsOperator.MehJudge / 2);
 		meh.Color = new Color(0.5f, 0f, 0f, 0.3f);
 		meh.Visible = false;
-		GetNode<ColorRect>("Playfield/Guard").AddChild(meh);
+		Playfield.GetNode<ColorRect>("Guard").AddChild(meh);
 
 		great = new ColorRect();
 		great.Size = new Vector2(450, SettingsOperator.GreatJudge);
 		great.Position = new Vector2(0, -SettingsOperator.GreatJudge / 2);
 		great.Color = new Color(0f, 0.5f, 0f, 0.3f);
 		great.Visible = false;
-		GetNode<ColorRect>("Playfield/Guard").AddChild(great);
+		Playfield.GetNode<ColorRect>("Guard").AddChild(great);
 
 		perfect = new ColorRect();
 		perfect.Size = new Vector2(450, SettingsOperator.PerfectJudge * 2);
 		perfect.Position = new Vector2(0, -SettingsOperator.PerfectJudge);
 		perfect.Color = new Color(0f, 0f, 0.5f, 0.3f);
 		perfect.Visible = false;
-		GetNode<ColorRect>("Playfield/Guard").AddChild(perfect);
+		Playfield.GetNode<ColorRect>("Guard").AddChild(perfect);
 
 
 		foreach (int i in Enumerable.Range(1, 4))
 		{
-			var notet = GetNode<PanelContainer>("Playfield/ChartSections/Section" + i);
+			var notet = Playfield.GetNode<PanelContainer>("ChartSections/Section" + i);
 			Keys.Add(new KeyL { Node = notet, hit = false });
 			notet.SelfModulate = Skin.Element.LaneNotes[i - 1] / 2;
 		}
@@ -437,7 +444,7 @@ public partial class Gameplay : Control
 			{
 				if (!Note.hit && Note.Node == null)
 				{
-					var playfieldpart = GetNode<Control>($"Playfield/ChartSections/Section{Note.NoteSection + 1}/Control");
+					var playfieldpart = Playfield.GetNode<Control>($"ChartSections/Section{Note.NoteSection + 1}/Control");
 					Note.Node = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<Sprite2D>(".");
 					Note.Node.SetMeta("part", Note.NoteSection);
 					Note.Node.SelfModulate = new Color(0.83f, 0f, 1f);
