@@ -6,6 +6,7 @@ public partial class SceneTransition : Control
 {
 	public enum TransitionMode
 		{
+			None,
 			FadeToBlack,
 			CrossFade,
 			FadeToWhite,
@@ -33,16 +34,20 @@ public partial class SceneTransition : Control
 			_stillRender = GetNode<TextureRect>("StillRender");
 			_stillRender.Modulate = new Color(1, 1, 1, 0);
 		}
-		public async void Switch(string sceneName, bool Fadein = true, TransitionMode _mode = TransitionMode.FadeToBlack, float time = 0) {
+		public async void Switch(string sceneName, bool Fadein = true, TransitionMode mode = TransitionMode.None, float time = 0) {
+			if (mode == TransitionMode.None)
+			{
+				mode = _mode;
+			}
 			if (time == 0) time = _time;
 			Node oldScene = GetTree().CurrentScene;
 			if (Fadein)
 			{
-				await _TransitionIn(sceneName,_mode,time);
+				await _TransitionIn(sceneName,mode,time);
 			}
-			if (_mode != TransitionMode.CrossFade)
+			if (mode != TransitionMode.CrossFade)
 				GetTree().ChangeSceneToFile(sceneName);
-			_TransitionOut(_mode, oldScene,time);
+			_TransitionOut(mode, oldScene,time);
 		}
 
 		private async Task _TransitionIn(string sceneName, TransitionMode _mode, float _time) {
