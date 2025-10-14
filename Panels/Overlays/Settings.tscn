@@ -444,7 +444,7 @@ text = "Debug"
 
 [node name="HideDevDisclaimer" type="CheckButton" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
-text = "Hide Developer Disclaimer"
+text = "Hide Experimental Disclaimer"
 
 [node name="GodotEngineVersion" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
