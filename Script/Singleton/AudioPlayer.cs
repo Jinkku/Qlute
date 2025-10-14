@@ -18,7 +18,7 @@ public partial class AudioPlayer : AudioStreamPlayer
         BrowsePreview = new AudioStreamPlayer();
         BrowsePreview.Finished += OnAudioFinished;
         AddChild(BrowsePreview);
-        Instance.Bus = "Master";
+        Instance.Bus = "Music";
     }
 
     private void OnAudioFinished()
