@@ -116,7 +116,7 @@ anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 480.0
 grow_vertical = 2
-color = Color(0.0404297, 0.025, 0.05, 1)
+color = Color(0.15294118, 0.15294118, 0.15294118, 0.8509804)
 
 [node name="Panels" type="HBoxContainer" parent="ColorRect"]
 layout_mode = 1

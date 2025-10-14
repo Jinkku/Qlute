@@ -3,9 +3,9 @@ using System;
 
 public partial class Clock : Label
 {
-	// Called when the node enters the scene tree for the first time.
 	private int prestart = 0;
 	private int runtime = 0;
+	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		prestart = DateTime.Now.Second;
