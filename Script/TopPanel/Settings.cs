@@ -8,36 +8,18 @@ public partial class Settings : Button
 	//public static <string, object>GetSetting { get; set; }
 	
 	private SettingsOperator SettingsOperator { get; set; }
-	private Tween acctween;
-	public Control Card;
 	public Control SettingsPanel {get;set;}
 	public Control NotificationPanel {get;set;}
 	public ColorRect TopPanel {get;set;}
 	public Settings Instance {get;set;}
-	public Label Ranking {get;set;}
-	public Label PlayerName {get;set;}
 	public override void _Ready(){
 		Instance = this;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		TopPanel = GetNode<ColorRect>("../../");
-        PlayerName = GetNode<Label>("%UPlayerName");
-		Ranking = GetNode<Label>("%Ranking");
+		TopPanel =  GetNode<ColorRect>("../../");
 	}
 	public override void _Process(double _delta){
 		if (Input.IsActionJustPressed("Settings")){
 			togglesettingspanel();
-		}
-		string username = SettingsOperator.GetSetting("username")?.ToString();
-		string ranking = ((int)SettingsOperator.Sessioncfg["ranknumber"]).ToString("N0");
-		if (username != null){
-			PlayerName.Text = username;
-			if (ranking != null && ranking != "0"){
-        	Ranking.Visible = true;}
-			else{Ranking.Visible = false;}
-			Ranking.Text = "#" + ranking;
-		} else{
-			PlayerName.Text = "Guest\nLog in here!";
-			Ranking.Visible = false;
 		}
 	}
 	private bool chksettingsv(){
@@ -144,39 +126,17 @@ public partial class Settings : Button
 		}
 		SettingsOperator.Sessioncfg["notificationpanelv"] = !(bool)SettingsOperator.Sessioncfg["notificationpanelv"];
 	}
-	private void toggleaccountpanel(){
-		var loggedin = (bool)SettingsOperator.Sessioncfg["loggedin"];
-		acctween?.Kill();
-		acctween = CreateTween();
-		if (!(bool)SettingsOperator.Sessioncfg["showaccountpro"])
-		{
-			Card = GD.Load<PackedScene>("res://Panels/Overlays/AccountPrompt.tscn").Instantiate().GetNode<Control>(".");
-			Card.ZIndex = -1;
-			TopPanel.AddChild(Card);
-			Card.Position = new Vector2(0, -265);
-			acctween.TweenProperty(Card, "position", new Vector2(0,SettingsOperator.TopPanelPosition), 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-			acctween.Play();
-		}
-		else
-		{
-			acctween.TweenProperty(Card, "position", new Vector2(0,-265), 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-			acctween.TweenCallback(Callable.From(Card.QueueFree));
-		}
-		SettingsOperator.Sessioncfg["showaccountpro"] = !(bool)SettingsOperator.Sessioncfg["showaccountpro"];}
+
 	private void _settings_pressed(){
 		if (chkaccountpos()) {
-			toggleaccountpanel();
+			GetNode<AccountButton>("../AccountButton").toggleaccountpanel();
 		}
 		togglesettingspanel();
 	}
 	private void _on_notifications(){
 		if (chkaccountpos()) {
-			toggleaccountpanel();
+			GetNode<AccountButton>("../AccountButton").toggleaccountpanel();
 		}
 		togglenotificationpanel();
 	}
-	private void _on_AccountButton_pressed(){
-		toggleaccountpanel();
-	}
 }
-//

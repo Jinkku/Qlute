@@ -476,15 +476,19 @@ public partial class SettingsOperator : Node
     
 
     private Tween TopPanelAnimation { get; set; }
-    public void toppaneltoggle(bool value)
+    public void toppaneltoggle(bool value, bool noani = false)
     {
         ColorRect TopPanel = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar");
         TopPanelAnimation?.Kill();
         TopPanelAnimation = CreateTween();
         Sessioncfg["toppanelhide"] = !value;
-        if (!value)
+        if (value && noani)
+            TopPanel.Position = new Vector2(TopPanel.Position.X, 0);
+        else if (!value && noani)
+            TopPanel.Position = new Vector2(TopPanel.Position.X, -TopPanel.Size.Y);
+        else if (!value && !noani)
             TopPanelAnimation.TweenProperty(TopPanel, "position", new Vector2(TopPanel.Position.X, -TopPanel.Size.Y), 0.3).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-        else
+        else if (!noani)
             TopPanelAnimation.TweenProperty(TopPanel, "position", new Vector2(TopPanel.Position.X, 0), 0.3).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
         TopPanelAnimation.Play();
     }
