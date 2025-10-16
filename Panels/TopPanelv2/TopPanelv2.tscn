@@ -1,0 +1,237 @@
+[gd_scene load_steps=22 format=3 uid="uid://cgt5q5s7cymtu"]
+
+[ext_resource type="Script" uid="uid://cujw42jdfio40" path="res://Script/TopPanelV2/TopPanel.cs" id="1_0d1ka"]
+[ext_resource type="PackedScene" uid="uid://e23sgokrubcw" path="res://Panels/Overlays/TopPanelv2/AccountButton.tscn" id="1_6cgag"]
+[ext_resource type="Texture2D" uid="uid://xt04iwux1uyt" path="res://Resources/System/TopPanel/Changelog.png" id="2_phkx3"]
+[ext_resource type="Script" uid="uid://b2fdn4oh7m0p8" path="res://Script/TopPanel/NowPlayer.cs" id="3_0d1ka"]
+[ext_resource type="Texture2D" uid="uid://dnhwv61vkgn0d" path="res://Resources/System/TopPanel/NowPlaying.png" id="4_21f6s"]
+[ext_resource type="Texture2D" uid="uid://ci24g7ndyah7y" path="res://Resources/System/MainMenu/Browse.svg" id="5_ruc5v"]
+[ext_resource type="Texture2D" uid="uid://cpp14plc7cctp" path="res://Resources/System/TopPanel/Chat.svg" id="6_jvorr"]
+[ext_resource type="Texture2D" uid="uid://4uedtgsvw7ep" path="res://Resources/System/TopPanel/Settings.svg" id="7_j48p2"]
+[ext_resource type="Script" uid="uid://ddvycljmp7l70" path="res://Script/TopPanel/Settings.cs" id="8_dcn2n"]
+[ext_resource type="Script" uid="uid://duhirqs3mbsn6" path="res://Script/TopPanelV2/ClockV2.cs" id="9_phkx3"]
+[ext_resource type="Texture2D" uid="uid://dbrt8ltwm3upi" path="res://Resources/System/TopPanel/Notifications.svg" id="10_dvigu"]
+
+[sub_resource type="Gradient" id="Gradient_n7q28"]
+colors = PackedColorArray(0, 0, 0, 0.568627, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0d1ka"]
+gradient = SubResource("Gradient_n7q28")
+fill_from = Vector2(0.993865, 0)
+fill_to = Vector2(1, 0.996933)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e57m5"]
+bg_color = Color(0.85105014, 0.85105014, 0.85105014, 0.15)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_88b8v"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.8509804, 0.8509804, 0.8509804, 0.4509804)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nny0l"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.85105014, 0.85105014, 0.85105014, 0.35000002)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ank2i"]
+
+[sub_resource type="FontVariation" id="FontVariation_0d1ka"]
+spacing_top = 1
+spacing_bottom = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_phkx3"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.85105014, 0.85105014, 0.85105014, 0.15)
+corner_radius_top_left = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0d1ka"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.85105014, 0.85105014, 0.85105014, 0.45000002)
+corner_radius_top_left = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_21f6s"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.85105014, 0.85105014, 0.85105014, 0.35000002)
+corner_radius_top_left = 15
+corner_radius_bottom_left = 15
+
+[node name="InfoBar" type="ColorRect"]
+custom_minimum_size = Vector2(0, 50)
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+color = Color(0.15170373, 0.15170373, 0.15170373, 0.851)
+script = ExtResource("1_0d1ka")
+
+[node name="Shadow" type="TextureRect" parent="."]
+process_mode = 3
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 50.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_0d1ka")
+
+[node name="AccountButton" parent="." instance=ExtResource("1_6cgag")]
+layout_mode = 0
+
+[node name="Widgets" type="HBoxContainer" parent="."]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -99.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/separation = 5
+
+[node name="ChangeLog" type="Button" parent="Widgets"]
+process_mode = 3
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_constants/icon_max_width = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_e57m5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_88b8v")
+theme_override_styles/hover = SubResource("StyleBoxFlat_nny0l")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ank2i")
+keep_pressed_outside = true
+icon = ExtResource("2_phkx3")
+icon_alignment = 1
+
+[node name="NowPlayer" type="Button" parent="Widgets"]
+process_mode = 3
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_constants/icon_max_width = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_e57m5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_88b8v")
+theme_override_styles/hover = SubResource("StyleBoxFlat_nny0l")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ank2i")
+keep_pressed_outside = true
+icon = ExtResource("4_21f6s")
+icon_alignment = 1
+script = ExtResource("3_0d1ka")
+
+[node name="Browse" type="Button" parent="Widgets"]
+process_mode = 3
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_constants/icon_max_width = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_e57m5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_88b8v")
+theme_override_styles/hover = SubResource("StyleBoxFlat_nny0l")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ank2i")
+keep_pressed_outside = true
+icon = ExtResource("5_ruc5v")
+icon_alignment = 1
+
+[node name="Chat" type="Button" parent="Widgets"]
+process_mode = 3
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_constants/icon_max_width = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_e57m5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_88b8v")
+theme_override_styles/hover = SubResource("StyleBoxFlat_nny0l")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ank2i")
+keep_pressed_outside = true
+icon = ExtResource("6_jvorr")
+icon_alignment = 1
+
+[node name="Settings" type="Button" parent="Widgets"]
+process_mode = 3
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_constants/icon_max_width = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_e57m5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_88b8v")
+theme_override_styles/hover = SubResource("StyleBoxFlat_nny0l")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ank2i")
+keep_pressed_outside = true
+icon = ExtResource("7_j48p2")
+icon_alignment = 1
+script = ExtResource("8_dcn2n")
+
+[node name="Clock" type="RichTextLabel" parent="Widgets"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_fonts/normal_font = SubResource("FontVariation_0d1ka")
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "Time
+[color=#FF9D00]current run[/color]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 2
+vertical_alignment = 1
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+script = ExtResource("9_phkx3")
+
+[node name="Tick" type="Timer" parent="Widgets/Clock"]
+autostart = true
+
+[node name="Notifications" type="Button" parent="Widgets"]
+process_mode = 3
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_constants/icon_max_width = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_phkx3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_0d1ka")
+theme_override_styles/hover = SubResource("StyleBoxFlat_21f6s")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ank2i")
+keep_pressed_outside = true
+icon = ExtResource("10_dvigu")
+icon_alignment = 1
+
+[connection signal="mouse_entered" from="." to="." method="_hovered"]
+[connection signal="mouse_exited" from="." to="." method="_unhover"]
+[connection signal="pressed" from="Widgets/ChangeLog" to="." method="_ChangeLog"]
+[connection signal="pressed" from="Widgets/NowPlayer" to="Widgets/NowPlayer" method="toggleaccountpanel"]
+[connection signal="pressed" from="Widgets/Browse" to="." method="_on_browse_pressed"]
+[connection signal="pressed" from="Widgets/Chat" to="." method="_ChatRoom"]
+[connection signal="pressed" from="Widgets/Settings" to="Widgets/Settings" method="_settings_pressed"]
+[connection signal="ready" from="Widgets/Settings" to="Widgets/Settings" method="ready"]
+[connection signal="timeout" from="Widgets/Clock/Tick" to="Widgets/Clock" method="Tick"]
+[connection signal="pressed" from="Widgets/Notifications" to="Widgets/Settings" method="_on_notifications"]

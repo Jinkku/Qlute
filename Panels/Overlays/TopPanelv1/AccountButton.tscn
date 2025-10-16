@@ -1,0 +1,127 @@
+[gd_scene load_steps=14 format=3 uid="uid://0w212tuyejur"]
+
+[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="1_2c1a5"]
+[ext_resource type="Script" uid="uid://c6ccj80gaao77" path="res://Script/TopPanel/Overlays/AccountButton.cs" id="1_d1csl"]
+[ext_resource type="Script" uid="uid://gu4jvlj8sdfj" path="res://Script/TopPanel/Ranking.cs" id="2_d1csl"]
+[ext_resource type="Script" uid="uid://ckunjtbu57684" path="res://Script/TopPanel/UPlayerName.cs" id="3_fij06"]
+[ext_resource type="Texture2D" uid="uid://cxgktcat5d5n1" path="res://Resources/System/loading.svg" id="4_8qi8d"]
+[ext_resource type="Script" uid="uid://bm70a8842a0fp" path="res://Script/TopPanel/RankUpdate.cs" id="5_eaukw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fw7wp"]
+bg_color = Color(0.231373, 0.231373, 0.231373, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qq0m8"]
+bg_color = Color(0.369792, 0.369792, 0.369792, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pg4ve"]
+bg_color = Color(0.25, 0.25, 0.25, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yewru"]
+
+[sub_resource type="Animation" id="Animation_1f010"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_tk3k2"]
+resource_name = "loading"
+length = 0.5
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0166667, 0.0333333, 0.05, 0.0666667, 0.0833333, 0.1, 0.116667, 0.133333, 0.15, 0.166667, 0.183333, 0.2, 0.216667, 0.233333, 0.25, 0.266667, 0.283333, 0.3, 0.316667, 0.333333, 0.35, 0.366667, 0.383333, 0.4, 0.416667, 0.433333, 0.45, 0.466667, 0.483333, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.607609, 1.17472, 1.70275, 2.19307, 2.64709, 3.0662, 3.4518, 3.80529, 4.12806, 4.4215, 4.68703, 4.92602, 5.13988, 5.33001, 5.49779, 5.64463, 5.77192, 5.88107, 5.97345, 6.05048, 6.11354, 6.16404, 6.20337, 6.23292, 6.2541, 6.2683, 6.27691, 6.28133, 6.28296, 6.28319]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1f8y5"]
+_data = {
+&"RESET": SubResource("Animation_1f010"),
+&"loading": SubResource("Animation_tk3k2")
+}
+
+[node name="AccountButton" type="Button"]
+process_mode = 3
+self_modulate = Color(0.5, 0, 0.421875, 1)
+offset_right = 200.0
+offset_bottom = 50.0
+mouse_filter = 1
+theme_override_styles/normal = SubResource("StyleBoxFlat_fw7wp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_qq0m8")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pg4ve")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yewru")
+alignment = 0
+script = ExtResource("1_d1csl")
+
+[node name="ProfilePicture" type="TextureRect" parent="."]
+process_mode = 3
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+texture = ExtResource("1_2c1a5")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Ranking" type="Label" parent="."]
+process_mode = 3
+visible = false
+layout_mode = 0
+offset_left = 55.0
+offset_top = 25.0
+offset_right = 103.0
+offset_bottom = 44.0
+text = "#?"
+script = ExtResource("2_d1csl")
+
+[node name="UPlayerName" type="Label" parent="."]
+process_mode = 3
+layout_mode = 1
+offset_left = 55.0
+offset_top = 5.0
+offset_right = 196.0
+offset_bottom = 46.0
+text = "If your seeing 
+this... it broke :<"
+clip_text = true
+text_overrun_behavior = 3
+script = ExtResource("3_fij06")
+
+[node name="Loadingicon" type="Sprite2D" parent="."]
+process_mode = 3
+visible = false
+texture_filter = 1
+position = Vector2(175, 25)
+texture = ExtResource("4_8qi8d")
+
+[node name="Loadinganimation" type="AnimationPlayer" parent="Loadingicon"]
+process_mode = 3
+libraries = {
+&"": SubResource("AnimationLibrary_1f8y5")
+}
+
+[node name="Placeholder" type="Control" parent="."]
+process_mode = 3
+custom_minimum_size = Vector2(69, 60)
+layout_mode = 1
+anchors_preset = 0
+offset_right = 80.0
+offset_bottom = 41.0
+script = ExtResource("5_eaukw")
+
+[connection signal="pressed" from="." to="." method="_on_AccountButton_pressed"]
