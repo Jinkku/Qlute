@@ -84,7 +84,7 @@ public partial class SongSelect : Control
 	/// </summary>
 	private Button InitiateMusicCard()
 	{
-		return musiccardtemplate.Instantiate().GetNode<Button>(".");
+		return (Button)musiccardtemplate.Instantiate();
 	}
 
 	public void AddSongList(int id)
@@ -269,45 +269,61 @@ public partial class SongSelect : Control
 	private void ScrollSongs()
 	{
 		if (scrollBar == null)
-		{
 			return;
-		}
+
 		SongLoaded = 0;
-		float Height = GetViewportRect().Size.Y;
-		int CardHeight = (int)(CardSize.Y + 5);
-		int ItemCount = (int)(Height / CardHeight);
-		int startIndex = Math.Max(0, (int)scrollBar.Value - (ItemCount / 2));
-		int endIndex = Math.Min(SettingsOperator.Beatmaps.Count, (int)scrollBar.Value + (ItemCount / 2) + 2);
-		// This will check if the Node is off screen.
-		for (int i = SongEntry.Count - 1; i >= 0; i--)
+		float height = GetViewportRect().Size.Y;
+		int cardHeight = (int)(CardSize.Y + 5);
+		int itemCount = (int)(height / cardHeight);
+		int startIndex = Math.Max(0, (int)scrollBar.Value - (itemCount / 2));
+		int endIndex = Math.Min(SettingsOperator.Beatmaps.Count, (int)scrollBar.Value + (itemCount / 2) + 2);
+
+		// ⚡ Build quick lookup of visible buttons to avoid repeated LINQ
+		var visible = new Dictionary<int, Button>(SongEntry.Count);
+		for (int i = 0; i < SongEntry.Count; i++)
 		{
-			if (SongEntry[i] is Button button)
+			Button btn = SongEntry[i];
+			if (btn != null)
 			{
-				int buttonIndex = int.Parse(button.Name);
-				if (buttonIndex < startIndex || buttonIndex >= endIndex)
-				{
-					button.QueueFree();
-					SongEntry.RemoveAt(i);
-					SongLoaded--;
-				}
+				int idx = int.Parse(btn.Name);
+				visible[idx] = btn;
 			}
 		}
 
-		// Add missing visible items
+		// ⚡ Remove off-screen buttons in reverse to avoid shifting
+		for (int i = SongEntry.Count - 1; i >= 0; i--)
+		{
+			Button button = SongEntry[i];
+			int buttonIndex = int.Parse(button.Name);
+
+			if (buttonIndex < startIndex || buttonIndex >= endIndex)
+			{
+				button.QueueFree();
+				SongEntry.RemoveAt(i);
+				visible.Remove(buttonIndex);
+			}
+		}
+
+		// ⚡ Add missing visible items and update existing ones
 		for (int i = startIndex; i < endIndex; i++)
 		{
-			if (!SongEntry.Any(entry => entry is Button btn && btn.Name == i.ToString()))
+			Button entry;
+			if (!visible.TryGetValue(i, out entry))
 			{
+				// new song card needed
 				AddSongList(i);
+				entry = SongEntry.Last(); // AddSongList adds it to SongEntry
+				visible[i] = entry;
 				SongLoaded++;
 			}
-			// Update positions of existing entries
-			if (SongEntry.FirstOrDefault(e => e is Button btn && btn.Name == i.ToString()) is Button entry)
-			{
-				entry.ZIndex = 0; // Ensure proper layering
-				entry.Position = new Vector2(entry.Position.X, startposition + (CardSize.Y * i) - (CardSize.Y * (float)scrollBar.Value));
-				SongLoaded++;
-			}
+
+			// Update existing position (no redundant search)
+			float targetY = startposition + (CardSize.Y * i) - (CardSize.Y * (float)scrollBar.Value);
+			if (!Mathf.IsEqualApprox(entry.Position.Y, targetY))
+				entry.Position = new Vector2(entry.Position.X, targetY);
+
+			entry.ZIndex = 0;
+			SongLoaded++;
 		}
 	}
 

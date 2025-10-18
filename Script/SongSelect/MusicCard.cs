@@ -38,7 +38,11 @@ public partial class MusicCard : Button
 
 		isLoadingImage = true;
 
-		// Load image off-thread
+		await Task.Delay(250); // Wait half a second
+
+		if (!IsInstanceValid(this))
+			return; // The node has perished… abort mission!
+
 		var data = await Task.Run(() =>
 		{
 			if (FileAccess.FileExists(path))
@@ -46,6 +50,10 @@ public partial class MusicCard : Button
 			else
 				return null;
 		});
+
+// Optional: check again if the node still exists before using `data`
+		if (!IsInstanceValid(this))
+			return;
 
 		// Dispose the old texture before replacing
 		if (texture != null)

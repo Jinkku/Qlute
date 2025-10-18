@@ -23,7 +23,8 @@ public partial class Modscfg : Button
         Disabled = true;
         ModsOperator.Mods[GetMeta("ModName").ToString()] = !Disabled;
     }
-	public override void _Process(double _delta)
+
+    public override void _PhysicsProcess(double _delta)
 	{
         // This makes it so that if one of the mods don't conflict with one another
         if (ModsOperator.Mods["dt"] && GetMeta("ModName").ToString() == "ht")
