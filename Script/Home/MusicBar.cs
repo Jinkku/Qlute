@@ -13,6 +13,7 @@ public partial class MusicBar : TextureProgressBar
     {
         // Get master bus index
         _busIndex = AudioServer.GetBusIndex("Music");
+        PivotOffset = Size / 2;
 
         // Get the analyzer effect instance from the master bus
         _spectrum = (AudioEffectSpectrumAnalyzerInstance)AudioServer.GetBusEffectInstance(_busIndex, 0);
@@ -21,7 +22,7 @@ public partial class MusicBar : TextureProgressBar
     public override void _Process(double delta)
     {
         if (_spectrum == null) return;
-
+        
         // Get magnitude for just the bass range
         float magnitude = _spectrum.GetMagnitudeForFrequencyRange(BassRange.X, BassRange.Y).Length();
         float db = Mathf.LinearToDb(magnitude);

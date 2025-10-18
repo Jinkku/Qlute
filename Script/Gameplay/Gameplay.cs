@@ -170,14 +170,8 @@ public partial class Gameplay : Control
 				string[] section = line.Split(':',',');
 				timing = Convert.ToInt32(section[2]);
 				part = Convert.ToInt32(section[0]);
-				if (part == 64) { part = 0; }
-				else if (part == 192) { part = 1; }
-				else if (part == 320) { part = 2; }
-				else if (part == 448) { part = 3; }
-				else if (part < 128) { part = 0; }
-				else if (part < 256) { part = 1; }
-				else if (part < 384) { part = 2; }
-				else if (part < 512) { part = 3; }
+				int index = (int)Math.Floor(part * 4 / 512.0);
+				part = Math.Clamp(index, 0, 4 - 1);
 				timen = -timing;
 				Notes.Add(new NotesEn { timing = timen, NoteSection = part });
 			}
