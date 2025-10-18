@@ -107,10 +107,11 @@ public partial class SettingsOperator : Node
 
     public static Texture2D LoadImage(string path)
     {
+        GD.Print(path);
         if (!FileAccess.FileExists(path))
         {
             Notify.Post("Image could not be loaded, because it doesn't exist!");
-            return null;
+            return GetNullImage();
         }
 
         try
@@ -128,7 +129,7 @@ public partial class SettingsOperator : Node
         catch (Exception)
         {
             Notify.Post("Failed to load image!");
-            return null;
+            return GetNullImage();
         }
     }
     public static int RndSongID() {
@@ -195,7 +196,10 @@ public partial class SettingsOperator : Node
             LevelRating = beatmap.Levelrating;
             Sessioncfg["osubeatid"] = (int)beatmap.Osubeatid;
             Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
-            Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
+            if (beatmap.Path != null && beatmap.Background != null)
+                Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
+            else
+                Sessioncfg["background"] = null;
             if (seek == -1)
             {
                 seek = beatmap.PreviewTime;

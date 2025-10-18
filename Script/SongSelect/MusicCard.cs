@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using FileAccess = Godot.FileAccess;
 
 public partial class MusicCard : Button
 {
@@ -40,7 +41,10 @@ public partial class MusicCard : Button
 		// Load image off-thread
 		var data = await Task.Run(() =>
 		{
-			return Image.LoadFromFile(path);
+			if (FileAccess.FileExists(path))
+				return Image.LoadFromFile(path);
+			else
+				return null;
 		});
 
 		// Dispose the old texture before replacing
@@ -130,10 +134,7 @@ public partial class MusicCard : Button
 		{
 			BackgroundPath = self.GetMeta("background").ToString();
 			Preview.Modulate = new Color(0f, 0f, 0f, 1f);
-			if (File.Exists(BackgroundPath))
-				LoadExternalImage(BackgroundPath);
-			else
-				GD.PrintErr("Background image not found: " + BackgroundPath);
+			LoadExternalImage(BackgroundPath);
 		}
 
 		SelfModulate = Checkid() ? toggledcolour : Idlecolour;

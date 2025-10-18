@@ -67,7 +67,7 @@ skew = Vector2(0.5, 0)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qejje"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yu1gh"]
-bg_color = Color(0, 0, 0, 0.588235)
+bg_color = Color(0.1640625, 0.1640625, 0.1640625, 1)
 
 [sub_resource type="Curve" id="Curve_whutp"]
 _limits = [-360.0, 360.0, 0.0, 1.0]
@@ -431,6 +431,7 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="MusicBar" parent="IntroPending/logo" instance=ExtResource("18_ldbht")]
+z_index = -1
 layout_mode = 1
 
 [node name="Accessory" type="Sprite2D" parent="IntroPending/logo"]

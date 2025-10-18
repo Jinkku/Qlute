@@ -77,10 +77,10 @@ public partial class BeatmapBackground : TextureRect
 			Size = new Vector2(GetViewportRect().Size[0] + 20, GetViewportRect().Size[1] + 20);
 			Position = new Vector2(GetViewportRect().Size[0] - 5, GetViewportRect().Size[1] - 5);
 		}
-		else if (Texture != DefaultImage && SettingsOperator.Sessioncfg["background"] == null)
+		else if (Texture != SettingsOperator.GetNullImage() && SettingsOperator.Sessioncfg["background"] == null)
 		{
 			GD.Print("[Qlute] Switching to Default background");
-			Switch_Background(DefaultImage, Instant);
+			Switch_Background(SettingsOperator.GetNullImage(), Instant);
 			Size = new Vector2(GetViewportRect().Size[0] + 20, GetViewportRect().Size[1] + 20);
 			Position = new Vector2(GetViewportRect().Size[0] - 5, GetViewportRect().Size[1] - 5);	
 		}
