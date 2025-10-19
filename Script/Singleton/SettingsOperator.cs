@@ -244,7 +244,7 @@ public partial class SettingsOperator : Node
 
 
     public static float GetLevelRating(int Objects, float TimeTotal) => (Objects * levelweight) / (TimeTotal / TimeCap);
-    public static double Get_ppvalue(int max, int great, int meh, int bad, float multiplier = 1, int combo = 0, float TimeTotal = 0)
+    public static double Get_ppvalue(int max, int great, int meh, int bad, float multiplier = 1, int combo = 0, double TimeTotal = 0)
     {
         //bad = Math.Max(1,bad);
         var ppvalue = 0.0;
@@ -416,17 +416,15 @@ public partial class SettingsOperator : Node
         Gameplaycfg.MaxCombo = 0;
         Gameplaycfg.Avgms = 0;
         Gameplaycfg.ms = 0;
-        Gameplaycfg.Timeframe = 0;
     }
     public static class Gameplaycfg
     {
         public static int Score { get; set; }
-        public static double Timeframe { get; set; }
         public static double pp { get; set; }
         public static double maxpp { get; set; }
-        public static float Time { get; set; }
-        public static float TimeTotal { get; set; }
-        public static float TimeTotalGame { get; set; }
+        public static double Time { get; set; }
+        public static double TimeTotal { get; set; }
+        public static double TimeTotalGame { get; set; }
         public static float Accuracy { get; set; }
         public static string SampleSet { get; set; }
         public static int Combo { get; set; }
