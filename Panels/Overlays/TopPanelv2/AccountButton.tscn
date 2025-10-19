@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://e23sgokrubcw"]
 
 [ext_resource type="Script" uid="uid://c6ccj80gaao77" path="res://Script/TopPanel/Overlays/AccountButton.cs" id="1_5yayb"]
-[ext_resource type="Texture2D" uid="uid://4hj42w7ss788" path="res://8b678108c870039f72ffb4ed47edc88d.jpg" id="2_5yayb"]
+[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="2_5yayb"]
 [ext_resource type="Script" uid="uid://gu4jvlj8sdfj" path="res://Script/TopPanel/Ranking.cs" id="3_75g75"]
 [ext_resource type="Script" uid="uid://ckunjtbu57684" path="res://Script/TopPanel/UPlayerName.cs" id="4_kstth"]
 [ext_resource type="Texture2D" uid="uid://cxgktcat5d5n1" path="res://Resources/System/loading.svg" id="5_m3his"]
@@ -130,6 +130,7 @@ layout_mode = 1
 anchors_preset = 0
 offset_right = 80.0
 offset_bottom = 41.0
+mouse_filter = 2
 script = ExtResource("6_en5jc")
 
 [connection signal="button_down" from="." to="." method="_highlight"]
