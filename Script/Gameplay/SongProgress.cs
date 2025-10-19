@@ -3,8 +3,8 @@ using System;
 
 public partial class SongProgress : ProgressBar
 {
-	private float timeTotal {get;set;}
-	private float timeCurrent { get; set; }
+	private double timeTotal {get;set;}
+	private double timeCurrent { get; set; }
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{

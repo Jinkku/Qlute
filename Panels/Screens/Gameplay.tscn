@@ -84,7 +84,7 @@ grow_horizontal = 0
 grow_vertical = 2
 
 [node name="Wait" type="Timer" parent="."]
-wait_time = 5.0
+wait_time = 2.0
 one_shot = true
 autostart = true
 

@@ -335,11 +335,11 @@ public partial class Gameplay : Control
 
 		var audioOffset = GameMode ? SettingsOperator.AudioOffset * 0.001f : 0f;
 
-		SettingsOperator.Gameplaycfg.Timeframe = -WaitClock.TimeLeft + smoothTime;
-		SettingsOperator.Gameplaycfg.Timeframe -= startedtime;
-		SettingsOperator.Gameplaycfg.Timeframe += audioOffset;
+		SettingsOperator.Gameplaycfg.Time = -WaitClock.TimeLeft + smoothTime;
+		SettingsOperator.Gameplaycfg.Time -= startedtime;
+		SettingsOperator.Gameplaycfg.Time += audioOffset;
 
-		return (float)SettingsOperator.Gameplaycfg.Timeframe;
+		return (float)SettingsOperator.Gameplaycfg.Time;
 	}
     /// <summary>
     /// Get's the Score calculated
