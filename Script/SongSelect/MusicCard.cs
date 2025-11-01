@@ -191,7 +191,10 @@ public partial class MusicCard : Button
 	public void _on_pressed()
 	{
 		Connection_Button = true;
-		SettingsOperator.SelectSongID(SongID);
+		if (SettingsOperator.SongID != SongID)
+		{
+			SettingsOperator.SelectSongID(SongID);	
+		}
 	}
 	private bool Accessed = false;
 	public static bool Connection_Button = false;
