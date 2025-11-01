@@ -50,6 +50,8 @@ public partial class SongSelect : Control
 	private ScrollContainer Leaderboardinfo { get; set; }
 	private Vector2 CardSize { get; set; }
 	private bool Update { get; set; }
+	
+	private int OldSongID { get; set; }
 
 
 	int startposition = 0;
@@ -65,6 +67,7 @@ public partial class SongSelect : Control
 
 	private void scrollmode(int ement = 0, int exactvalue = 0)
 	{
+		OldSongID = SettingsOperator.SongID;
 		double value = ement != 0 ? scrollBar.Value + ement : exactvalue;
 		scrolltween?.Kill();
 		scrolltween = CreateTween();
@@ -233,6 +236,8 @@ public partial class SongSelect : Control
 		check_modscreen();
 		ScrollSongs();
 
+		OldSongID = SettingsOperator.SongID;
+		
 		_res_resize();
 		checksongpanel();
 		
@@ -538,12 +543,12 @@ public partial class SongSelect : Control
 		{
 			_Start();
 		}
-		else if (MusicCard.Connection_Button && scrollBar.Value == SettingsOperator.SongID)
+		else if (MusicCard.Connection_Button && OldSongID == SettingsOperator.SongID)
 		{
 			_Start();
 			MusicCard.Connection_Button = false;
 		}
-		else if (MusicCard.Connection_Button && scrollBar.Value != SettingsOperator.SongID)
+		else if (MusicCard.Connection_Button && OldSongID != SettingsOperator.SongID)
 		{
 			scrollmode(exactvalue: SettingsOperator.SongID);
 			MusicCard.Connection_Button = false;
