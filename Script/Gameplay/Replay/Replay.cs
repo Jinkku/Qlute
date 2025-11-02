@@ -249,6 +249,7 @@ public static class Replay
             cache += $"#Max Combo: {SettingsOperator.Gameplaycfg.MaxCombo}\n";
             cache += $"#Average ms: {SettingsOperator.Gameplaycfg.ms}\n";
             cache += $"#Mods: {ModsOperator.GetModAlias()}\n";
+            cache += $"#Seed: {Gameplay.seed}\n";
             foreach (ReplayLegend entry in ReplayCache)
             {
                 cache += $"{entry.Time},{entry.NoteTap}\n";

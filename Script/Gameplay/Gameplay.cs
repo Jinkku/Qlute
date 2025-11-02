@@ -60,6 +60,7 @@ public partial class Gameplay : Control
 	private Control SpectatorPanel { get; set; }
 	private Tween scoretween { get; set; }
 	private int MaxNotes { get; set; }
+	public static int seed = 0;
 	private void ShowPauseMenu()
 	{
 		Cursor.CursorVisible = true;
@@ -152,6 +153,7 @@ public partial class Gameplay : Control
 		var timing = 0;
 		var sampletype = 0;
 		var timen = -1;
+		var BaseRnd = new Random(seed);
 		var isHitObjectSection = false;
 		dance = SettingsOperator.Beatmaps[SettingsOperator.SongID].Dance;
 		foreach (string line in lines)
@@ -169,17 +171,30 @@ public partial class Gameplay : Control
 					break;
 				string[] section = line.Split(':',',');
 				timing = Convert.ToInt32(section[2]);
-				part = Convert.ToInt32(section[0]);
-				int index = (int)Math.Floor(part * 4 / 512.0);
-				part = Math.Clamp(index, 0, 4 - 1);
+				if (ModsOperator.Mods["random"])
+				{
+					part = BaseRnd.Next(0, 4);
+					GD.Print(part);
+				}
+				else
+				{
+					part = Convert.ToInt32(section[0]);
+					int index = (int)Math.Floor(part * 4 / 512.0);
+					part = Math.Clamp(index, 0, 4 - 1);
+				}
+
 				timen = -timing;
-				Notes.Add(new NotesEn { timing = timen, NoteSection = part });
+				if (!Notes.Any(n => n.timing == timen && n.NoteSection == part))
+				{
+					Notes.Add(new NotesEn { timing = timen, NoteSection = part });
+				} // So that theres no overlapping notes :)
 			}
 		}
 		MaxNotes = Notes.Count;
 	}
 	public override void _Ready()
 	{
+		seed = new Random().Next(1,214562543);
 		ReplayINT = 0;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SpectatorPanel = GD.Load<PackedScene>("res://Panels/Overlays/SpectatorSettings.tscn").Instantiate().GetNode<Control>(".");
@@ -402,6 +417,8 @@ public partial class Gameplay : Control
 
     public override void _ExitTree()
     {
+	    HurtAnimation?.Kill();
+	    Modulate = new Color("#FFFFFF");
 		Cursor.CursorVisible = true;
 		SettingsOperator.SpectatorMode = false; // Disables Spectator mode.
     }

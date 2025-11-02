@@ -42,8 +42,6 @@ public partial class Modscfg : Button
             DisabledButton();
         } else if (ModsOperator.Mods["auto"] && GetMeta("ModName").ToString() == "no-fail"){
             DisabledButton();
-        } else if (GetMeta("ModName").ToString() == "random"){
-            DisabledButton();
         }
         else{
             Disabled = false;
