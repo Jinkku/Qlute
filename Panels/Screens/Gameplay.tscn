@@ -88,5 +88,9 @@ wait_time = 2.0
 one_shot = true
 autostart = true
 
+[node name="BreakCheck" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="timeout" from="Wait" to="." method="StartPlay"]
+[connection signal="timeout" from="BreakCheck" to="." method="BreakNow"]

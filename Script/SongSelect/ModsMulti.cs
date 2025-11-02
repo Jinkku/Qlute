@@ -29,7 +29,7 @@ public partial class ModsMulti : Label
 			{
 				multiplier *= 1.15f;
 			}
-			else if (mod.Value && mod.Key != "auto" && mod.Key != "random")
+			else if (mod.Value && mod.Key != "auto")
 			{
 				multiplier *= 1.05f;
 			} 
