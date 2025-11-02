@@ -332,7 +332,7 @@ public partial class Gameplay : Control
 			if (Mathf.Abs(truePos - smoothTime) > 0.05f) // 50ms tolerance
 				smoothTime = truePos;
 		}
-
+		
 		var audioOffset = GameMode ? SettingsOperator.AudioOffset * 0.001f : 0f;
 
 		SettingsOperator.Gameplaycfg.Time = -WaitClock.TimeLeft + smoothTime;
@@ -572,8 +572,8 @@ public partial class Gameplay : Control
 				IncreaseDanceIndex();
 			}
 
-			CheckReplayKey((int)est);
 			_GameNoteTick(delta);
+			CheckReplayKey((int)est);
 		}
 		catch (Exception e)
 		{
