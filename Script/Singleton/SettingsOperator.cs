@@ -32,6 +32,7 @@ public partial class SettingsOperator : Node
     public static float levelweight = 0.0084f;
     public static bool loopaudio = false;
     public static bool jukebox = false;
+    public static string GameChecksum { get; set; }
     public int backgrounddim { get; set; }
     public int MasterVol { get; set; }
     public int SampleVol { get; set; }
@@ -110,7 +111,7 @@ public partial class SettingsOperator : Node
         if (!FileAccess.FileExists(path))
         {
             Notify.Post("Image could not be loaded, because it doesn't exist!");
-            return null;
+            return GetNullImage();
         }
 
         try
@@ -128,7 +129,7 @@ public partial class SettingsOperator : Node
         catch (Exception)
         {
             Notify.Post("Failed to load image!");
-            return null;
+            return GetNullImage();
         }
     }
     public static int RndSongID() {
@@ -197,6 +198,10 @@ public partial class SettingsOperator : Node
             Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
             Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
             GD.Print($"ppv2:{beatmap.ppv2}pp");
+            if (beatmap.Path != null && beatmap.Background != null)
+                Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
+            else
+                Sessioncfg["background"] = null;
             if (seek == -1)
             {
                 seek = beatmap.PreviewTime;
@@ -242,7 +247,7 @@ public partial class SettingsOperator : Node
 
 
     public static float GetLevelRating(int Objects, float TimeTotal) => (Objects * levelweight) / (TimeTotal / TimeCap);
-    public static double Get_ppvalue(int max, int great, int meh, int bad, float multiplier = 1, int combo = 0, float TimeTotal = 0)
+    public static double Get_ppvalue(int max, int great, int meh, int bad, float multiplier = 1, int combo = 0, double TimeTotal = 0)
     {
         //bad = Math.Max(1,bad);
         var ppvalue = 0.0;
@@ -359,10 +364,9 @@ public partial class SettingsOperator : Node
         legend.pp = Get_ppvalue(hitCount, 0, 0, 0, combo: hitCount, TimeTotal: lastNoteTime * 0.001f);
         legend.Path = filename.Replace(filename.Split("/").Last(), "");
         legend.Rawurl = filename;
-        if (legend.KeyCount == 4)
-        {
-            Beatmaps.Add(legend);
-        }
+        
+        Beatmaps.Add(legend);
+        
         return $"{legend.Artist} - {legend.Title} from {legend.Mapper}";
     }
 
@@ -428,12 +432,10 @@ public partial class SettingsOperator : Node
         Gameplaycfg.MaxCombo = 0;
         Gameplaycfg.Avgms = 0;
         Gameplaycfg.ms = 0;
-        Gameplaycfg.Timeframe = 0;
     }
     public static class Gameplaycfg
     {
         public static int Score { get; set; }
-        public static double Timeframe { get; set; }
         public static double pp { get; set; }
         public static double maxpp { get; set; }
         public static double ppv2 { get; set; }
@@ -494,15 +496,19 @@ public partial class SettingsOperator : Node
     
 
     private Tween TopPanelAnimation { get; set; }
-    public void toppaneltoggle(bool value)
+    public void toppaneltoggle(bool value, bool noani = false)
     {
         ColorRect TopPanel = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar");
         TopPanelAnimation?.Kill();
         TopPanelAnimation = CreateTween();
         Sessioncfg["toppanelhide"] = !value;
-        if (!value)
+        if (value && noani)
+            TopPanel.Position = new Vector2(TopPanel.Position.X, 0);
+        else if (!value && noani)
+            TopPanel.Position = new Vector2(TopPanel.Position.X, -TopPanel.Size.Y);
+        else if (!value && !noani)
             TopPanelAnimation.TweenProperty(TopPanel, "position", new Vector2(TopPanel.Position.X, -TopPanel.Size.Y), 0.3).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-        else
+        else if (!noani)
             TopPanelAnimation.TweenProperty(TopPanel, "position", new Vector2(TopPanel.Position.X, 0), 0.3).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
         TopPanelAnimation.Play();
     }
@@ -598,6 +604,7 @@ public partial class SettingsOperator : Node
         }
         if (LeaderboardType < 0 && LeaderboardType > 2) LeaderboardType = 1;
         CheckOldSiteUrl();
+        GameChecksum = ChecksumUtil.GetGameChecksum(); 
     }
     public void ResetVol()
     {

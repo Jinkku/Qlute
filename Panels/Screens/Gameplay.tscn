@@ -84,6 +84,7 @@ grow_horizontal = 0
 grow_vertical = 2
 
 [node name="Wait" type="Timer" parent="."]
+wait_time = 2.0
 one_shot = true
 autostart = true
 
@@ -95,5 +96,9 @@ offset_right = 179.0
 offset_bottom = 324.0
 text = "0pp"
 
+[node name="BreakCheck" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="timeout" from="Wait" to="." method="StartPlay"]
+[connection signal="timeout" from="BreakCheck" to="." method="BreakNow"]

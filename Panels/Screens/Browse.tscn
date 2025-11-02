@@ -1,7 +1,7 @@
-[gd_scene load_steps=20 format=3 uid="uid://1eecnwds7hxx"]
+[gd_scene load_steps=15 format=3 uid="uid://1eecnwds7hxx"]
 
 [ext_resource type="Script" uid="uid://gl6ndgfj1mc8" path="res://Script/Browse/Browse.cs" id="1_gq7gs"]
-[ext_resource type="Texture2D" uid="uid://ctnqrw3he2egt" path="res://Resources/System/backicon.svg" id="2_gtswx"]
+[ext_resource type="PackedScene" uid="uid://c2ouvq16jls8u" path="res://Panels/Overlays/BottomPanelButtons.tscn" id="2_287m4"]
 [ext_resource type="Texture2D" uid="uid://cxgktcat5d5n1" path="res://Resources/System/loading.svg" id="3_287m4"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gt3n2"]
@@ -76,26 +76,6 @@ corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vgk5y"]
 content_margin_left = 15.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_61puy"]
-bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v4oe2"]
-content_margin_left = 10.0
-content_margin_right = 20.0
-bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lwdlb"]
-content_margin_left = 10.0
-content_margin_right = 20.0
-bg_color = Color(0.666667, 0.222387, 0.142361, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ftq75"]
-content_margin_left = 10.0
-content_margin_right = 20.0
-bg_color = Color(0.92549, 0.294118, 0.180392, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_82bl1"]
 
 [sub_resource type="Animation" id="Animation_1f010"]
 length = 0.001
@@ -323,41 +303,9 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 columns = 3
 
-[node name="BottomBar" type="Control" parent="."]
+[node name="ControlPanel" parent="." instance=ExtResource("2_287m4")]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -100.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 1
-
-[node name="ControlPanel" type="PanelContainer" parent="BottomBar"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -50.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_61puy")
-
-[node name="Box" type="HBoxContainer" parent="BottomBar/ControlPanel"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Button" type="Button" parent="BottomBar/ControlPanel/Box"]
-custom_minimum_size = Vector2(108, 50)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_v4oe2")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_lwdlb")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ftq75")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_82bl1")
-text = "  Back"
-icon = ExtResource("2_gtswx")
 
 [node name="Loadingicon" type="Sprite2D" parent="."]
 z_index = 5
@@ -374,4 +322,6 @@ libraries = {
 [connection signal="text_submitted" from="Header/VBoxContainer/MarginContainer/SearchBox" to="." method="_submit"]
 [connection signal="item_selected" from="Header/VBoxContainer/SearchFilters/Tabs/RankButton" to="." method="_rankchanged"]
 [connection signal="scroll_started" from="BeatmapSec/Scroll" to="." method="_scroll"]
-[connection signal="pressed" from="BottomBar/ControlPanel/Box/Button" to="." method="_on_back"]
+[connection signal="pressed" from="ControlPanel/Box/BackButton" to="." method="_on_back"]
+
+[editable path="ControlPanel"]

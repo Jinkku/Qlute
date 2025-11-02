@@ -1,12 +1,8 @@
-[gd_scene load_steps=31 format=3 uid="uid://bwpja5llmgtqo"]
+[gd_scene load_steps=19 format=3 uid="uid://bwpja5llmgtqo"]
 
 [ext_resource type="Script" uid="uid://borvy2xtb1o65" path="res://Script/TopPanel/InfoBar.cs" id="1_bm6kj"]
-[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="2_4cvop"]
 [ext_resource type="Script" uid="uid://ddvycljmp7l70" path="res://Script/TopPanel/Settings.cs" id="2_6umcl"]
-[ext_resource type="Script" uid="uid://gu4jvlj8sdfj" path="res://Script/TopPanel/Ranking.cs" id="3_ggapr"]
-[ext_resource type="Script" uid="uid://ckunjtbu57684" path="res://Script/TopPanel/UPlayerName.cs" id="4_v36dv"]
-[ext_resource type="Texture2D" uid="uid://cxgktcat5d5n1" path="res://Resources/System/loading.svg" id="5_3trnu"]
-[ext_resource type="Script" uid="uid://bm70a8842a0fp" path="res://Script/TopPanel/RankUpdate.cs" id="6_3trnu"]
+[ext_resource type="PackedScene" uid="uid://0w212tuyejur" path="res://Panels/Overlays/TopPanelv1/AccountButton.tscn" id="2_81xya"]
 [ext_resource type="Texture2D" uid="uid://ci24g7ndyah7y" path="res://Resources/System/MainMenu/Browse.svg" id="7_1qp4o"]
 [ext_resource type="Script" uid="uid://b2fdn4oh7m0p8" path="res://Script/TopPanel/NowPlayer.cs" id="7_6quot"]
 [ext_resource type="Texture2D" uid="uid://dnhwv61vkgn0d" path="res://Resources/System/TopPanel/NowPlaying.png" id="7_bwtk2"]
@@ -15,64 +11,14 @@
 [ext_resource type="Texture2D" uid="uid://cpp14plc7cctp" path="res://Resources/System/TopPanel/Chat.svg" id="8_1qp4o"]
 [ext_resource type="Texture2D" uid="uid://4uedtgsvw7ep" path="res://Resources/System/TopPanel/Settings.svg" id="9_6quot"]
 [ext_resource type="Texture2D" uid="uid://dbrt8ltwm3upi" path="res://Resources/System/TopPanel/Notifications.svg" id="12_1qp4o"]
-[ext_resource type="Script" uid="uid://dp1rdt0w40nki" path="res://Script/TestMenu/Debugitem2.cs" id="13_1qp4o"]
 
-[sub_resource type="Gradient" id="Gradient_n7q28"]
+[sub_resource type="Gradient" id="Gradient_81xya"]
 colors = PackedColorArray(0, 0, 0, 0.568627, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_gkq3o"]
-gradient = SubResource("Gradient_n7q28")
+gradient = SubResource("Gradient_81xya")
 fill_from = Vector2(0.993865, 0)
 fill_to = Vector2(1, 0.996933)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fw7wp"]
-bg_color = Color(0.231373, 0.231373, 0.231373, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qq0m8"]
-bg_color = Color(0.369792, 0.369792, 0.369792, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pg4ve"]
-bg_color = Color(0.25, 0.25, 0.25, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yewru"]
-
-[sub_resource type="Animation" id="Animation_1f010"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-
-[sub_resource type="Animation" id="Animation_tk3k2"]
-resource_name = "loading"
-length = 0.5
-loop_mode = 2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0166667, 0.0333333, 0.05, 0.0666667, 0.0833333, 0.1, 0.116667, 0.133333, 0.15, 0.166667, 0.183333, 0.2, 0.216667, 0.233333, 0.25, 0.266667, 0.283333, 0.3, 0.316667, 0.333333, 0.35, 0.366667, 0.383333, 0.4, 0.416667, 0.433333, 0.45, 0.466667, 0.483333, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [0.0, 0.607609, 1.17472, 1.70275, 2.19307, 2.64709, 3.0662, 3.4518, 3.80529, 4.12806, 4.4215, 4.68703, 4.92602, 5.13988, 5.33001, 5.49779, 5.64463, 5.77192, 5.88107, 5.97345, 6.05048, 6.11354, 6.16404, 6.20337, 6.23292, 6.2541, 6.2683, 6.27691, 6.28133, 6.28296, 6.28319]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_1f8y5"]
-_data = {
-&"RESET": SubResource("Animation_1f010"),
-&"loading": SubResource("Animation_tk3k2")
-}
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0o1af"]
 content_margin_left = 12.0
@@ -117,76 +63,8 @@ grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_gkq3o")
 
-[node name="AccountButton" type="Button" parent="."]
-process_mode = 3
-self_modulate = Color(0.5, 0, 0.421875, 1)
+[node name="AccountButton" parent="." instance=ExtResource("2_81xya")]
 layout_mode = 0
-offset_right = 200.0
-offset_bottom = 50.0
-mouse_filter = 1
-theme_override_styles/normal = SubResource("StyleBoxFlat_fw7wp")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_qq0m8")
-theme_override_styles/hover = SubResource("StyleBoxFlat_pg4ve")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_yewru")
-alignment = 0
-
-[node name="ProfilePicture" type="TextureRect" parent="AccountButton"]
-unique_name_in_owner = true
-process_mode = 3
-layout_mode = 0
-offset_right = 50.0
-offset_bottom = 50.0
-texture = ExtResource("2_4cvop")
-expand_mode = 1
-stretch_mode = 4
-
-[node name="Ranking" type="Label" parent="AccountButton"]
-unique_name_in_owner = true
-process_mode = 3
-visible = false
-layout_mode = 0
-offset_left = 55.0
-offset_top = 25.0
-offset_right = 103.0
-offset_bottom = 44.0
-text = "#?"
-script = ExtResource("3_ggapr")
-
-[node name="UPlayerName" type="Label" parent="AccountButton"]
-unique_name_in_owner = true
-process_mode = 3
-layout_mode = 1
-offset_left = 55.0
-offset_top = 5.0
-offset_right = 196.0
-offset_bottom = 46.0
-text = "If your seeing 
-this... it broke :<"
-clip_text = true
-text_overrun_behavior = 3
-script = ExtResource("4_v36dv")
-
-[node name="Loadingicon" type="Sprite2D" parent="AccountButton"]
-process_mode = 3
-visible = false
-texture_filter = 1
-position = Vector2(175, 25)
-texture = ExtResource("5_3trnu")
-
-[node name="Loadinganimation" type="AnimationPlayer" parent="AccountButton/Loadingicon"]
-process_mode = 3
-libraries = {
-&"": SubResource("AnimationLibrary_1f8y5")
-}
-
-[node name="Placeholder" type="Control" parent="AccountButton"]
-process_mode = 3
-custom_minimum_size = Vector2(69, 60)
-layout_mode = 1
-anchors_preset = 0
-offset_right = 80.0
-offset_bottom = 41.0
-script = ExtResource("6_3trnu")
 
 [node name="Widgets" type="HBoxContainer" parent="."]
 process_mode = 3
@@ -213,7 +91,6 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_56gsx")
 keep_pressed_outside = true
 icon = ExtResource("7_w554c")
 icon_alignment = 1
-script = ExtResource("7_6quot")
 
 [node name="NowPlayer" type="Button" parent="Widgets"]
 process_mode = 3
@@ -296,18 +173,6 @@ keep_pressed_outside = true
 icon = ExtResource("12_1qp4o")
 icon_alignment = 1
 
-[node name="Debugitem2" type="Label" parent="."]
-process_mode = 3
-visible = false
-layout_mode = 0
-offset_left = 18.0
-offset_top = 70.0
-offset_right = 131.0
-offset_bottom = 89.0
-theme_override_font_sizes/font_size = 12
-text = "Debug infomation"
-script = ExtResource("13_1qp4o")
-
 [node name="ToolTip" type="Label" parent="."]
 visible = false
 layout_mode = 0
@@ -319,7 +184,6 @@ text = "Play more!"
 
 [connection signal="mouse_entered" from="." to="." method="_hovered"]
 [connection signal="mouse_exited" from="." to="." method="_unhover"]
-[connection signal="pressed" from="AccountButton" to="Widgets/Settings" method="_on_AccountButton_pressed"]
 [connection signal="mouse_entered" from="Widgets/ChangeLog" to="." method="CL"]
 [connection signal="mouse_exited" from="Widgets/ChangeLog" to="." method="_hidetooltip"]
 [connection signal="pressed" from="Widgets/ChangeLog" to="." method="_ChangeLog"]

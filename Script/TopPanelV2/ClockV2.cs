@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Clock : Label
+public partial class ClockV2 : RichTextLabel
 {
 	private int prestart = 0;
 	private int runtime = 0;
@@ -9,6 +9,7 @@ public partial class Clock : Label
 	public override void _Ready()
 	{
 		prestart = DateTime.Now.Second;
+		Tick();
 	}
 	private string formatTime(int seconds)
 	{
@@ -17,8 +18,8 @@ public partial class Clock : Label
 		int secs = seconds % 60;
 		return $"{hours:D2}:{minutes:D2}:{secs:D2}";
 	}
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+
+	private void Tick()
 	{
 		if (prestart != DateTime.Now.Second)
 		{
@@ -26,6 +27,6 @@ public partial class Clock : Label
 			runtime++;
 		}
 		var run = formatTime(runtime);
-		Text = DateTime.Now.ToString("HH:mm:ss tt") + "\nrunning " + run;
+		Text = $"{DateTime.Now.ToString("HH:mm:ss")}\n[color=#FF9D00]running {run}[/color]";
 	}
 }

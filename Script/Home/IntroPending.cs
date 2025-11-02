@@ -63,7 +63,7 @@ public partial class IntroPending : Control
 				.SetEase(Tween.EaseType.Out);
 			tween.Connect("finished", Callable.From(() => GetTree().Quit()));
 		}
-		else if (@event.IsPressed() && !hidden)
+		else if ((Input.IsPhysicalKeyPressed(Key.Enter) || Input.IsPhysicalKeyPressed(Key.Space) || Input.IsPhysicalKeyPressed(Key.P)) && !hidden)
 		{
 			_on_bomb_pressed();
 		}

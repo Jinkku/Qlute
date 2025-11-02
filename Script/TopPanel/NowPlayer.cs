@@ -3,13 +3,9 @@ using System;
 
 public partial class NowPlayer : Button
 {
-	// Called when the node enters the scene tree for the first time.
 	private Tween Tween { get; set; }
 	private PanelContainer Card { get; set; }
 	private bool IsPlayerOpen { get; set; }
-	public override void _Ready()
-	{
-	}
 	private void toggleaccountpanel() {
 		if (Tween != null && IsInstanceValid(Card))
 		{

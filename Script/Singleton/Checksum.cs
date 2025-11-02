@@ -2,11 +2,29 @@ using Godot;
 using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 
 public static class ChecksumUtil
 {
     const int CHUNK_SIZE = 8192;
 
+    public static string GetGameChecksum()
+    {
+        return ComputeSHA256(OS.GetExecutablePath());
+    }
+    
+    public static string ComputeSHA256(string filePath)
+    {
+        using (var sha256 = SHA256.Create())
+        using (var stream = File.OpenRead(filePath)) 
+        {
+            byte[] hashBytes = sha256.ComputeHash(stream);
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in hashBytes) 
+                sb.Append(b.ToString("x2")); 
+            return sb.ToString();
+        }
+    }
     // SHA-256 (recommended)
     public static string GetSha256(string path)
     {

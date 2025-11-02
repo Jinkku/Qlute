@@ -116,7 +116,7 @@ anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 480.0
 grow_vertical = 2
-color = Color(0.0404297, 0.025, 0.05, 1)
+color = Color(0.15170373, 0.15170373, 0.15170373, 1)
 
 [node name="Panels" type="HBoxContainer" parent="ColorRect"]
 layout_mode = 1
@@ -444,7 +444,7 @@ text = "Debug"
 
 [node name="HideDevDisclaimer" type="CheckButton" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
-text = "Hide Developer Disclaimer"
+text = "Hide Experimental Disclaimer"
 
 [node name="GodotEngineVersion" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2

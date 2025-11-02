@@ -202,10 +202,9 @@ metadata/ModNameSmall = "HT"
 
 [node name="ModButton5" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
 layout_mode = 2
-disabled = true
 toggle_mode = true
 metadata/Title = "Random"
-metadata/Desc = "A ramdomized beatmap (not implemented)"
+metadata/Desc = "A ramdomized beatmap"
 metadata/ModName = "random"
 metadata/ModNameSmall = "RND"
 

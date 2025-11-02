@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using FileAccess = Godot.FileAccess;
 
 public partial class MusicCard : Button
 {
@@ -37,11 +38,22 @@ public partial class MusicCard : Button
 
 		isLoadingImage = true;
 
-		// Load image off-thread
+		await Task.Delay(250); // Wait half a second
+
+		if (!IsInstanceValid(this))
+			return; // The node has perished… abort mission!
+
 		var data = await Task.Run(() =>
 		{
-			return Image.LoadFromFile(path);
+			if (FileAccess.FileExists(path))
+				return Image.LoadFromFile(path);
+			else
+				return null;
 		});
+
+// Optional: check again if the node still exists before using `data`
+		if (!IsInstanceValid(this))
+			return;
 
 		// Dispose the old texture before replacing
 		if (texture != null)
@@ -130,10 +142,7 @@ public partial class MusicCard : Button
 		{
 			BackgroundPath = self.GetMeta("background").ToString();
 			Preview.Modulate = new Color(0f, 0f, 0f, 1f);
-			if (File.Exists(BackgroundPath))
-				LoadExternalImage(BackgroundPath);
-			else
-				GD.PrintErr("Background image not found: " + BackgroundPath);
+			LoadExternalImage(BackgroundPath);
 		}
 
 		SelfModulate = Checkid() ? toggledcolour : Idlecolour;
@@ -182,7 +191,10 @@ public partial class MusicCard : Button
 	public void _on_pressed()
 	{
 		Connection_Button = true;
-		SettingsOperator.SelectSongID(SongID);
+		if (SettingsOperator.SongID != SongID)
+		{
+			SettingsOperator.SelectSongID(SongID);	
+		}
 	}
 	private bool Accessed = false;
 	public static bool Connection_Button = false;

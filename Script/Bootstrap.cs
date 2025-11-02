@@ -15,8 +15,8 @@ public partial class Bootstrap : Control
 		Welcome.PivotOffset = Welcome.Size / 2;
 		animationPlayer = GetNode<AnimationPlayer>("./AnimationPlayer");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		SettingsOperator.Sessioncfg["toppanelhide"] = true;
 		db = (int)(Math.Log10(SettingsOperator.MasterVol / 100.0) * 20) - 5;
+		SettingsOperator.toppaneltoggle(false);
 	}
 	private bool Finished { get; set;}
 
@@ -59,6 +59,6 @@ public partial class Bootstrap : Control
 	{
 		Finished = true;
 		Cursor.CursorVisible = true;
-		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn",_mode: SceneTransition.TransitionMode.CrossFade,time: 0.3f);
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn",mode: SceneTransition.TransitionMode.CrossFade,time: 0.3f);
 	}
 }

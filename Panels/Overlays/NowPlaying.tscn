@@ -1,9 +1,8 @@
-[gd_scene load_steps=17 format=3 uid="uid://bid386g4mu454"]
+[gd_scene load_steps=15 format=3 uid="uid://bid386g4mu454"]
 
 [ext_resource type="Script" uid="uid://depnjfvaitcqy" path="res://Script/TopPanel/Overlays/NowPlaying.cs" id="1_jkubj"]
 [ext_resource type="Texture2D" uid="uid://sfbrs7c6t7dr" path="res://DefaultWallpaper/future.png" id="2_s31hx"]
-[ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="3_h74x6"]
-[ext_resource type="Script" uid="uid://bkssygfdsllly" path="res://Script/Home/SongIndication.cs" id="3_wsnno"]
+[ext_resource type="Script" path="res://Script/NowPlaying/NowPlayingIndicator.cs" id="3_6pqoc"]
 [ext_resource type="Script" uid="uid://covi80vxoi1m7" path="res://Script/Gameplay/SongProgress.cs" id="4_h74x6"]
 [ext_resource type="Texture2D" uid="uid://djva7iioax2sy" path="res://Resources/System/MusicPlayer/Play.png" id="6_2pwl0"]
 [ext_resource type="Texture2D" uid="uid://c14lwc8d3sqpi" path="res://Resources/System/MusicPlayer/Prev.png" id="6_pkmya"]
@@ -19,27 +18,19 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="LabelSettings" id="LabelSettings_2pwl0"]
-font = ExtResource("3_h74x6")
-font_size = 12
-shadow_size = 3
-shadow_color = Color(0, 0, 0, 0.235294)
-shadow_offset = Vector2(0, 0)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2pwl0"]
 bg_color = Color(0.03125, 0.03125, 0.03125, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6pqoc"]
 bg_color = Color(1, 1, 1, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h74x6"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jkubj"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h74x6"]
 content_margin_left = 5.0
 content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
-bg_color = Color(0.21875, 0.21875, 0.21875, 0.588235)
+bg_color = Color(0, 0, 0, 0.588235)
+draw_center = false
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
@@ -56,21 +47,22 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h74x6"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jkubj"]
 content_margin_left = 5.0
 content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
-bg_color = Color(0, 0, 0, 0.588235)
-draw_center = false
+bg_color = Color(0.21875, 0.21875, 0.21875, 0.588235)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h74x6"]
+
 [node name="NowPlaying" type="PanelContainer"]
 clip_children = 2
-custom_minimum_size = Vector2(300, 120)
+custom_minimum_size = Vector2(370, 150)
 offset_right = 40.0
 offset_bottom = 40.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_wsnno")
@@ -89,19 +81,20 @@ texture = ExtResource("2_s31hx")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Title" type="Label" parent="V/Banner"]
+[node name="Title" type="RichTextLabel" parent="V/Banner"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Artist - Title"
-label_settings = SubResource("LabelSettings_2pwl0")
+theme_override_font_sizes/normal_font_size = 18
+text = "Artist - verrryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy Big Title!"
+scroll_following = true
+autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
-autowrap_mode = 2
-script = ExtResource("3_wsnno")
+script = ExtResource("3_6pqoc")
 
 [node name="ProgressBar" type="ProgressBar" parent="V"]
 custom_minimum_size = Vector2(0, 5)
@@ -125,10 +118,10 @@ custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 theme_override_constants/icon_max_width = 30
 theme_override_font_sizes/font_size = 12
-theme_override_styles/focus = SubResource("StyleBoxEmpty_h74x6")
-theme_override_styles/hover = SubResource("StyleBoxFlat_jkubj")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_s31hx")
 theme_override_styles/normal = SubResource("StyleBoxFlat_h74x6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_s31hx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jkubj")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h74x6")
 icon = ExtResource("6_pkmya")
 icon_alignment = 1
 
@@ -137,10 +130,10 @@ custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 theme_override_constants/icon_max_width = 30
 theme_override_font_sizes/font_size = 12
-theme_override_styles/focus = SubResource("StyleBoxEmpty_h74x6")
-theme_override_styles/hover = SubResource("StyleBoxFlat_jkubj")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_s31hx")
 theme_override_styles/normal = SubResource("StyleBoxFlat_h74x6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_s31hx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jkubj")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h74x6")
 icon = ExtResource("6_2pwl0")
 icon_alignment = 1
 
@@ -149,10 +142,10 @@ custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 theme_override_constants/icon_max_width = 30
 theme_override_font_sizes/font_size = 12
-theme_override_styles/focus = SubResource("StyleBoxEmpty_h74x6")
-theme_override_styles/hover = SubResource("StyleBoxFlat_jkubj")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_s31hx")
 theme_override_styles/normal = SubResource("StyleBoxFlat_h74x6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_s31hx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jkubj")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h74x6")
 icon = ExtResource("8_617ia")
 icon_alignment = 1
 
