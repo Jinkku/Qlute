@@ -184,8 +184,8 @@ public partial class Gameplay : Control
 				else
 				{
 					part = Convert.ToInt32(section[0]);
-					int index = (int)Math.Floor(part * 4 / 512.0);
-					part = Math.Clamp(index, 0, 4 - 1);
+					int indexpart = (int)Math.Floor(part * 4 / 512.0);
+					part = Math.Clamp(indexpart, 0, 4 - 1);
 				}
 
 				timen = -timing;
@@ -199,7 +199,7 @@ public partial class Gameplay : Control
 				if (!Notes.Any(n => n.timing == timen && n.NoteSection == part))
 				{
 					Notes.Add(new NotesEn { timing = timen, NoteSection = part });
-				} // So that theres no overlapping notes :)
+				} // So that there's no overlapping notes :)
 			}
 		}
 		MaxNotes = Notes.Count;
@@ -271,7 +271,7 @@ public partial class Gameplay : Control
 		SettingsOperator.Resetms();
 		if (SettingsOperator.Sessioncfg["beatmapurl"] != null) ReloadBeatmap(SettingsOperator.Sessioncfg["beatmapurl"].ToString());
 		// If auto is enabled, it will make a Replay file with Auto being the player playing the beatmap. Before this it didn't make the replay file, it just plays.
-		// I am doing this because it's more simpler for me and don't have to worry about breaking auto (Qlutina)
+		// I am doing this because it's simpler for me and don't have to worry about breaking auto (Qlutina)
 		if (ModsOperator.Mods["auto"]) {
 			Replay.ResetReplay(); // Resets the replay to be cleared before making the auto replay.
 			SettingsOperator.SpectatorMode = true; // Enables Spectator Mode to play the Replay, without this it won't know it even existed lol :p
@@ -370,7 +370,7 @@ public partial class Gameplay : Control
 		return (float)SettingsOperator.Gameplaycfg.Time;
 	}
     /// <summary>
-    /// Get's the Score calculated
+    /// Gets the Score calculated
     /// </summary>
     private int Get_Score(double pp, double maxpp, float multiplier)
     {
@@ -500,8 +500,6 @@ public partial class Gameplay : Control
 				{
 					Note.Node.Position = new Vector2(0, (notex * scrollspeed) - (HitPoint * (scrollspeed - 1)));
 					Ttick++;
-					JudgeResult = checkjudge((int)notex, Keys[(int)Note.Node.GetMeta("part")].hit, Note.Node,
-						Note.Node.Visible);
 					JudgeResult = checkjudge((int)notex, Keys[(int)Note.Node.GetMeta("part")].hit, Note);
 					if (JudgeResult < 4)
 					{

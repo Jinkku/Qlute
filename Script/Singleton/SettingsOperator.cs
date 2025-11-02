@@ -440,9 +440,9 @@ public partial class SettingsOperator : Node
         public static double maxpp { get; set; }
         public static double ppv2 { get; set; }
         public static double maxppv2 { get; set; }
-        public static float Time { get; set; }
-        public static float TimeTotal { get; set; }
-        public static float TimeTotalGame { get; set; }
+        public static double Time { get; set; }
+        public static double TimeTotal { get; set; }
+        public static double TimeTotalGame { get; set; }
         public static float Accuracy { get; set; }
         public static string SampleSet { get; set; }
         public static int Combo { get; set; }
