@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://depnjfvaitcqy" path="res://Script/TopPanel/Overlays/NowPlaying.cs" id="1_jkubj"]
 [ext_resource type="Texture2D" uid="uid://sfbrs7c6t7dr" path="res://DefaultWallpaper/future.png" id="2_s31hx"]
+[ext_resource type="Script" path="res://Script/NowPlaying/NowPlayingIndicator.cs" id="3_6pqoc"]
 [ext_resource type="Script" uid="uid://covi80vxoi1m7" path="res://Script/Gameplay/SongProgress.cs" id="4_h74x6"]
-[ext_resource type="Script" uid="uid://dlf5qhmjcpowo" path="res://Script/NowPlaying/NowPlaying.cs" id="4_pkmya"]
 [ext_resource type="Texture2D" uid="uid://djva7iioax2sy" path="res://Resources/System/MusicPlayer/Play.png" id="6_2pwl0"]
 [ext_resource type="Texture2D" uid="uid://c14lwc8d3sqpi" path="res://Resources/System/MusicPlayer/Prev.png" id="6_pkmya"]
 [ext_resource type="Texture2D" uid="uid://7jh4dm1rrsff" path="res://Resources/System/MusicPlayer/Next.png" id="8_617ia"]
@@ -94,9 +94,7 @@ scroll_following = true
 autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
-script = ExtResource("4_pkmya")
-theme_override_font_sizes/font_size = 18
-theme_override_font_sizes/normal_font_size = 18
+script = ExtResource("3_6pqoc")
 
 [node name="ProgressBar" type="ProgressBar" parent="V"]
 custom_minimum_size = Vector2(0, 5)
