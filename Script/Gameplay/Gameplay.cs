@@ -645,7 +645,7 @@ public partial class Gameplay : Control
 				erroredout = true;
 				GD.PrintErr(e);
 				GD.PushError(e);
-				Notify.Post("Can't play the bestmap because\n" + e.Message);
+				Notify.Post("Can't play the beatmap because\n" + e.Message);
 				SettingsOperator.toppaneltoggle(true);
 				BeatmapBackground.FlashEnable = true;
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
