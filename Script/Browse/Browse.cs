@@ -190,7 +190,7 @@ public partial class Browse : Control
 		{
 			uritext = Uri.EscapeDataString(_searchText);
 		}
-		var uri = $"{ApiOperator.Beatmapapi}/api/v2/search?query={uritext}&status={ranktype}&mode=3&page={page}";
+		var uri = $"{ApiOperator.Beatmapapi}/api/v2/search?query={uritext}&status={ranktype}&page={page}";
 		GD.Print($"Looking up with: {uri}");
 		BrowseApi.Request(uri);
 	}
