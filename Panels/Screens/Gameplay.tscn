@@ -90,11 +90,12 @@ autostart = true
 
 [node name="Newpp" type="Label" parent="."]
 layout_mode = 0
-offset_left = 139.0
-offset_top = 305.0
-offset_right = 179.0
-offset_bottom = 324.0
+offset_left = 302.0
+offset_top = 68.0
+offset_right = 375.0
+offset_bottom = 87.0
 text = "0pp"
+horizontal_alignment = 2
 
 [node name="BreakCheck" type="Timer" parent="."]
 one_shot = true

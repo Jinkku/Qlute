@@ -22,7 +22,7 @@ public partial class SettingsOperator : Node
     public static string beatmapsdir => homedir + "/beatmaps";
     public static string exportdir => homedir + "/exports";
     public static readonly float ppbase = 0.035f;
-    public static readonly float ppv2base = 0.0035f;
+    public static readonly float ppv2base = 0.045f;
     public static string downloadsdir => homedir + "/downloads";
     public static string replaydir => homedir + "/replays";
     public static string screenshotdir => homedir + "/screenshots";
@@ -345,7 +345,7 @@ public partial class SettingsOperator : Node
                         ppv2time = noteTime;
                         ppv2multi = 1;
                     }
-                    var ppv2value = SettingsOperator.ppbase * ppv2multi;
+                    var ppv2value = SettingsOperator.ppv2base * ppv2multi;
                     legend.ppv2sets.Add(ppv2value);
                     legend.ppv2 += ppv2value;
                     lastNoteTime = noteTime;
