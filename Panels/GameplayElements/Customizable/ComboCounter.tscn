@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://cud76jctgrcxo" path="res://Script/Gameplay/Comboa.cs" id="2_jxbfk"]
 
 [node name="Combo" type="Label" groups=["Gameplay"]]
-z_index = 1000
 offset_right = 84.0
 offset_bottom = 62.0
 theme_override_fonts/font = ExtResource("1_k55c1")
