@@ -220,7 +220,6 @@ public partial class Gameplay : Control
 		Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)));
 		BeatmapBackground.FlashEnable = false;
 
-		ppv2LabelTest = GetNode<Label>("Newpp");
 		HealthBar.Reset();
 		Control P = GetNode<Control>("Playfield");
 		Chart = GetNode<HBoxContainer>("Playfield/ChartSections");
@@ -333,11 +332,6 @@ public partial class Gameplay : Control
 	public static float ReloadAccuracy(int max, int great, int meh, int bad)
 	{
 		return ((float)max + ((float)great / 2) + ((float)meh / 3)) / ((float)max + (float)great + (float)meh + (float)bad);
-	}
-
-	public static void ReloadppCounter()
-	{
-		SettingsOperator.Gameplaycfg.pp = SettingsOperator.Get_ppvalue(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, ModsMulti.multiplier, SettingsOperator.Gameplaycfg.MaxCombo,SettingsOperator.Gameplaycfg.TimeTotalGame);
 	}
 	
 	private float smoothTime = 0f;
@@ -552,7 +546,6 @@ public partial class Gameplay : Control
 			
 		}
 		SettingsOperator.Gameplaycfg.Score = scoreint; // Set the score of the player
-		ppv2LabelTest.Text = $"{SettingsOperator.Gameplaycfg.ppv2.ToString("N0")}pp";
 		HitPoint = (int)Chart.Size.Y - 150;
 		try
 		{
@@ -593,7 +586,6 @@ public partial class Gameplay : Control
 
 			Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)));
 			SettingsOperator.Gameplaycfg.Accuracy = ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
-			ReloadppCounter();
 			if (Input.IsActionJustPressed("pausemenu") && SettingsOperator.SpectatorMode)
 			{
 				BeatmapBackground.FlashEnable = true;
@@ -703,7 +695,7 @@ public partial class Gameplay : Control
 		{
 			SettingsOperator.Gameplaycfg.Max++;
 			SettingsOperator.Gameplaycfg.Combo++;
-			SettingsOperator.Gameplaycfg.ppv2 += Note.ppv2xp;
+			SettingsOperator.Gameplaycfg.pp += Note.ppv2xp;
 			BadCombo = 0;
 			Hittext("Perfect", new Color(0f, 0.71f, 1f));
 			HealthBar.Heal((5 * (SettingsOperator.Gameplaycfg.Combo / 100)) + 1);
@@ -713,7 +705,7 @@ public partial class Gameplay : Control
 		{
 			SettingsOperator.Gameplaycfg.Great++;
 			SettingsOperator.Gameplaycfg.Combo++;
-			SettingsOperator.Gameplaycfg.ppv2 -= Note.ppv2xp * 2;
+			SettingsOperator.Gameplaycfg.pp -= Note.ppv2xp * 2;
 			BadCombo = 0;
 			Hittext("Great", new Color(0f, 1f, 0.03f));
 			HealthBar.Heal((3 * (SettingsOperator.Gameplaycfg.Combo / 300)) + 1);
@@ -725,7 +717,7 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg.Meh++;
 			SettingsOperator.Gameplaycfg.Combo++;
 
-			SettingsOperator.Gameplaycfg.ppv2 -= Note.ppv2xp * 3;
+			SettingsOperator.Gameplaycfg.pp -= Note.ppv2xp * 3;
 			BadCombo = 0;
 			HealthBar.Heal((1 * (SettingsOperator.Gameplaycfg.Combo / 500)) + 1);
 			return 2;
@@ -736,7 +728,7 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg.Bad++;
 			if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
 			SettingsOperator.Gameplaycfg.Combo = 0;
-			SettingsOperator.Gameplaycfg.ppv2 -= Note.ppv2xp * 4;
+			SettingsOperator.Gameplaycfg.pp -= Note.ppv2xp * 4;
 			BadCombo++;
 			HealthBar.Damage(5 * BadCombo);
 			if (HurtAnimation != null && HurtAnimation.IsRunning())

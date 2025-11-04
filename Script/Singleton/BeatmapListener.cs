@@ -19,7 +19,6 @@ public class BeatmapLegend
 	public int KeyCount { get; set; } = 4;
 	public string Version { get; set; } = null;
 	public double pp { get; set; } = 0.0;
-	public double ppv2 { get; set; } = 0.0;
 	public List<double> ppv2sets { get; set; } = new List<double>();
 	public int Osubeatid { get; set; } = -1; // osu!mania compatibility
 	public int Osubeatidset { get; set; } = -1;

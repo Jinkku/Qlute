@@ -197,7 +197,6 @@ public partial class SettingsOperator : Node
             Sessioncfg["osubeatid"] = (int)beatmap.Osubeatid;
             Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
             Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
-            GD.Print($"ppv2:{beatmap.ppv2}pp");
             if (beatmap.Path != null && beatmap.Background != null)
                 Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
             else
@@ -207,7 +206,6 @@ public partial class SettingsOperator : Node
                 seek = beatmap.PreviewTime;
             }
             Gameplaycfg.maxpp = beatmap.pp;
-            Gameplaycfg.maxppv2 = beatmap.ppv2;
             ApiOperator.CheckBeatmapRankStatus();
 
 
@@ -347,7 +345,7 @@ public partial class SettingsOperator : Node
                     }
                     var ppv2value = SettingsOperator.ppv2base * ppv2multi;
                     legend.ppv2sets.Add(ppv2value);
-                    legend.ppv2 += ppv2value;
+                    legend.pp += ppv2value;
                     lastNoteTime = noteTime;
                     hitCount++;
 
@@ -361,7 +359,6 @@ public partial class SettingsOperator : Node
 
         legend.Timetotal = lastNoteTime;
         legend.Levelrating = GetLevelRating(hitCount, lastNoteTime * 0.001f);
-        legend.pp = Get_ppvalue(hitCount, 0, 0, 0, combo: hitCount, TimeTotal: lastNoteTime * 0.001f);
         legend.Path = filename.Replace(filename.Split("/").Last(), "");
         legend.Rawurl = filename;
         
@@ -421,7 +418,6 @@ public partial class SettingsOperator : Node
     {
         Gameplaycfg.Score = 0;
         Gameplaycfg.pp = 0;
-        Gameplaycfg.ppv2 = 0;
         Gameplaycfg.Max = 0;
         Gameplaycfg.Great = 0;
         Gameplaycfg.Meh = 0;
