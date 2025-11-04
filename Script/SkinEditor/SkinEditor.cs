@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.IO.Compression;
 using System.IO;
+using System.Linq;
 
 public partial class SkinEditor : Control
 {
@@ -38,9 +39,11 @@ public partial class SkinEditor : Control
 	}
 	private void SaveChanges()
 	{
-		if (Skin.Element.Name.Length < 1)
+		SkinningLegend PreElement = Skin.Element;
+		bool New = false;
+		if (PreElement.Name.Length < 1)
 		{
-			Skin.Element.Name = new SkinningLegend().Name;
+			PreElement.Name = new SkinningLegend().Name;
 		}
 		Dictionary<string, object> SkinSettings = new Dictionary<string, object> // Settings for the skin!!!!
 		{
@@ -50,17 +53,19 @@ public partial class SkinEditor : Control
 			{"NoteLane3" , Skin.Element.LaneNotes[2].ToHtml(false)},
 			{"NoteLane4" , Skin.Element.LaneNotes[3].ToHtml(false)},
 		};
-		var path = Skin.Element.SkinPath;
-		if (Skin.Element.SkinPath == null)
+		var path = PreElement.SkinPath;
+		if (PreElement.SkinPath == null || Skin.Element.SkinPath.StartsWith("res://"))
 		{
 			path = SettingsOperator.skinsdir.PathJoin(Skin.Element.Name);
 		}
 		if (!Directory.Exists(path))
 		{
 			System.IO.Directory.CreateDirectory(path);
+			New = true;
+
 		}
 		var index = 0;
-		foreach (Texture2D img in new List<Texture2D>([Skin.Element.NoteBack, Skin.Element.NoteFore, Skin.Element.Cursor]))
+		foreach (Texture2D img in new List<Texture2D>([PreElement.NoteBack, PreElement.NoteFore, PreElement.Cursor]))
 		{
 			Error resultPng = img.GetImage().SavePng(path.PathJoin(Skin.ImageNames[index]));
 			if (resultPng == Error.Ok)
@@ -77,6 +82,17 @@ public partial class SkinEditor : Control
 		var json = JsonSerializer.Serialize(SkinSettings);
 		saveFile.StoreString(json);
 		saveFile.Close();
+		if (New)
+		{
+			int ind = Skin.LoadSkin(path);
+			Skin.Element = Skin.List[ind];
+			SettingsOperator.SetSetting("skin", ind);
+			Skin.SkinIndex = ind;
+		}
+		else
+		{
+			Skin.Element = PreElement;
+		}
 		Notify.Post($"Saved {Skin.Element.Name}");
 	}
 	private bool MissingFunction { get; set; } = false;
@@ -111,7 +127,6 @@ public partial class SkinEditor : Control
 	}
 	private void FileID(int index)
 	{
-		GD.Print(index);
 		if (index == 0)
 		{
 			SaveChanges();

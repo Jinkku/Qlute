@@ -19,7 +19,7 @@ public partial class SkinMode : OptionButton
 	private void _LoadSkin(int index)
 	{
 		Skin.Element = Skin.List[index];
-		SettingsOperator.SetSetting("skin", index);
+		SettingsOperator.SetSetting("skin", Skin.Element.SkinPath);
 		Skin.SkinIndex = index;
 	}
 

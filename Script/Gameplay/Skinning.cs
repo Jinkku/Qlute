@@ -21,20 +21,31 @@ public partial class Skinning : Node
             var dirs = System.IO.Directory.GetDirectories(SettingsOperator.skinsdir);
             foreach (var skin in dirs)
             {
-                GD.Print($"Found {skin}");
+                GD.Print($"Queued {skin}");
                 Skin.LoadSkin(skin);
             }
         }
-        Skin.SkinIndex = int.TryParse(SettingsOperator.GetSetting("skin")?.ToString(), out int mode) ? mode : 0;
-        try
+        SkinningLegend foundEntry = Skin.List.FirstOrDefault(s => s.SkinPath == SettingsOperator.GetSetting("skin")?.ToString());
+        GD.Print(SettingsOperator.GetSetting("skin")?.ToString());
+        if (foundEntry != null)
         {
-            Skin.Element = Skin.List[Math.Max(0, Math.Min(Skin.List.Count, Skin.SkinIndex))];
-        }
-        catch
+            Skin.SkinIndex = foundEntry.ID;
+            Skin.Element = foundEntry;
+            SettingsOperator.SetSetting("skin", foundEntry.SkinPath);
+            GD.Print($"[Qlute] Found skin: {foundEntry.Name}");
+        } else if (SettingsOperator.GetSetting("skin") == null)
         {
-            Notify.Post($"Skin disappeared, defaulting to {Skin.List[0].Name}.");
             Skin.SkinIndex = 0;
-            SettingsOperator.SetSetting("skin", 0);
+            Skin.Element = Skin.List[Skin.SkinIndex];
+            SettingsOperator.SetSetting("skin", null);
+        }
+        else
+        {
+            Skin.SkinIndex = 0;
+            Skin.Element = Skin.List[Skin.SkinIndex];
+            Notify.Post($"Skin disappeared, defaulting to {Skin.List[0].Name}.");
+            SettingsOperator.SetSetting("skin", null);
+            GD.Print($"[Qlute] Can't find skin, defaulting to default skin");
         }
     }
 
@@ -42,7 +53,6 @@ public partial class Skinning : Node
     {
         foreach (string file in files)
         {
-            GD.Print(file);
             if (file.EndsWith(".qsk"))
             {
                 ZipFile.ExtractToDirectory(file, SettingsOperator.skinsdir);
@@ -68,6 +78,7 @@ public partial class Skinning : Node
 
 public class SkinningLegend
 {
+    public int ID { get; set; }
     public string Name { get; set; } = "Untitled";
     public string SkinPath { get; set; } = "res://SelectableSkins/Slia/";
     public Texture2D NoteBack { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/Backgroundnote.png");
@@ -148,10 +159,16 @@ public class Skin
         PreElement.SkinPath = path;
         PreElement.NoteBack = SettingsOperator.LoadImage(FindFile(path, "Backgroundnote.png")) ?? new SkinningLegend().NoteBack;
         PreElement.NoteFore = SettingsOperator.LoadImage(FindFile(path, "Foregroundnote.png")) ?? new SkinningLegend().NoteFore;
+        PreElement.ID = List.Count;
         return PreElement;
     }
-    public static void LoadSkin(string path)
+    public static int LoadSkin(string path)
     {
-        List.Add(ReloadSkin(path));
+        if (!List.Any(legend => legend.SkinPath == path))
+        {
+            List.Add(ReloadSkin(path));
+            return List.Last().ID;
+        }
+        return 0;
     }
 }
