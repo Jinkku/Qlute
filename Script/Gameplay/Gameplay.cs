@@ -179,7 +179,6 @@ public partial class Gameplay : Control
 				if (ModsOperator.Mods["random"])
 				{
 					part = BaseRnd.Next(0, 4);
-					GD.Print(part);
 				}
 				else
 				{
@@ -193,7 +192,7 @@ public partial class Gameplay : Control
 				{
 					timing = timen,
 					NoteSection = part,
-					ppv2xp = beatmap.ppv2sets[index]
+					ppv2xp = beatmap.ppv2sets[index] * ModsMulti.multiplier // Multiplier when adding mods onto the pp system
 				});
 				index++;
 				if (!Notes.Any(n => n.timing == timen && n.NoteSection == part))
