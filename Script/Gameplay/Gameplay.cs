@@ -705,7 +705,7 @@ public partial class Gameplay : Control
 		{
 			SettingsOperator.Gameplaycfg.Great++;
 			SettingsOperator.Gameplaycfg.Combo++;
-			SettingsOperator.Gameplaycfg.pp -= Note.ppv2xp * 2;
+			SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp - (Note.ppv2xp * 2));
 			BadCombo = 0;
 			Hittext("Great", new Color(0f, 1f, 0.03f));
 			HealthBar.Heal((3 * (SettingsOperator.Gameplaycfg.Combo / 300)) + 1);
@@ -716,8 +716,7 @@ public partial class Gameplay : Control
 			Hittext("Meh", new Color(1f, 0.66f, 0f));
 			SettingsOperator.Gameplaycfg.Meh++;
 			SettingsOperator.Gameplaycfg.Combo++;
-
-			SettingsOperator.Gameplaycfg.pp -= Note.ppv2xp * 3;
+			SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp - (Note.ppv2xp * 3));
 			BadCombo = 0;
 			HealthBar.Heal((1 * (SettingsOperator.Gameplaycfg.Combo / 500)) + 1);
 			return 2;
@@ -728,7 +727,7 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg.Bad++;
 			if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
 			SettingsOperator.Gameplaycfg.Combo = 0;
-			SettingsOperator.Gameplaycfg.pp -= Note.ppv2xp * 4;
+			SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp - (Note.ppv2xp * 4));
 			BadCombo++;
 			HealthBar.Damage(5 * BadCombo);
 			if (HurtAnimation != null && HurtAnimation.IsRunning())
