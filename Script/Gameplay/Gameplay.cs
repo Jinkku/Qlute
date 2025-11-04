@@ -9,6 +9,7 @@ public class NotesEn {
 	public Sprite2D Node {get;set;}
 	public bool hit {get;set;}
 	public string Sample => SampleSet.Normal.First();
+	public double ppv2xp { get; set; }
 }
 public class KeyL
 {
@@ -39,6 +40,7 @@ public partial class Gameplay : Control
 	public long startedtime { get; set; } = 0;
 	public bool songstarted = false;
 	public Node2D noteblock { get; set; }
+	private Label ppv2LabelTest { get; set; }
 	public bool hittextinit = false;
 	public Label hittext { get; set; }
 	public Tween hittextani { get; set; }
@@ -156,7 +158,9 @@ public partial class Gameplay : Control
 		var timen = -1;
 		var BaseRnd = new Random(seed);
 		var isHitObjectSection = false;
-		dance = SettingsOperator.Beatmaps[SettingsOperator.SongID].Dance;
+		int index = 0;
+		BeatmapLegend beatmap = SettingsOperator.Beatmaps[SettingsOperator.SongID];
+		dance = beatmap.Dance;
 		foreach (string line in lines)
 		{
 			if (line.Trim() == "[HitObjects]")
@@ -170,25 +174,31 @@ public partial class Gameplay : Control
 				// Break if we reach an empty line or another section
 				if (string.IsNullOrWhiteSpace(line) || line.StartsWith('['))
 					break;
-				string[] section = line.Split(':',',');
+				string[] section = line.Split(':', ',');
 				timing = Convert.ToInt32(section[2]);
 				if (ModsOperator.Mods["random"])
 				{
 					part = BaseRnd.Next(0, 4);
-					GD.Print(part);
 				}
 				else
 				{
 					part = Convert.ToInt32(section[0]);
-					int index = (int)Math.Floor(part * 4 / 512.0);
-					part = Math.Clamp(index, 0, 4 - 1);
+					int indexpart = (int)Math.Floor(part * 4 / 512.0);
+					part = Math.Clamp(indexpart, 0, 4 - 1);
 				}
 
 				timen = -timing;
+				Notes.Add(new NotesEn
+				{
+					timing = timen,
+					NoteSection = part,
+					ppv2xp = beatmap.ppv2sets[index] * ModsMulti.multiplier // Multiplier when adding mods onto the pp system
+				});
+				index++;
 				if (!Notes.Any(n => n.timing == timen && n.NoteSection == part))
 				{
 					Notes.Add(new NotesEn { timing = timen, NoteSection = part });
-				} // So that theres no overlapping notes :)
+				} // So that there's no overlapping notes :)
 			}
 		}
 		MaxNotes = Notes.Count;
@@ -209,7 +219,6 @@ public partial class Gameplay : Control
 		Dead = false;
 		Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)));
 		BeatmapBackground.FlashEnable = false;
-
 
 		HealthBar.Reset();
 		Control P = GetNode<Control>("Playfield");
@@ -260,7 +269,7 @@ public partial class Gameplay : Control
 		SettingsOperator.Resetms();
 		if (SettingsOperator.Sessioncfg["beatmapurl"] != null) ReloadBeatmap(SettingsOperator.Sessioncfg["beatmapurl"].ToString());
 		// If auto is enabled, it will make a Replay file with Auto being the player playing the beatmap. Before this it didn't make the replay file, it just plays.
-		// I am doing this because it's more simpler for me and don't have to worry about breaking auto (Qlutina)
+		// I am doing this because it's simpler for me and don't have to worry about breaking auto (Qlutina)
 		if (ModsOperator.Mods["auto"]) {
 			Replay.ResetReplay(); // Resets the replay to be cleared before making the auto replay.
 			SettingsOperator.SpectatorMode = true; // Enables Spectator Mode to play the Replay, without this it won't know it even existed lol :p
@@ -324,11 +333,6 @@ public partial class Gameplay : Control
 	{
 		return ((float)max + ((float)great / 2) + ((float)meh / 3)) / ((float)max + (float)great + (float)meh + (float)bad);
 	}
-
-	public static void ReloadppCounter()
-	{
-		SettingsOperator.Gameplaycfg.pp = SettingsOperator.Get_ppvalue(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, ModsMulti.multiplier, SettingsOperator.Gameplaycfg.MaxCombo,SettingsOperator.Gameplaycfg.TimeTotalGame);
-	}
 	
 	private float smoothTime = 0f;
 
@@ -359,7 +363,7 @@ public partial class Gameplay : Control
 		return (float)SettingsOperator.Gameplaycfg.Time;
 	}
     /// <summary>
-    /// Get's the Score calculated
+    /// Gets the Score calculated
     /// </summary>
     private int Get_Score(double pp, double maxpp, float multiplier)
     {
@@ -489,8 +493,7 @@ public partial class Gameplay : Control
 				{
 					Note.Node.Position = new Vector2(0, (notex * scrollspeed) - (HitPoint * (scrollspeed - 1)));
 					Ttick++;
-					JudgeResult = checkjudge((int)notex, Keys[(int)Note.Node.GetMeta("part")].hit, Note.Node,
-						Note.Node.Visible);
+					JudgeResult = checkjudge((int)notex, Keys[(int)Note.Node.GetMeta("part")].hit, Note);
 					if (JudgeResult < 4)
 					{
 						// NPC Part
@@ -583,7 +586,6 @@ public partial class Gameplay : Control
 
 			Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)));
 			SettingsOperator.Gameplaycfg.Accuracy = ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
-			ReloadppCounter();
 			if (Input.IsActionJustPressed("pausemenu") && SettingsOperator.SpectatorMode)
 			{
 				BeatmapBackground.FlashEnable = true;
@@ -634,7 +636,7 @@ public partial class Gameplay : Control
 				erroredout = true;
 				GD.PrintErr(e);
 				GD.PushError(e);
-				Notify.Post("Can't play the bestmap because\n" + e.Message);
+				Notify.Post("Can't play the beatmap because\n" + e.Message);
 				SettingsOperator.toppaneltoggle(true);
 				BeatmapBackground.FlashEnable = true;
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
@@ -687,41 +689,46 @@ public partial class Gameplay : Control
 		hittextani.Play();
 		hittext.Text = word;
 	}
-	public int checkjudge(int timing, bool keyvalue, Sprite2D node, bool visibility)
+	public int checkjudge(int timing, bool keyvalue, NotesEn Note)
 	{
-		if (timing + nodeSize > HitPoint - SettingsOperator.PerfectJudge && timing + nodeSize < HitPoint + SettingsOperator.PerfectJudge && keyvalue && visibility)
+		if (timing + nodeSize > HitPoint - SettingsOperator.PerfectJudge && timing + nodeSize < HitPoint + SettingsOperator.PerfectJudge && keyvalue && Note.Node.Visible)
 		{
 			SettingsOperator.Gameplaycfg.Max++;
 			SettingsOperator.Gameplaycfg.Combo++;
+			SettingsOperator.Gameplaycfg.pp += Note.ppv2xp;
 			BadCombo = 0;
 			Hittext("Perfect", new Color(0f, 0.71f, 1f));
 			HealthBar.Heal((5 * (SettingsOperator.Gameplaycfg.Combo / 100)) + 1);
 			return 0;
 		}
-		else if (timing + nodeSize > HitPoint - (SettingsOperator.GreatJudge / 2) && timing + nodeSize < HitPoint + (SettingsOperator.GreatJudge / 2) && keyvalue && visibility)
+		else if (timing + nodeSize > HitPoint - (SettingsOperator.GreatJudge / 2) && timing + nodeSize < HitPoint + (SettingsOperator.GreatJudge / 2) && keyvalue && Note.Node.Visible)
 		{
 			SettingsOperator.Gameplaycfg.Great++;
 			SettingsOperator.Gameplaycfg.Combo++;
+			SettingsOperator.Gameplaycfg.pp -= Note.ppv2xp * 2;
 			BadCombo = 0;
 			Hittext("Great", new Color(0f, 1f, 0.03f));
 			HealthBar.Heal((3 * (SettingsOperator.Gameplaycfg.Combo / 300)) + 1);
 			return 1;
 		}
-		else if (timing + nodeSize > HitPoint - (SettingsOperator.MehJudge / 2) && timing + nodeSize < HitPoint + (SettingsOperator.MehJudge / 2) && keyvalue && visibility)
+		else if (timing + nodeSize > HitPoint - (SettingsOperator.MehJudge / 2) && timing + nodeSize < HitPoint + (SettingsOperator.MehJudge / 2) && keyvalue && Note.Node.Visible)
 		{
 			Hittext("Meh", new Color(1f, 0.66f, 0f));
 			SettingsOperator.Gameplaycfg.Meh++;
 			SettingsOperator.Gameplaycfg.Combo++;
+
+			SettingsOperator.Gameplaycfg.pp -= Note.ppv2xp * 3;
 			BadCombo = 0;
 			HealthBar.Heal((1 * (SettingsOperator.Gameplaycfg.Combo / 500)) + 1);
 			return 2;
 		}
-		else if (timing + nodeSize > GetViewportRect().Size.Y + 60 && visibility)
+		else if (timing + nodeSize > GetViewportRect().Size.Y + 60 && Note.Node.Visible)
 		{
 			Hittext("Miss", new Color(1f, 0.28f, 0f));
 			SettingsOperator.Gameplaycfg.Bad++;
 			if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
 			SettingsOperator.Gameplaycfg.Combo = 0;
+			SettingsOperator.Gameplaycfg.pp -= Note.ppv2xp * 4;
 			BadCombo++;
 			HealthBar.Damage(5 * BadCombo);
 			if (HurtAnimation != null && HurtAnimation.IsRunning())

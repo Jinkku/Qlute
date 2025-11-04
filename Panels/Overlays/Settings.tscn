@@ -446,6 +446,10 @@ text = "Debug"
 layout_mode = 2
 text = "Hide Experimental Disclaimer"
 
+[node name="Experimentpp" type="CheckButton" parent="ColorRect/Panels/Scroll/Sections"]
+layout_mode = 2
+text = "Experiment new pp system"
+
 [node name="GodotEngineVersion" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
 layout_mode = 2
 mouse_filter = 0

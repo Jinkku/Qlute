@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 
 public class BeatmapLegend
 {
+	public int ppversion = 1; // pp version to check if beatmap needs to be refreshed.
 	public int ID { get; set; } = 0;
 	public int SetID { get; set; } = 0;
 	public string Title { get; set; } = null;
@@ -18,6 +19,7 @@ public class BeatmapLegend
 	public int KeyCount { get; set; } = 4;
 	public string Version { get; set; } = null;
 	public double pp { get; set; } = 0.0;
+	public List<double> ppv2sets { get; set; } = new List<double>();
 	public int Osubeatid { get; set; } = -1; // osu!mania compatibility
 	public int Osubeatidset { get; set; } = -1;
 	public int Beatid { get; set; } = -1; // Beatmap ID for Qlute-made beatmaps
