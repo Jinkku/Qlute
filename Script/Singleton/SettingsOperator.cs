@@ -434,8 +434,6 @@ public partial class SettingsOperator : Node
         public static int Score { get; set; }
         public static double pp { get; set; }
         public static double maxpp { get; set; }
-        public static double ppv2 { get; set; }
-        public static double maxppv2 { get; set; }
         public static double Time { get; set; }
         public static double TimeTotal { get; set; }
         public static double TimeTotalGame { get; set; }
