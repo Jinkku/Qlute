@@ -63,6 +63,7 @@ public partial class Gameplay : Control
 	private Tween scoretween { get; set; }
 	private int MaxNotes { get; set; }
 	private Timer BreakCheck { get; set; }
+	private Label ComboCounter { get; set; }
 	public static int seed = 0;
 	private void ShowPauseMenu()
 	{
@@ -215,6 +216,11 @@ public partial class Gameplay : Control
 		BreakCheck = GetNode<Timer>("BreakCheck");
 		AudioPlayer.Instance.Stop();
 		ClipContents = true;
+
+		if (HasNode("Combo"))
+		{
+			ComboCounter = GetNode<Label>("Combo");
+		}
 
 		Dead = false;
 		Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)));
@@ -689,6 +695,22 @@ public partial class Gameplay : Control
 		hittextani.Play();
 		hittext.Text = word;
 	}
+	private Tween ComboTween { get; set; }
+
+	private void ComboAnimation()
+	{
+		if (ComboCounter != null)
+		{
+			ComboCounter.Scale = new Vector2(1.0f, 1.2f);
+			ComboTween?.Kill();
+			ComboTween = CreateTween();
+			ComboTween.TweenProperty(ComboCounter, "scale", new Vector2(1f, 1f), 0.5f)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			ComboTween.Play();
+			
+		}
+	}
 	public int checkjudge(int timing, bool keyvalue, NotesEn Note)
 	{
 		if (timing + nodeSize > HitPoint - SettingsOperator.PerfectJudge && timing + nodeSize < HitPoint + SettingsOperator.PerfectJudge && keyvalue && Note.Node.Visible)
@@ -698,6 +720,7 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg.pp += Note.ppv2xp;
 			BadCombo = 0;
 			Hittext("Perfect", new Color(0f, 0.71f, 1f));
+			ComboAnimation();
 			HealthBar.Heal((5 * (SettingsOperator.Gameplaycfg.Combo / 100)) + 1);
 			return 0;
 		}
@@ -708,6 +731,7 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp - (Note.ppv2xp * 2));
 			BadCombo = 0;
 			Hittext("Great", new Color(0f, 1f, 0.03f));
+			ComboAnimation();
 			HealthBar.Heal((3 * (SettingsOperator.Gameplaycfg.Combo / 300)) + 1);
 			return 1;
 		}
@@ -718,6 +742,7 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg.Combo++;
 			SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp - (Note.ppv2xp * 3));
 			BadCombo = 0;
+			ComboAnimation();
 			HealthBar.Heal((1 * (SettingsOperator.Gameplaycfg.Combo / 500)) + 1);
 			return 2;
 		}
@@ -729,6 +754,7 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg.Combo = 0;
 			SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp - (Note.ppv2xp * 4));
 			BadCombo++;
+			ComboAnimation();
 			HealthBar.Damage(5 * BadCombo);
 			if (HurtAnimation != null && HurtAnimation.IsRunning())
 			{
