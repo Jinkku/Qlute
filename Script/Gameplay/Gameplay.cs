@@ -729,7 +729,7 @@ public partial class Gameplay : Control
 		{
 			SettingsOperator.Gameplaycfg.Great++;
 			SettingsOperator.Gameplaycfg.Combo++;
-			SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp - (Note.ppv2xp * 2));
+			SettingsOperator.Gameplaycfg.pp += Note.ppv2xp * 0.6;
 			BadCombo = 0;
 			Hittext(Skin.Element.JudgeGreat);
 			ComboAnimation();
@@ -741,7 +741,7 @@ public partial class Gameplay : Control
 			Hittext(Skin.Element.JudgeMeh);
 			SettingsOperator.Gameplaycfg.Meh++;
 			SettingsOperator.Gameplaycfg.Combo++;
-			SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp - (Note.ppv2xp * 3));
+			SettingsOperator.Gameplaycfg.pp += Note.ppv2xp * 0.3;
 			BadCombo = 0;
 			ComboAnimation();
 			HealthBar.Heal((1 * (SettingsOperator.Gameplaycfg.Combo / 500)) + 1);
