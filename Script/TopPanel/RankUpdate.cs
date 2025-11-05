@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public partial class RankUpdate : Control
 {
-	// Called when the node enters the scene tree for the first time.
 
 	public Label Performance {get;set;}
 	public Label Rank {get;set;}
@@ -58,6 +57,7 @@ public partial class RankUpdate : Control
 
 		return ColorOperator[index];
 	}
+	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		UserCard = GD.Load<PackedScene>("res://Panels/UserCard/UserCard.tscn").Instantiate().GetNode<PanelContainer>(".");
