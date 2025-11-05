@@ -188,6 +188,10 @@ metadata/part = 3
 position = Vector2(154, 100)
 metadata/part = 1
 
+[node name="NoteBack5" parent="SubViewport" instance=ExtResource("3_rhii7")]
+position = Vector2(258, 37.745)
+metadata/part = 2
+
 [connection signal="text_changed" from="Panel/Scrolls/SettingsRows/Skin Name/Name" to="." method="NameChange"]
 [connection signal="color_changed" from="Panel/Scrolls/SettingsRows/NoteLaneColour1/Color" to="." method="NoteLane1Color"]
 [connection signal="color_changed" from="Panel/Scrolls/SettingsRows/NoteLaneColour2/Color" to="." method="NoteLane2Color"]
