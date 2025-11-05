@@ -32,7 +32,7 @@ public partial class EndScreen : ColorRect
 
 	private void FC()
 	{
-		ComboScreen.Texture = GD.Load<Texture2D>("res://SelectableSkins/Slia/EndScreen/FC.png");
+		ComboScreen.Texture = Skin.Element.FullCombo;
 		ComboScreen.Scale = new Vector2(0.8f, 0.8f);
 		Modulate = new Color(0f, 0f, 0f, 0f);
 		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/comboclear.wav");
@@ -44,7 +44,7 @@ public partial class EndScreen : ColorRect
 	{
 		Modulate = new Color(0f, 0f, 0f, 0f);
 		ComboScreen.Scale = new Vector2(0.8f, 0.8f);
-		ComboScreen.Texture = GD.Load<Texture2D>("res://SelectableSkins/Slia/EndScreen/Bad.png");
+		ComboScreen.Texture = Skin.Element.Bad;
 		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/comboclear.wav");
 		Tween.Parallel().TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		Tween.Parallel().TweenProperty(ComboScreen, "scale", new Vector2(1f, 1f), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
@@ -54,7 +54,7 @@ public partial class EndScreen : ColorRect
 	{
 		Modulate = new Color(0f, 0f, 0f, 0f);
 		ComboScreen.Scale = new Vector2(0.8f, 0.8f);
-		ComboScreen.Texture = GD.Load<Texture2D>("res://SelectableSkins/Slia/EndScreen/Good.png");
+		ComboScreen.Texture = Skin.Element.Good;
 		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/comboclear.wav");
 		Tween.Parallel().TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		Tween.Parallel().TweenProperty(ComboScreen, "scale", new Vector2(1f, 1f), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
@@ -64,7 +64,7 @@ public partial class EndScreen : ColorRect
 	{
 		Modulate = new Color(0f, 0f, 0f, 0f);
 		ComboScreen.Scale = new Vector2(0.8f, 0.8f);
-		ComboScreen.Texture = GD.Load<Texture2D>("res://SelectableSkins/Slia/EndScreen/MAX.png");
+		ComboScreen.Texture = Skin.Element.Perfect;
 		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/comboclear.wav");
 		Tween.Parallel().TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		Tween.Parallel().TweenProperty(ComboScreen, "scale", new Vector2(1f, 1f), 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
