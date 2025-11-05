@@ -87,6 +87,10 @@ public class SkinningLegend
     public Texture2D FullCombo { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/EndScreen/FC.png");
     public Texture2D Good { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/EndScreen/Good.png");
     public Texture2D Bad { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/EndScreen/Bad.png");
+    public Texture2D JudgePerfect { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/Judgement/JudgePerfect.png");
+    public Texture2D JudgeGreat { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/Judgement/JudgeGreat.png");
+    public Texture2D JudgeMeh { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/Judgement/JudgeMeh.png");
+    public Texture2D JudgeMiss { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/Judgement/JudgeMiss.png");
     public List<Color> LaneNotes { get; set; } = new()
     {
         new Color("8f00ff"),
@@ -131,7 +135,7 @@ public class Skin
     public static SkinningLegend Element = new SkinningLegend();
     public static List<SkinningLegend> List = new List<SkinningLegend>();
     public static int SkinIndex { get; set; }
-    public static List<string> ImageNames = new List<string>(["Backgroundnote.png","Foregroundnote.png","cursor.png","MAX.png","Good.png","Bad.png","FC.png"]);
+    public static List<string> ImageNames = new List<string>(["Backgroundnote.png","Foregroundnote.png","cursor.png","MAX.png","Good.png","Bad.png","FC.png", "JudgePerfect.png", "JudgeGreat.png", "JudgeMeh.png", "JudgeMiss.png"]);
     public static SkinningLegend ReloadSkin(string path)
     {
         SkinningLegend PreElement = new SkinningLegend();
@@ -167,6 +171,10 @@ public class Skin
         PreElement.FullCombo = SettingsOperator.LoadImage(FindFile(path, "FC.png")) ?? new SkinningLegend().FullCombo;
         PreElement.Good = SettingsOperator.LoadImage(FindFile(path, "Good.png")) ?? new SkinningLegend().Good;
         PreElement.Bad = SettingsOperator.LoadImage(FindFile(path, "Bad.png")) ?? new SkinningLegend().Bad;
+        PreElement.JudgePerfect = SettingsOperator.LoadImage(FindFile(path, "JudgePerfect.png")) ?? new SkinningLegend().JudgePerfect;
+        PreElement.JudgeGreat = SettingsOperator.LoadImage(FindFile(path, "JudgeGreat.png")) ?? new SkinningLegend().JudgeGreat;
+        PreElement.JudgeMeh = SettingsOperator.LoadImage(FindFile(path, "JudgeMeh.png")) ?? new SkinningLegend().JudgeMeh;
+        PreElement.JudgeMiss = SettingsOperator.LoadImage(FindFile(path, "JudgeMiss.png")) ?? new SkinningLegend().JudgeMiss;
         PreElement.ID = List.Count;
         return PreElement;
     }

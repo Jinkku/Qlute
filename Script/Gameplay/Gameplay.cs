@@ -42,7 +42,7 @@ public partial class Gameplay : Control
 	public Node2D noteblock { get; set; }
 	private Label ppv2LabelTest { get; set; }
 	public bool hittextinit = false;
-	public Label hittext { get; set; }
+	public TextureRect hittext { get; set; }
 	public Tween hittextani { get; set; }
 	private Tween hitnoteani { get; set; }
 	private Tween HurtAnimation { get; set; }
@@ -229,7 +229,7 @@ public partial class Gameplay : Control
 		HealthBar.Reset();
 		Control P = GetNode<Control>("Playfield");
 		Chart = GetNode<HBoxContainer>("Playfield/ChartSections");
-		hittext = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/hittext.tscn").Instantiate().GetNode<Label>(".");
+		hittext = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/hittext.tscn").Instantiate().GetNode<TextureRect>(".");
 		hittextinit = true;
 		hittext.Modulate = new Color(1f, 1f, 1f, 0f);
 		hittext.ZIndex = 100;
@@ -679,10 +679,12 @@ public partial class Gameplay : Control
 		}
 	}
 	private bool erroredout = false;
-	public void Hittext(string word, Color wordcolor)
+	public void Hittext(Texture2D Image)
 	{
-		hittext.Modulate = wordcolor;
+		hittext.Modulate = new Color(1f, 1f, 1f, 1f);
 		hittext.Position = new Vector2(hittextoldpos.X, hittextoldpos.Y - 10);
+		if (hittext.Texture != Image)
+			hittext.Texture = Image;
 		//tween.TweenProperty(hittext, "position", new Vector2(hittext.Position.X,hittext.Position.Y+10), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		if (hittextani != null && hittextani.IsRunning())
 		{
@@ -693,7 +695,6 @@ public partial class Gameplay : Control
 		hittextani.Parallel().TweenProperty(hittext, "modulate", new Color(0f, 0f, 0f, 0f), 0.5).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		hittextani.Parallel().TweenProperty(hittext, "position", hittextoldpos, 0.5).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		hittextani.Play();
-		hittext.Text = word;
 	}
 	private Tween ComboTween { get; set; }
 
@@ -719,7 +720,7 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg.Combo++;
 			SettingsOperator.Gameplaycfg.pp += Note.ppv2xp;
 			BadCombo = 0;
-			Hittext("Perfect", new Color(0f, 0.71f, 1f));
+			Hittext(Skin.Element.JudgePerfect);
 			ComboAnimation();
 			HealthBar.Heal((5 * (SettingsOperator.Gameplaycfg.Combo / 100)) + 1);
 			return 0;
@@ -730,14 +731,14 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg.Combo++;
 			SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp - (Note.ppv2xp * 2));
 			BadCombo = 0;
-			Hittext("Great", new Color(0f, 1f, 0.03f));
+			Hittext(Skin.Element.JudgeGreat);
 			ComboAnimation();
 			HealthBar.Heal((3 * (SettingsOperator.Gameplaycfg.Combo / 300)) + 1);
 			return 1;
 		}
 		else if (timing + nodeSize > HitPoint - (SettingsOperator.MehJudge / 2) && timing + nodeSize < HitPoint + (SettingsOperator.MehJudge / 2) && keyvalue && Note.Node.Visible)
 		{
-			Hittext("Meh", new Color(1f, 0.66f, 0f));
+			Hittext(Skin.Element.JudgeMeh);
 			SettingsOperator.Gameplaycfg.Meh++;
 			SettingsOperator.Gameplaycfg.Combo++;
 			SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp - (Note.ppv2xp * 3));
@@ -748,7 +749,7 @@ public partial class Gameplay : Control
 		}
 		else if (timing + nodeSize > GetViewportRect().Size.Y + 60 && Note.Node.Visible)
 		{
-			Hittext("Miss", new Color(1f, 0.28f, 0f));
+			Hittext(Skin.Element.JudgeMiss);
 			SettingsOperator.Gameplaycfg.Bad++;
 			if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
 			SettingsOperator.Gameplaycfg.Combo = 0;

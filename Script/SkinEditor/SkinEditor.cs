@@ -65,7 +65,7 @@ public partial class SkinEditor : Control
 
 		}
 		var index = 0;
-		foreach (Texture2D img in new List<Texture2D>([PreElement.NoteBack, PreElement.NoteFore, PreElement.Cursor, PreElement.Perfect, PreElement.Good, PreElement.Bad, PreElement.FullCombo]))
+		foreach (Texture2D img in new List<Texture2D>([PreElement.NoteBack, PreElement.NoteFore, PreElement.Cursor, PreElement.Perfect, PreElement.Good, PreElement.Bad, PreElement.FullCombo, PreElement.JudgePerfect, PreElement.JudgeGreat, PreElement.JudgeMeh, PreElement.JudgeMiss]))
 		{
 			Error resultPng = img.GetImage().SavePng(path.PathJoin(Skin.ImageNames[index]));
 			if (resultPng == Error.Ok)
