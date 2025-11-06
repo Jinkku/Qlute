@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://cq88ttvp5k3if"]
+
+[ext_resource type="Script" uid="uid://dsfp3h2v5vijn" path="res://Script/CustomMenus/DropDownMenu/DropDownMenu.cs" id="1_682tb"]
+[ext_resource type="Theme" uid="uid://dirht6112nu0h" path="res://Panels/CustomMenus/blank.tres" id="1_gqp6l"]
+
+[node name="Drop Down Menu" type="Button"]
+self_modulate = Color(0.99607843, 0, 0, 1)
+custom_minimum_size = Vector2(141, 50)
+offset_right = 141.0
+offset_bottom = 50.0
+theme = ExtResource("1_gqp6l")
+theme_type_variation = &"FlatButton"
+script = ExtResource("1_682tb")
+MenuToggle = true
+FocusColour = Color(1, 0.41176474, 0.41176474, 1)
+HighlightColour = Color(0.9882353, 0.7019607, 0.7019607, 1)
+IdleColour = Color(0.99607843, 0, 0, 1)
+StringText = "for you brotha"
+Items = Array[String](["um", "ok bro", "yes"])
+
+[connection signal="button_down" from="." to="." method="_highlight"]
+[connection signal="button_up" from="." to="." method="_unhold"]
+[connection signal="mouse_entered" from="." to="." method="_focus"]
+[connection signal="mouse_exited" from="." to="." method="_unfocus"]
+[connection signal="pressed" from="." to="." method="_toggle"]

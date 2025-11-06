@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://36cfuoq2u55m"]
+
+[ext_resource type="Theme" uid="uid://cu8ap5uak1q6c" path="res://Resources/System/theme.tres" id="1_he1dw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ntjnk"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+
+[node name="Menu" type="PanelContainer"]
+self_modulate = Color(0.6640523, 0, 0, 0.6666667)
+z_index = -1
+custom_minimum_size = Vector2(100, 50)
+offset_right = 199.0
+offset_bottom = 50.0
+theme = ExtResource("1_he1dw")
+theme_override_styles/panel = SubResource("StyleBoxFlat_ntjnk")
+
+[node name="Entries" type="VBoxContainer" parent="."]
+layout_mode = 2

@@ -10,6 +10,23 @@ public partial class Create : Control
 	{
 	}
 
+	public override void _ExitTree()
+	{
+		SettingsOperator.CreateSelectingBeatmap = false;
+	}
+
+	private void _FileMenu(int ID)
+	{
+		if (ID == 1)
+		{
+			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
+			SettingsOperator.CreateSelectingBeatmap = true;
+		} else if (ID == 5)
+		{
+			_on_back();
+		}
+	}
+
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	private void _on_back(){
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");

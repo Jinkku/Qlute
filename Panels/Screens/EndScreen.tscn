@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cunoteokirmkm"]
 
 [ext_resource type="Script" uid="uid://c0am75ykk1641" path="res://Script/Gameplay/EndScreen.cs" id="1_xhg3f"]
-[ext_resource type="Texture2D" uid="uid://cxl3uhqdgw4j3" path="res://SelectableSkins/Slia/Game/EndScreen/FC.png" id="3_u07xl"]
+[ext_resource type="Texture2D" uid="uid://cxl3uhqdgw4j3" path="res://SelectableSkins/Slia/EndScreen/FC.png" id="3_u07xl"]
 
 [node name="EndScreen" type="ColorRect"]
 anchors_preset = 15
