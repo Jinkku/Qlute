@@ -95,10 +95,6 @@ corner_radius_bottom_left = 15
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ixo7g"]
 bg_color = Color(0.078, 0.078, 0.078, 0.8)
 border_color = Color(0.265625, 0.63855, 1, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
 expand_margin_right = 25.0
 expand_margin_bottom = 5.0
 
@@ -427,7 +423,8 @@ theme_override_constants/margin_bottom = 0
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_vertical = 4
-placeholder_text = "search....."
+placeholder_text = "search..... (This doesn't work yet ;n;)"
+clear_button_enabled = true
 
 [node name="SongDetails" type="VBoxContainer" parent="."]
 layout_mode = 1

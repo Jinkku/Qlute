@@ -94,7 +94,7 @@ public partial class MusicCard : Button
 	private void CheckUnicode()
 	{
 		string text = "";
-		if (Unicode)
+		if (Unicode && Beatmap.TitleUnicode != null && Beatmap.ArtistUnicode != null)
 		{
 			text = $"[font_size=14]{Beatmap.TitleUnicode}[/font_size]\n[font_size=10]{Beatmap.ArtistUnicode}[/font_size]\n[font_size=10]mapped by {Beatmap.Mapper}[/font_size]";
 		}

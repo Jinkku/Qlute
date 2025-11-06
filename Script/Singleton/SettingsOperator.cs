@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-
+using System.Threading.Tasks;
 
 
 public class DanceCounter {
@@ -151,17 +151,15 @@ public partial class SettingsOperator : Node
     {
         if (Beatmaps.Count > 0 && SongID != -1)
         {
-            GD.Print("change");
             var beatmap = Beatmaps[SongID];
-            if (!Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString()))
-            {
-                Sessioncfg["beatmaptitle"] = beatmap.Title;
-                Sessioncfg["beatmapartist"] = beatmap.Artist;
-            }
-            else
+            if (Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString()) && beatmap.TitleUnicode != null && beatmap.ArtistUnicode != null)
             {
                 Sessioncfg["beatmaptitle"] = beatmap.TitleUnicode;
                 Sessioncfg["beatmapartist"] = beatmap.ArtistUnicode;
+            } else
+            {
+                Sessioncfg["beatmaptitle"] = beatmap.Title;
+                Sessioncfg["beatmapartist"] = beatmap.Artist;
             }
         }
     }
@@ -176,15 +174,14 @@ public partial class SettingsOperator : Node
             var beatmap = Beatmaps[id];
             SongID = id;
             Sessioncfg["beatmapurl"] = beatmap.Rawurl;
-            if (!Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString()))
-            {
-                Sessioncfg["beatmaptitle"] = beatmap.Title;
-                Sessioncfg["beatmapartist"] = beatmap.Artist;
-            }
-            else
+            if (beatmap.TitleUnicode != null && beatmap.ArtistUnicode != null)
             {
                 Sessioncfg["beatmaptitle"] = beatmap.TitleUnicode;
                 Sessioncfg["beatmapartist"] = beatmap.ArtistUnicode;
+            }else if (!Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString()) || ( beatmap.TitleUnicode == null && beatmap.ArtistUnicode == null ) )
+            {
+                Sessioncfg["beatmaptitle"] = beatmap.Title;
+                Sessioncfg["beatmapartist"] = beatmap.Artist;
             }
             Sessioncfg["beatmapdiff"] = beatmap.Version;
             Sessioncfg["beatmapbpm"] = (int)beatmap.Bpm;
@@ -206,8 +203,6 @@ public partial class SettingsOperator : Node
                 seek = beatmap.PreviewTime;
             }
             Gameplaycfg.maxpp = beatmap.pp;
-            ApiOperator.CheckBeatmapRankStatus();
-
 
             string audioPath = beatmap.Path + "" + beatmap.Audio;
             string chk = ChecksumUtil.GetSha256(audioPath);
@@ -237,6 +232,9 @@ public partial class SettingsOperator : Node
             {
                 GD.PrintErr("Audio file not found: " + audioPath);
             }
+            
+            ApiOperator.CheckBeatmapRankStatus();
+            
         }
         else { GD.PrintErr("Can't select a song that don't exist :/"); }
     }

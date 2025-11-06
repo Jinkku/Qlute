@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene load_steps=34 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" uid="uid://bxurggbxgjswg" path="res://Script/Home/HomeScreen.cs" id="1_vj7aj"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
@@ -21,7 +21,6 @@
 [ext_resource type="Texture2D" uid="uid://84eme8uqluil" path="res://Resources/System/MainMenu/santahat.png" id="17_jpc6g"]
 [ext_resource type="PackedScene" uid="uid://d2hnxlea2j351" path="res://Panels/Overlays/MusicBar.tscn" id="18_ldbht"]
 [ext_resource type="Texture2D" uid="uid://dyrairg2m2il6" path="res://Resources/System/emit.png" id="19_whutp"]
-[ext_resource type="Script" uid="uid://dsfp3h2v5vijn" path="res://Script/CustomMenus/DropDownMenu/DropDownMenu.cs" id="22_1l3bn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1gbip"]
 content_margin_left = 10.0
@@ -492,15 +491,6 @@ texture = ExtResource("19_whutp")
 lifetime = 3.0
 fixed_fps = 15
 process_material = SubResource("ParticleProcessMaterial_ldbht")
-
-[node name="DropDownMenu" type="Button" parent="."]
-self_modulate = Color(1, 0, 0, 1)
-layout_mode = 0
-offset_right = 20.0
-offset_bottom = 20.0
-script = ExtResource("22_1l3bn")
-IdleColour = Color(1, 0, 0, 1)
-metadata/_custom_type_script = "uid://dsfp3h2v5vijn"
 
 [connection signal="timeout" from="MenuNotice/Timer" to="MenuNotice/HTTPRequest" method="_on_timer_timeout"]
 [connection signal="request_completed" from="MenuNotice/HTTPRequest" to="MenuNotice/HTTPRequest" method="_on_request_completed"]
