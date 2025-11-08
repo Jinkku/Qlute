@@ -151,7 +151,7 @@ public partial class DropDownMenu : Button
         _buttonText.OffsetTop = 0.5f;
         _buttonText.OffsetBottom = 0.5f;
         _buttonText.Resized += resize;
-        _buttonText.Theme = GD.Load<Theme>("res://Panels/CustomMenus/blank.tres"); // Sets theme
+        Theme = GD.Load<Theme>("res://Panels/CustomMenus/blank.tres"); // Sets theme
         _buttonText.Text = StringText;
         
         // Menu Setup

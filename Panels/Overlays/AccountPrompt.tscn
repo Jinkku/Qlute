@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://b4ys2qwkqf5m5"]
+[gd_scene load_steps=8 format=3 uid="uid://b4ys2qwkqf5m5"]
 
 [ext_resource type="Script" uid="uid://dqgueg320i7t2" path="res://Script/TopPanel/AccountPrompt.cs" id="1_ppf2d"]
 [ext_resource type="PackedScene" uid="uid://q1un3bv5kmm0" path="res://Panels/UserCard/UserCard.tscn" id="2_8mlqu"]
+[ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="2_c5png"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_golg1"]
 
@@ -75,16 +76,22 @@ text = "Stay logged in"
 layout_mode = 2
 
 [node name="Login" type="Button" parent="AccPanel/NotLog/HBoxContainer2"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Login"
+script = ExtResource("2_c5png")
+StringText = "Login"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Create" type="Button" parent="AccPanel/NotLog/HBoxContainer2"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Create"
+script = ExtResource("2_c5png")
+StringText = "Create"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Log" type="VBoxContainer" parent="AccPanel"]
 visible = false
@@ -95,9 +102,13 @@ layout_mode = 2
 size_flags_vertical = 0
 
 [node name="Logout" type="Button" parent="AccPanel/Log"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6jcst")
-text = "Log out"
+script = ExtResource("2_c5png")
+StringText = "Log out"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Retring" type="VBoxContainer" parent="AccPanel"]
 visible = false
@@ -112,9 +123,13 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Logout" type="Button" parent="AccPanel/Retring"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6jcst")
-text = "Log out"
+script = ExtResource("2_c5png")
+StringText = "Log out"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [connection signal="draw" from="." to="." method="_on_draw"]
 [connection signal="pressed" from="AccPanel/NotLog/HBoxContainer2/Login" to="." method="_on_login_pressed"]

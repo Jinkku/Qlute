@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://cwj7c4xk3gg8o"]
+[gd_scene load_steps=4 format=3 uid="uid://cwj7c4xk3gg8o"]
 
 [ext_resource type="Script" uid="uid://dr1b8krg0kw6k" path="res://Script/NotificationPanel/NotificationPanel.cs" id="1_xu62s"]
+[ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="2_ws2sv"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llstv"]
 content_margin_left = 0.0
@@ -48,9 +49,12 @@ text = "Notifications"
 horizontal_alignment = 2
 
 [node name="ClearAll Button" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(100, 40)
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 size_flags_horizontal = 8
-text = "Clear all"
+script = ExtResource("2_ws2sv")
+StringText = "Clear All"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [connection signal="pressed" from="MarginContainer/ScrollContainer/VBoxContainer/ClearAll Button" to="." method="_ClearAll"]

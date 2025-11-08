@@ -57,7 +57,11 @@ public partial class HomeScreen : Control
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Browse.tscn");
 	}
 	private void _create() {
-		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
+		#if DEBUG
+			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
+		#else
+			Notify.Post("Under Construction!");
+		#endif
 	}
 	private void _leave() {
 		SettingsOperator.toppaneltoggle(false);

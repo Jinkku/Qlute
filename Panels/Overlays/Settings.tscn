@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://d0qmsp3ewrdj4"]
+[gd_scene load_steps=29 format=3 uid="uid://d0qmsp3ewrdj4"]
 
 [ext_resource type="Script" uid="uid://bcpf58suyr63f" path="res://Script/SettingsPanel/SettingsPanel.cs" id="1_gfh6f"]
 [ext_resource type="Texture2D" uid="uid://cj5ugwjbsax06" path="res://Resources/SettingsIcon/display.png" id="2_r347j"]
@@ -9,6 +9,7 @@
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="5_k6nch"]
 [ext_resource type="Script" uid="uid://dp53wl7qkvxyq" path="res://Script/SettingsPanel/FpsShow.cs" id="6_o7dm5"]
 [ext_resource type="Script" uid="uid://csqtqnvdjslaf" path="res://Script/SettingsPanel/SkinMode.cs" id="8_bjgno"]
+[ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="10_4moo3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5b8eh"]
 bg_color = Color(0, 0, 0, 0.392157)
@@ -413,10 +414,12 @@ max_value = 400.0
 value = 200.0
 
 [node name="AudioOffsetAuto" type="Button" parent="ColorRect/Panels/Scroll/Sections"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
-text = "Set offset by last played song (0ms)"
+script = ExtResource("10_4moo3")
+StringText = "Set offset by last played song (0ms)"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="AudioOffsetWizard2" type="Button" parent="ColorRect/Panels/Scroll/Sections"]
 visible = false

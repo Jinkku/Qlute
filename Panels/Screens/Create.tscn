@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dnxlc61trat1l"]
+[gd_scene load_steps=18 format=3 uid="uid://dnxlc61trat1l"]
 
 [ext_resource type="Script" uid="uid://cdhm1bqkq60y3" path="res://Script/LevelEditor/Create.cs" id="1_4dycg"]
 [ext_resource type="Script" uid="uid://dsfp3h2v5vijn" path="res://Script/CustomMenus/DropDownMenu/DropDownMenu.cs" id="4_lwg7d"]
@@ -13,9 +13,6 @@ bg_color = Color(0, 0, 0, 0.568627)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ee5vh"]
 content_margin_left = 25.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lwg7d"]
-content_margin_right = 15.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_elvf5"]
 content_margin_left = 5.0
@@ -88,10 +85,24 @@ offset_top = 100.0
 offset_bottom = -50.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
 
 [node name="Playfield" parent="Ground" instance=ExtResource("6_vy1ai")]
 layout_mode = 1
+
+[node name="ChartSections" parent="Ground/Playfield" index="0"]
+mouse_filter = 0
+
+[node name="Control" parent="Ground/Playfield/ChartSections/Section1" index="0"]
+mouse_filter = 2
+
+[node name="Control" parent="Ground/Playfield/ChartSections/Section2" index="0"]
+mouse_filter = 2
+
+[node name="Control" parent="Ground/Playfield/ChartSections/Section3" index="0"]
+mouse_filter = 2
+
+[node name="Control" parent="Ground/Playfield/ChartSections/Section4" index="0"]
+mouse_filter = 2
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -153,14 +164,6 @@ IdleColour = Color(0.21057129, 0.359375, 0.21057129, 1)
 StringText = "Edit"
 Items = Array[String](["Cut", "Copy", "Paste", "Undo", "Redo"])
 metadata/_custom_type_script = "uid://dsfp3h2v5vijn"
-
-[node name="Label2" type="Label" parent="ToolBar/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.945312, 1, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxEmpty_lwg7d")
-text = "Note: Most stuff will not work!"
-horizontal_alignment = 2
 
 [node name="Creativity" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -230,7 +233,10 @@ layout_mode = 2
 text = "0 Notes"
 
 [node name="Na" type="Label" parent="Info/ContextSections"]
-visible = false
+layout_mode = 2
+text = "0"
+
+[node name="Na2" type="Label" parent="Info/ContextSections"]
 layout_mode = 2
 text = "0"
 

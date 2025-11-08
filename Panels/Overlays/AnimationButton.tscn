@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://ctwe33rydnvxo"]
+
+[ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="1_w84pl"]
+
+[node name="Button" type="Button"]
+self_modulate = Color(0.21618652, 0.21724206, 0.21875, 1)
+custom_minimum_size = Vector2(100, 40)
+offset_right = 100.0
+offset_bottom = 40.0
+script = ExtResource("1_w84pl")
+FocusColour = Color(0.110687256, 0.42668164, 0.9140625, 1)
+HighlightColour = Color(0.4140625, 0.6468323, 1, 1)
+IdleColour = Color(0.21618652, 0.21724206, 0.21875, 1)
+
+[connection signal="button_down" from="." to="." method="_highlight"]
+[connection signal="button_up" from="." to="." method="_unhold"]
+[connection signal="mouse_entered" from="." to="." method="_focus"]
+[connection signal="mouse_exited" from="." to="." method="_unfocus"]

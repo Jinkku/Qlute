@@ -10,7 +10,7 @@ public partial class SettingsPanel : Control
 	private SettingsOperator SettingsOperator { get; set; }
 	public OptionButton Windowmode { get; set; }
 	public HSlider BackgroundDim { get; set; }
-	public Button OffsetButton { get; set; }
+	public ButtonFade OffsetButton { get; set; }
 	public HSlider OffsetSlider { get; set; }
 	public Label OffsetTicker { get; set; }
 	public Label ScrollSpeedt { get; set; }
@@ -25,7 +25,7 @@ public partial class SettingsPanel : Control
 		Windowmode = GetNode<OptionButton>("ColorRect/Panels/Scroll/Sections/WindowSelector");
 		Windowmode.Selected = int.TryParse(SettingsOperator.GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
 		BackgroundDim = GetNode<HSlider>("ColorRect/Panels/Scroll/Sections/BackgroundDim");
-		OffsetButton = GetNode<Button>("ColorRect/Panels/Scroll/Sections/AudioOffsetAuto");
+		OffsetButton = GetNode<ButtonFade>("ColorRect/Panels/Scroll/Sections/AudioOffsetAuto");
 		OffsetSlider = GetNode<HSlider>("ColorRect/Panels/Scroll/Sections/AudioOffset");
 		ScrollSpeed = GetNode<HSlider>("ColorRect/Panels/Scroll/Sections/ScrollSpeed");
 		DevHide = GetNode<CheckButton>("ColorRect/Panels/Scroll/Sections/HideDevDisclaimer");
@@ -35,7 +35,6 @@ public partial class SettingsPanel : Control
 		ScrollSpeedt = GetNode<Label>("ColorRect/Panels/Scroll/Sections/ScrollSpeedn");
 		GetNode<Label>("ColorRect/Panels/Scroll/Sections/GodotEngineVersion").Text = $"Godot Version {Engine.GetVersionInfo()["major"]}.{Engine.GetVersionInfo()["minor"]}";
 		BackgroundDim.Value = SettingsOperator.backgrounddim;
-		OffsetButton.Text = "Set offset by last played song (" + SettingsOperator.Getms().ToString("0.00") + "ms)";
 		ScrollSpeedt.Text = $"Scroll Speed ({(11485 / (SettingsOperator.GetSetting("scrollspeed") != null ? int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString()) : 1346)).ToString()})";
 		ScrollSpeed.Value = 11485 / (SettingsOperator.GetSetting("scrollspeed") != null ? int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString()) : 1346);
 
@@ -78,6 +77,18 @@ public partial class SettingsPanel : Control
 	public override void _Process(double delta)
 	{
 		Size = new Vector2(Size.X, GetViewportRect().Size.Y - (GetNode<ColorRect>("..").Position.Y + 50));
+		var ms = SettingsOperator.Getms();
+		if (float.IsNaN(ms))
+		{
+			ms = -1;
+			OffsetButton.StringText = "Please play a map before you can set your offset!!";
+			OffsetButton.Disabled = true;
+		}
+		else
+		{
+			OffsetButton.StringText = "Set offset by last played song (" + ms.ToString("0.00") + "ms)";
+			OffsetButton.Disabled = false;
+		}
 	}
 	private void _changed_resolution(int index)
 	{

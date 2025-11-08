@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dpjsc7sxiwkm7"]
+[gd_scene load_steps=16 format=3 uid="uid://dpjsc7sxiwkm7"]
 
 [ext_resource type="Script" uid="uid://dxbbl1s8m45so" path="res://Script/Mods/Mods.cs" id="1_7gucc"]
 [ext_resource type="Script" uid="uid://b4xchyvoqsbhp" path="res://Script/Mods/CustomizeMenu.cs" id="1_u70wj"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://d4cyep10vdq2d" path="res://Script/Mods/customize.gd" id="5_b2hs3"]
 [ext_resource type="PackedScene" uid="uid://c2ouvq16jls8u" path="res://Panels/Overlays/BottomPanelButtons.tscn" id="5_smilj"]
 [ext_resource type="Script" uid="uid://bagjvps0md7pu" path="res://Script/Mods/LevelCompute.cs" id="5_vbcbr"]
+[ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="6_8k74e"]
 [ext_resource type="PackedScene" uid="uid://c8egllgadndpy" path="res://Panels/Mods/ModButton.tscn" id="6_133ox"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_smilj"]
@@ -139,11 +140,14 @@ text = "Lv. ??"
 script = ExtResource("5_vbcbr")
 
 [node name="Reset" type="Button" parent="Title/Info"]
-custom_minimum_size = Vector2(150, 0)
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(150, 40)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
-text = "Reset"
+script = ExtResource("6_8k74e")
+StringText = "Reset"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Customize" type="Button" parent="Title/Info"]
 custom_minimum_size = Vector2(150, 0)
@@ -154,6 +158,7 @@ tooltip_text = "Later release"
 disabled = true
 text = "Customize"
 script = ExtResource("5_b2hs3")
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="ControlPanel" parent="." instance=ExtResource("5_smilj")]
 visible = false
