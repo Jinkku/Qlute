@@ -42,7 +42,7 @@ public partial class SongSelect : Control
 	private int SongLoaded { get; set; }
 	private bool ContextMenuActive { get; set; }
 	private Tween ContextMenuAni { get; set; }
-	private PanelContainer ContextMenu { get; set; }
+	private BeatmapContextMenu ContextMenu { get; set; }
 	private Button LeaderboardLocal { get; set; }
 	private Button LeaderboardGlobal { get; set; }
 	private Button LeaderboardDetails { get; set; }
@@ -195,7 +195,7 @@ public partial class SongSelect : Control
 		SettingsOperator.loopaudio = true;
 		scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
 		RankStatus = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Column1/RankBox");
-		ContextMenu = GetNode<PanelContainer>("ContextMenu");
+		ContextMenu = GetNode<BeatmapContextMenu>("ContextMenu");
 		ContextMenu.Visible = false;
 		musiccardtemplate = ResourceLoader.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		NoBeatmap = GetNode<Label>("SongPanel/NoBeatmap");
@@ -439,7 +439,7 @@ public partial class SongSelect : Control
 
 		if (Input.IsMouseButtonPressed(MouseButton.Right) && SettingsOperator.SongIDHighlighted != -1)
 		{
-			ContextMenu.SetMeta("SongID", SettingsOperator.SongIDHighlighted);
+			ContextMenu.SongID = SettingsOperator.SongIDHighlighted;
 			ContextMenuActive = true;
 			ContextMenu.Visible = true;
 			ContextMenuAni?.Kill();

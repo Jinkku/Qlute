@@ -5,15 +5,16 @@ using System.IO;
 public partial class BeatmapContextMenu : PanelContainer
 {
 	private SettingsOperator SettingsOperator { get; set; }
+	public int SongID { get; set; } = -1;
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 	}
 
 	private void _deletebeatmap(){
-		if ((int)GetMeta("SongID") is int songID && songID != -1)
+		if (SongID != -1)
 		{
-			var beatmap = SettingsOperator.Beatmaps.Find(b => b.ID == songID);
+			var beatmap = SettingsOperator.Beatmaps[SongID];
 			var SetID = beatmap.SetID;
 			if (beatmap != null)
 			{
@@ -33,18 +34,22 @@ public partial class BeatmapContextMenu : PanelContainer
 			}
 			SettingsOperator.SelectSongID(SettingsOperator.SongID);
 		}
+		else
+		{
+			Notify.Post("Can't delete beatmap, it doesn't exist.");
+		}
 	}
 	private void _delete()
 	{
-		if ((int)GetMeta("SongID") is int songID && songID != -1)
+		if (SongID != -1)
 		{
-			var beatmap = SettingsOperator.Beatmaps.Find(b => b.ID == songID);
+			var beatmap = SettingsOperator.Beatmaps[SongID];
 			if (beatmap != null)
 			{
 				string message = $"Deleted {beatmap.Artist} - {beatmap.Title} [{beatmap.Version}]";
 				Notify.Post(message);
 			}
-			SettingsOperator.Beatmaps.RemoveAll(beatmap => beatmap.ID == songID);
+			SettingsOperator.Beatmaps.Remove(beatmap);
 			SettingsOperator.Sessioncfg["reloaddb"] = true;
 			if (File.Exists(beatmap.Rawurl))
 			{
@@ -56,6 +61,10 @@ public partial class BeatmapContextMenu : PanelContainer
 				SettingsOperator.SongID = SettingsOperator.Beatmaps.Count - 1;
 			}
 			SettingsOperator.SelectSongID(SettingsOperator.SongID);
+		}
+		else
+		{
+			Notify.Post("Can't delete beatmap, it doesn't exist.");
 		}
 	}
 }
