@@ -6,7 +6,7 @@ public partial class SettingsPanel : Control
 	[Signal]
 	public delegate void UpdateInfoEventHandler();
 
-
+	private float MS { get; set; }
 	private SettingsOperator SettingsOperator { get; set; }
 	public OptionButton Windowmode { get; set; }
 	public HSlider BackgroundDim { get; set; }
@@ -48,6 +48,7 @@ public partial class SettingsPanel : Control
 			offset = 0;
 		}
 		OffsetSlider.Value = 200 - offset;
+		OffsetTicker.Text = "Audio offset - " + (OffsetSlider.Value - 200).ToString("N0") + "ms";
 		ShowUnicode.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString());
 		DevHide.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("hidedevintro").ToString());
 	}
@@ -77,16 +78,16 @@ public partial class SettingsPanel : Control
 	public override void _Process(double delta)
 	{
 		Size = new Vector2(Size.X, GetViewportRect().Size.Y - (GetNode<ColorRect>("..").Position.Y + 50));
-		var ms = SettingsOperator.Getms();
-		if (float.IsNaN(ms))
+		MS = SettingsOperator.Getms();
+		if (float.IsNaN(MS))
 		{
-			ms = -1;
+			MS = -1;
 			OffsetButton.StringText = "Please play a map before you can set your offset!!";
 			OffsetButton.Disabled = true;
 		}
 		else
 		{
-			OffsetButton.StringText = "Set offset by last played song (" + ms.ToString("0.00") + "ms)";
+			OffsetButton.StringText = "Set offset by last played song (" + MS.ToString("N0") + "ms)";
 			OffsetButton.Disabled = false;
 		}
 	}
@@ -97,7 +98,7 @@ public partial class SettingsPanel : Control
 	private void _on_audio_offset_value_changed(float value)
 	{
 		SettingsOperator.SetSetting("audiooffset", 200 - value);
-		OffsetTicker.Text = "Audio offset - " + (value - 200).ToString("0") + "ms";
+		OffsetTicker.Text = "Audio offset - " + (value - 200).ToString("N0") + "ms";
 	}
 	private void _aow()
 	{
@@ -105,9 +106,9 @@ public partial class SettingsPanel : Control
 	}
 	private void _aoautoset()
 	{
-		SettingsOperator.SetSetting("audiooffset", SettingsOperator.Getms());
-		OffsetSlider.Value = 200 + SettingsOperator.Getms();
-		OffsetTicker.Text = "Audio offset - " + (OffsetSlider.Value - 200).ToString("0") + "ms";
+		SettingsOperator.SetSetting("audiooffset", (int)MS);
+		OffsetSlider.Value = 200 + MS;
+		OffsetTicker.Text = "Audio offset - " + (OffsetSlider.Value - 200).ToString("N0") + "ms";
 	}
 	private void _backgrounddim_started(float value)
 	{
