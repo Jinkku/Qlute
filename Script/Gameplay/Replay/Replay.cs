@@ -232,31 +232,41 @@ public static class Replay
     {
         if (!SettingsOperator.SpectatorMode)
         {
-            GD.Print("[Qlute] Saving Replay...");
-            var cache = $"#Qlute Version: {ProjectSettings.GetSetting("application/config/version")}-{ProjectSettings.GetSetting("application/config/branch")}\n";
-            cache += $"#Username: {ApiOperator.Username}\n";
-            cache += $"#osuBeatmapID: {SettingsOperator.Sessioncfg["osubeatid"]}\n";
-            cache += $"#osuBeatmapSetID: {SettingsOperator.Sessioncfg["osubeatidset"]}\n";
-            cache += $"#QluteBeatmapID: 0\n";
-            cache += $"#QluteBeatmapSetID: 0\n";
-            cache += $"#Score: {SettingsOperator.Gameplaycfg.Score}\n";
-            cache += $"#Max: {SettingsOperator.Gameplaycfg.Max}\n";
-            cache += $"#Great: {SettingsOperator.Gameplaycfg.Great}\n";
-            cache += $"#Meh: {SettingsOperator.Gameplaycfg.Meh}\n";
-            cache += $"#Bad: {SettingsOperator.Gameplaycfg.Bad}\n";
-            cache += $"#Accuracy: {SettingsOperator.Gameplaycfg.Accuracy * 100.00}\n";
-            cache += $"#Max Combo: {SettingsOperator.Gameplaycfg.MaxCombo}\n";
-            cache += $"#Average ms: {SettingsOperator.Gameplaycfg.ms}\n";
-            cache += $"#Mods: {ModsOperator.GetModAlias()}\n";
-            cache += $"#Seed: {Gameplay.seed}\n";
-            foreach (ReplayLegend entry in ReplayCache)
+            try
             {
-                cache += $"{entry.Time},{entry.NoteTap}\n";
+                GD.Print("[Qlute] Saving Replay...");
+                var cache =
+                    $"#Qlute Version: {ProjectSettings.GetSetting("application/config/version")}-{ProjectSettings.GetSetting("application/config/branch")}\n";
+                cache += $"#Username: {ApiOperator.Username}\n";
+                cache += $"#osuBeatmapID: {SettingsOperator.Sessioncfg["osubeatid"]}\n";
+                cache += $"#osuBeatmapSetID: {SettingsOperator.Sessioncfg["osubeatidset"]}\n";
+                cache += $"#QluteBeatmapID: 0\n";
+                cache += $"#QluteBeatmapSetID: 0\n";
+                cache += $"#Score: {SettingsOperator.Gameplaycfg.Score}\n";
+                cache += $"#Max: {SettingsOperator.Gameplaycfg.Max}\n";
+                cache += $"#Great: {SettingsOperator.Gameplaycfg.Great}\n";
+                cache += $"#Meh: {SettingsOperator.Gameplaycfg.Meh}\n";
+                cache += $"#Bad: {SettingsOperator.Gameplaycfg.Bad}\n";
+                cache += $"#Accuracy: {SettingsOperator.Gameplaycfg.Accuracy * 100.00}\n";
+                cache += $"#Max Combo: {SettingsOperator.Gameplaycfg.MaxCombo}\n";
+                cache += $"#Average ms: {SettingsOperator.Gameplaycfg.ms}\n";
+                cache += $"#Mods: {ModsOperator.GetModAlias()}\n";
+                cache += $"#Seed: {Gameplay.seed}\n";
+                foreach (ReplayLegend entry in ReplayCache)
+                {
+                    cache += $"{entry.Time},{entry.NoteTap}\n";
+                }
+
+                using var file = Godot.FileAccess.Open(FilePath, Godot.FileAccess.ModeFlags.Write);
+                file.StoreString(cache);
+                cache = "";
+                GD.Print("[Qlute] Completed Successfully!");
             }
-            using var file = Godot.FileAccess.Open(FilePath, Godot.FileAccess.ModeFlags.Write);
-            file.StoreString(cache);
-            cache = "";
-            GD.Print("[Qlute] Completed Successfully!");
+            catch (Exception err)
+            {
+                GD.PrintErr(err);
+                GD.Print("[Qlute] Replay failed to save.");
+            }
         }
     }
     /// <summary>
