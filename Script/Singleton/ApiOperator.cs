@@ -415,7 +415,7 @@ public partial class ApiOperator : Node
 
 				var downloadRequest = new HttpRequest();
 				AddChild(downloadRequest);
-				downloadRequest.Timeout = 5;
+				downloadRequest.Timeout = 0;
 				downloadRequest.RequestCompleted += (long result, long responseCode, string[] headers, byte[] body) => _on_download_completed(result, responseCode, headers, body, id);
 				downloadRequest.DownloadFile = Path.Combine(SettingsOperator.downloadsdir, $"{id}.osz.tmp");
 				downloadRequest.Request(url, null, Godot.HttpClient.Method.Get);

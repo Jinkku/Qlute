@@ -1,43 +1,98 @@
 using Godot;
 using System;
 using System.IO;
-
+using System.Linq;
+[Tool]
 public partial class CardFunctions : Button
 {
+    public  SettingsOperator SettingsOperator { get; set; }
     private Button Download { get; set; }
+    private Button GoShortcut { get; set; }
+    private PanelContainer Existant { get; set; }
+    public Label Title { get; set; }
+    public Label Artist { get; set; }
+    public Label Mapper { get; set; }
+    public Label Release { get; set; }
+    public PanelContainer RankColour { get; set; }
+    public Label RankText { get; set; }
+    public Label LvStart { get; set; }
+    public Label LvEnd { get; set; }
+    public string BannerPicture { get; set; }
+    public int BeatmapID { get; set; }
+    public int Index { get; set; }
+    private int ID { get; set; }
+    [Export]
+    public bool Downloaded { get; set; } = false;
+
     public async override void _Ready()
     {
         if (this != null)
         {
-            await Browse.DownloadImage(GetMeta("pic").ToString(), (ImageTexture texture) =>
-            {
-                GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview").Texture = texture;
-            });
-            Download = GetNode<Button>("DownloadBar/VBoxContainer/Download");
-
-
-
-
-            SelfModulate = Idlecolour;
             var StartAnimation = CreateTween();
             StartAnimation.TweenProperty(this, "modulate", new Color(1, 1, 1, 1), 1f)
                 .SetTrans(Tween.TransitionType.Cubic)
                 .SetEase(Tween.EaseType.Out);
             StartAnimation.Play();
+            SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
+            Title = GetNode<Label>("Info/SongTitle");
+            Artist = GetNode<Label>("Info/SongArtist");
+            Mapper = GetNode<Label>("Info/SongMapper");
+            Release = GetNode<Label>("Info/SongTitle");
+            RankColour = GetNode<PanelContainer>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor");
+            RankText = GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor/RankText");
+            LvStart = GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvStartColor/LvStartText");
+            LvEnd = GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvEndColor/LvEndText");
+            Existant = GetNode<PanelContainer>("Existed");
+            GoShortcut = GetNode<Button>("DownloadBar/VBoxContainer/Play");
+            Download = GetNode<Button>("DownloadBar/VBoxContainer/Download");
+            Existance();
+            
+            if (BannerPicture != null)
+                await Browse.DownloadImage(BannerPicture, (ImageTexture texture) =>
+                {
+                    GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview").Texture = texture;
+                });
+
+            SelfModulate = Idlecolour;
         }
     }
 
-        private void _download()
+    public override void _PhysicsProcess(double delta)
     {
-        ApiOperator.DownloadBeatmap(int.Parse(GetMeta("beatmap").ToString()), (int)GetMeta("index"));
+        Existance();
     }
 
+    /// <summary>
+    /// Checks if it's already downloaded.
+    /// </summary>
+    private void Existance()
+    {
+        var beatmap = SettingsOperator.Beatmaps.FirstOrDefault(b => b.Osubeatidset == BeatmapID);
+        Downloaded = beatmap != null;
+        if (Downloaded)
+        {
+            ID = beatmap.ID;
+            Download.Visible = false;
+            Existant.Visible = true;
+            GoShortcut.Visible = true;
+        }
+        else
+        {
+            Download.Visible = true;
+            Existant.Visible = false;
+            GoShortcut.Visible = false;
+        }
+    }
 
-
-
-
-
-
+    private void _play()
+    {
+        SettingsOperator.SelectSongID(ID);
+        GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
+    }
+    private void _download()
+    {
+        ApiOperator.DownloadBeatmap(BeatmapID, Index);
+    }
 
     private Color Idlecolour = new Color(0.20f, 0.20f, 0.20f, 0.5f); // Colour when idle
     private Color Focuscolour = new Color(0.5f, 0.5f, 0.5f, 1); // Colour when focused
@@ -82,10 +137,11 @@ public partial class CardFunctions : Button
         if (!ButtonPress)
         {
             var Animation = CreateTween();
-            var BeatmapInfoCard = GD.Load<PackedScene>("res://Panels/BrowseElements/BeatmapInfo.tscn").Instantiate().GetNode<Control>(".");
+            var BeatmapInfoCard = GD.Load<PackedScene>("res://Panels/BrowseElements/BeatmapInfo.tscn").Instantiate().GetNode<BeatmapInfo>(".");
             BeatmapInfoCard.Position = new Vector2(0, GetViewportRect().Size.Y);
             BeatmapInfoCard.GetNode<TextureRect>("Pill/Poster").Texture = GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview").Texture;
-            BeatmapInfoCard.SetMeta("index", GetMeta("index"));
+            BeatmapInfoCard.Index = Index;
+            BeatmapInfoCard.BeatmapID = BeatmapID;
             var Back = BeatmapInfoCard.GetNode<Button>("Back");
             Back.Position = new Vector2(0, Back.Position.Y);
             var Blank = new ColorRect();
@@ -96,8 +152,6 @@ public partial class CardFunctions : Button
             Blank.AnchorBottom = 1;
             Blank.Modulate = new Color(0, 0, 0, 0f);
             Blank.Name = "Blank-Chan";
-            BeatmapInfoCard.SetMeta("index", GetMeta("index"));
-            BeatmapInfoCard.SetMeta("beatmap", GetMeta("beatmap"));
             GetTree().CurrentScene.AddChild(Blank);
             GetTree().CurrentScene.AddChild(BeatmapInfoCard);
             Animation.SetParallel(true);

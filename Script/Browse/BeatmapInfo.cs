@@ -2,9 +2,11 @@ using Godot;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class BeatmapInfo : Control
 {
+	public  SettingsOperator SettingsOperator { get; set; }
 	private Label Length { get; set; }
 	private Label BPM { get; set; }
 	private Label NoteCount { get; set; }
@@ -19,21 +21,53 @@ public partial class BeatmapInfo : Control
 	private List<CatalogBeatmapInfoLegend> BeatmapList { get; set; }
 	public static int BeatmapIndex { get; set; } = -1;
 	public static int BeatmapIndexH { get; set; } = -1;
-	private int index { get; set; } = -1;
 	private int NoteCountTotal { get; set; }
+	public bool Downloaded { get; set; } = false;
+	public int BeatmapID { get; set; }
+	private Button Download { get; set; }
+	private Button GoShortcut { get; set; }
+	public int Index { get; set; }
+	private int ID { get; set; }
+	
+	private void _play()
+	{
+		SettingsOperator.SelectSongID(ID);
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
+	}
 
     public override void _ExitTree()
 	{
 		BeatmapIndex = -1;
 		BeatmapIndexH = -1;
 	}
+	public override void _PhysicsProcess(double delta)
+	{
+		Existance();
+	}
+
+	/// <summary>
+	/// Checks if it's already downloaded.
+	/// </summary>
+	private void Existance()
+	{
+		var beatmap = SettingsOperator.Beatmaps.FirstOrDefault(b => b.Osubeatidset == BeatmapID);
+		Downloaded = beatmap != null;
+		if (Downloaded)
+		{
+			ID = beatmap.ID;
+			Download.Visible = false;
+			GoShortcut.Visible = true;
+		}
+		else
+		{
+			Download.Visible = true;
+			GoShortcut.Visible = false;
+		}
+	}
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		if (HasMeta("index"))
-		{
-			index = (int)GetMeta("index");
-		}
+		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		Title = GetNode<Label>("Pill/Padding/Info/Columns/Info/SongTitle");
 		Artist = GetNode<Label>("Pill/Padding/Info/Columns/Info/SongArtist");
 		Mapper = GetNode<Label>("Pill/Padding/Info/Columns/Info/SongMapper");
@@ -45,9 +79,11 @@ public partial class BeatmapInfo : Control
 		MaxPP = GetNode<Label>("Pill/Padding/Info/Columns/Details/Row/Column4/Value");
 		LevelRating = GetNode<Label>("Pill/Padding/Info/Columns/Details/Row/Column5/Value");
 		Beatmaps = GetNode<HBoxContainer>("Pill/Padding/Info/Beatmaps");
+		GoShortcut = GetNode<Button>("Pill/Padding/Info/Columns/Info/HBoxContainer/Play");
+		Download = GetNode<Button>("Pill/Padding/Info/Columns/Info/HBoxContainer/Download");
 
 
-		BeatmapList = Browse.BrowseCatalog[index].beatmaps;
+		BeatmapList = Browse.BrowseCatalog[Index].beatmaps;
 
 
 		var ind = 0;
@@ -55,7 +91,7 @@ public partial class BeatmapInfo : Control
 		{
 			var icon = GD.Load<PackedScene>("res://Panels/BrowseElements/GameModeDifficulty.tscn").Instantiate().GetNode<TextureButton>(".");
 			icon.SetMeta("index", ind);
-			icon.SetMeta("rootindex", index);
+			icon.SetMeta("rootindex", Index);
 			Beatmaps.AddChild(icon);
 			ind++;
 		}
@@ -72,13 +108,13 @@ public partial class BeatmapInfo : Control
 
 	private void _download()
 	{
-		ApiOperator.DownloadBeatmap((int)GetMeta("beatmap"), (int)GetMeta("index"));
+		ApiOperator.DownloadBeatmap(BeatmapID, Index);
 	}
 
 	private void ReloadStats()
 	{
-		var cache = Browse.BrowseCatalog[index];
-		if (index != -1)
+		var cache = Browse.BrowseCatalog[Index];
+		if (Index != -1)
 		{
 			NoteCountTotal = BeatmapList[BeatmapIndex].count_circles + BeatmapList[BeatmapIndex].count_sliders;
 			double lastUpdatedSeconds = cache.last_updated / 1000; // example epoch timestamp

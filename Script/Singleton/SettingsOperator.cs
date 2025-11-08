@@ -258,7 +258,7 @@ public partial class SettingsOperator : Node
     }
     public static string Parse_Beatmapfile(string filename, int SetID = 0)
     {
-        var legend = new BeatmapLegend { SetID = SetID };
+        var legend = new BeatmapLegend {ID = Beatmaps.Count , SetID = SetID };
         using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
         var lines = file.GetAsText().Split("\n");
         bool inHitObjects = false;

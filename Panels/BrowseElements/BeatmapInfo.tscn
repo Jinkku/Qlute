@@ -1,9 +1,10 @@
-[gd_scene load_steps=21 format=3 uid="uid://ddoobud01aev"]
+[gd_scene load_steps=22 format=3 uid="uid://ddoobud01aev"]
 
 [ext_resource type="Texture2D" uid="uid://fgbtqxkt8lm" path="res://DefaultWallpaper/attack.png" id="1_8h4jc"]
 [ext_resource type="Script" uid="uid://csn1oydkld5la" path="res://Script/Browse/BeatmapInfo.cs" id="1_60ltk"]
 [ext_resource type="Texture2D" uid="uid://46vt33hasgbd" path="res://Resources/System/TopPanel/Download.svg" id="1_on5xq"]
 [ext_resource type="Texture2D" uid="uid://dhtk4mxqohiru" path="res://Resources/System/Heart.svg" id="2_8h4jc"]
+[ext_resource type="Texture2D" uid="uid://cix7tpqhp0qkf" path="res://Resources/System/Browse/playidle.png" id="3_5idjq"]
 [ext_resource type="Texture2D" uid="uid://ctnqrw3he2egt" path="res://Resources/System/backicon.svg" id="4_osl5l"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_at4uj"]
@@ -194,7 +195,21 @@ custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_constants/separation = 10
 
+[node name="Play" type="Button" parent="Pill/Padding/Info/Columns/Info/HBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_constants/icon_max_width = 26
+theme_override_styles/normal = SubResource("StyleBoxFlat_at4uj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5idjq")
+theme_override_styles/hover = SubResource("StyleBoxFlat_60ltk")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_eeb1h")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_osl5l")
+text = "Play"
+icon = ExtResource("3_5idjq")
+expand_icon = true
+
 [node name="Download" type="Button" parent="Pill/Padding/Info/Columns/Info/HBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_constants/icon_max_width = 26
 theme_override_styles/normal = SubResource("StyleBoxFlat_at4uj")
@@ -206,6 +221,7 @@ text = "Download"
 icon = ExtResource("1_on5xq")
 
 [node name="Favorite" type="Button" parent="Pill/Padding/Info/Columns/Info/HBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_constants/icon_max_width = 26
 theme_override_styles/normal = SubResource("StyleBoxFlat_at4uj")
@@ -390,5 +406,6 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_60ltk")
 text = "  Back"
 icon = ExtResource("4_osl5l")
 
+[connection signal="pressed" from="Pill/Padding/Info/Columns/Info/HBoxContainer/Play" to="." method="_play"]
 [connection signal="pressed" from="Pill/Padding/Info/Columns/Info/HBoxContainer/Download" to="." method="_download"]
 [connection signal="pressed" from="Back" to="." method="_close"]

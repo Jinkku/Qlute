@@ -13,10 +13,10 @@ public partial class MusicPreview : TextureButton
 	private TextureProgressBar MusicProgress;
 	public override void _Ready()
 	{
-		var Root = GetNode<Button>("../../");
-		if (Root.HasMeta("beatmap"))
+		var Root = GetNode<CardFunctions>("../../");
+		if (Root.BeatmapID != -1)
 		{
-			PreviewID = (int)Root.GetMeta("beatmap");
+			PreviewID = Root.BeatmapID;
 		}
 		SelfModulate = Idlecolour;
 		audioPath = GetMeta("preview_url").ToString();

@@ -268,23 +268,20 @@ public static async Task
 				List<CatalogBeatmapInfoLegend> beatmaps = (List<CatalogBeatmapInfoLegend>)line.beatmaps.OrderBy(d => d.count_circles + d.count_sliders).ToList();
 				line.beatmaps = beatmaps;
 
-				var Element = GD.Load<PackedScene>("res://Panels/BrowseElements/Card.tscn").Instantiate().GetNode<Button>(".");
-				CardSizeX = (int)Element.Size.X + 5;
-				Element.GetNode<Label>("Info/SongTitle").Text = line.title;
-				Element.GetNode<Label>("Info/SongArtist").Text = line.artist;
-				Element.GetNode<Label>("Info/SongMapper").Text = "mapped by " + line.creator;
-				Element.GetNode<PanelContainer>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor").SelfModulate = ConvertTypetoColor(line.beatmaps.First().ranked);
-				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor/RankText").Text = ConvertTypetoRank(line.beatmaps.First().ranked);
-				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor/RankText").TooltipText = line.beatmaps.First().difficulty_rating.ToString("0.00");
-
-				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvStartColor/LvStartText").Text = "Lv. " + SettingsOperator.GetLevelRating(line.beatmaps.First().count_circles + line.beatmaps.First().count_sliders, line.beatmaps.First().total_length).ToString("N0");
-				Element.GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvEndColor/LvEndText").Text = "Lv. " + SettingsOperator.GetLevelRating(line.beatmaps.Last().count_circles + line.beatmaps.Last().count_sliders, line.beatmaps.Last().total_length).ToString("N0");
-				Element.SetMeta("pic", line.covers.card);
-				Element.SetMeta("beatmap", line.id);
-				Element.SetMeta("index", index);
-				Element.GetNode<TextureButton>("SongBackgroundPreview/Playbutton").SetMeta("preview_url", "https:" + line.preview_url);
-				Element.Modulate = new Color(1f, 1f, 1f, 0f);
+				var Element = GD.Load<PackedScene>("res://Panels/BrowseElements/Card.tscn").Instantiate().GetNode<CardFunctions>(".");
+				Element.GetNode<TextureButton>("SongBackgroundPreview/Playbutton").SetMeta("preview_url", "https:" + line.preview_url);Element.BannerPicture = line.covers.card;
+				Element.BeatmapID = line.id;
+				Element.Index = index;
 				GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps").AddChild(Element);
+				CardSizeX = (int)Element.Size.X + 5;
+				Element.Title.Text = line.title;
+				Element.Artist.Text = line.artist;
+				Element.Mapper.Text = "mapped by " + line.creator;
+				Element.RankColour.SelfModulate = ConvertTypetoColor(line.beatmaps.First().ranked);
+				Element.RankText.Text = ConvertTypetoRank(line.beatmaps.First().ranked);
+				Element.LvStart.Text = "Lv. " + SettingsOperator.GetLevelRating(line.beatmaps.First().count_circles + line.beatmaps.First().count_sliders, line.beatmaps.First().total_length).ToString("N0");
+				Element.LvEnd.Text = "Lv. " + SettingsOperator.GetLevelRating(line.beatmaps.Last().count_circles + line.beatmaps.Last().count_sliders, line.beatmaps.Last().total_length).ToString("N0");
+				Element.Modulate = new Color(1f, 1f, 1f, 0f);
 				index++;
 			}
 		}

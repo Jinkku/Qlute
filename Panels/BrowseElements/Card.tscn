@@ -356,7 +356,6 @@ tint_progress = Color(0.580627, 0.691027, 0.984375, 1)
 [connection signal="mouse_entered" from="DownloadBar/VBoxContainer/Play" to="." method="_buttoncard"]
 [connection signal="mouse_exited" from="DownloadBar/VBoxContainer/Play" to="." method="_buttoncardup"]
 [connection signal="pressed" from="DownloadBar/VBoxContainer/Play" to="." method="_play"]
-[connection signal="pressed" from="DownloadBar/VBoxContainer/Play" to="." method="_setid"]
 [connection signal="mouse_entered" from="DownloadBar/VBoxContainer/Favorite" to="." method="_buttoncard"]
 [connection signal="mouse_exited" from="DownloadBar/VBoxContainer/Favorite" to="." method="_buttoncardup"]
 [connection signal="pressed" from="DownloadBar/VBoxContainer/Favorite" to="." method="_favorite"]
