@@ -19,7 +19,10 @@ public partial class MusicPreview : TextureButton
 			PreviewID = Root.BeatmapID;
 		}
 		SelfModulate = Idlecolour;
-		audioPath = GetMeta("preview_url").ToString();
+		if (audioPath == null)
+		{
+			SetProcess(false);
+		}
 		MusicProgress = GetNode<TextureProgressBar>("SongProgress");
 	}
 	private void AnimationButton(Color colour)
@@ -36,7 +39,7 @@ public partial class MusicPreview : TextureButton
 	}
 	private HttpRequest AudioPreviewData { get; set; }
 	HttpRequest downloadRequest { get; set; }
-	string audioPath { get; set; }
+	public string audioPath { get; set; }
 	string fileName { get; set; }
 	private bool Loaded { get; set; } = false;
 	private void _PlayPreview(long result, long responseCode, string[] headers, byte[] body)

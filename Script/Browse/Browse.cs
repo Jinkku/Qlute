@@ -269,7 +269,8 @@ public static async Task
 				line.beatmaps = beatmaps;
 
 				var Element = GD.Load<PackedScene>("res://Panels/BrowseElements/Card.tscn").Instantiate().GetNode<CardFunctions>(".");
-				Element.GetNode<TextureButton>("SongBackgroundPreview/Playbutton").SetMeta("preview_url", "https:" + line.preview_url);Element.BannerPicture = line.covers.card;
+				Element.GetNode<MusicPreview>("SongBackgroundPreview/Playbutton").audioPath = "https:" + line.preview_url;
+				Element.BannerPicture = line.covers.card;
 				Element.BeatmapID = line.id;
 				Element.Index = index;
 				GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps").AddChild(Element);

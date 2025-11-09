@@ -2,7 +2,6 @@ using Godot;
 using System;
 using System.IO;
 using System.Linq;
-[Tool]
 public partial class CardFunctions : Button
 {
     public  SettingsOperator SettingsOperator { get; set; }
