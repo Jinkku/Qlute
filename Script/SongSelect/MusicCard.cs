@@ -12,10 +12,13 @@ public partial class MusicCard : Button
 	public TextureRect Cover { get; set; }
 	public Timer Wait { get; set; }
 	public TextureRect Preview { get; set; }
-	private int SongID { get; set; }
+	[Export]
+	public int SongID { get; set; } = -1;
+	[Export]
+	public int ButtonID { get; set; } = -1;
 	public int waitt = 0;
 	private bool isLoadingImage = false;
-	private string BackgroundPath = null;
+	public string BackgroundPath = null;
 	private Texture2D texture { get; set; }
 	private RichTextLabel SongInfo { get; set; }
 	private Label Version { get; set; }
@@ -126,10 +129,9 @@ public partial class MusicCard : Button
 		SongInfo = GetNode<RichTextLabel>("MarginContainer/VBoxContainer/SongInfo");
 		Version = GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Version");
 
-		if (!self.HasMeta("SongID"))
-			self.SetMeta("SongID", 0);
+		if (SongID == -1)
+			SongID = 0;
 
-		SongID = (int)GetMeta("SongID");
 		Beatmap = SettingsOperator.Beatmaps[SongID];
 
 		ReloadInfo(force: true);
@@ -138,9 +140,8 @@ public partial class MusicCard : Button
 
 
 
-		if (self.HasMeta("background"))
+		if (BackgroundPath != null)
 		{
-			BackgroundPath = self.GetMeta("background").ToString();
 			Preview.Modulate = new Color(0f, 0f, 0f, 1f);
 			LoadExternalImage(BackgroundPath);
 		}
@@ -180,7 +181,7 @@ public partial class MusicCard : Button
 	private void _highlight() => AnimationButton(highlightcolour);
 	private void _focus()
 	{
-		SettingsOperator.SongIDHighlighted = (int)self.GetMeta("SongID");
+		SettingsOperator.SongIDHighlighted = SongID;
 		AnimationButton(Focuscolour, true);
 	}
 	private void _unfocus()
@@ -200,7 +201,7 @@ public partial class MusicCard : Button
 	public static bool Connection_Button = false;
 	public bool Checkid()
 	{
-		return SettingsOperator.SongID.ToString().Equals(self.GetMeta("SongID").ToString());
+		return SettingsOperator.SongID.ToString().Equals(SongID.ToString());
 	}
 
 	public override void _PhysicsProcess(double delta)

@@ -85,21 +85,21 @@ public partial class SongSelect : Control
 	///<summary>
 	/// Initiates Music Card then returns into a button.
 	/// </summary>
-	private Button InitiateMusicCard()
+	private MusicCard InitiateMusicCard()
 	{
-		return (Button)musiccardtemplate.Instantiate();
+		return (MusicCard)musiccardtemplate.Instantiate();
 	}
 
 	public void AddSongList(int id)
 	{
-		Button button = InitiateMusicCard();
+		MusicCard button = InitiateMusicCard();
 		var Rating = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Rating");
 		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Version");
 		button.Position = new Vector2(0, startposition + (CardSize.Y * id));
 		button.Name = id.ToString();
 		button.ClipText = true;
-		button.SetMeta("background", SettingsOperator.Beatmaps[id].Path + SettingsOperator.Beatmaps[id].Background);
-		button.SetMeta("SongID", id);
+		button.BackgroundPath = SettingsOperator.Beatmaps[id].Path + SettingsOperator.Beatmaps[id].Background;
+		button.SongID = id;
 		GetNode<Control>("SongPanel").AddChild(button);
 		SongEntry.Add(button);
 	}

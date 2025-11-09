@@ -105,7 +105,7 @@ colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1)
 gradient = SubResource("Gradient_tgpg0")
 
 [node name="MusicCard" type="Button"]
-self_modulate = Color(1, 1, 1, 0.541176)
+self_modulate = Color(0.2, 0.2, 0.2, 0.5)
 clip_contents = true
 custom_minimum_size = Vector2(400, 115)
 offset_right = 350.0

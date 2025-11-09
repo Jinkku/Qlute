@@ -6,7 +6,7 @@ public partial class RatingCard : Label
 	private int SongID { get; set; }
     public override void _Ready()
     {
-		SongID = (int)GetNode<Button>("../../../../../").GetMeta("SongID");
+		SongID = (int)GetNode<MusicCard>("../../../../../").SongID;
     }
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
