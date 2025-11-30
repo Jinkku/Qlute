@@ -260,6 +260,7 @@ public static class Replay
                 using var file = Godot.FileAccess.Open(FilePath, Godot.FileAccess.ModeFlags.Write);
                 file.StoreString(cache);
                 cache = "";
+                Parse(FilePath);
                 GD.Print("[Qlute] Completed Successfully!");
             }
             catch (Exception err)
