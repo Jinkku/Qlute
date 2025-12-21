@@ -54,6 +54,7 @@ public partial class ResultScreenv2 : Control
 	private Label RankLead { get; set; }
 	private Label Username { get; set; }
 	private Label Achieved { get; set; }
+	private RankLeaderboard CurrentLead {get;set;}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -97,16 +98,35 @@ public partial class ResultScreenv2 : Control
 		RArtist = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/Artist");
 		RMapper = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/mapped");
 		//Leaderboard
+		CurrentLead = GetNode<RankLeaderboard>("Ranking/Ranking/VBoxContainer/CurrentLead");
 
+		var ranknum = 1;
+		var pointold = 0;
 		foreach (LeaderboardEntry entry in ApiOperator.LeaderboardList)
 		{
-			if (entry.Active)
+			if (entry.points > pointold && entry.username == SettingsOperator.Gameplaycfg.Username)
 			{
-				
-				break;
+				CurrentLead.Rank = ranknum;
+				CurrentLead.PlayerName = entry.username;
+				CurrentLead.Accuracy = entry.Accuracy;
+				CurrentLead.Combo = entry.combo;
+				CurrentLead.Perfect = entry.MAX;
+				CurrentLead.Great = entry.GOOD;
+				CurrentLead.Meh = entry.MEH;
+				CurrentLead.Miss = entry.BAD;
+				CurrentLead.Time = entry.time;
+				CurrentLead.Score = entry.score;
+				CurrentLead.pp = (int)entry.points;
+				pointold = (int)entry.points;
 			}
+			else
+			{
+				ranknum++;
+			}
+			if (entry.Active) 
+				break;
 		}
-		
+		CurrentLead._Ready();
 		// Panels
 
 		Details = GetNode<PanelContainer>("MainScreen/Details");

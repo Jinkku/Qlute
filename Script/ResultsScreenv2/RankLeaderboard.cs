@@ -69,7 +69,6 @@ public partial class RankLeaderboard : PanelContainer
 		TimeLabel.Text = SettingsOperator.ParseTimeEpoch(Time);
 		ComboLabel.Text = $"{Combo:N0}x";
 		ModsList.ExternalMods = Mods;
-		SetProcess(false);
 
 		
 	}

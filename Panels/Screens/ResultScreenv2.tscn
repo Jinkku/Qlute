@@ -768,7 +768,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "mapped by Tappa"
 
-[node name="RankLeaderboard" parent="Ranking/Ranking/VBoxContainer" instance=ExtResource("10_8y25b")]
+[node name="CurrentLead" parent="Ranking/Ranking/VBoxContainer" instance=ExtResource("10_8y25b")]
 layout_mode = 2
 
 [node name="Legend" type="PanelContainer" parent="Ranking/Ranking/VBoxContainer"]
