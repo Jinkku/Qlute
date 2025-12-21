@@ -36,7 +36,7 @@ public partial class CardFunctions : Button
             Title = GetNode<Label>("Info/SongTitle");
             Artist = GetNode<Label>("Info/SongArtist");
             Mapper = GetNode<Label>("Info/SongMapper");
-            Release = GetNode<Label>("Info/SongTitle");
+            Release = GetNode<Label>("Info/SongReleaseDate");
             RankColour = GetNode<PanelContainer>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor");
             RankText = GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/RankColor/RankText");
             LvStart = GetNode<Label>("InfoBar-Base/InfoBar-Space/InfoBar/LvStartColor/LvStartText");
@@ -44,6 +44,13 @@ public partial class CardFunctions : Button
             Existant = GetNode<PanelContainer>("Existed");
             GoShortcut = GetNode<Button>("DownloadBar/VBoxContainer/Play");
             Download = GetNode<Button>("DownloadBar/VBoxContainer/Download");
+            double lastUpdatedSeconds = Browse.BrowseCatalog[Index].last_updated / 1000; // example epoch timestamp
+            DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            DateTime date = epoch.AddSeconds(lastUpdatedSeconds);
+            string formatted = $"{Extras.GetDayWithSuffix(date.Day)} {date:MMM yyyy}";
+            Release.Text = $"submitted at {formatted}";
+            
+            
             Existance();
             
             if (BannerPicture != null)
