@@ -4,12 +4,27 @@ using System.Collections.Generic;
 
 public partial class ModsResultsScreenShowcase : HBoxContainer
 {
-	private List<string> _mods = new List<string>();
+	[Export]
+	public bool External { get; set; }
 
+	[Export] public string ExternalMods { get; set; } = "";
+	private List<string> ModsL { get; set; }
+	private List<string> _mods = new List<string>();
+	[Export] public bool IsExternalLoaded { get; set; }
+	
 	private void reset()
 	{
-		
-		foreach (string mod in ModsOperator.ModsEnabled)
+		if (External && ExternalMods != null)
+		{
+			ModsL = ModsOperator.ParseModAlias(ExternalMods);
+			IsExternalLoaded = true;
+		}
+		else
+		{
+			ModsL = ModsOperator.ModsEnabled;
+			IsExternalLoaded = false;
+		}
+		foreach (string mod in ModsL)
 		{
 			if (!_mods.Contains(mod))
 			{
@@ -22,7 +37,7 @@ public partial class ModsResultsScreenShowcase : HBoxContainer
 		}
 		foreach (var mod in GetChildren())
 		{
-			if (!ModsOperator.ModsEnabled.Contains(mod.GetMeta("ModName").ToString()))
+			if (!ModsL.Contains(mod.GetMeta("ModName").ToString()))
 			{
 				mod.QueueFree();
 				_mods.Remove(mod.GetMeta("ModName").ToString());

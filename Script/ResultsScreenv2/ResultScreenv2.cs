@@ -46,6 +46,14 @@ public partial class ResultScreenv2 : Control
 	private float Additional2Pos { get; set; }
 	private float RankEmblemPos { get; set; }
 	private float AnimationSpeed = 0.5f;
+	private Control RankingP { get; set; }
+	private TextureRect Banner { get; set; }
+	private Label RTitle { get; set; }
+	private Label RArtist { get; set; }
+	private Label RMapper { get; set; }
+	private Label RankLead { get; set; }
+	private Label Username { get; set; }
+	private Label Achieved { get; set; }
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -53,6 +61,10 @@ public partial class ResultScreenv2 : Control
 		Tween = CreateTween();
 		Tween.SetParallel(true);
 		
+		
+		Username = GetNode<Label>("MainScreen/Additional2/Card/Column/Row/Username");
+		Achieved = GetNode<Label>("MainScreen/Additional2/Card/Column/Row/Achieved");
+		Username.Text = SettingsOperator.Gameplaycfg.Username; 
 		
 		Title = GetNode<Label>("MainScreen/Details/Details/Title");
 		Artist = GetNode<Label>("MainScreen/Details/Details/Artist");
@@ -74,6 +86,27 @@ public partial class ResultScreenv2 : Control
 		WatchReplayButton = GetNode<Button>("BottomBar/HBoxContainer/WatchReplay");
 		RankGainPanel = GetNode<PanelContainer>("MainScreen/Additional/Rankgain");
 		PerfectEmblem = GetNode<TextureRect>("MainScreen/ScoreCount/HBoxContainer/Perfect");
+		RankLead = GetNode<Label>("MainScreen/Additional2/Card/Column/Number/RankLead");
+		RankLead.Text = $"#{SettingsOperator.Gameplaycfg.Rank:N0}";
+		// Ranking Panel
+		RankingP = GetNode<Control>("Ranking");
+		RankingP.Visible = false;
+		Banner = GetNode<TextureRect>("Ranking/Ranking/VBoxContainer/Banner/Banner");
+		Banner.Texture = (Texture2D)SettingsOperator.Sessioncfg["background"];
+		RTitle = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/Title");
+		RArtist = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/Artist");
+		RMapper = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/mapped");
+		//Leaderboard
+
+		foreach (LeaderboardEntry entry in ApiOperator.LeaderboardList)
+		{
+			if (entry.Active)
+			{
+				
+				break;
+			}
+		}
+		
 		// Panels
 
 		Details = GetNode<PanelContainer>("MainScreen/Details");
@@ -177,6 +210,11 @@ public partial class ResultScreenv2 : Control
 			Rank.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/ResultsScreen/Ranks/D.png");
 		}
 	}
+
+	private void Ranking()
+	{
+		RankingP.Visible = !RankingP.Visible;
+	}
 	public void Back()
 	{
 		SettingsOperator.ResetRank();
@@ -227,6 +265,9 @@ public partial class ResultScreenv2 : Control
 		Mapper.Text = "mapped by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString();
 		Difficulty.Text = SettingsOperator.Sessioncfg["beatmapdiff"]?.ToString();
 		Level.Text = $"Lv. {SettingsOperator.LevelRating:N0}";
+		RTitle.Text = Title.Text;
+		RArtist.Text = Artist.Text;
+		RMapper.Text = Mapper.Text;
 		if (Tween != null && Tween.IsRunning())
 		{
 			pp.Text = $"{ppValue:N0}pp";
@@ -237,6 +278,7 @@ public partial class ResultScreenv2 : Control
 			Miss.Text = $"{MissValue:N0}";
 			AvgHit.Text = $"{AvgHitValue:N0}ms";
 			Accuracy.Text = $"{AccuracyValue:P2}";
+			Combo.Text = $"{ComboValue:N0}x";
 			Combo.Text = $"{ComboValue:N0}x";
 		}
 		if (SettingsOperator.UpdatedRank != "#0")

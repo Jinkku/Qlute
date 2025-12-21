@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://di5ewxeoj57jx"]
+[gd_scene load_steps=27 format=3 uid="uid://di5ewxeoj57jx"]
 
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="1_anm4q"]
 [ext_resource type="Script" uid="uid://cuilclotqydk7" path="res://Script/ResultsScreenv2/ResultScreenv2.cs" id="1_x8kcy"]
@@ -11,13 +11,14 @@
 [ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="8_p8vf7"]
 [ext_resource type="Texture2D" uid="uid://fgbtqxkt8lm" path="res://DefaultWallpaper/attack.png" id="9_2qgfu"]
 [ext_resource type="PackedScene" uid="uid://enjjpp7s76ps" path="res://Panels/Overlays/RankLeaderboard.tscn" id="10_8y25b"]
+[ext_resource type="Script" uid="uid://babskjhowme4a" path="res://Script/ResultsScreenv2/LeaderboardInfoResult.cs" id="11_8y25b"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_anm4q"]
 content_margin_left = 20.0
 content_margin_top = 10.0
 content_margin_right = 10.0
 content_margin_bottom = 10.0
-bg_color = Color(0, 0, 0, 0.4509804)
+bg_color = Color(0, 0, 0, 0.70000005)
 skew = Vector2(0.2, 0)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
@@ -57,7 +58,7 @@ content_margin_left = 10.0
 content_margin_top = 10.0
 content_margin_right = 10.0
 content_margin_bottom = 10.0
-bg_color = Color(0, 0, 0, 0.4509804)
+bg_color = Color(0, 0, 0, 0.70000005)
 skew = Vector2(0.2, 0)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
@@ -70,7 +71,7 @@ content_margin_left = 15.0
 content_margin_top = 10.0
 content_margin_right = 15.0
 content_margin_bottom = 10.0
-bg_color = Color(0, 0, 0, 0.4509804)
+bg_color = Color(0, 0, 0, 0.70000005)
 skew = Vector2(0.2, 0)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
@@ -78,7 +79,7 @@ corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6dcqk"]
-bg_color = Color(0, 0, 0, 0.4509804)
+bg_color = Color(0, 0, 0, 0.70000005)
 skew = Vector2(0.2, 0)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
@@ -96,7 +97,7 @@ corner_radius_bottom_left = 15
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8y25b"]
 content_margin_left = 25.0
 texture = ExtResource("4_p8vf7")
-modulate_color = Color(1, 1, 1, 0.45000002)
+modulate_color = Color(1, 1, 1, 0.70000005)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8y25b"]
 content_margin_left = 15.0
@@ -227,7 +228,7 @@ theme_override_constants/separation = 6
 
 [node name="Title" type="Label" parent="MainScreen/Details/Details"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.734375, 0.77996737, 1, 1)
+theme_override_colors/font_color = Color(0.43137255, 0.84705883, 1, 1)
 theme_override_font_sizes/font_size = 24
 text = "Amazing Songs"
 
@@ -500,11 +501,16 @@ text_overrun_behavior = 3
 layout_mode = 2
 alignment = 1
 
+[node name="GuestName" type="LineEdit" parent="MainScreen/Additional2/Card/Column/Row"]
+visible = false
+layout_mode = 2
+placeholder_text = "Enter your name!"
+
 [node name="Username" type="Label" parent="MainScreen/Additional2/Card/Column/Row"]
 layout_mode = 2
-text = "aquapoki"
+text = "Guest"
 
-[node name="Username2" type="Label" parent="MainScreen/Additional2/Card/Column/Row"]
+[node name="Achieved" type="Label" parent="MainScreen/Additional2/Card/Column/Row"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "achieved on 12th Dec 2025"
@@ -576,6 +582,7 @@ texture = ExtResource("7_2qgfu")
 stretch_mode = 5
 
 [node name="MoreInfo" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -728,7 +735,7 @@ layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_7qog1")
 
 [node name="Banner" type="TextureRect" parent="Ranking/Ranking/VBoxContainer/Banner"]
-self_modulate = Color(0.7977378, 0.7977378, 0.7977378, 1)
+self_modulate = Color(0.484375, 0.484375, 0.484375, 1)
 layout_mode = 2
 texture = ExtResource("9_2qgfu")
 expand_mode = 1
@@ -747,6 +754,7 @@ grow_vertical = 2
 
 [node name="Title" type="Label" parent="Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.43137255, 0.84705883, 1, 1)
 theme_override_font_sizes/font_size = 12
 text = "Amazing Songs"
 
@@ -803,6 +811,14 @@ text = "Accuracy"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Label10" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Combo"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Label2" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
@@ -856,46 +872,11 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
+script = ExtResource("11_8y25b")
 
 [node name="Rows" type="VBoxContainer" parent="Ranking/Ranking/VBoxContainer/Leaderboard"]
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="RankLeaderboard" parent="Ranking/Ranking/VBoxContainer/Leaderboard/Rows" instance=ExtResource("10_8y25b")]
-layout_mode = 2
-
-[node name="RankLeaderboard2" parent="Ranking/Ranking/VBoxContainer/Leaderboard/Rows" instance=ExtResource("10_8y25b")]
-layout_mode = 2
-
-[node name="RankLeaderboard3" parent="Ranking/Ranking/VBoxContainer/Leaderboard/Rows" instance=ExtResource("10_8y25b")]
-layout_mode = 2
-
-[node name="RankLeaderboard4" parent="Ranking/Ranking/VBoxContainer/Leaderboard/Rows" instance=ExtResource("10_8y25b")]
-layout_mode = 2
-
-[node name="RankLeaderboard5" parent="Ranking/Ranking/VBoxContainer/Leaderboard/Rows" instance=ExtResource("10_8y25b")]
-layout_mode = 2
-
-[node name="RankLeaderboard6" parent="Ranking/Ranking/VBoxContainer/Leaderboard/Rows" instance=ExtResource("10_8y25b")]
-layout_mode = 2
-
-[node name="RankLeaderboard7" parent="Ranking/Ranking/VBoxContainer/Leaderboard/Rows" instance=ExtResource("10_8y25b")]
-layout_mode = 2
-
-[node name="RankLeaderboard8" parent="Ranking/Ranking/VBoxContainer/Leaderboard/Rows" instance=ExtResource("10_8y25b")]
-layout_mode = 2
-
-[node name="RankLeaderboard9" parent="Ranking/Ranking/VBoxContainer/Leaderboard/Rows" instance=ExtResource("10_8y25b")]
-layout_mode = 2
-
-[node name="RankLeaderboard10" parent="Ranking/Ranking/VBoxContainer/Leaderboard/Rows" instance=ExtResource("10_8y25b")]
-layout_mode = 2
-
-[node name="RankLeaderboard11" parent="Ranking/Ranking/VBoxContainer/Leaderboard/Rows" instance=ExtResource("10_8y25b")]
-layout_mode = 2
-
-[node name="RankLeaderboard12" parent="Ranking/Ranking/VBoxContainer/Leaderboard/Rows" instance=ExtResource("10_8y25b")]
-layout_mode = 2
 
 [node name="BottomBar" type="PanelContainer" parent="."]
 custom_minimum_size = Vector2(0, 50)
@@ -946,7 +927,6 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
 custom_minimum_size = Vector2(148, 0)
 layout_mode = 2
-disabled = true
 script = ExtResource("8_p8vf7")
 FocusColour = Color(0.10253906, 0.5999719, 0.625, 1)
 HighlightColour = Color(0.40267944, 0.696996, 0.79296875, 1)

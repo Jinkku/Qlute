@@ -26,6 +26,13 @@ public partial class Leaderboard : Button
 		SettingsOperator.Gameplaycfg.Score = Info.score;
 		SettingsOperator.Gameplaycfg.MaxCombo = Info.combo;
 		SettingsOperator.Gameplaycfg.pp = Info.points;
+		SettingsOperator.Gameplaycfg.Username = Info.username;
+		if (HasMeta("rank"))
+			SettingsOperator.Gameplaycfg.Rank = (int)GetMeta("rank");
+		else
+		{
+			SettingsOperator.Gameplaycfg.Rank = 1;
+		}
 		SettingsOperator.Gameplaycfg.Accuracy = Gameplay.ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 		if (Info.FilePath != "")
 		{

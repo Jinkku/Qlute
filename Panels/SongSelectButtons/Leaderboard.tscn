@@ -4,10 +4,8 @@
 [ext_resource type="Script" uid="uid://bp6h74gm3lwau" path="res://Script/SongSelect/Leaderboard.cs" id="1_ysfsi"]
 [ext_resource type="Script" uid="uid://r1nchdkq185" path="res://Script/SongSelect/LeaderboardRank.cs" id="2_wkrig"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ysfsi"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wkrig"]
-bg_color = Color(0.4, 0.4, 0.4, 0.8)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wbm6w"]
+bg_color = Color(0.2, 0.2, 0.2, 0.8)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
@@ -20,12 +18,14 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wbm6w"]
-bg_color = Color(0.2, 0.2, 0.2, 0.8)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wkrig"]
+bg_color = Color(0.4, 0.4, 0.4, 0.8)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ysfsi"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wkrig"]
 content_margin_left = 3.0
@@ -69,10 +69,10 @@ custom_minimum_size = Vector2(330, 60)
 offset_left = 5.0
 offset_right = 335.0
 offset_bottom = 60.0
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ysfsi")
-theme_override_styles/hover = SubResource("StyleBoxFlat_wkrig")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_1bkjm")
 theme_override_styles/normal = SubResource("StyleBoxFlat_wbm6w")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_1bkjm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_wkrig")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ysfsi")
 script = ExtResource("1_ysfsi")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]

@@ -365,6 +365,19 @@ public partial class SettingsOperator : Node
         return $"{legend.Artist} - {legend.Title} from {legend.Mapper}";
     }
 
+    /// <summary>
+    /// Parse Epoch time to string ex. "Dec 12th, 2025"
+    /// </summary>
+    /// <param name="time"></param>
+    /// <returns></returns>
+    public static string ParseTimeEpoch(long time)
+    {
+        double lastUpdatedSeconds = time;
+        DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        DateTime date = epoch.AddSeconds(lastUpdatedSeconds);
+        string formatted = $"{Extras.GetDayWithSuffix(date.Day)} {date:MMM yyyy}";
+        return formatted;
+    }
     public static void Addms(float ms)
     {
         AllMiliSecondsFromBeatmap += ms;
@@ -447,6 +460,7 @@ public partial class SettingsOperator : Node
         public static int Avgms { get; set; }
         public static float BeatmapAccuracy { get; set; } = 1;
         public static int Rank { get; set; }
+        public static string Username { get; set; } = "Guest";
     }
     public static int ranked_points { get; set; }
 
