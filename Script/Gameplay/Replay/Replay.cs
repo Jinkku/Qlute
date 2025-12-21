@@ -24,6 +24,7 @@ public class ReplayInfo
     public int MaxCombo { get; set; } = 0;
     public float Avgms { get; set; } = 0;
     public string Mods { get; set; } = "";
+    public double Points { get; set; } = 0;
     public string Filepath { get; set; }
 }
 /// <summary>
@@ -75,6 +76,7 @@ public static class Replay
                 MEH = Entry.Meh,
                 BAD = Entry.Bad,
                 mods = Entry.Mods,
+                points = Entry.Points,
                 time = Time,
                 FilePath = Entry.Filepath
             });
@@ -103,9 +105,10 @@ public static class Replay
                 var Great = 0;
                 var Meh = 0;
                 var Bad = 0;
-                var Accuracy = 100.00f;
+                var Accuracy = 1.00f;
                 var MaxCombo = 0;
                 var AverageMs = 0.0f;
+                double Points = 0;
                 var Mods = "";
                 foreach (string data in cache)
                 {
@@ -167,6 +170,10 @@ public static class Replay
                         {
                             Mods = data.Replace("#Mods: ", "");
                         }
+                        else if (data.StartsWith("#Points: "))
+                        {
+                            Points = double.Parse(data.Replace("#Points: ", ""));
+                        }
                     }
                     else
                     {
@@ -187,6 +194,7 @@ public static class Replay
                             MaxCombo = MaxCombo,
                             Avgms = AverageMs,
                             Mods = Mods,
+                            Points = Points,
                             Filepath = file
                         });
                         break;
@@ -247,10 +255,11 @@ public static class Replay
                 cache += $"#Great: {SettingsOperator.Gameplaycfg.Great}\n";
                 cache += $"#Meh: {SettingsOperator.Gameplaycfg.Meh}\n";
                 cache += $"#Bad: {SettingsOperator.Gameplaycfg.Bad}\n";
-                cache += $"#Accuracy: {SettingsOperator.Gameplaycfg.Accuracy * 100.00}\n";
+                cache += $"#Accuracy: {SettingsOperator.Gameplaycfg.Accuracy}\n";
                 cache += $"#Max Combo: {SettingsOperator.Gameplaycfg.MaxCombo}\n";
                 cache += $"#Average ms: {SettingsOperator.Gameplaycfg.ms}\n";
                 cache += $"#Mods: {ModsOperator.GetModAlias()}\n";
+                cache += $"#Points: {SettingsOperator.Gameplaycfg.pp}\n";
                 cache += $"#Seed: {Gameplay.seed}\n";
                 foreach (ReplayLegend entry in ReplayCache)
                 {

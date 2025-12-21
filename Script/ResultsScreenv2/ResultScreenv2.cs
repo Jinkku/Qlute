@@ -56,11 +56,112 @@ public partial class ResultScreenv2 : Control
 	private Label Achieved { get; set; }
 	private RankLeaderboard CurrentLead {get;set;}
 
+	private void AnimationMode(int mode)
+	{
+		Tween?.Kill();
+		Tween = CreateTween();
+		Tween.SetParallel(true);
+		if (mode == 0)
+		{	
+			Details.Position = new Vector2( Details.Position.X - Details.Size.X, Details.Position.Y);
+			Details.Modulate = new Color(0f, 0f, 0f, 0f);
+			ScoreCount.Position = new Vector2( ScoreCount.Position.X - ScoreCount.Size.X, ScoreCount.Position.Y);
+			ScoreCount.Modulate = new Color(0f, 0f, 0f, 0f);
+			HitCount.Position = new Vector2( HitCount.Position.X - HitCount.Size.X, HitCount.Position.Y);
+			HitCount.Modulate = new Color(0f, 0f, 0f, 0f);
+			Additional.Position = new Vector2( Additional.Position.X - Additional.Size.X, Additional.Position.Y);
+			Additional.Modulate = new Color(0f, 0f, 0f, 0f);
+			Additional2.Position = new Vector2( Additional2.Position.X - Additional2.Size.X, Additional2.Position.Y);
+			Additional2.Modulate = new Color(0f, 0f, 0f, 0f);
+			RankEmblem.Position = new Vector2( RankEmblem.Position.X + RankEmblem.Size.X, RankEmblem.Position.Y);
+			RankEmblem.Modulate = new Color(0f, 0f, 0f, 0f);
+			
+			AccuracyProgress.Value = 0;
+			Rank.SelfModulate = new Color(1f, 1f, 1f, 0f);
+			Rank.PivotOffset = Rank.Size / 2;
+			Rank.Scale = new Vector2(1.2f, 1.2f);
+			Tween.SetTrans(Tween.TransitionType.Cubic);
+			Tween.SetEase(Tween.EaseType.Out);
+			Tween.TweenProperty(Details, "position:x", 0,AnimationSpeed);
+			Tween.TweenProperty(Details, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
+			Tween.TweenProperty(ScoreCount, "position:x", 0,AnimationSpeed);
+			Tween.TweenProperty(ScoreCount, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
+			Tween.TweenProperty(HitCount, "position:x", HitCountPos,AnimationSpeed);
+			Tween.TweenProperty(HitCount, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
+			Tween.TweenProperty(Additional, "position:x", AdditionalPos,AnimationSpeed);
+			Tween.TweenProperty(Additional, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
+			Tween.TweenProperty(Additional2, "position:x", Additional2Pos,AnimationSpeed);
+			Tween.TweenProperty(Additional2, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
+			Tween.TweenProperty(RankEmblem, "position:x", RankEmblemPos,AnimationSpeed);
+			Tween.TweenProperty(RankEmblem, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
+			
+			Tween.TweenProperty(this, "ScoreValue", SettingsOperator.Gameplaycfg.Score,1);
+			Tween.TweenProperty(AccuracyProgress, "value", SettingsOperator.Gameplaycfg.Accuracy * 100,1);
+			Tween.TweenProperty(this, "AccuracyValue", SettingsOperator.Gameplaycfg.Accuracy,1);
+			Tween.TweenProperty(this, "PerfectValue", SettingsOperator.Gameplaycfg.Max,1);
+			Tween.TweenProperty(this, "GreatValue", SettingsOperator.Gameplaycfg.Great,1);
+			Tween.TweenProperty(this, "MehValue", SettingsOperator.Gameplaycfg.Meh,1);
+			Tween.TweenProperty(this, "MissValue", SettingsOperator.Gameplaycfg.Bad,1);
+			Tween.TweenProperty(this, "AvgHitValue", SettingsOperator.Gameplaycfg.ms,1);
+			Tween.TweenProperty(this, "ComboValue", SettingsOperator.Gameplaycfg.MaxCombo,1);
+			Tween.TweenProperty(this, "ppValue", SettingsOperator.Gameplaycfg.pp,1);
+			Tween.TweenProperty(Rank, "self_modulate:a", 1f,0.2).SetDelay(1.1);
+			Tween.TweenProperty(Rank, "scale", new Vector2(1f, 1f),0.2f).SetDelay(1.1);
+			Tween.TweenProperty(PerfectEmblem, "self_modulate", new Color(1f,1f,1f, 1f),0.2f).SetDelay(1.1);
+		}	else if (mode == 1)
+		{
+			Details.Position = new Vector2(0, Details.Position.Y);
+			Details.Modulate = new Color(1f, 1f, 1f, 1f);
+			ScoreCount.Position = new Vector2( 0, ScoreCount.Position.Y);
+			ScoreCount.Modulate = new Color(1f, 1f, 1f, 1f);
+			HitCount.Position = new Vector2( 0, HitCount.Position.Y);
+			HitCount.Modulate = new Color(1f, 1f, 1f, 1f);
+			Additional.Position = new Vector2( AdditionalPos, Additional.Position.Y);
+			Additional.Modulate = new Color(1f, 1f, 1f, 1f);
+			Additional2.Position = new Vector2( Additional2Pos, Additional2.Position.Y);
+			Additional2.Modulate = new Color(1f, 1f, 1f, 1f);
+			RankEmblem.Position = new Vector2( RankEmblemPos, RankEmblem.Position.Y);
+			RankEmblem.Modulate = new Color(1f, 1f, 1f, 1f);
+			
+			AccuracyProgress.Value = 0;
+			Rank.SelfModulate = new Color(1f, 1f, 1f, 0f);
+			Rank.PivotOffset = Rank.Size / 2;
+			Rank.Scale = new Vector2(1.2f, 1.2f);
+			Tween.SetTrans(Tween.TransitionType.Cubic);
+			Tween.SetEase(Tween.EaseType.Out);
+			Tween.TweenProperty(Details, "position:x", Details.Position.X - Details.Size.X,AnimationSpeed);
+			Tween.TweenProperty(Details, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
+			Tween.TweenProperty(ScoreCount, "position:x", ScoreCount.Position.X - ScoreCount.Size.X,AnimationSpeed);
+			Tween.TweenProperty(ScoreCount, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
+			Tween.TweenProperty(HitCount, "position:x", HitCountPos - HitCount.Size.X,AnimationSpeed);
+			Tween.TweenProperty(HitCount, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
+			Tween.TweenProperty(Additional, "position:x", AdditionalPos - Additional.Size.X,AnimationSpeed);
+			Tween.TweenProperty(Additional, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
+			Tween.TweenProperty(Additional2, "position:x", Additional2Pos - Additional2.Size.X,AnimationSpeed);
+			Tween.TweenProperty(Additional2, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
+			Tween.TweenProperty(RankEmblem, "position:x", RankEmblemPos + RankEmblem.Size.X,AnimationSpeed);
+			Tween.TweenProperty(RankEmblem, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
+			
+			Tween.TweenProperty(this, "ScoreValue", SettingsOperator.Gameplaycfg.Score,1);
+			Tween.TweenProperty(AccuracyProgress, "value", SettingsOperator.Gameplaycfg.Accuracy * 100,1);
+			Tween.TweenProperty(this, "AccuracyValue", SettingsOperator.Gameplaycfg.Accuracy,1);
+			Tween.TweenProperty(this, "PerfectValue", SettingsOperator.Gameplaycfg.Max,1);
+			Tween.TweenProperty(this, "GreatValue", SettingsOperator.Gameplaycfg.Great,1);
+			Tween.TweenProperty(this, "MehValue", SettingsOperator.Gameplaycfg.Meh,1);
+			Tween.TweenProperty(this, "MissValue", SettingsOperator.Gameplaycfg.Bad,1);
+			Tween.TweenProperty(this, "AvgHitValue", SettingsOperator.Gameplaycfg.ms,1);
+			Tween.TweenProperty(this, "ComboValue", SettingsOperator.Gameplaycfg.MaxCombo,1);
+			Tween.TweenProperty(this, "ppValue", SettingsOperator.Gameplaycfg.pp,1);
+			Tween.TweenProperty(Rank, "self_modulate:a", 1f,0.2).SetDelay(1.1);
+			Tween.TweenProperty(Rank, "scale", new Vector2(1f, 1f),0.2f).SetDelay(1.1);
+			Tween.TweenProperty(PerfectEmblem, "self_modulate", new Color(1f,1f,1f, 1f),0.2f).SetDelay(1.1);
+			
+		}
+	}
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		Tween = CreateTween();
-		Tween.SetParallel(true);
 		
 		
 		Username = GetNode<Label>("MainScreen/Additional2/Card/Column/Row/Username");
@@ -101,7 +202,7 @@ public partial class ResultScreenv2 : Control
 		CurrentLead = GetNode<RankLeaderboard>("Ranking/Ranking/VBoxContainer/CurrentLead");
 
 		var ranknum = 1;
-		var pointold = 0;
+		var pointold = -1;
 		foreach (LeaderboardEntry entry in ApiOperator.LeaderboardList)
 		{
 			if (entry.points > pointold && entry.username == SettingsOperator.Gameplaycfg.Username)
@@ -159,52 +260,7 @@ public partial class ResultScreenv2 : Control
 		AdditionalPos = Additional.Position.X;
 		Additional2Pos = Additional2.Position.X;
 		RankEmblemPos = RankEmblem.Position.X;
-		
-		Details.Position = new Vector2( Details.Position.X - Details.Size.X, Details.Position.Y);
-		Details.Modulate = new Color(0f, 0f, 0f, 0f);
-		ScoreCount.Position = new Vector2( ScoreCount.Position.X - ScoreCount.Size.X, ScoreCount.Position.Y);
-		ScoreCount.Modulate = new Color(0f, 0f, 0f, 0f);
-		HitCount.Position = new Vector2( HitCount.Position.X - HitCount.Size.X, HitCount.Position.Y);
-		HitCount.Modulate = new Color(0f, 0f, 0f, 0f);
-		Additional.Position = new Vector2( Additional.Position.X - Additional.Size.X, Additional.Position.Y);
-		Additional.Modulate = new Color(0f, 0f, 0f, 0f);
-		Additional2.Position = new Vector2( Additional2.Position.X - Additional2.Size.X, Additional2.Position.Y);
-		Additional2.Modulate = new Color(0f, 0f, 0f, 0f);
-		RankEmblem.Position = new Vector2( RankEmblem.Position.X + RankEmblem.Size.X, RankEmblem.Position.Y);
-		RankEmblem.Modulate = new Color(0f, 0f, 0f, 0f);
-		
-		AccuracyProgress.Value = 0;
-		Rank.SelfModulate = new Color(1f, 1f, 1f, 0f);
-		Rank.PivotOffset = Rank.Size / 2;
-		Rank.Scale = new Vector2(1.2f, 1.2f);
-		Tween.SetTrans(Tween.TransitionType.Cubic);
-		Tween.SetEase(Tween.EaseType.Out);
-		Tween.TweenProperty(Details, "position:x", 0,AnimationSpeed);
-		Tween.TweenProperty(Details, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
-		Tween.TweenProperty(ScoreCount, "position:x", 0,AnimationSpeed);
-		Tween.TweenProperty(ScoreCount, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
-		Tween.TweenProperty(HitCount, "position:x", HitCountPos,AnimationSpeed);
-		Tween.TweenProperty(HitCount, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
-		Tween.TweenProperty(Additional, "position:x", AdditionalPos,AnimationSpeed);
-		Tween.TweenProperty(Additional, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
-		Tween.TweenProperty(Additional2, "position:x", Additional2Pos,AnimationSpeed);
-		Tween.TweenProperty(Additional2, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
-		Tween.TweenProperty(RankEmblem, "position:x", RankEmblemPos,AnimationSpeed);
-		Tween.TweenProperty(RankEmblem, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
-		
-		Tween.TweenProperty(this, "ScoreValue", SettingsOperator.Gameplaycfg.Score,1);
-		Tween.TweenProperty(AccuracyProgress, "value", SettingsOperator.Gameplaycfg.Accuracy * 100,1);
-		Tween.TweenProperty(this, "AccuracyValue", SettingsOperator.Gameplaycfg.Accuracy,1);
-		Tween.TweenProperty(this, "PerfectValue", SettingsOperator.Gameplaycfg.Max,1);
-		Tween.TweenProperty(this, "GreatValue", SettingsOperator.Gameplaycfg.Great,1);
-		Tween.TweenProperty(this, "MehValue", SettingsOperator.Gameplaycfg.Meh,1);
-		Tween.TweenProperty(this, "MissValue", SettingsOperator.Gameplaycfg.Bad,1);
-		Tween.TweenProperty(this, "AvgHitValue", SettingsOperator.Gameplaycfg.ms,1);
-		Tween.TweenProperty(this, "ComboValue", SettingsOperator.Gameplaycfg.MaxCombo,1);
-		Tween.TweenProperty(this, "ppValue", SettingsOperator.Gameplaycfg.pp,1);
-		Tween.TweenProperty(Rank, "self_modulate:a", 1f,0.2).SetDelay(1.1);
-		Tween.TweenProperty(Rank, "scale", new Vector2(1f, 1f),0.2f).SetDelay(1.1);
-		Tween.TweenProperty(PerfectEmblem, "self_modulate", new Color(1f,1f,1f, 1f),0.2f).SetDelay(1.1);
+		AnimationMode(0);
 		if (SettingsOperator.Gameplaycfg.Accuracy == 1)
 		{
 			Rank.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/ResultsScreen/Ranks/SS.png");
@@ -237,6 +293,7 @@ public partial class ResultScreenv2 : Control
 	}
 	public void Back()
 	{
+		AnimationMode(1);
 		SettingsOperator.ResetRank();
 		if (!AudioPlayer.Instance.IsPlaying())
 			AudioPlayer.Instance.Play();
@@ -274,6 +331,7 @@ public partial class ResultScreenv2 : Control
 	}
 	public void Retry()
 	{
+		AnimationMode(1);
 		SettingsOperator.ResetRank();
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 	}
