@@ -156,9 +156,20 @@ public partial class ResultScreenv2 : Control
 			Tween.TweenProperty(Rank, "scale", new Vector2(1f, 1f),0.2f).SetDelay(1.1);
 			Tween.TweenProperty(PerfectEmblem, "self_modulate", new Color(1f,1f,1f, 1f),0.2f).SetDelay(1.1);
 			
+		} else if (mode == 2)
+		{
+			Tween.SetTrans(Tween.TransitionType.Cubic);
+			Tween.SetEase(Tween.EaseType.Out);
+			Tween.TweenProperty(RankingP, "modulate:a", 1f,AnimationSpeed);
+		} else if (mode == 3)
+		{
+			Tween.SetTrans(Tween.TransitionType.Cubic);
+			Tween.SetEase(Tween.EaseType.Out);
+			Tween.TweenProperty(RankingP, "modulate:a", 0f,AnimationSpeed);
 		}
 	}
-
+	private bool RankingTick {get;set;} = true;
+	private bool MoreInfoTick {get;set;} = true;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -192,7 +203,8 @@ public partial class ResultScreenv2 : Control
 		RankLead.Text = $"#{SettingsOperator.Gameplaycfg.Rank:N0}";
 		// Ranking Panel
 		RankingP = GetNode<Control>("Ranking");
-		RankingP.Visible = false;
+		RankingP.Visible = true;
+		RankingP.Modulate = new Color(1f,1f,1f,0f);
 		Banner = GetNode<TextureRect>("Ranking/Ranking/VBoxContainer/Banner/Banner");
 		Banner.Texture = (Texture2D)SettingsOperator.Sessioncfg["background"];
 		RTitle = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/Title");
@@ -289,7 +301,11 @@ public partial class ResultScreenv2 : Control
 
 	private void Ranking()
 	{
-		RankingP.Visible = !RankingP.Visible;
+		if (RankingTick)
+			AnimationMode(2);
+		else 
+			AnimationMode(3);
+		RankingTick = !RankingTick;
 	}
 	public void Back()
 	{
