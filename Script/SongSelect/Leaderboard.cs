@@ -32,7 +32,7 @@ public partial class Leaderboard : Button
 			Replay.FilePath = Info.FilePath;
 		}
 		ModsOperator.SetMods(Info.mods);
-		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultsScreen.tscn");
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultScreenv2.tscn");
 	}
 	public override void _Ready()
 	{

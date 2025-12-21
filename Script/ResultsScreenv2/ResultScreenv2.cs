@@ -1,0 +1,252 @@
+using Godot;
+using System;
+using System.IO;
+using System.Linq;
+public partial class ResultScreenv2 : Control
+{
+	private Label Title { get; set; }
+	private Label Artist { get; set; }
+	private Label Mapper { get; set; }
+	private Label Difficulty { get; set; }
+	private Label Level { get; set; }
+	private Label Score { get; set; }
+	private int ScoreValue { get; set; }
+	private Label Perfect { get; set; }
+	private int PerfectValue { get; set; }
+	private Label Great { get; set; }
+	private int GreatValue { get; set; }
+	private Label Meh { get; set; }
+	private int MehValue { get; set; }
+	private Label Miss { get; set; }
+	private int MissValue { get; set; }
+	private Label Accuracy { get; set; }
+	private float AccuracyValue { get; set; }
+	private Label Combo { get; set; }
+	private int ComboValue { get; set; }
+	private Label AvgHit { get; set; }
+	private int AvgHitValue { get; set; }
+	private Label pp { get; set; }
+	private int ppValue { get; set; }
+	private Label RankGain { get; set; }
+	private PanelContainer RankGainPanel { get; set; }
+	private PanelContainer Details { get; set; }
+	private PanelContainer ScoreCount { get; set; }
+	private HBoxContainer HitCount { get; set; }
+	private HBoxContainer Additional { get; set; }
+	private HBoxContainer Additional2 { get; set; }
+	private PanelContainer RankEmblem { get; set; }
+	private TextureProgressBar AccuracyProgress { get; set; }
+	private TextureRect Rank { get; set; }
+	private TextureRect PerfectEmblem { get; set; }
+	private Tween Tween { get; set; }
+	private bool PerfectPlay { get; set; }
+	private Button WatchReplayButton { get; set; }
+	private float HitCountPos { get; set; }
+	private float AdditionalPos { get; set; }
+	private float Additional2Pos { get; set; }
+	private float RankEmblemPos { get; set; }
+	private float AnimationSpeed = 0.5f;
+
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
+		Tween = CreateTween();
+		Tween.SetParallel(true);
+		
+		
+		Title = GetNode<Label>("MainScreen/Details/Details/Title");
+		Artist = GetNode<Label>("MainScreen/Details/Details/Artist");
+		Mapper = GetNode<Label>("MainScreen/Details/Details/Mapper");
+		Difficulty = GetNode<Label>("MainScreen/Details/Misc/Stick/Difficulty");
+		Level = GetNode<Label>("MainScreen/Details/Misc/Level/Number");
+		Score = GetNode<Label>("MainScreen/ScoreCount/HBoxContainer/Score");
+		Perfect = GetNode<Label>("MainScreen/HITCOUNT/PERFECT/VBoxContainer/Count");
+		Great = GetNode<Label>("MainScreen/HITCOUNT/GREAT/VBoxContainer/Count");
+		Meh = GetNode<Label>("MainScreen/HITCOUNT/MEH/VBoxContainer/Count");
+		Miss = GetNode<Label>("MainScreen/HITCOUNT/MISS/VBoxContainer/Count");
+		Accuracy = GetNode<Label>("MainScreen/Additional/Accuracy/VBoxContainer/Count");
+		Combo = GetNode<Label>("MainScreen/Additional/Combo/VBoxContainer/Count");
+		AvgHit = GetNode<Label>("MainScreen/Additional/AvgHit/VBoxContainer/Count");
+		pp = GetNode<Label>("MainScreen/Additional/pp/VBoxContainer/Count");
+		RankGain = GetNode<Label>("MainScreen/Additional/Rankgain/VBoxContainer/Count");
+		AccuracyProgress = GetNode<TextureProgressBar>("MainScreen/Rank/AccuracyProgress");
+		Rank = GetNode<TextureRect>("MainScreen/Rank/AccuracyProgress/RankEmblem");
+		WatchReplayButton = GetNode<Button>("BottomBar/HBoxContainer/WatchReplay");
+		RankGainPanel = GetNode<PanelContainer>("MainScreen/Additional/Rankgain");
+		PerfectEmblem = GetNode<TextureRect>("MainScreen/ScoreCount/HBoxContainer/Perfect");
+		// Panels
+
+		Details = GetNode<PanelContainer>("MainScreen/Details");
+		ScoreCount = GetNode<PanelContainer>("MainScreen/ScoreCount");
+		HitCount = GetNode<HBoxContainer>("MainScreen/HITCOUNT");
+		Additional = GetNode<HBoxContainer>("MainScreen/Additional");
+		Additional2 = GetNode<HBoxContainer>("MainScreen/Additional2");
+		RankEmblem = GetNode<PanelContainer>("MainScreen/Rank");
+		
+		
+		// Checks if the replay file is in replay folder (temp until have backend support replay downloading :p)
+		if (System.IO.File.Exists(Replay.FilePath) && Replay.FilePath != "")
+		{
+			WatchReplayButton.Disabled = false;
+		}
+		else
+		{
+			WatchReplayButton.Disabled = true;
+		}
+
+		PerfectEmblem.SelfModulate = new Color(0f, 0f, 0f, 0f);
+		if (SettingsOperator.Gameplaycfg.Bad != 0)
+		{
+			PerfectPlay = true;
+		}
+		
+		// Panel Position
+		
+		HitCountPos = HitCount.Position.X;
+		AdditionalPos = Additional.Position.X;
+		Additional2Pos = Additional2.Position.X;
+		RankEmblemPos = RankEmblem.Position.X;
+		
+		Details.Position = new Vector2( Details.Position.X - Details.Size.X, Details.Position.Y);
+		Details.Modulate = new Color(0f, 0f, 0f, 0f);
+		ScoreCount.Position = new Vector2( ScoreCount.Position.X - ScoreCount.Size.X, ScoreCount.Position.Y);
+		ScoreCount.Modulate = new Color(0f, 0f, 0f, 0f);
+		HitCount.Position = new Vector2( HitCount.Position.X - HitCount.Size.X, HitCount.Position.Y);
+		HitCount.Modulate = new Color(0f, 0f, 0f, 0f);
+		Additional.Position = new Vector2( Additional.Position.X - Additional.Size.X, Additional.Position.Y);
+		Additional.Modulate = new Color(0f, 0f, 0f, 0f);
+		Additional2.Position = new Vector2( Additional2.Position.X - Additional2.Size.X, Additional2.Position.Y);
+		Additional2.Modulate = new Color(0f, 0f, 0f, 0f);
+		RankEmblem.Position = new Vector2( RankEmblem.Position.X + RankEmblem.Size.X, RankEmblem.Position.Y);
+		RankEmblem.Modulate = new Color(0f, 0f, 0f, 0f);
+		
+		AccuracyProgress.Value = 0;
+		Rank.SelfModulate = new Color(1f, 1f, 1f, 0f);
+		Rank.PivotOffset = Rank.Size / 2;
+		Rank.Scale = new Vector2(1.2f, 1.2f);
+		Tween.SetTrans(Tween.TransitionType.Cubic);
+		Tween.SetEase(Tween.EaseType.Out);
+		Tween.TweenProperty(Details, "position:x", 0,AnimationSpeed);
+		Tween.TweenProperty(Details, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
+		Tween.TweenProperty(ScoreCount, "position:x", 0,AnimationSpeed);
+		Tween.TweenProperty(ScoreCount, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
+		Tween.TweenProperty(HitCount, "position:x", HitCountPos,AnimationSpeed);
+		Tween.TweenProperty(HitCount, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
+		Tween.TweenProperty(Additional, "position:x", AdditionalPos,AnimationSpeed);
+		Tween.TweenProperty(Additional, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
+		Tween.TweenProperty(Additional2, "position:x", Additional2Pos,AnimationSpeed);
+		Tween.TweenProperty(Additional2, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
+		Tween.TweenProperty(RankEmblem, "position:x", RankEmblemPos,AnimationSpeed);
+		Tween.TweenProperty(RankEmblem, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
+		
+		Tween.TweenProperty(this, "ScoreValue", SettingsOperator.Gameplaycfg.Score,1);
+		Tween.TweenProperty(AccuracyProgress, "value", SettingsOperator.Gameplaycfg.Accuracy * 100,1);
+		Tween.TweenProperty(this, "AccuracyValue", SettingsOperator.Gameplaycfg.Accuracy,1);
+		Tween.TweenProperty(this, "PerfectValue", SettingsOperator.Gameplaycfg.Max,1);
+		Tween.TweenProperty(this, "GreatValue", SettingsOperator.Gameplaycfg.Great,1);
+		Tween.TweenProperty(this, "MehValue", SettingsOperator.Gameplaycfg.Meh,1);
+		Tween.TweenProperty(this, "MissValue", SettingsOperator.Gameplaycfg.Bad,1);
+		Tween.TweenProperty(this, "AvgHitValue", SettingsOperator.Gameplaycfg.ms,1);
+		Tween.TweenProperty(this, "ComboValue", SettingsOperator.Gameplaycfg.MaxCombo,1);
+		Tween.TweenProperty(this, "ppValue", SettingsOperator.Gameplaycfg.pp,1);
+		Tween.TweenProperty(Rank, "self_modulate:a", 1f,0.2).SetDelay(1.1);
+		Tween.TweenProperty(Rank, "scale", new Vector2(1f, 1f),0.2f).SetDelay(1.1);
+		Tween.TweenProperty(PerfectEmblem, "self_modulate", new Color(1f,1f,1f, 1f),0.2f).SetDelay(1.1);
+		if (SettingsOperator.Gameplaycfg.Accuracy == 1)
+		{
+			Rank.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/ResultsScreen/Ranks/SS.png");
+		}
+		else if (SettingsOperator.Gameplaycfg.Accuracy > 0.95)
+		{
+			Rank.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/ResultsScreen/Ranks/S.png");
+		}
+		else if (SettingsOperator.Gameplaycfg.Accuracy > 0.90)
+		{
+			Rank.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/ResultsScreen/Ranks/A.png");
+		}
+		else if (SettingsOperator.Gameplaycfg.Accuracy > 0.80)
+		{
+			Rank.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/ResultsScreen/Ranks/B.png");
+		}
+		else if (SettingsOperator.Gameplaycfg.Accuracy > 0.70)
+		{
+			Rank.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/ResultsScreen/Ranks/C.png");
+		}
+		else
+		{
+			Rank.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/ResultsScreen/Ranks/D.png");
+		}
+	}
+	public void Back()
+	{
+		SettingsOperator.ResetRank();
+		if (!AudioPlayer.Instance.IsPlaying())
+			AudioPlayer.Instance.Play();
+		Replay.FilePath = "";
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
+	}
+
+	private void Screenshot()
+	{
+		var filename = "/screenshot_" + ((int)Directory.GetFiles(SettingsOperator.screenshotdir).Count() + 1) + ".jpg";
+		var image = GetViewport().GetTexture().GetImage();
+		var scalecrop = 50 * (GetViewportRect().Size.Y / 720);
+		int screenWidth = image.GetWidth();
+		int screenHeight = image.GetHeight();
+		int croppedHeight = screenHeight - (int)(scalecrop * 2);
+
+		// Define the crop area (x, y, width, height)
+		// y-coordinate starts after the top cropped area
+		Rect2I cropRegion = new Rect2I(0, (int)scalecrop, screenWidth, croppedHeight);
+
+		// Crop the image to the specified region
+		Image croppedImage = image.GetRegion(cropRegion);
+		croppedImage.SaveJpg(SettingsOperator.screenshotdir + filename);
+		Notify.Post($"saved as screenshot_{(int)Directory.GetFiles(SettingsOperator.screenshotdir).Count() + 1}", SettingsOperator.screenshotdir);
+		GD.Print(filename);
+	}
+	private void WatchReplay()
+	{
+		Replay.ReloadReplay(Replay.FilePath);
+		Retry();
+	}
+	private void _resetreplay()
+	{
+		SettingsOperator.SpectatorMode = false;
+	}
+	public void Retry()
+	{
+		SettingsOperator.ResetRank();
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
+	}
+
+	public override void _PhysicsProcess(double delta)
+	{
+		Title.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No Beatmaps Selected";
+		Artist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "Please select a Beatmap!";
+		Mapper.Text = "mapped by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString();
+		Difficulty.Text = SettingsOperator.Sessioncfg["beatmapdiff"]?.ToString();
+		Level.Text = $"Lv. {SettingsOperator.LevelRating:N0}";
+		if (Tween != null && Tween.IsRunning())
+		{
+			pp.Text = $"{ppValue:N0}pp";
+			Score.Text = $"{ScoreValue:N0}";
+			Perfect.Text = $"{PerfectValue:N0}";
+			Great.Text = $"{GreatValue:N0}";
+			Meh.Text = $"{MehValue:N0}";
+			Miss.Text = $"{MissValue:N0}";
+			AvgHit.Text = $"{AvgHitValue:N0}ms";
+			Accuracy.Text = $"{AccuracyValue:P2}";
+			Combo.Text = $"{ComboValue:N0}x";
+		}
+		if (SettingsOperator.UpdatedRank != "#0")
+		{
+			RankGainPanel.Visible = true;
+			RankGain.Text = SettingsOperator.UpdatedRank;
+		}
+		else
+		{
+			RankGainPanel.Visible = false;
+		}
+	}
+}

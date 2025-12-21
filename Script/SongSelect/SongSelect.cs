@@ -338,7 +338,7 @@ public partial class SongSelect : Control
 		if (SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.Sessioncfg["beatmaptitle"] != null)
 		{
 			// Update song details
-			ExSongInfo.Text = $"{SettingsOperator.Sessioncfg["beatmapartist"]}\n{SettingsOperator.Sessioncfg["beatmapdiff"]}\n{SettingsOperator.Sessioncfg["beatmapmapper"]}";
+			ExSongInfo.Text = $"by {SettingsOperator.Sessioncfg["beatmapartist"]}\nmapped by {SettingsOperator.Sessioncfg["beatmapmapper"]}\nDifficulty: {SettingsOperator.Sessioncfg["beatmapdiff"]}";
 			InfoBox.Text(Songpp, "+" + (SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier).ToString("N0") + "pp");
 			InfoBox.Text(LevelRating, "Lv. " + (SettingsOperator.LevelRating * ModsMulti.multiplier).ToString("N0") ?? "Lv. 0");
 			LevelRating.SelfModulate = SettingsOperator.ReturnLevelColour((int)(SettingsOperator.LevelRating * ModsMulti.multiplier));

@@ -446,6 +446,7 @@ public partial class SettingsOperator : Node
         public static float ms { get; set; }
         public static int Avgms { get; set; }
         public static float BeatmapAccuracy { get; set; } = 1;
+        public static int Rank { get; set; }
     }
     public static int ranked_points { get; set; }
 
