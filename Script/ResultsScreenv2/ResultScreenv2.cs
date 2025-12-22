@@ -332,6 +332,7 @@ public partial class ResultScreenv2 : Control
 	}
 	public void Back()
 	{
+		SettingsOperator.OldRank = SettingsOperator.Rank;
 		AnimationMode(1);
 		if (!AudioPlayer.Instance.IsPlaying())
 			AudioPlayer.Instance.Play();
@@ -369,6 +370,7 @@ public partial class ResultScreenv2 : Control
 	}
 	public void Retry()
 	{
+		SettingsOperator.OldRank = SettingsOperator.Rank;
 		AnimationMode(1);
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 	}
