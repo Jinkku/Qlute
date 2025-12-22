@@ -47,6 +47,7 @@ public partial class ResultScreenv2 : Control
 	private float RankEmblemPos { get; set; }
 	private float AnimationSpeed = 0.5f;
 	private Control RankingP { get; set; }
+	private Control MoreInfoP { get; set; }
 	private TextureRect Banner { get; set; }
 	private Label RTitle { get; set; }
 	private Label RArtist { get; set; }
@@ -166,6 +167,16 @@ public partial class ResultScreenv2 : Control
 			Tween.SetTrans(Tween.TransitionType.Cubic);
 			Tween.SetEase(Tween.EaseType.Out);
 			Tween.TweenProperty(RankingP, "modulate:a", 0f,AnimationSpeed);
+		}else if (mode == 4)
+		{
+			Tween.SetTrans(Tween.TransitionType.Cubic);
+			Tween.SetEase(Tween.EaseType.Out);
+			Tween.TweenProperty(MoreInfoP, "modulate:a", 1f,AnimationSpeed);
+		} else if (mode == 5)
+		{
+			Tween.SetTrans(Tween.TransitionType.Cubic);
+			Tween.SetEase(Tween.EaseType.Out);
+			Tween.TweenProperty(MoreInfoP, "modulate:a", 0f,AnimationSpeed);
 		}
 	}
 	private bool RankingTick {get;set;} = true;
@@ -205,6 +216,10 @@ public partial class ResultScreenv2 : Control
 		RankingP = GetNode<Control>("Ranking");
 		RankingP.Visible = true;
 		RankingP.Modulate = new Color(1f,1f,1f,0f);
+		// More Info Panel
+		MoreInfoP = GetNode<Control>("MoreInfo");
+		MoreInfoP.Visible = true;
+		MoreInfoP.Modulate = new Color(1f,1f,1f,0f);
 		Banner = GetNode<TextureRect>("Ranking/Ranking/VBoxContainer/Banner/Banner");
 		Banner.Texture = (Texture2D)SettingsOperator.Sessioncfg["background"];
 		RTitle = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/Title");
@@ -307,10 +322,17 @@ public partial class ResultScreenv2 : Control
 			AnimationMode(3);
 		RankingTick = !RankingTick;
 	}
+	private void MoreInfo()
+	{
+		if (MoreInfoTick)
+			AnimationMode(4);
+		else 
+			AnimationMode(5);
+		MoreInfoTick = !MoreInfoTick;
+	}
 	public void Back()
 	{
 		AnimationMode(1);
-		SettingsOperator.ResetRank();
 		if (!AudioPlayer.Instance.IsPlaying())
 			AudioPlayer.Instance.Play();
 		Replay.FilePath = "";
@@ -348,7 +370,6 @@ public partial class ResultScreenv2 : Control
 	public void Retry()
 	{
 		AnimationMode(1);
-		SettingsOperator.ResetRank();
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 	}
 
@@ -375,10 +396,10 @@ public partial class ResultScreenv2 : Control
 			Combo.Text = $"{ComboValue:N0}x";
 			Combo.Text = $"{ComboValue:N0}x";
 		}
-		if (SettingsOperator.UpdatedRank != "#0")
+		if (SettingsOperator.Rank != 0)
 		{
 			RankGainPanel.Visible = true;
-			RankGain.Text = SettingsOperator.UpdatedRank;
+			RankGain.Text = $"#{SettingsOperator.Rank - SettingsOperator.OldRank}";
 		}
 		else
 		{

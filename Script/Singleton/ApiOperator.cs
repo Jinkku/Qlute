@@ -192,8 +192,9 @@ public partial class ApiOperator : Node
 				Ranking.Instance.Text = "#" + n.ToString("N0");
 			}
 		}
-		SettingsOperator.Sessioncfg["ranknumber"] = n;
+		SettingsOperator.Rank = n;
 		SettingsOperator.ranked_points = json["points"].AsInt32();
+		SettingsOperator.Level = json["level"].AsInt32();
 	}
 
 	public static int RankedStatus { get; set; }

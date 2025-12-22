@@ -13,8 +13,6 @@ public partial class RankUpdate : Control
 	public static int PerformanceNow { get; set; }
 	public static string prefixRank {get;set;}
 	public static string prefixPerformance {get;set;}
-	public static int OldRank {get;set;}
-	public static int OldPerformance {get;set;}
 	public static bool Updated { get; set; }
 	public static Color ORank { get; set; }
 	public static Color OPerf { get; set; }
@@ -91,18 +89,33 @@ public partial class RankUpdate : Control
 			OperatorPerformance.SelfModulate = OPerf;
 			OperatorRank.SelfModulate = ORank;
 
-			RankDisplay = OldRank;
-			PerfDisplay = OldPerformance;
-			ORankDisplay = RankLost;
-			OPerfDisplay = PerformanceLost;
+			RankDisplay = SettingsOperator.OldRank;
+			PerfDisplay = SettingsOperator.Oldpp;
+			if (RankLost < 0)
+			{
+				ORankDisplay = -RankLost;
+			}
+			else
+			{
+				ORankDisplay = RankLost;	
+			}
+			
+			if (PerformanceLost < 0)
+			{
+				OPerfDisplay = -PerformanceLost;
+			}
+			else
+			{
+				OPerfDisplay = PerformanceLost;
+			}
 
 
 
 
 			tweenNum?.Kill();
 			tweenNum = CreateTween();
-			tweenNum.Parallel().TweenProperty(this, "RankDisplay", RankNow, 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(1);
-			tweenNum.Parallel().TweenProperty(this, "PerfDisplay", PerformanceNow, 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(1);
+			tweenNum.Parallel().TweenProperty(this, "RankDisplay", SettingsOperator.Rank - RankLost, 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(1);
+			tweenNum.Parallel().TweenProperty(this, "PerfDisplay", SettingsOperator.ranked_points - PerformanceLost, 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(1);
 			tweenNum.Parallel().TweenProperty(this, "ORankDisplay", 0, 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(1);
 			tweenNum.Parallel().TweenProperty(this, "OPerfDisplay", 0, 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(1);
 
@@ -127,9 +140,9 @@ public partial class RankUpdate : Control
 
 
 			Rank.Text = $"#{RankDisplay.ToString("N0")}";
-			OperatorRank.Text = $"{prefixRank}#{ORankDisplay.ToString("N0")}";
+			OperatorRank.Text = $"{prefixRank} #{ORankDisplay.ToString("N0")}";
 
-			SettingsOperator.Sessioncfg["ranknumber"] = RankDisplay;
+			SettingsOperator.Rank = RankDisplay;
 			SettingsOperator.ranked_points = PerfDisplay;
 
 
@@ -138,16 +151,13 @@ public partial class RankUpdate : Control
 		}
 	}
 	public static void Update(int rank,int pp){
-		prefixRank = "";
-		prefixPerformance = "";
-		OldPerformance = SettingsOperator.ranked_points;
-		OldRank = (int)SettingsOperator.Sessioncfg["ranknumber"];
-		RankLost = rank - OldRank;
+		SettingsOperator.Oldpp = SettingsOperator.ranked_points;
+		SettingsOperator.OldRank = SettingsOperator.Rank;
+		RankLost = SettingsOperator.OldRank - rank;
 		PerformanceLost = pp - SettingsOperator.ranked_points;
 		if (RankLost > 0)
 		{
-			RankLost = RankLost;
-			prefixRank = "-";
+			prefixRank = "+";
 		}
 		else if (RankLost == 0)
 		{
@@ -155,12 +165,12 @@ public partial class RankUpdate : Control
 		}
 		else if (RankLost < 0)
 		{
-			RankLost = -RankLost;
-			prefixRank = "+";
+			prefixRank = "-";
 		}
 		
 		if (PerformanceLost > 0)
 		{
+			PerformanceLost = -PerformanceLost;
 			prefixPerformance = "+";
 		}
 		else if (PerformanceLost == 0)
@@ -173,12 +183,7 @@ public partial class RankUpdate : Control
 			prefixPerformance = "-";
 		}
 		OPerf = GetOperatorColour(pp, SettingsOperator.ranked_points);
-		ORank = GetOperatorColour(rank, OldRank, opo: true);
-
-		SettingsOperator.UpdatedRank = prefixRank + RankLost.ToString("N0");
-		SettingsOperator.Updatedpp = prefixRank + PerformanceLost.ToString("N0") + "pp";
-		RankNow = rank;
-		PerformanceNow = pp;
+		ORank = GetOperatorColour(rank, SettingsOperator.OldRank, opo: true);
 		Updated = true;
 	}
 }

@@ -937,7 +937,6 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
 custom_minimum_size = Vector2(148, 0)
 layout_mode = 2
-disabled = true
 script = ExtResource("8_p8vf7")
 StringText = "More Info"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"

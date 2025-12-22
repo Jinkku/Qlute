@@ -15,8 +15,13 @@ public class DanceCounter {
 public partial class SettingsOperator : Node
 {
     public string[] args { get; set; }
-    public static string UpdatedRank = "#0";
-    public static string Updatedpp = "0pp";
+    public static int Rank = 0;
+    public static int ranked_points = 0;
+    public static int OldRank = 0;
+    public static int Oldpp = 0;
+    public static int OldLevel { get; set; } = 0;
+    public static int Level { get; set; } = 0;
+
     public static string homedir = OS.GetUserDataDir().Replace("\\", "/");
     public static string tempdir => homedir + "/temp";
     public static string beatmapsdir => homedir + "/beatmaps";
@@ -45,11 +50,6 @@ public partial class SettingsOperator : Node
     public static float AudioOffset { get; set; } = 0;
     public static int LeaderboardType = 1;
     public static bool NoConnectionToGameServer { get; set; }
-    public static void ResetRank()
-    {
-        UpdatedRank = "#0";
-        Updatedpp = "0pp";
-    }
 
     public void RefreshFPS()
     {
@@ -462,7 +462,6 @@ public partial class SettingsOperator : Node
         public static int Rank { get; set; }
         public static string Username { get; set; } = "Guest";
     }
-    public static int ranked_points { get; set; }
 
     public static int SongID { get; set; } = -1;
     public static int SongIDHighlighted { get; set; } = -1; // Highlighted song ID for the song select screen
@@ -480,7 +479,6 @@ public partial class SettingsOperator : Node
         { "settingspanelv", false },
         { "chatboxv", false },
         { "notificationpanelv", false },
-        { "ranknumber", 0 },
         { "playercolour", null },
         { "totalbeatmaps", 0 },
         { "beatmapurl", null },
