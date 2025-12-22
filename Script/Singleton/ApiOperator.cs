@@ -193,6 +193,7 @@ public partial class ApiOperator : Node
 			}
 		}
 		SettingsOperator.Rank = n;
+		SettingsOperator.OldRank = n;
 		SettingsOperator.ranked_points = json["points"].AsInt32();
 		SettingsOperator.Level = json["level"].AsInt32();
 	}

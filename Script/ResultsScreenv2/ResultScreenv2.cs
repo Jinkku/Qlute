@@ -396,10 +396,21 @@ public partial class ResultScreenv2 : Control
 			Combo.Text = $"{ComboValue:N0}x";
 			Combo.Text = $"{ComboValue:N0}x";
 		}
-		if (SettingsOperator.Rank != 0)
+		if (SettingsOperator.Rank - SettingsOperator.OldRank != 0)
 		{
 			RankGainPanel.Visible = true;
-			RankGain.Text = $"#{SettingsOperator.Rank - SettingsOperator.OldRank}";
+			var Ranktick = SettingsOperator.Rank - SettingsOperator.OldRank;
+			var Rankp = "";
+			if (Ranktick < 0)
+			{
+				Ranktick = -Ranktick;
+				Rankp = "+";
+			}
+			else
+			{
+				Rankp = "-";
+			}
+			RankGain.Text = $"{Rankp} #{Ranktick}";
 		}
 		else
 		{
