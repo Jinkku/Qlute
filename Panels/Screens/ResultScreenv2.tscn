@@ -291,7 +291,7 @@ text = "PERFECT"
 
 [node name="Count" type="Label" parent="MainScreen/HITCOUNT/PERFECT/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "999,456"
 clip_text = true
 text_overrun_behavior = 3
@@ -311,7 +311,7 @@ text = "GREAT"
 
 [node name="Count" type="Label" parent="MainScreen/HITCOUNT/GREAT/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "999,456"
 clip_text = true
 text_overrun_behavior = 3
@@ -331,7 +331,7 @@ text = "MEH"
 
 [node name="Count" type="Label" parent="MainScreen/HITCOUNT/MEH/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "999,456"
 clip_text = true
 text_overrun_behavior = 3
@@ -351,7 +351,7 @@ text = "MISS"
 
 [node name="Count" type="Label" parent="MainScreen/HITCOUNT/MISS/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "999,456"
 clip_text = true
 text_overrun_behavior = 3
@@ -380,7 +380,7 @@ text = "Accuracy"
 
 [node name="Count" type="Label" parent="MainScreen/Additional/Accuracy/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "100%"
 clip_text = true
 text_overrun_behavior = 3
@@ -400,7 +400,7 @@ text = "Combo"
 
 [node name="Count" type="Label" parent="MainScreen/Additional/Combo/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "456,789x"
 clip_text = true
 text_overrun_behavior = 3
@@ -420,7 +420,7 @@ text = "Average Hit"
 
 [node name="Count" type="Label" parent="MainScreen/Additional/AvgHit/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "200ms"
 clip_text = true
 text_overrun_behavior = 3
@@ -440,7 +440,7 @@ text = "pp"
 
 [node name="Count" type="Label" parent="MainScreen/Additional/pp/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "99,999pp"
 clip_text = true
 text_overrun_behavior = 3
@@ -460,7 +460,7 @@ text = "Rank"
 
 [node name="Count" type="Label" parent="MainScreen/Additional/Rankgain/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "+#999,999"
 clip_text = true
 text_overrun_behavior = 3
@@ -582,6 +582,7 @@ texture = ExtResource("7_2qgfu")
 stretch_mode = 5
 
 [node name="MoreInfo" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

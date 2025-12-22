@@ -410,7 +410,7 @@ public partial class ResultScreenv2 : Control
 			{
 				Rankp = "-";
 			}
-			RankGain.Text = $"{Rankp} #{Ranktick}";
+			RankGain.Text = $"{Rankp} #{Ranktick:N0}";
 		}
 		else
 		{
