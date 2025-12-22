@@ -52,6 +52,7 @@ public partial class ApiOperator : Node
 	{
 		if (!SettingsOperator.SpectatorMode)
 		{
+			SettingsOperator.JustPlayedScore = false;
 			GD.Print("Submitting score....");
 			int BeatmapID = (int)SettingsOperator.Sessioncfg["osubeatid"];
 			int BeatmapSetID = (int)SettingsOperator.Sessioncfg["osubeatidset"];
@@ -194,8 +195,12 @@ public partial class ApiOperator : Node
 		}
 		SettingsOperator.Rank = n;
 		SettingsOperator.OldRank = n;
+		SettingsOperator.RankScore = json["score"].AsInt32();
+		SettingsOperator.OldScore = json["score"].AsInt32();
 		SettingsOperator.ranked_points = json["points"].AsInt32();
+		SettingsOperator.Oldpp = json["points"].AsInt32();
 		SettingsOperator.Level = json["level"].AsInt32();
+		SettingsOperator.OldLevel = json["level"].AsInt32();
 	}
 
 	public static int RankedStatus { get; set; }

@@ -55,6 +55,32 @@ public partial class ResultScreenv2 : Control
 	private Label RankLead { get; set; }
 	private Label Username { get; set; }
 	private Label Achieved { get; set; }
+	private Label RankedScore { get; set; }
+	private Label RankedPoints { get; set; }
+	private Label RankPlayer { get; set; }
+	private Label RankPlayerLost { get; set; }
+	private Label LevelPlayer { get; set; }
+	private Label RankedScoreLost { get; set; }
+	private Label RankedPointsLost { get; set; }
+	private Label LevelPlayerLost { get; set; }
+	/// <summary>
+	/// Rank Colour
+	/// </summary>
+	private Color RPC { get; set; }
+	/// <summary>
+	/// Level Colour
+	/// </summary>
+	private Color LPC { get; set; } 
+	/// <summary>
+	/// Ranked Score Colour
+	/// </summary>
+	private Color RSC { get; set; } 
+
+	/// <summary>
+	/// Ranked Points Colour
+	/// </summary>
+	private Color RPLC { get; set; } 
+
 	private RankLeaderboard CurrentLead {get;set;}
 
 	private void AnimationMode(int mode)
@@ -225,6 +251,14 @@ public partial class ResultScreenv2 : Control
 		RTitle = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/Title");
 		RArtist = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/Artist");
 		RMapper = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/mapped");
+		RankedScore = GetNode<Label>("MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Ranked Score/Value");
+		RankedPoints = GetNode<Label>("MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Ranked Points/Value");
+		LevelPlayer = GetNode<Label>("MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Level/Value");
+		RankPlayer = GetNode<Label>("MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Rank/Value");
+		RankPlayerLost = RankPlayer.GetNode<Label>("Lost");
+		RankedScoreLost = RankedScore.GetNode<Label>("Lost");
+		RankedPointsLost = RankedPoints.GetNode<Label>("Lost");
+		LevelPlayerLost = LevelPlayer.GetNode<Label>("Lost");
 		//Leaderboard
 		CurrentLead = GetNode<RankLeaderboard>("Ranking/Ranking/VBoxContainer/CurrentLead");
 
@@ -385,6 +419,13 @@ public partial class ResultScreenv2 : Control
 		RTitle.Text = Title.Text;
 		RArtist.Text = Artist.Text;
 		RMapper.Text = Mapper.Text;
+		RankedScore.Text = $"{SettingsOperator.RankScore:N0}";
+		RankedScoreLost.Text = 
+		RankedPoints.Text = $"{SettingsOperator.ranked_points:N0}pp";
+		LevelPlayer.Text = $"{SettingsOperator.Level:N0}";
+		RankPlayer.Text = $"#{SettingsOperator.Rank:N0}";
+		
+		
 		if (Tween != null && Tween.IsRunning())
 		{
 			pp.Text = $"{ppValue:N0}pp";

@@ -16,11 +16,14 @@ public partial class SettingsOperator : Node
 {
     public string[] args { get; set; }
     public static int Rank = 0;
+    public static int RankScore = 0;
+    public static int OldScore = 0;
     public static int ranked_points = 0;
     public static int OldRank = 0;
     public static int Oldpp = 0;
     public static int OldLevel { get; set; } = 0;
     public static int Level { get; set; } = 0;
+    public static bool JustPlayedScore {get; set;}
 
     public static string homedir = OS.GetUserDataDir().Replace("\\", "/");
     public static string tempdir => homedir + "/temp";

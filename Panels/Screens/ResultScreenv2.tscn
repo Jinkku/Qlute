@@ -582,7 +582,6 @@ texture = ExtResource("7_2qgfu")
 stretch_mode = 5
 
 [node name="MoreInfo" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -638,6 +637,38 @@ theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 30
 columns = 2
 
+[node name="Rank" type="HBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Rank"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "Overall Rank"
+
+[node name="Value" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Rank"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "#123,456,789"
+
+[node name="Lost" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Rank/Value"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 12.5
+offset_bottom = 31.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+theme_override_colors/font_color = Color(0.6542969, 1, 0.7042618, 1)
+text = "+ #60"
+
 [node name="Ranked Score" type="HBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -667,8 +698,8 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.3
-theme_override_colors/font_color = Color(0.6542969, 1, 0.7042618, 1)
-text = "+ #60"
+theme_override_colors/font_color = Color(1, 0.654902, 0.654902, 1)
+text = "+ 60"
 
 [node name="Ranked Points" type="HBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer"]
 layout_mode = 2
