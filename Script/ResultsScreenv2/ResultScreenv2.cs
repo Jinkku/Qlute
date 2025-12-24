@@ -420,7 +420,7 @@ public partial class ResultScreenv2 : Control
 		RArtist.Text = Artist.Text;
 		RMapper.Text = Mapper.Text;
 		RankedScore.Text = $"{SettingsOperator.RankScore:N0}";
-		RankedScoreLost.Text = 
+		RankedScoreLost.Text = $"{SettingsOperator.RankScore - SettingsOperator.OldScore:N0}";
 		RankedPoints.Text = $"{SettingsOperator.ranked_points:N0}pp";
 		LevelPlayer.Text = $"{SettingsOperator.Level:N0}";
 		RankPlayer.Text = $"#{SettingsOperator.Rank:N0}";
