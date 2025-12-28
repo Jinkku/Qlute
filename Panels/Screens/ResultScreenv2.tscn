@@ -673,7 +673,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.3
-theme_override_colors/font_color = Color(0.6542969, 1, 0.7042618, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "+ #60"
 
 [node name="Ranked Score" type="HBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer"]
@@ -705,7 +705,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.3
-theme_override_colors/font_color = Color(1, 0.654902, 0.654902, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "+ 60"
 
 [node name="Ranked Points" type="HBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer"]
@@ -737,7 +737,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.3
-theme_override_colors/font_color = Color(0.6542969, 1, 0.7042618, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "+ 62pp"
 
 [node name="Level" type="HBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer"]
@@ -769,7 +769,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.3
-theme_override_colors/font_color = Color(0.6542969, 1, 0.7042618, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "+ 3"
 
 [node name="Accuracy" type="HBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer"]
@@ -801,7 +801,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.3
-theme_override_colors/font_color = Color(0.6542969, 1, 0.7042618, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "+ 2.00%"
 
 [node name="Combo" type="HBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer"]
@@ -833,7 +833,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.3
-theme_override_colors/font_color = Color(0.6542969, 1, 0.7042618, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "+ 2x"
 
 [node name="Ranking" type="Control" parent="."]

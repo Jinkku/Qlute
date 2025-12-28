@@ -63,6 +63,10 @@ public partial class ResultScreenv2 : Control
 	private Label RankedScoreLost { get; set; }
 	private Label RankedPointsLost { get; set; }
 	private Label LevelPlayerLost { get; set; }
+	private Label MaxCombo { get; set; }
+	private Label MaxComboLost { get; set; }
+	private Label OAccuracy { get; set; }
+	private Label AccuracyLost { get; set; }
 	/// <summary>
 	/// Rank Colour
 	/// </summary>
@@ -268,10 +272,16 @@ public partial class ResultScreenv2 : Control
 		RankedPoints = GetNode<Label>("MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Ranked Points/Value");
 		LevelPlayer = GetNode<Label>("MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Level/Value");
 		RankPlayer = GetNode<Label>("MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Rank/Value");
+		LevelPlayer = GetNode<Label>("MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Level/Value");
+		RankPlayer = GetNode<Label>("MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Rank/Value");
+		OAccuracy = GetNode<Label>("MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Accuracy/Value");
+		MaxCombo = GetNode<Label>("MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Combo/Value");
 		RankPlayerLost = RankPlayer.GetNode<Label>("Lost");
 		RankedScoreLost = RankedScore.GetNode<Label>("Lost");
 		RankedPointsLost = RankedPoints.GetNode<Label>("Lost");
 		LevelPlayerLost = LevelPlayer.GetNode<Label>("Lost");
+		MaxComboLost = MaxCombo.GetNode<Label>("Lost");
+		AccuracyLost = OAccuracy.GetNode<Label>("Lost");
 		//Leaderboard
 		CurrentLead = GetNode<RankLeaderboard>("Ranking/Ranking/VBoxContainer/CurrentLead");
 
@@ -426,7 +436,9 @@ public partial class ResultScreenv2 : Control
 	private LostClass RPP {get; set;}
 	private LostClass LP {get; set;}
 	private LostClass RP {get; set;}
-
+	private LostClass OA {get; set;}
+	private LostClass MC {get; set;}
+	private bool ChangedStats { get; set; }
 	public override void _PhysicsProcess(double delta)
 	{
 		Title.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No Beatmaps Selected";
@@ -439,27 +451,36 @@ public partial class ResultScreenv2 : Control
 		RMapper.Text = Mapper.Text;
 		if (ApiOperator.Submitted)
 		{
+			ChangedStats = true;
 			MInfo.Visible = true;
 			NA.Visible = false;
 			RS = RankUpdate.ReturnLost(SettingsOperator.RankScore, SettingsOperator.OldScore);
 			RPP = RankUpdate.ReturnLost(SettingsOperator.ranked_points, SettingsOperator.Oldpp);
 			LP = RankUpdate.ReturnLost(SettingsOperator.Level, SettingsOperator.OldLevel);
+			OA = RankUpdate.ReturnLost(SettingsOperator.OAccuracy, SettingsOperator.OldAccuracy);
+			MC = RankUpdate.ReturnLost(SettingsOperator.OCombo, SettingsOperator.OldCombo);
 			RP = RankUpdate.ReturnLost(SettingsOperator.Rank, SettingsOperator.OldRank,reverse: true);
 			ApiOperator.Submitted = false;
 			RankedScore.Text = $"{SettingsOperator.RankScore:N0}";
 			RankedPoints.Text = $"{SettingsOperator.ranked_points:N0}pp";
 			LevelPlayer.Text = $"{SettingsOperator.Level:N0}";
 			RankPlayer.Text = $"#{SettingsOperator.Rank:N0}";
+			OAccuracy.Text = $"{SettingsOperator.OAccuracy:P2}";
+			MaxCombo.Text = $"{SettingsOperator.OCombo:N0}x";
 			// Losses
 			RankedScoreLost.Text = $"{RS.prefix} {RS.output:N0}";
 			RankedPointsLost.Text = $"{RPP.prefix} {RPP.output:N0}";
 			LevelPlayerLost.Text = $"{LP.prefix} {LP.output:N0}";
 			RankPlayerLost.Text = $"{RP.prefix} {RP.output:N0}";
+			AccuracyLost.Text = $"{OA.prefix} {OA.output:P2}";
+			MaxComboLost.Text = $"{MC.prefix} {MC.output:N0}";
 			RankedScoreLost.SelfModulate = RS.OperatorColour;
 			RankedPointsLost.SelfModulate = RPP.OperatorColour;
 			LevelPlayerLost.SelfModulate = LP.OperatorColour;
 			RankPlayerLost.SelfModulate = RP.OperatorColour;
-		} else
+			AccuracyLost.SelfModulate = OA.OperatorColour;
+			MaxComboLost.SelfModulate = MC.OperatorColour;
+		} else if (!ChangedStats)
 		{
 			NA.Visible = true;	
 		}

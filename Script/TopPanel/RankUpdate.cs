@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class LostClass
 {
 	public string prefix = "-";
-	public int output;
-	public int rawoutput;
+	public float output;
+	public float rawoutput;
 	public Color OperatorColour = new Color(0,0,0,1);
 }
 
@@ -27,7 +27,7 @@ public partial class RankUpdate : Control
 	private int OPerfDisplay { get; set; }
 	private bool Realtime { get; set; }
 	public static List<Color> ColorOperator = new List<Color>([new Color("#3fff5fff"), new Color("#ffffff00"), new Color("#ff4154ff"),]);
-	public static LostClass ReturnLost(int oldput = 0, int oput = 0, bool reverse = false)
+	public static LostClass ReturnLost(float oldput = 0, float oput = 0, bool reverse = false)
 	{
 		LostClass Opa = new LostClass();
 		Opa.OperatorColour = ColorOperator[2];
@@ -90,8 +90,8 @@ public partial class RankUpdate : Control
 
 			RankDisplay = SettingsOperator.OldRank;
 			PerfDisplay = SettingsOperator.Oldpp;
-			ORankDisplay = RL.output;
-			OPerfDisplay = PL.output;
+			ORankDisplay = (int)RL.output;
+			OPerfDisplay = (int)PL.output;
 
 			tweenNum?.Kill();
 			tweenNum = CreateTween();

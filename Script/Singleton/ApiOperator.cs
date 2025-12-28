@@ -178,7 +178,7 @@ public partial class ApiOperator : Node
 			SettingsOperator.OldCombo = SettingsOperator.OCombo;
 			SettingsOperator.Level = (int)json["level"];
 			SettingsOperator.RankScore = (int)json["score"];
-			SettingsOperator.OAccuracy = json["accuracy"].AsInt32();
+			SettingsOperator.OAccuracy = (float)json["accuracy"];
 			SettingsOperator.OCombo = json["max_combo"].AsInt32();
 
 		}
@@ -213,7 +213,7 @@ public partial class ApiOperator : Node
 		SettingsOperator.Oldpp = SettingsOperator.ranked_points;
 		SettingsOperator.Level = json["level"].AsInt32();
 		SettingsOperator.OldLevel = SettingsOperator.Level;
-		SettingsOperator.OAccuracy = json["accuracy"].AsInt32();
+		SettingsOperator.OAccuracy = (float)json["accuracy"];
 		SettingsOperator.OldAccuracy = SettingsOperator.OAccuracy;
 		SettingsOperator.OCombo = json["max_combo"].AsInt32();
 		SettingsOperator.OldCombo = SettingsOperator.OCombo;
