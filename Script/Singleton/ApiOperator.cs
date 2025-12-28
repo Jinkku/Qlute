@@ -44,6 +44,7 @@ public partial class ApiOperator : Node
 	private SettingsOperator SettingsOperator { get; set; }
 	public static string NoticeText { get; set; }
 	public static ApiOperator Instance { get; set; }
+	public static bool Submitted = false;
 	public static string Beatmapapi = "https://catboy.best";
 	/// <summary>
 	/// Submits a score to the dedicated server.
@@ -52,6 +53,7 @@ public partial class ApiOperator : Node
 	{
 		if (!SettingsOperator.SpectatorMode)
 		{
+			Submitted = false;
 			SettingsOperator.JustPlayedScore = false;
 			GD.Print("Submitting score....");
 			int BeatmapID = (int)SettingsOperator.Sessioncfg["osubeatid"];
@@ -168,7 +170,17 @@ public partial class ApiOperator : Node
 		Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
 		if ((int)json["rankedmap"] > 0 && (int)json["error"] == 0)
 		{
+			Submitted = true;
 			RankUpdate.Update((int)json["rank"], (int)json["points"]);
+			SettingsOperator.OldLevel = SettingsOperator.Level;
+			SettingsOperator.OldScore = SettingsOperator.RankScore;
+			SettingsOperator.OldAccuracy = SettingsOperator.OAccuracy;
+			SettingsOperator.OldCombo = SettingsOperator.OCombo;
+			SettingsOperator.Level = (int)json["level"];
+			SettingsOperator.RankScore = (int)json["score"];
+			SettingsOperator.OAccuracy = json["accuracy"].AsInt32();
+			SettingsOperator.OCombo = json["max_combo"].AsInt32();
+
 		}
 		if (json["msg"].ToString() != "")
 		{
@@ -196,11 +208,16 @@ public partial class ApiOperator : Node
 		SettingsOperator.Rank = n;
 		SettingsOperator.OldRank = n;
 		SettingsOperator.RankScore = json["score"].AsInt32();
-		SettingsOperator.OldScore = json["score"].AsInt32();
+		SettingsOperator.OldScore = SettingsOperator.RankScore;
 		SettingsOperator.ranked_points = json["points"].AsInt32();
-		SettingsOperator.Oldpp = json["points"].AsInt32();
+		SettingsOperator.Oldpp = SettingsOperator.ranked_points;
 		SettingsOperator.Level = json["level"].AsInt32();
-		SettingsOperator.OldLevel = json["level"].AsInt32();
+		SettingsOperator.OldLevel = SettingsOperator.Level;
+		SettingsOperator.OAccuracy = json["accuracy"].AsInt32();
+		SettingsOperator.OldAccuracy = SettingsOperator.OAccuracy;
+		SettingsOperator.OCombo = json["max_combo"].AsInt32();
+		SettingsOperator.OldCombo = SettingsOperator.OCombo;
+
 	}
 
 	public static int RankedStatus { get; set; }

@@ -23,6 +23,10 @@ public partial class SettingsOperator : Node
     public static int Oldpp = 0;
     public static int OldLevel { get; set; } = 0;
     public static int Level { get; set; } = 0;
+    public static int OldCombo { get; set; } = 0;
+    public static int OCombo { get; set; } = 0;
+    public static int OldAccuracy { get; set; } = 0;
+    public static int OAccuracy { get; set; } = 0;
     public static bool JustPlayedScore {get; set;}
 
     public static string homedir = OS.GetUserDataDir().Replace("\\", "/");

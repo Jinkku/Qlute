@@ -623,6 +623,13 @@ theme_override_constants/separation = 10
 layout_mode = 2
 text = "More info"
 
+[node name="NA" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "No infomation here :/"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Moreinfo" type="PanelContainer" parent="MoreInfo/Moreinfo/VBoxContainer"]
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2

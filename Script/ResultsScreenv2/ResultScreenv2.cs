@@ -134,7 +134,8 @@ public partial class ResultScreenv2 : Control
 			Tween.TweenProperty(this, "ppValue", SettingsOperator.Gameplaycfg.pp,1);
 			Tween.TweenProperty(Rank, "self_modulate:a", 1f,0.2).SetDelay(1.1);
 			Tween.TweenProperty(Rank, "scale", new Vector2(1f, 1f),0.2f).SetDelay(1.1);
-			Tween.TweenProperty(PerfectEmblem, "self_modulate", new Color(1f,1f,1f, 1f),0.2f).SetDelay(1.1);
+			if (PerfectPlay)
+				Tween.TweenProperty(PerfectEmblem, "self_modulate", new Color(1f,1f,1f, 1f),0.2f).SetDelay(1.1);
 		}	else if (mode == 1)
 		{
 			Details.Position = new Vector2(0, Details.Position.Y);
@@ -207,6 +208,14 @@ public partial class ResultScreenv2 : Control
 	}
 	private bool RankingTick {get;set;} = true;
 	private bool MoreInfoTick {get;set;} = true;
+	private PanelContainer MInfo {get; set;}
+	private Label NA {get; set;}
+
+    public override void _ExitTree()
+    {
+        ApiOperator.Submitted = false;
+    }
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -246,6 +255,10 @@ public partial class ResultScreenv2 : Control
 		MoreInfoP = GetNode<Control>("MoreInfo");
 		MoreInfoP.Visible = true;
 		MoreInfoP.Modulate = new Color(1f,1f,1f,0f);
+		MInfo = GetNode<PanelContainer>("MoreInfo/Moreinfo/VBoxContainer/Moreinfo");
+		NA = GetNode<Label>("MoreInfo/Moreinfo/VBoxContainer/NA");
+		MInfo.Visible = false;
+		NA.Visible = false;
 		Banner = GetNode<TextureRect>("Ranking/Ranking/VBoxContainer/Banner/Banner");
 		Banner.Texture = (Texture2D)SettingsOperator.Sessioncfg["background"];
 		RTitle = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/Title");
@@ -310,7 +323,7 @@ public partial class ResultScreenv2 : Control
 		}
 
 		PerfectEmblem.SelfModulate = new Color(0f, 0f, 0f, 0f);
-		if (SettingsOperator.Gameplaycfg.Bad != 0)
+		if (SettingsOperator.Gameplaycfg.Bad == 0)
 		{
 			PerfectPlay = true;
 		}
@@ -409,6 +422,11 @@ public partial class ResultScreenv2 : Control
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 	}
 
+	private LostClass RS {get; set;}
+	private LostClass RPP {get; set;}
+	private LostClass LP {get; set;}
+	private LostClass RP {get; set;}
+
 	public override void _PhysicsProcess(double delta)
 	{
 		Title.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No Beatmaps Selected";
@@ -419,11 +437,32 @@ public partial class ResultScreenv2 : Control
 		RTitle.Text = Title.Text;
 		RArtist.Text = Artist.Text;
 		RMapper.Text = Mapper.Text;
-		RankedScore.Text = $"{SettingsOperator.RankScore:N0}";
-		RankedScoreLost.Text = $"{SettingsOperator.RankScore - SettingsOperator.OldScore:N0}";
-		RankedPoints.Text = $"{SettingsOperator.ranked_points:N0}pp";
-		LevelPlayer.Text = $"{SettingsOperator.Level:N0}";
-		RankPlayer.Text = $"#{SettingsOperator.Rank:N0}";
+		if (ApiOperator.Submitted)
+		{
+			MInfo.Visible = true;
+			NA.Visible = false;
+			RS = RankUpdate.ReturnLost(SettingsOperator.RankScore, SettingsOperator.OldScore);
+			RPP = RankUpdate.ReturnLost(SettingsOperator.ranked_points, SettingsOperator.Oldpp);
+			LP = RankUpdate.ReturnLost(SettingsOperator.Level, SettingsOperator.OldLevel);
+			RP = RankUpdate.ReturnLost(SettingsOperator.Rank, SettingsOperator.OldRank,reverse: true);
+			ApiOperator.Submitted = false;
+			RankedScore.Text = $"{SettingsOperator.RankScore:N0}";
+			RankedPoints.Text = $"{SettingsOperator.ranked_points:N0}pp";
+			LevelPlayer.Text = $"{SettingsOperator.Level:N0}";
+			RankPlayer.Text = $"#{SettingsOperator.Rank:N0}";
+			// Losses
+			RankedScoreLost.Text = $"{RS.prefix} {RS.output:N0}";
+			RankedPointsLost.Text = $"{RPP.prefix} {RPP.output:N0}";
+			LevelPlayerLost.Text = $"{LP.prefix} {LP.output:N0}";
+			RankPlayerLost.Text = $"{RP.prefix} {RP.output:N0}";
+			RankedScoreLost.SelfModulate = RS.OperatorColour;
+			RankedPointsLost.SelfModulate = RPP.OperatorColour;
+			LevelPlayerLost.SelfModulate = LP.OperatorColour;
+			RankPlayerLost.SelfModulate = RP.OperatorColour;
+		} else
+		{
+			NA.Visible = true;	
+		}
 		
 		
 		if (Tween != null && Tween.IsRunning())
