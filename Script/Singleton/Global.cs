@@ -18,6 +18,14 @@ public partial class Global : Node
 	private Control _skineditorScene;
 	private Tween SkinEditorAni { get; set; }
 
+	public static string GetFormatTime(double time)
+	{
+		double lastUpdatedSeconds = time;
+		DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		DateTime date = epoch.AddSeconds(lastUpdatedSeconds);
+		string formatted = $"{Extras.GetDayWithSuffix(date.Day)} {date:MMM yyyy}";
+		return formatted;
+	}
 	public override void _Process(double delta)
 	{
 		_CurrentScene = GetTree().CurrentScene;

@@ -44,11 +44,7 @@ public partial class CardFunctions : Button
             Existant = GetNode<PanelContainer>("Existed");
             GoShortcut = GetNode<Button>("DownloadBar/VBoxContainer/Play");
             Download = GetNode<Button>("DownloadBar/VBoxContainer/Download");
-            double lastUpdatedSeconds = Browse.BrowseCatalog[Index].last_updated / 1000; // example epoch timestamp
-            DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime date = epoch.AddSeconds(lastUpdatedSeconds);
-            string formatted = $"{Extras.GetDayWithSuffix(date.Day)} {date:MMM yyyy}";
-            Release.Text = $"submitted at {formatted}";
+            Release.Text = $"submitted at {Global.GetFormatTime(Browse.BrowseCatalog[Index].last_updated / 1000)}";
             
             
             Existance();
