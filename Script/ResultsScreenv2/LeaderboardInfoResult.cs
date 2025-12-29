@@ -43,6 +43,7 @@ public partial class LeaderboardInfoResult : ScrollContainer
 				leaderboardEntry.Accuracy = entry.Accuracy;
 				leaderboardEntry.pp = (int)entry.points;
 				leaderboardEntry.Time = entry.time;
+				leaderboardEntry.Combo = entry.combo;
 				leaderboardEntry.Mods = entry.mods;
 				leaderboardEntry.Score = entry.score;
 				
