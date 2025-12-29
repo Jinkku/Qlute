@@ -53,7 +53,6 @@ public partial class SongSelect : Control
 	
 	private int OldSongID { get; set; }
 
-
 	int startposition = 0;
 	int scrolloldvalue { get; set; }
 	private void _valuechangedscroll(float value)
@@ -62,8 +61,6 @@ public partial class SongSelect : Control
 		startposition = ((int)GetViewportRect().Size.Y / 2) - 166;
 		ScrollSongs();
 	}
-
-
 
 	private void scrollmode(int ement = 0, int exactvalue = 0)
 	{
@@ -110,9 +107,7 @@ public partial class SongSelect : Control
 	}
 
 	private Tween Ani { get; set; }
-	
-	
-	
+
 	private void AnimationScene(int type)
 	{
 		Ani?.Kill();
@@ -164,7 +159,6 @@ public partial class SongSelect : Control
 			Ani.TweenProperty(SongControl, "modulate", new Color(1f,1f,1f,1f), 0.5f).SetEase(Tween.EaseType.Out)
 				.SetTrans(Tween.TransitionType.Cubic);
 			Ani.Play();
-			
 		}
 		else if (type == 0)
 		{
@@ -211,7 +205,6 @@ public partial class SongSelect : Control
 		Particle = GetNode<GpuParticles2D>("Particle");
 		Particle.Emitting = true; // Enables it
 
-
 		SettingsOperator.Marathon = false;
 		ModScreen = GetNode<Control>("ModsScreen");
 		ModScreen.Visible = true;
@@ -235,7 +228,6 @@ public partial class SongSelect : Control
 		StartButton.Visible = false; // Start the button off with being hidden.
 		scrollBar.Value = SettingsOperator.SongID;
 		CheckLeaderboardMode();
-
 
 		check_modscreen();
 		ScrollSongs();
@@ -372,7 +364,6 @@ public partial class SongSelect : Control
 			LevelRating.SelfModulate = SettingsOperator.ReturnLevelColour((int)(SettingsOperator.LevelRating * ModsMulti.multiplier));
 			InfoBox.Text(SongBPM, (SettingsOperator.bpm * AudioPlayer.Instance.PitchScale).ToString("N0") ?? "???");
 			InfoBox.Text(SongLen, TimeSpan.FromMilliseconds((SettingsOperator.Gameplaycfg.TimeTotalGame / 0.001f) / AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00");
-
 
 			SetControlsVisibility(true);
 		}
@@ -617,7 +608,6 @@ public partial class SongSelect : Control
 			_Mods_show();
 		}
 		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/play.wav");
-
 
 		if (ModsOperator.Mods["npc"])
 		{
