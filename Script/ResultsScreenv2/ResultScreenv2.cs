@@ -392,6 +392,19 @@ public partial class ResultScreenv2 : Control
 		MoreInfoTick = !MoreInfoTick;
 		RankingTick = true;
 	}
+	private void _up()
+	{
+		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/selected.wav");
+	}
+	private void highlight()
+	{
+		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/hover.wav");
+	}
+
+	private void _uppa()
+	{
+		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/play.wav");
+	}
 	public void Back()
 	{
 		if (!MoreInfoTick)
