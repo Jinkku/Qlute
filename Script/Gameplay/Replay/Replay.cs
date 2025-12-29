@@ -246,8 +246,8 @@ public static class Replay
                 var cache =
                     $"#Qlute Version: {ProjectSettings.GetSetting("application/config/version")}-{ProjectSettings.GetSetting("application/config/branch")}\n";
                 cache += $"#Username: {ApiOperator.Username}\n";
-                cache += $"#osuBeatmapID: {SettingsOperator.Sessioncfg["osubeatid"]}\n";
-                cache += $"#osuBeatmapSetID: {SettingsOperator.Sessioncfg["osubeatidset"]}\n";
+                cache += $"#osuBeatmapID: {SettingsOperator.BeatmapID}\n";
+                cache += $"#osuBeatmapSetID: {SettingsOperator.BeatmapSetID}\n";
                 cache += $"#QluteBeatmapID: 0\n";
                 cache += $"#QluteBeatmapSetID: 0\n";
                 cache += $"#Score: {SettingsOperator.Gameplaycfg.Score}\n";

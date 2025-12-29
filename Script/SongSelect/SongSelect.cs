@@ -390,9 +390,9 @@ public partial class SongSelect : Control
 
 	private void _reloadLeaderboard()
 	{
-		if (SettingsOperator.Sessioncfg["osubeatid"] != null)
+		if (SettingsOperator.BeatmapID != null)
 		{
-			ApiOperator.ReloadLeaderboard((int)SettingsOperator.Sessioncfg["osubeatid"]);
+			ApiOperator.ReloadLeaderboard(SettingsOperator.BeatmapID);
 		}
 		else
 		{
@@ -468,7 +468,7 @@ public partial class SongSelect : Control
 		if (SettingsOperator.Start_reloadLeaderboard && SettingsOperator.Beatmaps.Count > 0)
 		{
 			SettingsOperator.Start_reloadLeaderboard = false;
-			GD.Print("Loading Leaderboard for: " + SettingsOperator.Sessioncfg["osubeatid"]);
+			GD.Print("Loading Leaderboard for: " + SettingsOperator.BeatmapID);
 			_reloadLeaderboard();
 		}
 		if ((bool)SettingsOperator.Sessioncfg["reloaddb"])
@@ -620,7 +620,7 @@ public partial class SongSelect : Control
 
 	private void _openexternal()
 	{
-		OS.ShellOpen(SettingsOperator.Configuration["api"] + "beatmap/" + SettingsOperator.Sessioncfg["osubeatid"]);
+		OS.ShellOpen(SettingsOperator.Configuration["api"] + "beatmap/" + SettingsOperator.BeatmapID);
 	}
 	///<summary>
 	/// Check Rank status

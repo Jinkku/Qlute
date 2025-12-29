@@ -251,6 +251,7 @@ public partial class ResultScreenv2 : Control
 		PerfectEmblem = GetNode<TextureRect>("MainScreen/ScoreCount/HBoxContainer/Perfect");
 		RankLead = GetNode<Label>("MainScreen/Additional2/Card/Column/Number/RankLead");
 		RankLead.Text = $"#{SettingsOperator.Gameplaycfg.Rank:N0}";
+		Achieved.Text = $"achieved on {Global.GetFormatTime(SettingsOperator.Gameplaycfg.EpochTime)}";
 		// Ranking Panel
 		RankingP = GetNode<Control>("Ranking");
 		RankingP.Visible = true;

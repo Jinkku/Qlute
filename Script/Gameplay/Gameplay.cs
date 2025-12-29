@@ -216,6 +216,8 @@ public partial class Gameplay : Control
 		BreakCheck = GetNode<Timer>("BreakCheck");
 		AudioPlayer.Instance.Stop();
 		ClipContents = true;
+		SettingsOperator.Gameplaycfg.Username = ApiOperator.Username;
+		SettingsOperator.Gameplaycfg.EpochTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
 		if (HasNode("Combo"))
 		{

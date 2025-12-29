@@ -198,8 +198,8 @@ public partial class SettingsOperator : Node
             //Gameplaycfg.SampleSet = beatmap.SampleSet;
             Gameplaycfg.SampleSet = SampleSet.Type[1];
             LevelRating = beatmap.Levelrating;
-            Sessioncfg["osubeatid"] = (int)beatmap.Osubeatid;
-            Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
+            BeatmapID =  beatmap.Osubeatid;
+            BeatmapSetID = beatmap.Osubeatidset;
             Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
             if (beatmap.Path != null && beatmap.Background != null)
                 Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
@@ -467,12 +467,16 @@ public partial class SettingsOperator : Node
         public static int Avgms { get; set; }
         public static float BeatmapAccuracy { get; set; } = 1;
         public static int Rank { get; set; }
+        public static double EpochTime { get; set; }
         public static string Username { get; set; } = "Guest";
     }
 
     public static int SongID { get; set; } = -1;
     public static int SongIDHighlighted { get; set; } = -1; // Highlighted song ID for the song select screen
     public static double LevelRating { get; set; } = -1;
+    public static int BeatmapID { get; set; }
+    public static int BeatmapSetID { get; set; }
+
     public static Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
     {
         { "TopPanelSlideip", false },
@@ -493,8 +497,6 @@ public partial class SettingsOperator : Node
         { "beatmapartist", "" },
         { "beatmapmapper", "" },
         { "beatmapbpm", (int)160 },
-        { "osubeatid", 0 },
-        { "osubeatidset", 0 },
         { "beatmapaccuracy", (int)1 },
         { "beatmapdiff", "" },
         { "customapi", false},

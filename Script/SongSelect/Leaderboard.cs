@@ -27,6 +27,7 @@ public partial class Leaderboard : Button
 		SettingsOperator.Gameplaycfg.MaxCombo = Info.combo;
 		SettingsOperator.Gameplaycfg.pp = Info.points;
 		SettingsOperator.Gameplaycfg.Username = Info.username;
+		SettingsOperator.Gameplaycfg.EpochTime = Info.time;
 		if (HasMeta("rank"))
 			SettingsOperator.Gameplaycfg.Rank = (int)GetMeta("rank");
 		else
