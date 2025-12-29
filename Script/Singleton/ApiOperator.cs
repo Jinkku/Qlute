@@ -56,8 +56,8 @@ public partial class ApiOperator : Node
 			Submitted = false;
 			SettingsOperator.JustPlayedScore = false;
 			GD.Print("Submitting score....");
-			int BeatmapID = (int)SettingsOperator.Sessioncfg["osubeatid"];
-			int BeatmapSetID = (int)SettingsOperator.Sessioncfg["osubeatidset"];
+			int BeatmapID = SettingsOperator.BeatmapID;
+			int BeatmapSetID = SettingsOperator.BeatmapSetID;
 			double MAX = SettingsOperator.Gameplaycfg.Max;
 			double GREAT = SettingsOperator.Gameplaycfg.Great;
 			double MEH = SettingsOperator.Gameplaycfg.Meh;
@@ -111,6 +111,10 @@ public partial class ApiOperator : Node
 		if (SettingsOperator.NoConnectionToGameServer)
 		{
 			GD.Print("Skipping because connection to Game server is unverified");
+			return;
+		}else if (BeatmapID == -1)
+		{
+			GD.Print("Skipping because BeatmapID is -1. Meaning there is not BeatmapID set.");
 			return;
 		}
 		else if (SettingsOperator.LeaderboardType == 1)
@@ -180,7 +184,7 @@ public partial class ApiOperator : Node
 			SettingsOperator.RankScore = (int)json["score"];
 			SettingsOperator.OAccuracy = (float)json["accuracy"];
 			SettingsOperator.OCombo = json["max_combo"].AsInt32();
-
+			ReloadLeaderboard(SettingsOperator.BeatmapID);
 		}
 		if (json["msg"].ToString() != "")
 		{
@@ -229,7 +233,7 @@ public partial class ApiOperator : Node
 		RankApi?.CancelRequest();
 		if (SettingsOperator.SongID != -1 && !SettingsOperator.NoConnectionToGameServer)
 		{
-			RankApi.Request($"{Beatmapapi}/api/s/{SettingsOperator.Sessioncfg["osubeatidset"]}");
+			RankApi.Request($"{Beatmapapi}/api/s/{SettingsOperator.BeatmapSetID}");
 		}
 	}
 	/// <summary>

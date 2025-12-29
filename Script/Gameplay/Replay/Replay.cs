@@ -11,8 +11,6 @@ using System.Linq;
 public class ReplayInfo
 {
     public string Username { get; set; } = "Unknown";
-    public int osuBeatmapID { get; set; } = 0;
-    public int osuBeatmapSetID { get; set; } = 0;
     public int BeatmapID { get; set; } = 0;
     public int BeatmapSetID { get; set; } = 0;
     public int Score { get; set; } = 0;
@@ -59,7 +57,7 @@ public static class Replay
     public static List<LeaderboardEntry> Search(int ID)
     {
         List<LeaderboardEntry> List = new List<LeaderboardEntry>();
-        var selectedBeatmaps = Replays.Where(b => b.osuBeatmapID == ID).ToList();
+        var selectedBeatmaps = Replays.Where(b => b.BeatmapID == ID).ToList();
 		selectedBeatmaps = selectedBeatmaps.OrderByDescending(entry => entry.Score).ToList();
         foreach (ReplayInfo Entry in selectedBeatmaps)
         {
@@ -96,8 +94,6 @@ public static class Replay
                 using var filedata = Godot.FileAccess.Open(file, Godot.FileAccess.ModeFlags.Read);
                 string[] cache = filedata.GetAsText().TrimEnd('\n').Split("\n");
                 var Username = "";
-                var osuBeatmapID = 0;
-                var osuBeatmapSetID = 0;
                 var BeatmapID = 0;
                 var BeatmapSetID = 0;
                 var Score = 0;
@@ -118,21 +114,13 @@ public static class Replay
                         {
                             Username = data.Replace("#Username: ", "");
                         }
-                        else if (data.StartsWith("#osuBeatmapID: "))
+                        else if (data.StartsWith("#BeatmapID: "))
                         {
-                            osuBeatmapID = Int32.Parse(data.Replace("#osuBeatmapID: ", ""));
+                            BeatmapID = Int32.Parse(data.Replace("#BeatmapID: ", ""));
                         }
-                        else if (data.StartsWith("#osuBeatmapSetID: "))
+                        else if (data.StartsWith("#BeatmapSetID: "))
                         {
-                            osuBeatmapSetID = Int32.Parse(data.Replace("#osuBeatmapSetID: ", ""));
-                        }
-                        else if (data.StartsWith("#QluteBeatmapID: "))
-                        {
-                            BeatmapID = Int32.Parse(data.Replace("#QluteBeatmapID: ", ""));
-                        }
-                        else if (data.StartsWith("#QluteBeatmapSetID: "))
-                        {
-                            BeatmapSetID = Int32.Parse(data.Replace("#QluteBeatmapSetID: ", ""));
+                            BeatmapSetID = Int32.Parse(data.Replace("#BeatmapSetID: ", ""));
                         }
                         else if (data.StartsWith("#Score: "))
                         {
@@ -181,8 +169,6 @@ public static class Replay
                         Replays.Add(new ReplayInfo
                         {
                             Username = Username,
-                            osuBeatmapID = osuBeatmapID,
-                            osuBeatmapSetID = osuBeatmapSetID,
                             BeatmapID = BeatmapID,
                             BeatmapSetID = BeatmapSetID,
                             Score = Score,
@@ -246,10 +232,8 @@ public static class Replay
                 var cache =
                     $"#Qlute Version: {ProjectSettings.GetSetting("application/config/version")}-{ProjectSettings.GetSetting("application/config/branch")}\n";
                 cache += $"#Username: {ApiOperator.Username}\n";
-                cache += $"#osuBeatmapID: {SettingsOperator.BeatmapID}\n";
-                cache += $"#osuBeatmapSetID: {SettingsOperator.BeatmapSetID}\n";
-                cache += $"#QluteBeatmapID: 0\n";
-                cache += $"#QluteBeatmapSetID: 0\n";
+                cache += $"#BeatmapID: {SettingsOperator.BeatmapID}\n";
+                cache += $"#BeatmapSetID: {SettingsOperator.BeatmapSetID}\n";
                 cache += $"#Score: {SettingsOperator.Gameplaycfg.Score}\n";
                 cache += $"#Max: {SettingsOperator.Gameplaycfg.Max}\n";
                 cache += $"#Great: {SettingsOperator.Gameplaycfg.Great}\n";

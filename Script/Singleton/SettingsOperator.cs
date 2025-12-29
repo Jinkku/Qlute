@@ -198,8 +198,8 @@ public partial class SettingsOperator : Node
             //Gameplaycfg.SampleSet = beatmap.SampleSet;
             Gameplaycfg.SampleSet = SampleSet.Type[1];
             LevelRating = beatmap.Levelrating;
-            BeatmapID =  beatmap.Osubeatid;
-            BeatmapSetID = beatmap.Osubeatidset;
+            BeatmapID =  beatmap.BeatmapID;
+            BeatmapSetID = beatmap.BeatmapSetID;
             Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
             if (beatmap.Path != null && beatmap.Background != null)
                 Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
@@ -303,10 +303,8 @@ public partial class SettingsOperator : Node
                     case "CircleSize": legend.KeyCount = (int)(float.TryParse(value, out var cs) ? cs : 4); break;
                     case "OverallDifficulty": legend.Accuracy = float.TryParse(value, out var od) ? od : 0; break;
                     case "AudioFilename": legend.Audio = value; break;
-                    case "BeatmapID": legend.Osubeatid = int.TryParse(value, out var bid) ? bid : -1; break;
-                    case "BeatmapSetID": legend.Osubeatidset = int.TryParse(value, out var bset) ? bset : -1; break;
-                    case "QluteBeatID": legend.Beatid = int.TryParse(value, out var qbid) ? qbid : -1; break;
-                    case "QluteBeatIDSet": legend.Beatidset = int.TryParse(value, out var qbset) ? qbset : -1; break;
+                    case "BeatmapID": legend.BeatmapID = int.TryParse(value, out var bid) ? bid : -1; break;
+                    case "BeatmapSetID": legend.BeatmapSetID = int.TryParse(value, out var bset) ? bset : -1; break;
                     case "PreviewTime": legend.PreviewTime = (float.TryParse(value, out var pt) ? pt : 0) * 0.001f; break;
                 }
             }
@@ -474,8 +472,8 @@ public partial class SettingsOperator : Node
     public static int SongID { get; set; } = -1;
     public static int SongIDHighlighted { get; set; } = -1; // Highlighted song ID for the song select screen
     public static double LevelRating { get; set; } = -1;
-    public static int BeatmapID { get; set; }
-    public static int BeatmapSetID { get; set; }
+    public static int BeatmapID { get; set; } = -1;
+    public static int BeatmapSetID { get; set; } = -1;
 
     public static Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
     {

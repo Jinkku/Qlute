@@ -50,7 +50,7 @@ public partial class BeatmapInfo : Control
 	/// </summary>
 	private void Existance()
 	{
-		var beatmap = SettingsOperator.Beatmaps.FirstOrDefault(b => b.Osubeatidset == BeatmapID);
+		var beatmap = SettingsOperator.Beatmaps.FirstOrDefault(b => b.BeatmapSetID == BeatmapID);
 		Downloaded = beatmap != null;
 		if (Downloaded)
 		{

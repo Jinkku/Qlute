@@ -388,18 +388,6 @@ public partial class SongSelect : Control
 		}
 	}
 
-	private void _reloadLeaderboard()
-	{
-		if (SettingsOperator.BeatmapID != null)
-		{
-			ApiOperator.ReloadLeaderboard(SettingsOperator.BeatmapID);
-		}
-		else
-		{
-			GD.PrintErr("No osubeatid found in Sessioncfg, cannot reload leaderboard.");
-		}
-	}
-
 	private void CheckLeaderboardMode()
 	{
 		if (SettingsOperator.LeaderboardType == 0)
@@ -469,7 +457,7 @@ public partial class SongSelect : Control
 		{
 			SettingsOperator.Start_reloadLeaderboard = false;
 			GD.Print("Loading Leaderboard for: " + SettingsOperator.BeatmapID);
-			_reloadLeaderboard();
+			ApiOperator.ReloadLeaderboard(SettingsOperator.BeatmapID);
 		}
 		if ((bool)SettingsOperator.Sessioncfg["reloaddb"])
 		{
