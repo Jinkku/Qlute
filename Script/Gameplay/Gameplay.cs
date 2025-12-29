@@ -72,7 +72,6 @@ public partial class Gameplay : Control
 		GetTree().Root.AddChild(PauseMenu);
 	}
 
-
 	private void FailAnimation()
 	{
 		var Interval = 1f; // Interval of speed that the animation will go.
@@ -262,14 +261,12 @@ public partial class Gameplay : Control
 		perfect.Visible = false;
 		GetNode<ColorRect>("Playfield/Guard").AddChild(perfect);
 
-
 		foreach (int i in Enumerable.Range(1, 4))
 		{
 			var notet = GetNode<PanelContainer>("Playfield/ChartSections/Section" + i);
 			Keys.Add(new KeyL { Node = notet, hit = false });
 			notet.SelfModulate = Skin.Element.LaneNotes[i - 1] / 2;
 		}
-
 
 		maxrndvalue = (int)(1000000 * ModsMulti.multiplier);
 
@@ -289,8 +286,6 @@ public partial class Gameplay : Control
 			}
 		}
 
-
-
 		if (SettingsOperator.SpectatorMode)
 		{
 			AddChild(SpectatorPanel);
@@ -303,8 +298,6 @@ public partial class Gameplay : Control
 		}
 		GD.Print($"Spectator mode: {SettingsOperator.SpectatorMode}");
 	}
-
-
 
 	public Texture2D NoteSkinBack { get; set; }
 	public Texture2D NoteSkinFore { get; set; }
@@ -380,7 +373,6 @@ public partial class Gameplay : Control
 	    double finalScore = baseScore * multiplier;
 	    return (int)Math.Round(finalScore);
     }
-	
 
 	/// <summary>
 	/// Starts Playback
@@ -390,7 +382,6 @@ public partial class Gameplay : Control
 		songstarted = true;
 		AudioPlayer.Instance.Play();
 	}
-
 
     /// <summary>
     /// If SettingsOperator.ReplayMode is enabled, this will check at the specified index of the replay cache to simulate a keypress in Spectator Mode.
@@ -551,7 +542,6 @@ public partial class Gameplay : Control
 			scoretween.TweenProperty(this, "scoreint",
 				Get_Score(SettingsOperator.Gameplaycfg.pp, SettingsOperator.Gameplaycfg.maxpp, ModsMulti.multiplier), 0.3f);
 			scoretween.Play();
-			
 		}
 		SettingsOperator.Gameplaycfg.Score = scoreint; // Set the score of the player
 		HitPoint = (int)Chart.Size.Y - 150;
@@ -564,7 +554,6 @@ public partial class Gameplay : Control
 				Dead = !Dead;
 				FailAnimation();
 			}
-
 
 			// End Game
 
@@ -590,7 +579,6 @@ public partial class Gameplay : Control
 			{
 				SettingsOperator.Gameplaycfg.MaxCombo = SettingsOperator.Gameplaycfg.Combo;
 			}
-
 
 			Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)));
 			SettingsOperator.Gameplaycfg.Accuracy = ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
@@ -620,8 +608,6 @@ public partial class Gameplay : Control
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 			}
 			//debugtext.Text = $"est: {est}\nDanceIndex:{DanceIndex}\nTimeindex:{dance[DanceIndex].time}";
-
-
 
 			if ((int)est >= dance[DanceIndex].time + BeatmapBackground.bpm && BeatmapBackground.FlashEnable)
 			{
@@ -711,7 +697,6 @@ public partial class Gameplay : Control
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
 			ComboTween.Play();
-			
 		}
 	}
 	public int checkjudge(int timing, bool keyvalue, NotesEn Note)
