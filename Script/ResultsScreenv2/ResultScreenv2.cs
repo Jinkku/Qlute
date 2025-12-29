@@ -469,9 +469,9 @@ public partial class ResultScreenv2 : Control
 			MaxCombo.Text = $"{SettingsOperator.OCombo:N0}x";
 			// Losses
 			RankedScoreLost.Text = $"{RS.prefix} {RS.output:N0}";
-			RankedPointsLost.Text = $"{RPP.prefix} {RPP.output:N0}";
+			RankedPointsLost.Text = $"{RPP.prefix} {RPP.output:N0}pp";
 			LevelPlayerLost.Text = $"{LP.prefix} {LP.output:N0}";
-			RankPlayerLost.Text = $"{RP.prefix} {RP.output:N0}";
+			RankPlayerLost.Text = $"{RP.prefix} #{RP.output:N0}";
 			AccuracyLost.Text = $"{OA.prefix} {OA.output:P2}";
 			MaxComboLost.Text = $"{MC.prefix} {MC.output:N0}";
 			RankedScoreLost.SelfModulate = RS.OperatorColour;
