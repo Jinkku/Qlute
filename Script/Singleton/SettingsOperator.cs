@@ -55,6 +55,10 @@ public partial class SettingsOperator : Node
     public static int MiliSecondsFromBeatmapTimes { get; set; }
     public static List<BeatmapLegend> Beatmaps = new List<BeatmapLegend>();
     public static float AudioOffset { get; set; } = 0;
+    /// <summary>
+    /// 1 = Online,
+    /// 2+ = Local
+    /// </summary>
     public static int LeaderboardType = 1;
     public static bool NoConnectionToGameServer { get; set; }
 

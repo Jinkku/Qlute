@@ -254,6 +254,8 @@ public static class Replay
                 file.StoreString(cache);
                 cache = "";
                 Parse(FilePath);
+                if (SettingsOperator.LeaderboardType == 2)
+                    ApiOperator.ReloadLeaderboard(SettingsOperator.BeatmapID);
                 GD.Print("[Qlute] Completed Successfully!");
             }
             catch (Exception err)

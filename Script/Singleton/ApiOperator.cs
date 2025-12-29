@@ -184,7 +184,8 @@ public partial class ApiOperator : Node
 			SettingsOperator.RankScore = (int)json["score"];
 			SettingsOperator.OAccuracy = (float)json["accuracy"];
 			SettingsOperator.OCombo = json["max_combo"].AsInt32();
-			ReloadLeaderboard(SettingsOperator.BeatmapID);
+			if (SettingsOperator.LeaderboardType == 1)
+				ReloadLeaderboard(SettingsOperator.BeatmapID);
 		}
 		if (json["msg"].ToString() != "")
 		{
