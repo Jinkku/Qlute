@@ -11,7 +11,6 @@ public partial class CustomValue : PanelContainer
 		Emblem = GetNode<PanelContainer>("../../");
 		Custom = GetNode<Label>("Value");
 		if (Emblem.HasMeta("ModName")) id = Emblem.GetMeta("ModName").ToString();
-		GD.Print(id);
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)

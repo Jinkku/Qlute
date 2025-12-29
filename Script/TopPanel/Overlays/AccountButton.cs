@@ -18,7 +18,7 @@ public partial class AccountButton : Button
 	public override void _Process(double delta)
 	{
 		string username = SettingsOperator.GetSetting("username")?.ToString();
-		string ranking = ((int)SettingsOperator.Sessioncfg["ranknumber"]).ToString("N0");
+		string ranking = (SettingsOperator.Rank).ToString("N0");
 		if (username != null){
 			PlayerName.Text = username;
 			if (ranking != null && ranking != "0"){

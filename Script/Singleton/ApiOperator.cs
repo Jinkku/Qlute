@@ -44,6 +44,7 @@ public partial class ApiOperator : Node
 	private SettingsOperator SettingsOperator { get; set; }
 	public static string NoticeText { get; set; }
 	public static ApiOperator Instance { get; set; }
+	public static bool Submitted = false;
 	public static string Beatmapapi = "https://catboy.best";
 	/// <summary>
 	/// Submits a score to the dedicated server.
@@ -52,9 +53,11 @@ public partial class ApiOperator : Node
 	{
 		if (!SettingsOperator.SpectatorMode)
 		{
+			Submitted = false;
+			SettingsOperator.JustPlayedScore = false;
 			GD.Print("Submitting score....");
-			int BeatmapID = (int)SettingsOperator.Sessioncfg["osubeatid"];
-			int BeatmapSetID = (int)SettingsOperator.Sessioncfg["osubeatidset"];
+			int BeatmapID = SettingsOperator.BeatmapID;
+			int BeatmapSetID = SettingsOperator.BeatmapSetID;
 			double MAX = SettingsOperator.Gameplaycfg.Max;
 			double GREAT = SettingsOperator.Gameplaycfg.Great;
 			double MEH = SettingsOperator.Gameplaycfg.Meh;
@@ -108,6 +111,10 @@ public partial class ApiOperator : Node
 		if (SettingsOperator.NoConnectionToGameServer)
 		{
 			GD.Print("Skipping because connection to Game server is unverified");
+			return;
+		}else if (BeatmapID == -1)
+		{
+			GD.Print("Skipping because BeatmapID is -1. Meaning there is not BeatmapID set.");
 			return;
 		}
 		else if (SettingsOperator.LeaderboardType == 1)
@@ -167,7 +174,18 @@ public partial class ApiOperator : Node
 		Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
 		if ((int)json["rankedmap"] > 0 && (int)json["error"] == 0)
 		{
+			Submitted = true;
 			RankUpdate.Update((int)json["rank"], (int)json["points"]);
+			SettingsOperator.OldLevel = SettingsOperator.Level;
+			SettingsOperator.OldScore = SettingsOperator.RankScore;
+			SettingsOperator.OldAccuracy = SettingsOperator.OAccuracy;
+			SettingsOperator.OldCombo = SettingsOperator.OCombo;
+			SettingsOperator.Level = (int)json["level"];
+			SettingsOperator.RankScore = (int)json["score"];
+			SettingsOperator.OAccuracy = (float)json["accuracy"];
+			SettingsOperator.OCombo = json["max_combo"].AsInt32();
+			if (SettingsOperator.LeaderboardType == 1)
+				ReloadLeaderboard(SettingsOperator.BeatmapID);
 		}
 		if (json["msg"].ToString() != "")
 		{
@@ -192,8 +210,19 @@ public partial class ApiOperator : Node
 				Ranking.Instance.Text = "#" + n.ToString("N0");
 			}
 		}
-		SettingsOperator.Sessioncfg["ranknumber"] = n;
+		SettingsOperator.Rank = n;
+		SettingsOperator.OldRank = n;
+		SettingsOperator.RankScore = json["score"].AsInt32();
+		SettingsOperator.OldScore = SettingsOperator.RankScore;
 		SettingsOperator.ranked_points = json["points"].AsInt32();
+		SettingsOperator.Oldpp = SettingsOperator.ranked_points;
+		SettingsOperator.Level = json["level"].AsInt32();
+		SettingsOperator.OldLevel = SettingsOperator.Level;
+		SettingsOperator.OAccuracy = (float)json["accuracy"];
+		SettingsOperator.OldAccuracy = SettingsOperator.OAccuracy;
+		SettingsOperator.OCombo = json["max_combo"].AsInt32();
+		SettingsOperator.OldCombo = SettingsOperator.OCombo;
+
 	}
 
 	public static int RankedStatus { get; set; }
@@ -205,7 +234,7 @@ public partial class ApiOperator : Node
 		RankApi?.CancelRequest();
 		if (SettingsOperator.SongID != -1 && !SettingsOperator.NoConnectionToGameServer)
 		{
-			RankApi.Request($"{Beatmapapi}/api/s/{SettingsOperator.Sessioncfg["osubeatidset"]}");
+			RankApi.Request($"{Beatmapapi}/api/s/{SettingsOperator.BeatmapSetID}");
 		}
 	}
 	/// <summary>

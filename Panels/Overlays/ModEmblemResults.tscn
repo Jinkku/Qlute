@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://cs1yw4bti3qhr"]
+
+[ext_resource type="Texture2D" uid="uid://bs0ry26wcs6fv" path="res://Resources/System/Mods/Emblem.png" id="1_fta7i"]
+[ext_resource type="Script" uid="uid://clqgk650pimgt" path="res://Script/ResultsScreenv2/ModEmblemResults.cs" id="2_sin7o"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_eu4ee"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
+texture = ExtResource("1_fta7i")
+texture_margin_left = 15.0
+texture_margin_top = 15.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
+
+[node name="ModEmblem" type="Label"]
+custom_minimum_size = Vector2(45, 30)
+offset_right = 52.0
+offset_bottom = 30.0
+theme_override_styles/normal = SubResource("StyleBoxTexture_eu4ee")
+text = "DT"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("2_sin7o")
+metadata/ModName = ""

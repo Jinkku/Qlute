@@ -11,8 +11,6 @@ using System.Linq;
 public class ReplayInfo
 {
     public string Username { get; set; } = "Unknown";
-    public int osuBeatmapID { get; set; } = 0;
-    public int osuBeatmapSetID { get; set; } = 0;
     public int BeatmapID { get; set; } = 0;
     public int BeatmapSetID { get; set; } = 0;
     public int Score { get; set; } = 0;
@@ -24,6 +22,7 @@ public class ReplayInfo
     public int MaxCombo { get; set; } = 0;
     public float Avgms { get; set; } = 0;
     public string Mods { get; set; } = "";
+    public double Points { get; set; } = 0;
     public string Filepath { get; set; }
 }
 /// <summary>
@@ -58,7 +57,7 @@ public static class Replay
     public static List<LeaderboardEntry> Search(int ID)
     {
         List<LeaderboardEntry> List = new List<LeaderboardEntry>();
-        var selectedBeatmaps = Replays.Where(b => b.osuBeatmapID == ID).ToList();
+        var selectedBeatmaps = Replays.Where(b => b.BeatmapID == ID).ToList();
 		selectedBeatmaps = selectedBeatmaps.OrderByDescending(entry => entry.Score).ToList();
         foreach (ReplayInfo Entry in selectedBeatmaps)
         {
@@ -75,6 +74,7 @@ public static class Replay
                 MEH = Entry.Meh,
                 BAD = Entry.Bad,
                 mods = Entry.Mods,
+                points = Entry.Points,
                 time = Time,
                 FilePath = Entry.Filepath
             });
@@ -94,8 +94,6 @@ public static class Replay
                 using var filedata = Godot.FileAccess.Open(file, Godot.FileAccess.ModeFlags.Read);
                 string[] cache = filedata.GetAsText().TrimEnd('\n').Split("\n");
                 var Username = "";
-                var osuBeatmapID = 0;
-                var osuBeatmapSetID = 0;
                 var BeatmapID = 0;
                 var BeatmapSetID = 0;
                 var Score = 0;
@@ -103,9 +101,10 @@ public static class Replay
                 var Great = 0;
                 var Meh = 0;
                 var Bad = 0;
-                var Accuracy = 100.00f;
+                var Accuracy = 1.00f;
                 var MaxCombo = 0;
                 var AverageMs = 0.0f;
+                double Points = 0;
                 var Mods = "";
                 foreach (string data in cache)
                 {
@@ -115,21 +114,13 @@ public static class Replay
                         {
                             Username = data.Replace("#Username: ", "");
                         }
-                        else if (data.StartsWith("#osuBeatmapID: "))
+                        else if (data.StartsWith("#BeatmapID: "))
                         {
-                            osuBeatmapID = Int32.Parse(data.Replace("#osuBeatmapID: ", ""));
+                            BeatmapID = Int32.Parse(data.Replace("#BeatmapID: ", ""));
                         }
-                        else if (data.StartsWith("#osuBeatmapSetID: "))
+                        else if (data.StartsWith("#BeatmapSetID: "))
                         {
-                            osuBeatmapSetID = Int32.Parse(data.Replace("#osuBeatmapSetID: ", ""));
-                        }
-                        else if (data.StartsWith("#QluteBeatmapID: "))
-                        {
-                            BeatmapID = Int32.Parse(data.Replace("#QluteBeatmapID: ", ""));
-                        }
-                        else if (data.StartsWith("#QluteBeatmapSetID: "))
-                        {
-                            BeatmapSetID = Int32.Parse(data.Replace("#QluteBeatmapSetID: ", ""));
+                            BeatmapSetID = Int32.Parse(data.Replace("#BeatmapSetID: ", ""));
                         }
                         else if (data.StartsWith("#Score: "))
                         {
@@ -167,6 +158,10 @@ public static class Replay
                         {
                             Mods = data.Replace("#Mods: ", "");
                         }
+                        else if (data.StartsWith("#Points: "))
+                        {
+                            Points = double.Parse(data.Replace("#Points: ", ""));
+                        }
                     }
                     else
                     {
@@ -174,8 +169,6 @@ public static class Replay
                         Replays.Add(new ReplayInfo
                         {
                             Username = Username,
-                            osuBeatmapID = osuBeatmapID,
-                            osuBeatmapSetID = osuBeatmapSetID,
                             BeatmapID = BeatmapID,
                             BeatmapSetID = BeatmapSetID,
                             Score = Score,
@@ -187,6 +180,7 @@ public static class Replay
                             MaxCombo = MaxCombo,
                             Avgms = AverageMs,
                             Mods = Mods,
+                            Points = Points,
                             Filepath = file
                         });
                         break;
@@ -238,19 +232,18 @@ public static class Replay
                 var cache =
                     $"#Qlute Version: {ProjectSettings.GetSetting("application/config/version")}-{ProjectSettings.GetSetting("application/config/branch")}\n";
                 cache += $"#Username: {ApiOperator.Username}\n";
-                cache += $"#osuBeatmapID: {SettingsOperator.Sessioncfg["osubeatid"]}\n";
-                cache += $"#osuBeatmapSetID: {SettingsOperator.Sessioncfg["osubeatidset"]}\n";
-                cache += $"#QluteBeatmapID: 0\n";
-                cache += $"#QluteBeatmapSetID: 0\n";
+                cache += $"#BeatmapID: {SettingsOperator.BeatmapID}\n";
+                cache += $"#BeatmapSetID: {SettingsOperator.BeatmapSetID}\n";
                 cache += $"#Score: {SettingsOperator.Gameplaycfg.Score}\n";
                 cache += $"#Max: {SettingsOperator.Gameplaycfg.Max}\n";
                 cache += $"#Great: {SettingsOperator.Gameplaycfg.Great}\n";
                 cache += $"#Meh: {SettingsOperator.Gameplaycfg.Meh}\n";
                 cache += $"#Bad: {SettingsOperator.Gameplaycfg.Bad}\n";
-                cache += $"#Accuracy: {SettingsOperator.Gameplaycfg.Accuracy * 100.00}\n";
+                cache += $"#Accuracy: {SettingsOperator.Gameplaycfg.Accuracy}\n";
                 cache += $"#Max Combo: {SettingsOperator.Gameplaycfg.MaxCombo}\n";
                 cache += $"#Average ms: {SettingsOperator.Gameplaycfg.ms}\n";
                 cache += $"#Mods: {ModsOperator.GetModAlias()}\n";
+                cache += $"#Points: {SettingsOperator.Gameplaycfg.pp}\n";
                 cache += $"#Seed: {Gameplay.seed}\n";
                 foreach (ReplayLegend entry in ReplayCache)
                 {
@@ -261,6 +254,8 @@ public static class Replay
                 file.StoreString(cache);
                 cache = "";
                 Parse(FilePath);
+                if (SettingsOperator.LeaderboardType == 0)
+                    ApiOperator.ReloadLeaderboard(SettingsOperator.BeatmapID);
                 GD.Print("[Qlute] Completed Successfully!");
             }
             catch (Exception err)

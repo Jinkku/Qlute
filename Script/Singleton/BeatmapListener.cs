@@ -20,10 +20,8 @@ public class BeatmapLegend
 	public string Version { get; set; } = null;
 	public double pp { get; set; } = 0.0;
 	public List<double> ppv2sets { get; set; } = new List<double>();
-	public int Osubeatid { get; set; } = -1; // osu!mania compatibility
-	public int Osubeatidset { get; set; } = -1;
-	public int Beatid { get; set; } = -1; // Beatmap ID for Qlute-made beatmaps
-	public int Beatidset { get; set; } = -1; // Beatmap ID for Qlute-made beatmaps
+	public int BeatmapID { get; set; } = -1;
+	public int BeatmapSetID { get; set; } = -1;
 	public float Bpm { get; set; } = 0.0f;
 	public List<DanceCounter> Dance { get; set; } = new List<DanceCounter>();
 	public float PreviewTime { get; set; } = 0; // Preview Time

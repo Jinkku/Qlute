@@ -35,6 +35,40 @@ public partial class ModsOperator : Node
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public static List<string> ModsEnabled { get; set; } = new List<string>();
+
+	public static List<string> ParseModAlias(string modalias)
+	{
+		var modsparsed = new List<string>();
+		if (modalias.Contains("AT"))
+		{
+			modsparsed.Add("AT");
+		}
+		else if (modalias.Contains("DT"))
+		{
+			modsparsed.Add("DT");
+		}
+		else if (modalias.Contains("HT"))
+		{
+			modsparsed.Add("HT");
+		}
+		else if (modalias.Contains("RND"))
+		{
+			modsparsed.Add("RND");
+		}
+		else if (modalias.Contains("SL"))
+		{
+			modsparsed.Add("SL");
+		}
+		else if (modalias.Contains("BT"))
+		{
+			modsparsed.Add("BT");
+		}
+		else if (modalias.Contains("NF"))
+		{
+			modsparsed.Add("NF");
+		}
+		return modsparsed;
+	}
 	public static string GetModAlias()
 	{
 		var modalias = "";
@@ -108,7 +142,7 @@ public partial class ModsOperator : Node
 			Mods["ht"] = true;
 			ModsEnabled.Add("HT");
 		}
-		else if (modalias == "END")
+		else if (modalias == "RND")
 		{
 			Mods["random"] = true;
 			ModsEnabled.Add("RND");

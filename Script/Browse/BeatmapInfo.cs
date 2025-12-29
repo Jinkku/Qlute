@@ -50,7 +50,7 @@ public partial class BeatmapInfo : Control
 	/// </summary>
 	private void Existance()
 	{
-		var beatmap = SettingsOperator.Beatmaps.FirstOrDefault(b => b.Osubeatidset == BeatmapID);
+		var beatmap = SettingsOperator.Beatmaps.FirstOrDefault(b => b.BeatmapSetID == BeatmapID);
 		Downloaded = beatmap != null;
 		if (Downloaded)
 		{
@@ -117,10 +117,6 @@ public partial class BeatmapInfo : Control
 		if (Index != -1)
 		{
 			NoteCountTotal = BeatmapList[BeatmapIndex].count_circles + BeatmapList[BeatmapIndex].count_sliders;
-			double lastUpdatedSeconds = cache.last_updated / 1000; // example epoch timestamp
-			DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-			DateTime date = epoch.AddSeconds(lastUpdatedSeconds);
-			string formatted = $"{Extras.GetDayWithSuffix(date.Day)} {date:MMM yyyy}";
 			Length.Text = $"{TimeSpan.FromSeconds(BeatmapList[BeatmapIndex].total_length):mm\\:ss}";
 			BPM.Text = BeatmapList[BeatmapIndex].bpm.ToString("N0");
 			MaxPP.Text = $"{SettingsOperator.Get_ppvalue(NoteCountTotal, 0, 0, 0, 1, NoteCountTotal, BeatmapList[BeatmapIndex].total_length).ToString("N0")}pp";
@@ -129,7 +125,7 @@ public partial class BeatmapInfo : Control
 			Title.Text = cache.title;
 			Artist.Text = cache.artist;
 			Mapper.Text = $"mapped by {cache.creator}";
-			Submitted.Text = $"submitted at {formatted}";
+			Submitted.Text = $"submitted at {Global.GetFormatTime(cache.last_updated / 1000)}";
 		}
 	}
 

@@ -338,7 +338,7 @@ public partial class SongSelect : Control
 		if (SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.Sessioncfg["beatmaptitle"] != null)
 		{
 			// Update song details
-			ExSongInfo.Text = $"{SettingsOperator.Sessioncfg["beatmapartist"]}\n{SettingsOperator.Sessioncfg["beatmapdiff"]}\n{SettingsOperator.Sessioncfg["beatmapmapper"]}";
+			ExSongInfo.Text = $"by {SettingsOperator.Sessioncfg["beatmapartist"]}\nmapped by {SettingsOperator.Sessioncfg["beatmapmapper"]}\nDifficulty: {SettingsOperator.Sessioncfg["beatmapdiff"]}";
 			InfoBox.Text(Songpp, "+" + (SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier).ToString("N0") + "pp");
 			InfoBox.Text(LevelRating, "Lv. " + (SettingsOperator.LevelRating * ModsMulti.multiplier).ToString("N0") ?? "Lv. 0");
 			LevelRating.SelfModulate = SettingsOperator.ReturnLevelColour((int)(SettingsOperator.LevelRating * ModsMulti.multiplier));
@@ -385,18 +385,6 @@ public partial class SongSelect : Control
 		if (index != 2)
 		{
 			SettingsOperator.Start_reloadLeaderboard = true;
-		}
-	}
-
-	private void _reloadLeaderboard()
-	{
-		if (SettingsOperator.Sessioncfg["osubeatid"] != null)
-		{
-			ApiOperator.ReloadLeaderboard((int)SettingsOperator.Sessioncfg["osubeatid"]);
-		}
-		else
-		{
-			GD.PrintErr("No osubeatid found in Sessioncfg, cannot reload leaderboard.");
 		}
 	}
 
@@ -468,8 +456,8 @@ public partial class SongSelect : Control
 		if (SettingsOperator.Start_reloadLeaderboard && SettingsOperator.Beatmaps.Count > 0)
 		{
 			SettingsOperator.Start_reloadLeaderboard = false;
-			GD.Print("Loading Leaderboard for: " + SettingsOperator.Sessioncfg["osubeatid"]);
-			_reloadLeaderboard();
+			GD.Print("Loading Leaderboard for: " + SettingsOperator.BeatmapID);
+			ApiOperator.ReloadLeaderboard(SettingsOperator.BeatmapID);
 		}
 		if ((bool)SettingsOperator.Sessioncfg["reloaddb"])
 		{
@@ -620,7 +608,7 @@ public partial class SongSelect : Control
 
 	private void _openexternal()
 	{
-		OS.ShellOpen(SettingsOperator.Configuration["api"] + "beatmap/" + SettingsOperator.Sessioncfg["osubeatid"]);
+		OS.ShellOpen(SettingsOperator.Configuration["api"] + "beatmap/" + SettingsOperator.BeatmapID);
 	}
 	///<summary>
 	/// Check Rank status

@@ -139,12 +139,10 @@ public partial class ResultsScreen : Control
 	}
 	public void _retry()
 	{
-		SettingsOperator.ResetRank();
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 	}
 	public void _continue()
 	{
-		SettingsOperator.ResetRank();
 		AudioPlayer.Instance.Play();
 		Replay.FilePath = "";
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
@@ -152,16 +150,16 @@ public partial class ResultsScreen : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
-		if (SettingsOperator.UpdatedRank != "#0")
+		if (SettingsOperator.Rank - SettingsOperator.OldRank != 0)
 		{
 			TRankBox.Visible = true;
-			TRank.Text = SettingsOperator.UpdatedRank;
+			TRank.Text = $"#{SettingsOperator.Rank - SettingsOperator.OldRank}";
 		}
 		else TRankBox.Visible = false;
-		if (SettingsOperator.Updatedpp != "0pp")
+		if (SettingsOperator.ranked_points - SettingsOperator.Oldpp != 0)
 		{
 			TppBox.Visible = true;
-			Tpp.Text = SettingsOperator.Updatedpp;
+			Tpp.Text = $"{SettingsOperator.ranked_points - SettingsOperator.Oldpp}pp";
 		}
 		else TppBox.Visible = false;
 		Score.Text = scorevalue.ToString("N0");

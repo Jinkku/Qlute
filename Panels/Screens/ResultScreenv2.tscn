@@ -1,0 +1,1128 @@
+[gd_scene load_steps=27 format=3 uid="uid://di5ewxeoj57jx"]
+
+[ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="1_anm4q"]
+[ext_resource type="Script" uid="uid://cuilclotqydk7" path="res://Script/ResultsScreenv2/ResultScreenv2.cs" id="1_x8kcy"]
+[ext_resource type="Texture2D" uid="uid://g700huvbxfe" path="res://Resources/System/ResultsScreen/PerfectCombo.png" id="2_gw5a4"]
+[ext_resource type="Script" uid="uid://dxlp3pg2t1kfb" path="res://Script/ResultsScreenv2/ModsResultsScreenShowcase.cs" id="4_476ju"]
+[ext_resource type="Texture2D" uid="uid://l7228i4a0mcx" path="res://Resources/System/ResultsScreen/Union.png" id="4_p8vf7"]
+[ext_resource type="Texture2D" uid="uid://7xeithpea7rg" path="res://Resources/System/ResultsScreen/AccuracyProgress.png" id="5_476ju"]
+[ext_resource type="Texture2D" uid="uid://brygxnbtgntug" path="res://Resources/System/ResultsScreen/Ranks/SS.png" id="6_6dcqk"]
+[ext_resource type="Texture2D" uid="uid://b1clm3jlo8ybj" path="res://Resources/System/ResultsScreen/AccuracyHint.png" id="7_2qgfu"]
+[ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="8_p8vf7"]
+[ext_resource type="Texture2D" uid="uid://fgbtqxkt8lm" path="res://DefaultWallpaper/attack.png" id="9_2qgfu"]
+[ext_resource type="PackedScene" uid="uid://enjjpp7s76ps" path="res://Panels/Overlays/RankLeaderboard.tscn" id="10_8y25b"]
+[ext_resource type="Script" uid="uid://babskjhowme4a" path="res://Script/ResultsScreenv2/LeaderboardInfoResult.cs" id="11_8y25b"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_anm4q"]
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.70000005)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_left = 35.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gw5a4"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.45000002)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kpst7"]
+content_margin_left = 42.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kpst7"]
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.45000002)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_661fp"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.70000005)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_left = 55.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4oeqo"]
+content_margin_left = 15.0
+content_margin_top = 10.0
+content_margin_right = 15.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.70000005)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6dcqk"]
+bg_color = Color(0, 0, 0, 0.70000005)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2qgfu"]
+bg_color = Color(0, 0, 0, 0.4509804)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8y25b"]
+content_margin_left = 25.0
+texture = ExtResource("4_p8vf7")
+modulate_color = Color(1, 1, 1, 0.70000005)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8y25b"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.2265625, 0.2265625, 0.2265625, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cyywx"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 35.0
+bg_color = Color(1, 1, 1, 0.1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7qog1"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o4gfc"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_476ju"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.45000002)
+
+[node name="ResultScreenv2" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_x8kcy")
+
+[node name="BeatmapBackground" parent="." instance=ExtResource("1_anm4q")]
+layout_mode = 1
+
+[node name="MainScreen" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Details" type="PanelContainer" parent="MainScreen"]
+custom_minimum_size = Vector2(617, 142)
+layout_mode = 0
+offset_top = 76.0
+offset_right = 617.0
+offset_bottom = 218.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_anm4q")
+
+[node name="Misc" type="Control" parent="MainScreen/Details"]
+layout_mode = 2
+
+[node name="Stick" type="PanelContainer" parent="MainScreen/Details/Misc"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -53.0
+offset_top = -34.0
+offset_right = 1.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_gw5a4")
+
+[node name="Difficulty" type="Label" parent="MainScreen/Details/Misc/Stick"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_kpst7")
+text = "Masterpiece of a song >w<"
+vertical_alignment = 1
+
+[node name="Level" type="PanelContainer" parent="MainScreen/Details/Misc"]
+custom_minimum_size = Vector2(100, 44)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -99.0
+offset_top = -34.0
+offset_right = 1.0
+offset_bottom = 10.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_kpst7")
+
+[node name="Number" type="Label" parent="MainScreen/Details/Misc/Level"]
+layout_mode = 2
+text = "Lv. 45"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Details" type="VBoxContainer" parent="MainScreen/Details"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Title" type="Label" parent="MainScreen/Details/Details"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.43137255, 0.84705883, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Amazing Songs"
+
+[node name="Artist" type="Label" parent="MainScreen/Details/Details"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "idiotplier"
+
+[node name="Mapper" type="Label" parent="MainScreen/Details/Details"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "mapped by tappa"
+
+[node name="ScoreCount" type="PanelContainer" parent="MainScreen"]
+custom_minimum_size = Vector2(640, 142)
+layout_mode = 0
+offset_left = 20.0
+offset_top = 241.0
+offset_right = 660.0
+offset_bottom = 383.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_661fp")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainScreen/ScoreCount"]
+layout_mode = 2
+
+[node name="Score" type="Label" parent="MainScreen/ScoreCount/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 90
+text = "123,456,789"
+
+[node name="Perfect" type="TextureRect" parent="MainScreen/ScoreCount/HBoxContainer"]
+custom_minimum_size = Vector2(120, 100)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+texture = ExtResource("2_gw5a4")
+expand_mode = 1
+stretch_mode = 3
+
+[node name="HITCOUNT" type="HBoxContainer" parent="MainScreen"]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 406.0
+offset_right = 651.0
+offset_bottom = 485.0
+theme_override_constants/separation = 10
+
+[node name="PERFECT" type="PanelContainer" parent="MainScreen/HITCOUNT"]
+custom_minimum_size = Vector2(150, 79)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/HITCOUNT/PERFECT"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="MainScreen/HITCOUNT/PERFECT/VBoxContainer"]
+layout_mode = 2
+text = "PERFECT"
+
+[node name="Count" type="Label" parent="MainScreen/HITCOUNT/PERFECT/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "999,456"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="GREAT" type="PanelContainer" parent="MainScreen/HITCOUNT"]
+custom_minimum_size = Vector2(150, 79)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/HITCOUNT/GREAT"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="MainScreen/HITCOUNT/GREAT/VBoxContainer"]
+layout_mode = 2
+text = "GREAT"
+
+[node name="Count" type="Label" parent="MainScreen/HITCOUNT/GREAT/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "999,456"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="MEH" type="PanelContainer" parent="MainScreen/HITCOUNT"]
+custom_minimum_size = Vector2(150, 79)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/HITCOUNT/MEH"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="MainScreen/HITCOUNT/MEH/VBoxContainer"]
+layout_mode = 2
+text = "MEH"
+
+[node name="Count" type="Label" parent="MainScreen/HITCOUNT/MEH/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "999,456"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="MISS" type="PanelContainer" parent="MainScreen/HITCOUNT"]
+custom_minimum_size = Vector2(150, 79)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/HITCOUNT/MISS"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="MainScreen/HITCOUNT/MISS/VBoxContainer"]
+layout_mode = 2
+text = "MISS"
+
+[node name="Count" type="Label" parent="MainScreen/HITCOUNT/MISS/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "999,456"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Additional" type="HBoxContainer" parent="MainScreen"]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 496.0
+offset_right = 656.0
+offset_bottom = 575.0
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Accuracy" type="PanelContainer" parent="MainScreen/Additional"]
+custom_minimum_size = Vector2(118, 79)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/Additional/Accuracy"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="MainScreen/Additional/Accuracy/VBoxContainer"]
+layout_mode = 2
+text = "Accuracy"
+
+[node name="Count" type="Label" parent="MainScreen/Additional/Accuracy/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "100%"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Combo" type="PanelContainer" parent="MainScreen/Additional"]
+custom_minimum_size = Vector2(118, 79)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/Additional/Combo"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="MainScreen/Additional/Combo/VBoxContainer"]
+layout_mode = 2
+text = "Combo"
+
+[node name="Count" type="Label" parent="MainScreen/Additional/Combo/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "456,789x"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="AvgHit" type="PanelContainer" parent="MainScreen/Additional"]
+custom_minimum_size = Vector2(118, 79)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/Additional/AvgHit"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="MainScreen/Additional/AvgHit/VBoxContainer"]
+layout_mode = 2
+text = "Average Hit"
+
+[node name="Count" type="Label" parent="MainScreen/Additional/AvgHit/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "200ms"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="pp" type="PanelContainer" parent="MainScreen/Additional"]
+custom_minimum_size = Vector2(118, 79)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/Additional/pp"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="MainScreen/Additional/pp/VBoxContainer"]
+layout_mode = 2
+text = "pp"
+
+[node name="Count" type="Label" parent="MainScreen/Additional/pp/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "99,999pp"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Rankgain" type="PanelContainer" parent="MainScreen/Additional"]
+custom_minimum_size = Vector2(126, 79)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/Additional/Rankgain"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="MainScreen/Additional/Rankgain/VBoxContainer"]
+layout_mode = 2
+text = "Rank"
+
+[node name="Count" type="Label" parent="MainScreen/Additional/Rankgain/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "+#999,999"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Additional2" type="HBoxContainer" parent="MainScreen"]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 589.0
+offset_right = 711.0
+offset_bottom = 657.0
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Card" type="PanelContainer" parent="MainScreen/Additional2"]
+custom_minimum_size = Vector2(346, 53)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6dcqk")
+
+[node name="Column" type="HBoxContainer" parent="MainScreen/Additional2/Card"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Number" type="PanelContainer" parent="MainScreen/Additional2/Card/Column"]
+custom_minimum_size = Vector2(97, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_2qgfu")
+
+[node name="RankLead" type="Label" parent="MainScreen/Additional2/Card/Column/Number"]
+layout_mode = 2
+text = "#369,789"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Row" type="VBoxContainer" parent="MainScreen/Additional2/Card/Column"]
+layout_mode = 2
+alignment = 1
+
+[node name="GuestName" type="LineEdit" parent="MainScreen/Additional2/Card/Column/Row"]
+visible = false
+layout_mode = 2
+placeholder_text = "Enter your name!"
+
+[node name="Username" type="Label" parent="MainScreen/Additional2/Card/Column/Row"]
+layout_mode = 2
+text = "Guest"
+
+[node name="Achieved" type="Label" parent="MainScreen/Additional2/Card/Column/Row"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "achieved on 12th Dec 2025"
+
+[node name="Mods" type="PanelContainer" parent="MainScreen/Additional2"]
+custom_minimum_size = Vector2(346, 53)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/Additional2/Mods"]
+layout_mode = 2
+theme_override_constants/separation = -1
+alignment = 1
+
+[node name="Title" type="Label" parent="MainScreen/Additional2/Mods/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+text = "Mods"
+
+[node name="Mods" type="HBoxContainer" parent="MainScreen/Additional2/Mods/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_constants/separation = 3
+script = ExtResource("4_476ju")
+
+[node name="Rank" type="PanelContainer" parent="MainScreen"]
+custom_minimum_size = Vector2(657, 533)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -599.0
+offset_top = -266.5
+offset_right = 58.0
+offset_bottom = 266.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_8y25b")
+
+[node name="AccuracyProgress" type="TextureProgressBar" parent="MainScreen/Rank"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+step = 0.01
+value = 85.0
+fill_mode = 4
+texture_progress = ExtResource("5_476ju")
+texture_progress_offset = Vector2(10, 0)
+
+[node name="RankEmblem" type="TextureRect" parent="MainScreen/Rank/AccuracyProgress"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+texture = ExtResource("6_6dcqk")
+stretch_mode = 3
+
+[node name="Hint" type="TextureRect" parent="MainScreen/Rank"]
+custom_minimum_size = Vector2(493, 494)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture = ExtResource("7_2qgfu")
+stretch_mode = 5
+
+[node name="MoreInfo" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Cover" type="ColorRect" parent="MoreInfo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.2)
+
+[node name="Moreinfo" type="PanelContainer" parent="MoreInfo"]
+custom_minimum_size = Vector2(1200, 570)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -457.0
+offset_top = -257.0
+offset_right = 457.0
+offset_bottom = 257.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8y25b")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MoreInfo/Moreinfo"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer"]
+layout_mode = 2
+text = "More info"
+
+[node name="NA" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "No infomation here :/"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Moreinfo" type="PanelContainer" parent="MoreInfo/Moreinfo/VBoxContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cyywx")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 30
+columns = 2
+
+[node name="Rank" type="HBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Rank"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "Overall Rank"
+
+[node name="Value" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Rank"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "#123,456,789"
+
+[node name="Lost" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Rank/Value"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 12.5
+offset_bottom = 31.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "+ #60"
+
+[node name="Ranked Score" type="HBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Ranked Score"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "Ranked Score"
+
+[node name="Value" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Ranked Score"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "172,000,000"
+
+[node name="Lost" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Ranked Score/Value"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 12.5
+offset_bottom = 31.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "+ 60"
+
+[node name="Ranked Points" type="HBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Ranked Points"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "Ranked Points"
+
+[node name="Value" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Ranked Points"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "14,000pp"
+
+[node name="Lost" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Ranked Points/Value"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 12.5
+offset_bottom = 31.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "+ 62pp"
+
+[node name="Level" type="HBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Level"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "Level"
+
+[node name="Value" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Level"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "27"
+
+[node name="Lost" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Level/Value"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 12.5
+offset_bottom = 31.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "+ 3"
+
+[node name="Accuracy" type="HBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Accuracy"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "Overall Accuracy"
+
+[node name="Value" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Accuracy"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "100.00%"
+
+[node name="Lost" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Accuracy/Value"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 12.5
+offset_bottom = 31.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "+ 2.00%"
+
+[node name="Combo" type="HBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Combo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "Max Combo"
+
+[node name="Value" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Combo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+text = "2,347x"
+
+[node name="Lost" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer/Combo/Value"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 12.5
+offset_bottom = 31.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "+ 2x"
+
+[node name="Ranking" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Cover" type="ColorRect" parent="Ranking"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.2)
+
+[node name="Ranking" type="PanelContainer" parent="Ranking"]
+custom_minimum_size = Vector2(1200, 570)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -457.0
+offset_top = -257.0
+offset_right = 457.0
+offset_bottom = 257.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8y25b")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ranking/Ranking"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Ranking/Ranking/VBoxContainer"]
+layout_mode = 2
+text = "Ranking"
+
+[node name="Banner" type="PanelContainer" parent="Ranking/Ranking/VBoxContainer"]
+clip_children = 1
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7qog1")
+
+[node name="Banner" type="TextureRect" parent="Ranking/Ranking/VBoxContainer/Banner"]
+self_modulate = Color(0.484375, 0.484375, 0.484375, 1)
+layout_mode = 2
+texture = ExtResource("9_2qgfu")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ranking/Ranking/VBoxContainer/Banner/Banner"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -20.0
+offset_right = 149.0
+offset_bottom = 20.0
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.43137255, 0.84705883, 1, 1)
+theme_override_font_sizes/font_size = 12
+text = "Amazing Songs"
+
+[node name="Artist" type="Label" parent="Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Artist"
+
+[node name="mapped" type="Label" parent="Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "mapped by Tappa"
+
+[node name="CurrentLead" parent="Ranking/Ranking/VBoxContainer" instance=ExtResource("10_8y25b")]
+layout_mode = 2
+
+[node name="Legend" type="PanelContainer" parent="Ranking/Ranking/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_o4gfc")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ranking/Ranking/VBoxContainer/Legend"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label7" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Rank"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Player Details"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label8" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer"]
+custom_minimum_size = Vector2(108, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Score"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label6" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Accuracy"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label10" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Combo"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Perfect"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Great"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label4" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Meh"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label5" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Miss"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label9" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "pp"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label11" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Mods"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Leaderboard" type="ScrollContainer" parent="Ranking/Ranking/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+script = ExtResource("11_8y25b")
+
+[node name="Rows" type="VBoxContainer" parent="Ranking/Ranking/VBoxContainer/Leaderboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BottomBar" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_476ju")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BottomBar"]
+layout_mode = 2
+
+[node name="Back" type="Button" parent="BottomBar/HBoxContainer"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(148, 0)
+layout_mode = 2
+script = ExtResource("8_p8vf7")
+FocusColour = Color(0.9137255, 0.109803915, 0.109803915, 1)
+HighlightColour = Color(1, 0.41568625, 0.41568625, 1)
+StringText = "Back"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[node name="WatchReplay" type="Button" parent="BottomBar/HBoxContainer"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(148, 0)
+layout_mode = 2
+script = ExtResource("8_p8vf7")
+FocusColour = Color(0.23175389, 0.58984375, 0.17050171, 1)
+HighlightColour = Color(0.38310927, 0.7109375, 0.31381226, 1)
+StringText = "Watch Replay"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[node name="Screenshot" type="Button" parent="BottomBar/HBoxContainer"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(148, 0)
+layout_mode = 2
+script = ExtResource("8_p8vf7")
+FocusColour = Color(0.88671875, 0.41218567, 0.8357933, 1)
+HighlightColour = Color(0.9065647, 0.61328125, 1, 1)
+StringText = "Screenshot"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[node name="Ranking" type="Button" parent="BottomBar/HBoxContainer"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(148, 0)
+layout_mode = 2
+script = ExtResource("8_p8vf7")
+FocusColour = Color(0.10253906, 0.5999719, 0.625, 1)
+HighlightColour = Color(0.40267944, 0.696996, 0.79296875, 1)
+StringText = "Ranking"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[node name="MoreInfo" type="Button" parent="BottomBar/HBoxContainer"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(148, 0)
+layout_mode = 2
+script = ExtResource("8_p8vf7")
+StringText = "More Info"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[node name="PlayAgain" type="Button" parent="BottomBar/HBoxContainer"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(148, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+script = ExtResource("8_p8vf7")
+FocusColour = Color(0.109803915, 0.68762255, 0.9137255, 1)
+HighlightColour = Color(0.41568625, 0.7945772, 1, 1)
+StringText = "Play Again!"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[connection signal="button_down" from="BottomBar/HBoxContainer/Back" to="." method="highlight"]
+[connection signal="button_up" from="BottomBar/HBoxContainer/Back" to="." method="_up"]
+[connection signal="mouse_entered" from="BottomBar/HBoxContainer/Back" to="." method="highlight"]
+[connection signal="pressed" from="BottomBar/HBoxContainer/Back" to="." method="Back"]
+[connection signal="button_down" from="BottomBar/HBoxContainer/WatchReplay" to="." method="highlight"]
+[connection signal="button_up" from="BottomBar/HBoxContainer/WatchReplay" to="." method="_up"]
+[connection signal="mouse_entered" from="BottomBar/HBoxContainer/WatchReplay" to="." method="highlight"]
+[connection signal="pressed" from="BottomBar/HBoxContainer/WatchReplay" to="." method="WatchReplay"]
+[connection signal="button_down" from="BottomBar/HBoxContainer/Screenshot" to="." method="highlight"]
+[connection signal="button_up" from="BottomBar/HBoxContainer/Screenshot" to="." method="_up"]
+[connection signal="mouse_entered" from="BottomBar/HBoxContainer/Screenshot" to="." method="highlight"]
+[connection signal="pressed" from="BottomBar/HBoxContainer/Screenshot" to="." method="Screenshot"]
+[connection signal="button_down" from="BottomBar/HBoxContainer/Ranking" to="." method="highlight"]
+[connection signal="button_up" from="BottomBar/HBoxContainer/Ranking" to="." method="_up"]
+[connection signal="mouse_entered" from="BottomBar/HBoxContainer/Ranking" to="." method="highlight"]
+[connection signal="pressed" from="BottomBar/HBoxContainer/Ranking" to="." method="Ranking"]
+[connection signal="button_down" from="BottomBar/HBoxContainer/MoreInfo" to="." method="highlight"]
+[connection signal="button_up" from="BottomBar/HBoxContainer/MoreInfo" to="." method="_up"]
+[connection signal="mouse_entered" from="BottomBar/HBoxContainer/MoreInfo" to="." method="highlight"]
+[connection signal="pressed" from="BottomBar/HBoxContainer/MoreInfo" to="." method="MoreInfo"]
+[connection signal="button_down" from="BottomBar/HBoxContainer/PlayAgain" to="." method="_uppa"]
+[connection signal="mouse_entered" from="BottomBar/HBoxContainer/PlayAgain" to="." method="highlight"]
+[connection signal="pressed" from="BottomBar/HBoxContainer/PlayAgain" to="." method="Retry"]

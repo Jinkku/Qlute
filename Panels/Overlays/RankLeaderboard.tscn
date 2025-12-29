@@ -1,0 +1,126 @@
+[gd_scene load_steps=6 format=3 uid="uid://enjjpp7s76ps"]
+
+[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="1_lcudt"]
+[ext_resource type="Script" uid="uid://druevadsno4x1" path="res://Script/ResultsScreenv2/RankLeaderboard.cs" id="1_o4gfc"]
+[ext_resource type="Script" uid="uid://dxlp3pg2t1kfb" path="res://Script/ResultsScreenv2/ModsResultsScreenShowcase.cs" id="3_t84r2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o4gfc"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t84r2"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="RankLeaderboard" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 50)
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_o4gfc")
+script = ExtResource("1_o4gfc")
+
+[node name="Columns" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Rank" type="Label" parent="Columns"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "#999"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProfilePicture" type="PanelContainer" parent="Columns"]
+clip_children = 2
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_t84r2")
+
+[node name="Pic" type="TextureRect" parent="Columns/ProfilePicture"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("1_lcudt")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Row1" type="VBoxContainer" parent="Columns"]
+custom_minimum_size = Vector2(146, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Username" type="Label" parent="Columns/Row1"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Player name"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Achieved" type="Label" parent="Columns/Row1"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "achieved Dec 12th, 2025"
+
+[node name="Score" type="Label" parent="Columns"]
+custom_minimum_size = Vector2(108, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24433899, 0.62666, 0.93359375, 1)
+theme_override_font_sizes/font_size = 20
+text = "456,789,123"
+horizontal_alignment = 1
+
+[node name="Accuracy" type="Label" parent="Columns"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "100.00%"
+horizontal_alignment = 1
+
+[node name="Combo" type="Label" parent="Columns"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "9,999x"
+horizontal_alignment = 1
+
+[node name="Perfect" type="Label" parent="Columns"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "999"
+horizontal_alignment = 1
+
+[node name="Great" type="Label" parent="Columns"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "999"
+horizontal_alignment = 1
+
+[node name="Meh" type="Label" parent="Columns"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "999"
+horizontal_alignment = 1
+
+[node name="Miss" type="Label" parent="Columns"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "999"
+horizontal_alignment = 1
+
+[node name="pp" type="Label" parent="Columns"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "4,000pp"
+horizontal_alignment = 1
+
+[node name="Mods" type="HBoxContainer" parent="Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -25
+script = ExtResource("3_t84r2")
+External = true

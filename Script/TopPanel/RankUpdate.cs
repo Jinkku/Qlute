@@ -2,60 +2,57 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
+public class LostClass
+{
+	public string prefix = "-";
+	public float output;
+	public float rawoutput;
+	public Color OperatorColour = new Color(0,0,0,1);
+}
+
 public partial class RankUpdate : Control
 {
 
 	public Label Performance {get;set;}
 	public Label Rank {get;set;}
-	public static int RankLost { get; set; }
-	public static int PerformanceLost { get; set; }
-	public static int RankNow { get; set; }
-	public static int PerformanceNow { get; set; }
-	public static string prefixRank {get;set;}
-	public static string prefixPerformance {get;set;}
-	public static int OldRank {get;set;}
-	public static int OldPerformance {get;set;}
 	public static bool Updated { get; set; }
-	public static Color ORank { get; set; }
-	public static Color OPerf { get; set; }
 	private PanelContainer UserCard { get; set; }
 	private Label OperatorPerformance { get; set;}
 	private Label OperatorRank { get; set;}
 	private Tween tween { get; set; }
 	private Tween tweenNum { get; set; }
-
-
-
-	
 	private int RankDisplay { get; set; }
 	private int PerfDisplay { get; set; }
 	private int ORankDisplay { get; set; }
 	private int OPerfDisplay { get; set; }
-
-
-
 	private bool Realtime { get; set; }
-	public static List<Color> ColorOperator = new List<Color>([new Color("#3fff5fff"), new Color("#FFFFFF"), new Color("#ff4154ff"),]);
-
-	public static  Color GetOperatorColour(int num, int oldnum, bool opo= false)
+	public static List<Color> ColorOperator = new List<Color>([new Color("#3fff5fff"), new Color("#ffffff00"), new Color("#ff4154ff"),]);
+	public static LostClass ReturnLost(float oldput = 0, float oput = 0, bool reverse = false)
 	{
-		var numres = num - oldnum;
-		var index = 0;
-		if (opo)
+		LostClass Opa = new LostClass();
+		Opa.OperatorColour = ColorOperator[2];
+		Opa.output = oput - oldput;
+		Opa.rawoutput = Opa.output;
+		if (Opa.output < 0) {
+			Opa.output = -Opa.output;
+		} 
+
+		if (Opa.output == 0)
 		{
-			if (numres < 0) index = 0;
-			else if (numres == 0) index = 1;
-			else if (numres > 0) index = 2;
+			Opa.prefix = "";
+			Opa.OperatorColour = ColorOperator[1];
+		}else if (!reverse && Opa.rawoutput < 0)
+		{
+			Opa.prefix = "+";
+			Opa.OperatorColour = ColorOperator[0];
 		}
-		else
+		else if (reverse && Opa.rawoutput > 0)
 		{
-			if (numres < 0) index = 2;
-			else if (numres == 0) index = 1;
-			else if (numres > 0) index = 0;
+			Opa.prefix = "+";
+			Opa.OperatorColour = ColorOperator[0];
 		}
 
-
-		return ColorOperator[index];
+		return Opa;
 	}
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -88,21 +85,18 @@ public partial class RankUpdate : Control
 
 
 			//New Card
-			OperatorPerformance.SelfModulate = OPerf;
-			OperatorRank.SelfModulate = ORank;
+			OperatorPerformance.SelfModulate = PL.OperatorColour;
+			OperatorRank.SelfModulate = RL.OperatorColour;
 
-			RankDisplay = OldRank;
-			PerfDisplay = OldPerformance;
-			ORankDisplay = RankLost;
-			OPerfDisplay = PerformanceLost;
-
-
-
+			RankDisplay = SettingsOperator.OldRank;
+			PerfDisplay = SettingsOperator.Oldpp;
+			ORankDisplay = (int)RL.output;
+			OPerfDisplay = (int)PL.output;
 
 			tweenNum?.Kill();
 			tweenNum = CreateTween();
-			tweenNum.Parallel().TweenProperty(this, "RankDisplay", RankNow, 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(1);
-			tweenNum.Parallel().TweenProperty(this, "PerfDisplay", PerformanceNow, 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(1);
+			tweenNum.Parallel().TweenProperty(this, "RankDisplay", SettingsOperator.Rank - RL.rawoutput, 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(1);
+			tweenNum.Parallel().TweenProperty(this, "PerfDisplay", SettingsOperator.ranked_points - PL.rawoutput, 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(1);
 			tweenNum.Parallel().TweenProperty(this, "ORankDisplay", 0, 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(1);
 			tweenNum.Parallel().TweenProperty(this, "OPerfDisplay", 0, 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(1);
 
@@ -126,59 +120,23 @@ public partial class RankUpdate : Control
 			}
 
 
-			Rank.Text = $"#{RankDisplay.ToString("N0")}";
-			OperatorRank.Text = $"{prefixRank}#{ORankDisplay.ToString("N0")}";
+			Rank.Text = $"#{RankDisplay:N0}";
+			OperatorRank.Text = $"{RL.prefix} #{ORankDisplay:N0}";
 
-			SettingsOperator.Sessioncfg["ranknumber"] = RankDisplay;
+			SettingsOperator.Rank = RankDisplay;
 			SettingsOperator.ranked_points = PerfDisplay;
 
-
-			Performance.Text = $"{(PerfDisplay).ToString("N0")}pp";
-			OperatorPerformance.Text = $"{prefixPerformance} {OPerfDisplay.ToString("N0")}pp";
+			Performance.Text = $"{(PerfDisplay):N0}pp";
+			OperatorPerformance.Text = $"{PL.prefix} {OPerfDisplay:N0}pp";
 		}
 	}
+	public static LostClass PL {get; set;} = new LostClass();
+	public static LostClass RL {get; set;} = new LostClass();
 	public static void Update(int rank,int pp){
-		prefixRank = "";
-		prefixPerformance = "";
-		OldPerformance = SettingsOperator.ranked_points;
-		OldRank = (int)SettingsOperator.Sessioncfg["ranknumber"];
-		RankLost = rank - OldRank;
-		PerformanceLost = pp - SettingsOperator.ranked_points;
-		if (RankLost > 0)
-		{
-			RankLost = RankLost;
-			prefixRank = "-";
-		}
-		else if (RankLost == 0)
-		{
-			prefixRank = "";
-		}
-		else if (RankLost < 0)
-		{
-			RankLost = -RankLost;
-			prefixRank = "+";
-		}
-		
-		if (PerformanceLost > 0)
-		{
-			prefixPerformance = "+";
-		}
-		else if (PerformanceLost == 0)
-		{
-			prefixPerformance = "";
-		}
-		else if (PerformanceLost < 0)
-		{
-			PerformanceLost = -PerformanceLost;
-			prefixPerformance = "-";
-		}
-		OPerf = GetOperatorColour(pp, SettingsOperator.ranked_points);
-		ORank = GetOperatorColour(rank, OldRank, opo: true);
-
-		SettingsOperator.UpdatedRank = prefixRank + RankLost.ToString("N0");
-		SettingsOperator.Updatedpp = prefixRank + PerformanceLost.ToString("N0") + "pp";
-		RankNow = rank;
-		PerformanceNow = pp;
+		SettingsOperator.Oldpp = SettingsOperator.ranked_points;
+		SettingsOperator.OldRank = SettingsOperator.Rank;
+		PL = ReturnLost(pp, SettingsOperator.ranked_points);
+		RL = ReturnLost(rank, SettingsOperator.Rank,reverse:true);
 		Updated = true;
 	}
 }

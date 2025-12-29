@@ -15,8 +15,20 @@ public class DanceCounter {
 public partial class SettingsOperator : Node
 {
     public string[] args { get; set; }
-    public static string UpdatedRank = "#0";
-    public static string Updatedpp = "0pp";
+    public static int Rank = 0;
+    public static int RankScore = 0;
+    public static int OldScore = 0;
+    public static int ranked_points = 0;
+    public static int OldRank = 0;
+    public static int Oldpp = 0;
+    public static int OldLevel { get; set; } = 0;
+    public static int Level { get; set; } = 0;
+    public static int OldCombo { get; set; } = 0;
+    public static int OCombo { get; set; } = 0;
+    public static float OldAccuracy { get; set; } = 0;
+    public static float OAccuracy { get; set; } = 0;
+    public static bool JustPlayedScore {get; set;}
+
     public static string homedir = OS.GetUserDataDir().Replace("\\", "/");
     public static string tempdir => homedir + "/temp";
     public static string beatmapsdir => homedir + "/beatmaps";
@@ -43,13 +55,13 @@ public partial class SettingsOperator : Node
     public static int MiliSecondsFromBeatmapTimes { get; set; }
     public static List<BeatmapLegend> Beatmaps = new List<BeatmapLegend>();
     public static float AudioOffset { get; set; } = 0;
+    /// <summary>
+    /// 1 = Online,
+    /// 0 = Local
+    /// 2 = Don't Reload
+    /// </summary>
     public static int LeaderboardType = 1;
     public static bool NoConnectionToGameServer { get; set; }
-    public static void ResetRank()
-    {
-        UpdatedRank = "#0";
-        Updatedpp = "0pp";
-    }
 
     public void RefreshFPS()
     {
@@ -191,8 +203,8 @@ public partial class SettingsOperator : Node
             //Gameplaycfg.SampleSet = beatmap.SampleSet;
             Gameplaycfg.SampleSet = SampleSet.Type[1];
             LevelRating = beatmap.Levelrating;
-            Sessioncfg["osubeatid"] = (int)beatmap.Osubeatid;
-            Sessioncfg["osubeatidset"] = (int)beatmap.Osubeatidset;
+            BeatmapID =  beatmap.BeatmapID;
+            BeatmapSetID = beatmap.BeatmapSetID;
             Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
             if (beatmap.Path != null && beatmap.Background != null)
                 Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
@@ -296,10 +308,8 @@ public partial class SettingsOperator : Node
                     case "CircleSize": legend.KeyCount = (int)(float.TryParse(value, out var cs) ? cs : 4); break;
                     case "OverallDifficulty": legend.Accuracy = float.TryParse(value, out var od) ? od : 0; break;
                     case "AudioFilename": legend.Audio = value; break;
-                    case "BeatmapID": legend.Osubeatid = int.TryParse(value, out var bid) ? bid : -1; break;
-                    case "BeatmapSetID": legend.Osubeatidset = int.TryParse(value, out var bset) ? bset : -1; break;
-                    case "QluteBeatID": legend.Beatid = int.TryParse(value, out var qbid) ? qbid : -1; break;
-                    case "QluteBeatIDSet": legend.Beatidset = int.TryParse(value, out var qbset) ? qbset : -1; break;
+                    case "BeatmapID": legend.BeatmapID = int.TryParse(value, out var bid) ? bid : -1; break;
+                    case "BeatmapSetID": legend.BeatmapSetID = int.TryParse(value, out var bset) ? bset : -1; break;
                     case "PreviewTime": legend.PreviewTime = (float.TryParse(value, out var pt) ? pt : 0) * 0.001f; break;
                 }
             }
@@ -365,6 +375,19 @@ public partial class SettingsOperator : Node
         return $"{legend.Artist} - {legend.Title} from {legend.Mapper}";
     }
 
+    /// <summary>
+    /// Parse Epoch time to string ex. "Dec 12th, 2025"
+    /// </summary>
+    /// <param name="time"></param>
+    /// <returns></returns>
+    public static string ParseTimeEpoch(long time)
+    {
+        double lastUpdatedSeconds = time;
+        DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        DateTime date = epoch.AddSeconds(lastUpdatedSeconds);
+        string formatted = $"{Extras.GetDayWithSuffix(date.Day)} {date:MMM yyyy}";
+        return formatted;
+    }
     public static void Addms(float ms)
     {
         AllMiliSecondsFromBeatmap += ms;
@@ -446,12 +469,17 @@ public partial class SettingsOperator : Node
         public static float ms { get; set; }
         public static int Avgms { get; set; }
         public static float BeatmapAccuracy { get; set; } = 1;
+        public static int Rank { get; set; }
+        public static double EpochTime { get; set; }
+        public static string Username { get; set; } = "Guest";
     }
-    public static int ranked_points { get; set; }
 
     public static int SongID { get; set; } = -1;
     public static int SongIDHighlighted { get; set; } = -1; // Highlighted song ID for the song select screen
     public static double LevelRating { get; set; } = -1;
+    public static int BeatmapID { get; set; } = -1;
+    public static int BeatmapSetID { get; set; } = -1;
+
     public static Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
     {
         { "TopPanelSlideip", false },
@@ -465,7 +493,6 @@ public partial class SettingsOperator : Node
         { "settingspanelv", false },
         { "chatboxv", false },
         { "notificationpanelv", false },
-        { "ranknumber", 0 },
         { "playercolour", null },
         { "totalbeatmaps", 0 },
         { "beatmapurl", null },
@@ -473,8 +500,6 @@ public partial class SettingsOperator : Node
         { "beatmapartist", "" },
         { "beatmapmapper", "" },
         { "beatmapbpm", (int)160 },
-        { "osubeatid", 0 },
-        { "osubeatidset", 0 },
         { "beatmapaccuracy", (int)1 },
         { "beatmapdiff", "" },
         { "customapi", false},

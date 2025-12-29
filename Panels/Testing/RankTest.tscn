@@ -1,6 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://b27ai0tv8r13m"]
+[gd_scene load_steps=5 format=3 uid="uid://b27ai0tv8r13m"]
 
 [ext_resource type="Script" uid="uid://67dkcn5abrtj" path="res://Script/TestMenu/RankTest.cs" id="1_ecuki"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ecuki"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_halog"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4v147"]
 
 [node name="RankTest" type="Control"]
 layout_mode = 3
@@ -21,14 +27,23 @@ offset_bottom = 344.0
 
 [node name="Button" type="Button" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_ecuki")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_halog")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4v147")
 text = "Rank up"
 
 [node name="Button2" type="Button" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_ecuki")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_halog")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4v147")
 text = "RankDown"
 
 [node name="Button3" type="Button" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_ecuki")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_halog")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4v147")
 text = "Rank Stay"
 
 [connection signal="pressed" from="VBoxContainer/Button" to="." method="_rankup"]
