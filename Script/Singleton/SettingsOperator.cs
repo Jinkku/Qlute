@@ -57,7 +57,8 @@ public partial class SettingsOperator : Node
     public static float AudioOffset { get; set; } = 0;
     /// <summary>
     /// 1 = Online,
-    /// 2+ = Local
+    /// 0 = Local
+    /// 2 = Don't Reload
     /// </summary>
     public static int LeaderboardType = 1;
     public static bool NoConnectionToGameServer { get; set; }
