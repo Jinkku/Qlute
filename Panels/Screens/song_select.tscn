@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bdolx4haf5ycn" path="res://Resources/System/SongSelect/Icons/metronome.png" id="5_ndor5"]
 [ext_resource type="PackedScene" uid="uid://dpjsc7sxiwkm7" path="res://Panels/SongSelectElements/Mods.tscn" id="6_4xos4"]
 [ext_resource type="Texture2D" uid="uid://muwc6a6hoc53" path="res://Resources/System/SongSelect/Icons/clock.png" id="6_aosrv"]
+[ext_resource type="Texture2D" uid="uid://dspx8q0llb8gt" path="res://Resources/System/PlayEmblem.png" id="7_0g2hw"]
 [ext_resource type="Texture2D" uid="uid://dswumgvij18fg" path="res://Resources/System/Browse/Heart2x.png" id="7_fb0k2"]
 [ext_resource type="PackedScene" uid="uid://c2ouvq16jls8u" path="res://Panels/Overlays/BottomPanelButtons.tscn" id="7_p2axe"]
 [ext_resource type="PackedScene" uid="uid://cxtvce61elw00" path="res://Panels/Overlays/ModShowcase.tscn" id="7_p20rm"]
@@ -18,6 +19,7 @@
 [ext_resource type="Script" uid="uid://b7udx8fmtfcbg" path="res://Script/SongSelect/SongSelectMode.cs" id="9_p2axe"]
 [ext_resource type="Texture2D" uid="uid://dhtk4mxqohiru" path="res://Resources/System/Heart.svg" id="12_5rktx"]
 [ext_resource type="Script" uid="uid://jiq8w3wo2uhl" path="res://Script/SongSelect/SongDetails/Details.cs" id="12_fb0k2"]
+[ext_resource type="Script" uid="uid://0xn63uccdk6j" path="res://Script/TimerwithBPM/Bpmtick.cs" id="20_ihwey"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5rktx"]
 particle_flag_rotate_y = true
@@ -80,17 +82,6 @@ content_margin_right = 5.0
 content_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p2axe"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cv1hb"]
-bg_color = Color(1, 1, 1, 1)
-skew = Vector2(0.2, 0)
-border_color = Color(0.140625, 0.140625, 0.140625, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llhhs"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ixo7g"]
 bg_color = Color(0.078, 0.078, 0.078, 0.8)
@@ -346,38 +337,24 @@ metadata/unfocus = Color(0.0784314, 0.0784314, 0.0784314, 1)
 metadata/focus = Color(0.21875, 0.21875, 0.21875, 1)
 metadata/highlight = Color(0.192993, 0.205833, 0.398438, 1)
 
-[node name="Start" type="Button" parent="BottomBar"]
-self_modulate = Color(0.461, 0.461, 0.461, 0.5)
-custom_minimum_size = Vector2(150, 0)
+[node name="Start" type="TextureButton" parent="BottomBar"]
+custom_minimum_size = Vector2(128, 128)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -220.0
-offset_top = -80.0
+offset_left = -148.0
+offset_top = -140.0
 offset_right = -20.0
-offset_bottom = -20.0
+offset_bottom = -12.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxFlat_cv1hb")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_cv1hb")
-theme_override_styles/hover = SubResource("StyleBoxFlat_cv1hb")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_llhhs")
-
-[node name="StartText" type="Label" parent="BottomBar/Start"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 24
-text = "Play"
-horizontal_alignment = 1
-vertical_alignment = 1
+pivot_offset = Vector2(64, 64)
+texture_normal = ExtResource("7_0g2hw")
+ignore_texture_size = true
+stretch_mode = 4
 
 [node name="ControlBar" type="PanelContainer" parent="."]
 z_index = 1
@@ -699,6 +676,11 @@ offset_top = 359.0
 offset_right = 1253.0
 offset_bottom = 427.0
 
+[node name="Bpmtick" type="Timer" parent="."]
+wait_time = 0.375
+autostart = true
+script = ExtResource("20_ihwey")
+
 [connection signal="resized" from="." to="." method="_res_resize"]
 [connection signal="mouse_entered" from="SongPanel" to="." method="_songenter"]
 [connection signal="mouse_exited" from="SongPanel" to="." method="_songexit"]
@@ -730,5 +712,6 @@ offset_bottom = 427.0
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Country" to="." method="_leaderboardmode" binds= [0]]
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Teams" to="." method="_leaderboardmode" binds= [0]]
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/OpenExternal" to="." method="_openexternal"]
+[connection signal="timeout" from="Bpmtick" to="." method="_tick"]
 
 [editable path="BottomBar/ControlPanel"]

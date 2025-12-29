@@ -27,7 +27,7 @@ public partial class SongSelect : Control
 	public Label Debugtext { get; set; }
 	public PanelContainer SongBPM { get; set; }
 	public PanelContainer SongLen { get; set; }
-	public Button StartButton { get; set; }
+	public TextureButton StartButton { get; set; }
 	public List<Button> SongEntry = new List<Button>();
 	public int SongETick { get; set; }
 	public Texture2D ImageCache { get; set; }
@@ -137,6 +137,8 @@ public partial class SongSelect : Control
 				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 			Ani.TweenProperty(LoadScreen, "modulate", new Color(1, 1, 1, 1), 0.5f)
 				.SetTrans(Tween.TransitionType.Linear);
+			Ani.TweenProperty(StartButton, "modulate", new Color(1, 1, 1, 0), 0.5f)
+				.SetTrans(Tween.TransitionType.Linear);
 			Ani.Play();
 		}
 		else if (type == 2)
@@ -155,6 +157,8 @@ public partial class SongSelect : Control
 				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 			Ani.TweenProperty(BottomBar, "modulate", new Color(1f,1f,1f,1f), 0.5f).SetEase(Tween.EaseType.Out)
 				.SetTrans(Tween.TransitionType.Cubic);
+			Ani.TweenProperty(StartButton, "modulate", new Color(1, 1, 1, 1f), 0.5f)
+				.SetTrans(Tween.TransitionType.Linear);
 			Ani.TweenProperty(SongControl, "position", new Vector2(SongControl.Position.X, 0), 0.5f)
 				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 			Ani.TweenProperty(SongControl, "modulate", new Color(1f,1f,1f,1f), 0.5f).SetEase(Tween.EaseType.Out)
@@ -227,7 +231,7 @@ public partial class SongSelect : Control
 		LeaderboardDetails = GetNode<Button>("SongDetails/Leaderboard Panel/Rows/Box4/Details");
 		DetailsExtended = GetNode<PanelContainer>("SongDetails/Leaderboard Panel/Rows/Details");
 		Leaderboardinfo = GetNode<ScrollContainer>("SongDetails/Leaderboard Panel/Rows/LeaderboardInfo");
-		StartButton = GetNode<Button>("BottomBar/Start");
+		StartButton = GetNode<TextureButton>("BottomBar/Start");
 		StartButton.Visible = false; // Start the button off with being hidden.
 		scrollBar.Value = SettingsOperator.SongID;
 		CheckLeaderboardMode();
@@ -246,9 +250,31 @@ public partial class SongSelect : Control
 	// Animation for Start Button DUH
 
 	public Tween StartTween { get; set; }
-	private Color idlestartcolour = new Color(0.5f, 0.5f, 0.5f, 0.5f);
-	private Color focuscolour = new Color(0.270f, 0.549f, 1f);
-	private Color startpress = new Color(0.44f, 0.53f, 0.5f);
+	private Color idlestartcolour = new Color(1f, 1f, 1f);
+	private Color focuscolour = new Color(1.2f, 1.2f, 1.2f);
+	private Color startpress = new Color(1.3f, 1.3f, 1.3f);
+	private Tween StartTween2 { get; set; }
+	private bool HeartbeatHover { get; set; }
+	private int beattick = 1;
+	private void _tick()
+	{
+		if (HeartbeatHover && beattick < 4) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/heartbeat.wav");
+		if (HeartbeatHover && beattick == 4) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/downbeat.wav");
+		if (beattick > 3) beattick = 1;
+		else beattick++; // for the feedback of hovering the Qlute logo
+		StartButtonTick();
+	}
+
+	private void StartButtonTick()
+	{
+		StartButton.Scale = new Vector2(Scale.X + 0.02777777778f, Scale.Y + 0.02777777778f);
+		StartTween2?.Kill();
+		StartTween2 = StartButton.CreateTween();
+		StartTween2.TweenProperty(StartButton, "scale",new Vector2(1f, 1f), 60000 / (SettingsOperator.bpm * AudioPlayer.Instance.PitchScale) * 0.001)
+			.SetTrans(Tween.TransitionType.Cubic)
+			.SetEase(Tween.EaseType.Out);
+		StartTween2.Play();
+	}
 	private void _start_down()
 	{
 		StartTween?.Kill();
@@ -258,6 +284,7 @@ public partial class SongSelect : Control
 	}
 	private void _start_focus()
 	{
+		HeartbeatHover = true;
 		StartTween?.Kill();
 		StartTween = StartButton.CreateTween();
 		StartTween.TweenProperty(StartButton, "self_modulate", focuscolour, 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
@@ -265,6 +292,7 @@ public partial class SongSelect : Control
 	}
 	private void _start_unfocus()
 	{
+		HeartbeatHover = false;
 		StartTween?.Kill();
 		StartTween = StartButton.CreateTween();
 		StartTween.TweenProperty(StartButton, "self_modulate", idlestartcolour, 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
@@ -342,7 +370,7 @@ public partial class SongSelect : Control
 			InfoBox.Text(Songpp, "+" + (SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier).ToString("N0") + "pp");
 			InfoBox.Text(LevelRating, "Lv. " + (SettingsOperator.LevelRating * ModsMulti.multiplier).ToString("N0") ?? "Lv. 0");
 			LevelRating.SelfModulate = SettingsOperator.ReturnLevelColour((int)(SettingsOperator.LevelRating * ModsMulti.multiplier));
-			InfoBox.Text(SongBPM, ((int)SettingsOperator.Sessioncfg["beatmapbpm"] * AudioPlayer.Instance.PitchScale).ToString("N0") ?? "???");
+			InfoBox.Text(SongBPM, (SettingsOperator.bpm * AudioPlayer.Instance.PitchScale).ToString("N0") ?? "???");
 			InfoBox.Text(SongLen, TimeSpan.FromMilliseconds((SettingsOperator.Gameplaycfg.TimeTotalGame / 0.001f) / AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00");
 
 

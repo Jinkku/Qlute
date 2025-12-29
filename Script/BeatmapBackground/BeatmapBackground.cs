@@ -96,7 +96,7 @@ public partial class BeatmapBackground : TextureRect
 	{
 		oldmod = SelfModulate;
 
-		bpm = 60000 / ((int)SettingsOperator.Sessioncfg["beatmapbpm"] * AudioPlayer.Instance.PitchScale) * 0.001f;
+		bpm = 60000 / (SettingsOperator.bpm * AudioPlayer.Instance.PitchScale) * 0.001f;
 		bpmtime = Extras.GetMilliseconds();
 		if (bpmtimewait - bpmtime < 0) // Ticks for BPM
 		{

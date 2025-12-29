@@ -9,5 +9,5 @@ public partial class Bpmtick : Timer
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
-	{WaitTime = 60000 / ((int)SettingsOperator.Sessioncfg["beatmapbpm"]*AudioPlayer.Instance.PitchScale) * 0.001;}
+	{WaitTime = 60000 / (SettingsOperator.bpm*AudioPlayer.Instance.PitchScale) * 0.001;}
 }

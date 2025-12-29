@@ -196,7 +196,7 @@ public partial class SettingsOperator : Node
                 Sessioncfg["beatmapartist"] = beatmap.Artist;
             }
             Sessioncfg["beatmapdiff"] = beatmap.Version;
-            Sessioncfg["beatmapbpm"] = (int)beatmap.Bpm;
+            bpm = (int)beatmap.Bpm;
             Gameplaycfg.TimeTotalGame = beatmap.Timetotal * 0.001f;
             Sessioncfg["beatmapmapper"] = beatmap.Mapper;
             Gameplaycfg.Accuracy = (int)beatmap.Accuracy;
@@ -479,6 +479,7 @@ public partial class SettingsOperator : Node
     public static double LevelRating { get; set; } = -1;
     public static int BeatmapID { get; set; } = -1;
     public static int BeatmapSetID { get; set; } = -1;
+    public static int bpm { get; set; } = 180;
 
     public static Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
     {
@@ -499,7 +500,6 @@ public partial class SettingsOperator : Node
         { "beatmaptitle", null },
         { "beatmapartist", "" },
         { "beatmapmapper", "" },
-        { "beatmapbpm", (int)160 },
         { "beatmapaccuracy", (int)1 },
         { "beatmapdiff", "" },
         { "customapi", false},

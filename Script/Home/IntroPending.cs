@@ -91,12 +91,9 @@ public partial class IntroPending : Control
 	private void StartLogoBounce()
 	{
 		Logo.Scale = new Vector2(Scale.X + 0.02777777778f, Scale.Y + 0.02777777778f);
-		if (LogoTween != null)
-		{
-			LogoTween.Kill();
-		}
+		LogoTween?.Kill();
 		LogoTween = Logo.CreateTween();
-		LogoTween.Parallel().TweenProperty(Logo, "scale", Scale, 60000 / ((int)SettingsOperator.Sessioncfg["beatmapbpm"] * AudioPlayer.Instance.PitchScale) * 0.001)
+		LogoTween.Parallel().TweenProperty(Logo, "scale", Scale, 60000 / (SettingsOperator.bpm * AudioPlayer.Instance.PitchScale) * 0.001)
 			.SetTrans(Tween.TransitionType.Cubic)
 			.SetEase(Tween.EaseType.Out);
 		LogoTween.Play();
