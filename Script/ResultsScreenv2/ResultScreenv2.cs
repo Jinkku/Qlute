@@ -45,7 +45,7 @@ public partial class ResultScreenv2 : Control
 	private float AdditionalPos { get; set; }
 	private float Additional2Pos { get; set; }
 	private float RankEmblemPos { get; set; }
-	private float AnimationSpeed = 0.5f;
+	private float AnimationSpeed = 0.3f;
 	private Control RankingP { get; set; }
 	private Control MoreInfoP { get; set; }
 	private TextureRect Banner { get; set; }
@@ -193,6 +193,7 @@ public partial class ResultScreenv2 : Control
 			Tween.SetTrans(Tween.TransitionType.Cubic);
 			Tween.SetEase(Tween.EaseType.Out);
 			Tween.TweenProperty(RankingP, "modulate:a", 1f,AnimationSpeed);
+			Tween.TweenProperty(MoreInfoP, "modulate:a", 0f,AnimationSpeed);
 		} else if (mode == 3)
 		{
 			Tween.SetTrans(Tween.TransitionType.Cubic);
@@ -203,6 +204,7 @@ public partial class ResultScreenv2 : Control
 			Tween.SetTrans(Tween.TransitionType.Cubic);
 			Tween.SetEase(Tween.EaseType.Out);
 			Tween.TweenProperty(MoreInfoP, "modulate:a", 1f,AnimationSpeed);
+			Tween.TweenProperty(RankingP, "modulate:a", 0f,AnimationSpeed);
 		} else if (mode == 5)
 		{
 			Tween.SetTrans(Tween.TransitionType.Cubic);
@@ -379,6 +381,7 @@ public partial class ResultScreenv2 : Control
 		else 
 			AnimationMode(3);
 		RankingTick = !RankingTick;
+		MoreInfoTick = true;
 	}
 	private void MoreInfo()
 	{
@@ -387,15 +390,31 @@ public partial class ResultScreenv2 : Control
 		else 
 			AnimationMode(5);
 		MoreInfoTick = !MoreInfoTick;
+		RankingTick = true;
 	}
 	public void Back()
 	{
-		SettingsOperator.OldRank = SettingsOperator.Rank;
-		AnimationMode(1);
-		if (!AudioPlayer.Instance.IsPlaying())
-			AudioPlayer.Instance.Play();
-		Replay.FilePath = "";
-		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
+		if (!MoreInfoTick)
+		{
+			AnimationMode(5);
+			MoreInfoTick = true;
+			RankingTick = true;
+		}
+		else if (!RankingTick)
+		{
+			AnimationMode(3);
+			MoreInfoTick = true;
+			RankingTick = true;
+		}
+		else
+		{
+			SettingsOperator.OldRank = SettingsOperator.Rank;
+			AnimationMode(1);
+			if (!AudioPlayer.Instance.IsPlaying())
+				AudioPlayer.Instance.Play();
+			Replay.FilePath = "";
+			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
+		}
 	}
 
 	private void Screenshot()

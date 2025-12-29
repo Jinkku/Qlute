@@ -109,7 +109,7 @@ public partial class LeaderboardPanel : PanelContainer
 				{
 					entry.Score = SettingsOperator.Gameplaycfg.Score;
 					PlayerLeaderboardEntry = i;
-					SettingsOperator.Gameplaycfg.Rank = PlayerLeaderboardEntry;
+					SettingsOperator.Gameplaycfg.Rank = PlayerLeaderboardEntry + 1;
 				}
 				else if (ModsOperator.Mods["npc"] && i > LeaderboardEntries.Count - 1)
 				{
