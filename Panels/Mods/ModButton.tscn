@@ -1,41 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://c8egllgadndpy"]
+[gd_scene load_steps=11 format=3 uid="uid://c8egllgadndpy"]
 
 [ext_resource type="Script" uid="uid://ddyso8ifkfuv2" path="res://Script/SongSelect/Modscfg.cs" id="1_wunyc"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_43aj5"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xnhch"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
-bg_color = Color(0.09375, 0.09375, 0.09375, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w2ft7"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
-bg_color = Color(0.443137, 0.384314, 1, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_43aj5"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
-bg_color = Color(0.290196, 0.447059, 1, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+[ext_resource type="PackedScene" uid="uid://cs1yw4bti3qhr" path="res://Panels/Overlays/ModEmblemResults.tscn" id="2_w2ft7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wunyc"]
 content_margin_left = 15.0
@@ -48,48 +14,117 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_43aj5"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.35686275, 0.3137255, 0.7490196, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w2ft7"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.16862746, 0.22745098, 0.43137255, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xnhch"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.09375, 0.09375, 0.09375, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_43aj5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xnhch"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_w2ft7"]
+content_margin_left = 5.0
+content_margin_right = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j7feq"]
+content_margin_left = 5.0
+content_margin_top = 2.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 1, 1, 0.1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
 [node name="ModButton" type="Button"]
-custom_minimum_size = Vector2(300, 100)
+custom_minimum_size = Vector2(400, 65)
 offset_right = 8.0
 offset_bottom = 8.0
-theme_override_styles/focus = SubResource("StyleBoxEmpty_43aj5")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_xnhch")
-theme_override_styles/hover = SubResource("StyleBoxFlat_w2ft7")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_43aj5")
 theme_override_styles/normal = SubResource("StyleBoxFlat_wunyc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_43aj5")
+theme_override_styles/hover = SubResource("StyleBoxFlat_w2ft7")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_xnhch")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_43aj5")
+toggle_mode = true
+button_pressed = true
 script = ExtResource("1_wunyc")
 metadata/Title = "Mod Title"
 metadata/Desc = "This mod will explode your enemies with 9999 HP damage!"
 metadata/ModName = "Sample"
 metadata/ModNameSmall = "SPL"
 
-[node name="Margin" type="MarginContainer" parent="."]
+[node name="Margin" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_xnhch")
 
-[node name="Pill" type="VBoxContainer" parent="Margin"]
+[node name="H" type="HBoxContainer" parent="Margin"]
 layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="ModEmblem" parent="Margin/H" instance=ExtResource("2_w2ft7")]
+layout_mode = 2
+text = "NA"
+
+[node name="Pill" type="VBoxContainer" parent="Margin/H"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 7
 alignment = 1
 
-[node name="Title" type="Label" parent="Margin/Pill"]
+[node name="Title" type="Label" parent="Margin/H/Pill"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w2ft7")
 text = "Mod Title"
 
-[node name="Desc" type="Label" parent="Margin/Pill"]
-custom_minimum_size = Vector2(280, 57)
+[node name="Desc" type="Label" parent="Margin/H/Pill"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_j7feq")
 text = "Damage"
 vertical_alignment = 1
 autowrap_mode = 3

@@ -5,10 +5,13 @@ public partial class Modscfg : Button
 {
     private Label _modTitle;
     private Label _modDesc;
+    private Label ModEmblem;
 	public override void _Ready()
     {
-        _modTitle = GetNode<Label>("Margin/Pill/Title");
-        _modDesc = GetNode<Label>("Margin/Pill/Desc");
+        _modTitle = GetNode<Label>("Margin/H/Pill/Title");
+        _modDesc = GetNode<Label>("Margin/H/Pill/Desc");
+        ModEmblem = GetNode<Label>("Margin/H/ModEmblem");
+        ModEmblem.Text = GetMeta("ModNameSmall").ToString();
         if (HasMeta("Title"))
         {
             _modTitle.Text = GetMeta("Title").ToString();

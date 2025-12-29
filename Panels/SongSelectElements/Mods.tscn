@@ -183,7 +183,7 @@ columns = 3
 
 [node name="ModButton" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
 layout_mode = 2
-toggle_mode = true
+button_pressed = false
 metadata/Title = "Auto"
 metadata/Desc = "Perfect play"
 metadata/ModName = "auto"
@@ -191,7 +191,7 @@ metadata/ModNameSmall = "AT"
 
 [node name="ModButton2" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
 layout_mode = 2
-toggle_mode = true
+button_pressed = false
 metadata/Title = "Nightcore"
 metadata/Desc = "Have that classic 2012 feel~"
 metadata/ModName = "dt"
@@ -199,7 +199,7 @@ metadata/ModNameSmall = "DT"
 
 [node name="ModButton3" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
 layout_mode = 2
-toggle_mode = true
+button_pressed = false
 metadata/Title = "Half Time"
 metadata/Desc = "Very slooooow"
 metadata/ModName = "ht"
@@ -207,7 +207,7 @@ metadata/ModNameSmall = "HT"
 
 [node name="ModButton5" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
 layout_mode = 2
-toggle_mode = true
+button_pressed = false
 metadata/Title = "Random"
 metadata/Desc = "A ramdomized beatmap"
 metadata/ModName = "random"
@@ -215,7 +215,7 @@ metadata/ModNameSmall = "RND"
 
 [node name="ModButton6" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
 layout_mode = 2
-toggle_mode = true
+button_pressed = false
 metadata/Title = "Slice"
 metadata/Desc = "Half of the screen is covered -w-"
 metadata/ModName = "slice"
@@ -223,7 +223,7 @@ metadata/ModNameSmall = "SL"
 
 [node name="ModButton7" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
 layout_mode = 2
-toggle_mode = true
+button_pressed = false
 metadata/Title = "Black out"
 metadata/Desc = "Who turn off the lights?!"
 metadata/ModName = "black-out"
@@ -231,7 +231,7 @@ metadata/ModNameSmall = "BO"
 
 [node name="ModButton8" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
 layout_mode = 2
-toggle_mode = true
+button_pressed = false
 metadata/Title = "No Fail"
 metadata/Desc = "Your immortal!"
 metadata/ModName = "no-fail"
@@ -239,7 +239,7 @@ metadata/ModNameSmall = "NF"
 
 [node name="NPC" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
 layout_mode = 2
-toggle_mode = true
+button_pressed = false
 metadata/Title = "NPC Mode"
 metadata/Desc = "Compete with other NPCs"
 metadata/ModName = "npc"
