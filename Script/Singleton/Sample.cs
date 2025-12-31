@@ -9,8 +9,9 @@ public partial class Sample : AudioStreamPlayer
     Instance = this;
     Bus = "Effects";
   }
-  public static void PlaySample(string path)
+  public static void PlaySample(string path, float audiopitch = 1)
   {
+    Instance.PitchScale = audiopitch;
     if (Instance == null)
     {
       GD.PrintErr("Sample instance is not initialized.");

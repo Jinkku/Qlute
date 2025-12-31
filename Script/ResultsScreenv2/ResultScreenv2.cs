@@ -36,9 +36,11 @@ public partial class ResultScreenv2 : Control
 	private HBoxContainer Additional2 { get; set; }
 	private PanelContainer RankEmblem { get; set; }
 	private TextureProgressBar AccuracyProgress { get; set; }
+	private double AccuracyProgressTick { get; set; }
 	private TextureRect Rank { get; set; }
 	private TextureRect PerfectEmblem { get; set; }
 	private Tween Tween { get; set; }
+	private Tween Tween2 { get; set; }
 	private bool PerfectPlay { get; set; }
 	private Button WatchReplayButton { get; set; }
 	private float HitCountPos { get; set; }
@@ -139,7 +141,15 @@ public partial class ResultScreenv2 : Control
 			Tween.TweenProperty(Rank, "self_modulate:a", 1f,0.2).SetDelay(1.1);
 			Tween.TweenProperty(Rank, "scale", new Vector2(1f, 1f),0.2f).SetDelay(1.1);
 			if (PerfectPlay)
+			{
 				Tween.TweenProperty(PerfectEmblem, "self_modulate", new Color(1f,1f,1f, 1f),0.2f).SetDelay(1.1);
+				Tween.TweenCallback(Callable.From(() => Sample.PlaySample("res://SelectableSkins/Slia/Sounds/applause-fc.wav"))).SetDelay(1.1);
+			}
+			else
+			{
+				Tween.TweenCallback(Callable.From(() => Sample.PlaySample("res://SelectableSkins/Slia/Sounds/applause.wav"))).SetDelay(1.1);
+			}
+				
 		}	else if (mode == 1)
 		{
 			Details.Position = new Vector2(0, Details.Position.Y);
@@ -175,7 +185,6 @@ public partial class ResultScreenv2 : Control
 			Tween.TweenProperty(RankEmblem, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
 			
 			Tween.TweenProperty(this, "ScoreValue", SettingsOperator.Gameplaycfg.Score,1);
-			Tween.TweenProperty(AccuracyProgress, "value", SettingsOperator.Gameplaycfg.Accuracy * 100,1);
 			Tween.TweenProperty(this, "AccuracyValue", SettingsOperator.Gameplaycfg.Accuracy,1);
 			Tween.TweenProperty(this, "PerfectValue", SettingsOperator.Gameplaycfg.Max,1);
 			Tween.TweenProperty(this, "GreatValue", SettingsOperator.Gameplaycfg.Great,1);
@@ -482,6 +491,11 @@ public partial class ResultScreenv2 : Control
 		RTitle.Text = Title.Text;
 		RArtist.Text = Artist.Text;
 		RMapper.Text = Mapper.Text;
+		if (AccuracyProgressTick != AccuracyProgress.Value)
+		{
+			AccuracyProgressTick = AccuracyProgress.Value;
+			Sample.PlaySample("res://SelectableSkins/Slia/Sounds/score-tick.wav", audiopitch: (float)AccuracyProgress.Value * 0.01f);
+		}
 		if (ApiOperator.Submitted)
 		{
 			ChangedStats = true;
