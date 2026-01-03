@@ -436,6 +436,7 @@ z_index = -1
 layout_mode = 1
 
 [node name="Accessory" type="Sprite2D" parent="IntroPending/logo"]
+visible = false
 texture = ExtResource("17_jpc6g")
 offset = Vector2(300, 20)
 
