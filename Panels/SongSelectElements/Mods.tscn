@@ -1,11 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://dpjsc7sxiwkm7"]
+[gd_scene load_steps=15 format=3 uid="uid://dpjsc7sxiwkm7"]
 
 [ext_resource type="Script" uid="uid://dxbbl1s8m45so" path="res://Script/Mods/Mods.cs" id="1_7gucc"]
 [ext_resource type="Script" uid="uid://b4xchyvoqsbhp" path="res://Script/Mods/CustomizeMenu.cs" id="1_u70wj"]
 [ext_resource type="Script" uid="uid://bhe0fbn3yi1r4" path="res://Script/SongSelect/ModsMulti.cs" id="2_caatv"]
 [ext_resource type="Script" uid="uid://f41458s5sqqm" path="res://Script/Mods/Customizations/DtCustom.cs" id="2_k155b"]
 [ext_resource type="Script" uid="uid://c5wpvib2f3hn" path="res://Script/Mods/Customizations/HtCustom.cs" id="3_b2hs3"]
-[ext_resource type="Script" uid="uid://d4cyep10vdq2d" path="res://Script/Mods/customize.gd" id="5_b2hs3"]
 [ext_resource type="PackedScene" uid="uid://c2ouvq16jls8u" path="res://Panels/Overlays/BottomPanelButtons.tscn" id="5_smilj"]
 [ext_resource type="Script" uid="uid://bagjvps0md7pu" path="res://Script/Mods/LevelCompute.cs" id="5_vbcbr"]
 [ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="6_8k74e"]
@@ -150,14 +149,13 @@ StringText = "Reset"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Customize" type="Button" parent="Title/Info"]
-custom_minimum_size = Vector2(150, 0)
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(150, 40)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
-tooltip_text = "Later release"
-disabled = true
-text = "Customize"
-script = ExtResource("5_b2hs3")
+script = ExtResource("6_8k74e")
+StringText = "Customize"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="ControlPanel" parent="." instance=ExtResource("5_smilj")]
@@ -249,7 +247,6 @@ metadata/ModNameSmall = "NPC"
 [connection signal="value_changed" from="Customize/VBoxContainer/HT Custom/HTMS" to="Customize/VBoxContainer/HT Custom" method="_valuechanged"]
 [connection signal="pressed" from="Title/Info/Reset" to="Mods" method="_reset"]
 [connection signal="pressed" from="Title/Info/Customize" to="Customize" method="_customize"]
-[connection signal="pressed" from="Title/Info/Customize" to="Title/Info/Customize" method="_on_pressed"]
 [connection signal="pressed" from="ControlPanel/Box/BackButton" to="Mods" method="_back"]
 [connection signal="resized" from="Mods" to="Mods" method="_on_resized"]
 [connection signal="pressed" from="Mods/ModsEntries/ModButton" to="Mods/ModsEntries/ModButton" method="_modpressed"]

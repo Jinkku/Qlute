@@ -17,7 +17,7 @@ public partial class ModsOperator : Node
 		Refresh();
 	}
 	public static void Refresh()
-	{		
+	{
 		if (Mods["ht"])
 		{
 			AudioPlayer.Instance.PitchScale = 0.5f;

@@ -60,38 +60,48 @@ public partial class BeatmapListener : Node
 		return Name;
 	}
 
+	private void ImportBeatmap(string file, bool dd = false)
+	{
+		string beatmapDir = Path.Combine(SettingsOperator.beatmapsdir, Path.GetFileNameWithoutExtension(file));
+		if (!Directory.Exists(beatmapDir))
+		{
+			Directory.CreateDirectory(beatmapDir);
+		}
+		else
+		{
+			GD.Print("Beatmap already exists for " + file + ", cancelling extraction and removing file.");
+			if (!dd) File.Delete(file);
+		}
+		System.IO.Compression.ZipFile.ExtractToDirectory(file, beatmapDir);
+		File.Delete(file);
+		GD.Print("Extracted and moved " + file + " to " + beatmapDir);
+		GD.Print("Parsing " + beatmapDir);
+		var Name = Parse_BeatmapDir(beatmapDir);
+		GD.Print("Parsed...");
+		Notify.Post("Imported\n" + Name);
+	}
 	public void CheckAndExtractOszFiles()
 	{
 		foreach (string file in Directory.GetFiles(SettingsOperator.downloadsdir, "*.osz"))
 		{
-			string beatmapDir = Path.Combine(SettingsOperator.beatmapsdir, Path.GetFileNameWithoutExtension(file));
-			if (!Directory.Exists(beatmapDir))
-			{
-				Directory.CreateDirectory(beatmapDir);
-			}
-			else
-			{
-				GD.Print("Directory already exists for " + file + ", cancelling extraction and removing file.");
-				File.Delete(file);
-				continue;
-			}
-			System.IO.Compression.ZipFile.ExtractToDirectory(file, beatmapDir);
-			File.Delete(file);
-			GD.Print("Extracted and moved " + file + " to " + beatmapDir);
-			GD.Print("Parsing " + beatmapDir);
-			var Name = Parse_BeatmapDir(beatmapDir);
-			GD.Print("Parsed...");
-			Notify.Post("Imported\n" + Name);
-		}
-		foreach (string file in Directory.GetFiles(SettingsOperator.downloadsdir, "*.zip"))
-		{
-			System.IO.Compression.ZipFile.ExtractToDirectory(file, SettingsOperator.downloadsdir);
-			File.Delete(file);
-			GD.Print("Extracted pack" + file);
+			ImportBeatmap(file);
 		}
 	}
+
+	private void ParseFileDrop(String[] files)
+	{
+		foreach (string file in files)
+		{
+			if (file.EndsWith(".qsf") || file.EndsWith(".osz"))
+			{
+				ImportBeatmap(file);
+			}
+		}
+	}
+	
 	public override void _Ready()
 	{
+		GetWindow().FilesDropped += ParseFileDrop;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		GD.Print(SettingsOperator.beatmapsdir);
 		string[] directories = { SettingsOperator.homedir, SettingsOperator.tempdir, SettingsOperator.beatmapsdir, SettingsOperator.downloadsdir, SettingsOperator.replaydir, SettingsOperator.screenshotdir, SettingsOperator.skinsdir, SettingsOperator.exportdir };

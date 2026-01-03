@@ -25,11 +25,11 @@ public partial class HtCustom : VBoxContainer
 		if (Visible)
 		{
 			HTLabel.Text = $"HT Speed {Speed}x";
-			AudioPlayer.Instance.PitchScale = Speed;
 		}
 	}
 	private void _valuechanged(float value)
 	{
 		Speed = value;
+		AudioPlayer.Instance.PitchScale = Speed;
 	}
 }

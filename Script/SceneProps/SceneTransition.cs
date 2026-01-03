@@ -115,6 +115,7 @@ public partial class SceneTransition : Control
 				case TransitionMode.CrossFade:
 					t.TweenProperty(oldScene, "modulate:a", 0.0f, _time);
 					t.TweenCallback(Callable.From(() => oldScene.QueueFree()));
+					t.TweenProperty(GetTree().CurrentScene, "modulate", new Color(1f,1f,1f,1f), _time);
 					break;
 				default:
 					break;

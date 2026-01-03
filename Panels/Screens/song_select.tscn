@@ -653,17 +653,8 @@ layout_mode = 2
 text = "0"
 horizontal_alignment = 2
 
-[node name="ModsScreen" type="Control" parent="."]
+[node name="ModsScreen" parent="." instance=ExtResource("6_4xos4")]
 visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="ModsApplet" parent="ModsScreen" instance=ExtResource("6_4xos4")]
 z_index = 1
 layout_mode = 1
 

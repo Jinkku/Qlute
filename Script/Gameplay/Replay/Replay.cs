@@ -23,6 +23,10 @@ public class ReplayInfo
     public float Avgms { get; set; } = 0;
     public string Mods { get; set; } = "";
     public double Points { get; set; } = 0;
+    /// <summary>
+    /// DT/HT Multiplier
+    /// </summary>
+    public float Multiplier { get; set; }
     public string Filepath { get; set; }
 }
 /// <summary>
@@ -76,6 +80,7 @@ public static class Replay
                 BAD = Entry.Bad,
                 mods = Entry.Mods,
                 points = Entry.Points,
+                speed_multi = Entry.Multiplier,
                 time = Time,
                 FilePath = Entry.Filepath
             });
@@ -92,98 +97,74 @@ public static class Replay
             if (Godot.FileAccess.FileExists(file))
             {
                 GD.Print($"[Qlute] Found '{file}' Processing it....");
+                ReplayInfo Replayman = new ReplayInfo {Filepath = file};
                 using var filedata = Godot.FileAccess.Open(file, Godot.FileAccess.ModeFlags.Read);
                 string[] cache = filedata.GetAsText().TrimEnd('\n').Split("\n");
-                var Username = "";
-                var BeatmapID = 0;
-                var BeatmapSetID = 0;
-                var Score = 0;
-                var Max = 0;
-                var Great = 0;
-                var Meh = 0;
-                var Bad = 0;
-                var Accuracy = 1.00f;
-                var MaxCombo = 0;
-                var AverageMs = 0.0f;
-                double Points = 0;
-                var Mods = "";
                 foreach (string data in cache)
                 {
                     if (data.StartsWith("#"))
                     {
                         if (data.StartsWith("#Username: "))
                         {
-                            Username = data.Replace("#Username: ", "");
+                            Replayman.Username = data.Replace("#Username: ", "");
                         }
                         else if (data.StartsWith("#BeatmapID: "))
                         {
-                            BeatmapID = Int32.Parse(data.Replace("#BeatmapID: ", ""));
+                            Replayman.BeatmapID = Int32.Parse(data.Replace("#BeatmapID: ", ""));
                         }
                         else if (data.StartsWith("#BeatmapSetID: "))
                         {
-                            BeatmapSetID = Int32.Parse(data.Replace("#BeatmapSetID: ", ""));
+                            Replayman.BeatmapSetID = Int32.Parse(data.Replace("#BeatmapSetID: ", ""));
                         }
                         else if (data.StartsWith("#Score: "))
                         {
-                            Score = Int32.Parse(data.Replace("#Score: ", ""));
+                            Replayman.Score = Int32.Parse(data.Replace("#Score: ", ""));
                         }
                         else if (data.StartsWith("#Max: "))
                         {
-                            Max = Int32.Parse(data.Replace("#Max: ", ""));
+                            Replayman.Max = Int32.Parse(data.Replace("#Max: ", ""));
                         }
                         else if (data.StartsWith("#Great: "))
                         {
-                            Great = Int32.Parse(data.Replace("#Great: ", ""));
+                            Replayman.Great = Int32.Parse(data.Replace("#Great: ", ""));
                         }
                         else if (data.StartsWith("#Meh: "))
                         {
-                            Meh = Int32.Parse(data.Replace("#Meh: ", ""));
+                            Replayman.Meh = Int32.Parse(data.Replace("#Meh: ", ""));
                         }
                         else if (data.StartsWith("#Bad: "))
                         {
-                            Bad = Int32.Parse(data.Replace("#Bad: ", ""));
+                            Replayman.Bad = Int32.Parse(data.Replace("#Bad: ", ""));
                         }
                         else if (data.StartsWith("#Accuracy: "))
                         {
-                            Accuracy = float.Parse(data.Replace("#Accuracy: ", ""));
+                            Replayman.Accuracy = float.Parse(data.Replace("#Accuracy: ", ""));
                         }
                         else if (data.StartsWith("#Max Combo: "))
                         {
-                            MaxCombo = Int32.Parse(data.Replace("#Max Combo: ", ""));
+                            Replayman.MaxCombo = Int32.Parse(data.Replace("#Max Combo: ", ""));
                         }
                         else if (data.StartsWith("#Average ms: "))
                         {
-                            AverageMs = float.Parse(data.Replace("#Average ms: ", ""));
+                            Replayman.Avgms = float.Parse(data.Replace("#Average ms: ", ""));
                         }
                         else if (data.StartsWith("#Mods: "))
                         {
-                            Mods = data.Replace("#Mods: ", "");
+                            Replayman.Mods = data.Replace("#Mods: ", "");
                         }
                         else if (data.StartsWith("#Points: "))
                         {
-                            Points = double.Parse(data.Replace("#Points: ", ""));
+                            Replayman.Points = double.Parse(data.Replace("#Points: ", ""));
+                        }
+                        else if (data.StartsWith("#Multiplier: "))
+                        {
+                            Replayman.Multiplier = float.Parse(data.Replace("#Multiplier: ", ""));
                         }
                     }
                     else
                     {
                         GD.Print("[Qlute] Finished parsing... NEXT! >:3");
-                        Replays.Add(new ReplayInfo
-                        {
-                            Username = Username,
-                            BeatmapID = BeatmapID,
-                            BeatmapSetID = BeatmapSetID,
-                            Score = Score,
-                            Max = Max,
-                            Great = Great,
-                            Meh = Meh,
-                            Bad = Bad,
-                            Accuracy = Accuracy,
-                            MaxCombo = MaxCombo,
-                            Avgms = AverageMs,
-                            Mods = Mods,
-                            Points = Points,
-                            Filepath = file
-                        });
+                        Replays.Add(Replayman);
                         break;
                     }
                 }
@@ -246,6 +227,7 @@ public static class Replay
                 FileCache += $"#Mods: {ModsOperator.GetModAlias()}\n";
                 FileCache += $"#Points: {SettingsOperator.Gameplaycfg.pp}\n";
                 FileCache += $"#Seed: {Gameplay.seed}\n";
+                FileCache += $"#Multiplier: {AudioPlayer.Instance.PitchScale}\n";
                 foreach (ReplayLegend entry in ReplayCache)
                 {
                     FileCache += $"{entry.Time},{entry.NoteTap}\n";

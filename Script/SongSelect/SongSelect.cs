@@ -584,12 +584,14 @@ public partial class SongSelect : Control
 		if (ModsScreenActive)
 		{
 			ModsScreenActive = false;
+			ModScreen.SetProcess(false);
 			colour = new Color(0f, 0f, 0f, 0f);
 			pos = new Vector2(0, GetViewportRect().Size.Y);
 		}
 		else
 		{
 			ModsScreenActive = true;
+			ModScreen.SetProcess(true);
 			ModScreen.Position = new Vector2(0, GetViewportRect().Size.Y);
 		}
 		ModScreen_Tween.SetParallel(true);
