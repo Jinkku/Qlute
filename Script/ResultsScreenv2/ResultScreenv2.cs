@@ -145,7 +145,7 @@ public partial class ResultScreenv2 : Control
 				Tween.TweenProperty(PerfectEmblem, "self_modulate", new Color(1f,1f,1f, 1f),0.2f).SetDelay(1.1);
 				Tween.TweenCallback(Callable.From(() => Sample.PlaySample("res://SelectableSkins/Slia/Sounds/applause-fc.wav"))).SetDelay(1.1);
 			}
-			else
+			else if (SettingsOperator.Gameplaycfg.Accuracy > 0.80f)
 			{
 				Tween.TweenCallback(Callable.From(() => Sample.PlaySample("res://SelectableSkins/Slia/Sounds/applause.wav"))).SetDelay(1.1);
 			}
