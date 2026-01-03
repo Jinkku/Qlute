@@ -15,15 +15,15 @@ public partial class CustomValue : PanelContainer
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (id == "DT" && DtCustom.Speed != 1.25)
+		if (id == "DT" && AudioPlayer.Instance.PitchScale != 1.25)
 		{
 			Visible = true;
-			Custom.Text = $"{DtCustom.Speed}x";
+			Custom.Text = $"{AudioPlayer.Instance.PitchScale}x";
 		}
-		else if (id == "HT" && HtCustom.Speed != 0.5)
+		else if (id == "HT" && AudioPlayer.Instance.PitchScale != 0.5)
 		{
 			Visible = true;
-			Custom.Text = $"{HtCustom.Speed}x";
+			Custom.Text = $"{AudioPlayer.Instance.PitchScale}x";
 		}
 		else Visible = false;
 	}

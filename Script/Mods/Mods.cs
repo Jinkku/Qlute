@@ -14,7 +14,7 @@ public partial class Mods : PanelContainer
 
 	private void _on_resized()
 	{
-		if (ModEntry != null) ModEntry.Columns = (int)(Size.X / 404);
+		if (ModEntry != null) ModEntry.Columns = (int)(Size.X / 420);
 	}
 	private void _reset()
 	{

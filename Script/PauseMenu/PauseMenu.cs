@@ -40,7 +40,6 @@ public partial class PauseMenu : Control
 
 	private void FadeOut() // Using this later, it's supposed to be a fade out animation for when you press the pause button but this is glitchy right now.
 	{
-        ModsOperator.Refresh();
 		QueueFree();
 		PauseTween?.Kill();
 		PauseTween = CreateTween();

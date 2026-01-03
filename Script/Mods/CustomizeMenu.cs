@@ -8,10 +8,12 @@ public partial class CustomizeMenu : PanelContainer
 	private int _customizePanelHeight = 0;
 	private int _modmenuPanelHeight = 0;
 	private bool _isCustomizing = false;
+	private ButtonFade customizebtn { get; set; }
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		_modmenuPanel = GetNode<PanelContainer>("../Mods");
+		customizebtn = GetNode<ButtonFade>("../Title/Info/Customize");
 		_customizePanelHeight = (int)Position.Y;
 		_modmenuPanelHeight = (int)_modmenuPanel.Position.Y;
 	}
@@ -26,12 +28,14 @@ public partial class CustomizeMenu : PanelContainer
 		_customizeTween.SetParallel(true);
 		if (_isCustomizing)
 		{
+			customizebtn.Text = "Close Customize";
 			// Move the mod menu panel down
 			_customizeTween.TweenProperty(_modmenuPanel, "size", new Vector2(_modmenuPanel.Size.X - 400, _modmenuPanel.Size.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			_customizeTween.TweenProperty(this, "position", new Vector2(Position.X - 400, Position.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		}
 		else
 		{
+			customizebtn.Text = "Customize";
 			// Move the mod menu panel back to its original position
 			_customizeTween.TweenProperty(_modmenuPanel, "size", new Vector2(_modmenuPanel.Size.X + 400, _modmenuPanel.Size.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			_customizeTween.TweenProperty(this, "position", new Vector2(Position.X + 400, Position.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);

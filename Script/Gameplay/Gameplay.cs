@@ -65,6 +65,7 @@ public partial class Gameplay : Control
 	private Timer BreakCheck { get; set; }
 	private Label ComboCounter { get; set; }
 	public static int seed = 0;
+	private float speedold = 1f;
 	private void ShowPauseMenu()
 	{
 		Cursor.CursorVisible = true;
@@ -205,6 +206,7 @@ public partial class Gameplay : Control
 	}
 	public override void _Ready()
 	{
+		speedold = AudioPlayer.Instance.PitchScale;
 		seed = new Random().Next(1,214562543);
 		ReplayINT = 0;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -428,6 +430,7 @@ public partial class Gameplay : Control
 	    Modulate = new Color("#FFFFFF");
 		Cursor.CursorVisible = true;
 		SettingsOperator.SpectatorMode = false; // Disables Spectator mode.
+		AudioPlayer.Instance.PitchScale = speedold;
     }
 
 	private float est { get; set; }
@@ -605,6 +608,8 @@ public partial class Gameplay : Control
 			{
 				BeatmapBackground.FlashEnable = true;
 				SettingsOperator.toppaneltoggle(true);
+				MainScreenAnimation?.Kill();
+				AudioPlayer.Instance.PitchScale = speedold;
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 			}
 			//debugtext.Text = $"est: {est}\nDanceIndex:{DanceIndex}\nTimeindex:{dance[DanceIndex].time}";

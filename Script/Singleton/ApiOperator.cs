@@ -29,6 +29,7 @@ public class LeaderboardEntry
 	public int BAD { get; set; }
 	public string mods { get; set; }
 	public long time { get; set; }
+	public float speed_multi { get; set; } = 1;
 	public string FilePath { get; set; }
 	public bool Active { get; set; }
 }
@@ -78,6 +79,7 @@ public partial class ApiOperator : Node
 				$"COMBO: {COMBO}",
 				$"Version: {ProjectSettings.GetSetting("application/config/version")}",
 				$"Branch: {ProjectSettings.GetSetting("application/config/branch")}",
+				$"MULTIPLIER: {AudioPlayer.Instance.PitchScale}",
 				$"Mods: {ModsOperator.GetModAlias()}"
 			};
 			SubmitApi.Request(SettingsOperator.GetSetting("api") + "apiv2/ss", Headers,method: HttpClient.Method.Post, requestData: Replay.FileCache);
@@ -133,6 +135,7 @@ public partial class ApiOperator : Node
 		{
 			LeaderboardList.Clear();
 			LeaderboardStatus = 2; // Set status to loaded
+			GD.Print(Encoding.UTF8.GetString(body));
 			LeaderboardList = JsonSerializer.Deserialize<List<LeaderboardEntry>>((string)Encoding.UTF8.GetString(body));
 			GD.Print("Leaderboard loaded successfully.");
 		}

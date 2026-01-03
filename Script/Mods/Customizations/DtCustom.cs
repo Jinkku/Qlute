@@ -25,11 +25,11 @@ public partial class DtCustom : VBoxContainer
 		if (Visible)
 		{
 			DTLabel.Text = $"DT Speed {Speed}x";
-			AudioPlayer.Instance.PitchScale = Speed;
 		}
 	}
 	private void _valuechanged(float value)
 	{
 		Speed = value;
+		AudioPlayer.Instance.PitchScale = Speed;
 	}
 }
