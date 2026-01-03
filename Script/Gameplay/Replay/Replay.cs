@@ -37,6 +37,7 @@ public class ReplayLegend
 public static class Replay
 {
     public static string FilePath { get; set; }
+    public static string FileCache { get; set; }
     public static List<ReplayLegend> ReplayCache = new List<ReplayLegend>();
     public static List<ReplayInfo> Replays { get; set; } = new List<ReplayInfo>();
 
@@ -229,30 +230,29 @@ public static class Replay
             try
             {
                 GD.Print("[Qlute] Saving Replay...");
-                var cache =
+                FileCache =
                     $"#Qlute Version: {ProjectSettings.GetSetting("application/config/version")}-{ProjectSettings.GetSetting("application/config/branch")}\n";
-                cache += $"#Username: {ApiOperator.Username}\n";
-                cache += $"#BeatmapID: {SettingsOperator.BeatmapID}\n";
-                cache += $"#BeatmapSetID: {SettingsOperator.BeatmapSetID}\n";
-                cache += $"#Score: {SettingsOperator.Gameplaycfg.Score}\n";
-                cache += $"#Max: {SettingsOperator.Gameplaycfg.Max}\n";
-                cache += $"#Great: {SettingsOperator.Gameplaycfg.Great}\n";
-                cache += $"#Meh: {SettingsOperator.Gameplaycfg.Meh}\n";
-                cache += $"#Bad: {SettingsOperator.Gameplaycfg.Bad}\n";
-                cache += $"#Accuracy: {SettingsOperator.Gameplaycfg.Accuracy}\n";
-                cache += $"#Max Combo: {SettingsOperator.Gameplaycfg.MaxCombo}\n";
-                cache += $"#Average ms: {SettingsOperator.Gameplaycfg.ms}\n";
-                cache += $"#Mods: {ModsOperator.GetModAlias()}\n";
-                cache += $"#Points: {SettingsOperator.Gameplaycfg.pp}\n";
-                cache += $"#Seed: {Gameplay.seed}\n";
+                FileCache += $"#Username: {ApiOperator.Username}\n";
+                FileCache += $"#BeatmapID: {SettingsOperator.BeatmapID}\n";
+                FileCache += $"#BeatmapSetID: {SettingsOperator.BeatmapSetID}\n";
+                FileCache += $"#Score: {SettingsOperator.Gameplaycfg.Score}\n";
+                FileCache += $"#Max: {SettingsOperator.Gameplaycfg.Max}\n";
+                FileCache += $"#Great: {SettingsOperator.Gameplaycfg.Great}\n";
+                FileCache += $"#Meh: {SettingsOperator.Gameplaycfg.Meh}\n";
+                FileCache += $"#Bad: {SettingsOperator.Gameplaycfg.Bad}\n";
+                FileCache += $"#Accuracy: {SettingsOperator.Gameplaycfg.Accuracy}\n";
+                FileCache += $"#Max Combo: {SettingsOperator.Gameplaycfg.MaxCombo}\n";
+                FileCache += $"#Average ms: {SettingsOperator.Gameplaycfg.ms}\n";
+                FileCache += $"#Mods: {ModsOperator.GetModAlias()}\n";
+                FileCache += $"#Points: {SettingsOperator.Gameplaycfg.pp}\n";
+                FileCache += $"#Seed: {Gameplay.seed}\n";
                 foreach (ReplayLegend entry in ReplayCache)
                 {
-                    cache += $"{entry.Time},{entry.NoteTap}\n";
+                    FileCache += $"{entry.Time},{entry.NoteTap}\n";
                 }
 
                 using var file = Godot.FileAccess.Open(FilePath, Godot.FileAccess.ModeFlags.Write);
-                file.StoreString(cache);
-                cache = "";
+                file.StoreString(FileCache);
                 Parse(FilePath);
                 if (SettingsOperator.LeaderboardType == 0)
                     ApiOperator.ReloadLeaderboard(SettingsOperator.BeatmapID);

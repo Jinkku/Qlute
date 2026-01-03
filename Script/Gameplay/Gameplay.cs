@@ -560,8 +560,8 @@ public partial class Gameplay : Control
 			if (SettingsOperator.Gameplaycfg.TimeTotalGame - SettingsOperator.Gameplaycfg.Time < 0 && !Finished)
 			{
 				Finished = true;
-				ApiOperator.SubmitScore();
 				Replay.SaveReplay();
+				ApiOperator.SS();
 				if (!SettingsOperator.Marathon)
 				{
 					AddChild(GD.Load<PackedScene>("res://Panels/Screens/EndScreen.tscn").Instantiate());

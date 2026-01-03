@@ -46,8 +46,45 @@ public partial class ApiOperator : Node
 	public static ApiOperator Instance { get; set; }
 	public static bool Submitted = false;
 	public static string Beatmapapi = "https://catboy.best";
+
 	/// <summary>
-	/// Submits a score to the dedicated server.
+	/// Submits a score to the dedicated server. (New Version)
+	/// </summary>
+	public void SS()
+	{
+		if (!SettingsOperator.SpectatorMode)
+		{
+			Submitted = false;
+			SettingsOperator.JustPlayedScore = false;
+			GD.Print("Submitting score....");
+			int BeatmapID = SettingsOperator.BeatmapID;
+			int BeatmapSetID = SettingsOperator.BeatmapSetID;
+			double MAX = SettingsOperator.Gameplaycfg.Max;
+			double GREAT = SettingsOperator.Gameplaycfg.Great;
+			double MEH = SettingsOperator.Gameplaycfg.Meh;
+			double BAD = SettingsOperator.Gameplaycfg.Bad;
+			double COMBO = SettingsOperator.Gameplaycfg.MaxCombo;
+			double timetotal = SettingsOperator.Gameplaycfg.TimeTotal;
+			string[] Headers = new string[] {
+				$"BeatmapID: {BeatmapID}",
+				$"BeatmapSetID: {BeatmapSetID}",
+				$"USERNAME: {SettingsOperator.GetSetting("username")}",
+				$"PASSWORD: {SettingsOperator.GetSetting("password")}",
+				$"MAX: {MAX}",
+				$"TAKEN: {timetotal}",
+				$"GREAT: {GREAT}",
+				$"MEH: {MEH}",
+				$"BAD: {BAD}",
+				$"COMBO: {COMBO}",
+				$"Version: {ProjectSettings.GetSetting("application/config/version")}",
+				$"Branch: {ProjectSettings.GetSetting("application/config/branch")}",
+				$"Mods: {ModsOperator.GetModAlias()}"
+			};
+			SubmitApi.Request(SettingsOperator.GetSetting("api") + "apiv2/ss", Headers,method: HttpClient.Method.Post, requestData: Replay.FileCache);
+		}
+	}
+	/// <summary>
+	/// Submits a score to the dedicated server. (Old Version, use SS than SubmitScore)
 	/// </summary>
 	public void SubmitScore()
 	{
@@ -171,6 +208,7 @@ public partial class ApiOperator : Node
 	}
 	private void _Submitrequest(long result, long responseCode, string[] headers, byte[] body)
 	{
+		GD.Print(Encoding.UTF8.GetString(body));
 		Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
 		if ((int)json["rankedmap"] > 0 && (int)json["error"] == 0)
 		{
