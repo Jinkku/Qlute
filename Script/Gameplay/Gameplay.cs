@@ -437,11 +437,16 @@ public partial class Gameplay : Control
 	private int NoteTick { get; set; }
 	private bool BreakTime { get; set; }
 	private int NoteBreakTiming { get; set; }
+	private Break Break { get; set; }
 
 	private void BreakNow()
 	{
-		var Break = GD.Load<PackedScene>("res://Panels/Screens/Break.tscn").Instantiate();
-		Break.Set("MaxTick", (NoteBreakTiming * 0.001));
+		if (IsInstanceValid(Break))
+		{
+			Break?.QueueFree();
+		}
+		Break = GD.Load<PackedScene>("res://Panels/Screens/Break.tscn").Instantiate().GetNode<Break>(".");
+		Break.MaxTick = NoteBreakTiming * 0.001;
 		AddChild(Break);
 	}
 	private void _GameNoteTick(double delta)
@@ -459,17 +464,23 @@ public partial class Gameplay : Control
 			viewportSize = GetViewportRect().Size.Y;
 		}
 
-		var AlreadyChecked = false;
 		var NoteCount = 0;
+		
+		if (!BreakTime && songstarted && Notes[Math.Min(Notes.Count() - 1, NoteTick)].timing  + est + HitPoint <= -4500)
+		{
+			BreakTime = true;
+			NoteBreakTiming = -(int)(Notes[Math.Min(Notes.Count() - 1, NoteTick)].timing);
+			BreakNow();
+		}
+		
 		for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
 		{
 			var Note = Notes[i];
 			var notex = Note.timing + est + HitPoint;
 			if (notex > -150 && notex < viewportSize + 150 && !Note.hit)
 			{
-				NoteCount++;
-				BreakCheck.Stop();
 				BreakTime = false;
+				NoteCount++;
 				if (!Note.hit && Note.Node == null)
 				{
 					var playfieldpart =
@@ -484,7 +495,7 @@ public partial class Gameplay : Control
 				if (ModsOperator.Mods["slice"] && Note.Node != null)
 				{
 					Note.Node.Modulate =
-						new Color(1f, 1f, 1f, Math.Min(HitPoint, Note.Node.Position.Y - 200) / HitPoint);
+						new Color(1f, 1f, 1f, Math.Min(HitPoint, Note.Node.Position.Y - 350) / HitPoint);
 				}
 				else if (ModsOperator.Mods["black-out"] && Note.Node != null)
 				{
@@ -498,9 +509,6 @@ public partial class Gameplay : Control
 					JudgeResult = checkjudge((int)notex, Keys[(int)Note.Node.GetMeta("part")].hit, Note);
 					if (JudgeResult < 4)
 					{
-						// NPC Part
-						CheckNPCValues();
-
 						mshitold = HitPoint + 5;
 						mshit = notex;
 						SettingsOperator.Addms(mshitold - mshit - 50);
@@ -525,14 +533,8 @@ public partial class Gameplay : Control
 			{
 				Note.Node.Position = new Vector2(0, (notex * scrollspeed) - (HitPoint * (scrollspeed - 1)));
 			}
-			else if (!BreakTime & notex < -150 && !Note.hit && songstarted && !AlreadyChecked && NoteCount < 1)
-			{
-				AlreadyChecked = true;
-				BreakTime = true;
-				NoteBreakTiming = -Note.timing;
-				BreakCheck.Start();
-			}
-	}
+
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
