@@ -82,71 +82,12 @@ public partial class Gameplay : Control
 		MainScreenAnimation.TweenInterval(0.5f);
 		MainScreenAnimation.Parallel().TweenProperty(this, "modulate", new Color(1f, 0.8f, 0.8f, 1f), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		MainScreenAnimation.Parallel().TweenProperty(this, "position", new Vector2(Position.X, Position.Y + 20), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-		MainScreenAnimation.Parallel().TweenProperty(this, "rotation", 0.25f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		MainScreenAnimation.Parallel().TweenProperty(this, "rotation", 0.05f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		MainScreenAnimation.Parallel().TweenProperty(AudioPlayer.Instance, "pitch_scale", 0.01f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-		MainScreenAnimation.Parallel().TweenProperty(this, "scale", Scale * 0.9f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		MainScreenAnimation.Parallel().TweenProperty(this, "scale", Scale * 0.7f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		MainScreenAnimation.Connect("finished", new Callable(this, nameof(ShowPauseMenu)));
 	}
 	private int maxrndvalue { get; set; }
-
-	private void CheckNPCValues()
-	{
-		if (ModsOperator.Mods["npc"])
-		{
-			Random rnd = new Random();
-			for (int i = 0; i < ApiOperator.LeaderboardList.Count; i++)
-			{
-				var value = rnd.Next(1, maxrndvalue);
-				var entry = ApiOperator.LeaderboardList[i];
-				if (value > maxrndvalue * 0.0004 && entry.Active)
-				{
-					entry.MAX++;
-					entry.rcombo++;
-				}
-				else if (value > maxrndvalue * 0.00003 && entry.Active)
-				{
-					entry.GOOD++;
-					entry.rcombo++;
-				}
-				else if (value > maxrndvalue * 0.000002 && entry.Active)
-				{
-					entry.MEH++;
-					entry.rcombo++;
-				}
-				else if (entry.Active)
-				{
-					entry.BAD++;
-					entry.rcombo = 0;
-				}
-				entry.combo = Math.Max(entry.rcombo, entry.combo);
-				entry.Accuracy = ReloadAccuracy(entry.MAX, entry.GOOD, entry.MEH, entry.BAD);
-
-				entry.score = Get_Score(SettingsOperator.Get_ppvalue(entry.MAX, entry.GOOD, entry.MEH, entry.BAD, ModsMulti.multiplier, entry.combo, SettingsOperator.Gameplaycfg.TimeTotalGame), SettingsOperator.Gameplaycfg.maxpp, ModsMulti.multiplier) / (1 + i);
-			}
-		}
-	}
-
-	public static void reload_npcleaderboard()
-	{
-		ApiOperator.LeaderboardList.Clear();
-		for (int i = 0; i < 51; i++)
-		{
-			ApiOperator.LeaderboardList.Add(new LeaderboardEntry
-			{
-				username = $"NPC-{i.ToString("N0")}",
-				points = 0,
-				score = 0,
-				combo = 0,
-				MAX = 0,
-				GOOD = 0,
-				MEH = 0,
-				BAD = 0,
-				mods = "",
-				time = 0,
-				Active = true
-			});
-		}
-	}
 	public void ReloadBeatmap(string filepath)
 	{
 		Notes.Clear();

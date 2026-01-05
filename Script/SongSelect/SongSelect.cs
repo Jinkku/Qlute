@@ -611,11 +611,6 @@ public partial class SongSelect : Control
 		}
 		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/play.wav");
 
-		if (ModsOperator.Mods["npc"])
-		{
-			Gameplay.reload_npcleaderboard();
-		}
-
 		AnimationScene(1);
 		SettingsOperator.loopaudio = false;
 	}

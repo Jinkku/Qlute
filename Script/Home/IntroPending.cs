@@ -33,14 +33,14 @@ public partial class IntroPending : Control
 	private void _hover()
 	{
 		HeartbeatHover = true;
-		Scale = HoverScale;
+		IScale = HoverScale;
 		HoverChg();
 	}
 
 	private void _unhover()
 	{
 		HeartbeatHover = false;
-		Scale = IdleScale;
+		IScale = IdleScale;
 		HoverChg();
 	}
     public override void _Input(InputEvent @event)
@@ -69,7 +69,7 @@ public partial class IntroPending : Control
 		}
     }
 
-	private Vector2 Scale { get; set; } = new Vector2(1f, 1f);
+	private Vector2 IScale { get; set; } = new Vector2(1f, 1f);
 	private Vector2 IdleScale { get; set; } = new Vector2(1f, 1f);
 	private Vector2 HoverScale { get; set; } = new Vector2(1.1f, 1.1f);
 
@@ -80,7 +80,7 @@ public partial class IntroPending : Control
 			LogoTween.Kill();
 		}
 		LogoTween = Logo.CreateTween();
-		LogoTween.Parallel().TweenProperty(Logo, "scale", Scale, 0.2f)
+		LogoTween.Parallel().TweenProperty(Logo, "scale", IScale, 0.2f)
 			.SetTrans(Tween.TransitionType.Bounce)
 			.SetEase(Tween.EaseType.Out);
 		LogoTween.Play();
@@ -90,10 +90,10 @@ public partial class IntroPending : Control
 	/// </summary>
 	private void StartLogoBounce()
 	{
-		Logo.Scale = new Vector2(Scale.X + 0.02777777778f, Scale.Y + 0.02777777778f);
+		Logo.Scale = new Vector2(IScale.X + 0.02777777778f, IScale.Y + 0.02777777778f);
 		LogoTween?.Kill();
 		LogoTween = Logo.CreateTween();
-		LogoTween.Parallel().TweenProperty(Logo, "scale", Scale, 60000 / (SettingsOperator.bpm * AudioPlayer.Instance.PitchScale) * 0.001)
+		LogoTween.Parallel().TweenProperty(Logo, "scale", IScale, 60000 / (SettingsOperator.bpm * AudioPlayer.Instance.PitchScale) * 0.001)
 			.SetTrans(Tween.TransitionType.Cubic)
 			.SetEase(Tween.EaseType.Out);
 		LogoTween.Play();
@@ -116,53 +116,55 @@ public partial class IntroPending : Control
 		_tween.SetParallel(true);
 		if (type)
 		{
-			HomeButtons.Position = new Vector2(HomeButtons.Position.X, HomeButtons.Position.Y + 150);
-			HomeButtons.Modulate = new Color(0f, 0f, 0f, 0f);
-			_tween.TweenProperty(this, "position:y", Position.Y + 150, time)
-					.SetTrans(Tween.TransitionType.Cubic)
-					.SetEase(Tween.EaseType.Out);
-			_tween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 0f), time)
-					.SetTrans(Tween.TransitionType.Cubic)
-					.SetEase(Tween.EaseType.Out);
-			_tween.TweenProperty(this, "visible", false, time)
-					.SetTrans(Tween.TransitionType.Cubic)
-					.SetEase(Tween.EaseType.Out);
-			_tween.TweenProperty(HomeButtons, "visible", true, 0f)
-					.SetTrans(Tween.TransitionType.Cubic)
-					.SetEase(Tween.EaseType.Out);
-			_tween.TweenProperty(HomeButtons, "position", HomeButtonsPOS, time)
-					.SetTrans(Tween.TransitionType.Cubic)
-					.SetEase(Tween.EaseType.Out);
+			HomeButtons.Scale = new Vector2(1.2f, 1.2f);
+			HomeButtons.Modulate = new Color(1f, 1f, 1f, 0f);
+			PivotOffset = Size / 2;
+			HomeButtons.PivotOffset = HomeButtons.Size / 2;
+			HomeButtons.Visible = true;
+			Visible = true;
+			
 			_tween.TweenProperty(HomeButtons, "modulate", new Color(1f, 1f, 1f, 1f), time)
-					.SetTrans(Tween.TransitionType.Cubic)
-					.SetEase(Tween.EaseType.Out);
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			_tween.TweenProperty(HomeButtons, "scale", new Vector2(1f, 1f), time)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			_tween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 0f), time)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			_tween.TweenProperty(this, "scale", new Vector2(1.2f, 1.2f), time)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
 			_tween.TweenCallback(Callable.From(() => hidden = true));
 			_tween.TweenCallback(Callable.From(() => HomeScreen.StayOpen = true));
+			_tween.TweenCallback(Callable.From(() => Visible = false)).SetDelay(time);
 		}
 		else
 		{
-			Position = new Vector2(Position.X, Position.Y + 150);
-			Modulate = new Color(0f, 0f, 0f, 0f);
-			_tween.TweenProperty(HomeButtons, "position:y", HomeButtonsPOS.Y + 150, time)
-					.SetTrans(Tween.TransitionType.Cubic)
-					.SetEase(Tween.EaseType.Out);
-			_tween.TweenProperty(HomeButtons, "modulate", new Color(0f, 0f, 0f, 0f), time)
-					.SetTrans(Tween.TransitionType.Cubic)
-					.SetEase(Tween.EaseType.Out);
-			_tween.TweenProperty(HomeButtons, "visible", false, time)
-					.SetTrans(Tween.TransitionType.Cubic)
-					.SetEase(Tween.EaseType.Out);
-			_tween.TweenProperty(this, "position:y", Position.Y - 150, time)
-					.SetTrans(Tween.TransitionType.Cubic)
-					.SetEase(Tween.EaseType.Out);
-			_tween.TweenProperty(this, "visible", true, 0f)
-					.SetTrans(Tween.TransitionType.Cubic)
-					.SetEase(Tween.EaseType.Out);
+			HomeButtons.Scale = new Vector2(1f, 1f);
+			Scale = new Vector2(1.2f, 1.2f);
+			HomeButtons.Modulate = new Color(1f, 1f, 1f, 1f);
+			Modulate = new Color(1f, 1f, 1f, 0f);
+			PivotOffset = Size / 2;
+			HomeButtons.PivotOffset = HomeButtons.Size / 2;
+			HomeButtons.Visible = true;
+			Visible = true;
+			
+			_tween.TweenProperty(HomeButtons, "modulate", new Color(1f, 1f, 1f, 0f), time)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			_tween.TweenProperty(HomeButtons, "scale", new Vector2(1.2f, 1.2f), time)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
 			_tween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), time)
-					.SetTrans(Tween.TransitionType.Cubic)
-					.SetEase(Tween.EaseType.Out);
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			_tween.TweenProperty(this, "scale", new Vector2(1f, 1f), time)
+				.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
 			_tween.TweenCallback(Callable.From(() => hidden = false));
 			_tween.TweenCallback(Callable.From(() => HomeScreen.StayOpen = false));
+			_tween.TweenCallback(Callable.From(() => HomeButtons.Visible = false)).SetDelay(time);
 		}
 		_tween.Play();
 	}

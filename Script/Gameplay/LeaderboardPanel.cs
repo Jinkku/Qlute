@@ -111,10 +111,6 @@ public partial class LeaderboardPanel : PanelContainer
 					PlayerLeaderboardEntry = i;
 					SettingsOperator.Gameplaycfg.Rank = PlayerLeaderboardEntry + 1;
 				}
-				else if (ModsOperator.Mods["npc"] && i > LeaderboardEntries.Count - 1)
-				{
-					entry.Score = ApiOperator.LeaderboardList[i].score;
-				}
 				if (entry.Rank > LeaderboardEntries[PlayerLeaderboardEntry].Rank - 6 && entry.Rank < LeaderboardEntries[PlayerLeaderboardEntry].Rank + 6 && !entry.Playing)
 				{
 					entry.Node.Visible = true;
