@@ -20,19 +20,18 @@ public partial class Sample : Node
     }
     SampleNode.Stream = audioStream;
     Streams.Add(SampleNode);
-    GD.Print("aga");
   }
 
   public override void _Process(double delta)
   {
     foreach (var stream in Streams)
     {
-      GD.Print("aka");
       AddChild(stream);
       stream.VolumeDb = VolumeDb;
       stream.Play();
       stream.Finished += () => stream.QueueFree();
-      Streams.Remove(stream);
     }
+
+    Streams.Clear();
   }
 }
