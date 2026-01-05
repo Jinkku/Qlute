@@ -34,7 +34,6 @@ public partial class VolumeControl : PanelContainer
 	}
 	private void _sample(float value)
 	{
-		Sample.Instance.VolumeDb = (int)(Math.Log10(value / 100) * 20) - 5;
 		SampleLabel.Text = "Sample " + (int)value + "%";
 		SettingsOperator.SetSetting("sample", (int)value);
 		SettingsOperator.SampleVol = (int)value;

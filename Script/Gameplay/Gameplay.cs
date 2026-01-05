@@ -62,7 +62,6 @@ public partial class Gameplay : Control
 	private Control SpectatorPanel { get; set; }
 	private Tween scoretween { get; set; }
 	private int MaxNotes { get; set; }
-	private Timer BreakCheck { get; set; }
 	private Label ComboCounter { get; set; }
 	public static int seed = 0;
 	private float speedold = 1f;
@@ -155,7 +154,6 @@ public partial class Gameplay : Control
 		ApiOperator = GetNode<ApiOperator>("/root/ApiOperator");
 		Beatmap_Background = GetNode<TextureRect>("./Beatmap_Background");
 		WaitClock = GetNode<Timer>("Wait");
-		BreakCheck = GetNode<Timer>("BreakCheck");
 		AudioPlayer.Instance.Stop();
 		ClipContents = true;
 		SettingsOperator.Gameplaycfg.Username = ApiOperator.Username;
