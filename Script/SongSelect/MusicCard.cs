@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using FileAccess = Godot.FileAccess;
-
+using System.Collections.Generic;
 public partial class MusicCard : Button
 {
 	private SettingsOperator SettingsOperator { get; set; }
@@ -22,6 +22,8 @@ public partial class MusicCard : Button
 	private Texture2D texture { get; set; }
 	private RichTextLabel SongInfo { get; set; }
 	private Label Version { get; set; }
+	private PanelContainer Ranked { get; set; }
+	private Label RankedText { get; set; }
 	private BeatmapLegend Beatmap { get; set; }
 	public override void _ExitTree()
 	{
@@ -107,7 +109,30 @@ public partial class MusicCard : Button
 		}
 		SongInfo.Text = text;
 	}
+	private List<Color> Colors = new List<Color>([new Color(1, 0, 0),new Color(0, 1, 0), new Color(1, 1, 0), new Color(0, 0, 0)]);
 
+	private void RefreshRank()
+	{
+		var rankid = SettingsOperator.Beatmaps[SongID].RankStatus;
+		if (rankid == 0)
+		{
+			RankedText.Text = "Unranked";
+			Ranked.SelfModulate = Colors[0];
+		} else if (rankid == 1)
+		{
+			RankedText.Text = "Ranked";
+			Ranked.SelfModulate = Colors[1];
+		} else if (rankid == 2)
+		{
+			RankedText.Text = "Special";
+			Ranked.SelfModulate = Colors[2];
+		}else if (rankid == -1)
+		{
+			RankedText.Text = "Unknown";
+			Ranked.SelfModulate = Colors[3];
+		}
+	}
+	
 	private void ReloadInfo(bool force = false)
 	{
 		var newUnicode = Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString());
@@ -128,6 +153,8 @@ public partial class MusicCard : Button
 		Preview = GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
 		SongInfo = GetNode<RichTextLabel>("MarginContainer/VBoxContainer/SongInfo");
 		Version = GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Version");
+		Ranked = GetNode<PanelContainer>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Ranked");
+		RankedText = GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Ranked/RankText");
 
 		if (SongID == -1)
 			SongID = 0;
@@ -207,6 +234,7 @@ public partial class MusicCard : Button
 	public override void _PhysicsProcess(double delta)
 	{
 			ReloadInfo();
+			RefreshRank();
     }
 
 
