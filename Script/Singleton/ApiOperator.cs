@@ -135,7 +135,6 @@ public partial class ApiOperator : Node
 		{
 			LeaderboardList.Clear();
 			LeaderboardStatus = 2; // Set status to loaded
-			GD.Print(Encoding.UTF8.GetString(body));
 			LeaderboardList = JsonSerializer.Deserialize<List<LeaderboardEntry>>((string)Encoding.UTF8.GetString(body));
 			GD.Print("Leaderboard loaded successfully.");
 		}
@@ -211,7 +210,6 @@ public partial class ApiOperator : Node
 	}
 	private void _Submitrequest(long result, long responseCode, string[] headers, byte[] body)
 	{
-		GD.Print(Encoding.UTF8.GetString(body));
 		Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
 		if ((int)json["rankedmap"] > 0 && (int)json["error"] == 0)
 		{
@@ -266,7 +264,7 @@ public partial class ApiOperator : Node
 
 	}
 
-	public static int RankedStatus { get; set; }
+	public static int RankedStatus { get; set; } = RankStatusLegend.Unknown;
 
 	public static HttpRequest RankApi { get; set; }
 
@@ -287,25 +285,37 @@ public partial class ApiOperator : Node
 	/// <param name="body"></param>
 	public void RankOutput(long result, long responseCode, string[] headers, byte[] body)
 	{
-		// Convert byte[] → string
-		string jsonString = Encoding.UTF8.GetString(body);
-
-		// Parse the JSON (returns Variant)
-		Variant parsed = Json.ParseString(jsonString);
-
-		// Cast Variant to Dictionary
-		var dict = (Godot.Collections.Dictionary)parsed;
-
-		// Get RankedStatus (Variant → long → int)
-		RankedStatus = (int)(long)dict["RankedStatus"];
-		if (RankedStatus == -1)
+		if (responseCode == 200)
 		{
-			RankedStatus = 0;
+			// Convert byte[] → string
+			string jsonString = Encoding.UTF8.GetString(body);
+
+			// Parse the JSON (returns Variant)
+			Variant parsed = Json.ParseString(jsonString);
+
+			// Cast Variant to Dictionary
+			var dict = (Godot.Collections.Dictionary)parsed;
+
+			// Get RankedStatus (Variant → long → int)
+			RankedStatus = (int)(long)dict["RankedStatus"];
+			if (RankedStatus == RankStatusLegend.Ranked)
+			{
+				RankedStatus = RankStatusLegend.Ranked;	
+			}
+			else if (RankedStatus == -1)
+			{
+				RankedStatus = RankStatusLegend.Unranked;
+			}
+			else if (RankedStatus != 1)
+			{
+				RankedStatus = RankStatusLegend.Special;
+			}
 		}
-		else if (RankedStatus != 1)
+		else
 		{
-			RankedStatus = 2;
+			RankedStatus = RankStatusLegend.Unknown;
 		}
+		SettingsOperator.Beatmaps[SettingsOperator.SongID].RankStatus = RankedStatus;
 	}
 
 	public static void DownloadBeatmap(int id, int index)

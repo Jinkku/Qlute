@@ -4,10 +4,6 @@ using System;
 
 public partial class ModsOperator : Node
 {
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-	}
 	public static void Reset()
 	{
 		foreach(var mod in Mods)
@@ -112,11 +108,6 @@ public partial class ModsOperator : Node
 					modalias += "NF";
 					ModsEnabled.Add("NF");
 				}
-				else if (modst == "npc")
-				{
-					modalias += "";
-					ModsEnabled.Add("NPC");
-				}
 			}
 		}
 		return modalias;
@@ -173,6 +164,5 @@ public partial class ModsOperator : Node
 		{"random", false},
 		{"slice", false},
 		{"black-out", false},
-		{"npc", false},
 	};
 }

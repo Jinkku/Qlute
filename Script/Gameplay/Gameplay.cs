@@ -62,7 +62,6 @@ public partial class Gameplay : Control
 	private Control SpectatorPanel { get; set; }
 	private Tween scoretween { get; set; }
 	private int MaxNotes { get; set; }
-	private Timer BreakCheck { get; set; }
 	private Label ComboCounter { get; set; }
 	public static int seed = 0;
 	private float speedold = 1f;
@@ -82,71 +81,12 @@ public partial class Gameplay : Control
 		MainScreenAnimation.TweenInterval(0.5f);
 		MainScreenAnimation.Parallel().TweenProperty(this, "modulate", new Color(1f, 0.8f, 0.8f, 1f), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		MainScreenAnimation.Parallel().TweenProperty(this, "position", new Vector2(Position.X, Position.Y + 20), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-		MainScreenAnimation.Parallel().TweenProperty(this, "rotation", 0.25f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		MainScreenAnimation.Parallel().TweenProperty(this, "rotation", 0.05f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		MainScreenAnimation.Parallel().TweenProperty(AudioPlayer.Instance, "pitch_scale", 0.01f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-		MainScreenAnimation.Parallel().TweenProperty(this, "scale", Scale * 0.9f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		MainScreenAnimation.Parallel().TweenProperty(this, "scale", Scale * 0.7f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		MainScreenAnimation.Connect("finished", new Callable(this, nameof(ShowPauseMenu)));
 	}
 	private int maxrndvalue { get; set; }
-
-	private void CheckNPCValues()
-	{
-		if (ModsOperator.Mods["npc"])
-		{
-			Random rnd = new Random();
-			for (int i = 0; i < ApiOperator.LeaderboardList.Count; i++)
-			{
-				var value = rnd.Next(1, maxrndvalue);
-				var entry = ApiOperator.LeaderboardList[i];
-				if (value > maxrndvalue * 0.0004 && entry.Active)
-				{
-					entry.MAX++;
-					entry.rcombo++;
-				}
-				else if (value > maxrndvalue * 0.00003 && entry.Active)
-				{
-					entry.GOOD++;
-					entry.rcombo++;
-				}
-				else if (value > maxrndvalue * 0.000002 && entry.Active)
-				{
-					entry.MEH++;
-					entry.rcombo++;
-				}
-				else if (entry.Active)
-				{
-					entry.BAD++;
-					entry.rcombo = 0;
-				}
-				entry.combo = Math.Max(entry.rcombo, entry.combo);
-				entry.Accuracy = ReloadAccuracy(entry.MAX, entry.GOOD, entry.MEH, entry.BAD);
-
-				entry.score = Get_Score(SettingsOperator.Get_ppvalue(entry.MAX, entry.GOOD, entry.MEH, entry.BAD, ModsMulti.multiplier, entry.combo, SettingsOperator.Gameplaycfg.TimeTotalGame), SettingsOperator.Gameplaycfg.maxpp, ModsMulti.multiplier) / (1 + i);
-			}
-		}
-	}
-
-	public static void reload_npcleaderboard()
-	{
-		ApiOperator.LeaderboardList.Clear();
-		for (int i = 0; i < 51; i++)
-		{
-			ApiOperator.LeaderboardList.Add(new LeaderboardEntry
-			{
-				username = $"NPC-{i.ToString("N0")}",
-				points = 0,
-				score = 0,
-				combo = 0,
-				MAX = 0,
-				GOOD = 0,
-				MEH = 0,
-				BAD = 0,
-				mods = "",
-				time = 0,
-				Active = true
-			});
-		}
-	}
 	public void ReloadBeatmap(string filepath)
 	{
 		Notes.Clear();
@@ -214,7 +154,6 @@ public partial class Gameplay : Control
 		ApiOperator = GetNode<ApiOperator>("/root/ApiOperator");
 		Beatmap_Background = GetNode<TextureRect>("./Beatmap_Background");
 		WaitClock = GetNode<Timer>("Wait");
-		BreakCheck = GetNode<Timer>("BreakCheck");
 		AudioPlayer.Instance.Stop();
 		ClipContents = true;
 		SettingsOperator.Gameplaycfg.Username = ApiOperator.Username;
@@ -437,11 +376,16 @@ public partial class Gameplay : Control
 	private int NoteTick { get; set; }
 	private bool BreakTime { get; set; }
 	private int NoteBreakTiming { get; set; }
+	private Break Break { get; set; }
 
 	private void BreakNow()
 	{
-		var Break = GD.Load<PackedScene>("res://Panels/Screens/Break.tscn").Instantiate();
-		Break.Set("MaxTick", (NoteBreakTiming * 0.001));
+		if (IsInstanceValid(Break))
+		{
+			Break?.QueueFree();
+		}
+		Break = GD.Load<PackedScene>("res://Panels/Screens/Break.tscn").Instantiate().GetNode<Break>(".");
+		Break.MaxTick = NoteBreakTiming * 0.001;
 		AddChild(Break);
 	}
 	private void _GameNoteTick(double delta)
@@ -459,17 +403,23 @@ public partial class Gameplay : Control
 			viewportSize = GetViewportRect().Size.Y;
 		}
 
-		var AlreadyChecked = false;
 		var NoteCount = 0;
+		
+		if (!BreakTime && songstarted && Notes[Math.Min(Notes.Count() - 1, NoteTick)].timing  + est + HitPoint <= -4500)
+		{
+			BreakTime = true;
+			NoteBreakTiming = -(int)(Notes[Math.Min(Notes.Count() - 1, NoteTick)].timing);
+			BreakNow();
+		}
+		
 		for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
 		{
 			var Note = Notes[i];
 			var notex = Note.timing + est + HitPoint;
 			if (notex > -150 && notex < viewportSize + 150 && !Note.hit)
 			{
-				NoteCount++;
-				BreakCheck.Stop();
 				BreakTime = false;
+				NoteCount++;
 				if (!Note.hit && Note.Node == null)
 				{
 					var playfieldpart =
@@ -484,7 +434,7 @@ public partial class Gameplay : Control
 				if (ModsOperator.Mods["slice"] && Note.Node != null)
 				{
 					Note.Node.Modulate =
-						new Color(1f, 1f, 1f, Math.Min(HitPoint, Note.Node.Position.Y - 200) / HitPoint);
+						new Color(1f, 1f, 1f, Math.Min(HitPoint, Note.Node.Position.Y - 350) / HitPoint);
 				}
 				else if (ModsOperator.Mods["black-out"] && Note.Node != null)
 				{
@@ -498,9 +448,6 @@ public partial class Gameplay : Control
 					JudgeResult = checkjudge((int)notex, Keys[(int)Note.Node.GetMeta("part")].hit, Note);
 					if (JudgeResult < 4)
 					{
-						// NPC Part
-						CheckNPCValues();
-
 						mshitold = HitPoint + 5;
 						mshit = notex;
 						SettingsOperator.Addms(mshitold - mshit - 50);
@@ -525,14 +472,8 @@ public partial class Gameplay : Control
 			{
 				Note.Node.Position = new Vector2(0, (notex * scrollspeed) - (HitPoint * (scrollspeed - 1)));
 			}
-			else if (!BreakTime & notex < -150 && !Note.hit && songstarted && !AlreadyChecked && NoteCount < 1)
-			{
-				AlreadyChecked = true;
-				BreakTime = true;
-				NoteBreakTiming = -Note.timing;
-				BreakCheck.Start();
-			}
-	}
+
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

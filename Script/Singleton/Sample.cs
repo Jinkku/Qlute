@@ -1,22 +1,16 @@
 using Godot;
 using System;
-
-public partial class Sample : AudioStreamPlayer
+using System.Collections.Generic;
+public partial class Sample : Node
 {
-  public static AudioStreamPlayer Instance;
-  public override void _Ready()
-  {
-    Instance = this;
-    Bus = "Effects";
-  }
+  public static List<AudioStreamPlayer> Streams = new List<AudioStreamPlayer>();
+  public static float VolumeDb { get; set; } = 0;
   public static void PlaySample(string path, float audiopitch = 1)
   {
-    Instance.PitchScale = audiopitch;
-    if (Instance == null)
-    {
-      GD.PrintErr("Sample instance is not initialized.");
-      return;
-    }
+    var SampleNode = new AudioStreamPlayer();
+    SampleNode.Bus = "Effects";
+    
+    SampleNode.PitchScale = audiopitch;
     
     var audioStream = ResourceLoader.Load<AudioStream>(path);
     if (audioStream == null)
@@ -24,11 +18,20 @@ public partial class Sample : AudioStreamPlayer
       GD.PrintErr("Failed to load audio stream from path: " + path);
       return;
     }
-    if (Instance.Playing)
+    SampleNode.Stream = audioStream;
+    Streams.Add(SampleNode);
+  }
+
+  public override void _Process(double delta)
+  {
+    foreach (var stream in Streams)
     {
-      Instance.Stop();
+      AddChild(stream);
+      stream.VolumeDb = VolumeDb;
+      stream.Play();
+      stream.Finished += () => stream.QueueFree();
     }
-    Instance.Stream = audioStream;
-    Instance.Play();
+
+    Streams.Clear();
   }
 }

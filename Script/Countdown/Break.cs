@@ -21,11 +21,13 @@ public partial class Break : TextureProgressBar
 		var vaka = Math.Min(((float)Value / (float)MaxTick) * 1f,1);
 		Tween = CreateTween();
 		Modulate = new Color(0f, 0f, 0f, 0f);
-		Tween.TweenProperty(this, "modulate", new Color(vaka, vaka, vaka, vaka), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		Tween.TweenProperty(this, "modulate", new Color(vaka, vaka, vaka, vaka), 0.2f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		Tween.Play();
 		CountdownValue = GetNode<Label>("Label");
 		MaxValue = MaxTick;
-		GD.Print($"V:{GetValueTick()}/M:{GetMaxTick()}");
+#if DEBUG
+		GD.Print($"V:{GetValueTick()}/M:{GetMaxTick()}");	
+#endif
 	}
 
 	private void Tick()

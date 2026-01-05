@@ -7,33 +7,117 @@ using System.Runtime.CompilerServices;
 
 public class BeatmapLegend
 {
-	public int ppversion = 1; // pp version to check if beatmap needs to be refreshed.
+	/// <summary>
+	/// For checking if the pp has been updated. if not then updates it at boot. 
+	/// </summary>
+	public int ppversion = 1;
+	/// <summary>
+	/// ID for internal set
+	/// </summary>
 	public int ID { get; set; } = 0;
+	/// <summary>
+	/// Set ID for internal set
+	/// </summary>
 	public int SetID { get; set; } = 0;
+	/// <summary>
+	/// Title in translation
+	/// </summary>
 	public string Title { get; set; } = null;
+	/// <summary>
+	/// Title in pure unicode
+	/// </summary>
 	public string TitleUnicode { get; set; } = null;
+	/// <summary>
+	/// Artist in translation
+	/// </summary>
 	public string Artist { get; set; } = null;
+	/// <summary>
+	/// Artist in pure unicode
+	/// </summary>
 	public string ArtistUnicode { get; set; } = null;
+	/// <summary>
+	/// Sample set
+	/// </summary>
 	public string SampleSet { get; set; } = "Normal";
+	/// <summary>
+	/// Mapper who made the beatmap
+	/// </summary>
 	public string Mapper { get; set; } = null;
+	/// <summary>
+	/// Key count
+	/// </summary>
 	public int KeyCount { get; set; } = 4;
+	/// <summary>
+	/// Difficulty name
+	/// </summary>
 	public string Version { get; set; } = null;
+	/// <summary>
+	/// old pp system
+	/// </summary>
 	public double pp { get; set; } = 0.0;
+	/// <summary>
+	/// ppv2 set for caching the points.
+	/// </summary>
 	public List<double> ppv2sets { get; set; } = new List<double>();
+	/// <summary>
+	/// Beatmap ID for the dedicated server
+	/// </summary>
 	public int BeatmapID { get; set; } = -1;
+	/// <summary>
+	/// Beatmap Set ID for the dedicated server
+	/// </summary>
 	public int BeatmapSetID { get; set; } = -1;
+	/// <summary>
+	/// Beats per minute
+	/// </summary>
 	public float Bpm { get; set; } = 0.0f;
+	/// <summary>
+	/// Dance mode time sets.
+	/// </summary>
 	public List<DanceCounter> Dance { get; set; } = new List<DanceCounter>();
-	public float PreviewTime { get; set; } = 0; // Preview Time
-	public float Timetotal { get; set; } = 0; // in milliseconds
-	public float Levelrating { get; set; } = 0.0f; // Level rating for the beatmap
-	public double Accuracy { get; set; } = 0.0; // Accuracy Level for the beatmap (not been used yet)
-	public string Background { get; set; } = null; // Background image path
-	public string Audio { get; set; } = null; // Audio file path
-	public string Rawurl { get; set; } = null; // Raw URL for the beatmap, used for downloading
-	public string Path { get; set; } = null; // Path for the beatmap
+	/// <summary>
+	/// Preview audio segment for the beatmap
+	/// </summary>
+	public float PreviewTime { get; set; } = 0;
+	/// <summary>
+	/// Total duration of the beatmap.
+	/// </summary>
+	public float Timetotal { get; set; } = 0;
+	/// <summary>
+	/// Level for the beatmap.
+	/// </summary>
+	public float Levelrating { get; set; } = 0.0f;
+	/// <summary>
+	/// Accuracy Difficulty for the beatmap
+	/// </summary>
+	public double Accuracy { get; set; } = 0.0;
+	/// <summary>
+	/// Background of the beatmap
+	/// </summary>
+	public string Background { get; set; } = null;
+	/// <summary>
+	/// Audio path
+	/// </summary>
+	public string Audio { get; set; } = null;
+	/// <summary>
+	/// Raw URL for the beatmap, used for downloading
+	/// </summary>
+	public string Rawurl { get; set; } = null;
+	/// <summary>
+	/// Path of the beatmap
+	/// </summary>
+	public string Path { get; set; } = null;
+	public int RankStatus { get; set; } = RankStatusLegend.Unknown;
 }
 
+public static class RankStatusLegend
+{
+	public static readonly int Ranked = 1;
+	public static readonly int Unranked = 0;
+	public static readonly int Special = 2;
+	public static readonly int Unknown = -1;
+	
+}
 public static class SampleSet
 {
 	public static List<string> Normal = new List<string>(["normal-hitnormal.wav", "normal-hitwhistle.wav", "normal-hitfinish.wav", "normal-hitclap.wav"]);

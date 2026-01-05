@@ -46,8 +46,8 @@ public partial class SettingsOperator : Node
     public static bool jukebox = false;
     public static string GameChecksum { get; set; }
     public int backgrounddim { get; set; }
-    public int MasterVol { get; set; }
-    public int SampleVol { get; set; }
+    public static int MasterVol { get; set; }
+    public static int SampleVol { get; set; }
     public int scrollspeed { get; set; }
     public static bool SpectatorMode { get; set; } = false;
     public static float AllMiliSecondsFromBeatmap { get; set; }
@@ -626,7 +626,7 @@ public partial class SettingsOperator : Node
     public void ResetVol()
     {
         if (AudioPlayer.Instance != null) AudioPlayer.Instance.VolumeDb = (int)(Math.Log10(MasterVol / 100.0) * 20) - 5; // -5 to adjust the volume to a more NOT loud level and cap it
-        if (Sample.Instance != null) Sample.Instance.VolumeDb = (int)(Math.Log10(SampleVol / 100.0) * 20) - 5;
+        Sample.VolumeDb = (int)(Math.Log10(SampleVol / 100.0) * 20) - 5;
     }
     public void changeres(int index)
     {
