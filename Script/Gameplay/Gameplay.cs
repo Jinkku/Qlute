@@ -32,6 +32,7 @@ public partial class Gameplay : Control
 	public List<KeyL> Keys = new List<KeyL>();
 	public int JudgeResult = -1;
 	public int nodeSize = 54;
+	public bool HideHUD { get; set; }
 	public ColorRect meh { get; set; }
 	public ColorRect great { get; set; }
 	public ColorRect perfect { get; set; }
@@ -64,6 +65,7 @@ public partial class Gameplay : Control
 	private int MaxNotes { get; set; }
 	private Label ComboCounter { get; set; }
 	public static int seed = 0;
+	private Control HUD { get; set; }
 	private float speedold = 1f;
 	private void ShowPauseMenu()
 	{
@@ -158,7 +160,10 @@ public partial class Gameplay : Control
 		ClipContents = true;
 		SettingsOperator.Gameplaycfg.Username = ApiOperator.Username;
 		SettingsOperator.Gameplaycfg.EpochTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-
+		HUD = GetNode<Control>("HUD");
+		HideHUD = Check.CheckBoolValue(SettingsOperator.GetSetting("hidehud").ToString());
+		HUD.Visible = !HideHUD;
+		
 		if (HasNode("Combo"))
 		{
 			ComboCounter = GetNode<Label>("Combo");
@@ -476,6 +481,26 @@ public partial class Gameplay : Control
 		}
 	}
 
+	private Tween HUDTween { get; set; }
+	private void HUDAni(bool value)
+	{
+		HUDTween?.Kill();
+		HUDTween = CreateTween();
+		HUDTween.SetEase(Tween.EaseType.Out);
+		HUDTween.SetTrans(Tween.TransitionType.Cubic);
+		if (value)
+		{
+			HUDTween.TweenProperty(HUD, "modulate:a", 0f, 0.5f);
+			HUDTween.TweenCallback(Callable.From(() => HUD.Hide()));
+		}
+		else
+		{
+			HUDTween.TweenProperty(HUD, "modulate:a", 0f, 0f);
+			HUDTween.TweenCallback(Callable.From(() => HUD.Show()));
+			HUDTween.TweenProperty(HUD, "modulate:a", 1f, 0.5f);
+		}
+	}
+
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
@@ -552,6 +577,12 @@ public partial class Gameplay : Control
 				MainScreenAnimation?.Kill();
 				AudioPlayer.Instance.PitchScale = speedold;
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
+			}
+			else if (Input.IsActionJustPressed("HideHUD"))
+			{
+				SettingsOperator.SetSetting("hidehud", !HideHUD);
+				HideHUD = !HideHUD;
+				HUDAni(HideHUD);
 			}
 			//debugtext.Text = $"est: {est}\nDanceIndex:{DanceIndex}\nTimeindex:{dance[DanceIndex].time}";
 

@@ -27,11 +27,6 @@ layout_mode = 1
 [node name="Playfield" parent="." instance=ExtResource("5_j387h")]
 layout_mode = 1
 
-[node name="ScoreBar" parent="." instance=ExtResource("2_tii4h")]
-layout_mode = 1
-offset_top = 40.0
-offset_bottom = -580.0
-
 [node name="Combo" parent="." instance=ExtResource("5_dhhkq")]
 layout_mode = 1
 anchors_preset = 8
@@ -46,7 +41,26 @@ offset_bottom = -98.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SongProgress" parent="." instance=ExtResource("4_alds2")]
+[node name="Wait" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+autostart = true
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScoreBar" parent="HUD" instance=ExtResource("2_tii4h")]
+layout_mode = 1
+offset_top = 40.0
+offset_right = 420.0
+offset_bottom = 140.0
+
+[node name="SongProgress" parent="HUD" instance=ExtResource("4_alds2")]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -57,7 +71,7 @@ offset_right = -10.0
 offset_bottom = -11.0
 grow_vertical = 0
 
-[node name="Leaderboard" parent="." instance=ExtResource("10_wpryt")]
+[node name="Leaderboard" parent="HUD" instance=ExtResource("10_wpryt")]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -69,7 +83,7 @@ offset_bottom = 160.0
 grow_vertical = 2
 scale = Vector2(0.8, 0.8)
 
-[node name="UR" parent="." instance=ExtResource("8_acwn2")]
+[node name="UR" parent="HUD" instance=ExtResource("8_acwn2")]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -82,13 +96,6 @@ offset_right = -30.0
 offset_bottom = 100.0
 grow_horizontal = 0
 grow_vertical = 2
-
-[node name="Wait" type="Timer" parent="."]
-wait_time = 2.0
-one_shot = true
-autostart = true
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="timeout" from="Wait" to="." method="StartPlay"]

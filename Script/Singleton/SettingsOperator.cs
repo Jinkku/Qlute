@@ -110,6 +110,7 @@ public partial class SettingsOperator : Node
         { "fpsmode", 1 },
         { "showfps", false },
         { "showunicode", false },
+        { "hidehud", false },
         { "hidedevintro", false },
         { "gamepath", "" },
         { "leaderboardtype", 1 },
@@ -164,7 +165,7 @@ public partial class SettingsOperator : Node
         if (Beatmaps.Count > 0 && SongID != -1)
         {
             var beatmap = Beatmaps[SongID];
-            if (Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString()) && beatmap.TitleUnicode != null && beatmap.ArtistUnicode != null)
+            if (Check.CheckBoolValue(GetSetting("showunicode").ToString()) && beatmap.TitleUnicode != null && beatmap.ArtistUnicode != null)
             {
                 Sessioncfg["beatmaptitle"] = beatmap.TitleUnicode;
                 Sessioncfg["beatmapartist"] = beatmap.ArtistUnicode;

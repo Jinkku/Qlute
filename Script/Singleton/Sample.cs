@@ -5,6 +5,11 @@ public partial class Sample : Node
 {
   public static List<AudioStreamPlayer> Streams = new List<AudioStreamPlayer>();
   public static float VolumeDb { get; set; } = 0;
+
+  public override void _Ready()
+  {
+    ProcessMode = ProcessModeEnum.Always;
+  }
   public static void PlaySample(string path, float audiopitch = 1)
   {
     var SampleNode = new AudioStreamPlayer();
@@ -19,6 +24,7 @@ public partial class Sample : Node
       return;
     }
     SampleNode.Stream = audioStream;
+    SampleNode.ProcessMode = ProcessModeEnum.Always;
     Streams.Add(SampleNode);
   }
 

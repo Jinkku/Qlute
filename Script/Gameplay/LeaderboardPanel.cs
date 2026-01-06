@@ -59,7 +59,6 @@ public partial class LeaderboardPanel : PanelContainer
 			leaderboardEntry.SetMeta("id", id);
 			leaderboardEntry.SetMeta("rank", ranknum);
 			leaderboardEntry.SetMeta("playing", false);
-			leaderboardEntry.SelfModulate = new Color(0.56f, 0.56f, 0.56f); // Default color for other ranks
 			LeaderboardContainer.AddChild(leaderboardEntry);
 			leaderboardEntry.Position = new Vector2(0, ((ranknum - 1) * leaderboardEntry.Size.Y) + (ranknum * 5)); // Adjust position based on rank
 			LeadSize += (int)leaderboardEntry.Size.Y + 5;
@@ -95,6 +94,10 @@ public partial class LeaderboardPanel : PanelContainer
 			tween = null,
 			Active = true
 		});
+		if (LeaderboardEntries.Count < 2)
+		{
+			Modulate = new Color(1f, 1f, 1f, 0f);
+		}
 		PlayerNode = playerEntry;
 		PlayerLeaderboardEntry = id;
 		Count = ranknum;
@@ -124,6 +127,7 @@ public partial class LeaderboardPanel : PanelContainer
 			for (int i = 0; i < LeaderboardEntries.Count; i++)
 			{
 				LeaderboardStatus entry = LeaderboardEntries[i];
+				SetColourLead(entry, i);
 				if (entry.Active && entry.Username == User)
 				{
 					entry.Score = SettingsOperator.Gameplaycfg.Score;
@@ -143,7 +147,6 @@ public partial class LeaderboardPanel : PanelContainer
 				var oldrank = entry.Rank;
 				entry.Rank = i + 1;
 				entry.Node.SetMeta("rank", entry.Rank);
-				SetColourLead(entry, i);
 				if (entry.Rank != oldrank)
 				{
 					entry.tween?.Kill();

@@ -511,7 +511,7 @@ public partial class ResultScreenv2 : Control
 			RankedScore.Text = $"{SettingsOperator.RankScore:N0}";
 			RankedPoints.Text = $"{SettingsOperator.ranked_points:N0}pp";
 			LevelPlayer.Text = $"{SettingsOperator.Level:N0}";
-			RankPlayer.Text = $"#{SettingsOperator.Rank:N0}";
+			RankPlayer.Text = $"#{Math.Max(1,SettingsOperator.Rank):N0}";
 			OAccuracy.Text = $"{SettingsOperator.OAccuracy:P2}";
 			MaxCombo.Text = $"{SettingsOperator.OCombo:N0}x";
 			// Losses
