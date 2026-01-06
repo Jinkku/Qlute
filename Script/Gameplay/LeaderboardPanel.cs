@@ -25,6 +25,26 @@ public partial class LeaderboardPanel : PanelContainer
 	private PanelContainer PlayerNode { get; set; }
 	private int PlayerLeaderboardEntry { get; set; }
 	private string User { get; set; }
+
+	private void SetColourLead(LeaderboardStatus Entry, int Rank)
+	{
+		if (Rank == 0)
+		{
+			Entry.Node.SelfModulate = new Color("#99ff97");
+		}
+		else if (Entry.Username == User && Entry.Active)
+		{
+			Entry.Node.SelfModulate = new Color("#ffda75");
+		}
+		else if (Entry.Username == User)
+		{
+			Entry.Node.SelfModulate = new Color("#947e44");
+		}
+		else
+		{
+			Entry.Node.SelfModulate = new Color(56 / 255f, 82 / 255f, 138 / 255f);
+		}
+	}
 	public override void _Ready()
 	{
 		LeaderboardContainer = GetNode<Control>("S/ControlLead");
@@ -60,7 +80,6 @@ public partial class LeaderboardPanel : PanelContainer
 		var playerEntry = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/Leaderboard.tscn").Instantiate().GetNode<PanelContainer>(".");
 		User = ApiOperator.Username;
 		if (ModsOperator.Mods["auto"]) User = "Qlutina";
-		playerEntry.SelfModulate = new Color(56 / 255f, 82 / 255f, 138 / 255f); // Default color for other ranks
 		playerEntry.SetMeta("rank", ranknum);
 		playerEntry.SetMeta("username", User);
 		playerEntry.SetMeta("playing", true);
@@ -104,7 +123,7 @@ public partial class LeaderboardPanel : PanelContainer
 			// Update ranks and UI
 			for (int i = 0; i < LeaderboardEntries.Count; i++)
 			{
-				var entry = LeaderboardEntries[i];
+				LeaderboardStatus entry = LeaderboardEntries[i];
 				if (entry.Active && entry.Username == User)
 				{
 					entry.Score = SettingsOperator.Gameplaycfg.Score;
@@ -124,6 +143,7 @@ public partial class LeaderboardPanel : PanelContainer
 				var oldrank = entry.Rank;
 				entry.Rank = i + 1;
 				entry.Node.SetMeta("rank", entry.Rank);
+				SetColourLead(entry, i);
 				if (entry.Rank != oldrank)
 				{
 					entry.tween?.Kill();
