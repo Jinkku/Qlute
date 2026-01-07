@@ -117,13 +117,13 @@ public partial class ResultScreenv2 : Control
 			Tween.SetEase(Tween.EaseType.Out);
 			Tween.TweenProperty(Details, "position:x", 0,AnimationSpeed);
 			Tween.TweenProperty(Details, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
-			Tween.TweenProperty(ScoreCount, "position:x", 0,AnimationSpeed);
+			Tween.TweenProperty(ScoreCount, "position:x", 0,AnimationSpeed + 0.1);
 			Tween.TweenProperty(ScoreCount, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
-			Tween.TweenProperty(HitCount, "position:x", HitCountPos,AnimationSpeed);
+			Tween.TweenProperty(HitCount, "position:x", HitCountPos,AnimationSpeed  + 0.2);
 			Tween.TweenProperty(HitCount, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
-			Tween.TweenProperty(Additional, "position:x", AdditionalPos,AnimationSpeed);
+			Tween.TweenProperty(Additional, "position:x", AdditionalPos,AnimationSpeed + 0.3);
 			Tween.TweenProperty(Additional, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
-			Tween.TweenProperty(Additional2, "position:x", Additional2Pos,AnimationSpeed);
+			Tween.TweenProperty(Additional2, "position:x", Additional2Pos,AnimationSpeed + 0.4);
 			Tween.TweenProperty(Additional2, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
 			Tween.TweenProperty(RankEmblem, "position:x", RankEmblemPos,AnimationSpeed);
 			Tween.TweenProperty(RankEmblem, "modulate", new Color(1f,1f,1f,1f),AnimationSpeed);
@@ -173,30 +173,18 @@ public partial class ResultScreenv2 : Control
 			Tween.SetEase(Tween.EaseType.Out);
 			Tween.TweenProperty(Details, "position:x", Details.Position.X - Details.Size.X,AnimationSpeed);
 			Tween.TweenProperty(Details, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
-			Tween.TweenProperty(ScoreCount, "position:x", ScoreCount.Position.X - ScoreCount.Size.X,AnimationSpeed);
+			Tween.TweenProperty(ScoreCount, "position:x", ScoreCount.Position.X - ScoreCount.Size.X,AnimationSpeed + 0.1);
 			Tween.TweenProperty(ScoreCount, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
-			Tween.TweenProperty(HitCount, "position:x", HitCountPos - HitCount.Size.X,AnimationSpeed);
+			Tween.TweenProperty(HitCount, "position:x", HitCountPos - HitCount.Size.X,AnimationSpeed + 0.2);
 			Tween.TweenProperty(HitCount, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
-			Tween.TweenProperty(Additional, "position:x", AdditionalPos - Additional.Size.X,AnimationSpeed);
+			Tween.TweenProperty(Additional, "position:x", AdditionalPos - Additional.Size.X,AnimationSpeed + 0.3);
 			Tween.TweenProperty(Additional, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
-			Tween.TweenProperty(Additional2, "position:x", Additional2Pos - Additional2.Size.X,AnimationSpeed);
+			Tween.TweenProperty(Additional2, "position:x", Additional2Pos - Additional2.Size.X,AnimationSpeed + 0.4);
 			Tween.TweenProperty(Additional2, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
 			Tween.TweenProperty(RankEmblem, "position:x", RankEmblemPos + RankEmblem.Size.X,AnimationSpeed);
 			Tween.TweenProperty(RankEmblem, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
-			
-			Tween.TweenProperty(this, "ScoreValue", SettingsOperator.Gameplaycfg.Score,1);
-			Tween.TweenProperty(this, "AccuracyValue", SettingsOperator.Gameplaycfg.Accuracy,1);
-			Tween.TweenProperty(this, "PerfectValue", SettingsOperator.Gameplaycfg.Max,1);
-			Tween.TweenProperty(this, "GreatValue", SettingsOperator.Gameplaycfg.Great,1);
-			Tween.TweenProperty(this, "MehValue", SettingsOperator.Gameplaycfg.Meh,1);
-			Tween.TweenProperty(this, "MissValue", SettingsOperator.Gameplaycfg.Bad,1);
-			Tween.TweenProperty(this, "AvgHitValue", SettingsOperator.Gameplaycfg.ms,1);
-			Tween.TweenProperty(this, "ComboValue", SettingsOperator.Gameplaycfg.MaxCombo,1);
-			Tween.TweenProperty(this, "ppValue", SettingsOperator.Gameplaycfg.pp,1);
-			Tween.TweenProperty(Rank, "self_modulate:a", 1f,0.2).SetDelay(1.1);
-			Tween.TweenProperty(Rank, "scale", new Vector2(1f, 1f),0.2f).SetDelay(1.1);
-			Tween.TweenProperty(PerfectEmblem, "self_modulate", new Color(1f,1f,1f, 1f),0.2f).SetDelay(1.1);
-			
+			Tween.TweenCallback(Callable.From(() => GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn"))).SetDelay(0.1);
+
 		} else if (mode == 2)
 		{
 			Tween.SetTrans(Tween.TransitionType.Cubic);
@@ -435,7 +423,6 @@ public partial class ResultScreenv2 : Control
 			if (!AudioPlayer.Instance.IsPlaying())
 				AudioPlayer.Instance.Play();
 			Replay.FilePath = "";
-			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 		}
 	}
 

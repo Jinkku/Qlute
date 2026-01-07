@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dk7xg5s8rl7nm"]
+[gd_scene load_steps=10 format=3 uid="uid://dk7xg5s8rl7nm"]
 
 [ext_resource type="Script" uid="uid://co734v8nma0jo" path="res://Script/Gameplay/LeaderboardGameplay.cs" id="1_a5nx3"]
 [ext_resource type="Texture2D" uid="uid://byuqumvg4808m" path="res://Resources/Game/Leaderboard/LeaderboardApplet.png" id="1_otw38"]
@@ -24,6 +24,11 @@ content_margin_bottom = 3.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s3ted"]
 content_margin_top = 3.0
+content_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dltue"]
+content_margin_top = 3.0
+content_margin_right = 18.0
 content_margin_bottom = 3.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_otw38"]
@@ -96,7 +101,7 @@ theme_override_constants/separation = 0
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxEmpty_otw38")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_dltue")
 text = "100.00%"
 horizontal_alignment = 2
 vertical_alignment = 2
