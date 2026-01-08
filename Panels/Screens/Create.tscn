@@ -1,18 +1,22 @@
-[gd_scene load_steps=18 format=3 uid="uid://dnxlc61trat1l"]
+[gd_scene load_steps=25 format=3 uid="uid://dnxlc61trat1l"]
 
 [ext_resource type="Script" uid="uid://cdhm1bqkq60y3" path="res://Script/LevelEditor/Create.cs" id="1_4dycg"]
 [ext_resource type="Script" uid="uid://dsfp3h2v5vijn" path="res://Script/CustomMenus/DropDownMenu/DropDownMenu.cs" id="4_lwg7d"]
 [ext_resource type="Theme" uid="uid://dirht6112nu0h" path="res://Panels/CustomMenus/blank.tres" id="4_vy1ai"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="5_lwg7d"]
+[ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="6_fn0xp"]
 [ext_resource type="PackedScene" uid="uid://c2ouvq16jls8u" path="res://Panels/Overlays/BottomPanelButtons.tscn" id="6_lwg7d"]
 [ext_resource type="PackedScene" uid="uid://chb8dgjfmmjgt" path="res://Panels/GameplayElements/Customizable/Playfield.tscn" id="6_vy1ai"]
-[ext_resource type="PackedScene" uid="uid://bdd2o3q0q03xf" path="res://Panels/Overlays/MissingFunction.tscn" id="7_vy1ai"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jucc0"]
-bg_color = Color(0, 0, 0, 0.568627)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vy1ai"]
+bg_color = Color(0.14901961, 0.24313726, 0.14901961, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ee5vh"]
-content_margin_left = 25.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a3rx6"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.313726)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_elvf5"]
 content_margin_left = 5.0
@@ -44,16 +48,48 @@ corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pjdex"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a3rx6"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
-bg_color = Color(0, 0, 0, 0.313726)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jucc0"]
+bg_color = Color(0, 0, 0, 0.568627)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ee5vh"]
+content_margin_left = 25.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cxjes"]
+bg_color = Color(1, 1, 1, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vy1ai"]
 content_margin_left = 10.0
 content_margin_right = 10.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_fn0xp"]
+viewport_path = NodePath("Slider")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fn0xp"]
+bg_color = Color(0.15625, 0.15625, 0.15625, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_top = 13.0
+expand_margin_bottom = 13.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_255xm"]
+bg_color = Color(0.6546936, 0.39453125, 1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_top = 13.0
+expand_margin_bottom = 13.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ryu8"]
+bg_color = Color(0.763393, 0.5859375, 1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_top = 13.0
+expand_margin_bottom = 13.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ecv8"]
 content_margin_left = 15.0
@@ -61,6 +97,13 @@ content_margin_top = 5.0
 content_margin_right = 15.0
 content_margin_bottom = 5.0
 bg_color = Color(0, 0, 0, 0.588235)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ddpis"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
 
 [node name="Create" type="Control"]
 layout_mode = 3
@@ -75,34 +118,197 @@ script = ExtResource("1_4dycg")
 layout_mode = 1
 metadata/disable = true
 
-[node name="Ground" type="Control" parent="."]
+[node name="Info" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 80.0
 offset_top = 100.0
 offset_bottom = -50.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Playfield" parent="Ground" instance=ExtResource("6_vy1ai")]
+[node name="Panel" type="PanelContainer" parent="Info"]
 layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vy1ai")
 
-[node name="ChartSections" parent="Ground/Playfield" index="0"]
-mouse_filter = 0
+[node name="Label" type="Label" parent="Info/Panel"]
+layout_mode = 2
+text = "Info Panel"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Control" parent="Ground/Playfield/ChartSections/Section1" index="0"]
+[node name="Timing" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 100.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Timing"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vy1ai")
+
+[node name="Label" type="Label" parent="Timing/Panel"]
+layout_mode = 2
+text = "Timing Panel"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Verify" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 100.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Verify"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vy1ai")
+
+[node name="Label" type="Label" parent="Verify/Panel"]
+layout_mode = 2
+text = "Verify Panel"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Compose" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 100.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
-[node name="Control" parent="Ground/Playfield/ChartSections/Section2" index="0"]
+[node name="Ground" type="Control" parent="Compose"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 91.0
+offset_right = -207.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Playfield" parent="Compose/Ground" instance=ExtResource("6_vy1ai")]
+layout_mode = 1
+mouse_filter = 1
+
+[node name="ChartSections" parent="Compose/Ground/Playfield" index="0"]
+mouse_filter = 1
+
+[node name="Control" parent="Compose/Ground/Playfield/ChartSections/Section1" index="0"]
 mouse_filter = 2
 
-[node name="Control" parent="Ground/Playfield/ChartSections/Section3" index="0"]
+[node name="Control" parent="Compose/Ground/Playfield/ChartSections/Section2" index="0"]
 mouse_filter = 2
 
-[node name="Control" parent="Ground/Playfield/ChartSections/Section4" index="0"]
+[node name="Control" parent="Compose/Ground/Playfield/ChartSections/Section3" index="0"]
 mouse_filter = 2
+
+[node name="Control" parent="Compose/Ground/Playfield/ChartSections/Section4" index="0"]
+mouse_filter = 2
+
+[node name="Info" type="PanelContainer" parent="Compose"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -207.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_a3rx6")
+
+[node name="ContextSections" type="VBoxContainer" parent="Compose/Info"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Title" type="Label" parent="Compose/Info/ContextSections"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.566406, 0.766266, 1, 1)
+text = "- Position highlighted"
+
+[node name="SelectedPos" type="Label" parent="Compose/Info/ContextSections"]
+layout_mode = 2
+text = "(0, 0)"
+
+[node name="Title2" type="Label" parent="Compose/Info/ContextSections"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.566406, 0.766266, 1, 1)
+text = "- Total Notes"
+
+[node name="NoteCount" type="Label" parent="Compose/Info/ContextSections"]
+layout_mode = 2
+text = "0 Notes"
+
+[node name="Na" type="Label" parent="Compose/Info/ContextSections"]
+layout_mode = 2
+text = "0"
+
+[node name="Na2" type="Label" parent="Compose/Info/ContextSections"]
+layout_mode = 2
+text = "0"
+
+[node name="Creativity" type="PanelContainer" parent="Compose"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 90.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_elvf5")
+
+[node name="ContextSections" type="VBoxContainer" parent="Compose/Creativity"]
+layout_mode = 2
+
+[node name="Place" type="Button" parent="Compose/Creativity/ContextSections"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_cb8jd")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_biwgm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_376mh")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
+text = "Place"
+icon_alignment = 1
+
+[node name="Remove" type="Button" parent="Compose/Creativity/ContextSections"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_cb8jd")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_biwgm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_376mh")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
+text = "Remove"
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -165,80 +371,75 @@ StringText = "Edit"
 Items = Array[String](["Cut", "Copy", "Paste", "Undo", "Redo"])
 metadata/_custom_type_script = "uid://dsfp3h2v5vijn"
 
-[node name="Creativity" type="PanelContainer" parent="."]
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_top = 100.0
-offset_right = 80.0
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_elvf5")
-
-[node name="ContextSections" type="VBoxContainer" parent="Creativity"]
+[node name="Menus" type="HBoxContainer" parent="ToolBar/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/separation = 0
 
-[node name="Place" type="Button" parent="Creativity/ContextSections"]
-custom_minimum_size = Vector2(80, 80)
+[node name="Info" type="Button" parent="ToolBar/HBoxContainer/Menus"]
+self_modulate = Color(0.15294118, 0.2627451, 0.15294118, 1)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
-theme_override_styles/normal = SubResource("StyleBoxFlat_cb8jd")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_biwgm")
-theme_override_styles/hover = SubResource("StyleBoxFlat_376mh")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
-text = "Place"
+theme_override_styles/normal = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/focus = SubResource("StyleBoxFlat_cxjes")
+script = ExtResource("6_fn0xp")
+FocusColour = Color(0.22375488, 0.3671875, 0.22375488, 1)
+HighlightColour = Color(0.4151764, 0.62890625, 0.4151764, 1)
+IdleColour = Color(0.15294118, 0.2627451, 0.15294118, 1)
+StringText = "Info"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
-[node name="Remove" type="Button" parent="Creativity/ContextSections"]
-custom_minimum_size = Vector2(80, 80)
+[node name="Compose" type="Button" parent="ToolBar/HBoxContainer/Menus"]
+self_modulate = Color(0.15294118, 0.2627451, 0.15294118, 1)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
-theme_override_styles/normal = SubResource("StyleBoxFlat_cb8jd")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_biwgm")
-theme_override_styles/hover = SubResource("StyleBoxFlat_376mh")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
-text = "Remove"
+theme_override_styles/normal = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/focus = SubResource("StyleBoxFlat_cxjes")
+script = ExtResource("6_fn0xp")
+FocusColour = Color(0.22375488, 0.3671875, 0.22375488, 1)
+HighlightColour = Color(0.4151764, 0.62890625, 0.4151764, 1)
+IdleColour = Color(0.15294118, 0.2627451, 0.15294118, 1)
+StringText = "Compose"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
-[node name="Info" type="PanelContainer" parent="."]
-layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -180.0
-offset_top = 100.0
-offset_bottom = -50.0
-grow_horizontal = 0
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_a3rx6")
-
-[node name="ContextSections" type="VBoxContainer" parent="Info"]
+[node name="Timing" type="Button" parent="ToolBar/HBoxContainer/Menus"]
+self_modulate = Color(0.15294118, 0.2627451, 0.15294118, 1)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_constants/separation = 5
+theme_override_styles/normal = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/focus = SubResource("StyleBoxFlat_cxjes")
+script = ExtResource("6_fn0xp")
+FocusColour = Color(0.22375488, 0.3671875, 0.22375488, 1)
+HighlightColour = Color(0.4151764, 0.62890625, 0.4151764, 1)
+IdleColour = Color(0.15294118, 0.2627451, 0.15294118, 1)
+StringText = "Timing"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
-[node name="Title" type="Label" parent="Info/ContextSections"]
+[node name="Verify" type="Button" parent="ToolBar/HBoxContainer/Menus"]
+self_modulate = Color(0.15294118, 0.2627451, 0.15294118, 1)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.566406, 0.766266, 1, 1)
-text = "- Position highlighted"
-
-[node name="SelectedPos" type="Label" parent="Info/ContextSections"]
-layout_mode = 2
-text = "(0, 0)"
-
-[node name="Title2" type="Label" parent="Info/ContextSections"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.566406, 0.766266, 1, 1)
-text = "- Total Notes"
-
-[node name="NoteCount" type="Label" parent="Info/ContextSections"]
-layout_mode = 2
-text = "0 Notes"
-
-[node name="Na" type="Label" parent="Info/ContextSections"]
-layout_mode = 2
-text = "0"
-
-[node name="Na2" type="Label" parent="Info/ContextSections"]
-layout_mode = 2
-text = "0"
+theme_override_styles/normal = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_cxjes")
+theme_override_styles/focus = SubResource("StyleBoxFlat_cxjes")
+script = ExtResource("6_fn0xp")
+FocusColour = Color(0.22375488, 0.3671875, 0.22375488, 1)
+HighlightColour = Color(0.4151764, 0.62890625, 0.4151764, 1)
+IdleColour = Color(0.15294118, 0.2627451, 0.15294118, 1)
+StringText = "Verify"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="ControlPanel" parent="." instance=ExtResource("6_lwg7d")]
 layout_mode = 1
@@ -252,50 +453,92 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_vy1ai")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+theme_override_constants/center_grabber = 0
+theme_override_icons/grabber = SubResource("ViewportTexture_fn0xp")
+theme_override_icons/grabber_highlight = SubResource("ViewportTexture_fn0xp")
+theme_override_styles/slider = SubResource("StyleBoxFlat_fn0xp")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_255xm")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_7ryu8")
+step = 0.1
+value = 33.0
 
 [node name="TimeBox" type="PanelContainer" parent="ControlPanel/Box" index="2"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_styles/panel = SubResource("StyleBoxFlat_8ecv8")
 
-[node name="Label" type="Label" parent="ControlPanel/Box/TimeBox"]
+[node name="Time" type="Label" parent="ControlPanel/Box/TimeBox"]
 layout_mode = 2
 text = "00:00:00"
 
-[node name="Next" parent="ControlPanel/Box" index="3"]
+[node name="Player" type="PanelContainer" parent="ControlPanel/Box" index="3"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_8ecv8")
+
+[node name="Columns" type="HBoxContainer" parent="ControlPanel/Box/Player"]
+layout_mode = 2
+
+[node name="ButtonFade" type="Button" parent="ControlPanel/Box/Player/Columns"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(39, 39)
+layout_mode = 2
+script = ExtResource("6_fn0xp")
+StringText = "X"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[node name="ButtonFade2" type="Button" parent="ControlPanel/Box/Player/Columns"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(39, 39)
+layout_mode = 2
+script = ExtResource("6_fn0xp")
+StringText = "X"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[node name="ButtonFade3" type="Button" parent="ControlPanel/Box/Player/Columns"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(39, 39)
+layout_mode = 2
+script = ExtResource("6_fn0xp")
+StringText = "X"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[node name="Next" parent="ControlPanel/Box" index="4"]
 visible = true
 size_flags_horizontal = 8
 
 [node name="Label" parent="ControlPanel/Box/Next" index="0"]
 text = "Test"
 
-[node name="MissingFunction" parent="." instance=ExtResource("7_vy1ai")]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -200.0
-offset_right = 200.0
-offset_bottom = 200.0
+[node name="Slider" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(40, 40)
+
+[node name="PanelContainer" type="PanelContainer" parent="Slider"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ddpis")
 
-[connection signal="mouse_entered" from="Ground/Playfield/ChartSections/Section1" to="." method="_enter" binds= [0]]
-[connection signal="mouse_exited" from="Ground/Playfield/ChartSections/Section1" to="." method="_off" binds= [0]]
-[connection signal="mouse_entered" from="Ground/Playfield/ChartSections/Section2" to="." method="_enter" binds= [1]]
-[connection signal="mouse_exited" from="Ground/Playfield/ChartSections/Section2" to="." method="_off" binds= [1]]
-[connection signal="mouse_entered" from="Ground/Playfield/ChartSections/Section3" to="." method="_enter" binds= [2]]
-[connection signal="mouse_exited" from="Ground/Playfield/ChartSections/Section3" to="." method="_off" binds= [2]]
-[connection signal="mouse_entered" from="Ground/Playfield/ChartSections/Section4" to="." method="_enter" binds= [3]]
-[connection signal="mouse_exited" from="Ground/Playfield/ChartSections/Section4" to="." method="_off" binds= [3]]
+[connection signal="mouse_entered" from="Compose/Ground/Playfield/ChartSections/Section1" to="." method="_enter" binds= [0]]
+[connection signal="mouse_exited" from="Compose/Ground/Playfield/ChartSections/Section1" to="." method="_off" binds= [0]]
+[connection signal="mouse_entered" from="Compose/Ground/Playfield/ChartSections/Section2" to="." method="_enter" binds= [1]]
+[connection signal="mouse_exited" from="Compose/Ground/Playfield/ChartSections/Section2" to="." method="_off" binds= [1]]
+[connection signal="mouse_entered" from="Compose/Ground/Playfield/ChartSections/Section3" to="." method="_enter" binds= [2]]
+[connection signal="mouse_exited" from="Compose/Ground/Playfield/ChartSections/Section3" to="." method="_off" binds= [2]]
+[connection signal="mouse_entered" from="Compose/Ground/Playfield/ChartSections/Section4" to="." method="_enter" binds= [3]]
+[connection signal="mouse_exited" from="Compose/Ground/Playfield/ChartSections/Section4" to="." method="_off" binds= [3]]
 [connection signal="ButtonPressed" from="ToolBar/HBoxContainer/DropDownMenu" to="." method="_FileMenu"]
 [connection signal="ButtonPressed" from="ToolBar/HBoxContainer/DropDownMenu2" to="." method="_EditMenu"]
+[connection signal="pressed" from="ToolBar/HBoxContainer/Menus/Info" to="." method="Info"]
+[connection signal="pressed" from="ToolBar/HBoxContainer/Menus/Compose" to="." method="Compose"]
+[connection signal="pressed" from="ToolBar/HBoxContainer/Menus/Timing" to="." method="Timing"]
+[connection signal="pressed" from="ToolBar/HBoxContainer/Menus/Verify" to="." method="Verify"]
 [connection signal="pressed" from="ControlPanel/Box/BackButton" to="." method="_on_back"]
+[connection signal="value_changed" from="ControlPanel/Box/PanelContainer/HSlider" to="." method="ValueChanged"]
 
 [editable path="BeatmapBackground"]
-[editable path="Ground/Playfield"]
+[editable path="Compose/Ground/Playfield"]
 [editable path="ControlPanel"]

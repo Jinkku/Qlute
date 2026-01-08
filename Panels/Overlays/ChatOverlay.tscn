@@ -22,19 +22,12 @@ content_margin_right = 5.0
 content_margin_bottom = 5.0
 bg_color = Color(0, 0, 0, 0.25098)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_771wj"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2a1my"]
 content_margin_left = 5.0
 content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
-bg_color = Color(1, 1, 1, 0.156863)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iha2g"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(1, 1, 1, 0.156863)
+bg_color = Color(1, 1, 1, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nsfte"]
 content_margin_left = 5.0
@@ -43,12 +36,19 @@ content_margin_right = 5.0
 content_margin_bottom = 5.0
 bg_color = Color(1, 1, 1, 0.25098)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2a1my"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iha2g"]
 content_margin_left = 5.0
 content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
-bg_color = Color(1, 1, 1, 0)
+bg_color = Color(1, 1, 1, 0.156863)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_771wj"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.156863)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0r8ct"]
 
@@ -121,10 +121,10 @@ text = "Local"
 [node name="ChatRoom4" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
 visible = false
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
 theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
+theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
+theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
 text = "SweetyTweety"
 alignment = 0
 
@@ -137,30 +137,30 @@ text = "Public Channels"
 [node name="ChatRoom" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
 visible = false
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
 theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
+theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
+theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
 text = "#general"
 alignment = 0
 
 [node name="ChatRoom2" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
 visible = false
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
 theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
+theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
+theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
 text = "#off-topic"
 alignment = 0
 
 [node name="ChatRoom3" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
 visible = false
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
 theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
+theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
+theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
 text = "#anime"
 alignment = 0
 
@@ -173,20 +173,20 @@ text = "Friends"
 [node name="ChatRoom6" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
 visible = false
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
 theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
+theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
+theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
 text = "SweetyTweety"
 alignment = 0
 
 [node name="ChatRoom5" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
 visible = false
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
 theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
+theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
+theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
 text = "Epicgamer92"
 alignment = 0
 
@@ -221,6 +221,6 @@ size_flags_vertical = 3
 
 [node name="LineEdit" type="LineEdit" parent="ChatV/ChatSect/ChatTextS/ChatTextSV"]
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_2rbjs")
 theme_override_styles/normal = SubResource("StyleBoxFlat_2rbjs")
+theme_override_styles/focus = SubResource("StyleBoxFlat_2rbjs")
 placeholder_text = "You are chatting as: Guest"

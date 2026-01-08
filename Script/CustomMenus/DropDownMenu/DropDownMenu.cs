@@ -92,7 +92,7 @@ public partial class DropDownMenu : Button
         int index = 0;
         foreach (string item in _items)
         {
-            var Button = new Button { Text = item };
+            var Button = new ButtonFade { StringText = item, CustomMinimumSize = new Vector2(240, 30), IdleColour = IdleColour, FocusColour = FocusColour, HighlightColour = HighlightColour};
             MenuEntries.AddChild(Button);
 
             int currentIndex = index; // capture the current index

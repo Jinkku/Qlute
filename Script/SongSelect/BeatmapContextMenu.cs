@@ -11,6 +11,14 @@ public partial class BeatmapContextMenu : PanelContainer
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 	}
 
+	private void _edit()
+	{
+		if (SongID != -1)
+		{
+			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
+		}
+	}
+
 	private void _deletebeatmap(){
 		if (SongID != -1)
 		{

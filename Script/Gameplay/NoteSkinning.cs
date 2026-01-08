@@ -7,15 +7,16 @@ public partial class NoteSkinning : Sprite2D
 	private Texture2D Fore { get; set; }
 	private Color NoteColour { get; set; }
 	private Sprite2D ForeNote { get; set; }
+	[Export] public int NotePart { get; set; }
 	
 	/// <summary>
 	/// Check if skin is changed.
 	/// </summary>
 	private void CheckSkinNote()
 	{
-		if (Skin.Element.LaneNotes[(int)GetMeta("part")] * 2 != NoteColour)
+		if (Skin.Element.LaneNotes[NotePart] * 2 != NoteColour)
 		{
-			NoteColour = Skin.Element.LaneNotes[(int)GetMeta("part")] * 3;
+			NoteColour = Skin.Element.LaneNotes[NotePart] * 3;
 			SelfModulate = new Color(NoteColour.R, NoteColour.G, NoteColour.B, SelfModulate.A);
 		}
 		if (Skin.Element.NoteBack != Back)

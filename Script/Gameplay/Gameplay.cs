@@ -6,7 +6,7 @@ using System.Reflection.Metadata;
 public class NotesEn {
 	public int timing {get;set;}
 	public int NoteSection {get;set;}
-	public Sprite2D Node {get;set;}
+	public NoteSkinning Node {get;set;}
 	public bool hit {get;set;}
 	public string Sample => SampleSet.Normal.First();
 	public double ppv2xp { get; set; }
@@ -430,8 +430,8 @@ public partial class Gameplay : Control
 					var playfieldpart =
 						GetNode<Control>($"Playfield/ChartSections/Section{Note.NoteSection + 1}/Control");
 					Note.Node = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate()
-						.GetNode<Sprite2D>(".");
-					Note.Node.SetMeta("part", Note.NoteSection);
+						.GetNode<NoteSkinning>(".");
+					Note.Node.NotePart = Note.NoteSection;
 					Note.Node.SelfModulate = new Color(0.83f, 0f, 1f);
 					playfieldpart.AddChild(Note.Node);
 				}
