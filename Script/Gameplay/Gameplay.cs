@@ -450,20 +450,20 @@ public partial class Gameplay : Control
 				{
 					Note.Node.Position = new Vector2(0, (notex * scrollspeed) - (HitPoint * (scrollspeed - 1)));
 					Ttick++;
-					JudgeResult = checkjudge((int)notex, Keys[(int)Note.Node.GetMeta("part")].hit, Note);
+					JudgeResult = checkjudge((int)notex, Keys[Note.Node.NotePart].hit, Note);
 					if (JudgeResult < 4)
 					{
 						mshitold = HitPoint + 5;
 						mshit = notex;
 						SettingsOperator.Addms(mshitold - mshit - 50);
 						SettingsOperator.Gameplaycfg.ms = SettingsOperator.Getms();
-						Keys[(int)Note.Node.GetMeta("part")].hit = false;
+						Keys[Note.Node.NotePart].hit = false;
 						Note.hit = true;
 						Note.Node.Visible = false;
 					}
 					else
 					{
-						Keys[(int)Note.Node.GetMeta("part")].hit = false;
+						Keys[Note.Node.NotePart].hit = false;
 					}
 				}
 			}
