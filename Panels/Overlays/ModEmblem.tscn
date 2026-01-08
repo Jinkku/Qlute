@@ -32,10 +32,12 @@ script = ExtResource("1_gnskv")
 metadata/ModName = ""
 
 [node name="Customizations" type="HBoxContainer" parent="."]
+use_parent_material = true
 layout_mode = 2
 alignment = 1
 
 [node name="Name" type="Label" parent="Customizations"]
+use_parent_material = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxEmpty_fuyg4")
@@ -44,11 +46,13 @@ horizontal_alignment = 1
 
 [node name="CustomValue" type="PanelContainer" parent="Customizations"]
 visible = false
+use_parent_material = true
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_brkpi")
 script = ExtResource("2_eu4ee")
 
 [node name="Value" type="Label" parent="Customizations/CustomValue"]
+use_parent_material = true
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_fuyg4")
 text = "2.00x"

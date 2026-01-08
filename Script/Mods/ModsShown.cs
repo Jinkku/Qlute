@@ -16,6 +16,7 @@ public partial class ModsShown : HBoxContainer
 				// Load the mod emblem scene and instantiate it
 				var modd = GD.Load<PackedScene>("res://Panels/Overlays/ModEmblem.tscn").Instantiate().GetNode<PanelContainer>(".");
 				modd.SetMeta("ModName", mod);
+				modd.UseParentMaterial = true;
 				AddChild(modd);
 			}
 		}

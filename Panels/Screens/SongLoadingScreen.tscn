@@ -1,11 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://dgy27wulmugfs"]
+[gd_scene load_steps=19 format=3 uid="uid://dgy27wulmugfs"]
 
 [ext_resource type="Script" uid="uid://dtqpa0tsirnjp" path="res://Script/SongLoadingScreen/SongLoadingScreen.cs" id="1_2kt4t"]
 [ext_resource type="Texture2D" uid="uid://sfbrs7c6t7dr" path="res://DefaultWallpaper/future.png" id="1_4pmu1"]
 [ext_resource type="Script" uid="uid://c3epg1qy8dum3" path="res://Script/SongLoadingScreen/ImageScript.cs" id="2_yjtgo"]
+[ext_resource type="Shader" uid="uid://c44mhibp7kd2x" path="res://Shaders/Offset.gdshader" id="4_5hbj0"]
 [ext_resource type="PackedScene" uid="uid://c2ouvq16jls8u" path="res://Panels/Overlays/BottomPanelButtons.tscn" id="4_28gti"]
-[ext_resource type="PackedScene" uid="uid://cxtvce61elw00" path="res://Panels/Overlays/ModShowcase.tscn" id="4_ukgnb"]
-[ext_resource type="PackedScene" uid="uid://djrsc8oxuw7h6" path="res://Panels/Overlays/DisclaimerInfo.tscn" id="6_ukgnb"]
+[ext_resource type="Script" uid="uid://c6n2xpe1glwfm" path="res://Script/Mods/ModsShown.cs" id="5_cviis"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_28gti"]
 bg_color = Color(0.242188, 0.242188, 0.242188, 1)
@@ -32,11 +32,26 @@ expand_margin_right = 30.0
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_28gti"]
 content_margin_left = 15.0
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cviis"]
+content_margin_left = 8.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_731vf"]
+content_margin_left = 3.0
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ukgnb"]
 content_margin_left = 15.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pj3ow"]
+shader = ExtResource("4_5hbj0")
+shader_parameter/x_offset = -4.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bbpbm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5hbj0"]
+shader = ExtResource("4_5hbj0")
+shader_parameter/x_offset = -8.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5hbj0"]
-content_margin_left = 15.0
 draw_center = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cviis"]
@@ -45,10 +60,15 @@ content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
 bg_color = Color(0, 0, 0, 0.196078)
+skew = Vector2(0.2, 0)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_731vf"]
+shader = ExtResource("4_5hbj0")
+shader_parameter/x_offset = -10.0
 
 [node name="Song Loading Screen" type="Control"]
 layout_mode = 3
@@ -128,18 +148,24 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxEmpty_28gti")
 text = "Sweet Dreams"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="Artist" type="Label" parent="InfoBox/Box"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxEmpty_28gti")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_cviis")
 text = "Tokana Nanashi"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="Difficulty" type="Label" parent="InfoBox/Box"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxEmpty_28gti")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_731vf")
 text = "Love me like you take me away~"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="Source" type="Label" parent="InfoBox/Box"]
 visible = false
@@ -147,35 +173,45 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ukgnb")
 text = "Source: MAKA PIE?!"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="Creator" type="Label" parent="InfoBox/Box"]
+material = SubResource("ShaderMaterial_pj3ow")
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxEmpty_ukgnb")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_bbpbm")
 text = "Creator: dummy"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="Infos" type="PanelContainer" parent="InfoBox/Box"]
+material = SubResource("ShaderMaterial_5hbj0")
 custom_minimum_size = Vector2(0, 19)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5hbj0")
 
 [node name="Sections" type="HBoxContainer" parent="InfoBox/Box/Infos"]
+use_parent_material = true
 layout_mode = 2
 
 [node name="Level" type="Label" parent="InfoBox/Box/Infos/Sections"]
+use_parent_material = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_cviis")
 text = "Lv. 42"
 
-[node name="ModsShown" parent="InfoBox/Box" instance=ExtResource("4_ukgnb")]
+[node name="Mods" type="HBoxContainer" parent="InfoBox/Box"]
+material = SubResource("ShaderMaterial_731vf")
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+script = ExtResource("5_cviis")
 
 [node name="ControlPanel" parent="." instance=ExtResource("4_28gti")]
 layout_mode = 1
 
-[node name="DisclaimerInfo" parent="." instance=ExtResource("6_ukgnb")]
-visible = false
+[node name="Disclaimers" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -183,21 +219,13 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -420.0
-offset_top = -124.0
+offset_top = -102.0
 offset_right = -20.0
 offset_bottom = -20.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="title" parent="DisclaimerInfo/DisclaimerSort" index="0"]
-text = "You are in Marathon Mode"
-vertical_alignment = 1
-
-[node name="desc" parent="DisclaimerInfo/DisclaimerSort" index="1"]
-text = "If you fail you will lose your progress!"
-
 [connection signal="timeout" from="Timer" to="." method="_Timer_load"]
 [connection signal="pressed" from="ControlPanel/Box/BackButton" to="." method="_on_back"]
 
 [editable path="ControlPanel"]
-[editable path="DisclaimerInfo"]
