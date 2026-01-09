@@ -50,9 +50,10 @@ public partial class CardFunctions : Button
             Existance();
             
             if (BannerPicture != null)
-                await Browse.DownloadImage(BannerPicture, (ImageTexture texture) =>
+                await ApiOperator.DownloadImage(BannerPicture, (ImageTexture texture) =>
                 {
                     GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview").Texture = texture;
+                    texture.Dispose();
                 });
 
             SelfModulate = Idlecolour;

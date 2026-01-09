@@ -28,6 +28,8 @@ public partial class RankLeaderboard : PanelContainer
 	public int Combo { get; set; }
 	[Export]
 	public string Mods { get; set; }
+	[Export]
+	public Texture2D PictureData { get; set; }
 	
 	private Label PlayerNameLabel { get; set; }
 	private Label ScoreLabel { get; set; }
@@ -41,10 +43,14 @@ public partial class RankLeaderboard : PanelContainer
 	private Label TimeLabel { get; set; }
 	private Label ComboLabel { get; set; }
 	private ModsResultsScreenShowcase ModsList { get; set; }
+	private TextureRect Picture { get; set; }
+	private Texture2D GuestPicture { get; set; }
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		GuestPicture = GD.Load<CompressedTexture2D>("res://Resources/System/guest.png");
+		Picture = GetNode<TextureRect>("Columns/ProfilePicture/Pic");
 		PlayerNameLabel = GetNode<Label>("Columns/Row1/Username");
 		TimeLabel = GetNode<Label>("Columns/Row1/Achieved");
 		ScoreLabel = GetNode<Label>("Columns/Score");
@@ -69,6 +75,14 @@ public partial class RankLeaderboard : PanelContainer
 		TimeLabel.Text = SettingsOperator.ParseTimeEpoch(Time);
 		ComboLabel.Text = $"{Combo:N0}x";
 		ModsList.ExternalMods = Mods;
+		if (Picture.Texture != PictureData && PictureData != null)
+		{
+			Picture.Texture = PictureData;
+		}
+		else if (Picture.Texture != GuestPicture && PictureData == null)
+		{
+			Picture.Texture = GuestPicture;
+		}
 
 		
 	}

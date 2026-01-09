@@ -10,8 +10,6 @@ public partial class AccountPrompt : Control
 	private VBoxContainer Log {get;set;}
 	private VBoxContainer NotLog {get;set;}
 	private VBoxContainer Retring {get;set;}
-	private Label Ranking {get;set;}
-	private Label PerformanceNumber {get;set;}
 	public Label PlayerName {get;set;}
 	private Label Notice { get; set; }
 	private SettingsOperator SettingsOperator { get; set; }
@@ -66,7 +64,6 @@ public partial class AccountPrompt : Control
 		SettingsOperator.SetSetting("username",null);
 		SettingsOperator.SetSetting("password",null);
 		SettingsOperator.Sessioncfg["loggedin"] = false;
-		Ranking.Visible = false;
 		PlayerName.Text = "Guest";
 	}
 }

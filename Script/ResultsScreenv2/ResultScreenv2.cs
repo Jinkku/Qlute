@@ -89,7 +89,7 @@ public partial class ResultScreenv2 : Control
 
 	private RankLeaderboard CurrentLead {get;set;}
 
-	private void AnimationMode(int mode)
+	private void AnimationMode(int mode, string scene = "res://Panels/Screens/song_select.tscn")
 	{
 		Tween?.Kill();
 		Tween = CreateTween();
@@ -183,7 +183,7 @@ public partial class ResultScreenv2 : Control
 			Tween.TweenProperty(Additional2, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
 			Tween.TweenProperty(RankEmblem, "position:x", RankEmblemPos + RankEmblem.Size.X,AnimationSpeed);
 			Tween.TweenProperty(RankEmblem, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
-			Tween.TweenCallback(Callable.From(() => GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn"))).SetDelay(0.1);
+			Tween.TweenCallback(Callable.From(() => GetNode<SceneTransition>("/root/Transition").Switch(scene))).SetDelay(0.1);
 
 		} else if (mode == 2)
 		{
@@ -222,8 +222,6 @@ public partial class ResultScreenv2 : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		
-		
 		Username = GetNode<Label>("MainScreen/Additional2/Card/Column/Row/Username");
 		Achieved = GetNode<Label>("MainScreen/Additional2/Card/Column/Row/Achieved");
 		Username.Text = SettingsOperator.Gameplaycfg.Username; 
@@ -302,6 +300,7 @@ public partial class ResultScreenv2 : Control
 				CurrentLead.Time = entry.time;
 				CurrentLead.Score = entry.score;
 				CurrentLead.pp = (int)entry.points;
+				CurrentLead.PictureData = entry.ProfilePicture;
 				pointold = (int)entry.points;
 			}
 			else
@@ -457,8 +456,7 @@ public partial class ResultScreenv2 : Control
 	public void Retry()
 	{
 		SettingsOperator.OldRank = SettingsOperator.Rank;
-		AnimationMode(1);
-		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
+		AnimationMode(1, scene: "res://Panels/Screens/SongLoadingScreen.tscn");
 	}
 
 	private LostClass RS {get; set;}

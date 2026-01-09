@@ -46,6 +46,7 @@ public partial class LeaderboardInfoResult : ScrollContainer
 				leaderboardEntry.Combo = entry.combo;
 				leaderboardEntry.Mods = entry.mods;
 				leaderboardEntry.Score = entry.score;
+				leaderboardEntry.PictureData = entry.ProfilePicture;
 				
 				Leaderboards.AddChild(leaderboardEntry);
 				ranknum++;

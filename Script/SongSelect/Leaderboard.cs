@@ -15,6 +15,8 @@ public partial class Leaderboard : Button
 	private Label pp { get; set; }
 	private Label Time { get; set; }
 	private LeaderboardEntry Info { get; set; }
+	private TextureRect Picture { get; set; }
+	private Texture2D GuestPicture { get; set; }
 	public void _stats()
 	{
 		SettingsOperator.ResetScore();
@@ -45,6 +47,8 @@ public partial class Leaderboard : Button
 	}
 	public override void _Ready()
 	{
+		GuestPicture = GD.Load<CompressedTexture2D>("res://Resources/System/guest.png");
+		Picture = GetNode<TextureRect>("HBoxContainer/Picture");
 		Info = ApiOperator.LeaderboardList[(int)GetMeta("ID")];
 		Username = GetNode<Label>("HBoxContainer/UserInfo/Username");
 		Score = GetNode<Label>("HBoxContainer/UserInfo/PlayScore/Score");
@@ -68,6 +72,14 @@ public partial class Leaderboard : Button
 	long _lastTime = 0;
 	public override void _Process(double _delta)
 	{
+		if (Picture.Texture != Info.ProfilePicture && Info.ProfilePicture != null)
+		{
+			Picture.Texture = Info.ProfilePicture;
+		}
+		else if (Picture.Texture != GuestPicture && Info.ProfilePicture == null)
+		{
+			Picture.Texture = GuestPicture;
+		}
 		int seconds = (int)(DateTimeOffset.Now.ToUnixTimeSeconds() - Info.time);
 		if (_lastTime != seconds)
 		{

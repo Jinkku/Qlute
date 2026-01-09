@@ -12,8 +12,12 @@ public partial class LeaderboardGameplay : PanelContainer
 	private Label pp { get; set; }
 	private Label Time { get; set; }
 	private Label Rank { get; set; }
+	private TextureRect Picture { get; set; }
+	private Texture2D GuestPicture { get; set; }
 	public override void _Ready()
 	{
+		Picture = GetNode<TextureRect>("LeaderboardColumns/Picture");
+		GuestPicture = GD.Load<CompressedTexture2D>("res://Resources/System/guest.png");
 		Rank = GetNode<Label>("LeaderboardColumns/Rank");
 		Username = GetNode<Label>("LeaderboardColumns/Col1/Username");
 		Score = GetNode<Label>("LeaderboardColumns/Col1/Score");
@@ -27,6 +31,12 @@ public partial class LeaderboardGameplay : PanelContainer
 		{
 			Username.Text = GetMeta("username").ToString();
 		}
+
+		if (HasMeta("playing") && (bool)GetMeta("playing") && HasMeta("username") &&
+		    GetMeta("username").ToString() == ApiOperator.Username)
+		{
+			Picture.Texture = ApiOperator.PictureData;
+		}
 		refresh_info();
 	}
 
@@ -36,7 +46,6 @@ public partial class LeaderboardGameplay : PanelContainer
 	{
 		if (HasMeta("id"))
 		{
-			var info = ApiOperator.LeaderboardList[(int)GetMeta("id")];
 			Score.Text = string.Format("{0:N0}", info.score);
 			Combo.Text = $"{info.combo}x";
 			Accuracy.Text = info.Accuracy.ToString("P2");
@@ -60,7 +69,7 @@ public partial class LeaderboardGameplay : PanelContainer
 			Rank.Text = "#" + GetMeta("rank").ToString();
 		}
 	}
-
+	private LeaderboardEntry info { get; set; }
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
@@ -73,6 +82,15 @@ public partial class LeaderboardGameplay : PanelContainer
 		}
 		else
 		{
+			info = ApiOperator.LeaderboardList[(int)GetMeta("id")];
+			if (Picture.Texture != info.ProfilePicture && info.ProfilePicture != null)
+			{
+				Picture.Texture = info.ProfilePicture;
+			}
+			else if (Picture.Texture != GuestPicture && info.ProfilePicture == null)
+			{
+				Picture.Texture = GuestPicture;
+			}
 			refresh_info();
 		}
 	}
