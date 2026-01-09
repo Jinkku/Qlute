@@ -67,11 +67,10 @@ size_flags_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_ri41b")
 
 [node name="ProfilePicture" type="TextureRect" parent="SplitV/TopPart/Sections/RoundPicture"]
-unique_name_in_owner = true
 layout_mode = 2
 texture = ExtResource("1_vdvmb")
 expand_mode = 1
-stretch_mode = 4
+stretch_mode = 6
 
 [node name="Username" type="Label" parent="SplitV/TopPart/Sections"]
 custom_minimum_size = Vector2(0, 30)

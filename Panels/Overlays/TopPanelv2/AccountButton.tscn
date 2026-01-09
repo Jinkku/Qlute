@@ -58,6 +58,7 @@ _data = {
 
 [node name="AccountButton" type="Button"]
 process_mode = 3
+self_modulate = Color(0.2421875, 0.2421875, 0.2421875, 1)
 offset_right = 200.0
 offset_bottom = 50.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_5yayb")
@@ -77,6 +78,7 @@ offset_top = 5.0
 offset_right = 52.0
 offset_bottom = -5.0
 grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8fwpo")
 
 [node name="ProfilePicture" type="TextureRect" parent="PanelContainer"]

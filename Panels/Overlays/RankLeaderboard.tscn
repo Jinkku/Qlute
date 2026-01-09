@@ -49,7 +49,7 @@ custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 texture = ExtResource("1_lcudt")
 expand_mode = 1
-stretch_mode = 4
+stretch_mode = 6
 
 [node name="Row1" type="VBoxContainer" parent="Columns"]
 custom_minimum_size = Vector2(146, 0)

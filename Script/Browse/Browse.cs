@@ -2,7 +2,6 @@ using Godot;
 using System;
 using System.Security.Cryptography;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Net.Http;
 using System.Text;
 using System.Collections.Generic;
@@ -194,38 +193,7 @@ public partial class Browse : Control
 		GD.Print($"Looking up with: {uri}");
 		BrowseApi.Request(uri);
 	}
-
-public static async Task
-	DownloadImage(string path, Action<ImageTexture> callback)
-	{
-		try
-		{
-			// 1. Download the image
-			using (var client = new System.Net.Http.HttpClient())
-			{
-				byte[] imageBytes = await client.GetByteArrayAsync(path);
-
-				// 2. Create a Godot Image object
-				Godot.Image image = new Godot.Image();
-				using (var stream = new MemoryStream(imageBytes))
-				{
-					image.LoadJpgFromBuffer(imageBytes);
-				}
-
-				// 3. Create a texture and display the image
-				ImageTexture texture = new ImageTexture();
-				texture.SetImage(image);
-
-				// Call the callback function with the texture
-				callback(texture);
-				texture.Dispose();
-			}
-		}
-		catch (Exception e)
-		{
-			GD.PrintErr("Error downloading or processing image: " + e.Message);
-		}
-	}
+	
 	private void _BrowseAPI_finished(long result, long responseCode, string[] headers, byte[] body)
 	{
 		string BrowseEntries = (string)Encoding.UTF8.GetString(body);

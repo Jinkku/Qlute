@@ -5,27 +5,57 @@ public partial class AccountButton : Button
 {
 	public Label Ranking {get;set;}
 	public Label PlayerName {get;set;}
+	private HttpRequest PfpHttp { get; set; }
+	private TextureRect Picture { get; set; }
+	private int tickpic { get; set; }
+	private string Urltmppfp { get; set; }
+	private void ChangePicture(int mode, Texture2D Texture)
+	{
+		if (mode != tickpic)
+		{
+			tickpic = mode;
+			Picture.Texture = Texture;
+		}
+	}
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		TopPanel = GetNode<Control>("../");
 		PlayerName = GetNode<Label>("UPlayerName");
 		Ranking = GetNode<Label>("Ranking");
+		Picture = GetNode<TextureRect>("PanelContainer/ProfilePicture");
 		SelfModulate = Idlecolour;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	public async override void _Process(double delta)
 	{
 		string username = SettingsOperator.GetSetting("username")?.ToString();
-		string ranking = (SettingsOperator.Rank).ToString("N0");
+		if (Urltmppfp != SettingsOperator.ProfilePictureURL && SettingsOperator.ProfilePictureURL != null)
+		{
+			Urltmppfp = SettingsOperator.ProfilePictureURL;
+			await ApiOperator.DownloadImage(Urltmppfp, (ImageTexture texture) =>
+			{
+				ApiOperator.PictureData = texture;
+				ChangePicture(1,texture);
+			});
+		}
 		if (username != null){
 			PlayerName.Text = username;
-			if (ranking != null && ranking != "0"){
+			if (SettingsOperator.Rank != 0){
 				Ranking.Visible = true;}
-			else{Ranking.Visible = false;}
-			Ranking.Text = "#" + ranking;
-		} else{
+			else
+			{
+				Ranking.Visible = false;
+			}
+			
+			Ranking.Text = "#" + SettingsOperator.Rank.ToString("N0");
+		} else
+		{
+			ApiOperator.PictureData = null;
+			SettingsOperator.ProfilePictureURL = null;
+			Urltmppfp = SettingsOperator.ProfilePictureURL;
+			ChangePicture(0,GD.Load<CompressedTexture2D>("res://Resources/System/guest.png"));
 			PlayerName.Text = "Guest\nLog in here!";
 			Ranking.Visible = false;
 		}

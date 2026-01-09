@@ -24,6 +24,7 @@ public partial class SettingsOperator : Node
     public static int OldLevel { get; set; } = 0;
     public static int Level { get; set; } = 0;
     public static int OldCombo { get; set; } = 0;
+    public static string ProfilePictureURL { get; set; } = null;
     public static int OCombo { get; set; } = 0;
     public static float OldAccuracy { get; set; } = 0;
     public static float OAccuracy { get; set; } = 0;

@@ -5,8 +5,7 @@ using System.Text.Json;
 using System.Text;
 using System.Collections.Generic;
 using System.IO;
-
-
+using System.Threading.Tasks;
 public class BeatmapDownloader
 {
 	public HttpRequest Request { get; set; }
@@ -32,6 +31,7 @@ public class LeaderboardEntry
 	public float speed_multi { get; set; } = 1;
 	public string FilePath { get; set; }
 	public bool Active { get; set; }
+	public Texture2D ProfilePicture { get; set; }
 }
 public partial class ApiOperator : Node
 {
@@ -47,6 +47,7 @@ public partial class ApiOperator : Node
 	public static ApiOperator Instance { get; set; }
 	public static bool Submitted = false;
 	public static string Beatmapapi = "https://catboy.best";
+	public static Texture2D PictureData { get; set; }
 
 	/// <summary>
 	/// Submits a score to the dedicated server. (New Version)
@@ -122,7 +123,8 @@ public partial class ApiOperator : Node
 		}
 	}
 	public static List<LeaderboardEntry> LeaderboardList = new List<LeaderboardEntry>();
-	public void _LeaderboardAPIDone(long result, long responseCode, string[] headers, byte[] body)
+
+	public async void _LeaderboardAPIDone(long result, long responseCode, string[] headers, byte[] body)
 	{
 		if (responseCode != 200)
 		{
@@ -136,6 +138,17 @@ public partial class ApiOperator : Node
 			LeaderboardList.Clear();
 			LeaderboardStatus = 2; // Set status to loaded
 			LeaderboardList = JsonSerializer.Deserialize<List<LeaderboardEntry>>((string)Encoding.UTF8.GetString(body));
+			foreach (var leaderboardEntry in LeaderboardList)
+			{
+				var client = new System.Net.Http.HttpClient();
+				client.DefaultRequestHeaders.Add("USERNAME", leaderboardEntry.username); // <- add custom header
+				var pfp_path = await client.GetStringAsync(SettingsOperator.GetSetting("api") + "apiv2/getstat/pfp_path");
+				pfp_path = JsonDocument.Parse(pfp_path).RootElement.GetProperty("url").GetString();
+				await ApiOperator.DownloadImage(pfp_path, (ImageTexture texture) =>
+				{
+					leaderboardEntry.ProfilePicture = texture;
+				});
+			}
 			GD.Print("Leaderboard loaded successfully.");
 		}
 
@@ -211,6 +224,7 @@ public partial class ApiOperator : Node
 	private void _Submitrequest(long result, long responseCode, string[] headers, byte[] body)
 	{
 		Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
+		GD.Print(Encoding.UTF8.GetString(body));
 		if ((int)json["rankedmap"] > 0 && (int)json["error"] == 0)
 		{
 			Submitted = true;
@@ -261,6 +275,7 @@ public partial class ApiOperator : Node
 		SettingsOperator.OldAccuracy = SettingsOperator.OAccuracy;
 		SettingsOperator.OCombo = json["max_combo"].AsInt32();
 		SettingsOperator.OldCombo = SettingsOperator.OCombo;
+		SettingsOperator.ProfilePictureURL = json["pfp_path"].AsString();
 
 	}
 
@@ -385,7 +400,6 @@ public partial class ApiOperator : Node
 			json.Add("notification", "");
 			json.Add("success", 0);
 			if (responseCode == 200) json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
-
 			if (responseCode == 200 && json["notification"].ToString() != "")
 			{
 				Notify.Post(json["notification"].ToString());
@@ -475,6 +489,70 @@ public partial class ApiOperator : Node
 		$"PASSWORD: {SettingsOperator.GetSetting("password")}",
 		};
 		StatusChecker.Request(SettingsOperator.GetSetting("api") + "apiv2/setstatus", Headers);
+	}
+	
+	static bool IsJpeg(byte[] data)
+	{
+		return data != null &&
+		       data.Length >= 3 &&
+		       data[0] == 0xFF &&
+		       data[1] == 0xD8 &&
+		       data[2] == 0xFF;
+	}
+
+	static bool IsPng(byte[] data)
+	{
+		return data != null &&
+		       data.Length >= 8 &&
+		       data[0] == 0x89 &&
+		       data[1] == 0x50 &&
+		       data[2] == 0x4E &&
+		       data[3] == 0x47 &&
+		       data[4] == 0x0D &&
+		       data[5] == 0x0A &&
+		       data[6] == 0x1A &&
+		       data[7] == 0x0A;
+	}
+	public static async Task
+		DownloadImage(string path, Action<ImageTexture> callback)
+	{
+		try
+		{
+			// 1. Download the image
+			using (var client = new System.Net.Http.HttpClient())
+			{
+				byte[] imageBytes = await client.GetByteArrayAsync(path);
+
+				// 2. Create a Godot Image object
+				Godot.Image image = new Godot.Image();
+				using (var stream = new MemoryStream(imageBytes))
+				{
+					if (IsJpeg(imageBytes))
+					{
+						image.LoadJpgFromBuffer(imageBytes);
+					}
+					else if (IsPng(imageBytes))
+					{
+						image.LoadPngFromBuffer(imageBytes);
+					}
+					else
+					{
+						GD.PushError("Unknown or unsupported image format");
+					}
+				}
+
+				// 3. Create a texture and display the image
+				ImageTexture texture = new ImageTexture();
+				texture.SetImage(image);
+
+				// Call the callback function with the texture
+				callback(texture);
+			}
+		}
+		catch (Exception e)
+		{
+			GD.PrintErr("Error downloading or processing image: " + e.Message);
+		}
 	}
 	public override void _Process(double delta)
 	{
