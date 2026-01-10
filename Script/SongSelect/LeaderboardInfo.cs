@@ -37,8 +37,8 @@ public partial class LeaderboardInfo : ScrollContainer
 			var ranknum = 1;
 			foreach (var entry in ApiOperator.LeaderboardList)
 			{
-				var leaderboardEntry = GD.Load<PackedScene>("res://Panels/SongSelectButtons/Leaderboard.tscn").Instantiate().GetNode<Button>(".");
-				leaderboardEntry.SetMeta("ID", ranknum-1);
+				var leaderboardEntry = GD.Load<PackedScene>("res://Panels/SongSelectButtons/Leaderboard.tscn").Instantiate().GetNode<Leaderboard>(".");
+				leaderboardEntry.Info = entry;
 				leaderboardEntry.SetMeta("rank", ranknum);
 				Leaderboards.AddChild(leaderboardEntry);
 				ranknum++;

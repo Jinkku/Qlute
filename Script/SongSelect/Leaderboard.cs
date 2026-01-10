@@ -13,10 +13,41 @@ public partial class Leaderboard : Button
 	private Label Bad { get; set; }
 	private Label Mods { get; set; }
 	private Label pp { get; set; }
+	private Label Accuracy { get; set; }
 	private Label Time { get; set; }
-	private LeaderboardEntry Info { get; set; }
+	public LeaderboardEntry Info { get; set; }
 	private TextureRect Picture { get; set; }
 	private Texture2D GuestPicture { get; set; }
+	private TextureRect RankEmblem { get; set; }
+
+	private void ParseRankEmblem()
+	{
+		
+		if ( Info.Accuracy == 1)
+		{
+			RankEmblem.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/ResultsScreen/Ranks/SS.png");
+		}
+		else if ( Info.Accuracy > 0.95)
+		{
+			RankEmblem.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/ResultsScreen/Ranks/S.png");
+		}
+		else if ( Info.Accuracy > 0.90)
+		{
+			RankEmblem.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/ResultsScreen/Ranks/A.png");
+		}
+		else if ( Info.Accuracy > 0.80)
+		{
+			RankEmblem.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/ResultsScreen/Ranks/B.png");
+		}
+		else if ( Info.Accuracy > 0.70)
+		{
+			RankEmblem.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/ResultsScreen/Ranks/C.png");
+		}
+		else
+		{
+			RankEmblem.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/ResultsScreen/Ranks/D.png");
+		}
+	}
 	public void _stats()
 	{
 		SettingsOperator.ResetScore();
@@ -48,24 +79,21 @@ public partial class Leaderboard : Button
 	public override void _Ready()
 	{
 		GuestPicture = GD.Load<CompressedTexture2D>("res://Resources/System/guest.png");
-		Picture = GetNode<TextureRect>("HBoxContainer/Picture");
-		Info = ApiOperator.LeaderboardList[(int)GetMeta("ID")];
-		Username = GetNode<Label>("HBoxContainer/UserInfo/Username");
-		Score = GetNode<Label>("HBoxContainer/UserInfo/PlayScore/Score");
-		Combo = GetNode<Label>("HBoxContainer/UserInfo/PlayScore/Combo");
+		Picture = GetNode<TextureRect>("HBoxContainer/Mask/Picture");
+		Username = GetNode<Label>("HBoxContainer/UserInfo/Moreinfo/Username");
+		Score = GetNode<Label>("HBoxContainer/UserInfo/Score");
+		Combo = GetNode<Label>("HBoxContainer/Col2/Combo");
 		Mods = GetNode<Label>("HBoxContainer/Col2/Mods");
 		Time = GetNode<Label>("HBoxContainer/Col2/created");
+		Accuracy = GetNode<Label>("HBoxContainer/UserInfo/Moreinfo/Accuracy");
 		Username.Text = Info.username;
+		GD.Print(Info.Accuracy);
+		Accuracy.Text = Info.Accuracy.ToString("P0");
 		Score.Text = Info.score.ToString("N0");
 		Combo.Text = Info.combo.ToString("N0") + "x";
-		if (Info.mods != "")
-		{
-			Mods.Text = Info.mods;
-		}
-		else
-		{
-			Mods.Visible = false;
-		}
+		Mods.Text = Info.mods;
+		RankEmblem = GetNode<TextureRect>("HBoxContainer/Medal");
+		ParseRankEmblem();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="1_kgn3a"]
 [ext_resource type="Script" uid="uid://bp6h74gm3lwau" path="res://Script/SongSelect/Leaderboard.cs" id="1_ysfsi"]
 [ext_resource type="Script" uid="uid://r1nchdkq185" path="res://Script/SongSelect/LeaderboardRank.cs" id="2_wkrig"]
+[ext_resource type="Texture2D" uid="uid://brygxnbtgntug" path="res://Resources/System/ResultsScreen/Ranks/SS.png" id="4_vt3mq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wbm6w"]
 bg_color = Color(0.2, 0.2, 0.2, 0.8)
@@ -33,41 +34,41 @@ content_margin_top = 3.0
 content_margin_right = 3.0
 content_margin_bottom = 3.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6nid0"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wbm6w"]
-content_margin_top = 5.0
-content_margin_bottom = 5.0
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vt3mq"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(0, 0, 0, 0.313726)
+bg_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6nid0"]
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1bkjm"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y1q14"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d0w7j"]
-bg_color = Color(0.5, 0.5, 0.5, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y1q14"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 0.25)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vt3mq"]
-content_margin_top = 3.0
+content_margin_left = 5.0
+content_margin_top = 2.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y1q14"]
 
 [node name="Leaderboard" type="Button"]
 custom_minimum_size = Vector2(330, 60)
 offset_left = 5.0
-offset_right = 335.0
+offset_right = 499.0
 offset_bottom = 60.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_wbm6w")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_1bkjm")
@@ -82,6 +83,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 5
 
 [node name="Rank" type="Label" parent="HBoxContainer"]
 layout_mode = 2
@@ -91,7 +93,13 @@ text = "#1"
 horizontal_alignment = 1
 script = ExtResource("2_wkrig")
 
-[node name="Picture" type="TextureRect" parent="HBoxContainer"]
+[node name="Mask" type="PanelContainer" parent="HBoxContainer"]
+clip_children = 1
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vt3mq")
+
+[node name="Picture" type="TextureRect" parent="HBoxContainer/Mask"]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 mouse_filter = 2
@@ -106,87 +114,83 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_6nid0")
 [node name="UserInfo" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 0
+size_flags_stretch_ratio = 1.8
+theme_override_constants/separation = 5
 alignment = 1
 
-[node name="Username" type="Label" parent="HBoxContainer/UserInfo"]
+[node name="Score" type="Label" parent="HBoxContainer/UserInfo"]
 layout_mode = 2
-size_flags_vertical = 6
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1bkjm")
+text = "1,000,000"
+vertical_alignment = 1
+
+[node name="Moreinfo" type="HBoxContainer" parent="HBoxContainer/UserInfo"]
+layout_mode = 2
+
+[node name="Accuracy" type="Label" parent="HBoxContainer/UserInfo/Moreinfo"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
 theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxEmpty_wbm6w")
-text = "aquapoki"
+theme_override_styles/normal = SubResource("StyleBoxFlat_y1q14")
+text = "4%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Username" type="Label" parent="HBoxContainer/UserInfo/Moreinfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxEmpty_vt3mq")
+text = "REALLYBIGASSNAMEEEEEEEEEEEEEe"
 vertical_alignment = 1
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="PlayScore" type="HBoxContainer" parent="HBoxContainer/UserInfo"]
-layout_mode = 2
-
-[node name="Score" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
-layout_mode = 2
-size_flags_horizontal = 0
-theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_vt3mq")
-text = "1,000,000"
-vertical_alignment = 1
-
-[node name="Combo" type="Label" parent="HBoxContainer/UserInfo/PlayScore"]
-layout_mode = 2
-size_flags_horizontal = 0
-theme_override_font_sizes/font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_vt3mq")
-text = "0x"
-vertical_alignment = 1
-
-[node name="HSeparator" type="HSeparator" parent="HBoxContainer/UserInfo"]
-layout_mode = 2
-theme_override_styles/separator = SubResource("StyleBoxEmpty_1bkjm")
-
 [node name="Col2" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 0
+theme_override_constants/separation = -5
 alignment = 1
 
 [node name="Mods" type="Label" parent="HBoxContainer/Col2"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 10
 theme_override_styles/normal = SubResource("StyleBoxEmpty_y1q14")
-text = "Mods: "
+text = "Mods here yadayada"
 horizontal_alignment = 2
 vertical_alignment = 1
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="created" type="Label" parent="HBoxContainer/Col2"]
+[node name="Combo" type="Label" parent="HBoxContainer/Col2"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 12
-text = "---"
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxEmpty_y1q14")
+text = "0x"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="Medal" type="PanelContainer" parent="HBoxContainer/Col2"]
-visible = false
-self_modulate = Color(0, 0.695312, 1, 1)
-clip_children = 2
-custom_minimum_size = Vector2(50, 25)
+[node name="created" type="Label" parent="HBoxContainer/Col2"]
 layout_mode = 2
-size_flags_horizontal = 10
-size_flags_vertical = 4
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_d0w7j")
-
-[node name="Rank" type="Label" parent="HBoxContainer/Col2/Medal"]
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxEmpty_vt3mq")
-text = "SS"
-horizontal_alignment = 1
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxEmpty_y1q14")
+text = "35dys"
+horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+[node name="Medal" type="TextureRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-theme_override_styles/separator = SubResource("StyleBoxEmpty_6nid0")
+size_flags_horizontal = 6
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.6
+texture = ExtResource("4_vt3mq")
+expand_mode = 1
+stretch_mode = 5
 
 [connection signal="pressed" from="." to="." method="_stats"]
