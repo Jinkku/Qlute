@@ -182,7 +182,6 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxEmpty_bbpbm")
 text = "Creator: dummy"
-clip_text = true
 text_overrun_behavior = 3
 
 [node name="Infos" type="PanelContainer" parent="InfoBox/Box"]

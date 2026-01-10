@@ -87,7 +87,6 @@ public partial class Leaderboard : Button
 		Time = GetNode<Label>("HBoxContainer/Col2/created");
 		Accuracy = GetNode<Label>("HBoxContainer/UserInfo/Moreinfo/Accuracy");
 		Username.Text = Info.username;
-		GD.Print(Info.Accuracy);
 		Accuracy.Text = Info.Accuracy.ToString("P0");
 		Score.Text = Info.score.ToString("N0");
 		Combo.Text = Info.combo.ToString("N0") + "x";

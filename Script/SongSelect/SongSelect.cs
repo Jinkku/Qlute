@@ -623,7 +623,7 @@ public partial class SongSelect : Control
 
 	private void _openexternal()
 	{
-		OS.ShellOpen(SettingsOperator.Configuration["api"] + "beatmap/" + SettingsOperator.BeatmapID);
+		OS.ShellOpen($"{SettingsOperator.GetSetting("api")}beatmapset/{SettingsOperator.BeatmapSetID}/{SettingsOperator.BeatmapID}");
 	}
 	///<summary>
 	/// Check Rank status
