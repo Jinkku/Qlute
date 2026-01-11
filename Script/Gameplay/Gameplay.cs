@@ -20,7 +20,7 @@ public class KeyL
 
 public partial class Gameplay : Control
 {
-	// Called when the node enters the scene tree for the first time.
+	private string oldtitle = "";
 	private SettingsOperator SettingsOperator { get; set; }
 	private int BadCombo { get; set; }
 	public static ApiOperator ApiOperator { get; set; }
@@ -148,6 +148,8 @@ public partial class Gameplay : Control
 	}
 	public override void _Ready()
 	{
+		oldtitle = GetWindow().Title;
+		DisplayServer.WindowSetTitle($"{oldtitle} - {SettingsOperator.Sessioncfg["beatmapartist"] ?? ""} - {SettingsOperator.Sessioncfg["beatmaptitle"] ?? ""}");
 		speedold = AudioPlayer.Instance.PitchScale;
 		seed = new Random().Next(1,214562543);
 		ReplayINT = 0;
@@ -370,6 +372,7 @@ public partial class Gameplay : Control
 
     public override void _ExitTree()
     {
+	    DisplayServer.WindowSetTitle(oldtitle);
 	    HurtAnimation?.Kill();
 	    Modulate = new Color("#FFFFFF");
 		Cursor.CursorVisible = true;
