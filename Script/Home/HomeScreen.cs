@@ -17,6 +17,11 @@ public partial class HomeScreen : Control
 	public SettingsOperator SettingsOperator { get; set; }
 	public PanelContainer SubButtons { get; set; } // For more buttons for more playability
 	public PanelContainer HomePanel { get; set; } // Main Buttons
+
+	public void Quit()
+	{
+		GetTree().Root.GetNode<SettingsOperator>("/root/SettingsOperator").Quit();
+	}
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
@@ -64,16 +69,7 @@ public partial class HomeScreen : Control
 		#endif
 	}
 	private void _leave() {
-		SettingsOperator.toppaneltoggle(false);
-		var tween = CreateTween();
-		tween.SetParallel(true);
-		tween.TweenProperty(GetTree().CurrentScene, "modulate:a", 0f, 0.2f)
-			.SetTrans(Tween.TransitionType.Linear)
-			.SetEase(Tween.EaseType.Out);
-		tween.TweenProperty(AudioPlayer.Instance, "volume_db", -40f, 0.2f)
-			.SetTrans(Tween.TransitionType.Linear)
-			.SetEase(Tween.EaseType.Out);
-		tween.Connect("finished", Callable.From(() => GetTree().Quit()));
+		SettingsOperator.Quit();
 	}
 	private void _playf()
 	{

@@ -52,16 +52,7 @@ public partial class IntroPending : Control
 		}
 		else if (Input.IsActionJustPressed("ui_cancel") && !hidden)
 		{
-			GetTree().CurrentScene.SetProcessInput(false);
-			var tween = CreateTween();
-			tween.SetParallel(true);
-			tween.TweenProperty(GetTree().CurrentScene, "modulate:a", 0f, 0.2f)
-				.SetTrans(Tween.TransitionType.Linear)
-				.SetEase(Tween.EaseType.Out);
-			tween.TweenProperty(AudioPlayer.Instance, "volume_db", -40f, 0.2f)
-				.SetTrans(Tween.TransitionType.Linear)
-				.SetEase(Tween.EaseType.Out);
-			tween.Connect("finished", Callable.From(() => GetTree().Quit()));
+			SettingsOperator.Quit();
 		}
 		else if ((Input.IsPhysicalKeyPressed(Key.Enter) || Input.IsPhysicalKeyPressed(Key.Space) || Input.IsPhysicalKeyPressed(Key.P)) && !hidden)
 		{

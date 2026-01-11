@@ -118,6 +118,22 @@ public partial class SettingsOperator : Node
     };
     public Dictionary<string, object> Configurationbk { get; set; }
 
+    private float QuitSpeed = 0.5f;
+    public void Quit()
+    {
+        toppaneltoggle(false);
+        var tween = CreateTween();
+        tween.SetParallel(true);
+        tween.SetTrans(Tween.TransitionType.Cubic);
+        tween.SetEase(Tween.EaseType.Out);
+        var tmp = GetTree().CurrentScene.GetNode<Control>(".");
+        tmp.PivotOffset = tmp.Size / 2;
+        tween.TweenProperty(GetTree().CurrentScene, "modulate:a", 0f, QuitSpeed);
+        tween.TweenProperty(GetTree().CurrentScene, "scale", tmp.Scale / 1.5f, QuitSpeed);
+        tween.TweenProperty(GetTree().CurrentScene, "rotation", 0.25f, QuitSpeed);
+        tween.TweenProperty(AudioPlayer.Instance, "volume_db", -40f, QuitSpeed);
+        tween.TweenCallback(Callable.From(() => GetTree().Quit())).SetDelay(QuitSpeed + 0.5f);
+    }
     public static Texture2D GetNullImage() => ResourceLoader.Load<CompressedTexture2D>("res://Resources/System/SongSelect/NoBG.png");
 
     public static Texture2D LoadImage(string path)
