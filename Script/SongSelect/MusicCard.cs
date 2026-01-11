@@ -200,17 +200,12 @@ public partial class MusicCard : Button
 		}
 	}
 
-	private Color Idlecolour => SettingsOperator.ReturnLevelColour((int)(Beatmap.Levelrating * ModsMulti.multiplier));
-	private Color Focuscolour => SettingsOperator.ReturnLevelColour((int)(Beatmap.Levelrating * ModsMulti.multiplier)) * 1.2f;
+	private Color Idlecolour = new Color(0.20f, 0.20f, 0.20f, 1f);
+	private Color Focuscolour = new Color(1f, 1f, 1f, 1f);
 	private Color highlightcolour = new Color(0.19f, 0.37f, 0.65f, 1f);
 	private Color toggledcolour = new Color(0.09f, 0.38f, 0.85f, 1f);
 
-	private void _highlight()
-	{
-		
-		AnimationButton(highlightcolour, true);
-	}
-
+	private void _highlight() => AnimationButton(highlightcolour);
 	private void _focus()
 	{
 		SettingsOperator.SongIDHighlighted = SongID;
@@ -219,7 +214,7 @@ public partial class MusicCard : Button
 	private void _unfocus()
 	{
 		SettingsOperator.SongIDHighlighted = -1;
-		AnimationButton(Checkid() ? toggledcolour : Idlecolour, Checkid());
+		AnimationButton(Checkid() ? toggledcolour : Idlecolour, false);
 	}
 	public void _on_pressed()
 	{
