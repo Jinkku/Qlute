@@ -145,7 +145,7 @@ public partial class ApiOperator : Node
 				client.DefaultRequestHeaders.Add("USERNAME", leaderboardEntry.username); // <- add custom header
 				var pfp_path = await client.GetStringAsync(SettingsOperator.GetSetting("api") + "apiv2/getstat/pfp_path");
 				pfp_path = JsonDocument.Parse(pfp_path).RootElement.GetProperty("url").GetString();
-				await ApiOperator.DownloadImage(pfp_path, (ImageTexture texture) =>
+				await DownloadImage(pfp_path, (ImageTexture texture) =>
 				{
 					leaderboardEntry.ProfilePicture = texture;
 				});
@@ -221,6 +221,15 @@ public partial class ApiOperator : Node
 		{
 			GD.Print("No username or password found, skipping login.");
 		}
+
+		GetNotices();
+	}
+
+	public static List<EventLegend> EventData = new List<EventLegend>();
+	private async void GetNotices()
+	{
+		string result = await FetchData($"{SettingsOperator.GetSetting("api").ToString()}apiv2/getnotice");
+		EventData = JsonSerializer.Deserialize<List<EventLegend>>(result);
 	}
 	private void _Submitrequest(long result, long responseCode, string[] headers, byte[] body)
 	{
@@ -514,6 +523,18 @@ public partial class ApiOperator : Node
 		       data[6] == 0x1A &&
 		       data[7] == 0x0A;
 	}
+	
+	/// <summary>
+	/// Fetch data from url in a async way.
+	/// </summary>
+	/// <param name="url"></param>
+	/// <returns></returns>
+	public static async Task<string> FetchData(string url)
+	{
+		using var client = new System.Net.Http.HttpClient();
+		return await client.GetStringAsync(url);
+	}
+	
 	public static async Task
 		DownloadImage(string path, Action<ImageTexture> callback)
 	{

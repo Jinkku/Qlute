@@ -1,14 +1,14 @@
-[gd_scene load_steps=34 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene load_steps=33 format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" uid="uid://bxurggbxgjswg" path="res://Script/Home/HomeScreen.cs" id="1_vj7aj"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
 [ext_resource type="PackedScene" uid="uid://i4ipbotu77y8" path="res://Panels/Overlays/SongIndication.tscn" id="3_bb0aq"]
 [ext_resource type="Texture2D" uid="uid://3l7m8wfhdqg5" path="res://Resources/System/devlogomini.png" id="3_rmu25"]
-[ext_resource type="Script" uid="uid://dpoy0iryy0xx2" path="res://Script/Home/MenuNotice.cs" id="4_7kbet"]
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="5_pikml"]
 [ext_resource type="Script" uid="uid://dnu64hotg25n4" path="res://Script/Home/version.gd" id="6_1tkmr"]
 [ext_resource type="Script" uid="uid://cnaimpbrbt36j" path="res://Script/Home/SubButton.cs" id="6_bh2cj"]
 [ext_resource type="Script" uid="uid://d3kp8agi7f31r" path="res://Script/Home/HomeButtonBg.cs" id="6_rg0tv"]
+[ext_resource type="Script" uid="uid://y3i7cbqspnfj" path="res://Script/Home/Events.cs" id="7_1l3bn"]
 [ext_resource type="Script" uid="uid://btpasgcq7n7n6" path="res://Script/Effects/ButtonBounce.cs" id="8_qhwge"]
 [ext_resource type="Texture2D" uid="uid://b2ef26vxyoi26" path="res://Resources/System/MainMenu/Play.svg" id="9_bb0aq"]
 [ext_resource type="Texture2D" uid="uid://b1puke3u03rm6" path="res://Resources/System/MainMenu/Edit.svg" id="10_rmu25"]
@@ -21,17 +21,6 @@
 [ext_resource type="Texture2D" uid="uid://84eme8uqluil" path="res://Resources/System/MainMenu/santahat.png" id="17_jpc6g"]
 [ext_resource type="PackedScene" uid="uid://d2hnxlea2j351" path="res://Panels/Overlays/MusicBar.tscn" id="18_ldbht"]
 [ext_resource type="Texture2D" uid="uid://dyrairg2m2il6" path="res://Resources/System/emit.png" id="19_whutp"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1gbip"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0, 0, 0, 0.568627)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
 
 [sub_resource type="Gradient" id="Gradient_5vo6i"]
 colors = PackedColorArray(0, 0, 0, 0.568627, 0, 0, 0, 0)
@@ -103,35 +92,6 @@ script = ExtResource("1_vj7aj")
 [node name="BeatmapBackground" parent="." instance=ExtResource("2_ouv1d")]
 layout_mode = 1
 
-[node name="MenuNotice" type="PanelContainer" parent="."]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -91.0
-offset_top = -120.0
-offset_right = 91.0
-offset_bottom = -71.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_1gbip")
-
-[node name="Timer" type="Timer" parent="MenuNotice"]
-wait_time = 5.0
-autostart = true
-
-[node name="NoticeText" type="Label" parent="MenuNotice"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Example Text"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="HTTPRequest" type="HTTPRequest" parent="MenuNotice"]
-script = ExtResource("4_7kbet")
-
 [node name="SongIndication" parent="." instance=ExtResource("3_bb0aq")]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 1
@@ -169,17 +129,6 @@ theme_override_fonts/font = ExtResource("5_pikml")
 text = "Qlute/dev (0.0.0)"
 horizontal_alignment = 1
 script = ExtResource("6_1tkmr")
-
-[node name="TextureRect" type="TextureRect" parent="."]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -260.0
-offset_top = 120.0
-offset_right = -10.0
-offset_bottom = 200.0
-grow_horizontal = 0
 
 [node name="SubButton" type="PanelContainer" parent="."]
 visible = false
@@ -445,6 +394,27 @@ wait_time = 0.375
 autostart = true
 script = ExtResource("14_1vpa7")
 
+[node name="Events" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -125.0
+offset_top = -135.0
+offset_right = 125.0
+offset_bottom = -55.0
+grow_horizontal = 2
+grow_vertical = 0
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("7_1l3bn")
+
+[node name="Delay" type="Timer" parent="Events"]
+wait_time = 5.0
+autostart = true
+
 [node name="Logo" type="TextureRect" parent="."]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 1
@@ -493,8 +463,6 @@ lifetime = 3.0
 fixed_fps = 15
 process_material = SubResource("ParticleProcessMaterial_ldbht")
 
-[connection signal="timeout" from="MenuNotice/Timer" to="MenuNotice/HTTPRequest" method="_on_timer_timeout"]
-[connection signal="request_completed" from="MenuNotice/HTTPRequest" to="MenuNotice/HTTPRequest" method="_on_request_completed"]
 [connection signal="button_down" from="SubButton/SubButtons/Play_Solo" to="SubButton/SubButtons/Play_Solo" method="_down"]
 [connection signal="button_up" from="SubButton/SubButtons/Play_Solo" to="SubButton/SubButtons/Play_Solo" method="_up"]
 [connection signal="mouse_entered" from="SubButton/SubButtons/Play_Solo" to="SubButton/SubButtons/Play_Solo" method="_focus"]
@@ -528,3 +496,7 @@ process_material = SubResource("ParticleProcessMaterial_ldbht")
 [connection signal="mouse_exited" from="IntroPending/logo" to="IntroPending" method="_unhover"]
 [connection signal="pressed" from="IntroPending/logo" to="IntroPending" method="_on_bomb_pressed"]
 [connection signal="timeout" from="IntroPending/Bpmtick" to="IntroPending" method="_tick"]
+[connection signal="mouse_entered" from="Events" to="Events" method="Hover"]
+[connection signal="mouse_exited" from="Events" to="Events" method="Unhover"]
+[connection signal="pressed" from="Events" to="Events" method="Pressed"]
+[connection signal="timeout" from="Events/Delay" to="Events" method="NextEvent"]
