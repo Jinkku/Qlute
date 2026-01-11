@@ -189,6 +189,37 @@ public partial class SongSelect : Control
 		BottomBar = GetNode<Control>("BottomBar");
 		SongControl = GetNode<PanelContainer>("ControlBar");
 	}
+
+	private string Searchtext { get; set; }
+	private double timetext { get; set; }
+	private bool textchanging { get; set; }
+	private void SearchPrepare(string value)
+	{
+		Searchtext = value;
+		textchanging = true;
+		timetext = Extras.GetMilliseconds();
+	}
+
+	private void SearchTime()
+	{
+		if (Extras.GetMilliseconds() - timetext > 500 && textchanging)
+		{
+			textchanging = false;
+			Search(Searchtext);
+		}
+	}
+
+	private void Search(string value)
+	{
+		BeatmapLegend result = SettingsOperator.Beatmaps.FirstOrDefault(b => b.Title.Contains(value));
+		if (result != null && value != "")
+		{
+			SettingsOperator.SelectSongID(result.ID);
+			scrollmode(exactvalue: SettingsOperator.SongID);
+		}
+		
+	}
+	
 	public override void _Ready()
 	{
 		PrepareMainComponents(); // Prepares Song Select v2 components.
@@ -455,9 +486,11 @@ public partial class SongSelect : Control
 		}
 	}
 
+	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
+		SearchTime();
 		CheckLeaderboardMode();
 		CheckRankStatus();
 		// Show Play button if SongID is set.

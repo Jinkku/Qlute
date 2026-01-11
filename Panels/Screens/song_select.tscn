@@ -400,7 +400,7 @@ theme_override_constants/margin_bottom = 0
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_vertical = 4
-placeholder_text = "search..... (This doesn't work yet ;n;)"
+placeholder_text = "search...."
 clear_button_enabled = true
 
 [node name="SongDetails" type="VBoxContainer" parent="."]
@@ -697,6 +697,7 @@ script = ExtResource("20_ihwey")
 [connection signal="mouse_exited" from="BottomBar/Start" to="." method="_start_unfocus"]
 [connection signal="pressed" from="BottomBar/Start" to="." method="_Start"]
 [connection signal="pressed" from="BottomBar/Start" to="." method="_resetreplay"]
+[connection signal="text_changed" from="ControlBar/AmazingPillar/Margin/MarginContainer/Beatmapsearch" to="." method="SearchPrepare"]
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Details" to="." method="_leaderboardmode" binds= [2]]
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Local" to="." method="_leaderboardmode" binds= [0]]
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Global" to="." method="_leaderboardmode" binds= [1]]

@@ -195,7 +195,7 @@ public partial class SettingsOperator : Node
     }
     public void SelectSongID(int id, float seek = -1)
     {
-        if (Beatmaps.ElementAt(id) != null)
+        if (Beatmaps.ElementAt(id) != null && SongID != id)
         {
             ApiOperator.LeaderboardStatus = 0; // Reset leaderboard status
             ApiOperator.LeaderboardList.Clear(); // Clear the leaderboard list
@@ -266,7 +266,11 @@ public partial class SettingsOperator : Node
             ApiOperator.CheckBeatmapRankStatus();
             
         }
-        else { GD.PrintErr("Can't select a song that don't exist :/"); }
+        else if (SongID != id) { GD.PrintErr("Can't select a song that don't exist :/"); }
+        else if (SongID == id)
+        {
+            GD.PrintErr("The song is already picked :^");
+        }
     }
 
     public static float TimeCap = 120;
