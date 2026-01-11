@@ -71,12 +71,16 @@ public partial class SongSelect : Control
 		scrolltween.TweenProperty(scrollBar, "value", value, 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		scrolltween.Play();
 	}
+	private Vector2 WindowSize { get; set; }
+	private Vector2 WindowSizeCenter { get; set; }
 	public void _res_resize()
 	{
-		var window_size = GetViewportRect().Size;
+		WindowSize = GetViewportRect().Size;
+		WindowSizeCenter = WindowSize / 2;
+		
 		Control SongPanel = GetNode<Control>("SongPanel");
-		SongPanel.Size = new Vector2((window_size.X / 2.5f) + 40, window_size.Y - 150);
-		SongPanel.Position = new Vector2(window_size.X - (window_size.X / 2.5f), 105);
+		SongPanel.Size = new Vector2((WindowSize.X / 2.5f) + 40, WindowSize.Y - 150);
+		SongPanel.Position = new Vector2(WindowSize.X - (WindowSize.X / 2.5f), 105);
 		ScrollSongs();
 	}
 	///<summary>
@@ -297,13 +301,13 @@ public partial class SongSelect : Control
 			return;
 
 		SongLoaded = 0;
-		float height = GetViewportRect().Size.Y;
-		int cardHeight = (int)(CardSize.Y + 5);
-		int itemCount = (int)(height / cardHeight);
-		int startIndex = Math.Max(0, (int)scrollBar.Value - (itemCount / 2));
-		int endIndex = Math.Min(SettingsOperator.Beatmaps.Count, (int)scrollBar.Value + (itemCount / 2) + 2);
 
-		// ⚡ Build quick lookup of visible buttons to avoid repeated LINQ
+		int cardHeight = (int)(CardSize.Y + 5);
+		int itemCount = (int)(WindowSize.Y / cardHeight);
+		int startIndex = Math.Max(0, (int)scrollBar.Value - (itemCount / 2));
+		int endIndex = Math.Min(SettingsOperator.Beatmaps.Count,
+			(int)scrollBar.Value + (itemCount / 2) + 2);
+
 		var visible = new Dictionary<int, Button>(SongEntry.Count);
 		for (int i = 0; i < SongEntry.Count; i++)
 		{
@@ -315,7 +319,6 @@ public partial class SongSelect : Control
 			}
 		}
 
-		// ⚡ Remove off-screen buttons in reverse to avoid shifting
 		for (int i = SongEntry.Count - 1; i >= 0; i--)
 		{
 			Button button = SongEntry[i];
@@ -329,28 +332,45 @@ public partial class SongSelect : Control
 			}
 		}
 
-		// ⚡ Add missing visible items and update existing ones
 		for (int i = startIndex; i < endIndex; i++)
 		{
 			Button entry;
 			if (!visible.TryGetValue(i, out entry))
 			{
-				// new song card needed
 				AddSongList(i);
-				entry = SongEntry.Last(); // AddSongList adds it to SongEntry
+				entry = SongEntry.Last();
 				visible[i] = entry;
 				SongLoaded++;
 			}
 
-			// Update existing position (no redundant search)
-			float targetY = startposition + (CardSize.Y * i) - (CardSize.Y * (float)scrollBar.Value);
+			float targetY =
+				startposition +
+				(CardSize.Y * i) -
+				(CardSize.Y * (float)scrollBar.Value);
+
 			if (!Mathf.IsEqualApprox(entry.Position.Y, targetY))
 				entry.Position = new Vector2(entry.Position.X, targetY);
+
+			// =========================
+			// 🔥 RADIAL SCROLL EFFECT 🔥
+			// =========================
+
+			float screenY = entry.GlobalPosition.Y + entry.Size.Y * 0.5f;
+			float distance = Mathf.Abs(screenY - WindowSizeCenter.Y);
+
+			float radial = Mathf.Clamp(distance / WindowSizeCenter.Y, 0f, 1f);
+			radial = Mathf.Pow(radial, 1.6f);
+
+			// scale
+			float scale = 1.0f - radial * 0.15f;
+			
+			entry.Scale = new Vector2(scale, scale);
 
 			entry.ZIndex = 0;
 			SongLoaded++;
 		}
 	}
+
 
 	private void checksongpanel()
 	{
