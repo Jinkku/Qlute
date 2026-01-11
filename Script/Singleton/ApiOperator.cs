@@ -140,7 +140,6 @@ public partial class ApiOperator : Node
 			LeaderboardList = JsonSerializer.Deserialize<List<LeaderboardEntry>>((string)Encoding.UTF8.GetString(body));
 			foreach (var leaderboardEntry in LeaderboardList)
 			{
-				leaderboardEntry.Accuracy = Gameplay.ReloadAccuracy(leaderboardEntry.MAX, leaderboardEntry.GOOD,leaderboardEntry.MEH, leaderboardEntry.BAD);
 				var client = new System.Net.Http.HttpClient();
 				client.DefaultRequestHeaders.Add("USERNAME", leaderboardEntry.username); // <- add custom header
 				var pfp_path = await client.GetStringAsync(SettingsOperator.GetSetting("api") + "apiv2/getstat/pfp_path");
@@ -151,12 +150,6 @@ public partial class ApiOperator : Node
 				});
 			}
 			GD.Print("Leaderboard loaded successfully.");
-		}
-
-		for (int i = 0; i < LeaderboardList.Count; i++)
-		{
-			var entry = LeaderboardList[i];
-			entry.Accuracy = Gameplay.ReloadAccuracy(entry.MAX, entry.GOOD, entry.MEH, entry.BAD);
 		}
 	}
 	public static void ReloadLeaderboard(int BeatmapID)

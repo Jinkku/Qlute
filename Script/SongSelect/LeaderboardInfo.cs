@@ -37,6 +37,7 @@ public partial class LeaderboardInfo : ScrollContainer
 			var ranknum = 1;
 			foreach (var entry in ApiOperator.LeaderboardList)
 			{
+				entry.Accuracy = Gameplay.ReloadAccuracy(entry.MAX, entry.GOOD,entry.MEH, entry.BAD);
 				var leaderboardEntry = GD.Load<PackedScene>("res://Panels/SongSelectButtons/Leaderboard.tscn").Instantiate().GetNode<Leaderboard>(".");
 				leaderboardEntry.Info = entry;
 				leaderboardEntry.SetMeta("rank", ranknum);

@@ -235,6 +235,7 @@ public static class Replay
 
                 using var file = Godot.FileAccess.Open(FilePath, Godot.FileAccess.ModeFlags.Write);
                 file.StoreString(FileCache);
+                file.Close();
                 Parse(FilePath);
                 if (SettingsOperator.LeaderboardType == 0)
                     ApiOperator.ReloadLeaderboard(SettingsOperator.BeatmapID);
