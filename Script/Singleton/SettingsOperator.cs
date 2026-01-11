@@ -404,7 +404,7 @@ public partial class SettingsOperator : Node
         MiliSecondsFromBeatmapTimes = 0;
     }
 
-    public static List<Color> LevelColours = new List<Color>([new Color("43F9FF"), new Color("329928"), new Color("FFC300"), new Color("995028"), new Color("E32929"), new Color("FF5151"), new Color("000000")]);
+    public static List<Color> LevelColours = new List<Color>([new Color("5ec4ff"), new Color("4abf3f"), new Color("f7cf4a"), new Color("db7740"), new Color("E32929"), new Color("FF5151"), new Color("000000")]);
 
     public static Color ReturnLevelColour(int level)
     {
