@@ -20,6 +20,7 @@ public class KeyL
 
 public partial class Gameplay : Control
 {
+    
 	private string oldtitle = "";
 	private SettingsOperator SettingsOperator { get; set; }
 	private int BadCombo { get; set; }
@@ -148,6 +149,7 @@ public partial class Gameplay : Control
 	}
 	public override void _Ready()
 	{
+		SettingsOperator.inGameplay = true;
 		oldtitle = GetWindow().Title;
 		DisplayServer.WindowSetTitle($"{oldtitle} - {SettingsOperator.Sessioncfg["beatmapartist"] ?? ""} - {SettingsOperator.Sessioncfg["beatmaptitle"] ?? ""}");
 		speedold = AudioPlayer.Instance.PitchScale;
@@ -372,6 +374,7 @@ public partial class Gameplay : Control
 
     public override void _ExitTree()
     {
+	    SettingsOperator.inGameplay = false;
 	    DisplayServer.WindowSetTitle(oldtitle);
 	    HurtAnimation?.Kill();
 	    Modulate = new Color("#FFFFFF");

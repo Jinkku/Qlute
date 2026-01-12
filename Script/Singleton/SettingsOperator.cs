@@ -63,6 +63,7 @@ public partial class SettingsOperator : Node
     /// </summary>
     public static int LeaderboardType = 1;
     public static bool NoConnectionToGameServer { get; set; }
+    public static bool inGameplay { get; set; }
     private int UnfocusedFPS = 15;
     private bool Unfocused { get; set; }
 

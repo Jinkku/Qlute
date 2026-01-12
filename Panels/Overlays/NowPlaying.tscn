@@ -1,9 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://bid386g4mu454"]
+[gd_scene load_steps=16 format=3 uid="uid://bid386g4mu454"]
 
 [ext_resource type="Script" uid="uid://depnjfvaitcqy" path="res://Script/TopPanel/Overlays/NowPlaying.cs" id="1_jkubj"]
 [ext_resource type="Texture2D" uid="uid://sfbrs7c6t7dr" path="res://DefaultWallpaper/future.png" id="2_s31hx"]
-[ext_resource type="Script" path="res://Script/NowPlaying/NowPlayingIndicator.cs" id="3_6pqoc"]
-[ext_resource type="Script" uid="uid://covi80vxoi1m7" path="res://Script/Gameplay/SongProgress.cs" id="4_h74x6"]
+[ext_resource type="Script" uid="uid://dlf5qhmjcpowo" path="res://Script/NowPlaying/NowPlayingIndicator.cs" id="3_6pqoc"]
+[ext_resource type="Script" uid="uid://dab44c3hun23q" path="res://Script/NowPlaying/NowPlayingProgress.cs" id="4_6pqoc"]
 [ext_resource type="Texture2D" uid="uid://djva7iioax2sy" path="res://Resources/System/MusicPlayer/Play.png" id="6_2pwl0"]
 [ext_resource type="Texture2D" uid="uid://c14lwc8d3sqpi" path="res://Resources/System/MusicPlayer/Prev.png" id="6_pkmya"]
 [ext_resource type="Texture2D" uid="uid://7jh4dm1rrsff" path="res://Resources/System/MusicPlayer/Next.png" id="8_617ia"]
@@ -18,11 +18,14 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2pwl0"]
-bg_color = Color(0.03125, 0.03125, 0.03125, 1)
+[sub_resource type="Texture2DRD" id="Texture2DRD_pkmya"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6pqoc"]
-bg_color = Color(1, 1, 1, 1)
+[sub_resource type="Texture2DRD" id="Texture2DRD_617ia"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6vilc"]
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h74x6"]
 content_margin_left = 5.0
@@ -88,7 +91,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/normal_font_size = 18
+theme_override_font_sizes/normal_font_size = 14
 text = "Artist - verrryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy Big Title!"
 scroll_following = true
 autowrap_mode = 0
@@ -96,13 +99,12 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("3_6pqoc")
 
-[node name="ProgressBar" type="ProgressBar" parent="V"]
-custom_minimum_size = Vector2(0, 5)
+[node name="SongProgress" type="HSlider" parent="V"]
 layout_mode = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_2pwl0")
-theme_override_styles/fill = SubResource("StyleBoxFlat_6pqoc")
-show_percentage = false
-script = ExtResource("4_h74x6")
+theme_override_icons/grabber = SubResource("Texture2DRD_pkmya")
+theme_override_icons/grabber_highlight = SubResource("Texture2DRD_617ia")
+theme_override_styles/slider = SubResource("StyleBoxFlat_6vilc")
+script = ExtResource("4_6pqoc")
 
 [node name="SPACE" type="MarginContainer" parent="V"]
 layout_mode = 2
@@ -149,6 +151,8 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_h74x6")
 icon = ExtResource("8_617ia")
 icon_alignment = 1
 
+[connection signal="drag_ended" from="V/SongProgress" to="V/SongProgress" method="Changeto"]
+[connection signal="value_changed" from="V/SongProgress" to="V/SongProgress" method="Changed"]
 [connection signal="pressed" from="V/PlayerControls/Prev" to="." method="Prev"]
 [connection signal="pressed" from="V/PlayerControls/Play" to="." method="Play"]
 [connection signal="pressed" from="V/PlayerControls/Next" to="." method="Next"]

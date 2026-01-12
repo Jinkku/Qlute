@@ -20,37 +20,37 @@ public partial class NowPlaying : PanelContainer
 
 	private void Play()
 	{
-		if (SettingsOperator.Beatmaps.Count > 0 && AudioPlayer.Instance.Stream != null)
+		if (SettingsOperator.Beatmaps.Count > 0 && AudioPlayer.Instance.Stream != null && !SettingsOperator.inGameplay)
 		{
 			AudioPlayer.Instance.StreamPaused = !AudioPlayer.Instance.StreamPaused;
 		}
 	}
 	private void Prev()
 	{
-		if (SettingsOperator.SongID - 1 >= 0 && SettingsOperator.SongID != -1)
+		if (SettingsOperator.SongID - 1 >= 0 && SettingsOperator.SongID != -1 && !SettingsOperator.inGameplay)
 		{
 			SettingsOperator.SelectSongID(SettingsOperator.SongID - 1,seek: 0);
 		}
-		else if (SettingsOperator.SongID != -1)
+		else if (SettingsOperator.SongID != -1 && !SettingsOperator.inGameplay)
 		{
 			SettingsOperator.SelectSongID((int)SettingsOperator.Beatmaps.Count - 1,seek: 0);
 		}
-		else if (SettingsOperator.Beatmaps.Count != 0)
+		else if (SettingsOperator.Beatmaps.Count != 0 && !SettingsOperator.inGameplay)
 		{
 			SettingsOperator.SelectSongID(0, seek: 0);
 		}
 	}
 	private void Next()
 	{
-		if (SettingsOperator.SongID + 1 < (int)SettingsOperator.Beatmaps.Count && SettingsOperator.SongID != -1)
+		if (SettingsOperator.SongID + 1 < (int)SettingsOperator.Beatmaps.Count && SettingsOperator.SongID != -1 && !SettingsOperator.inGameplay)
 		{
 			SettingsOperator.SelectSongID(SettingsOperator.SongID + 1,seek: 0);
 		}
-		else if (SettingsOperator.SongID != -1)
+		else if (SettingsOperator.SongID != -1 && !SettingsOperator.inGameplay)
 		{
 			SettingsOperator.SelectSongID(0,seek: 0);
 		}
-		else if (SettingsOperator.Beatmaps.Count != 0)
+		else if (SettingsOperator.Beatmaps.Count != 0 && !SettingsOperator.inGameplay)
 		{
 			SettingsOperator.SelectSongID(SettingsOperator.Beatmaps.Count - 1, seek: 0);
 		}
