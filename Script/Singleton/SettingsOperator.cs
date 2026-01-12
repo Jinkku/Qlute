@@ -63,9 +63,12 @@ public partial class SettingsOperator : Node
     /// </summary>
     public static int LeaderboardType = 1;
     public static bool NoConnectionToGameServer { get; set; }
+    private int UnfocusedFPS = 15;
+    private bool Unfocused { get; set; }
 
     public void RefreshFPS()
     {
+        if (Unfocused) return;
         var fps = int.TryParse(GetSetting("fpsmode").ToString(), out int fpsm) ? (int)fpsm : 1;
         if (fps == 0)
         {
@@ -644,6 +647,25 @@ public partial class SettingsOperator : Node
         if (LeaderboardType < 0 && LeaderboardType > 2) LeaderboardType = 1;
         CheckOldSiteUrl();
         GameChecksum = ChecksumUtil.GetGameChecksum(); 
+    }
+
+
+    public override void _Notification(int what)
+    {
+        switch (what)
+        {
+            case (int)NotificationApplicationFocusIn:
+                GD.Print($"Detected focused going back to normal fps :D");
+                Unfocused = false;
+                RefreshFPS();
+                break;
+
+            case (int)NotificationApplicationFocusOut:
+                GD.Print($"Detected not focused going to {UnfocusedFPS} FPS");
+                Unfocused = true;
+                Engine.MaxFps = UnfocusedFPS;
+                break;
+        }
     }
     public void ResetVol()
     {
