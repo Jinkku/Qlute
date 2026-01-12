@@ -7,5 +7,6 @@
     <PackageReference Include="Markdig" Version="0.42.0" />
     <PackageReference Include="NVorbis" Version="0.10.5" />
     <PackageReference Include="realm" Version="20.1.0" />
+    <PackageReference Include="Sentry" Version="6.0.0" />
   </ItemGroup>
 </Project>
