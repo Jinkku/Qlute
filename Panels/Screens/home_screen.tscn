@@ -394,6 +394,10 @@ wait_time = 0.375
 autostart = true
 script = ExtResource("14_1vpa7")
 
+[node name="GobackLogo" type="Timer" parent="IntroPending"]
+wait_time = 60.0
+one_shot = true
+
 [node name="Events" type="TextureButton" parent="."]
 layout_mode = 1
 anchors_preset = 7
@@ -496,6 +500,7 @@ process_material = SubResource("ParticleProcessMaterial_ldbht")
 [connection signal="mouse_exited" from="IntroPending/logo" to="IntroPending" method="_unhover"]
 [connection signal="pressed" from="IntroPending/logo" to="IntroPending" method="_on_bomb_pressed"]
 [connection signal="timeout" from="IntroPending/Bpmtick" to="IntroPending" method="_tick"]
+[connection signal="timeout" from="IntroPending/GobackLogo" to="IntroPending" method="GoBackLogo"]
 [connection signal="mouse_entered" from="Events" to="Events" method="Hover"]
 [connection signal="mouse_exited" from="Events" to="Events" method="Unhover"]
 [connection signal="pressed" from="Events" to="Events" method="Pressed"]

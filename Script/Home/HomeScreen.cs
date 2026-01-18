@@ -17,7 +17,7 @@ public partial class HomeScreen : Control
 	public SettingsOperator SettingsOperator { get; set; }
 	public PanelContainer SubButtons { get; set; } // For more buttons for more playability
 	public PanelContainer HomePanel { get; set; } // Main Buttons
-
+	
 	public void Quit()
 	{
 		GetTree().Root.GetNode<SettingsOperator>("/root/SettingsOperator").Quit();

@@ -13,10 +13,12 @@ public partial class IntroPending : Control
 	private Tween LogoTween {get;set;}
 	private bool HeartbeatHover { get; set; }
 	private int beattick = 1;
+	private Timer GobackHome { get; set; }
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		GobackHome = GetNode<Timer>("GobackLogo");
 		HomeButtons = GetNode<PanelContainer>("../HomeButtonBG");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		HomeButtonsPOS = HomeButtons.Position;
@@ -64,6 +66,11 @@ public partial class IntroPending : Control
 	private Vector2 IdleScale { get; set; } = new Vector2(1f, 1f);
 	private Vector2 HoverScale { get; set; } = new Vector2(1.1f, 1.1f);
 
+	private void GoBackLogo()
+	{
+		AnimationTick(false);
+		SettingsOperator.toppaneltoggle(false);
+	}
 	private void HoverChg()
 	{
 		if (LogoTween != null)
@@ -107,6 +114,7 @@ public partial class IntroPending : Control
 		_tween.SetParallel(true);
 		if (type)
 		{
+			GobackHome.Start();
 			HomeButtons.Scale = new Vector2(1.2f, 1.2f);
 			HomeButtons.Modulate = new Color(1f, 1f, 1f, 0f);
 			PivotOffset = Size / 2;
@@ -132,6 +140,7 @@ public partial class IntroPending : Control
 		}
 		else
 		{
+			GobackHome.Stop();
 			HomeButtons.Scale = new Vector2(1f, 1f);
 			Scale = new Vector2(1.2f, 1.2f);
 			HomeButtons.Modulate = new Color(1f, 1f, 1f, 1f);
