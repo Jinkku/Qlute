@@ -203,7 +203,7 @@ public partial class ApiOperator : Node
 		LeaderboardAPI.Connect("request_completed", new Callable(this, nameof(_LeaderboardAPIDone)));
 		InfoApi.Connect("request_completed", new Callable(this, nameof(_on_info_request_completed)));
 		SubmitApi.Connect("request_completed", new Callable(this, nameof(_Submitrequest)));
-		if ((Username != null || PasswordHash != null) && (bool)SettingsOperator.Sessioncfg["loggedin"] == false)
+		if ((Username != null || PasswordHash != null) && (bool)SettingsOperator.Sessioncfg["loggedin"] == false && Check.CheckBoolValue(SettingsOperator.GetSetting("stayloggedin").ToString()))
 		{
 			GD.Print("Attempting to login with username: " + Username);
 			UPlayerName.Instance.Text = Username;
@@ -212,7 +212,7 @@ public partial class ApiOperator : Node
 		}
 		else
 		{
-			GD.Print("No username or password found, skipping login.");
+			GD.Print("No username or password found or stay logged in is not ticked, skipping login.");
 		}
 
 		GetNotices();
@@ -416,8 +416,10 @@ public partial class ApiOperator : Node
 				SettingsOperator.SetSetting("username", Username);
 				Username = SettingsOperator.GetSetting("username")?.ToString();
 				UPlayerName.Instance.Text = Username;
-				SettingsOperator.SetSetting("password", PasswordHash);
-				PasswordHash = SettingsOperator.GetSetting("password")?.ToString();
+				if (Check.CheckBoolValue(SettingsOperator.GetSetting("stayloggedin").ToString()))
+					SettingsOperator.SetSetting("password", PasswordHash);
+				else
+					SettingsOperator.SetSetting("password", "");
 				SettingsOperator.Sessioncfg["loggedin"] = true;
 				NoticeText = "";
 			}

@@ -68,8 +68,9 @@ layout_mode = 2
 placeholder_text = "Very secret password..."
 secret = true
 
-[node name="CheckButton" type="CheckButton" parent="AccPanel/NotLog"]
+[node name="StayLogin" type="CheckButton" parent="AccPanel/NotLog"]
 layout_mode = 2
+button_pressed = true
 text = "Stay logged in"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="AccPanel/NotLog"]
@@ -132,6 +133,7 @@ StringText = "Log out"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [connection signal="draw" from="." to="." method="_on_draw"]
+[connection signal="pressed" from="AccPanel/NotLog/StayLogin" to="." method="StayLoginCheck"]
 [connection signal="pressed" from="AccPanel/NotLog/HBoxContainer2/Login" to="." method="_on_login_pressed"]
 [connection signal="pressed" from="AccPanel/NotLog/HBoxContainer2/Create" to="." method="_create"]
 [connection signal="pressed" from="AccPanel/Log/Logout" to="." method="_logout"]

@@ -12,12 +12,18 @@ public partial class AccountPrompt : Control
 	private VBoxContainer Retring {get;set;}
 	public Label PlayerName {get;set;}
 	private Label Notice { get; set; }
+	private CheckButton StayLogin { get; set; }
 	private SettingsOperator SettingsOperator { get; set; }
 	private void _create()
 	{
 		var Signup = GD.Load<PackedScene>("res://Panels/Screens/Signup.tscn").Instantiate().GetNode<ColorRect>(".");
 		GetTree().CurrentScene.AddChild(Signup);
 		Hide();
+	}
+
+	private void StayLoginCheck()
+	{
+		SettingsOperator.SetSetting("stayloggedin", StayLogin.ButtonPressed);
 	}
 	public override void _Process(double _delta)
 	{
@@ -43,6 +49,8 @@ public partial class AccountPrompt : Control
 	}
 	public override void _Ready()
 	{
+		StayLogin = GetNode<CheckButton>("AccPanel/NotLog/StayLogin");
+		StayLogin.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("stayloggedin").ToString());
 		NotLog = GetNode<VBoxContainer>("AccPanel/NotLog");
 		Log = GetNode<VBoxContainer>("AccPanel/Log");
 		Retring = GetNode<VBoxContainer>("AccPanel/Retring");
@@ -50,6 +58,7 @@ public partial class AccountPrompt : Control
 		Password = NotLog.GetNode<LineEdit>("Password");
 		User = NotLog.GetNode<LineEdit>("Username");
 		Notice = NotLog.GetNode<Label>("HBoxContainer/Notice");
+		User.Text = ApiOperator.Username;
 	}
 	private void _on_login_pressed(){
 		ApiOperator.PasswordHash = ApiOperator.ComputeSha256Hash(Password.Text);   
