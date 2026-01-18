@@ -48,6 +48,7 @@ ApiOperator="*res://Script/Singleton/ApiOperator.cs"
 [debug]
 
 file_logging/enable_file_logging=true
+settings/gdscript/always_track_call_stacks=true
 
 [display]
 
@@ -213,3 +214,7 @@ renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)
+
+[sentry]
+
+options/dsn="https://8f83a1cb11fc8556b869dad47bc7d4b2@o4510694149914624.ingest.us.sentry.io/4510698719084544"
