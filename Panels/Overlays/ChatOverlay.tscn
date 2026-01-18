@@ -3,17 +3,17 @@
 [ext_resource type="Texture2D" uid="uid://cpp14plc7cctp" path="res://Resources/System/TopPanel/Chat.svg" id="1_0r8ct"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wb4tt"]
-bg_color = Color(0.176471, 0.137255, 0.407843, 1)
+bg_color = Color(0.27884218, 0.23010254, 0.56640625, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lxvh4"]
 content_margin_left = 15.0
 content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
-bg_color = Color(0.286275, 0.247059, 0.529412, 1)
+bg_color = Color(0.3736979, 0.328125, 0.65625, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xs1ts"]
-bg_color = Color(0.121569, 0.0941176, 0.254902, 1)
+bg_color = Color(0, 0, 0, 0.25)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eye8f"]
 content_margin_left = 5.0
