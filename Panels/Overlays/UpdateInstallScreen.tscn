@@ -1,0 +1,92 @@
+[gd_scene load_steps=4 format=3 uid="uid://ck3o8qa33kn73"]
+
+[ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="1_2ym88"]
+[ext_resource type="Script" uid="uid://bdelk8054he6b" path="res://Script/InstallUpdateScreen/UpdateInstallScreen.cs" id="1_og7rh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_og7rh"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.117647, 0.117647, 0.117647, 0.784314)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="InstallUpdateScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_og7rh")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12315822, 0.12315822, 0.12315822, 0.25)
+
+[node name="UpdateScreen" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(400, 150)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -75.0
+offset_right = 200.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_og7rh")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UpdateScreen"]
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Title" type="Label" parent="UpdateScreen/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Do you wanna install this update?
+
+This update might take a while to install depending on your hardware."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="UpdateScreen/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Install" type="Button" parent="UpdateScreen/VBoxContainer/VBox"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("1_2ym88")
+StringText = "Install this update!!"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[node name="Nada" type="Button" parent="UpdateScreen/VBoxContainer/VBox"]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("1_2ym88")
+StringText = "No! Go back!"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[node name="Signup" type="HTTPRequest" parent="UpdateScreen"]
+download_file = "user://h.html"
+timeout = 3.0
+
+[connection signal="pressed" from="UpdateScreen/VBoxContainer/VBox/Install" to="." method="Install"]
+[connection signal="pressed" from="UpdateScreen/VBoxContainer/VBox/Nada" to="." method="Exit"]

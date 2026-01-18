@@ -61,6 +61,10 @@ public partial class NotificationApplet : Button
 			if (uri.StartsWith("http"))
 			{
 				OS.ShellOpen(uri);
+			} else if (uri.StartsWith("updatefile://"))
+			{
+				UpdateInstallScreen InstallNotice = GD.Load<PackedScene>("res://Panels/Overlays/UpdateInstallScreen.tscn").Instantiate().GetNode<UpdateInstallScreen>(".");
+				GetTree().CurrentScene.AddChild(InstallNotice);
 			}
 		}
 		_remove();

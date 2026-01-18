@@ -33,7 +33,7 @@ public partial class Bootstrap : Control
 	}
     public override void _Process(double delta)
 	{
-		if (!Kiko.isUpdating && !animationPlayer.IsPlaying() && !Finished)
+		if (!animationPlayer.IsPlaying() && !Finished)
 		{
 			PlayIntro();
 		}
