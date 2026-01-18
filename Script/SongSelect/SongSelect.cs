@@ -390,7 +390,7 @@ public partial class SongSelect : Control
 			float distance = Mathf.Abs(screenY - WindowSizeCenter.Y);
 
 			float radial = Mathf.Clamp(distance / WindowSizeCenter.Y, 0f, 1f);
-			radial = Mathf.Pow(radial, 1.6f);
+			radial = Mathf.Pow(radial, 0.6f);
 
 			// scale
 			float scale = 1.0f - radial * 0.15f;
