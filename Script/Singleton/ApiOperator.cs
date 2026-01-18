@@ -410,6 +410,7 @@ public partial class ApiOperator : Node
 			SettingsOperator.Sessioncfg["loggingin"] = false;
 			if ((bool)json["success"] && responseCode == 200)
 			{
+				GetNotices();
 				SettingsOperator.NoConnectionToGameServer = false;
 				Check_Info(Username);
 				SettingsOperator.SetSetting("username", Username);
@@ -460,7 +461,7 @@ public partial class ApiOperator : Node
 			$"PASSWORD: {password}"
 		};
 		NoticeText = "Connecting...";
-		var msg = LoginApi.Request(SettingsOperator.GetSetting("api") + "apiv2/chkprofile", Headers);
+		LoginApi.Request(SettingsOperator.GetSetting("api") + "apiv2/chkprofile", Headers);
 	}
 	
 	private long Timer { get; set; }

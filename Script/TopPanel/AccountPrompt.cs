@@ -60,6 +60,9 @@ public partial class AccountPrompt : Control
 		Log.Visible = false;
 		NotLog.Visible = true;
 		Retring.Visible = true;
+		ApiOperator.NoticeText = "";
+		SettingsOperator.Sessioncfg["loggingin"] = false;
+		ApiOperator.LoginApi.CancelRequest();
 		SettingsOperator.NoConnectionToGameServer = false;
 		SettingsOperator.SetSetting("username",null);
 		SettingsOperator.SetSetting("password",null);
