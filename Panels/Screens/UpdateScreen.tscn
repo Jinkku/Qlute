@@ -1,6 +1,42 @@
-[gd_scene load_steps=2 format=3 uid="uid://cyif8xpux3t7u"]
+[gd_scene load_steps=2 format=3 uid="uid://dssfwfdl2juks"]
 
-[ext_resource type="Script" uid="uid://cncmt8rx1imt" path="res://Script/Updater/UpdateScreen.cs" id="1_lbgum"]
+[sub_resource type="CSharpScript" id="CSharpScript_03r3q"]
+script/source = "using Godot;
+using System;
+using System.IO;
+using System.IO.Compression;
+
+public partial class UpdateScreen : Control
+{
+	private HttpRequest Request { get; set; }
+	private ProgressBar ProgressBar { get; set; }
+
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
+		GetTree().Paused = true;
+		GetTree().Root.GetNode<Control>(\"TopPanelOnTop/InfoBar\").QueueFree();
+		Request = GetNode<HttpRequest>(\"Updater\");
+		ProgressBar = GetNode<ProgressBar>(\"ProgressBar\");
+		// If the update file directory exists, copy its contents (not the folder itself) to Xeos
+	}
+
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
+	{
+		if (Request.GetBodySize() != -1)
+		{
+			ProgressBar.Value = Request.GetDownloadedBytes();
+			ProgressBar.MaxValue = Request.GetBodySize();			
+		}
+	}
+
+	private void OnRequestCompleted(long result, long responseCode, string[] headers, byte[] body)
+	{
+
+	}
+}
+"
 
 [node name="UpdateQlute" type="Control"]
 process_mode = 3
@@ -10,7 +46,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_lbgum")
+script = SubResource("CSharpScript_03r3q")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1

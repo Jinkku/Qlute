@@ -14,6 +14,18 @@ public partial class Kiko : Node
     private Version Version { get; set; }
     public static bool isUpdating { get; set; }
 	public static readonly string extractPath = Path.Combine(Path.GetTempPath(), "QluteUpdateFile");
+    public static readonly string platformZip = OS.GetName() switch
+    {
+        "Windows" => "Windows.zip",
+        "Linux" => "Linux.zip",
+        _ => "unknown.zip"
+    };
+    public static readonly string executableName = OS.GetName() switch
+    {
+        "Windows" => "Qlute.exe",
+        "Linux" => "Qlute.x86_64",
+        _ => ""
+    };
 	private void CopyDirectory(string sourceDir, string destDir)
 		{
 			Directory.CreateDirectory(destDir);
@@ -37,9 +49,9 @@ public partial class Kiko : Node
             System.Threading.Thread.Sleep(3000);
             GD.Print("Start.... NOW!");
             GD.Print("Open file....");
-            var filepath = Path.Combine(Path.GetTempPath(), UpdateScreen.platformZip);
+            var filepath = Path.Combine(Path.GetTempPath(), platformZip);
             GD.Print("set file end path....");
-            string executablePath = Path.Combine(SettingsOperator.GetSetting("gamepath").ToString(), UpdateScreen.executableName);
+            string executablePath = Path.Combine(SettingsOperator.GetSetting("gamepath").ToString(), executableName);
             GD.Print("extracting....");
             using (var archive = ZipFile.OpenRead(filepath))
             {
@@ -89,9 +101,9 @@ public partial class Kiko : Node
             {
                 Directory.Delete(extractPath, true);
             }
-            if (File.Exists(Path.Combine(Path.GetTempPath(), UpdateScreen.platformZip)))
+            if (File.Exists(Path.Combine(Path.GetTempPath(), platformZip)))
             {
-                File.Delete(Path.Combine(Path.GetTempPath(), UpdateScreen.platformZip));
+                File.Delete(Path.Combine(Path.GetTempPath(), platformZip));
             }
             Version = new Version(ProjectSettings.GetSetting("application/config/version").ToString());
             KikoApi = new HttpRequest();
@@ -109,16 +121,61 @@ public partial class Kiko : Node
             GD.Print("Ignored updates for now...");
         }
     }
+
+    public void PrepareUpdateProcess()
+    {
+        GD.Print("Download completed!");
+        // Extract the downloaded zip file
+        string zipPath = KikoApi.DownloadFile;
+        Directory.CreateDirectory(Kiko.extractPath);
+
+        using (var archive = ZipFile.OpenRead(zipPath))
+        {
+            archive.ExtractToDirectory(Kiko.extractPath, true);
+        }
+
+        GD.Print($"Extracted to: {Kiko.extractPath}");
+        string executablePath = Path.Combine(Kiko.extractPath, executableName);
+
+        if (File.Exists(executablePath))
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(executablePath, "--update");
+            }
+            catch (Exception ex)
+            {
+                GD.PrintErr($"Failed to start the new executable: {ex.Message}");
+            }
+        }
+        else
+        {
+            GD.PrintErr($"Executable not found: {executablePath}");
+        }
+
+        GetTree().Quit();
+    }
+    
     private void _KikoApiDone(long result, long responseCode, string[] headers, byte[] body)
     {
+        KikoApi.Disconnect("request_completed", new Callable(this, nameof(_KikoApiDone)));
+        KikoApi.RequestCompleted += (result, code, headers, body) =>
+        {
+            if (code == 200)
+            {
+                Notify.Post("Update is ready to install!\nClick to install the update.", uri:$"updatefile:/{KikoApi.DownloadFile}");
+            }
+        };
         if (responseCode == 200)
         {
             isUpdating = false;
             VersionCode = new Version(Encoding.UTF8.GetString(body).TrimEnd(System.Environment.NewLine.ToCharArray()));
             if (VersionCode > Version)
             {
-                Notify.Post("New update is avaliable!\n" + VersionCode + " is available, click to view.", uri: "https://jinkku.itch.io/qlute");
-                GetTree().ChangeSceneToFile("res://Panels/Screens/UpdateScreen.tscn");
+                KikoApi.DownloadFile = Path.Combine(Path.GetTempPath(), platformZip);
+                KikoApi.Timeout = 0;
+                KikoApi.Request($"https://github.com/Jinkkuu/Qlute/releases/latest/download/{platformZip}");
+                Notify.Post($"Downloading update...", ProgressGetter: () => KikoApi.GetDownloadedBytes(), Max: () => KikoApi.GetBodySize());
             }
         }
         else
