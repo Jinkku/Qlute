@@ -20,7 +20,7 @@ public partial class BeatmapBackground : TextureRect
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		Flash = GetNode<TextureRect>("Flash");
 		TempImage = GetNode<TextureRect>("TempImage");
-		Texture = (Texture2D)SettingsOperator.Sessioncfg["background"];
+		Texture = SettingsOperator.Background;
 		check_background(true);
 		resettime();
 	}
@@ -43,21 +43,37 @@ public partial class BeatmapBackground : TextureRect
 	private Tween ImageTween { get; set; }
 	private void Switch_Background(Texture2D Image, bool Instant)
 	{
-		if (!Instant)
+		try
 		{
-			TempImage.Texture = Texture;
-			TempImage.Visible = true;
-			TempImage.Modulate = SelfModulate;
-			Texture = Image;
+			TempImage.Hide();
 			ImageTween?.Kill();
-			ImageTween = CreateTween();
-			ImageTween.TweenProperty(TempImage, "modulate", new Color(1f, 1f, 1f, 0f), 0.2f);
-			ImageTween.Play();
-			ImageTween.TweenCallback(Callable.From(() => TempImage.Hide()));
-		}
-		else
-		{
+			ImageTween = null;
+
+			if (Instant)
+			{
+				TempImage.Hide();
+				Texture = Image;
+				return;
+			}
+
+			TempImage.Texture = Texture;
+			TempImage.Modulate = SelfModulate;
+			TempImage.Visible = true;
+
 			Texture = Image;
+
+			ImageTween = CreateTween();
+			ImageTween.TweenProperty(
+				TempImage,
+				"modulate:a",
+				0f,
+				0.5f
+			);
+			ImageTween.TweenCallback(Callable.From(() => TempImage.Hide()));
+			
+		} catch (Exception err)
+		{
+			GD.PrintErr(err.Message);
 		}
 	}
 	private void check_background(bool Instant = false)
@@ -70,14 +86,14 @@ public partial class BeatmapBackground : TextureRect
 
 		Position = new Vector2(offsetX, offsetY); // Sets the position via mouse movements.
 
-		if (Texture != SettingsOperator.Sessioncfg["background"] && SettingsOperator.SongID != -1 && SettingsOperator.Sessioncfg["background"] != null)
+		if (Texture != SettingsOperator.Background && SettingsOperator.SongID != -1 && SettingsOperator.Background != null)
 		{
 			GD.Print("[Qlute] Switching to Specified image");
-			Switch_Background((Texture2D)SettingsOperator.Sessioncfg["background"], Instant);
+			Switch_Background(SettingsOperator.Background, Instant);
 			Size = new Vector2(GetViewportRect().Size[0] + 20, GetViewportRect().Size[1] + 20);
 			Position = new Vector2(GetViewportRect().Size[0] - 5, GetViewportRect().Size[1] - 5);
 		}
-		else if (Texture != SettingsOperator.GetNullImage() && SettingsOperator.Sessioncfg["background"] == null)
+		else if (Texture != SettingsOperator.GetNullImage() && SettingsOperator.Background == null)
 		{
 			GD.Print("[Qlute] Switching to Default background");
 			Switch_Background(SettingsOperator.GetNullImage(), Instant);

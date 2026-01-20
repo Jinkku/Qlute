@@ -67,9 +67,9 @@ public partial class NowPlaying : PanelContainer
 		{
 			Pause.Icon = PauseIcon;
 		}
-		if (Background.Texture != SettingsOperator.Sessioncfg["background"] && SettingsOperator.SongID != -1)
+		if (Background.Texture != SettingsOperator.Background && SettingsOperator.SongID != -1)
 		{
-			Background.Texture = (Texture2D)SettingsOperator.Sessioncfg["background"];
+			Background.Texture = SettingsOperator.Background;
 		}
 	}
 }

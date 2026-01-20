@@ -206,7 +206,6 @@ public partial class SettingsOperator : Node
             if (!Marathon) MarathonMapPaths.Clear(); // Clear marathon map paths if not in marathon mode
             Start_reloadLeaderboard = true;
             var beatmap = Beatmaps[id];
-            SongID = id;
             Sessioncfg["beatmapurl"] = beatmap.Rawurl;
             if (beatmap.TitleUnicode != null && beatmap.ArtistUnicode != null)
             {
@@ -227,11 +226,16 @@ public partial class SettingsOperator : Node
             LevelRating = beatmap.Levelrating;
             BeatmapID =  beatmap.BeatmapID;
             BeatmapSetID = beatmap.BeatmapSetID;
-            Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
-            if (beatmap.Path != null && beatmap.Background != null)
-                Sessioncfg["background"] = LoadImage(beatmap.Path.ToString() + beatmap.Background.ToString());
-            else
-                Sessioncfg["background"] = null;
+            SongID = id;
+            string bgpath = beatmap.Path.PathJoin(beatmap.Background.ToString());
+            string checksumbg = null;
+            if (System.IO.File.Exists(bgpath))
+                checksumbg = ChecksumUtil.GetSha256(bgpath);
+            if (BackgroundChecksum != checksumbg && checksumbg != null)
+                Background = null;
+            if (beatmap.Path != null && beatmap.Background != null && BackgroundChecksum != checksumbg)
+                Background = LoadImage(bgpath);
+            BackgroundChecksum = checksumbg;
             if (seek == -1)
             {
                 seek = beatmap.PreviewTime;
@@ -506,6 +510,8 @@ public partial class SettingsOperator : Node
     public static int BeatmapID { get; set; } = -1;
     public static int BeatmapSetID { get; set; } = -1;
     public static int bpm { get; set; } = 180;
+    public static Texture2D Background { get; set; }
+    public static string BackgroundChecksum { get; set; }
 
     public static Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
     {

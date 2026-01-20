@@ -262,7 +262,7 @@ public partial class ResultScreenv2 : Control
 		MInfo.Visible = false;
 		NA.Visible = false;
 		Banner = GetNode<TextureRect>("Ranking/Ranking/VBoxContainer/Banner/Banner");
-		Banner.Texture = (Texture2D)SettingsOperator.Sessioncfg["background"];
+		Banner.Texture = SettingsOperator.Background;
 		RTitle = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/Title");
 		RArtist = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/Artist");
 		RMapper = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/mapped");
