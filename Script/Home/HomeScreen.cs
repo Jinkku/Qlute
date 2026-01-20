@@ -83,7 +83,7 @@ public partial class HomeScreen : Control
 	}
 	private void _subunf()
 	{
-		if ((GetViewport().GetMousePosition().Y < HomePanel.Position.Y && SubButtons.Visible) | (GetViewport().GetMousePosition().Y > SubButtons.Position.Y + SubButtons.Size.Y && SubButtons.Visible))
+		if ((SettingsOperator.MouseMovement.Y < HomePanel.Position.Y && SubButtons.Visible) | (SettingsOperator.MouseMovement.Y > SubButtons.Position.Y + SubButtons.Size.Y && SubButtons.Visible))
 			HomeButtonID.ID = -1;
 	}
 }

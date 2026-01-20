@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+
 public partial class Create : Control
 {
 	// Called when the node enters the scene tree for the first time.
@@ -15,8 +16,20 @@ public partial class Create : Control
 	private Control VerifyN { get; set; }
 	private int BPM { get; set; } = 180;
 	private List<NoteSkinning> Notes { get; set; } = new List<NoteSkinning>();
-	public override void _Ready()
+	private AudioStreamPlayer EditorPlayer {get; set;}
+	private TextureRect EditorBackground { get; set; }
+	private HSlider Seeker { get; set; }
+	private Label TimeClock { get; set; }
+	private Label SelectedPos { get; set; }
+public override void _Ready()
 	{
+		if (AudioPlayer.Instance.Stream != null)
+			AudioPlayer.Instance.StreamPaused = true;
+		SelectedPos = GetNode<Label>("Compose/Info/ContextSections/SelectedPos");
+		Seeker = GetNode<HSlider>("ControlPanel/Box/PlayerControl/Seek");
+		EditorPlayer = GetNode<AudioStreamPlayer>("EditorPlayer");
+		EditorBackground = GetNode<TextureRect>("EditorBackground");
+		TimeClock = GetNode<Label>("ControlPanel/Box/TimeBox/Time");
 		Time = GetNode<Label>("ControlPanel/Box/TimeBox/Time");
 		NoteCount = GetNode<Label>("Compose/Info/ContextSections/NoteCount");
 		InfoN = GetNode<Control>("Info");
@@ -119,6 +132,32 @@ public partial class Create : Control
 		Menu(3);
 	}
 
+	private float smoothTime = 0f;
+	public long startedtime { get; set; } = 0;
+	private double EditorTime { get; set; } = 0;
+	/// <summary>
+	/// Game Clock
+	/// </summary>
+	public float GetRemainingTime(float delta = 1f)
+	{
+		if (AudioPlayer.Instance.Playing)
+		{
+			// increment smoothly
+			smoothTime += delta * AudioPlayer.Instance.PitchScale;
+
+			// occasional hard resync if drift gets big
+			float truePos = AudioPlayer.Instance.GetPlaybackPosition()
+			                + (float)AudioServer.GetTimeSinceLastMix();
+
+			if (Mathf.Abs(truePos - smoothTime) > 0.05f) // 50ms tolerance
+				smoothTime = truePos;
+		}
+
+		EditorTime = smoothTime;
+		EditorTime -= startedtime;
+
+		return (float)EditorTime;
+	}
 	private void Place()
 	{
 		if (NoteID != 0)
@@ -135,6 +174,8 @@ public partial class Create : Control
 	public override void _ExitTree()
 	{
 		SettingsOperator.CreateSelectingBeatmap = false;
+		if (AudioPlayer.Instance.Stream != null)
+			AudioPlayer.Instance.StreamPaused = false;
 	}
 
 	private void _FileMenu(int ID)
@@ -176,27 +217,42 @@ public partial class Create : Control
 		NoteHighlight?.QueueFree();
 		NoteHighlight = null;
 	}
+	private int MouseTicker { get; set; }
 
 	public override void _Input(InputEvent @event)
 	{
-		if (Input.IsMouseButtonPressed(MouseButton.Left))
+		if (@event is InputEventMouseButton mb &&
+		    mb.ButtonIndex == MouseButton.Left)
 		{
-			Place();
-		}
-		else if (Input.IsMouseButtonPressed(MouseButton.Right))
-		{
-			
+			if (mb.Pressed && MouseTicker == 0)
+			{
+				Place();
+				MouseTicker = 1;
+			}
+			else if (!mb.Pressed && MouseTicker == 1)
+			{
+				MouseTicker = 0;
+			}
 		}
 	}
 
 	private void ValueChanged(float value)
 	{
 		Time.Text = TimeSpan.FromMilliseconds(value * 1000).ToString(@"hh\:mm\:ss");
+		foreach (var note in Notes)
+		{
+			
+		}
 	}
 	public override void _Process(double delta)
 	{
+		EditorPlayer.VolumeDb = AudioPlayer.Instance.VolumeDb;
 		NoteCount.Text = $"{Notes.Count:N0} Notes";
 		if (NoteHighlight != null)
-			NoteHighlight.Position = new Vector2(0, GetViewport().GetMousePosition().Y - 150);
+		{
+			NoteHighlight.Position = new Vector2(0,  - 150);
+			SelectedPos.Text = $"posy: {NoteHighlight.Position.Y}";
+		}
+
 	}
 }

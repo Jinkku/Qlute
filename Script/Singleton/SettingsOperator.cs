@@ -29,7 +29,7 @@ public partial class SettingsOperator : Node
     public static float OldAccuracy { get; set; } = 0;
     public static float OAccuracy { get; set; } = 0;
     public static bool JustPlayedScore {get; set;}
-
+    
     public static string homedir = OS.GetUserDataDir().Replace("\\", "/");
     public static string tempdir => homedir + "/temp";
     public static string beatmapsdir => homedir + "/beatmaps";
@@ -563,9 +563,10 @@ public partial class SettingsOperator : Node
     }
     public static float TopPanelPosition { get; set; } = 0.0f;
     private double oldtime = 0.0f;
-
+    public static Vector2 MouseMovement { get; set; }
     public override void _Process(double _delta)
     {
+        MouseMovement = GetViewport().GetMousePosition(); 
         var aud = GetSetting("audiooffset").ToString();
         if (aud == null) AudioOffset = 0; // AudioOffset Subsystem
         else AudioOffset = float.Parse(aud);

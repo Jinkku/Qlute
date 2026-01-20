@@ -506,20 +506,19 @@ public partial class SongSelect : Control
 			ContextMenuAni = ContextMenu.CreateTween();
 			ContextMenuAni.SetParallel(true);
 			ContextMenuAni.TweenProperty(ContextMenu, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-			ContextMenuAni.TweenProperty(ContextMenu, "position", GetViewport().GetMousePosition(), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			ContextMenuAni.TweenProperty(ContextMenu, "position", SettingsOperator.MouseMovement, 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		}
 		else if (Input.IsMouseButtonPressed(MouseButton.Left) && ContextMenuActive) // Hide context menu if left mouse button is pressed outside of it
 		{
-			Vector2 mousePos = GetViewport().GetMousePosition();
 			Rect2 contextRect = new Rect2(ContextMenu.Position, ContextMenu.Size);
-			if (!contextRect.HasPoint(mousePos))
+			if (!contextRect.HasPoint(SettingsOperator.MouseMovement))
 			{
 				ContextMenu.SetMeta("SongID", -1);
 				ContextMenuAni?.Kill();
 				ContextMenuAni = ContextMenu.CreateTween();
 				ContextMenuAni.SetParallel(true);
 				ContextMenuAni.TweenProperty(ContextMenu, "modulate", new Color(1f, 1f, 1f, 0f), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-				ContextMenuAni.TweenProperty(ContextMenu, "position", GetViewport().GetMousePosition(), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+				ContextMenuAni.TweenProperty(ContextMenu, "position", SettingsOperator.MouseMovement, 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 				ContextMenuAni.TweenProperty(ContextMenu, "visible", false, 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 				ContextMenuActive = false;
 			}

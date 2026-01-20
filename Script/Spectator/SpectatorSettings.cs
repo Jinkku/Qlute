@@ -20,7 +20,7 @@ public partial class SpectatorSettings : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (GetViewport().GetMousePosition().X > SpectatorMenu.Position.X - 60)
+		if (SettingsOperator.MouseMovement.X > SpectatorMenu.Position.X - 60)
 		{
 			Tween?.Kill();
 			Tween = CreateTween();

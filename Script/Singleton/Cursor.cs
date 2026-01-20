@@ -16,11 +16,10 @@ public partial class Cursor : Sprite2D
 	private Vector2 oldpos { get; set; }
 
     public override void _PhysicsProcess(double delta)
-    {
-		var pos = GetTree().Root.GetViewport().GetMousePosition();
-		if (oldpos != pos)
+    {;
+		if (oldpos != SettingsOperator.MouseMovement)
 		{
-			Popup.Position = new Vector2I((int)(pos.X + 1), (int)(pos.Y + 1));
+			Popup.Position = new Vector2I((int)(SettingsOperator.MouseMovement.X + 1), (int)(SettingsOperator.MouseMovement.Y + 1));
 		}
 		Visible = CursorVisible;
 		Popup.Visible = CursorVisible;

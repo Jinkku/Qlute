@@ -28,9 +28,8 @@ public partial class RamUsage : PanelContainer
 	}
 	public override void _Process(double delta)
 	{
-		Vector2 mpos = GetViewport().GetMousePosition();
 		UsedRam.Text = ConvertBytes(((int)OS.GetStaticMemoryUsage()));
 		RealFPS.Text = (1 / delta).ToString("0") + "fps";
-		Position = mpos-Size;
+		Position = SettingsOperator.MouseMovement-Size;
 	}
 }

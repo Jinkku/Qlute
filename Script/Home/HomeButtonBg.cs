@@ -8,10 +8,9 @@ public partial class HomeButtonBg : PanelContainer
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
-//		Vector2 mousePos = GetViewport().GetMousePosition();
 //        Vector2 screenSize = GetViewportRect().Size;
-		//float offsetX = IntroPending.HomeButtonsPOS[0] + (mousePos.X / screenSize.X * 10) - 5;
-        //float offsetY = IntroPending.HomeButtonsPOS[1] + ((mousePos.Y / screenSize.Y * 10) - 5);
+		//float offsetX = IntroPending.HomeButtonsPOS[0] + (SettingsOperator.MouseMovement.X / screenSize.X * 10) - 5;
+        //float offsetY = IntroPending.HomeButtonsPOS[1] + ((SettingsOperator.MouseMovement.Y / screenSize.Y * 10) - 5);
 
 //        Position = new Vector2(offsetX, offsetY);
 	}

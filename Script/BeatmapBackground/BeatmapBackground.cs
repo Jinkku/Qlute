@@ -78,11 +78,10 @@ public partial class BeatmapBackground : TextureRect
 	}
 	private void check_background(bool Instant = false)
 	{
-		Vector2 mousePos = GetViewport().GetMousePosition();
 		Vector2 screenSize = GetViewportRect().Size;
 
-		float offsetX = (mousePos.X / screenSize.X * 10) - 10;
-		float offsetY = (mousePos.Y / screenSize.Y * 10) - 10;
+		float offsetX = (SettingsOperator.MouseMovement.X / screenSize.X * 10) - 10;
+		float offsetY = (SettingsOperator.MouseMovement.Y / screenSize.Y * 10) - 10;
 
 		Position = new Vector2(offsetX, offsetY); // Sets the position via mouse movements.
 
