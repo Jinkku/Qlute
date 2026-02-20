@@ -8,6 +8,8 @@ public partial class NoteSkinning : Sprite2D
 	private Color NoteColour { get; set; }
 	private Sprite2D ForeNote { get; set; }
 	[Export] public int NotePart { get; set; }
+	[Export] public float Time { get; set; } = 0;
+	[Export] public float EditorPos { get; set; } = 0;
 	
 	/// <summary>
 	/// Check if skin is changed.

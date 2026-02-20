@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public partial class Create : Control
 {
 	// Called when the node enters the scene tree for the first time.
-	private Sprite2D NoteHighlight { get; set; } = null;
+	private NoteSkinning NoteHighlight { get; set; } = null;
 	private int NoteID { get; set; } = 0;
 	private Control Playfield { get; set; }
 	private Label Time { get; set; }
@@ -21,10 +21,14 @@ public partial class Create : Control
 	private HSlider Seeker { get; set; }
 	private Label TimeClock { get; set; }
 	private Label SelectedPos { get; set; }
+	private Control SectionSample { get; set; }
+	private float SizeYSection { get; set; }
 public override void _Ready()
 	{
 		if (AudioPlayer.Instance.Stream != null)
 			AudioPlayer.Instance.StreamPaused = true;
+		SectionSample = GetNode<Control>("Compose/Ground/Playfield/ChartSections/Section1");
+		SizeYSection = SectionSample.Size.Y;
 		SelectedPos = GetNode<Label>("Compose/Info/ContextSections/SelectedPos");
 		Seeker = GetNode<HSlider>("ControlPanel/Box/PlayerControl/Seek");
 		EditorPlayer = GetNode<AudioStreamPlayer>("EditorPlayer");
@@ -51,6 +55,10 @@ public override void _Ready()
 		VerifyN.Visible = true;
 	}
 
+	private void SectionResized()
+	{
+		SizeYSection =  SectionSample.Size.Y;
+	}
 	private Tween MenuTween { get; set; }
 	/// <summary>
 	/// 0 = Info
@@ -166,7 +174,8 @@ public override void _Ready()
 			Notetmp.NotePart = NoteID - 1;
 			Notes.Add(Notetmp);
 			Playfield.GetNode<Control>($"ChartSections/Section{NoteID}/Control").AddChild(Notetmp);
-			Notetmp.Position = NoteHighlight.Position;
+			Notetmp.Time = NoteHighlight.Time;
+			Notetmp.Position = new Vector2(NoteHighlight.Position.X, SizeYSection - Notetmp.Time - 200 + (float)SongProgress);
 		}
 	}
 	
@@ -235,13 +244,16 @@ public override void _Ready()
 			}
 		}
 	}
-
+	private double SongProgress => Seeker.Value * 1000;
 	private void ValueChanged(float value)
 	{
-		Time.Text = TimeSpan.FromMilliseconds(value * 1000).ToString(@"hh\:mm\:ss");
+		// reference 
+		//Notetmp.Time = NoteHighlight.Time;
+		//Notetmp.Position = new Vector2(NoteHighlight.Position.X, SizeYSection - Notetmp.Time - 200);
+		Time.Text = TimeSpan.FromMilliseconds(value * 1000).ToString(@"hh\:mm\:ss\.fff");
 		foreach (var note in Notes)
 		{
-			
+			note.Position = new Vector2(note.Position.X,SizeYSection - note.Time - 200 + (float)SongProgress);
 		}
 	}
 	public override void _Process(double delta)
@@ -250,8 +262,9 @@ public override void _Ready()
 		NoteCount.Text = $"{Notes.Count:N0} Notes";
 		if (NoteHighlight != null)
 		{
-			NoteHighlight.Position = new Vector2(0,  - 150);
-			SelectedPos.Text = $"posy: {NoteHighlight.Position.Y}";
+			NoteHighlight.Time = SizeYSection - SettingsOperator.MouseMovement.Y - NoteHighlight.Texture.GetSize().Y + (float)SongProgress;
+			NoteHighlight.Position = new Vector2(NoteHighlight.Position.X, SizeYSection - NoteHighlight.Time - 200 + (float)SongProgress);
+			SelectedPos.Text = $"posy: {NoteHighlight.Position.Y + SongProgress:N0} {NoteHighlight.Time:N0}";
 		}
 
 	}
