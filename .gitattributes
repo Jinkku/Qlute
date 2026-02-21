@@ -3,6 +3,9 @@
 *.mm linguist-vendored
 *.h linguist-vendored
 
+# Ignore Sentry addon native code
+addons/sentry/** linguist-vendored
+
 # Or force C# detection
 *.cs linguist-language=C#
 
