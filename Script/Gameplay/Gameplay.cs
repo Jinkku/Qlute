@@ -15,6 +15,7 @@ public class KeyL
 {
 	public PanelContainer Node { get; set; }
 	public bool hit { get; set; }
+	public string KeyCode { get; set; }
 	public Tween Ani { get; set; }
 }
 
@@ -214,7 +215,7 @@ public partial class Gameplay : Control
 		foreach (int i in Enumerable.Range(1, 4))
 		{
 			var notet = GetNode<PanelContainer>("Playfield/ChartSections/Section" + i);
-			Keys.Add(new KeyL { Node = notet, hit = false });
+			Keys.Add(new KeyL { Node = notet, hit = false , KeyCode = SettingsOperator.GetSetting($"Key{i - 1}").ToString()});
 			notet.SelfModulate = Skin.Element.LaneNotes[i - 1] / 2;
 		}
 
@@ -365,7 +366,7 @@ public partial class Gameplay : Control
 	    {
 		    var keyName = "Key" + (i + 1);
 		    if ( !(@event is InputEventKey Key) ) return;
-		    else if (Key.Keycode.ToString() == SettingsOperator.GetSetting($"Key{i}").ToString())
+		    else if (Key.Keycode.ToString() == Keys[i].KeyCode)
 		    {
 			    hitnote(i, @event.IsPressed(), (int)est);
 		    }
