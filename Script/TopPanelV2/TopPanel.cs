@@ -36,7 +36,6 @@ public partial class TopPanel : ColorRect
 
 	private void _hidetooltip()
 	{
-		
 	}
 
 	private Control ChangeLog { get; set; }
@@ -110,7 +109,6 @@ public partial class TopPanel : ColorRect
 		}
 		SettingsOperator.Sessioncfg["chatboxv"] = !(bool)SettingsOperator.Sessioncfg["chatboxv"];
 	}
-
 
 	private void _on_browse_pressed()
 	{

@@ -113,7 +113,6 @@ public partial class ModsOperator : Node
 		return modalias;
 	}
 
-
 	public static void SetMods(string modalias)
 	{
 		Reset();

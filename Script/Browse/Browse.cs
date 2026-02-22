@@ -227,8 +227,6 @@ public partial class Browse : Control
 			} // Clears up the browse page.
 		}
 
-
-
 		try
 		{
 			foreach (BrowseCatalogLegend line in items)

@@ -16,7 +16,7 @@ public partial class Cursor : Sprite2D
 	private Vector2 oldpos { get; set; }
 
     public override void _PhysicsProcess(double delta)
-    {;
+    {
 		if (oldpos != SettingsOperator.MouseMovement)
 		{
 			Popup.Position = new Vector2I((int)(SettingsOperator.MouseMovement.X + 1), (int)(SettingsOperator.MouseMovement.Y + 1));

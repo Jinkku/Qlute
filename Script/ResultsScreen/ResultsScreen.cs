@@ -121,7 +121,6 @@ public partial class ResultsScreen : Control
 		// Set the Rank medal text
 		AccuracyMedal.Text = AccM;
 
-
 		WatchReplay = GetNode<Button>("PlayerButtons/Options/Replay");
 		// Checks if the replay file is in replay folder (temp until have backend support replay downloading :p)
 		if (FileAccess.FileExists(Replay.FilePath) && Replay.FilePath != "")

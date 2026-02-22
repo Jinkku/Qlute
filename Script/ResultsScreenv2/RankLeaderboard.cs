@@ -83,7 +83,5 @@ public partial class RankLeaderboard : PanelContainer
 		{
 			Picture.Texture = GuestPicture;
 		}
-
-		
 	}
 }

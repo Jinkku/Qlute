@@ -178,8 +178,7 @@ public override void _Ready()
 			Notetmp.Position = new Vector2(NoteHighlight.Position.X, SizeYSection - Notetmp.Time - 200 + (float)SongProgress);
 		}
 	}
-	
-	
+
 	public override void _ExitTree()
 	{
 		SettingsOperator.CreateSelectingBeatmap = false;
@@ -266,6 +265,5 @@ public override void _Ready()
 			NoteHighlight.Position = new Vector2(NoteHighlight.Position.X, SizeYSection - NoteHighlight.Time - 200 + (float)SongProgress);
 			SelectedPos.Text = $"posy: {NoteHighlight.Position.Y + SongProgress:N0} {NoteHighlight.Time:N0}";
 		}
-
 	}
 }
