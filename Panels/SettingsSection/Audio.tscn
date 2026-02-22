@@ -1,0 +1,140 @@
+[gd_scene format=3 uid="uid://buqt8jubgkav"]
+
+[ext_resource type="Script" uid="uid://blncjsvsso0ya" path="res://Script/SettingsSection/AudioSettings.cs" id="1_srj3p"]
+[ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="2_sppqm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aae3n"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.21484375, 0.21484375, 0.21484375, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8v4wg"]
+content_margin_left = 8.0
+content_margin_top = 15.0
+content_margin_right = 8.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.588235)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gk7sd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sppqm"]
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.128906, 0.128906, 0.128906, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8v4wg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0t5i8"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i31jj"]
+content_margin_left = 5.0
+content_margin_right = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_28fi4"]
+content_margin_left = 5.0
+content_margin_right = 5.0
+bg_color = Color(1, 1, 1, 0.196078)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_j114q"]
+
+[node name="Audio" type="PanelContainer" unique_id=1784822534]
+custom_minimum_size = Vector2(0, 200)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_aae3n")
+script = ExtResource("1_srj3p")
+
+[node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Rows" unique_id=528032714]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.47058824, 0.7490196, 0.9529412, 1)
+text = "Audio"
+
+[node name="AudioNotice" type="Label" parent="Rows" unique_id=747487797]
+visible = false
+layout_mode = 2
+mouse_filter = 0
+text = "Audio device"
+
+[node name="AudioSelector" type="OptionButton" parent="Rows" unique_id=1015398766]
+visible = false
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_8v4wg")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_gk7sd")
+theme_override_constants/arrow_margin = 10
+item_count = 3
+popup/item_0/text = "Audio Device 1"
+popup/item_0/id = 0
+popup/item_1/text = "Dummy Audio 2"
+popup/item_1/id = 1
+popup/item_2/text = "Twiggy NAC 2000"
+popup/item_2/id = 2
+
+[node name="AudioTicker" type="Label" parent="Rows" unique_id=792676348]
+layout_mode = 2
+mouse_filter = 0
+text = "Audio offset - "
+
+[node name="AudioOffset" type="HSlider" parent="Rows" unique_id=1038199033]
+layout_mode = 2
+max_value = 400.0
+value = 200.0
+
+[node name="AoaTicker" type="Label" parent="Rows" unique_id=410535862]
+layout_mode = 2
+mouse_filter = 0
+text = "Set offset by last played song (0ms)"
+autowrap_mode = 3
+
+[node name="AudioOffsetAuto" type="Button" parent="Rows" unique_id=765082970]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+script = ExtResource("2_sppqm")
+StringText = "Set offset"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[node name="AudioOffsetWizard2" type="Button" parent="Rows" unique_id=1361517510]
+visible = false
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_sppqm")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8v4wg")
+text = "Audio Offset Wizard"
+
+[node name="Bypass" type="CheckButton" parent="Rows" unique_id=313921067]
+visible = false
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0t5i8")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_i31jj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_28fi4")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_28fi4")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_j114q")
+text = "Bypass audio effects"
+
+[connection signal="value_changed" from="Rows/AudioOffset" to="." method="_on_audio_offset_value_changed"]
+[connection signal="pressed" from="Rows/AudioOffsetAuto" to="." method="_aoautoset"]

@@ -1,0 +1,19 @@
+using Godot;
+using System;
+
+public partial class DebugSettings : PanelContainer
+{
+	private CheckButton DevHide { get; set; }
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
+		DevHide = GetNode<CheckButton>("Rows/HideDevDisclaimer");
+		DevHide.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("hidedevintro").ToString());
+		GetNode<Label>("Rows/GodotEngineVersion").Text = $"Godot Version {Engine.GetVersionInfo()["major"]}.{Engine.GetVersionInfo()["minor"]}";
+	}
+
+	private void _devsel()
+	{
+		SettingsOperator.SetSetting("hidedevintro", DevHide.ButtonPressed);
+	}
+}

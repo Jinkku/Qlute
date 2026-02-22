@@ -364,11 +364,11 @@ public partial class Gameplay : Control
 	    for (int i = 0; i < 4; i++)
 	    {
 		    var keyName = "Key" + (i + 1);
-
-		    if (@event.IsActionPressed(keyName))
-			    hitnote(i, true, (int)est);
-		    else if (@event.IsActionReleased(keyName))
-			    hitnote(i, false, (int)est);
+		    if ( !(@event is InputEventKey Key) ) return;
+		    else if (Key.Keycode.ToString() == SettingsOperator.GetSetting($"Key{i}").ToString())
+		    {
+			    hitnote(i, @event.IsPressed(), (int)est);
+		    }
 	    }
     }
 

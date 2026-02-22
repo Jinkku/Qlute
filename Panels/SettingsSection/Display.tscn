@@ -1,0 +1,174 @@
+[gd_scene format=3 uid="uid://dm6msw184a5v7"]
+
+[ext_resource type="Script" uid="uid://b06qkmq57nsx0" path="res://Script/SettingsSection/Display.cs" id="1_lcyqc"]
+[ext_resource type="Script" uid="uid://btixh3f5pu736" path="res://Script/SettingsPanel/FpsModes.cs" id="2_3rl3a"]
+[ext_resource type="Script" uid="uid://clv5506kqlat3" path="res://Script/SettingsPanel/Resolution.cs" id="3_j1mlw"]
+[ext_resource type="Script" uid="uid://dp53wl7qkvxyq" path="res://Script/SettingsPanel/FpsShow.cs" id="4_2y1b4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aae3n"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.21484375, 0.21484375, 0.21484375, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u12hm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4rrg5"]
+content_margin_left = 8.0
+content_margin_top = 15.0
+content_margin_right = 8.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.392157)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nx0f5"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lwltm"]
+content_margin_left = 5.0
+content_margin_right = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npfg4"]
+content_margin_left = 5.0
+content_margin_right = 5.0
+bg_color = Color(1, 1, 1, 0.196078)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tuuye"]
+
+[node name="Display" type="PanelContainer" unique_id=1784822534]
+custom_minimum_size = Vector2(0, 480)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_aae3n")
+script = ExtResource("1_lcyqc")
+
+[node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Rows" unique_id=528032714]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.47058824, 0.7490196, 0.9529412, 1)
+text = "Display"
+
+[node name="WindowNotice" type="Label" parent="Rows" unique_id=1883750679]
+layout_mode = 2
+mouse_filter = 0
+text = "Window mode"
+
+[node name="WindowSelector" type="OptionButton" parent="Rows" unique_id=1760207384]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_u12hm")
+theme_override_constants/arrow_margin = 10
+item_count = 3
+popup/item_0/text = "Fullscreen"
+popup/item_0/id = 0
+popup/item_1/text = "Borderless"
+popup/item_1/id = 1
+popup/item_2/text = "Windowed"
+popup/item_2/id = 2
+
+[node name="FPSSet" type="Label" parent="Rows" unique_id=405571862]
+layout_mode = 2
+mouse_filter = 0
+text = "Limit FPS"
+
+[node name="FPSModes" type="OptionButton" parent="Rows" unique_id=635460088]
+layout_mode = 2
+theme_override_styles/disabled = SubResource("StyleBoxFlat_4rrg5")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_u12hm")
+theme_override_constants/arrow_margin = 10
+selected = 1
+item_count = 5
+popup/item_0/text = "VSync"
+popup/item_0/id = 0
+popup/item_1/text = "2x refresh rate"
+popup/item_1/id = 1
+popup/item_2/text = "4x refresh rate"
+popup/item_2/id = 2
+popup/item_3/text = "8x refresh rate"
+popup/item_3/id = 3
+popup/item_4/text = "Unlimited"
+popup/item_4/id = 4
+script = ExtResource("2_3rl3a")
+
+[node name="WindowNoticeRes" type="Label" parent="Rows" unique_id=1873835309]
+visible = false
+layout_mode = 2
+mouse_filter = 0
+text = "Screen resolution"
+
+[node name="Resolution" type="OptionButton" parent="Rows" unique_id=33542966]
+visible = false
+layout_mode = 2
+theme_override_constants/arrow_margin = 10
+selected = 0
+item_count = 1
+popup/item_0/text = "Default"
+popup/item_0/id = 0
+script = ExtResource("3_j1mlw")
+
+[node name="FPSShow" type="CheckButton" parent="Rows" unique_id=1812777085]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_nx0f5")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_lwltm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_npfg4")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_npfg4")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tuuye")
+text = "Show FPS"
+script = ExtResource("4_2y1b4")
+
+[node name="OriginalLanguage" type="CheckButton" parent="Rows" unique_id=263933410]
+layout_mode = 2
+text = "Use original language for beatmaps"
+
+[node name="WindowNotice2" type="Label" parent="Rows" unique_id=1627156756]
+layout_mode = 2
+mouse_filter = 0
+text = "Background Dim"
+
+[node name="BackgroundDim" type="HSlider" parent="Rows" unique_id=326727834]
+layout_mode = 2
+rounded = true
+
+[node name="CheckButton2" type="CheckButton" parent="Rows" unique_id=664842431]
+visible = false
+layout_mode = 2
+text = "Remove animations"
+
+[node name="CheckButton3" type="CheckButton" parent="Rows" unique_id=934960947]
+visible = false
+layout_mode = 2
+text = "Fade out when on break"
+
+[node name="CheckButton4" type="CheckButton" parent="Rows" unique_id=1776345167]
+visible = false
+layout_mode = 2
+text = "Disable flashing effects"
+
+[node name="CheckButton5" type="CheckButton" parent="Rows" unique_id=1238309320]
+visible = false
+layout_mode = 2
+text = "Switch to 24-Hour Clock"
+
+[connection signal="item_selected" from="Rows/WindowSelector" to="." method="_changed_resolution"]
+[connection signal="item_selected" from="Rows/FPSModes" to="Rows/FPSModes" method="_fpsselected"]
+[connection signal="pressed" from="Rows/FPSShow" to="Rows/FPSShow" method="_toggled"]
+[connection signal="pressed" from="Rows/OriginalLanguage" to="." method="_originallanguage"]
+[connection signal="drag_ended" from="Rows/BackgroundDim" to="." method="_backgrounddim_ended"]
+[connection signal="value_changed" from="Rows/BackgroundDim" to="." method="_backgrounddim_started"]

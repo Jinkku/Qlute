@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://jbmm2metmyvr"]
+
+[ext_resource type="Script" uid="uid://bkv2bi14hdlc6" path="res://Script/SettingsSection/DebugSettings.cs" id="1_5sgly"]
+[ext_resource type="Script" uid="uid://dnu64hotg25n4" path="res://Script/Home/version.gd" id="2_ubnii"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aae3n"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.21484375, 0.21484375, 0.21484375, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="FontVariation" id="FontVariation_ubnii"]
+variation_opentype = {
+2003265652: 700
+}
+
+[node name="Important" type="PanelContainer" unique_id=1784822534]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_aae3n")
+script = ExtResource("1_5sgly")
+
+[node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Debug" type="Label" parent="Rows" unique_id=326613078]
+layout_mode = 2
+mouse_filter = 0
+theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
+theme_override_fonts/font = SubResource("FontVariation_ubnii")
+text = "Debug"
+
+[node name="HideDevDisclaimer" type="CheckButton" parent="Rows" unique_id=2018246778]
+layout_mode = 2
+text = "Hide Experimental Disclaimer"
+
+[node name="GodotEngineVersion" type="Label" parent="Rows" unique_id=522553016]
+layout_mode = 2
+mouse_filter = 0
+text = "Godot 1.0"
+
+[node name="GodotRender" type="Label" parent="Rows" unique_id=1416051364]
+visible = false
+layout_mode = 2
+mouse_filter = 0
+text = "Using xx render"
+
+[node name="GameVersion" type="Label" parent="Rows" unique_id=107603884]
+layout_mode = 2
+mouse_filter = 0
+text = "0.0.0 Development Build"
+script = ExtResource("2_ubnii")
+
+[connection signal="pressed" from="Rows/HideDevDisclaimer" to="." method="_devsel"]
