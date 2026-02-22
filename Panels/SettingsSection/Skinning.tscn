@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://bi4keuwyc22ju"]
+
+[ext_resource type="Script" uid="uid://csqtqnvdjslaf" path="res://Script/SettingsPanel/SkinMode.cs" id="2_5ma6w"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aae3n"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.21484375, 0.21484375, 0.21484375, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btiu6"]
+content_margin_left = 8.0
+content_margin_top = 15.0
+content_margin_right = 8.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.392157)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5kcqv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5w4v1"]
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.128906, 0.128906, 0.128906, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5ma6w"]
+
+[node name="Skinning" type="PanelContainer" unique_id=1784822534]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_aae3n")
+
+[node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Rows" unique_id=528032714]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.47058824, 0.7490196, 0.9529412, 1)
+text = "Skinning"
+
+[node name="SkinMode" type="OptionButton" parent="Rows" unique_id=323255019]
+layout_mode = 2
+theme_override_styles/disabled = SubResource("StyleBoxFlat_btiu6")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5kcqv")
+theme_override_constants/arrow_margin = 10
+clip_text = true
+script = ExtResource("2_5ma6w")
+
+[node name="Create" type="Button" parent="Rows" unique_id=1114537015]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_5w4v1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5ma6w")
+text = "Open Skin Editor"
+
+[node name="SkinBox" type="HBoxContainer" parent="Rows" unique_id=175801050]
+visible = false
+layout_mode = 2
+
+[node name="Create" type="Button" parent="Rows/SkinBox" unique_id=1670689676]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_5w4v1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5ma6w")
+text = "Create Skin"
+
+[node name="Edit" type="Button" parent="Rows/SkinBox" unique_id=1301681672]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_5w4v1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5ma6w")
+text = "Edit Skin"
+
+[node name="Delete" type="Button" parent="Rows/SkinBox" unique_id=1616853742]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_5w4v1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5ma6w")
+text = "Delete Skin"
+
+[connection signal="item_selected" from="Rows/SkinMode" to="Rows/SkinMode" method="_LoadSkin"]

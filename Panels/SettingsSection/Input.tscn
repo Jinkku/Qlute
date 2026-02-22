@@ -1,0 +1,128 @@
+[gd_scene format=3 uid="uid://bptvmibdlnj35"]
+
+[ext_resource type="Script" uid="uid://cnw2awjuhd0no" path="res://Script/SettingsSection/InputSettings.cs" id="1_jqh0c"]
+[ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="2_3oobx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aae3n"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.21484375, 0.21484375, 0.21484375, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="FontVariation" id="FontVariation_q0wcy"]
+variation_opentype = {
+2003265652: 700
+}
+
+[node name="Input" type="PanelContainer" unique_id=1784822534]
+offset_right = 384.0
+offset_bottom = 300.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_aae3n")
+script = ExtResource("1_jqh0c")
+
+[node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Section" type="Label" parent="Rows" unique_id=118251586]
+layout_mode = 2
+mouse_filter = 0
+theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
+theme_override_fonts/font = SubResource("FontVariation_q0wcy")
+text = "Input"
+
+[node name="SectionGame" type="Label" parent="Rows" unique_id=1797242641]
+visible = false
+layout_mode = 2
+mouse_filter = 0
+theme_override_colors/font_color = Color(0.724823, 0.83405876, 0.9140625, 1)
+theme_override_fonts/font = SubResource("FontVariation_q0wcy")
+text = "Gameplay Keys"
+
+[node name="AI" type="Label" parent="Rows" unique_id=1109068579]
+layout_mode = 2
+mouse_filter = 0
+theme_override_colors/font_color = Color(0.724823, 0.83405876, 0.9140625, 1)
+theme_override_fonts/font = SubResource("FontVariation_q0wcy")
+text = "Awaiting input..."
+
+[node name="Selection" type="VBoxContainer" parent="Rows" unique_id=792526995]
+layout_mode = 2
+
+[node name="Key0" type="HBoxContainer" parent="Rows/Selection" unique_id=1360127526]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Rows/Selection/Key0" unique_id=279867357]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Key 0"
+
+[node name="Key0" type="Button" parent="Rows/Selection/Key0" unique_id=206608926]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_3oobx")
+StringText = "X"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[node name="Key1" type="HBoxContainer" parent="Rows/Selection" unique_id=1477781055]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Rows/Selection/Key1" unique_id=1181583711]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Key 1"
+
+[node name="Key1" type="Button" parent="Rows/Selection/Key1" unique_id=981810548]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_3oobx")
+StringText = "X"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[node name="Key2" type="HBoxContainer" parent="Rows/Selection" unique_id=849639195]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Rows/Selection/Key2" unique_id=1326209418]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Key 2"
+
+[node name="Key2" type="Button" parent="Rows/Selection/Key2" unique_id=1157584166]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_3oobx")
+StringText = "X"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[node name="Key3" type="HBoxContainer" parent="Rows/Selection" unique_id=1731591296]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Rows/Selection/Key3" unique_id=2032602497]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Key 3"
+
+[node name="Key3" type="Button" parent="Rows/Selection/Key3" unique_id=633540495]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_3oobx")
+StringText = "X"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[connection signal="pressed" from="Rows/Selection/Key0/Key0" to="." method="SetButton" binds= [0]]
+[connection signal="pressed" from="Rows/Selection/Key1/Key1" to="." method="SetButton" binds= [1]]
+[connection signal="pressed" from="Rows/Selection/Key2/Key2" to="." method="SetButton" binds= [2]]
+[connection signal="pressed" from="Rows/Selection/Key3/Key3" to="." method="SetButton" binds= [3]]

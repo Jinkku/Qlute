@@ -714,9 +714,44 @@ public partial class SettingsOperator : Node
         saveFile.Close();
     }
 
+    private Variant ConvertJsonElement(JsonElement element)
+    {
+        switch (element.ValueKind)
+        {
+            case JsonValueKind.String:
+                return element.GetString();
+
+            case JsonValueKind.Number:
+                if (element.TryGetInt64(out long l))
+                    return l;
+                return element.GetDouble();
+
+            case JsonValueKind.True:
+            case JsonValueKind.False:
+                return element.GetBoolean();
+
+            case JsonValueKind.Object:
+                var dict = new Godot.Collections.Dictionary();
+                foreach (var prop in element.EnumerateObject())
+                    dict[prop.Name] = ConvertJsonElement(prop.Value);
+                return dict;
+
+            case JsonValueKind.Array:
+                var array = new Godot.Collections.Array();
+                foreach (var item in element.EnumerateArray())
+                    array.Add(ConvertJsonElement(item));
+                return array;
+
+            case JsonValueKind.Null:
+            default:
+                return default;
+        }
+    }
+    
     // Get a setting
     public static object GetSetting(string key)
     {
         return Configuration.ContainsKey(key) ? Configuration[key] : null;
     }
+    
 }

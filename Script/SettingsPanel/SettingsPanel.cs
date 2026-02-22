@@ -6,125 +6,41 @@ public partial class SettingsPanel : Control
 	[Signal]
 	public delegate void UpdateInfoEventHandler();
 
-	private float MS { get; set; }
 	private SettingsOperator SettingsOperator { get; set; }
-	public OptionButton Windowmode { get; set; }
-	public HSlider BackgroundDim { get; set; }
-	public ButtonFade OffsetButton { get; set; }
-	public HSlider OffsetSlider { get; set; }
-	public Label OffsetTicker { get; set; }
-	public Label ScrollSpeedt { get; set; }
-	private CheckButton ShowUnicode { get; set; }
-	private CheckButton DevHide { get; set; }
-	public HSlider ScrollSpeed { get; set; }
 	public ScrollContainer Scrolls { get; set; }
 
 	public override void _Ready()
 	{
-		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		Windowmode = GetNode<OptionButton>("ColorRect/Panels/Scroll/Sections/WindowSelector");
-		Windowmode.Selected = int.TryParse(SettingsOperator.GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
-		BackgroundDim = GetNode<HSlider>("ColorRect/Panels/Scroll/Sections/BackgroundDim");
-		OffsetButton = GetNode<ButtonFade>("ColorRect/Panels/Scroll/Sections/AudioOffsetAuto");
-		OffsetSlider = GetNode<HSlider>("ColorRect/Panels/Scroll/Sections/AudioOffset");
-		ScrollSpeed = GetNode<HSlider>("ColorRect/Panels/Scroll/Sections/ScrollSpeed");
-		DevHide = GetNode<CheckButton>("ColorRect/Panels/Scroll/Sections/HideDevDisclaimer");
-		ShowUnicode = GetNode<CheckButton>("ColorRect/Panels/Scroll/Sections/OriginalLanguage");
-		OffsetTicker = GetNode<Label>("ColorRect/Panels/Scroll/Sections/AudioNotice2");
-		Scrolls = GetNode<ScrollContainer>("ColorRect/Panels/Scroll");
-		ScrollSpeedt = GetNode<Label>("ColorRect/Panels/Scroll/Sections/ScrollSpeedn");
-		GetNode<Label>("ColorRect/Panels/Scroll/Sections/GodotEngineVersion").Text = $"Godot Version {Engine.GetVersionInfo()["major"]}.{Engine.GetVersionInfo()["minor"]}";
-		BackgroundDim.Value = SettingsOperator.backgrounddim;
-		ScrollSpeedt.Text = $"Scroll Speed ({(11485 / (SettingsOperator.GetSetting("scrollspeed") != null ? int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString()) : 1346)).ToString()})";
-		ScrollSpeed.Value = 11485 / (SettingsOperator.GetSetting("scrollspeed") != null ? int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString()) : 1346);
+		Scrolls = GetNode<ScrollContainer>("Panels/Scroll");
 
-		var offset = float.Parse(SettingsOperator.GetSetting("audiooffset").ToString());
-		if (offset != 0)
-		{
-			offset = SettingsOperator.GetSetting("audiooffset") != null ? 11485 / float.Parse(SettingsOperator.GetSetting("audiooffset").ToString()) : 0;
-		}
-		else
-		{
-			offset = 0;
-		}
-		OffsetSlider.Value = 200 - offset;
-		OffsetTicker.Text = "Audio offset - " + (OffsetSlider.Value - 200).ToString("N0") + "ms";
-		ShowUnicode.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString());
-		DevHide.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("hidedevintro").ToString());
 	}
 	private void _display()
 	{
-		Scrolls.GetVScrollBar().Value = GetNode<Label>("ColorRect/Panels/Scroll/Sections/Display").Position.Y;
-	}
-
-	private void _originallanguage()
-	{
-		SettingsOperator.SetSetting("showunicode", ShowUnicode.ButtonPressed);
-		SettingsOperator.ReloadInfo();
-	}
-	private void _devsel()
-	{
-		SettingsOperator.SetSetting("hidedevintro", DevHide.ButtonPressed);
+		Scrolls.GetVScrollBar().Value = GetNode<PanelContainer>("Panels/Scroll/Sections/Display").Position.Y;
 	}
 
 	private void _audio()
 	{
-		Scrolls.GetVScrollBar().Value = GetNode<Label>("ColorRect/Panels/Scroll/Sections/Audio").Position.Y;
+		Scrolls.GetVScrollBar().Value = GetNode<PanelContainer>("Panels/Scroll/Sections/Audio").Position.Y;
 	}
 	private void _debug()
 	{
-		Scrolls.GetVScrollBar().Value = GetNode<Label>("ColorRect/Panels/Scroll/Sections/Debug").Position.Y;
+		Scrolls.GetVScrollBar().Value = GetNode<PanelContainer>("Panels/Scroll/Sections/Debug").Position.Y;
+	}
+	private void _skinning()
+	{
+		Scrolls.GetVScrollBar().Value = GetNode<PanelContainer>("Panels/Scroll/Sections/Skinning").Position.Y;
+	}
+	private void _input()
+	{
+		Scrolls.GetVScrollBar().Value = GetNode<PanelContainer>("Panels/Scroll/Sections/Input").Position.Y;
 	}
 	public override void _Process(double delta)
 	{
 		Size = new Vector2(Size.X, GetViewportRect().Size.Y - (GetNode<ColorRect>("..").Position.Y + 50));
-		MS = SettingsOperator.Getms();
-		if (float.IsNaN(MS))
-		{
-			MS = -1;
-			OffsetButton.StringText = "Please play a map before you can set your offset!!";
-			OffsetButton.Disabled = true;
-		}
-		else
-		{
-			OffsetButton.StringText = "Set offset by last played song (" + MS.ToString("N0") + "ms)";
-			OffsetButton.Disabled = false;
-		}
-	}
-	private void _changed_resolution(int index)
-	{
-		SettingsOperator.changeres(index);
-	}
-	private void _on_audio_offset_value_changed(float value)
-	{
-		SettingsOperator.SetSetting("audiooffset", 200 - value);
-		OffsetTicker.Text = "Audio offset - " + (value - 200).ToString("N0") + "ms";
-	}
-	private void _aow()
-	{
-		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/AudioOffset.tscn");
-	}
-	private void _aoautoset()
-	{
-		SettingsOperator.SetSetting("audiooffset", (int)MS);
-		OffsetSlider.Value = 200 + MS;
-		OffsetTicker.Text = "Audio offset - " + (OffsetSlider.Value - 200).ToString("N0") + "ms";
-	}
-	private void _backgrounddim_started(float value)
-	{
-		SettingsOperator.backgrounddim = (int)BackgroundDim.Value;
-	}
-	private void _backgrounddim_ended(int value)
-	{
-		SettingsOperator.SetSetting("backgrounddim", BackgroundDim.Value);
-	}
-	private void _scroll_speed(float value)
-	{
-		SettingsOperator.SetSetting("scrollspeed", (int)(11485 / value));
-		ScrollSpeedt.Text = $"Scroll Speed ({value.ToString("0")})";
 	}
 	private void _SkinEditor()
-	{
+	{	
 		if (!Global._SkinStart) {
 			var Settings = new Settings();
 			Global._SkinStart = !Global._SkinStart;

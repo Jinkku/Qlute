@@ -12,6 +12,7 @@ public partial class ButtonFade : Button
     
     [Export] public Color FocusColour = new Color("#1c6de9");
     [Export] public Color HighlightColour = new Color("#6aa5ff");
+    [Export] public bool RespectSize {get; set;} = false;
 
     [Export]
     public Color IdleColour
@@ -46,10 +47,9 @@ public partial class ButtonFade : Button
     
     private void resize()
     {
-	    if (_buttonText.Size.X + 20 > Size.X)
-	    {
-		    Size = new Vector2(Math.Max(oldsizex, _buttonText.Size.X + 20), Math.Max(oldsizey, _buttonText.Size.Y + 20));
-	    }
+	    GD.Print(Size.X);
+	    GD.Print(oldsizex);
+	    Size = new Vector2(Math.Max(oldsizex, _buttonText.Size.X + 20), Math.Max(oldsizey, _buttonText.Size.Y + 20));
     }
     private bool Hovered = false;
     private Tween _focus_animation;
@@ -100,17 +100,18 @@ public partial class ButtonFade : Button
 		_buttonText.Name = "ButtonText";
 		_buttonText.HorizontalAlignment = HorizontalAlignment.Center;
 		_buttonText.VerticalAlignment = VerticalAlignment.Center;
-		_buttonText.AnchorLeft = 0.5f;
-		_buttonText.AnchorRight = 0.5f;
-		_buttonText.AnchorTop = 0.5f;
-		_buttonText.AnchorBottom = 0.5f;
+		_buttonText.AnchorLeft = 0f;
+		_buttonText.AnchorRight = 1f;
+		_buttonText.AnchorTop = 0f;
+		_buttonText.AnchorBottom = 1f;
 		_buttonText.GrowHorizontal = GrowDirection.Both;
 		_buttonText.GrowVertical = GrowDirection.Both;
-		_buttonText.OffsetLeft = 0.5f;
-		_buttonText.OffsetRight = 0.5f;
-		_buttonText.OffsetTop = 0.5f;
-		_buttonText.OffsetBottom = 0.5f;
-		_buttonText.Resized += resize;
+		_buttonText.OffsetLeft = 0f;
+		_buttonText.OffsetRight = 0f;
+		_buttonText.OffsetTop = 0f;
+		_buttonText.OffsetBottom = 0f;
+		_buttonText.ClipText = true;
+		_buttonText.AutowrapMode = TextServer.AutowrapMode.Word;
 		_buttonText.Text = StringText;
 		_ready = true;
 		SelfModulate = _idleColour;

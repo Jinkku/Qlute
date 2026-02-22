@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://chb8dgjfmmjgt"]
+[gd_scene format=3 uid="uid://chb8dgjfmmjgt"]
 
+[ext_resource type="Script" uid="uid://ovxqbqyg72g0" path="res://Script/Gameplay/Playfield.cs" id="1_2mm1x"]
 [ext_resource type="PackedScene" uid="uid://cfg55dbl1ip8a" path="res://Panels/GameplayElements/Static/note.tscn" id="1_6jlou"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cb4c3"]
@@ -7,7 +8,7 @@ bg_color = Color(1, 1, 1, 0.588235)
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[node name="Playfield" type="Control"]
+[node name="Playfield" type="Control" unique_id=686998507]
 layout_mode = 3
 anchors_preset = 13
 anchor_left = 0.5
@@ -17,8 +18,9 @@ offset_left = -200.0
 offset_right = 200.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_2mm1x")
 
-[node name="ChartSections" type="HBoxContainer" parent="."]
+[node name="ChartSections" type="HBoxContainer" parent="." unique_id=1433262691]
 clip_children = 2
 clip_contents = true
 layout_mode = 1
@@ -33,43 +35,43 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Section1" type="PanelContainer" parent="ChartSections"]
+[node name="Section1" type="PanelContainer" parent="ChartSections" unique_id=2091561494]
 self_modulate = Color(0.0392157, 0.0392157, 0.0392157, 1)
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_cb4c3")
 
-[node name="Control" type="Control" parent="ChartSections/Section1"]
+[node name="Control" type="Control" parent="ChartSections/Section1" unique_id=1256406612]
 layout_mode = 2
 
-[node name="Section2" type="PanelContainer" parent="ChartSections"]
+[node name="Section2" type="PanelContainer" parent="ChartSections" unique_id=1266876680]
 self_modulate = Color(0.0392157, 0.0392157, 0.0392157, 1)
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_cb4c3")
 
-[node name="Control" type="Control" parent="ChartSections/Section2"]
+[node name="Control" type="Control" parent="ChartSections/Section2" unique_id=947891735]
 layout_mode = 2
 
-[node name="Section3" type="PanelContainer" parent="ChartSections"]
+[node name="Section3" type="PanelContainer" parent="ChartSections" unique_id=1063190678]
 self_modulate = Color(0.0392157, 0.0392157, 0.0392157, 1)
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_cb4c3")
 
-[node name="Control" type="Control" parent="ChartSections/Section3"]
+[node name="Control" type="Control" parent="ChartSections/Section3" unique_id=1569103684]
 layout_mode = 2
 
-[node name="Section4" type="PanelContainer" parent="ChartSections"]
+[node name="Section4" type="PanelContainer" parent="ChartSections" unique_id=566783130]
 self_modulate = Color(0.0392157, 0.0392157, 0.0392157, 1)
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_cb4c3")
 
-[node name="Control" type="Control" parent="ChartSections/Section4"]
+[node name="Control" type="Control" parent="ChartSections/Section4" unique_id=133581367]
 layout_mode = 2
 
-[node name="Guard" type="ColorRect" parent="."]
+[node name="Guard" type="ColorRect" parent="." unique_id=1229691932]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 1
 anchors_preset = 12
@@ -85,21 +87,26 @@ grow_vertical = 0
 mouse_filter = 2
 color = Color(1, 1, 1, 0)
 
-[node name="Note1" parent="Guard" instance=ExtResource("1_6jlou")]
+[node name="Note1" parent="Guard" unique_id=230947442 instance=ExtResource("1_6jlou")]
 self_modulate = Color(1, 1, 1, 0.05)
 position = Vector2(0, -45)
 
-[node name="Note2" parent="Guard" instance=ExtResource("1_6jlou")]
+[node name="Note2" parent="Guard" unique_id=1634780964 instance=ExtResource("1_6jlou")]
 self_modulate = Color(1, 1, 1, 0.05)
 position = Vector2(104, -45)
+NotePart = 1
 metadata/part = 1
 
-[node name="Note3" parent="Guard" instance=ExtResource("1_6jlou")]
+[node name="Note3" parent="Guard" unique_id=806681802 instance=ExtResource("1_6jlou")]
 self_modulate = Color(1, 1, 1, 0.05)
 position = Vector2(208, -45)
+NotePart = 2
 metadata/part = 2
 
-[node name="Note4" parent="Guard" instance=ExtResource("1_6jlou")]
+[node name="Note4" parent="Guard" unique_id=2065769152 instance=ExtResource("1_6jlou")]
 self_modulate = Color(1, 1, 1, 0.05)
 position = Vector2(312, -45)
+NotePart = 3
 metadata/part = 3
+
+[node name="KeyHide" type="Timer" parent="." unique_id=375988256]

@@ -1,15 +1,21 @@
-[gd_scene load_steps=29 format=3 uid="uid://d0qmsp3ewrdj4"]
+[gd_scene format=3 uid="uid://d0qmsp3ewrdj4"]
 
 [ext_resource type="Script" uid="uid://bcpf58suyr63f" path="res://Script/SettingsPanel/SettingsPanel.cs" id="1_gfh6f"]
 [ext_resource type="Texture2D" uid="uid://cj5ugwjbsax06" path="res://Resources/SettingsIcon/display.png" id="2_r347j"]
 [ext_resource type="Texture2D" uid="uid://c0ap610fbkw4r" path="res://Resources/SettingsIcon/audio.png" id="3_tkltb"]
 [ext_resource type="Texture2D" uid="uid://ccai8irwy3t26" path="res://Resources/SettingsIcon/debug.png" id="4_b8fcs"]
-[ext_resource type="Script" uid="uid://btixh3f5pu736" path="res://Script/SettingsPanel/FpsModes.cs" id="5_crlok"]
-[ext_resource type="Script" uid="uid://clv5506kqlat3" path="res://Script/SettingsPanel/Resolution.cs" id="5_h76q1"]
+[ext_resource type="Texture2D" uid="uid://wbwc1tqoq28f" path="res://Resources/SettingsIcon/skinning.png" id="4_k6rhm"]
+[ext_resource type="Texture2D" uid="uid://cygc8ovbmjkwv" path="res://Resources/SettingsIcon/input.png" id="5_fn636"]
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="5_k6nch"]
-[ext_resource type="Script" uid="uid://dp53wl7qkvxyq" path="res://Script/SettingsPanel/FpsShow.cs" id="6_o7dm5"]
-[ext_resource type="Script" uid="uid://csqtqnvdjslaf" path="res://Script/SettingsPanel/SkinMode.cs" id="8_bjgno"]
-[ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="10_4moo3"]
+[ext_resource type="PackedScene" uid="uid://dm6msw184a5v7" path="res://Panels/SettingsSection/Display.tscn" id="8_4moo3"]
+[ext_resource type="PackedScene" uid="uid://62fdbfcux0rs" path="res://Panels/SettingsSection/Important.tscn" id="8_k6rhm"]
+[ext_resource type="PackedScene" uid="uid://bi4keuwyc22ju" path="res://Panels/SettingsSection/Skinning.tscn" id="9_k6rhm"]
+[ext_resource type="PackedScene" uid="uid://buqt8jubgkav" path="res://Panels/SettingsSection/Audio.tscn" id="10_4moo3"]
+[ext_resource type="PackedScene" uid="uid://bptvmibdlnj35" path="res://Panels/SettingsSection/Input.tscn" id="12_djmes"]
+[ext_resource type="PackedScene" uid="uid://jbmm2metmyvr" path="res://Panels/SettingsSection/Debug.tscn" id="12_fn636"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fn636"]
+bg_color = Color(0.15294118, 0.15294118, 0.15294118, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5b8eh"]
 bg_color = Color(0, 0, 0, 0.392157)
@@ -24,7 +30,7 @@ bg_color = Color(1, 1, 1, 0.156863)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n2spt"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rfoxt"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fn636"]
 content_margin_left = 10.0
 content_margin_top = 10.0
 content_margin_right = 10.0
@@ -34,111 +40,33 @@ content_margin_bottom = 10.0
 content_margin_left = 0.0
 content_margin_top = 25.0
 
-[sub_resource type="FontVariation" id="FontVariation_n76qt"]
-variation_opentype = {
-2003265652: 700
-}
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v1adg"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_svam5"]
-content_margin_left = 8.0
-content_margin_top = 15.0
-content_margin_right = 8.0
-content_margin_bottom = 15.0
-bg_color = Color(0, 0, 0, 0.392157)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bjgno"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_crlok"]
-content_margin_left = 5.0
-content_margin_right = 5.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o7dm5"]
-content_margin_left = 5.0
-content_margin_right = 5.0
-bg_color = Color(1, 1, 1, 0.196078)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o7dm5"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3de0r"]
-content_margin_top = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.128906, 0.128906, 0.128906, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m56sc"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_32tni"]
-content_margin_left = 8.0
-content_margin_top = 15.0
-content_margin_right = 8.0
-content_margin_bottom = 15.0
-bg_color = Color(0, 0, 0, 0.588235)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_db3eo"]
-
-[node name="SettingsPanel" type="Control"]
+[node name="SettingsPanel" type="PanelContainer" unique_id=1763606212]
 z_index = 3
 z_as_relative = false
 clip_contents = true
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 50.0
-offset_right = -800.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("1_gfh6f")
-
-[node name="ColorRect" type="ColorRect" parent="."]
-layout_mode = 1
+custom_minimum_size = Vector2(480, 0)
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 480.0
+offset_right = 74.0
 grow_vertical = 2
-color = Color(0.15170373, 0.15170373, 0.15170373, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_fn636")
+script = ExtResource("1_gfh6f")
 
-[node name="Panels" type="HBoxContainer" parent="ColorRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Panels" type="HBoxContainer" parent="." unique_id=1249590537]
+layout_mode = 2
 
-[node name="Catagories" type="PanelContainer" parent="ColorRect/Panels"]
+[node name="Catagories" type="PanelContainer" parent="Panels" unique_id=593390362]
 clip_contents = true
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5b8eh")
 
-[node name="Cata" type="VBoxContainer" parent="ColorRect/Panels/Catagories"]
+[node name="Cata" type="VBoxContainer" parent="Panels/Catagories" unique_id=418071960]
 clip_contents = true
 layout_mode = 2
 alignment = 1
 
-[node name="Display" type="Button" parent="ColorRect/Panels/Catagories/Cata"]
+[node name="Display" type="Button" parent="Panels/Catagories/Cata" unique_id=1182856902]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
@@ -148,7 +76,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
 icon = ExtResource("2_r347j")
 icon_alignment = 1
 
-[node name="Audio" type="Button" parent="ColorRect/Panels/Catagories/Cata"]
+[node name="Audio" type="Button" parent="Panels/Catagories/Cata" unique_id=1748706413]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
@@ -158,7 +86,27 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
 icon = ExtResource("3_tkltb")
 icon_alignment = 1
 
-[node name="Debug" type="Button" parent="ColorRect/Panels/Catagories/Cata"]
+[node name="Skinning" type="Button" parent="Panels/Catagories/Cata" unique_id=1599312474]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
+theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
+icon = ExtResource("4_k6rhm")
+icon_alignment = 1
+
+[node name="Input" type="Button" parent="Panels/Catagories/Cata" unique_id=633582479]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
+theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
+icon = ExtResource("5_fn636")
+icon_alignment = 1
+
+[node name="Debug" type="Button" parent="Panels/Catagories/Cata" unique_id=624146245]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
@@ -168,20 +116,21 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
 icon = ExtResource("4_b8fcs")
 icon_alignment = 1
 
-[node name="Scroll" type="ScrollContainer" parent="ColorRect/Panels"]
+[node name="Scroll" type="ScrollContainer" parent="Panels" unique_id=924770767]
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_rfoxt")
-vertical_scroll_mode = 3
+theme_override_constants/scrollbar_h_separation = 10
+theme_override_styles/panel = SubResource("StyleBoxEmpty_fn636")
+horizontal_scroll_mode = 3
 
-[node name="Sections" type="VBoxContainer" parent="ColorRect/Panels/Scroll"]
+[node name="Sections" type="VBoxContainer" parent="Panels/Scroll" unique_id=989036448]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 15
 
-[node name="Name" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
+[node name="Name" type="Label" parent="Panels/Scroll/Sections" unique_id=2138111491]
 layout_mode = 2
 mouse_filter = 0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -190,295 +139,26 @@ theme_override_font_sizes/font_size = 36
 theme_override_styles/normal = SubResource("StyleBoxEmpty_llstv")
 text = "Settings"
 
-[node name="Section" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-mouse_filter = 0
-theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
-theme_override_fonts/font = SubResource("FontVariation_n76qt")
-text = "Important Infomation"
-
-[node name="Notice" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-mouse_filter = 0
-text = "Support the Creator!!!! <3"
-
-[node name="Section2" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
-layout_mode = 2
-mouse_filter = 0
-theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
-theme_override_fonts/font = SubResource("FontVariation_n76qt")
-text = "Game-specific Tweaks"
-
-[node name="ScrollSpeedn" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
-layout_mode = 2
-mouse_filter = 0
-text = "Scroll Speed (0)"
-
-[node name="ScrollSpeed" type="HSlider" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
-layout_mode = 2
-max_value = 25.0
-
-[node name="Display" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-mouse_filter = 0
-theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
-theme_override_fonts/font = SubResource("FontVariation_n76qt")
-text = "Display"
-
-[node name="WindowNotice" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-mouse_filter = 0
-text = "Window mode"
-
-[node name="WindowSelector" type="OptionButton" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_v1adg")
-theme_override_constants/arrow_margin = 10
-item_count = 3
-popup/item_0/text = "Fullscreen"
-popup/item_0/id = 0
-popup/item_1/text = "Borderless"
-popup/item_1/id = 1
-popup/item_2/text = "Windowed"
-popup/item_2/id = 2
-
-[node name="FPSSet" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-mouse_filter = 0
-text = "Limit FPS"
-
-[node name="FPSModes" type="OptionButton" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-theme_override_styles/disabled = SubResource("StyleBoxFlat_svam5")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_v1adg")
-theme_override_constants/arrow_margin = 10
-selected = 1
-item_count = 5
-popup/item_0/text = "VSync"
-popup/item_0/id = 0
-popup/item_1/text = "2x refresh rate"
-popup/item_1/id = 1
-popup/item_2/text = "4x refresh rate"
-popup/item_2/id = 2
-popup/item_3/text = "8x refresh rate"
-popup/item_3/id = 3
-popup/item_4/text = "Unlimited"
-popup/item_4/id = 4
-script = ExtResource("5_crlok")
-
-[node name="WindowNoticeRes" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
-layout_mode = 2
-mouse_filter = 0
-text = "Screen resolution"
-
-[node name="Resolution" type="OptionButton" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
-layout_mode = 2
-theme_override_constants/arrow_margin = 10
-selected = 0
-item_count = 1
-popup/item_0/text = "Default"
-popup/item_0/id = 0
-script = ExtResource("5_h76q1")
-
-[node name="FPSShow" type="CheckButton" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxEmpty_bjgno")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_crlok")
-theme_override_styles/hover = SubResource("StyleBoxFlat_o7dm5")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_o7dm5")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_o7dm5")
-text = "Show FPS"
-script = ExtResource("6_o7dm5")
-
-[node name="CheckButton2" type="CheckButton" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
-layout_mode = 2
-text = "Remove animations"
-
-[node name="CheckButton3" type="CheckButton" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
-layout_mode = 2
-text = "Fade out when on break"
-
-[node name="CheckButton4" type="CheckButton" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
-layout_mode = 2
-text = "Disable flashing effects"
-
-[node name="CheckButton5" type="CheckButton" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
-layout_mode = 2
-text = "Switch to 24-Hour Clock"
-
-[node name="OriginalLanguage" type="CheckButton" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-text = "Use original language for beatmaps"
-
-[node name="WindowNotice2" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-mouse_filter = 0
-text = "Background Dim"
-
-[node name="BackgroundDim" type="HSlider" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-rounded = true
-
-[node name="Skinning" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-mouse_filter = 0
-theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
-theme_override_fonts/font = SubResource("FontVariation_n76qt")
-text = "Skinning"
-
-[node name="SkinMode" type="OptionButton" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-theme_override_styles/disabled = SubResource("StyleBoxFlat_svam5")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_v1adg")
-theme_override_constants/arrow_margin = 10
-clip_text = true
-script = ExtResource("8_bjgno")
-
-[node name="Create" type="Button" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
-text = "Open Skin Editor"
-
-[node name="SkinBox" type="HBoxContainer" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
+[node name="Important" parent="Panels/Scroll/Sections" unique_id=1784822534 instance=ExtResource("8_k6rhm")]
 layout_mode = 2
 
-[node name="Create" type="Button" parent="ColorRect/Panels/Scroll/Sections/SkinBox"]
+[node name="Display" parent="Panels/Scroll/Sections" unique_id=1206613156 instance=ExtResource("8_4moo3")]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
-text = "Create Skin"
 
-[node name="Edit" type="Button" parent="ColorRect/Panels/Scroll/Sections/SkinBox"]
+[node name="Audio" parent="Panels/Scroll/Sections" unique_id=1435959226 instance=ExtResource("10_4moo3")]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
-text = "Edit Skin"
 
-[node name="Delete" type="Button" parent="ColorRect/Panels/Scroll/Sections/SkinBox"]
+[node name="Skinning" parent="Panels/Scroll/Sections" unique_id=1237445482 instance=ExtResource("9_k6rhm")]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
-text = "Delete Skin"
 
-[node name="Audio" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
+[node name="Input" parent="Panels/Scroll/Sections" unique_id=1141973016 instance=ExtResource("12_djmes")]
 layout_mode = 2
-mouse_filter = 0
-theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
-theme_override_fonts/font = SubResource("FontVariation_n76qt")
-text = "Audio"
 
-[node name="AudioNotice" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
+[node name="Debug" parent="Panels/Scroll/Sections" unique_id=2026888216 instance=ExtResource("12_fn636")]
 layout_mode = 2
-mouse_filter = 0
-text = "Audio device"
 
-[node name="AudioSelector" type="OptionButton" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_32tni")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_db3eo")
-theme_override_constants/arrow_margin = 10
-item_count = 3
-popup/item_0/text = "Audio Device 1"
-popup/item_0/id = 0
-popup/item_1/text = "Dummy Audio 2"
-popup/item_1/id = 1
-popup/item_2/text = "Twiggy NAC 2000"
-popup/item_2/id = 2
-
-[node name="AudioNotice2" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-mouse_filter = 0
-text = "Audio offset - "
-
-[node name="AudioOffset" type="HSlider" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-max_value = 400.0
-value = 200.0
-
-[node name="AudioOffsetAuto" type="Button" parent="ColorRect/Panels/Scroll/Sections"]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-script = ExtResource("10_4moo3")
-StringText = "Set offset by last played song (0ms)"
-metadata/_custom_type_script = "uid://s3i5b8frncgd"
-
-[node name="AudioOffsetWizard2" type="Button" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_3de0r")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_m56sc")
-text = "Audio Offset Wizard"
-
-[node name="Bypass" type="CheckButton" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxEmpty_bjgno")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_crlok")
-theme_override_styles/hover = SubResource("StyleBoxFlat_o7dm5")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_o7dm5")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_o7dm5")
-text = "Bypass audio effects"
-
-[node name="Debug" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-mouse_filter = 0
-theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
-theme_override_fonts/font = SubResource("FontVariation_n76qt")
-text = "Debug"
-
-[node name="HideDevDisclaimer" type="CheckButton" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-text = "Hide Experimental Disclaimer"
-
-[node name="GodotEngineVersion" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-layout_mode = 2
-mouse_filter = 0
-
-[node name="GodotRender" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
-layout_mode = 2
-mouse_filter = 0
-text = "Using xx render"
-
-[node name="Version2" type="Label" parent="ColorRect/Panels/Scroll/Sections"]
-visible = false
-layout_mode = 2
-mouse_filter = 0
-text = "0.0.0 Development Build"
-
-[connection signal="pressed" from="ColorRect/Panels/Catagories/Cata/Display" to="." method="_display"]
-[connection signal="pressed" from="ColorRect/Panels/Catagories/Cata/Audio" to="." method="_audio"]
-[connection signal="pressed" from="ColorRect/Panels/Catagories/Cata/Debug" to="." method="_debug"]
-[connection signal="value_changed" from="ColorRect/Panels/Scroll/Sections/ScrollSpeed" to="." method="_scroll_speed"]
-[connection signal="item_selected" from="ColorRect/Panels/Scroll/Sections/WindowSelector" to="." method="_changed_resolution"]
-[connection signal="item_selected" from="ColorRect/Panels/Scroll/Sections/FPSModes" to="ColorRect/Panels/Scroll/Sections/FPSModes" method="_fpsselected"]
-[connection signal="pressed" from="ColorRect/Panels/Scroll/Sections/FPSShow" to="ColorRect/Panels/Scroll/Sections/FPSShow" method="_toggled"]
-[connection signal="pressed" from="ColorRect/Panels/Scroll/Sections/OriginalLanguage" to="." method="_originallanguage"]
-[connection signal="drag_ended" from="ColorRect/Panels/Scroll/Sections/BackgroundDim" to="." method="_backgrounddim_ended"]
-[connection signal="value_changed" from="ColorRect/Panels/Scroll/Sections/BackgroundDim" to="." method="_backgrounddim_started"]
-[connection signal="item_selected" from="ColorRect/Panels/Scroll/Sections/SkinMode" to="ColorRect/Panels/Scroll/Sections/SkinMode" method="_LoadSkin"]
-[connection signal="pressed" from="ColorRect/Panels/Scroll/Sections/Create" to="." method="_SkinEditor"]
-[connection signal="item_selected" from="ColorRect/Panels/Scroll/Sections/AudioSelector" to="." method="_changed_audiodevice"]
-[connection signal="value_changed" from="ColorRect/Panels/Scroll/Sections/AudioOffset" to="." method="_on_audio_offset_value_changed"]
-[connection signal="pressed" from="ColorRect/Panels/Scroll/Sections/AudioOffsetAuto" to="." method="_aoautoset"]
-[connection signal="pressed" from="ColorRect/Panels/Scroll/Sections/AudioOffsetWizard2" to="." method="_aow"]
-[connection signal="pressed" from="ColorRect/Panels/Scroll/Sections/HideDevDisclaimer" to="." method="_devsel"]
+[connection signal="pressed" from="Panels/Catagories/Cata/Display" to="." method="_display"]
+[connection signal="pressed" from="Panels/Catagories/Cata/Audio" to="." method="_audio"]
+[connection signal="pressed" from="Panels/Catagories/Cata/Skinning" to="." method="_skinning"]
+[connection signal="pressed" from="Panels/Catagories/Cata/Input" to="." method="_input"]
+[connection signal="pressed" from="Panels/Catagories/Cata/Debug" to="." method="_debug"]

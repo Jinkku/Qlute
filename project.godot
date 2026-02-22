@@ -35,6 +35,10 @@ boot_splash/use_filter=false
 config/icon="res://Icons/logo.png"
 config/branch="dev"
 
+[audio]
+
+buses/default_bus_layout="uid://gw4d3826ldol"
+
 [autoload]
 
 AudioPlayer="*res://Script/Singleton/AudioPlayer.cs"

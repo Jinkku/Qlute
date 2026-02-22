@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://62fdbfcux0rs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aae3n"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.21484375, 0.21484375, 0.21484375, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="FontVariation" id="FontVariation_q0wcy"]
+variation_opentype = {
+2003265652: 700
+}
+
+[node name="Important" type="PanelContainer" unique_id=1784822534]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_aae3n")
+
+[node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Section" type="Label" parent="Rows" unique_id=118251586]
+layout_mode = 2
+mouse_filter = 0
+theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
+theme_override_fonts/font = SubResource("FontVariation_q0wcy")
+text = "Important Infomation"
+
+[node name="Notice" type="Label" parent="Rows" unique_id=1412362898]
+layout_mode = 2
+mouse_filter = 0
+text = "Support the Creator!!!! <3"
