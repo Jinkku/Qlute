@@ -109,7 +109,6 @@ public partial class NotificationApplet : Button
 			tempcard.Position = new Vector2(tempcard.Position.X, newY);
 		}
 
-
 		if (!isinit && HasMeta("is_popup") && (bool)GetMeta("is_popup") && DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - (long)GetMeta("time") > 4000 && !ProgressShow)
 		{
 			isinit = true;

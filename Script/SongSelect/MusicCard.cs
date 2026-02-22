@@ -95,7 +95,6 @@ public partial class MusicCard : Button
 	private Tween LoadTween { get; set; }
 	private bool Unicode { get; set; }
 
-
 	private void CheckUnicode()
 	{
 		string text = "";
@@ -162,10 +161,6 @@ public partial class MusicCard : Button
 		Beatmap = SettingsOperator.Beatmaps[SongID];
 
 		ReloadInfo(force: true);
-
-
-
-
 
 		if (BackgroundPath != null)
 		{
@@ -236,8 +231,6 @@ public partial class MusicCard : Button
 			ReloadInfo();
 			RefreshRank();
     }
-
-
 
 	public override void _Process(double _delta)
 	{

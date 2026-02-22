@@ -45,8 +45,7 @@ public partial class CardFunctions : Button
             GoShortcut = GetNode<Button>("DownloadBar/VBoxContainer/Play");
             Download = GetNode<Button>("DownloadBar/VBoxContainer/Download");
             Release.Text = $"submitted at {Global.GetFormatTime(Browse.BrowseCatalog[Index].last_updated / 1000)}";
-            
-            
+
             Existance();
             
             if (BannerPicture != null)

@@ -119,7 +119,6 @@ public partial class LeaderboardPanel : PanelContainer
 			Scroll.ScrollVertical = (int)PlayerNode.Position.Y;
 			LeaderboardContainer.CustomMinimumSize = new Vector2(0, PlayerNode.Position.Y + PlayerNode.Size.Y);
 
-
 			// Sort the leaderboard by score in descending order
 			LeaderboardEntries = LeaderboardEntries.OrderByDescending(entry => entry.Score).ToList();
 

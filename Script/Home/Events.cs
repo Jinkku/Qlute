@@ -85,8 +85,6 @@ public partial class Events : TextureButton
 		HoverTween.SetEase(Tween.EaseType.Out);
 		HoverTween.SetTrans(Tween.TransitionType.Cubic);
 		HoverTween.TweenProperty(this, "self_modulate", NormalModulate * 1.2f, Speed);
-		
-		
 	}
 
 	private void Unhover()

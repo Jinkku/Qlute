@@ -12,7 +12,6 @@ public class LostClass
 
 public partial class RankUpdate : Control
 {
-
 	public Label Performance {get;set;}
 	public Label Rank {get;set;}
 	public static bool Updated { get; set; }
@@ -83,7 +82,6 @@ public partial class RankUpdate : Control
 			var backpos = new Vector2(Position.X - 10, Position.Y);
 			Position = backpos;
 
-
 			//New Card
 			OperatorPerformance.SelfModulate = PL.OperatorColour;
 			OperatorRank.SelfModulate = RL.OperatorColour;
@@ -118,7 +116,6 @@ public partial class RankUpdate : Control
 			{
 				Realtime = false;
 			}
-
 
 			Rank.Text = $"#{RankDisplay:N0}";
 			OperatorRank.Text = $"{RL.prefix} #{ORankDisplay:N0}";

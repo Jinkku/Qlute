@@ -279,7 +279,6 @@ public partial class ApiOperator : Node
 		SettingsOperator.OCombo = json["max_combo"].AsInt32();
 		SettingsOperator.OldCombo = SettingsOperator.OCombo;
 		SettingsOperator.ProfilePictureURL = json["pfp_path"].AsString();
-
 	}
 
 	public static int RankedStatus { get; set; } = RankStatusLegend.Unknown;
@@ -386,8 +385,6 @@ public partial class ApiOperator : Node
 			Notify.Post($"Failed to download beatmap. HTTP Status: {responseCode}. You might be throttled ;w;");
 		}
 	}
-
-
 
 	public void Check_Info(string Username)
 	{

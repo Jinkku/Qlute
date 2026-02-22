@@ -8,8 +8,7 @@ public partial class ButtonFade : Button
     private string _textback = "Test";
     private bool _ready = false;
     private Color _idleColour = new Color("#373738");
-    
-    
+
     [Export] public Color FocusColour = new Color("#1c6de9");
     [Export] public Color HighlightColour = new Color("#6aa5ff");
     [Export] public bool RespectSize {get; set;} = false;
@@ -87,8 +86,7 @@ public partial class ButtonFade : Button
 		    AnimationButton(IdleColour);
 	    }
     }
-    
-    
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{

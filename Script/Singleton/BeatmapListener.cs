@@ -116,7 +116,6 @@ public static class RankStatusLegend
 	public static readonly int Unranked = 0;
 	public static readonly int Special = 2;
 	public static readonly int Unknown = -1;
-	
 }
 public static class SampleSet
 {

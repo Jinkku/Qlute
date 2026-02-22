@@ -6,7 +6,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-
 public class DanceCounter {
         public int time {get;set;}
         public bool flash {get;set;}
@@ -272,7 +271,6 @@ public partial class SettingsOperator : Node
             }
             
             ApiOperator.CheckBeatmapRankStatus();
-            
         }
         else if (SongID != id) { GD.PrintErr("Can't select a song that don't exist :/"); }
         else if (SongID == id)
@@ -282,7 +280,6 @@ public partial class SettingsOperator : Node
     }
 
     public static float TimeCap = 120;
-
 
     public static float GetLevelRating(int Objects, float TimeTotal) => (Objects * levelweight) / (TimeTotal / TimeCap);
     public static double Get_ppvalue(int max, int great, int meh, int bad, float multiplier = 1, int combo = 0, double TimeTotal = 0)
@@ -386,7 +383,6 @@ public partial class SettingsOperator : Node
                     legend.pp += ppv2value;
                     lastNoteTime = noteTime;
                     hitCount++;
-
                 }
             }
         }
@@ -542,7 +538,6 @@ public partial class SettingsOperator : Node
         { "client-id", null },
         { "client-secret", null },
     };
-    
 
     private Tween TopPanelAnimation { get; set; }
     public void toppaneltoggle(bool value, bool noani = false)
@@ -571,7 +566,6 @@ public partial class SettingsOperator : Node
         if (aud == null) AudioOffset = 0; // AudioOffset Subsystem
         else AudioOffset = float.Parse(aud);
 
-
         TopPanelPosition = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar").Position.Y + 50;
         if (Input.IsActionJustPressed("Hide Panel"))
         {
@@ -588,7 +582,6 @@ public partial class SettingsOperator : Node
             SetSetting("api", Configurationbk["api"]);
         }
     }
-
 
     public override void _Ready()
     {
@@ -617,7 +610,6 @@ public partial class SettingsOperator : Node
             SaveSettings();
         }
 
-
         // Check if temp folder is not empty, then delete its contents
         if (System.IO.Directory.Exists(tempdir))
         {
@@ -635,7 +627,6 @@ public partial class SettingsOperator : Node
                 }
             }
         }
-
 
         backgrounddim = int.TryParse(GetSetting("backgrounddim").ToString(), out int bkd) ? bkd : 70;
         SampleVol = int.TryParse(GetSetting("sample").ToString(), out int smp) ? smp : 80;
@@ -656,7 +647,6 @@ public partial class SettingsOperator : Node
         CheckOldSiteUrl();
         GameChecksum = ChecksumUtil.GetGameChecksum(); 
     }
-
 
     public override void _Notification(int what)
     {
@@ -753,5 +743,4 @@ public partial class SettingsOperator : Node
     {
         return Configuration.ContainsKey(key) ? Configuration[key] : null;
     }
-    
 }

@@ -12,7 +12,6 @@ public partial class SettingsPanel : Control
 	public override void _Ready()
 	{
 		Scrolls = GetNode<ScrollContainer>("Panels/Scroll");
-
 	}
 	private void _display()
 	{

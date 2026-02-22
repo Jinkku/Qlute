@@ -62,7 +62,6 @@ public partial class SkinEditor : Control
 		{
 			System.IO.Directory.CreateDirectory(path);
 			New = true;
-
 		}
 		var index = 0;
 		foreach (Texture2D img in new List<Texture2D>([PreElement.NoteBack, PreElement.NoteFore, PreElement.Cursor, PreElement.Perfect, PreElement.Good, PreElement.Bad, PreElement.FullCombo, PreElement.JudgePerfect, PreElement.JudgeGreat, PreElement.JudgeMeh, PreElement.JudgeMiss]))

@@ -82,9 +82,7 @@ public partial class BeatmapInfo : Control
 		GoShortcut = GetNode<Button>("Pill/Padding/Info/Columns/Info/HBoxContainer/Play");
 		Download = GetNode<Button>("Pill/Padding/Info/Columns/Info/HBoxContainer/Download");
 
-
 		BeatmapList = Browse.BrowseCatalog[Index].beatmaps;
-
 
 		var ind = 0;
 		foreach (var beat in BeatmapList)
@@ -101,7 +99,6 @@ public partial class BeatmapInfo : Control
 			BeatmapIndex = 0;
 			NoteCountTotal = BeatmapList[BeatmapIndex].count_circles + BeatmapList[BeatmapIndex].count_sliders;
 		}
-
 
 		ReloadStats();
 	}

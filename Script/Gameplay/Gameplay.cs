@@ -21,7 +21,6 @@ public class KeyL
 
 public partial class Gameplay : Control
 {
-    
 	private string oldtitle = "";
 	private SettingsOperator SettingsOperator { get; set; }
 	private int BadCombo { get; set; }
@@ -417,10 +416,10 @@ public partial class Gameplay : Control
 
 		var NoteCount = 0;
 		
-		if (!BreakTime && songstarted && Notes[Math.Min(Notes.Count() - 1, NoteTick)].timing  + est + HitPoint <= -4500)
+		if (!BreakTime && songstarted && Notes[Math.Min(Notes.Count - 1, NoteTick)].timing  + est + HitPoint <= -4500)
 		{
 			BreakTime = true;
-			NoteBreakTiming = -(int)(Notes[Math.Min(Notes.Count() - 1, NoteTick)].timing);
+			NoteBreakTiming = -(int)(Notes[Math.Min(Notes.Count - 1, NoteTick)].timing);
 			BreakNow();
 		}
 		
@@ -484,7 +483,6 @@ public partial class Gameplay : Control
 			{
 				Note.Node.Position = new Vector2(0, (notex * scrollspeed) - (HitPoint * (scrollspeed - 1)));
 			}
-
 		}
 	}
 
@@ -624,7 +622,7 @@ public partial class Gameplay : Control
 
 	private void IncreaseDanceIndex()
 	{
-		if (DanceIndex + 1 < dance.Count())
+		if (DanceIndex + 1 < dance.Count)
 		{
 			DanceIndex++;
 		}

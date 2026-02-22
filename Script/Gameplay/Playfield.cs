@@ -12,7 +12,6 @@ public partial class Playfield : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		
 		KeycodeTimer = GetNode<Timer>("KeyHide");
 		KeycodeTimer.Timeout += () => StartDetonation();
 		ChartSections = GetNode<HBoxContainer>("ChartSections");
@@ -49,9 +48,7 @@ public partial class Playfield : Control
 				id++;
 			}
 			tween.Finished += () => StartDetonation();
-			
 		}
-		
 	}
 
 	private void StartDetonation()

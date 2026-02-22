@@ -78,9 +78,6 @@ public partial class PauseMenu : Control
 			_retry();
 		}
 
-
-
-
 		if ((Input.IsActionJustPressed("ui_up") || Input.IsActionJustPressed("ui_down")) && GetViewport().GuiGetFocusOwner() == null)
 		{
 			foreach (Button Node in GetNode<VBoxContainer>("PanelContainer/VBoxContainer").GetChildren())

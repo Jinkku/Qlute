@@ -30,7 +30,6 @@ public partial class SongIndication : Label
 			Ani.TweenCallback(Callable.From(() => Text = newText)).SetDelay(0.5);
 			Ani.TweenProperty(this, "modulate:a", 1f, 0.5).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic).SetDelay(0.5);
 			Ani.Play();
-			
 		}
 	}
 
