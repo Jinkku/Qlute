@@ -88,23 +88,23 @@ mouse_filter = 2
 color = Color(1, 1, 1, 0)
 
 [node name="Note1" parent="Guard" unique_id=230947442 instance=ExtResource("1_6jlou")]
-self_modulate = Color(1, 1, 1, 0.05)
+self_modulate = Color(1, 1, 1, 0.25)
 position = Vector2(0, -45)
 
 [node name="Note2" parent="Guard" unique_id=1634780964 instance=ExtResource("1_6jlou")]
-self_modulate = Color(1, 1, 1, 0.05)
+self_modulate = Color(1, 1, 1, 0.25)
 position = Vector2(104, -45)
 NotePart = 1
 metadata/part = 1
 
 [node name="Note3" parent="Guard" unique_id=806681802 instance=ExtResource("1_6jlou")]
-self_modulate = Color(1, 1, 1, 0.05)
+self_modulate = Color(1, 1, 1, 0.25)
 position = Vector2(208, -45)
 NotePart = 2
 metadata/part = 2
 
 [node name="Note4" parent="Guard" unique_id=2065769152 instance=ExtResource("1_6jlou")]
-self_modulate = Color(1, 1, 1, 0.05)
+self_modulate = Color(1, 1, 1, 0.25)
 position = Vector2(312, -45)
 NotePart = 3
 metadata/part = 3
