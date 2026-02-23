@@ -3,7 +3,6 @@ using System;
 using System.IO;
 using System.Linq;
 
-
 public partial class Global : Node
 {
 	// Called when the node enters the scene tree for the first time.
@@ -124,10 +123,10 @@ public partial class Global : Node
 
 		if (Input.IsActionJustPressed("screenshot"))
 		{
-			var filename = "/screenshot_" + ((int)Directory.GetFiles(SettingsOperator.screenshotdir).Count() + 1) + ".jpg";
+			var filename = "/screenshot_" + ((int)Directory.GetFiles(SettingsOperator.screenshotdir).Length + 1) + ".jpg";
 			var image = GetViewport().GetTexture().GetImage();
 			image.SaveJpg(SettingsOperator.screenshotdir + filename);
-			Notify.Post($"saved as screenshot_{(int)Directory.GetFiles(SettingsOperator.screenshotdir).Count() + 1}", SettingsOperator.screenshotdir);
+			Notify.Post($"saved as screenshot_{(int)Directory.GetFiles(SettingsOperator.screenshotdir).Length + 1}", SettingsOperator.screenshotdir);
 			GD.Print(filename);
 		}
 		else if (Input.IsActionJustPressed("Skin Editor"))

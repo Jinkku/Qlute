@@ -217,7 +217,6 @@ public partial class SongSelect : Control
 			SettingsOperator.SelectSongID(result.ID);
 			scrollmode(exactvalue: SettingsOperator.SongID);
 		}
-		
 	}
 	
 	public override void _Ready()
@@ -386,14 +385,14 @@ public partial class SongSelect : Control
 			// 🔥 RADIAL SCROLL EFFECT 🔥
 			// =========================
 
-			float screenY = entry.GlobalPosition.Y + entry.Size.Y * 0.5f;
+			float screenY = entry.GlobalPosition.Y + (entry.Size.Y * 0.5f);
 			float distance = Mathf.Abs(screenY - WindowSizeCenter.Y);
 
 			float radial = Mathf.Clamp(distance / WindowSizeCenter.Y, 0f, 1f);
 			radial = Mathf.Pow(radial, 0.6f);
 
 			// scale
-			float scale = 1.0f - radial * 0.15f;
+			float scale = 1.0f - (radial * 0.15f);
 			
 			entry.Scale = new Vector2(scale, scale);
 
@@ -401,7 +400,6 @@ public partial class SongSelect : Control
 			SongLoaded++;
 		}
 	}
-
 
 	private void checksongpanel()
 	{
@@ -486,7 +484,6 @@ public partial class SongSelect : Control
 		}
 	}
 
-	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{

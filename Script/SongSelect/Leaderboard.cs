@@ -22,7 +22,6 @@ public partial class Leaderboard : Button
 
 	private void ParseRankEmblem()
 	{
-		
 		if ( Info.Accuracy == 1)
 		{
 			RankEmblem.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/ResultsScreen/Ranks/SS.png");

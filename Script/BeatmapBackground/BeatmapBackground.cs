@@ -70,7 +70,6 @@ public partial class BeatmapBackground : TextureRect
 				0.5f
 			);
 			ImageTween.TweenCallback(Callable.From(() => TempImage.Hide()));
-			
 		} catch (Exception err)
 		{
 			GD.PrintErr(err.Message);

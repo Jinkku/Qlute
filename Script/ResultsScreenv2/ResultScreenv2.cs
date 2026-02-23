@@ -149,7 +149,6 @@ public partial class ResultScreenv2 : Control
 			{
 				Tween.TweenCallback(Callable.From(() => Sample.PlaySample("res://SelectableSkins/Slia/Sounds/applause.wav"))).SetDelay(1.1);
 			}
-				
 		}	else if (mode == 1)
 		{
 			Details.Position = new Vector2(0, Details.Position.Y);
@@ -184,7 +183,6 @@ public partial class ResultScreenv2 : Control
 			Tween.TweenProperty(RankEmblem, "position:x", RankEmblemPos + RankEmblem.Size.X,AnimationSpeed);
 			Tween.TweenProperty(RankEmblem, "modulate", new Color(1f,1f,1f,0f),AnimationSpeed);
 			Tween.TweenCallback(Callable.From(() => GetNode<SceneTransition>("/root/Transition").Switch(scene))).SetDelay(0.1);
-
 		} else if (mode == 2)
 		{
 			Tween.SetTrans(Tween.TransitionType.Cubic);
@@ -319,8 +317,7 @@ public partial class ResultScreenv2 : Control
 		Additional = GetNode<HBoxContainer>("MainScreen/Additional");
 		Additional2 = GetNode<HBoxContainer>("MainScreen/Additional2");
 		RankEmblem = GetNode<PanelContainer>("MainScreen/Rank");
-		
-		
+
 		// Checks if the replay file is in replay folder (temp until have backend support replay downloading :p)
 		if (System.IO.File.Exists(Replay.FilePath) && Replay.FilePath != "")
 		{
@@ -427,7 +424,7 @@ public partial class ResultScreenv2 : Control
 
 	private void Screenshot()
 	{
-		var filename = "/screenshot_" + ((int)Directory.GetFiles(SettingsOperator.screenshotdir).Count() + 1) + ".jpg";
+		var filename = "/screenshot_" + ((int)Directory.GetFiles(SettingsOperator.screenshotdir).Length + 1) + ".jpg";
 		var image = GetViewport().GetTexture().GetImage();
 		var scalecrop = 50 * (GetViewportRect().Size.Y / 720);
 		int screenWidth = image.GetWidth();
@@ -441,7 +438,7 @@ public partial class ResultScreenv2 : Control
 		// Crop the image to the specified region
 		Image croppedImage = image.GetRegion(cropRegion);
 		croppedImage.SaveJpg(SettingsOperator.screenshotdir + filename);
-		Notify.Post($"saved as screenshot_{(int)Directory.GetFiles(SettingsOperator.screenshotdir).Count() + 1}", SettingsOperator.screenshotdir);
+		Notify.Post($"saved as screenshot_{(int)Directory.GetFiles(SettingsOperator.screenshotdir).Length + 1}", SettingsOperator.screenshotdir);
 		GD.Print(filename);
 	}
 	private void WatchReplay()
@@ -516,8 +513,7 @@ public partial class ResultScreenv2 : Control
 		{
 			NA.Visible = true;	
 		}
-		
-		
+
 		if (Tween != null && Tween.IsRunning())
 		{
 			pp.Text = $"{ppValue:N0}pp";

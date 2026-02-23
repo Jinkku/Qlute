@@ -61,8 +61,7 @@ public partial class DropDownMenu : Button
                 _buttonText.Text = _textback;
         }
     }
-    
-    
+
     [Signal] // <-- this makes it appear in the editor
     public delegate void ButtonPressedEventHandler(int index);
     
@@ -254,5 +253,4 @@ public partial class DropDownMenu : Button
         }
         _menuTween.Play();
     }
-    
 }
