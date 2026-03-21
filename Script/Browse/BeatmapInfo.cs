@@ -122,7 +122,7 @@ public partial class BeatmapInfo : Control
 			Title.Text = cache.title;
 			Artist.Text = cache.artist;
 			Mapper.Text = $"mapped by {cache.creator}";
-			Submitted.Text = $"submitted at {Global.GetFormatTime(cache.last_updated / 1000)}";
+			//Submitted.Text = $"submitted at {Global.GetFormatTime(cache.last_updated)}";
 		}
 	}
 
