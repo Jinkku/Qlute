@@ -119,9 +119,6 @@ public partial class SongSelect : Control
 		Ani.SetParallel(true);
 		if (type == 1)
 		{
-			var LoadScreen = GD.Load<PackedScene>("res://Panels/Screens/SongLoadingScreen.tscn").Instantiate().GetNode<Control>(".");
-			LoadScreen.Modulate = new Color(0, 0, 0, 0);
-			GetTree().CurrentScene.AddChild(LoadScreen);
 			Ani.TweenProperty(SongDetails, "position", new Vector2(-SongDetails.Size.X, SongDetails.Position.Y), 0.5f)
 				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 			Ani.TweenProperty(SongPanel, "position",
@@ -134,8 +131,6 @@ public partial class SongSelect : Control
 				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 			Ani.TweenProperty(SongControl, "position", new Vector2(SongControl.Position.X, -SongControl.Size.Y), 0.5f)
 				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-			Ani.TweenProperty(LoadScreen, "modulate", new Color(1, 1, 1, 1), 0.5f)
-				.SetTrans(Tween.TransitionType.Linear);
 			Ani.TweenProperty(StartButton, "modulate", new Color(1, 1, 1, 0), 0.5f)
 				.SetTrans(Tween.TransitionType.Linear);
 			Ani.Play();
@@ -661,6 +656,8 @@ public partial class SongSelect : Control
 		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/play.wav");
 
 		AnimationScene(1);
+		
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 		SettingsOperator.loopaudio = false;
 	}
 	private void _on_back_pressed()
