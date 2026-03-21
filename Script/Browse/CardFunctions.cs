@@ -44,7 +44,7 @@ public partial class CardFunctions : Button
             Existant = GetNode<PanelContainer>("Existed");
             GoShortcut = GetNode<Button>("DownloadBar/VBoxContainer/Play");
             Download = GetNode<Button>("DownloadBar/VBoxContainer/Download");
-            Release.Text = $"submitted at {Global.GetFormatTime(Browse.BrowseCatalog[Index].last_updated / 1000)}";
+            //Release.Text = $"submitted at {Global.GetFormatTime(Browse.BrowseCatalog[Index].last_updated / 1000)}";
 
             Existance();
             

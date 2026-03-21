@@ -33,7 +33,7 @@ public class BrowseCatalogLegend {
 	public string creator { get; set; }
 	public string source { get; set; }
 	public string preview_url { get; set; }
-	public double last_updated { get; set; }
+	//public DateTime last_updated { get; set; } FIX
 	public CatalogCardLegend covers { get; set; }
 	public List<CatalogBeatmapInfoLegend> beatmaps { get; set; }
 }
@@ -235,7 +235,7 @@ public partial class Browse : Control
 				line.beatmaps = beatmaps;
 
 				var Element = GD.Load<PackedScene>("res://Panels/BrowseElements/Card.tscn").Instantiate().GetNode<CardFunctions>(".");
-				Element.GetNode<MusicPreview>("SongBackgroundPreview/Playbutton").audioPath = "https:" + line.preview_url;
+				Element.GetNode<MusicPreview>("SongBackgroundPreview/Playbutton").audioPath = line.preview_url;
 				Element.BannerPicture = line.covers.card;
 				Element.BeatmapID = line.id;
 				Element.Index = index;
