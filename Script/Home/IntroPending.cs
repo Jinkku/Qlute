@@ -5,7 +5,7 @@ public partial class IntroPending : Control
 {
 	public  SettingsOperator SettingsOperator { get; set; }
 	public PanelContainer HomeButtons {get;set;}
-	public static bool JustStarted { get; set; }
+	public static bool AlreadyStarted { get; set; }
 	public static Vector2 HomeButtonsPOS { get; set; }
 	private Vector2 HomeLogoSize {get;set;}
 	private Vector2 HomeLogoPos {get;set;}
@@ -26,11 +26,12 @@ public partial class IntroPending : Control
 		Logo.PivotOffset = Logo.Size / 2;
 		Visible = true;
 		HomeButtons.Visible = false;
-		if (JustStarted)
+		if (AlreadyStarted)
 		{
-			AnimationTick(HomeScreen.StayOpen);
+			Visible = false;
+			HomeButtons.Visible = true;
 		}
-		JustStarted = true;
+		AlreadyStarted = true;
 	}
 	private void _hover()
 	{
