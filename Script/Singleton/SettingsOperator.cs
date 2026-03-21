@@ -117,6 +117,7 @@ public partial class SettingsOperator : Node
         { "showunicode", false },
         { "hidehud", false },
         { "hidedevintro", false },
+        { "discord-rpc", true },
         { "gamepath", "" },
         { "leaderboardtype", 1 },
     };

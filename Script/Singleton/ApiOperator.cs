@@ -6,6 +6,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using DiscordRPC;
 public class BeatmapDownloader
 {
 	public HttpRequest Request { get; set; }
@@ -48,6 +49,7 @@ public partial class ApiOperator : Node
 	public static bool Submitted = false;
 	public static string Beatmapapi = "https://catboy.best";
 	public static Texture2D PictureData { get; set; }
+	public DiscordRpcClient Client { get; private set; }
 
 	/// <summary>
 	/// Submits a score to the dedicated server. (New Version)
@@ -203,6 +205,9 @@ public partial class ApiOperator : Node
 		LeaderboardAPI.Connect("request_completed", new Callable(this, nameof(_LeaderboardAPIDone)));
 		InfoApi.Connect("request_completed", new Callable(this, nameof(_on_info_request_completed)));
 		SubmitApi.Connect("request_completed", new Callable(this, nameof(_Submitrequest)));
+		if ((bool)SettingsOperator.GetSetting("discord-rpc")) 
+			Client = new DiscordRpcClient("1484981423684452684");	// Creates the client
+			Client.Initialize();
 		if ((Username != null || PasswordHash != null) && (bool)SettingsOperator.Sessioncfg["loggedin"] == false && Check.CheckBoolValue(SettingsOperator.GetSetting("stayloggedin").ToString()))
 		{
 			GD.Print("Attempting to login with username: " + Username);
@@ -492,6 +497,18 @@ public partial class ApiOperator : Node
 		$"PASSWORD: {SettingsOperator.GetSetting("password")}",
 		};
 		StatusChecker.Request(SettingsOperator.GetSetting("api") + "apiv2/setstatus", Headers);
+		
+		// Discord RPC Part
+		if ((bool)SettingsOperator.GetSetting("discord-rpc") && Client != null) 
+			Client.SetPresence(new RichPresence()
+			{
+			State = Status,
+			Assets = new Assets()
+			{
+				LargeImageKey = "main-logo",
+				LargeImageText = $"{Username} (#{SettingsOperator.Rank:N0})",
+			}
+		});
 	}
 	
 	static bool IsJpeg(byte[] data)

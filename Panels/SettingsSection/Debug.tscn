@@ -36,7 +36,12 @@ theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
 theme_override_fonts/font = SubResource("FontVariation_ubnii")
 text = "Debug"
 
-[node name="HideDevDisclaimer" type="CheckButton" parent="Rows" unique_id=2018246778]
+[node name="DiscordRPC" type="CheckButton" parent="Rows" unique_id=2018246778]
+layout_mode = 2
+tooltip_text = "Need to restart the game to finish the changes."
+text = "Discord RPC *"
+
+[node name="HideDevDisclaimer" type="CheckButton" parent="Rows" unique_id=994766516]
 layout_mode = 2
 text = "Hide Experimental Disclaimer"
 
@@ -57,4 +62,5 @@ mouse_filter = 0
 text = "0.0.0 Development Build"
 script = ExtResource("2_ubnii")
 
+[connection signal="pressed" from="Rows/DiscordRPC" to="." method="_discordrpc"]
 [connection signal="pressed" from="Rows/HideDevDisclaimer" to="." method="_devsel"]
