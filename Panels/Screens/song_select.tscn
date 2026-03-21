@@ -1,7 +1,8 @@
-[gd_scene load_steps=42 format=3 uid="uid://coyf2teo5g6nm"]
+[gd_scene format=3 uid="uid://coyf2teo5g6nm"]
 
 [ext_resource type="Script" uid="uid://bqj04u64e106v" path="res://Script/SongSelect/SongSelect.cs" id="1_fin0e"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_wg4n2"]
+[ext_resource type="Texture2D" uid="uid://dyrairg2m2il6" path="res://Resources/System/emit.png" id="3_ihwey"]
 [ext_resource type="Texture2D" uid="uid://cmy4xmselkgxr" path="res://Resources/System/external.svg" id="3_javs2"]
 [ext_resource type="PackedScene" uid="uid://ce4jpc6edc2re" path="res://Panels/Overlays/InfoBox.tscn" id="4_5rktx"]
 [ext_resource type="PackedScene" uid="uid://do8d8d3w2frbv" path="res://Panels/Overlays/RankBox.tscn" id="4_fb0k2"]
@@ -17,7 +18,6 @@
 [ext_resource type="Script" uid="uid://blbe3d2880su3" path="res://Script/Effects/ScreenElementButton.cs" id="8_5rktx"]
 [ext_resource type="PackedScene" uid="uid://c1aa8tscp5u6p" path="res://Panels/Overlays/BeatmapContextMenu.tscn" id="9_1t01f"]
 [ext_resource type="Script" uid="uid://b7udx8fmtfcbg" path="res://Script/SongSelect/SongSelectMode.cs" id="9_p2axe"]
-[ext_resource type="Texture2D" uid="uid://dhtk4mxqohiru" path="res://Resources/System/Heart.svg" id="12_5rktx"]
 [ext_resource type="Script" uid="uid://jiq8w3wo2uhl" path="res://Script/SongSelect/SongDetails/Details.cs" id="12_fb0k2"]
 [ext_resource type="Script" uid="uid://0xn63uccdk6j" path="res://Script/TimerwithBPM/Bpmtick.cs" id="20_ihwey"]
 
@@ -186,7 +186,7 @@ expand_margin_left = 65.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0g2hw"]
 
-[node name="Song Select" type="Control"]
+[node name="Song Select" type="Control" unique_id=1389782858]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -195,22 +195,22 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_fin0e")
 
-[node name="BeatmapBackground" parent="." instance=ExtResource("2_wg4n2")]
+[node name="BeatmapBackground" parent="." unique_id=235856276 instance=ExtResource("2_wg4n2")]
 self_modulate = Color(0.9063318, 0.9063318, 0.9063318, 1)
 z_index = -5
 layout_mode = 1
 
-[node name="Particle" type="GPUParticles2D" parent="."]
+[node name="Particle" type="GPUParticles2D" parent="." unique_id=2096503861]
 z_index = -1
 position = Vector2(1276, 387)
 emitting = false
 amount = 40
-texture = ExtResource("12_5rktx")
+texture = ExtResource("3_ihwey")
 lifetime = 5.0
 fixed_fps = 15
 process_material = SubResource("ParticleProcessMaterial_5rktx")
 
-[node name="SongPanel" type="Control" parent="."]
+[node name="SongPanel" type="Control" parent="." unique_id=2127539448]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -220,7 +220,7 @@ offset_left = -300.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="VScrollBar" type="VScrollBar" parent="SongPanel"]
+[node name="VScrollBar" type="VScrollBar" parent="SongPanel" unique_id=1051983708]
 top_level = true
 z_index = 2
 layout_mode = 0
@@ -237,7 +237,7 @@ theme_override_styles/grabber = SubResource("StyleBoxFlat_dhkys")
 theme_override_styles/grabber_highlight = SubResource("StyleBoxFlat_xaiyr")
 theme_override_styles/grabber_pressed = SubResource("StyleBoxFlat_s818e")
 
-[node name="NoBeatmap" type="Label" parent="SongPanel"]
+[node name="NoBeatmap" type="Label" parent="SongPanel" unique_id=1845210040]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -251,7 +251,7 @@ visit the catalog to find some!
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BottomBar" type="Control" parent="."]
+[node name="BottomBar" type="Control" parent="." unique_id=1440072184]
 z_index = 2
 layout_mode = 1
 anchors_preset = 12
@@ -263,19 +263,19 @@ grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 
-[node name="ModsShown" parent="BottomBar" instance=ExtResource("7_p20rm")]
+[node name="ModsShown" parent="BottomBar" unique_id=7962095 instance=ExtResource("7_p20rm")]
 layout_mode = 1
 offset_left = 105.0
 offset_right = 605.0
 mouse_filter = 2
 
-[node name="ControlPanel" parent="BottomBar" instance=ExtResource("7_p2axe")]
+[node name="ControlPanel" parent="BottomBar" unique_id=226854940 instance=ExtResource("7_p2axe")]
 layout_mode = 1
 
 [node name="Box" parent="BottomBar/ControlPanel" index="0"]
 theme_override_constants/separation = 5
 
-[node name="Mod" type="Button" parent="BottomBar/ControlPanel/Box" index="1"]
+[node name="Mod" type="Button" parent="BottomBar/ControlPanel/Box" index="1" unique_id=1654882391]
 custom_minimum_size = Vector2(108, 50)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -288,7 +288,7 @@ metadata/unfocus = Color(0.0784314, 0.0784314, 0.0784314, 1)
 metadata/focus = Color(0.21875, 0.21875, 0.21875, 1)
 metadata/highlight = Color(0.398438, 0.279665, 0.192993, 1)
 
-[node name="Label" type="Label" parent="BottomBar/ControlPanel/Box/Mod"]
+[node name="Label" type="Label" parent="BottomBar/ControlPanel/Box/Mod" unique_id=501686639]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -299,7 +299,7 @@ text = "Mods"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Random" type="Button" parent="BottomBar/ControlPanel/Box" index="2"]
+[node name="Random" type="Button" parent="BottomBar/ControlPanel/Box" index="2" unique_id=1493602830]
 custom_minimum_size = Vector2(108, 50)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -312,7 +312,7 @@ metadata/unfocus = Color(0.0784314, 0.0784314, 0.0784314, 1)
 metadata/focus = Color(0.21875, 0.21875, 0.21875, 1)
 metadata/highlight = Color(0.228304, 0.398438, 0.192993, 1)
 
-[node name="Label" type="Label" parent="BottomBar/ControlPanel/Box/Random"]
+[node name="Label" type="Label" parent="BottomBar/ControlPanel/Box/Random" unique_id=183803153]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -323,7 +323,7 @@ text = "Random"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Collections" type="Button" parent="BottomBar/ControlPanel/Box" index="3"]
+[node name="Collections" type="Button" parent="BottomBar/ControlPanel/Box" index="3" unique_id=1217711355]
 visible = false
 custom_minimum_size = Vector2(108, 50)
 layout_mode = 2
@@ -337,7 +337,7 @@ metadata/unfocus = Color(0.0784314, 0.0784314, 0.0784314, 1)
 metadata/focus = Color(0.21875, 0.21875, 0.21875, 1)
 metadata/highlight = Color(0.192993, 0.205833, 0.398438, 1)
 
-[node name="Start" type="TextureButton" parent="BottomBar"]
+[node name="Start" type="TextureButton" parent="BottomBar" unique_id=1106559813]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 1
 anchors_preset = 3
@@ -356,7 +356,7 @@ texture_normal = ExtResource("7_0g2hw")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="ControlBar" type="PanelContainer" parent="."]
+[node name="ControlBar" type="PanelContainer" parent="." unique_id=1342281278]
 z_index = 1
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 1
@@ -366,13 +366,13 @@ offset_bottom = 34.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ixo7g")
 
-[node name="AmazingPillar" type="HBoxContainer" parent="ControlBar"]
+[node name="AmazingPillar" type="HBoxContainer" parent="ControlBar" unique_id=496132947]
 layout_mode = 2
 size_flags_vertical = 8
 mouse_filter = 0
 alignment = 2
 
-[node name="SongSelectMode" type="Label" parent="ControlBar/AmazingPillar"]
+[node name="SongSelectMode" type="Label" parent="ControlBar/AmazingPillar" unique_id=1151004506]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -386,24 +386,24 @@ vertical_alignment = 1
 text_overrun_behavior = 3
 script = ExtResource("9_p2axe")
 
-[node name="Margin" type="MarginContainer" parent="ControlBar/AmazingPillar"]
+[node name="Margin" type="MarginContainer" parent="ControlBar/AmazingPillar" unique_id=1480361346]
 layout_mode = 2
 theme_override_constants/margin_bottom = 5
 
-[node name="MarginContainer" type="MarginContainer" parent="ControlBar/AmazingPillar/Margin"]
+[node name="MarginContainer" type="MarginContainer" parent="ControlBar/AmazingPillar/Margin" unique_id=1065491016]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 0
 
-[node name="Beatmapsearch" type="LineEdit" parent="ControlBar/AmazingPillar/Margin/MarginContainer"]
+[node name="Beatmapsearch" type="LineEdit" parent="ControlBar/AmazingPillar/Margin/MarginContainer" unique_id=33041311]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_vertical = 4
 placeholder_text = "search...."
 clear_button_enabled = true
 
-[node name="SongDetails" type="VBoxContainer" parent="."]
+[node name="SongDetails" type="VBoxContainer" parent="." unique_id=1838294306]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -413,21 +413,21 @@ offset_bottom = 26.5
 grow_vertical = 2
 scale = Vector2(0.9, 0.9)
 
-[node name="SongInfo" type="PanelContainer" parent="SongDetails"]
+[node name="SongInfo" type="PanelContainer" parent="SongDetails" unique_id=1163572430]
 z_index = 1
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_p2axe")
 
-[node name="Rows" type="VBoxContainer" parent="SongDetails/SongInfo"]
+[node name="Rows" type="VBoxContainer" parent="SongDetails/SongInfo" unique_id=1246577479]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Column1" type="PanelContainer" parent="SongDetails/SongInfo/Rows"]
+[node name="Column1" type="PanelContainer" parent="SongDetails/SongInfo/Rows" unique_id=1463596661]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_0g2hw")
 
-[node name="Title" type="Label" parent="SongDetails/SongInfo/Rows/Column1"]
+[node name="Title" type="Label" parent="SongDetails/SongInfo/Rows/Column1" unique_id=822597837]
 custom_minimum_size = Vector2(360, 40)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -440,11 +440,11 @@ vertical_alignment = 1
 autowrap_mode = 1
 text_overrun_behavior = 3
 
-[node name="RankBox" parent="SongDetails/SongInfo/Rows/Column1" instance=ExtResource("4_fb0k2")]
+[node name="RankBox" parent="SongDetails/SongInfo/Rows/Column1" unique_id=616001889 instance=ExtResource("4_fb0k2")]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="ExSongInfo" type="Label" parent="SongDetails/SongInfo/Rows"]
+[node name="ExSongInfo" type="Label" parent="SongDetails/SongInfo/Rows" unique_id=1823610191]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -457,52 +457,52 @@ Shinji Kaoma"
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="Misc" type="HBoxContainer" parent="SongDetails/SongInfo/Rows"]
+[node name="Misc" type="HBoxContainer" parent="SongDetails/SongInfo/Rows" unique_id=458302241]
 layout_mode = 2
 
-[node name="BPM" parent="SongDetails/SongInfo/Rows/Misc" instance=ExtResource("4_5rktx")]
+[node name="BPM" parent="SongDetails/SongInfo/Rows/Misc" unique_id=1080282468 instance=ExtResource("4_5rktx")]
 layout_mode = 2
 size_flags_horizontal = 3
 Icon = ExtResource("5_ndor5")
 Text = "197"
 
-[node name="Length" parent="SongDetails/SongInfo/Rows/Misc" instance=ExtResource("4_5rktx")]
+[node name="Length" parent="SongDetails/SongInfo/Rows/Misc" unique_id=60981692 instance=ExtResource("4_5rktx")]
 layout_mode = 2
 size_flags_horizontal = 3
 Icon = ExtResource("6_aosrv")
 Text = "03:59"
 
-[node name="Points" parent="SongDetails/SongInfo/Rows/Misc" instance=ExtResource("4_5rktx")]
+[node name="Points" parent="SongDetails/SongInfo/Rows/Misc" unique_id=1399763814 instance=ExtResource("4_5rktx")]
 layout_mode = 2
 size_flags_horizontal = 3
 Icon = ExtResource("7_fb0k2")
 Text = "+0pp"
 
-[node name="Level" parent="SongDetails/SongInfo/Rows/Misc" instance=ExtResource("4_5rktx")]
+[node name="Level" parent="SongDetails/SongInfo/Rows/Misc" unique_id=1256915702 instance=ExtResource("4_5rktx")]
 layout_mode = 2
 size_flags_horizontal = 3
 Icon = ExtResource("8_0g2hw")
 Text = "Lv. 999"
 
-[node name="blank" type="HSeparator" parent="SongDetails"]
+[node name="blank" type="HSeparator" parent="SongDetails" unique_id=2022233355]
 layout_mode = 2
 theme_override_constants/separation = 20
 theme_override_styles/separator = SubResource("StyleBoxEmpty_xmk5a")
 
-[node name="Leaderboard Panel" type="PanelContainer" parent="SongDetails"]
+[node name="Leaderboard Panel" type="PanelContainer" parent="SongDetails" unique_id=115474256]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_gf377")
 
-[node name="Rows" type="VBoxContainer" parent="SongDetails/Leaderboard Panel"]
+[node name="Rows" type="VBoxContainer" parent="SongDetails/Leaderboard Panel" unique_id=1974626589]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="Box4" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows"]
+[node name="Box4" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows" unique_id=1406803450]
 custom_minimum_size = Vector2(370, 0)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Details" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4"]
+[node name="Details" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4" unique_id=1342331560]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_ihwey")
@@ -513,7 +513,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
 toggle_mode = true
 text = "Details"
 
-[node name="Local" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4"]
+[node name="Local" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4" unique_id=849316535]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_ihwey")
@@ -524,7 +524,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
 toggle_mode = true
 text = "Local"
 
-[node name="Global" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4"]
+[node name="Global" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4" unique_id=1416360993]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_ihwey")
@@ -535,7 +535,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
 toggle_mode = true
 text = "Global"
 
-[node name="Country" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4"]
+[node name="Country" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4" unique_id=1313540608]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -547,7 +547,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
 toggle_mode = true
 text = "Country"
 
-[node name="Teams" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4"]
+[node name="Teams" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4" unique_id=1912297235]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -559,7 +559,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
 toggle_mode = true
 text = "Teams"
 
-[node name="OpenExternal" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4"]
+[node name="OpenExternal" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4" unique_id=1138167561]
 custom_minimum_size = Vector2(22, 22)
 layout_mode = 2
 tooltip_text = "Open in browser"
@@ -569,7 +569,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_fb0k2")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
 icon = ExtResource("3_javs2")
 
-[node name="LeaderboardInfo" type="ScrollContainer" parent="SongDetails/Leaderboard Panel/Rows"]
+[node name="LeaderboardInfo" type="ScrollContainer" parent="SongDetails/Leaderboard Panel/Rows" unique_id=1589003153]
 custom_minimum_size = Vector2(370, 320)
 layout_mode = 2
 size_flags_vertical = 3
@@ -577,12 +577,12 @@ horizontal_scroll_mode = 3
 vertical_scroll_mode = 3
 script = ExtResource("5_ndd6a")
 
-[node name="Leaderboard" type="VBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/LeaderboardInfo"]
+[node name="Leaderboard" type="VBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/LeaderboardInfo" unique_id=397947716]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="NoBeatmap" type="Label" parent="SongDetails/Leaderboard Panel/Rows/LeaderboardInfo"]
+[node name="NoBeatmap" type="Label" parent="SongDetails/Leaderboard Panel/Rows/LeaderboardInfo" unique_id=507287270]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -591,27 +591,27 @@ text = "No scores set on this beatmap!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Details" type="PanelContainer" parent="SongDetails/Leaderboard Panel/Rows"]
+[node name="Details" type="PanelContainer" parent="SongDetails/Leaderboard Panel/Rows" unique_id=1690350623]
 visible = false
 custom_minimum_size = Vector2(0, 350)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pgcs5")
 script = ExtResource("12_fb0k2")
 
-[node name="Info" type="VBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details"]
+[node name="Info" type="VBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details" unique_id=985342489]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Row1" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details/Info"]
+[node name="Row1" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details/Info" unique_id=591831385]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row1"]
+[node name="Title" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row1" unique_id=676478950]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.4
 text = "Accuracy"
 
-[node name="ProgressBar" type="ProgressBar" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row1"]
+[node name="ProgressBar" type="ProgressBar" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row1" unique_id=1272542137]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -620,45 +620,45 @@ max_value = 10.0
 value = 1.0
 show_percentage = false
 
-[node name="Row2" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details/Info"]
+[node name="Row2" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details/Info" unique_id=637603663]
 material = SubResource("ShaderMaterial_0g2hw")
 layout_mode = 2
 
-[node name="Title" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row2"]
+[node name="Title" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row2" unique_id=891021794]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.4
 text = "Difficulty"
 
-[node name="ProgressBar" type="ProgressBar" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row2"]
+[node name="ProgressBar" type="ProgressBar" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row2" unique_id=1095152320]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 show_percentage = false
 
-[node name="Row3" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details/Info"]
+[node name="Row3" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details/Info" unique_id=246466322]
 visible = false
 material = SubResource("ShaderMaterial_0g2hw")
 layout_mode = 2
 
-[node name="Title" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row3"]
+[node name="Title" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row3" unique_id=167030974]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.4
 text = "Note Count"
 
-[node name="Value" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row3"]
+[node name="Value" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row3" unique_id=1824850769]
 layout_mode = 2
 text = "0"
 horizontal_alignment = 2
 
-[node name="ModsScreen" parent="." instance=ExtResource("6_4xos4")]
+[node name="ModsScreen" parent="." unique_id=858960574 instance=ExtResource("6_4xos4")]
 visible = false
 z_index = 1
 layout_mode = 1
 
-[node name="ContextMenu" parent="." instance=ExtResource("9_1t01f")]
+[node name="ContextMenu" parent="." unique_id=1153064960 instance=ExtResource("9_1t01f")]
 visible = false
 z_index = 3
 layout_mode = 0
@@ -667,7 +667,7 @@ offset_top = 359.0
 offset_right = 1253.0
 offset_bottom = 427.0
 
-[node name="Bpmtick" type="Timer" parent="."]
+[node name="Bpmtick" type="Timer" parent="." unique_id=365811024]
 wait_time = 0.375
 autostart = true
 script = ExtResource("20_ihwey")
