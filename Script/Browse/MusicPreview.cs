@@ -51,25 +51,29 @@ public partial class MusicPreview : TextureButton
 		{
 			existingPreviewB.QueueFree();
 		}
-
+		// Process audio file
+		var musicfile = Path.Combine(SettingsOperator.tempdir, $"musicpreview_{fileName}");
 		AudioPlayer.Instance.StreamPaused = true;
 		AudioStream filestream = null;
+		AudioFormat? format = AudioPlayer.GetAudioFormat(musicfile);
+		GD.Print($"Format: {format.ToString()}");
+		if (format == null)
+		{
+			Notify.Post("There is no preview for this beatmap.");
+			return;
+		}
 
-		if (audioPath.EndsWith(".mp3"))
+		// continue with the detected format
+		switch (format)
 		{
-			filestream = AudioPlayer.LoadMP3(Path.Combine(SettingsOperator.tempdir, $"musicpreview_{fileName}"));
-		}
-		else if (audioPath.EndsWith(".wav"))
-		{
-			filestream = AudioPlayer.LoadWAV(Path.Combine(SettingsOperator.tempdir, $"musicpreview_{fileName}"));
-		}
-		else if (audioPath.EndsWith(".ogg"))
-		{
-			filestream = AudioPlayer.LoadOGG(Path.Combine(SettingsOperator.tempdir, $"musicpreview_{fileName}"));
+			case AudioFormat.WAV: filestream = AudioPlayer.LoadWAV(musicfile); break;
+			case AudioFormat.OGG: filestream = AudioPlayer.LoadOGG(musicfile); break;
+			case AudioFormat.MP3: filestream = AudioPlayer.LoadMP3(musicfile); break;
 		}
 		AudioPlayer.PreviewID = PreviewID;
 		AudioPlayer.BrowsePreview.Stream = filestream;
 		AudioPlayer.BrowsePreview.Play();
+		GD.Print($"Now PLAY!"); 
 	}
 	public override void _ExitTree()
 	{
