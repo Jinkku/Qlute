@@ -205,7 +205,7 @@ public partial class ApiOperator : Node
 		LeaderboardAPI.Connect("request_completed", new Callable(this, nameof(_LeaderboardAPIDone)));
 		InfoApi.Connect("request_completed", new Callable(this, nameof(_on_info_request_completed)));
 		SubmitApi.Connect("request_completed", new Callable(this, nameof(_Submitrequest)));
-		if ((bool)SettingsOperator.GetSetting("discord-rpc")) 
+		if (Check.CheckBoolValue(SettingsOperator.GetSetting("discord-rpc").ToString())) 
 			Client = new DiscordRpcClient("1484981423684452684");	// Creates the client
 			Client.Initialize();
 		if ((Username != null || PasswordHash != null) && (bool)SettingsOperator.Sessioncfg["loggedin"] == false && Check.CheckBoolValue(SettingsOperator.GetSetting("stayloggedin").ToString()))
@@ -499,7 +499,7 @@ public partial class ApiOperator : Node
 		StatusChecker.Request(SettingsOperator.GetSetting("api") + "apiv2/setstatus", Headers);
 		
 		// Discord RPC Part
-		if ((bool)SettingsOperator.GetSetting("discord-rpc") && Client != null) 
+		if (Check.CheckBoolValue(SettingsOperator.GetSetting("discord-rpc").ToString()) && Client != null) 
 			Client.SetPresence(new RichPresence()
 			{
 			State = Status,
