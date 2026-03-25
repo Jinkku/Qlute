@@ -116,13 +116,13 @@ public partial class BeatmapInfo : Control
 			NoteCountTotal = BeatmapList[BeatmapIndex].count_circles + BeatmapList[BeatmapIndex].count_sliders;
 			Length.Text = $"{TimeSpan.FromSeconds(BeatmapList[BeatmapIndex].total_length):mm\\:ss}";
 			BPM.Text = BeatmapList[BeatmapIndex].bpm.ToString("N0");
-			MaxPP.Text = $"{SettingsOperator.Get_ppvalue(NoteCountTotal, 0, 0, 0, 1, NoteCountTotal, BeatmapList[BeatmapIndex].total_length).ToString("N0")}pp";
+			MaxPP.Text = $"{BeatmapList[BeatmapIndex].pp.ToString("N0")}pp";
 			NoteCount.Text = NoteCountTotal.ToString("N0");
 			LevelRating.Text = (SettingsOperator.GetLevelRating(NoteCountTotal, BeatmapList[BeatmapIndex].total_length)).ToString("N0");
 			Title.Text = cache.title;
 			Artist.Text = cache.artist;
 			Mapper.Text = $"mapped by {cache.creator}";
-			//Submitted.Text = $"submitted at {Global.GetFormatTime(cache.last_updated)}";
+			Submitted.Text = $"submitted at {Global.GetFormatTime(cache.last_updated)}";
 		}
 	}
 

@@ -2,6 +2,8 @@ using Godot;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+
 public partial class CardFunctions : Button
 {
     public  SettingsOperator SettingsOperator { get; set; }
@@ -16,14 +18,14 @@ public partial class CardFunctions : Button
     public Label RankText { get; set; }
     public Label LvStart { get; set; }
     public Label LvEnd { get; set; }
-    public string BannerPicture { get; set; }
     public int BeatmapID { get; set; }
     public int Index { get; set; }
     private int ID { get; set; }
-    [Export]
-    public bool Downloaded { get; set; } = false;
-
-    public async override void _Ready()
+    [Export] public bool Downloaded { get; set; } = false;
+    [Export] public string BannerPicture { get; set; }
+    private TextureRect _backgroundPreview;
+    private bool _isVisible = false;
+    public override void _Ready()
     {
         if (this != null)
         {
@@ -44,24 +46,57 @@ public partial class CardFunctions : Button
             Existant = GetNode<PanelContainer>("Existed");
             GoShortcut = GetNode<Button>("DownloadBar/VBoxContainer/Play");
             Download = GetNode<Button>("DownloadBar/VBoxContainer/Download");
-            //Release.Text = $"submitted at {Global.GetFormatTime(Browse.BrowseCatalog[Index].last_updated / 1000)}";
+            Release.Text = $"submitted at {Global.GetFormatTime(Browse.BrowseCatalog[Index].last_updated)}";
 
             Existance();
             
-            if (BannerPicture != null)
-                await ApiOperator.DownloadImage(BannerPicture, (ImageTexture texture) =>
-                {
-                    GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview").Texture = texture;
-                    texture.Dispose();
-                });
-
+            _backgroundPreview = GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
             SelfModulate = Idlecolour;
         }
+    }
+    private bool IsOnScreen()
+    {
+        var viewport = GetViewport().GetVisibleRect();
+        var rect = GetGlobalRect();
+        return viewport.Intersects(rect);
+    }
+    private async Task LoadBanner()
+    {
+        if (BannerPicture != null)
+            await ApiOperator.DownloadImage(BannerPicture, (ImageTexture texture) =>
+            {
+                // Guard: node might have gone off-screen while awaiting
+                if (!_isVisible)
+                {
+                    texture.Dispose();
+                    return;
+                }
+                _backgroundPreview.Texture = texture;
+            });
+    }
+    private void UnloadBanner()
+    {
+        if (_backgroundPreview.Texture is ImageTexture old)
+            old.Dispose();
+
+        _backgroundPreview.Texture = null;
     }
 
     public override void _PhysicsProcess(double delta)
     {
         Existance();
+        bool onScreen = IsOnScreen();
+
+        if (onScreen && !_isVisible)
+        {
+            _isVisible = true;
+            _ = LoadBanner();
+        }
+        else if (!onScreen && _isVisible)
+        {
+            _isVisible = false;
+            UnloadBanner();
+        }
     }
 
     /// <summary>

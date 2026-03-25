@@ -17,7 +17,8 @@ public class CatalogCardLegend {
 public class CatalogBeatmapInfoLegend
 {
 	public int id { get; set; }
-	public double difficulty_rating { get; set; }
+	public double level { get; set; }
+	public double pp { get; set; }
 	public int count_circles { get; set; }
 	public int count_sliders { get; set; }
 	public int? max_combo { get; set; }
@@ -33,7 +34,8 @@ public class BrowseCatalogLegend {
 	public string creator { get; set; }
 	public string source { get; set; }
 	public string preview_url { get; set; }
-	//public DateTime last_updated { get; set; } FIX
+	public string download_url { get; set; }
+	public double last_updated { get; set; }
 	public CatalogCardLegend covers { get; set; }
 	public List<CatalogBeatmapInfoLegend> beatmaps { get; set; }
 }
@@ -131,14 +133,14 @@ public partial class Browse : Control
 	public void StartBrowse(bool noani = false)
 	{
 		isLoading = true;
-		var ranktype = -3;
+		var ranktype = 0;
 		if (_ranktype == 0)
 		{
 			ranktype = 1;
 		}
 		else if (_ranktype == 1)
 		{
-			ranktype = 4;
+			ranktype = 2;
 		}
 
 		try
@@ -189,7 +191,7 @@ public partial class Browse : Control
 		{
 			uritext = Uri.EscapeDataString(_searchText);
 		}
-		var uri = $"{ApiOperator.Beatmapapi}/api/v2/search?query={uritext}&status={ranktype}&page={page}";
+		var uri = $"{SettingsOperator.GetSetting("api")}apiv2/search?query={uritext}&status={ranktype}&page={page}";
 		GD.Print($"Looking up with: {uri}");
 		BrowseApi.Request(uri);
 	}
@@ -250,8 +252,8 @@ public partial class Browse : Control
 				Element.Mapper.Text = "mapped by " + line.creator;
 				Element.RankColour.SelfModulate = ConvertTypetoColor(line.beatmaps.First().ranked);
 				Element.RankText.Text = ConvertTypetoRank(line.beatmaps.First().ranked);
-				Element.LvStart.Text = "Lv. " + SettingsOperator.GetLevelRating(line.beatmaps.First().count_circles + line.beatmaps.First().count_sliders, line.beatmaps.First().total_length).ToString("N0");
-				Element.LvEnd.Text = "Lv. " + SettingsOperator.GetLevelRating(line.beatmaps.Last().count_circles + line.beatmaps.Last().count_sliders, line.beatmaps.Last().total_length).ToString("N0");
+				Element.LvStart.Text = "Lv. " + line.beatmaps.First().level;
+				Element.LvEnd.Text = "Lv. " + line.beatmaps.Last().level;
 				Element.Modulate = new Color(1f, 1f, 1f, 0f);
 				index++;
 			}

@@ -352,15 +352,15 @@ public partial class ApiOperator : Node
 		var Title = BeatmapInfo.title;
 		var Creator = BeatmapInfo.creator;
 		var Info = $"{Artist} - {Title} from {Creator}";
-		string url = Beatmapapi + "/d/" + id;
-		if (DownloadList.Exists(d => d.Url == url))
+		if (DownloadList.Exists(d => d.Url == BeatmapInfo.download_url))
 		{
 			Notify.Post("This beatmap is already being downloaded.");
 			return;
 		}
+
 		DownloadList.Add(new BeatmapDownloader
 		{
-			Url = url,
+			Url = BeatmapInfo.download_url,
 			Info = Info,
 			BeatmapID = id
 		});
@@ -370,6 +370,7 @@ public partial class ApiOperator : Node
 
 	private void _on_download_completed(long result, long responseCode, string[] headers, byte[] body, int beatmap = 0)
 	{
+		DownloadList.RemoveAll(d => d.BeatmapID == beatmap);
 		if (responseCode == 200)
 		{
 			try
@@ -603,7 +604,7 @@ public partial class ApiOperator : Node
 		{
 			if (downloader.Request == null)
 			{
-				int id = int.Parse(downloader.Url.Substring(downloader.Url.LastIndexOf('/') + 1));
+				int id = downloader.BeatmapID;
 				string url = downloader.Url;
 				GD.Print(url);
 				string Info = downloader.Info;

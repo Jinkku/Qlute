@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://1eecnwds7hxx"]
+[gd_scene format=3 uid="uid://1eecnwds7hxx"]
 
 [ext_resource type="Script" uid="uid://gl6ndgfj1mc8" path="res://Script/Browse/Browse.cs" id="1_gq7gs"]
 [ext_resource type="PackedScene" uid="uid://c2ouvq16jls8u" path="res://Panels/Overlays/BottomPanelButtons.tscn" id="2_287m4"]
@@ -115,7 +115,7 @@ _data = {
 &"loading": SubResource("Animation_tk3k2")
 }
 
-[node name="BrowseCatalog" type="Control"]
+[node name="BrowseCatalog" type="Control" unique_id=668749115]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -124,7 +124,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gq7gs")
 
-[node name="Header" type="ColorRect" parent="."]
+[node name="Header" type="ColorRect" parent="." unique_id=834867634]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -132,7 +132,7 @@ offset_bottom = 210.0
 grow_horizontal = 2
 color = Color(0.261989, 0.2211, 0.273438, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Header"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Header" unique_id=1348819497]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -142,36 +142,36 @@ offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="Label" parent="Header/VBoxContainer"]
+[node name="Title" type="Label" parent="Header/VBoxContainer" unique_id=696853505]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxEmpty_gt3n2")
 text = "Browse"
 
-[node name="MarginContainer" type="MarginContainer" parent="Header/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Header/VBoxContainer" unique_id=1227685506]
 layout_mode = 2
 theme_override_constants/margin_left = 25
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 25
 theme_override_constants/margin_bottom = 10
 
-[node name="SearchBox" type="LineEdit" parent="Header/VBoxContainer/MarginContainer"]
+[node name="SearchBox" type="LineEdit" parent="Header/VBoxContainer/MarginContainer" unique_id=368686406]
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_gt3n2")
 theme_override_styles/focus = SubResource("StyleBoxFlat_287m4")
 placeholder_text = "Search here"
 
-[node name="SearchFilters" type="MarginContainer" parent="Header/VBoxContainer"]
+[node name="SearchFilters" type="MarginContainer" parent="Header/VBoxContainer" unique_id=1378923191]
 layout_mode = 2
 theme_override_constants/margin_left = 25
 theme_override_constants/margin_right = 25
 theme_override_constants/margin_bottom = 10
 
-[node name="Tabs" type="HBoxContainer" parent="Header/VBoxContainer/SearchFilters"]
+[node name="Tabs" type="HBoxContainer" parent="Header/VBoxContainer/SearchFilters" unique_id=1786720162]
 layout_mode = 2
 
-[node name="RankButton" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs"]
+[node name="RankButton" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs" unique_id=1541781977]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_npcsy")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_rkh30")
@@ -186,7 +186,7 @@ popup/item_1/id = 1
 popup/item_2/text = "Unranked"
 popup/item_2/id = 2
 
-[node name="Genre" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs"]
+[node name="Genre" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs" unique_id=1927058839]
 visible = false
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_npcsy")
@@ -224,7 +224,7 @@ popup/item_12/id = 12
 popup/item_13/text = "Jazz"
 popup/item_13/id = 13
 
-[node name="Language" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs"]
+[node name="Language" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs" unique_id=164751638]
 visible = false
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_npcsy")
@@ -262,13 +262,13 @@ popup/item_12/id = 12
 popup/item_13/text = "Unknown"
 popup/item_13/id = 13
 
-[node name="Label" type="Label" parent="Header/VBoxContainer/SearchFilters/Tabs"]
+[node name="Label" type="Label" parent="Header/VBoxContainer/SearchFilters/Tabs" unique_id=374896084]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.992188, 1, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxEmpty_vgk5y")
 text = "Note: More options are coming soon!"
 
-[node name="BeatmapSec" type="ColorRect" parent="."]
+[node name="BeatmapSec" type="ColorRect" parent="." unique_id=1059331218]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -279,7 +279,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.164532, 0.138306, 0.171875, 1)
 
-[node name="Scroll" type="ScrollContainer" parent="BeatmapSec"]
+[node name="Scroll" type="ScrollContainer" parent="BeatmapSec" unique_id=407584585]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -287,36 +287,34 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Center" type="CenterContainer" parent="BeatmapSec/Scroll"]
+[node name="Center" type="CenterContainer" parent="BeatmapSec/Scroll" unique_id=1047936625]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Spacer" type="MarginContainer" parent="BeatmapSec/Scroll/Center"]
+[node name="Spacer" type="MarginContainer" parent="BeatmapSec/Scroll/Center" unique_id=1756389413]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Beatmaps" type="GridContainer" parent="BeatmapSec/Scroll/Center/Spacer"]
+[node name="Beatmaps" type="GridContainer" parent="BeatmapSec/Scroll/Center/Spacer" unique_id=714980705]
 layout_mode = 2
 columns = 3
 
-[node name="ControlPanel" parent="." instance=ExtResource("2_287m4")]
+[node name="ControlPanel" parent="." unique_id=1403099792 instance=ExtResource("2_287m4")]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 1
 
-[node name="Loadingicon" type="Sprite2D" parent="."]
+[node name="Loadingicon" type="Sprite2D" parent="." unique_id=458699594]
 z_index = 5
 texture_filter = 1
 position = Vector2(175, 25)
 texture = ExtResource("3_287m4")
 
-[node name="Loadinganimation" type="AnimationPlayer" parent="Loadingicon"]
-libraries = {
-&"": SubResource("AnimationLibrary_1f8y5")
-}
+[node name="Loadinganimation" type="AnimationPlayer" parent="Loadingicon" unique_id=1644702058]
+libraries/ = SubResource("AnimationLibrary_1f8y5")
 
 [connection signal="text_changed" from="Header/VBoxContainer/MarginContainer/SearchBox" to="." method="_textchanged"]
 [connection signal="text_submitted" from="Header/VBoxContainer/MarginContainer/SearchBox" to="." method="_submit"]
