@@ -295,7 +295,7 @@ public partial class ApiOperator : Node
 		RankApi?.CancelRequest();
 		if (SettingsOperator.SongID != -1 && !SettingsOperator.NoConnectionToGameServer)
 		{
-			RankApi.Request($"{Beatmapapi}/api/s/{SettingsOperator.BeatmapSetID}");
+			RankApi.Request($"{SettingsOperator.GetSetting("api")}apiv2/s/{SettingsOperator.BeatmapID}");
 		}
 	}
 	/// <summary>
@@ -311,6 +311,7 @@ public partial class ApiOperator : Node
 		{
 			// Convert byte[] → string
 			string jsonString = Encoding.UTF8.GetString(body);
+			GD.PrintErr(jsonString);
 
 			// Parse the JSON (returns Variant)
 			Variant parsed = Json.ParseString(jsonString);
@@ -324,9 +325,13 @@ public partial class ApiOperator : Node
 			{
 				RankedStatus = RankStatusLegend.Ranked;	
 			}
-			else if (RankedStatus == -1)
+			else if (RankedStatus == 0)
 			{
 				RankedStatus = RankStatusLegend.Unranked;
+			}
+			else if (RankedStatus == -1)
+			{
+				RankedStatus = RankStatusLegend.Unknown;
 			}
 			else if (RankedStatus != 1)
 			{
