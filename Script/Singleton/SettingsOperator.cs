@@ -120,6 +120,10 @@ public partial class SettingsOperator : Node
         { "discord-rpc", true },
         { "gamepath", "" },
         { "leaderboardtype", 1 },
+        { "Key0", "D" },
+        { "Key1", "F" },
+        { "Key2", "J" },
+        { "Key3", "K" },
     };
     public Dictionary<string, object> Configurationbk { get; set; }
 
