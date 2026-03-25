@@ -29,7 +29,10 @@ public partial class SceneTransition : Node
         // Run the two fades in parallel
         _tween.SetParallel(true);
         if (newScene is CanvasItem)
-            _tween.TweenProperty(newScene, "modulate:a", 1.0f, _time);
+        {
+            _tween.TweenProperty(newScene, "modulate:a", 1.0f, _time); 
+            _tween.TweenProperty(newScene, "modulate", new Color(1f,1f,1f,1f), _time);
+        }
         if (oldScene is CanvasItem)
             _tween.TweenProperty(oldScene, "modulate:a", 0.0f, _time + 0.1);
 
@@ -41,6 +44,8 @@ public partial class SceneTransition : Node
             // even if the original C# reference went stale
             Node old = GetTree().Root.GetNodeOrNull(oldScenePath);
             old?.QueueFree();
+            newScene.Set("modulate", new Color(1f,1f,1f,1f));
         }));
+        _tween.TweenProperty(newScene, "modulate", new Color(1f,1f,1f,1f), _time);
     }
 }
