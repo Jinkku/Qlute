@@ -15,7 +15,6 @@ public partial class Bootstrap : Control
 		Welcome.PivotOffset = Welcome.Size / 2;
 		animationPlayer = GetNode<AnimationPlayer>("./AnimationPlayer");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		db = (int)(Math.Log10(SettingsOperator.MasterVol / 100.0) * 20) - 5;
 		SettingsOperator.toppaneltoggle(false);
 	}
 	private bool Finished { get; set;}
@@ -40,14 +39,14 @@ public partial class Bootstrap : Control
 	}
 	private Tween NewTween { get; set; }
 	private float time { get; set; } = 2.0333f;
-	private float db { get; set; }
 	private void _StartPreview()
 	{
 		if (SettingsOperator.Beatmaps.Count > 0)
 		{
-			AudioPlayer.Instance.VolumeDb = -40;
+			var init = AudioPlayer.ToDB(AudioPlayer.MasterVol);
+			AudioPlayer.Instance.VolumeDb = -100;
 			NewTween = CreateTween();
-			NewTween.TweenProperty(AudioPlayer.Instance, "volume_db", db, time).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+			NewTween.TweenProperty(AudioPlayer.Instance, "volume_db", init, time).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			NewTween.Play();
 			var num = SettingsOperator.RndSongID();
 			var PreviewTime = SettingsOperator.Beatmaps[num].PreviewTime - time;

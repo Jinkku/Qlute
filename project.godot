@@ -41,8 +41,8 @@ buses/default_bus_layout="uid://gw4d3826ldol"
 
 [autoload]
 
-AudioPlayer="*res://Script/Singleton/AudioPlayer.cs"
 SettingsOperator="*res://Script/Singleton/SettingsOperator.cs"
+AudioPlayer="*res://Script/Singleton/AudioPlayer.cs"
 Kiko="*res://Script/Updater/Kiko.cs"
 TopPanelOnTop="*res://Script/Singleton/OnTopOverlays.cs"
 Skinning="*res://Script/Gameplay/Skinning.cs"

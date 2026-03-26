@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cgt5q5s7cymtu"]
+[gd_scene format=3 uid="uid://cgt5q5s7cymtu"]
 
 [ext_resource type="Script" uid="uid://cujw42jdfio40" path="res://Script/TopPanelV2/TopPanel.cs" id="1_0d1ka"]
 [ext_resource type="PackedScene" uid="uid://e23sgokrubcw" path="res://Panels/Overlays/TopPanelv2/AccountButton.tscn" id="1_6cgag"]
@@ -72,7 +72,7 @@ bg_color = Color(0.85105014, 0.85105014, 0.85105014, 0.35000002)
 corner_radius_top_left = 15
 corner_radius_bottom_left = 15
 
-[node name="InfoBar" type="ColorRect"]
+[node name="InfoBar" type="ColorRect" unique_id=671856596]
 custom_minimum_size = Vector2(0, 50)
 anchors_preset = 10
 anchor_right = 1.0
@@ -80,7 +80,7 @@ grow_horizontal = 2
 color = Color(0.15170373, 0.15170373, 0.15170373, 0.851)
 script = ExtResource("1_0d1ka")
 
-[node name="Shadow" type="TextureRect" parent="."]
+[node name="Shadow" type="TextureRect" parent="." unique_id=305836170]
 process_mode = 3
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
@@ -94,10 +94,10 @@ grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_0d1ka")
 
-[node name="AccountButton" parent="." instance=ExtResource("1_6cgag")]
+[node name="AccountButton" parent="." unique_id=1801540962 instance=ExtResource("1_6cgag")]
 layout_mode = 0
 
-[node name="Widgets" type="HBoxContainer" parent="."]
+[node name="Widgets" type="HBoxContainer" parent="." unique_id=108908510]
 process_mode = 3
 layout_mode = 1
 anchors_preset = 11
@@ -109,7 +109,7 @@ grow_horizontal = 0
 grow_vertical = 2
 theme_override_constants/separation = 5
 
-[node name="ChangeLog" type="Button" parent="Widgets"]
+[node name="ChangeLog" type="Button" parent="Widgets" unique_id=1519787787]
 process_mode = 3
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -125,7 +125,7 @@ keep_pressed_outside = true
 icon = ExtResource("2_phkx3")
 icon_alignment = 1
 
-[node name="NowPlayer" type="Button" parent="Widgets"]
+[node name="NowPlayer" type="Button" parent="Widgets" unique_id=509986978]
 process_mode = 3
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -142,7 +142,7 @@ icon = ExtResource("4_21f6s")
 icon_alignment = 1
 script = ExtResource("3_0d1ka")
 
-[node name="Browse" type="Button" parent="Widgets"]
+[node name="Browse" type="Button" parent="Widgets" unique_id=1386290017]
 process_mode = 3
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -158,7 +158,7 @@ keep_pressed_outside = true
 icon = ExtResource("5_ruc5v")
 icon_alignment = 1
 
-[node name="Chat" type="Button" parent="Widgets"]
+[node name="Chat" type="Button" parent="Widgets" unique_id=1274049794]
 process_mode = 3
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -174,7 +174,7 @@ keep_pressed_outside = true
 icon = ExtResource("6_jvorr")
 icon_alignment = 1
 
-[node name="Settings" type="Button" parent="Widgets"]
+[node name="Settings" type="Button" parent="Widgets" unique_id=1999111531]
 process_mode = 3
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -191,7 +191,7 @@ icon = ExtResource("7_j48p2")
 icon_alignment = 1
 script = ExtResource("8_dcn2n")
 
-[node name="Clock" type="RichTextLabel" parent="Widgets"]
+[node name="Clock" type="RichTextLabel" parent="Widgets" unique_id=1586674962]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 theme_override_fonts/normal_font = SubResource("FontVariation_0d1ka")
@@ -207,10 +207,10 @@ deselect_on_focus_loss_enabled = false
 drag_and_drop_selection_enabled = false
 script = ExtResource("9_phkx3")
 
-[node name="Tick" type="Timer" parent="Widgets/Clock"]
+[node name="Tick" type="Timer" parent="Widgets/Clock" unique_id=224999693]
 autostart = true
 
-[node name="Notifications" type="Button" parent="Widgets"]
+[node name="Notifications" type="Button" parent="Widgets" unique_id=161884438]
 process_mode = 3
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2

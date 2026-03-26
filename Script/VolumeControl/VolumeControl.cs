@@ -19,18 +19,19 @@ public partial class VolumeControl : PanelContainer
 		SampleSlider = GetNode<HSlider>("VBoxContainer/EFFECTS");
 		SampleLabel = GetNode<Label>("VBoxContainer/Sample");
 		var samplev = SettingsOperator.SampleVol;
-		var masterv = SettingsOperator.MasterVol;
+		var masterv = AudioPlayer.MasterVol;
 		SampleSlider.Value = samplev;
+		GD.Print(AudioPlayer.Instance.VolumeDb);
 		//MusicSlider.Value = Math.Pow(10, masterv / 10) * 100;
 		MasterSlider.Value = masterv;
 	}
-
+	
 	private void _master(float value)
 	{
-		AudioPlayer.Instance.VolumeDb = (int)(Math.Log10(value / 100) * 20) - 5; // -5 to adjust the volume to a more NOT loud level and cap it
+		AudioPlayer.Instance.VolumeDb = AudioPlayer.ToDB(value);
+		AudioPlayer.MasterVol = (int)value;
 		MasterLabel.Text = "Music " + (int)value + "%";
 		SettingsOperator.SetSetting("master", (int)value);
-		SettingsOperator.MasterVol = (int)value;
 	}
 	private void _sample(float value)
 	{

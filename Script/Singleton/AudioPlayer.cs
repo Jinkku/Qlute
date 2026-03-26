@@ -7,6 +7,7 @@ public partial class AudioPlayer : AudioStreamPlayer
 {
     public static AudioStreamPlayer Instance;
     public static AudioStreamPlayer BrowsePreview;
+    public static int MasterVol { get; set; } = 100;
     private bool _isPlaying = false;
     public static bool _isogg = false;
     public static string checksum { get; set; }
@@ -20,9 +21,15 @@ public partial class AudioPlayer : AudioStreamPlayer
         BrowsePreview.Finished += OnAudioFinished;
         BrowsePreview.Name = $"Preview";
         AddChild(BrowsePreview);
-        Instance.Bus = "Music";
+        Bus = "Music";
+        MasterVol = int.TryParse(SettingsOperator.GetSetting("master").ToString(), out int mtr) ? mtr : 80;
+        GD.Print(MasterVol);
+        VolumeDb = ToDB(MasterVol);
+        GD.PrintErr(VolumeDb);
     }
 
+    public static float ToDB(float value) => Mathf.LinearToDb(value / 100.0f) - 10f;
+    
     private void OnAudioFinished()
     {
         if (Stream != null)
