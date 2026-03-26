@@ -7,16 +7,9 @@ public partial class AccountButton : Button
 	public Label PlayerName {get;set;}
 	private HttpRequest PfpHttp { get; set; }
 	private TextureRect Picture { get; set; }
-	private int tickpic { get; set; }
 	private string Urltmppfp { get; set; }
-	private void ChangePicture(int mode, Texture2D Texture)
-	{
-		if (mode != tickpic)
-		{
-			tickpic = mode;
-			Picture.Texture = Texture;
-		}
-	}
+	private string Urltmpcardborder { get; set; }
+	private TextureRect CardBorder { get; set; }
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -24,6 +17,7 @@ public partial class AccountButton : Button
 		PlayerName = GetNode<Label>("UPlayerName");
 		Ranking = GetNode<Label>("Ranking");
 		Picture = GetNode<TextureRect>("PanelContainer/ProfilePicture");
+		CardBorder = GetNode<TextureRect>("CardBorder");
 		SelfModulate = Idlecolour;
 	}
 
@@ -37,9 +31,25 @@ public partial class AccountButton : Button
 			await ApiOperator.DownloadImage(Urltmppfp, (ImageTexture texture) =>
 			{
 				ApiOperator.PictureData = texture;
-				ChangePicture(1,texture);
+				Picture.Texture = texture;
 			});
 		}
+		
+		if (Urltmpcardborder != SettingsOperator.CardBorderURL && SettingsOperator.CardBorderURL != null)
+		{
+			Urltmpcardborder = SettingsOperator.CardBorderURL;
+			await ApiOperator.DownloadImage(Urltmpcardborder, (ImageTexture texture) =>
+			{
+				ApiOperator.CardBorderData = texture;
+				CardBorder.Texture = texture;
+			});
+		}
+
+		if (SettingsOperator.CardBorderURL != null)
+		{
+			CardBorder.Modulate = new Color(1f, 1f, 1f, Math.Max(0, SettingsOperator.TopPanelPosition / 50f) );
+		}
+		
 		if (username != null){
 			PlayerName.Text = username;
 			if (SettingsOperator.Rank != 0){
@@ -53,9 +63,13 @@ public partial class AccountButton : Button
 		} else
 		{
 			ApiOperator.PictureData = null;
-			SettingsOperator.ProfilePictureURL = null;
+			ApiOperator.CardBorderData = null;
+			SettingsOperator.ProfilePictureURL = null;;
+			SettingsOperator.CardBorderURL = null;
 			Urltmppfp = SettingsOperator.ProfilePictureURL;
-			ChangePicture(0,GD.Load<CompressedTexture2D>("res://Resources/System/guest.png"));
+			Urltmpcardborder = null;
+			Picture.Texture = GD.Load<CompressedTexture2D>("res://Resources/System/guest.png");
+			CardBorder.Texture = null;
 			PlayerName.Text = "Guest\nLog in here!";
 			Ranking.Visible = false;
 		}

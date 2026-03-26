@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://e23sgokrubcw"]
+[gd_scene format=3 uid="uid://e23sgokrubcw"]
 
 [ext_resource type="Script" uid="uid://c6ccj80gaao77" path="res://Script/TopPanel/Overlays/AccountButton.cs" id="1_5yayb"]
 [ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="2_5yayb"]
@@ -56,7 +56,7 @@ _data = {
 &"loading": SubResource("Animation_tk3k2")
 }
 
-[node name="AccountButton" type="Button"]
+[node name="AccountButton" type="Button" unique_id=1629758720]
 process_mode = 3
 self_modulate = Color(0.2421875, 0.2421875, 0.2421875, 1)
 offset_right = 200.0
@@ -68,7 +68,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_yewru")
 alignment = 0
 script = ExtResource("1_5yayb")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=2019225579]
 clip_children = 1
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 1
@@ -81,14 +81,14 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8fwpo")
 
-[node name="ProfilePicture" type="TextureRect" parent="PanelContainer"]
+[node name="ProfilePicture" type="TextureRect" parent="PanelContainer" unique_id=1829492005]
 process_mode = 3
 layout_mode = 2
 texture = ExtResource("2_5yayb")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Ranking" type="Label" parent="."]
+[node name="Ranking" type="Label" parent="." unique_id=1133831160]
 process_mode = 3
 visible = false
 layout_mode = 0
@@ -99,7 +99,7 @@ offset_bottom = 44.0
 text = "#?"
 script = ExtResource("3_75g75")
 
-[node name="UPlayerName" type="Label" parent="."]
+[node name="UPlayerName" type="Label" parent="." unique_id=1189898781]
 process_mode = 3
 layout_mode = 1
 offset_left = 57.0
@@ -112,20 +112,18 @@ clip_text = true
 text_overrun_behavior = 3
 script = ExtResource("4_kstth")
 
-[node name="Loadingicon" type="Sprite2D" parent="."]
+[node name="Loadingicon" type="Sprite2D" parent="." unique_id=776531984]
 process_mode = 3
 visible = false
 texture_filter = 1
 position = Vector2(175, 25)
 texture = ExtResource("5_m3his")
 
-[node name="Loadinganimation" type="AnimationPlayer" parent="Loadingicon"]
+[node name="Loadinganimation" type="AnimationPlayer" parent="Loadingicon" unique_id=380668583]
 process_mode = 3
-libraries = {
-&"": SubResource("AnimationLibrary_1f8y5")
-}
+libraries/ = SubResource("AnimationLibrary_1f8y5")
 
-[node name="Placeholder" type="Control" parent="."]
+[node name="Placeholder" type="Control" parent="." unique_id=925967214]
 process_mode = 3
 custom_minimum_size = Vector2(69, 60)
 layout_mode = 1
@@ -134,6 +132,14 @@ offset_right = 80.0
 offset_bottom = 41.0
 mouse_filter = 2
 script = ExtResource("6_en5jc")
+
+[node name="CardBorder" type="TextureRect" parent="." unique_id=297838460]
+custom_minimum_size = Vector2(230, 80)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+expand_mode = 1
 
 [connection signal="button_down" from="." to="." method="_highlight"]
 [connection signal="button_up" from="." to="." method="_hover"]

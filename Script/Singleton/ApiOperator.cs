@@ -49,6 +49,7 @@ public partial class ApiOperator : Node
 	public static bool Submitted = false;
 	public static string Beatmapapi = "https://catboy.best";
 	public static Texture2D PictureData { get; set; }
+	public static Texture2D CardBorderData { get; set; }
 	public DiscordRpcClient Client { get; private set; }
 
 	/// <summary>
@@ -284,6 +285,7 @@ public partial class ApiOperator : Node
 		SettingsOperator.OCombo = json["max_combo"].AsInt32();
 		SettingsOperator.OldCombo = SettingsOperator.OCombo;
 		SettingsOperator.ProfilePictureURL = json["pfp_path"].AsString();
+		SettingsOperator.CardBorderURL = json["cardborder"].AsString();
 	}
 
 	public static int RankedStatus { get; set; } = RankStatusLegend.Unknown;
