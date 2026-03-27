@@ -55,11 +55,21 @@ public partial class SongSelect : Control
 
 	int startposition = 0;
 	int scrolloldvalue { get; set; }
+	// Tracks the scroll value at which the card pool was last rebuilt,
+	// so we only do expensive add/remove when the window shifts enough.
+	private int _lastPoolCenter = int.MinValue;
+
 	private void _valuechangedscroll(float value)
 	{ // Part of the loading Beatmaps
 		SongETick = 0;
 		startposition = ((int)GetViewportRect().Size.Y / 2) - 166;
-		ScrollSongs();
+		// Only do a full pool rebuild if the visible window has shifted;
+		// otherwise just reposition the existing cards to kill the stutter.
+		int newCenter = (int)scrollBar.Value;
+		if (Math.Abs(newCenter - _lastPoolCenter) >= 2)
+			ScrollSongs();
+		else
+			RepositionCards();
 	}
 
 	private void scrollmode(int ement = 0, int exactvalue = 0)
@@ -216,6 +226,9 @@ public partial class SongSelect : Control
 	
 	public override void _Ready()
 	{
+		// Assign SettingsOperator first — it's needed by many helpers called below.
+		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
+
 		PrepareMainComponents(); // Prepares Song Select v2 components.
 		AnimationScene(0); // Makes all elements invisible when ready to start.
 		
@@ -237,11 +250,13 @@ public partial class SongSelect : Control
 		SettingsOperator.Marathon = false;
 		ModScreen = GetNode<Control>("ModsScreen");
 		ModScreen.Visible = true;
-		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SongTitle = GetNode<Label>("SongDetails/SongInfo/Rows/Column1/Title");
 		ExSongInfo = GetNode<Label>("SongDetails/SongInfo/Rows/ExSongInfo");
 
-		CardSize = InitiateMusicCard().Size;
+		// Measure card size without leaking a node into the scene tree.
+		var tempCard = InitiateMusicCard();
+		CardSize = tempCard.Size;
+		tempCard.Free();
 		CardSize = new Vector2(CardSize.X, CardSize.Y + 5);
 
 		LevelRating = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/Level");
@@ -326,6 +341,7 @@ public partial class SongSelect : Control
 			return;
 
 		SongLoaded = 0;
+		_lastPoolCenter = (int)scrollBar.Value;
 
 		int cardHeight = (int)(CardSize.Y + 5);
 		int itemCount = (int)(WindowSize.Y / cardHeight);
@@ -365,7 +381,7 @@ public partial class SongSelect : Control
 				AddSongList(i);
 				entry = SongEntry.Last();
 				visible[i] = entry;
-				SongLoaded++;
+				SongLoaded++; // only count genuinely new cards
 			}
 
 			float targetY =
@@ -392,7 +408,37 @@ public partial class SongSelect : Control
 			entry.Scale = new Vector2(scale, scale);
 
 			entry.ZIndex = 0;
-			SongLoaded++;
+		}
+	}
+
+	/// <summary>
+	/// Lightweight reposition pass — moves existing cards to their current scroll
+	/// position without touching the card pool. Used during tween playback to
+	/// eliminate the stutter caused by rebuilding the pool on every value change.
+	/// </summary>
+	private void RepositionCards()
+	{
+		if (scrollBar == null) return;
+
+		for (int i = 0; i < SongEntry.Count; i++)
+		{
+			Button entry = SongEntry[i];
+			if (entry == null) continue;
+
+			int idx = int.Parse(entry.Name);
+			float targetY =
+				startposition +
+				(CardSize.Y * idx) -
+				(CardSize.Y * (float)scrollBar.Value);
+
+			entry.Position = new Vector2(entry.Position.X, targetY);
+
+			float screenY = entry.GlobalPosition.Y + (entry.Size.Y * 0.5f);
+			float distance = Mathf.Abs(screenY - WindowSizeCenter.Y);
+			float radial = Mathf.Clamp(distance / WindowSizeCenter.Y, 0f, 1f);
+			radial = Mathf.Pow(radial, 0.6f);
+			float scale = 1.0f - (radial * 0.15f);
+			entry.Scale = new Vector2(scale, scale);
 		}
 	}
 
