@@ -68,6 +68,20 @@ public partial class Gameplay : Control
 	public static int seed = 0;
 	private Control HUD { get; set; }
 	private float speedold = 1f;
+
+	// Spam protection: minimum ms between accepted key presses per column
+	private const float SPAM_COOLDOWN_MS = 80f; // 80ms — matches osu!mania's input buffer
+	private float[] LastKeyPressTime = new float[4] { float.MinValue, float.MinValue, float.MinValue, float.MinValue };
+
+	// Unstable Rate: stores raw hit offsets (ms) to compute std-dev * 10
+	private List<float> HitOffsets = new List<float>();
+	private float ComputeUnstableRate()
+	{
+		if (HitOffsets.Count < 2) return 0f;
+		float mean = HitOffsets.Average();
+		float variance = HitOffsets.Select(x => (x - mean) * (x - mean)).Average();
+		return (float)Math.Sqrt(variance) * 10f;
+	}
 	private void ShowPauseMenu()
 	{
 		Cursor.CursorVisible = true;
@@ -222,6 +236,8 @@ public partial class Gameplay : Control
 
 		SettingsOperator.ResetScore();
 		SettingsOperator.Resetms();
+		HitOffsets.Clear();
+		Array.Fill(LastKeyPressTime, float.MinValue);
 		if (SettingsOperator.Sessioncfg["beatmapurl"] != null) ReloadBeatmap(SettingsOperator.Sessioncfg["beatmapurl"].ToString());
 		// If auto is enabled, it will make a Replay file with Auto being the player playing the beatmap. Before this it didn't make the replay file, it just plays.
 		// I am doing this because it's simpler for me and don't have to worry about breaking auto (Qlutina)
@@ -367,7 +383,56 @@ public partial class Gameplay : Control
 		    if ( !(@event is InputEventKey Key) ) return;
 		    else if (Key.Keycode.ToString() == Keys[i].KeyCode)
 		    {
-			    hitnote(i, @event.IsPressed(), (int)est);
+			    bool pressed = @event.IsPressed();
+
+			    // Spam guard: if a key-down comes in too soon after the last one,
+			    // force a miss and ignore the input so it can't farm pp.
+			    if (pressed)
+			    {
+				    float nowMs = est; // est is already in ms
+				    float elapsed = nowMs - LastKeyPressTime[i];
+				    if (elapsed < SPAM_COOLDOWN_MS && elapsed >= 0f)
+				    {
+					    // Register forced miss for the nearest unhit note in this column
+					    TriggerSpamMiss(i);
+					    return;
+				    }
+				    LastKeyPressTime[i] = nowMs;
+			    }
+
+			    hitnote(i, pressed, (int)est);
+		    }
+	    }
+    }
+
+    /// <summary>
+    /// Called when a key is spammed. Finds the nearest note in the column and registers a miss.
+    /// </summary>
+    private void TriggerSpamMiss(int column)
+    {
+	    for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
+	    {
+		    var Note = Notes[i];
+		    if (Note.NoteSection == column && !Note.hit && Note.Node != null && Note.Node.Visible)
+		    {
+			    // Register miss
+			    Hittext(Skin.Element.JudgeMiss);
+			    SettingsOperator.Gameplaycfg.Bad++;
+			    if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
+			    SettingsOperator.Gameplaycfg.Combo = 0;
+			    SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp - (Note.ppv2xp * 4));
+			    BadCombo++;
+			    ComboAnimation();
+			    HealthBar.Damage(5 * BadCombo);
+			    if (HurtAnimation != null && HurtAnimation.IsRunning()) HurtAnimation.Stop();
+			    if (GetTree().CurrentScene is CanvasItem canvasScene) canvasScene.Modulate = new Color(1f, 0.5f, 0.5f, 1f);
+			    HurtAnimation = CreateTween();
+			    HurtAnimation.TweenProperty(GetTree().CurrentScene, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f)
+				    .SetTrans(Tween.TransitionType.Cubic)
+				    .SetEase(Tween.EaseType.Out);
+			    Note.hit = true;
+			    Note.Node.Visible = false;
+			    break;
 		    }
 	    }
     }
@@ -457,12 +522,16 @@ public partial class Gameplay : Control
 					Note.Node.Position = new Vector2(0, (notex * scrollspeed) - (HitPoint * (scrollspeed - 1)));
 					Ttick++;
 					JudgeResult = checkjudge((int)notex, Keys[Note.Node.NotePart].hit, Note);
-					if (JudgeResult < 4)
+					if (JudgeResult < 3) // Only count actual hits (perfect/great/meh), not misses
 					{
-						mshitold = HitPoint + 5;
-						mshit = notex;
-						SettingsOperator.Addms(mshitold - mshit - 50);
-						SettingsOperator.Gameplaycfg.ms = SettingsOperator.Getms();
+						// True hit offset in ms: how far the note was from the hit line when struck.
+						// Negative = early, Positive = late — exactly like osu!mania.
+						float hitOffsetMs = notex - HitPoint;
+						SettingsOperator.Addms(hitOffsetMs - 50);
+						SettingsOperator.Gameplaycfg.ms = ComputeUnstableRate();
+					}
+				if (JudgeResult < 4)
+					{
 						Keys[Note.Node.NotePart].hit = false;
 						Note.hit = true;
 						Note.Node.Visible = false;
