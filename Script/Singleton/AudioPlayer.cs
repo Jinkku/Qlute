@@ -7,7 +7,8 @@ public partial class AudioPlayer : AudioStreamPlayer
 {
     public static AudioStreamPlayer Instance;
     public static AudioStreamPlayer BrowsePreview;
-    public static int MasterVol { get; set; } = 100;
+    public static int MasterVol { get; set; } = 80;
+    public static int SampleVol { get; set; } = 70;
     private bool _isPlaying = false;
     public static bool _isogg = false;
     public static string checksum { get; set; }
@@ -23,9 +24,8 @@ public partial class AudioPlayer : AudioStreamPlayer
         AddChild(BrowsePreview);
         Bus = "Music";
         MasterVol = int.TryParse(SettingsOperator.GetSetting("master").ToString(), out int mtr) ? mtr : 80;
-        GD.Print(MasterVol);
+        SampleVol = int.TryParse(SettingsOperator.GetSetting("sample").ToString(), out int smp) ? smp : 70;
         VolumeDb = ToDB(MasterVol);
-        GD.PrintErr(VolumeDb);
     }
 
     public static float ToDB(float value) => Mathf.LinearToDb(value / 100.0f) - 10f;
@@ -44,6 +44,7 @@ public partial class AudioPlayer : AudioStreamPlayer
         BrowsePreview.VolumeDb = VolumeDb;
         SettingsOperator.Gameplaycfg.Time = GetPlaybackPosition();
         SettingsOperator.Gameplaycfg.TimeTotal = (float)(Stream?.GetLength() ?? 0);
+        Sample.VolumeDb = ToDB(SampleVol);
     }
 
     public static AudioStreamMP3 LoadMP3(string path)

@@ -48,7 +48,6 @@ public partial class SettingsOperator : Node
     public static bool jukebox = false;
     public static string GameChecksum { get; set; }
     public int backgrounddim { get; set; }
-    public static int SampleVol { get; set; }
     public int scrollspeed { get; set; }
     public static bool SpectatorMode { get; set; } = false;
     public static float AllMiliSecondsFromBeatmap { get; set; }
@@ -661,7 +660,6 @@ public static class EditorSongInfo
         }
 
         backgrounddim = int.TryParse(GetSetting("backgrounddim").ToString(), out int bkd) ? bkd : 70;
-        SampleVol = int.TryParse(GetSetting("sample").ToString(), out int smp) ? smp : 80;
         var resolutionIndex = int.TryParse(GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
         changeres(resolutionIndex);
         RefreshFPS();
@@ -694,10 +692,6 @@ public static class EditorSongInfo
                 Engine.MaxFps = UnfocusedFPS;
                 break;
         }
-    }
-    public void ResetVol()
-    {
-        Sample.VolumeDb = (int)(Math.Log10(SampleVol / 100.0) * 20) - 5;
     }
     public void changeres(int index)
     {

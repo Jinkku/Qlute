@@ -18,7 +18,7 @@ public partial class VolumeControl : PanelContainer
 		//MusicSlider = GetNode<HSlider>("VBoxContainer/MUSIC");
 		SampleSlider = GetNode<HSlider>("VBoxContainer/EFFECTS");
 		SampleLabel = GetNode<Label>("VBoxContainer/Sample");
-		var samplev = SettingsOperator.SampleVol;
+		var samplev = AudioPlayer.SampleVol;
 		var masterv = AudioPlayer.MasterVol;
 		SampleSlider.Value = samplev;
 		GD.Print(AudioPlayer.Instance.VolumeDb);
@@ -37,6 +37,6 @@ public partial class VolumeControl : PanelContainer
 	{
 		SampleLabel.Text = "Sample " + (int)value + "%";
 		SettingsOperator.SetSetting("sample", (int)value);
-		SettingsOperator.SampleVol = (int)value;
+		AudioPlayer.SampleVol = (int)value;
 	}
 }

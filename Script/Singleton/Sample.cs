@@ -34,6 +34,7 @@ public partial class Sample : Node
     {
       AddChild(stream);
       stream.VolumeDb = VolumeDb;
+      GD.Print(VolumeDb);
       stream.Play();
       stream.Finished += () => stream.QueueFree();
     }
