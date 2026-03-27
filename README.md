@@ -21,7 +21,7 @@ Embrace your Imagination
 ## Compiling the game
 Requirements:
 - Have Godot 4.6+ Installed
-- Dotnet 8.0 is recommended
+- Dotnet 10.0 is recommended
 - git binary for cloning and syncing the repository
 
 Preparation:
