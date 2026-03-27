@@ -527,7 +527,7 @@ public partial class Gameplay : Control
 						// True hit offset in ms: how far the note was from the hit line when struck.
 						// Negative = early, Positive = late — exactly like osu!mania.
 						float hitOffsetMs = notex - HitPoint;
-						SettingsOperator.Addms(hitOffsetMs - 50);
+						SettingsOperator.Addms(hitOffsetMs + 50);
 						SettingsOperator.Gameplaycfg.ms = ComputeUnstableRate();
 					}
 				if (JudgeResult < 4)
