@@ -479,10 +479,6 @@ public partial class Gameplay : Control
 				Note.Node.QueueFree();
 				Note.Node = null;
 			}
-			else if (Note.Node != null && Note.hit)
-			{
-				Note.Node.Position = new Vector2(0, (notex * scrollspeed) - (HitPoint * (scrollspeed - 1)));
-			}
 		}
 	}
 
@@ -743,4 +739,3 @@ public partial class Gameplay : Control
 		}
 	}
 }
-
