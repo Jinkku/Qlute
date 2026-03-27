@@ -362,7 +362,7 @@ public partial class ApiOperator : Node
 
 		DownloadList.Add(new BeatmapDownloader
 		{
-			Url = BeatmapInfo.download_url,
+			Url = BeatmapInfo.download_url.Replace(" ", "%20"),
 			Info = Info,
 			BeatmapID = id
 		});
@@ -616,7 +616,7 @@ public partial class ApiOperator : Node
 				downloadRequest.Timeout = 0;
 				downloadRequest.RequestCompleted += (long result, long responseCode, string[] headers, byte[] body) => _on_download_completed(result, responseCode, headers, body, id);
 				downloadRequest.DownloadFile = Path.Combine(SettingsOperator.downloadsdir, $"{id}.osz.tmp");
-				downloadRequest.Request(url, null, Godot.HttpClient.Method.Get);
+				downloadRequest.Request(url, method: HttpClient.Method.Get);
 
 				downloader.Request = downloadRequest;
 
