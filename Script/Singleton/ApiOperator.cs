@@ -608,7 +608,6 @@ public partial class ApiOperator : Node
 			{
 				int id = downloader.BeatmapID;
 				string url = downloader.Url;
-				GD.Print(url);
 				string Info = downloader.Info;
 
 				var downloadRequest = new HttpRequest();
