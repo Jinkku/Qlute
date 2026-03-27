@@ -16,13 +16,18 @@ public partial class Create : Control
 	private Control VerifyN { get; set; }
 	private int BPM { get; set; } = 180;
 	private List<NoteSkinning> Notes { get; set; } = new List<NoteSkinning>();
-	private AudioStreamPlayer EditorPlayer {get; set;}
+	private AudioStreamPlayer EditorPlayer { get; set; }
 	private TextureRect EditorBackground { get; set; }
+	private TextureRect EditorBackgroundPreview { get; set; }
 	private HSlider Seeker { get; set; }
 	private Label TimeClock { get; set; }
 	private Label SelectedPos { get; set; }
 	private Control SectionSample { get; set; }
 	private float SizeYSection { get; set; }
+	private LineEdit SongTitle { get; set; }
+	private LineEdit SongArtist { get; set; }
+	private LineEdit SongDifficulty { get; set; }
+
 public override void _Ready()
 	{
 		if (AudioPlayer.Instance.Stream != null)
@@ -33,6 +38,7 @@ public override void _Ready()
 		Seeker = GetNode<HSlider>("ControlPanel/Box/PlayerControl/Seek");
 		EditorPlayer = GetNode<AudioStreamPlayer>("EditorPlayer");
 		EditorBackground = GetNode<TextureRect>("EditorBackground");
+		EditorBackgroundPreview = GetNode<TextureRect>("Info/Panel/Scroll/GridContainer/Setting5/Preview");
 		TimeClock = GetNode<Label>("ControlPanel/Box/TimeBox/Time");
 		Time = GetNode<Label>("ControlPanel/Box/TimeBox/Time");
 		NoteCount = GetNode<Label>("Compose/Info/ContextSections/NoteCount");
@@ -53,6 +59,15 @@ public override void _Ready()
 		VerifyN.Modulate = new Color(1, 1, 1, 0f);
 		VerifyN.MouseFilter = MouseFilterEnum.Ignore;
 		VerifyN.Visible = true;
+		SongTitle = GetNode<LineEdit>("Info/Panel/Scroll/GridContainer/Setting1/Value");
+		SongArtist = GetNode<LineEdit>("Info/Panel/Scroll/GridContainer/Setting2/Value");
+		SongDifficulty = GetNode<LineEdit>("Info/Panel/Scroll/GridContainer/Setting3/Value");
+		SongTitle.Text = SettingsOperator.EditorSongInfo.SongTitle;
+		SongArtist.Text = SettingsOperator.EditorSongInfo.SongArtist;
+		SongDifficulty.Text = SettingsOperator.EditorSongInfo.SongDifficulty;
+		EditorBackground.Texture = SettingsOperator.EditorSongInfo.Background;
+		EditorBackgroundPreview.Texture = EditorBackground.Texture;
+
 	}
 
 	private void SectionResized()

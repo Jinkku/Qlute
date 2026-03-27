@@ -177,6 +177,7 @@ text = "Song Title"
 [node name="Value" type="LineEdit" parent="Info/Panel/Scroll/GridContainer/Setting1" unique_id=989037737]
 custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
+text = "X"
 
 [node name="Setting2" type="VBoxContainer" parent="Info/Panel/Scroll/GridContainer" unique_id=1459724622]
 layout_mode = 2
@@ -188,6 +189,7 @@ text = "Song Artist"
 [node name="Value" type="LineEdit" parent="Info/Panel/Scroll/GridContainer/Setting2" unique_id=1392975401]
 custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
+text = "Y"
 
 [node name="Setting3" type="VBoxContainer" parent="Info/Panel/Scroll/GridContainer" unique_id=1770023924]
 layout_mode = 2
@@ -199,6 +201,7 @@ text = "Song Difficulty Name"
 [node name="Value" type="LineEdit" parent="Info/Panel/Scroll/GridContainer/Setting3" unique_id=1539755381]
 custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
+text = "Z"
 
 [node name="Setting4" type="VBoxContainer" parent="Info/Panel/Scroll/GridContainer" unique_id=458439374]
 layout_mode = 2
@@ -227,6 +230,13 @@ layout_mode = 2
 [node name="Label" type="Label" parent="Info/Panel/Scroll/GridContainer/Setting5" unique_id=695173275]
 layout_mode = 2
 text = "Beatmap Background"
+
+[node name="Preview" type="TextureRect" parent="Info/Panel/Scroll/GridContainer/Setting5" unique_id=1467246318]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+texture = ExtResource("2_vy1ai")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="ButtonFade" type="Button" parent="Info/Panel/Scroll/GridContainer/Setting5" unique_id=830691474]
 self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
