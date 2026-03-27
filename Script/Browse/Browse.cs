@@ -1,19 +1,28 @@
 using Godot;
 using System;
-using System.Security.Cryptography;
 using System.Text.Json;
-using System.Net.Http;
 using System.Text;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
-public class CatalogCardLegend {
-	public string cover { get; set; }
-	public string card { get; set; }
-	public string list { get; set; }
-	public string slimcover { get; set; }
+public class CatalogCardLegend
+{
+	public string? Cover { get; set; }
+	public string? Card { get; set; }
+	public string? List { get; set; }
+	public string? SlimCover { get; set; }
+
+	// JSON property aliases — kept lowercase to match the API response
+	[System.Text.Json.Serialization.JsonPropertyName("cover")]
+	public string? cover { get => Cover; set => Cover = value; }
+	[System.Text.Json.Serialization.JsonPropertyName("card")]
+	public string? card { get => Card; set => Card = value; }
+	[System.Text.Json.Serialization.JsonPropertyName("list")]
+	public string? list { get => List; set => List = value; }
+	[System.Text.Json.Serialization.JsonPropertyName("slimcover")]
+	public string? slimcover { get => SlimCover; set => SlimCover = value; }
 }
+
 public class CatalogBeatmapInfoLegend
 {
 	public int id { get; set; }
@@ -24,42 +33,40 @@ public class CatalogBeatmapInfoLegend
 	public int? max_combo { get; set; }
 	public int ranked { get; set; }
 	public int total_length { get; set; }
-	public string version { get; set; }
+	public string? version { get; set; }
 	public double bpm { get; set; }
 }
-public class BrowseCatalogLegend {
+
+public class BrowseCatalogLegend
+{
 	public int id { get; set; }
-	public string artist { get; set; }
-	public string title { get; set; }
-	public string creator { get; set; }
-	public string source { get; set; }
-	public string preview_url { get; set; }
-	public string download_url { get; set; }
+	public string? artist { get; set; }
+	public string? title { get; set; }
+	public string? creator { get; set; }
+	public string? source { get; set; }
+	public string? preview_url { get; set; }
+	public string? download_url { get; set; }
 	public double last_updated { get; set; }
-	public CatalogCardLegend covers { get; set; }
-	public List<CatalogBeatmapInfoLegend> beatmaps { get; set; }
+	public CatalogCardLegend? covers { get; set; }
+	public List<CatalogBeatmapInfoLegend>? beatmaps { get; set; }
 }
+
 public partial class Browse : Control
 {
-	// Called when the node enters the scene tree for the first time.
-    public static List<BrowseCatalogLegend> BrowseCatalog = new List<BrowseCatalogLegend>();
-	public static HttpRequest BrowseApi { get; set; }
+	public static List<BrowseCatalogLegend> BrowseCatalog = new();
+	public static HttpRequest BrowseApi { get; set; } = null!;
 	public static int ScrollVertical { get; set; }
 	public int CardSizeX { get; set; }
-	public AnimationPlayer Loadinganimation {get ; set; }
-	private Tween BlankAni { get; set; }
-	// Loading icon
-	// This is the icon that will be shown while the API is loading
-	// It will be centered on the screen
-	public Sprite2D Loadingicon { get; set; }
-	public ColorRect Blank {get ; set; }
+	public AnimationPlayer? Loadinganimation { get; set; }
+	private Tween? BlankAni { get; set; }
+	public Sprite2D? Loadingicon { get; set; }
+	public ColorRect? Blank { get; set; }
 	private int page { get; set; } = 0;
-	private GridContainer BeatmapGrid { get; set; }
-	private ScrollContainer BeatmapScroll { get; set; }
-	private int BeatmapScrollHalfwayPoint { get; set; }
+	private GridContainer BeatmapGrid { get; set; } = null!;
+	private ScrollContainer BeatmapScroll { get; set; } = null!;
 	private bool ContinuePage { get; set; }
 	private bool Empty { get; set; }
-	
+
 	public override void _Ready()
 	{
 		BeatmapScroll = GetNode<ScrollContainer>("BeatmapSec/Scroll");
@@ -71,19 +78,20 @@ public partial class Browse : Control
 		BrowseApi.Connect("request_completed", new Callable(this, nameof(_BrowseAPI_finished)));
 		StartBrowse();
 	}
-	
+
 	private string _searchText { get; set; } = "";
 	private int _ranktype { get; set; }
 	private double timetext { get; set; }
-	private double timetextnow { get; set; }
 	private bool textchanging { get; set; }
 	private bool isLoading { get; set; }
+
 	private void _textchanged(string searchText)
 	{
 		textchanging = true;
 		timetext = Extras.GetMilliseconds();
 		_searchText = searchText;
 	}
+
 	private void _submit(string searchText)
 	{
 		textchanging = false;
@@ -93,6 +101,7 @@ public partial class Browse : Control
 		Empty = false;
 		StartBrowse();
 	}
+
 	private void _rankchanged(int rank)
 	{
 		_ranktype = rank;
@@ -102,193 +111,208 @@ public partial class Browse : Control
 		StartBrowse();
 	}
 
-	private string ConvertTypetoRank(int rank)
+	private static string ConvertTypetoRank(int rank) => rank switch
 	{
-		switch (rank)
-		{
-			case 1:
-				return "Ranked";
-			case 4:
-				return "Special";
-			case 0:
-				return "Unranked";
-			default:
-				return "Unknown";
-		}
-	}
-	private Color ConvertTypetoColor(int rank)
+		1 => "Ranked",
+		4 => "Special",
+		0 => "Unranked",
+		_ => "Unknown"
+	};
+
+	private static Color ConvertTypetoColor(int rank) => rank switch
 	{
-		switch (rank)
-		{
-			case 1:
-				return  new Color(0.2f, 0.8f, 0.2f, 1f); // Green for Ranked
-			case 4:
-				return new Color(0.8f, 0.8f, 0.2f, 1f); // Yellow for Special
-			case 0:
-				return new Color(0.8f, 0.2f, 0.2f, 1f); // Red for Unranked
-			default:
-				return new Color(0.5f, 0.5f, 0.5f, 1f); // Gray for Unknown
-		}
-	}
+		1 => new Color(0.2f, 0.8f, 0.2f, 1f),  // Green  – Ranked
+		4 => new Color(0.8f, 0.8f, 0.2f, 1f),  // Yellow – Special
+		0 => new Color(0.8f, 0.2f, 0.2f, 1f),  // Red    – Unranked
+		_ => new Color(0.5f, 0.5f, 0.5f, 1f),  // Gray   – Unknown
+	};
+
 	public void StartBrowse(bool noani = false)
 	{
 		isLoading = true;
-		var ranktype = 0;
-		if (_ranktype == 0)
+
+		// Map the UI rank index to the API status value
+		int ranktype = _ranktype switch
 		{
-			ranktype = 1;
-		}
-		else if (_ranktype == 1)
+			0 => 1,
+			1 => 2,
+			_ => 0
+		};
+
+		// Safely free any existing overlay
+		if (Blank != null && IsInstanceValid(Blank))
 		{
-			ranktype = 2;
+			Blank.QueueFree();
+			Blank = null;
 		}
 
-		try
-		{
-			if (Blank != null)
-			{
-				Blank.QueueFree();
-			}
-		}
-		catch (Exception e)
-		{
-			GD.Print("Guessing it already been freed: " + e.Message);
-		}
 		if (!noani)
 		{
-			Blank = new ColorRect();
-			Blank.Color = new Color(0, 0, 0, 0.5f);
-			Blank.AnchorLeft = 0;
-			Blank.AnchorTop = 0;
-			Blank.AnchorRight = 1;
-			Blank.AnchorBottom = 1;
-			Blank.ZIndex = 4; // Ensure it is on top of everything
-			Blank.Modulate = new Color(0, 0, 0, 0f);
-			Blank.Name = "Blanko-Chan";
+			Blank = new ColorRect
+			{
+				Color = new Color(0, 0, 0, 0.5f),
+				AnchorLeft = 0,
+				AnchorTop = 0,
+				AnchorRight = 1,
+				AnchorBottom = 1,
+				ZIndex = 4,
+				Modulate = new Color(0, 0, 0, 0f),
+				Name = "Blanko-Chan"
+			};
 			AddChild(Blank);
 			Blank.Size = new Vector2(Blank.Size.X, Blank.Size.Y - 50);
-			if (BlankAni != null)
-			{
-				BlankAni.Kill();
-			}
+
+			BlankAni?.Kill();
 			BlankAni = CreateTween();
 			BlankAni.TweenProperty(Blank, "modulate", new Color(1f, 1f, 1f, 0.5f), 0.5f)
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
 			BlankAni.Play();
+
 			Loadingicon = GetNode<Sprite2D>("Loadingicon");
 			Loadinganimation = GetNode<AnimationPlayer>("Loadingicon/Loadinganimation");
-			Loadingicon.Position = new Vector2((GetViewportRect().Size.X / 2) - (Loadingicon.Texture.GetSize().X / 2), (GetViewportRect().Size.Y / 2) - (Loadingicon.Texture.GetSize().Y / 2)); // Get size of the Loading Icon and center it
+
+			var iconSize = Loadingicon.Texture.GetSize();
+			var viewport = GetViewportRect().Size;
+			Loadingicon.Position = new Vector2(
+				(viewport.X / 2) - (iconSize.X / 2),
+				(viewport.Y / 2) - (iconSize.Y / 2)
+			);
 			Loadingicon.Visible = true;
 			Loadinganimation.Play("loading");
 		}
-		else
-		{
-			Blank = null;
-		}
-		var uritext = "";
-		if (_searchText != "")
-		{
-			uritext = Uri.EscapeDataString(_searchText);
-		}
+
+		var uritext = string.IsNullOrEmpty(_searchText)
+			? ""
+			: Uri.EscapeDataString(_searchText);
+
 		var uri = $"{SettingsOperator.GetSetting("api")}apiv2/search?query={uritext}&status={ranktype}&page={page}";
 		GD.Print($"Looking up with: {uri}");
 		BrowseApi.Request(uri);
 	}
-	
+
 	private void _BrowseAPI_finished(long result, long responseCode, string[] headers, byte[] body)
 	{
-		string BrowseEntries = (string)Encoding.UTF8.GetString(body);
-		List<BrowseCatalogLegend> items = JsonSerializer.Deserialize<List<BrowseCatalogLegend>>(BrowseEntries);
+		// Deserialise — guard against null or empty responses
+		List<BrowseCatalogLegend>? items = null;
+		try
+		{
+			var json = Encoding.UTF8.GetString(body);
+			items = JsonSerializer.Deserialize<List<BrowseCatalogLegend>>(json);
+		}
+		catch (Exception e)
+		{
+			GD.PrintErr($"Failed to parse browse API response: {e.Message}");
+		}
+
+		items ??= new List<BrowseCatalogLegend>();
 
 		var index = BrowseCatalog.Count;
 		BrowseCatalog.AddRange(items);
-		if (Blank != null)
+
+		// Hide the loading overlay
+		if (Blank != null && IsInstanceValid(Blank))
 		{
-			Loadingicon.Visible = false;
-			Loadinganimation.Stop();
-			if (BlankAni != null)
-			{
-				BlankAni.Kill();
-			}
+			if (Loadingicon != null) Loadingicon.Visible = false;
+			Loadinganimation?.Stop();
+
+			BlankAni?.Kill();
 			BlankAni = CreateTween();
 			BlankAni.TweenProperty(Blank, "modulate", new Color(0f, 0f, 0f, 0f), 0.5f)
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
+			BlankAni.TweenCallback(Callable.From(() => Blank?.QueueFree()));
 			BlankAni.Play();
-			BlankAni.TweenCallback(Callable.From(() => Blank.QueueFree()));
 		}
 
 		var beatmapsContainer = GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps");
+
+		// Clear existing cards on a fresh search (page 0)
 		if (page < 1)
 		{
 			foreach (Node child in beatmapsContainer.GetChildren())
 			{
 				beatmapsContainer.RemoveChild(child);
 				child.QueueFree();
-			} // Clears up the browse page.
+			}
 		}
 
 		try
 		{
 			foreach (BrowseCatalogLegend line in items)
 			{
-				List<CatalogBeatmapInfoLegend> beatmaps = (List<CatalogBeatmapInfoLegend>)line.beatmaps.OrderBy(d => d.count_circles + d.count_sliders).ToList();
-				line.beatmaps = beatmaps;
+				// Skip entries with no beatmaps
+				if (line.beatmaps is not { Count: > 0 }) continue;
 
-				var Element = GD.Load<PackedScene>("res://Panels/BrowseElements/Card.tscn").Instantiate().GetNode<CardFunctions>(".");
-				if (!line.preview_url.StartsWith("http"))
-				{
+				line.beatmaps = line.beatmaps
+					.OrderBy(d => d.count_circles + d.count_sliders)
+					.ToList();
+
+				var Element = GD.Load<PackedScene>("res://Panels/BrowseElements/Card.tscn")
+					.Instantiate()
+					.GetNode<CardFunctions>(".");
+
+				// Ensure the preview URL is absolute
+				if (!string.IsNullOrEmpty(line.preview_url) && !line.preview_url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
 					line.preview_url = "https:" + line.preview_url;
-				}
+
 				Element.GetNode<MusicPreview>("SongBackgroundPreview/Playbutton").audioPath = line.preview_url;
-				Element.BannerPicture = line.covers.card;
+				Element.BannerPicture = line.covers?.card;
 				Element.BeatmapID = line.id;
 				Element.Index = index;
-				GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps").AddChild(Element);
+
+				beatmapsContainer.AddChild(Element);
 				CardSizeX = (int)Element.Size.X + 5;
-				Element.Title.Text = line.title;
-				Element.Artist.Text = line.artist;
-				Element.Mapper.Text = "mapped by " + line.creator;
-				Element.RankColour.SelfModulate = ConvertTypetoColor(line.beatmaps.First().ranked);
-				Element.RankText.Text = ConvertTypetoRank(line.beatmaps.First().ranked);
-				Element.LvStart.Text = "Lv. " + line.beatmaps.First().level;
-				Element.LvEnd.Text = "Lv. " + line.beatmaps.Last().level;
+
+				var first = line.beatmaps.First();
+				var last  = line.beatmaps.Last();
+
+				Element.Title.Text  = line.title   ?? string.Empty;
+				Element.Artist.Text = line.artist  ?? string.Empty;
+				Element.Mapper.Text = $"mapped by {line.creator ?? "unknown"}";
+				Element.RankColour.SelfModulate = ConvertTypetoColor(first.ranked);
+				Element.RankText.Text = ConvertTypetoRank(first.ranked);
+				Element.LvStart.Text = $"Lv. {first.level}";
+				Element.LvEnd.Text   = $"Lv. {last.level}";
 				Element.Modulate = new Color(1f, 1f, 1f, 0f);
+
 				index++;
 			}
 		}
 		catch (Exception e)
 		{
-			GD.Print(e);
+			GD.PrintErr($"Error building browse cards: {e}");
 		}
-		if (index < 1)
-		{
-			Empty = true;
-		}
+
+		if (index < 1) Empty = true;
 		isLoading = false;
 	}
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	private void _on_back(){
+
+	private void _on_back()
+	{
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
 	}
+
 	public override void _Process(double delta)
 	{
-		var waba = (int)(GetViewportRect().Size.X/CardSizeX);
-		if (waba <1){
-			waba = 1;
+		if (CardSizeX > 0)
+		{
+			int columns = Math.Max(1, (int)(GetViewportRect().Size.X / CardSizeX));
+			GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps").Columns = columns;
 		}
+
 		if (Extras.GetMilliseconds() - timetext > 500 && textchanging)
 		{
 			textchanging = false;
 			_submit(_searchText);
 		}
+
 		ScrollVertical = BeatmapScroll.ScrollVertical;
+
 		if (ScrollVertical > BeatmapGrid.Size.Y / 2 && !isLoading && !Empty)
 		{
 			page++;
 			StartBrowse(noani: true);
 		}
-		GetNode<GridContainer>("BeatmapSec/Scroll/Center/Spacer/Beatmaps").Columns = waba;
 	}
 }
