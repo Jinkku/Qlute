@@ -68,6 +68,7 @@ public partial class Gameplay : Control
 	public static int seed = 0;
 	private Control HUD { get; set; }
 	private float speedold = 1f;
+	private double ppmisspower = 1.2;
 
 	// Spam protection: minimum ms between accepted key presses per column
 	private const float SPAM_COOLDOWN_MS = 80f; // 80ms — matches osu!mania's input buffer
@@ -420,7 +421,7 @@ public partial class Gameplay : Control
 			    SettingsOperator.Gameplaycfg.Bad++;
 			    if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
 			    SettingsOperator.Gameplaycfg.Combo = 0;
-			    SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp - (Note.ppv2xp * 4));
+			    SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp / ppmisspower);
 			    BadCombo++;
 			    ComboAnimation();
 			    HealthBar.Damage(5 * BadCombo);
@@ -787,7 +788,7 @@ public partial class Gameplay : Control
 			SettingsOperator.Gameplaycfg.Bad++;
 			if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
 			SettingsOperator.Gameplaycfg.Combo = 0;
-			SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp - (Note.ppv2xp * 4));
+			SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp / ppmisspower);
 			BadCombo++;
 			ComboAnimation();
 			HealthBar.Damage(5 * BadCombo);
