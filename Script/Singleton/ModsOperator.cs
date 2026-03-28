@@ -10,6 +10,8 @@ public partial class ModsOperator : Node
 		{
 			Mods[mod.Key] = false;
 		}
+		DtCustom.Speed = DtCustom.DTSpeed;
+		HtCustom.Speed = HtCustom.HTSpeed;
 		Refresh();
 	}
 	public static void Refresh()

@@ -5,12 +5,14 @@ public partial class DtCustom : VBoxContainer
 {
 	private Label DTLabel;
 	private HSlider DTMS;
-	public static float Speed;
-	private bool oldvis;
+	public static float DTSpeed = 1.25f;
+	public static float Speed = DTSpeed;
+	private bool oldvis = false;
 	public override void _Ready()
 	{
 		DTMS = GetNode<HSlider>("DTMS");
 		DTLabel = GetNode<Label>("DTM");
+		DTMS.Value = Speed;
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
@@ -19,7 +21,6 @@ public partial class DtCustom : VBoxContainer
 		if (oldvis != Visible)
 		{
 			oldvis = Visible;
-			Speed = AudioPlayer.Instance.PitchScale;
 			DTMS.Value = Speed;
 		}
 		if (Visible)
@@ -29,7 +30,10 @@ public partial class DtCustom : VBoxContainer
 	}
 	private void _valuechanged(float value)
 	{
-		Speed = value;
-		AudioPlayer.Instance.PitchScale = Speed;
+		if (oldvis)
+		{
+			Speed = value;
+			AudioPlayer.Instance.PitchScale = Speed;
+		}
 	}
 }

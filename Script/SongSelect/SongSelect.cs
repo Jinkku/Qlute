@@ -266,6 +266,8 @@ public partial class SongSelect : Control
 		_res_resize();
 		checksongpanel();
 		
+		ModsOperator.Refresh();
+		
 		AnimationScene(2); // Starts Animation
 	}
 	// Animation for Start Button DUH
