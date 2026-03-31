@@ -5,16 +5,28 @@ using System.IO;
 public partial class BeatmapContextMenu : PanelContainer
 {
 	private SettingsOperator SettingsOperator { get; set; }
+	private Button EditNode { get; set; }
 	public int SongID { get; set; } = -1;
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
+		EditNode = GetNode<Button>("ContextSections/Edit");
+		#if DEBUG
+			EditNode.Visible = true;
+		#else
+			EditNode.Visible = false;
+		#endif
 	}
 
 	private void _edit()
 	{
 		if (SongID != -1)
 		{
+			SettingsOperator.EditorSongInfo.SongTitle =  SettingsOperator.Beatmaps[SongID].Title;
+			SettingsOperator.EditorSongInfo.SongArtist =  SettingsOperator.Beatmaps[SongID].Artist;
+			SettingsOperator.EditorSongInfo.SongDifficulty =  SettingsOperator.Beatmaps[SongID].Version;
+			SettingsOperator.EditorSongInfo.FilePath =  SettingsOperator.Beatmaps[SongID].Path;
+			SettingsOperator.EditorSongInfo.Background = SettingsOperator.Background;
 			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
 		}
 	}

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c1aa8tscp5u6p"]
+[gd_scene format=3 uid="uid://c1aa8tscp5u6p"]
 
 [ext_resource type="Script" uid="uid://dnb0hvqt3boys" path="res://Script/SongSelect/BeatmapContextMenu.cs" id="1_m6md1"]
 
@@ -43,7 +43,7 @@ corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pjdex"]
 
-[node name="ContextMenu" type="PanelContainer"]
+[node name="ContextMenu" type="PanelContainer" unique_id=309067069]
 custom_minimum_size = Vector2(180, 37)
 offset_right = 180.0
 offset_bottom = 37.0
@@ -51,11 +51,10 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_fn0xp")
 script = ExtResource("1_m6md1")
 metadata/SongID = -1
 
-[node name="ContextSections" type="VBoxContainer" parent="."]
+[node name="ContextSections" type="VBoxContainer" parent="." unique_id=1459490355]
 layout_mode = 2
 
-[node name="Edit" type="Button" parent="ContextSections"]
-visible = false
+[node name="Edit" type="Button" parent="ContextSections" unique_id=1294593951]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("StyleBoxEmpty_elvf5")
@@ -65,7 +64,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
 text = "Edit"
 alignment = 0
 
-[node name="Delete" type="Button" parent="ContextSections"]
+[node name="Delete" type="Button" parent="ContextSections" unique_id=1587858423]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.976562, 0.473022, 0.473022, 1)
 theme_override_colors/font_focus_color = Color(0.976471, 0.47451, 0.47451, 1)
@@ -80,7 +79,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
 text = "Delete"
 alignment = 0
 
-[node name="DeleteBeatmap" type="Button" parent="ContextSections"]
+[node name="DeleteBeatmap" type="Button" parent="ContextSections" unique_id=113708383]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.976562, 0.473022, 0.473022, 1)
 theme_override_colors/font_focus_color = Color(0.976471, 0.47451, 0.47451, 1)
