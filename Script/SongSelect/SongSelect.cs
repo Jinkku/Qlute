@@ -444,7 +444,6 @@ public partial class SongSelect : Control
 
 	private void _leaderboardmode(int index)
 	{
-		GD.Print(index);
 		SettingsOperator.SetSetting("leaderboardtype", index);
 		SettingsOperator.LeaderboardType = index;
 		if (index != 2)

@@ -46,8 +46,6 @@ public partial class ButtonFade : Button
     
     private void resize()
     {
-	    GD.Print(Size.X);
-	    GD.Print(oldsizex);
 	    Size = new Vector2(Math.Max(oldsizex, _buttonText.Size.X + 20), Math.Max(oldsizey, _buttonText.Size.Y + 20));
     }
     private bool Hovered = false;
