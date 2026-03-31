@@ -22,11 +22,11 @@ public partial class BeatmapContextMenu : PanelContainer
 	{
 		if (SongID != -1)
 		{
-			SettingsOperator.EditorSongInfo.SongTitle =  SettingsOperator.Beatmaps[SongID].Title;
-			SettingsOperator.EditorSongInfo.SongArtist =  SettingsOperator.Beatmaps[SongID].Artist;
-			SettingsOperator.EditorSongInfo.SongDifficulty =  SettingsOperator.Beatmaps[SongID].Version;
-			SettingsOperator.EditorSongInfo.FilePath =  SettingsOperator.Beatmaps[SongID].Path;
-			SettingsOperator.EditorSongInfo.Background = SettingsOperator.Background;
+			CreateEditor.EditorSongInfo.SongTitle =  SettingsOperator.Beatmaps[SongID].Title;
+			CreateEditor.EditorSongInfo.SongArtist =  SettingsOperator.Beatmaps[SongID].Artist;
+			CreateEditor.EditorSongInfo.SongDifficulty =  SettingsOperator.Beatmaps[SongID].Version;
+			CreateEditor.EditorSongInfo.FilePath =  SettingsOperator.Beatmaps[SongID].Path;
+			CreateEditor.EditorSongInfo.Background = SettingsOperator.Background;
 			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
 		}
 	}

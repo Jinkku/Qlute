@@ -481,31 +481,6 @@ public partial class SettingsOperator : Node
         Gameplaycfg.Avgms = 0;
         Gameplaycfg.ms = 0;
     }
-/// <summary>
-/// Song info of the currently editing beatmap.
-/// </summary>
-public static class EditorSongInfo
-{
-    public static string SongTitle { get; set; } = "Untitled Title";
-    public static string SongArtist { get; set; } = "Untitled Artist";
-    public static string SongDifficulty { get; set; } = "Untitled Beatmap";
-    public static int SongLvRating { get; set; } = 0;
-    public static string SongMapper { get; set; } = "Unknown Mapper";
-    public static string FilePath { get; set; } = null;
-    public static Texture2D Background { get; set; } = GetNullImage();
-
-    public static void Reset()
-    {
-        SongTitle = "Untitled Title";
-        SongArtist = "Untitled Artist";
-        SongDifficulty = "Untitled Beatmap";
-        SongLvRating = 0;
-        SongMapper = "Unknown Mapper";
-        FilePath = null;
-        Background = GetNullImage();
-    }
-}
-
 
     public static class Gameplaycfg
     {

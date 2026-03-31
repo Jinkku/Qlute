@@ -62,10 +62,10 @@ public override void _Ready()
 		SongTitle = GetNode<LineEdit>("Info/Panel/Scroll/GridContainer/Setting1/Value");
 		SongArtist = GetNode<LineEdit>("Info/Panel/Scroll/GridContainer/Setting2/Value");
 		SongDifficulty = GetNode<LineEdit>("Info/Panel/Scroll/GridContainer/Setting3/Value");
-		SongTitle.Text = SettingsOperator.EditorSongInfo.SongTitle;
-		SongArtist.Text = SettingsOperator.EditorSongInfo.SongArtist;
-		SongDifficulty.Text = SettingsOperator.EditorSongInfo.SongDifficulty;
-		EditorBackground.Texture = SettingsOperator.EditorSongInfo.Background;
+		SongTitle.Text = CreateEditor.EditorSongInfo.SongTitle;
+		SongArtist.Text = CreateEditor.EditorSongInfo.SongArtist;
+		SongDifficulty.Text = CreateEditor.EditorSongInfo.SongDifficulty;
+		EditorBackground.Texture = CreateEditor.EditorSongInfo.Background;
 		EditorBackgroundPreview.Texture = EditorBackground.Texture;
 
 	}

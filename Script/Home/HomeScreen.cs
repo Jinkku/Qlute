@@ -66,7 +66,7 @@ public partial class HomeScreen : Control
 	}
 	private void _create() {
 		#if DEBUG
-			SettingsOperator.EditorSongInfo.Reset();
+			CreateEditor.EditorSongInfo.Reset();
 			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
 		#else
 			Notify.Post("Under Construction!");
