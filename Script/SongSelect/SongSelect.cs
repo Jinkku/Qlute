@@ -98,6 +98,7 @@ public partial class SongSelect : Control
 		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Version");
 		button.Position = new Vector2(0, startposition + (CardSize.Y * id));
 		button.Name = id.ToString();
+		button.SetMeta("SongIndex", id);
 		button.ClipText = true;
 		button.BackgroundPath = SettingsOperator.Beatmaps[id].Path + SettingsOperator.Beatmaps[id].Background;
 		button.SongID = id;
@@ -339,9 +340,9 @@ public partial class SongSelect : Control
 		for (int i = 0; i < SongEntry.Count; i++)
 		{
 			Button btn = SongEntry[i];
-			if (btn != null)
+			if (btn != null && btn.HasMeta("SongIndex"))
 			{
-				int idx = int.Parse(btn.Name);
+				int idx = (int)btn.GetMeta("SongIndex");
 				visible[idx] = btn;
 			}
 		}
@@ -349,7 +350,8 @@ public partial class SongSelect : Control
 		for (int i = SongEntry.Count - 1; i >= 0; i--)
 		{
 			Button button = SongEntry[i];
-			int buttonIndex = int.Parse(button.Name);
+			if (!button.HasMeta("SongIndex")) { SongEntry.RemoveAt(i); continue; }
+			int buttonIndex = (int)button.GetMeta("SongIndex");
 
 			if (buttonIndex < startIndex || buttonIndex >= endIndex)
 			{
