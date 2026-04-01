@@ -238,16 +238,13 @@ theme_override_styles/grabber_highlight = SubResource("StyleBoxFlat_xaiyr")
 theme_override_styles/grabber_pressed = SubResource("StyleBoxFlat_s818e")
 
 [node name="NoBeatmap" type="Label" parent="SongPanel" unique_id=1845210040]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "You have no beatmaps!
-visit the catalog to find some!
-<3"
+text = "XX"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -697,6 +694,8 @@ script = ExtResource("20_ihwey")
 [connection signal="mouse_exited" from="BottomBar/Start" to="." method="_start_unfocus"]
 [connection signal="pressed" from="BottomBar/Start" to="." method="_Start"]
 [connection signal="pressed" from="BottomBar/Start" to="." method="_resetreplay"]
+[connection signal="focus_entered" from="ControlBar/AmazingPillar/Margin/MarginContainer/Beatmapsearch" to="." method="searchfocus"]
+[connection signal="focus_exited" from="ControlBar/AmazingPillar/Margin/MarginContainer/Beatmapsearch" to="." method="searchunfocus"]
 [connection signal="text_changed" from="ControlBar/AmazingPillar/Margin/MarginContainer/Beatmapsearch" to="." method="SearchPrepare"]
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Details" to="." method="_leaderboardmode" binds= [2]]
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Local" to="." method="_leaderboardmode" binds= [0]]

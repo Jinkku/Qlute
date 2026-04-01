@@ -55,6 +55,24 @@ public partial class SongSelect : Control
 
 	int startposition = 0;
 	int scrolloldvalue { get; set; }
+	private List<int> FilteredIndices { get; set; } = new List<int>();
+
+	private void RebuildFilter(string query)
+	{
+		FilteredIndices.Clear();
+		bool hasQuery = !string.IsNullOrEmpty(query);
+		for (int i = 0; i < SettingsOperator.Beatmaps.Count; i++)
+		{
+			var b = SettingsOperator.Beatmaps[i];
+			if (!hasQuery ||
+				b.Title.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+				b.Artist.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+				b.Mapper.Contains(query, StringComparison.OrdinalIgnoreCase))
+			{
+				FilteredIndices.Add(i);
+			}
+		}
+	}
 	private void _valuechangedscroll(float value)
 	{ // Part of the loading Beatmaps
 		SongETick = 0;
@@ -91,17 +109,18 @@ public partial class SongSelect : Control
 		return (MusicCard)musiccardtemplate.Instantiate();
 	}
 
-	public void AddSongList(int id)
+	public void AddSongList(int virtualId)
 	{
+		int realId = FilteredIndices.Count > 0 ? FilteredIndices[virtualId] : virtualId;
 		MusicCard button = InitiateMusicCard();
 		var Rating = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Rating");
 		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Version");
-		button.Position = new Vector2(0, startposition + (CardSize.Y * id));
-		button.Name = id.ToString();
-		button.SetMeta("SongIndex", id);
+		button.Position = new Vector2(0, startposition + (CardSize.Y * virtualId));
+		button.Name = virtualId.ToString();
+		button.SetMeta("SongIndex", virtualId);
 		button.ClipText = true;
-		button.BackgroundPath = SettingsOperator.Beatmaps[id].Path + SettingsOperator.Beatmaps[id].Background;
-		button.SongID = id;
+		button.BackgroundPath = SettingsOperator.Beatmaps[realId].Path + SettingsOperator.Beatmaps[realId].Background;
+		button.SongID = realId;
 		GetNode<Control>("SongPanel").AddChild(button);
 		SongEntry.Add(button);
 	}
@@ -196,6 +215,10 @@ public partial class SongSelect : Control
 		timetext = Extras.GetMilliseconds();
 	}
 
+	private bool blockinputwhentext { get; set; }
+	private void searchfocus() => blockinputwhentext = true;
+	private void searchunfocus() => blockinputwhentext = false;
+
 	private void SearchTime()
 	{
 		if (Extras.GetMilliseconds() - timetext > 500 && textchanging)
@@ -207,12 +230,29 @@ public partial class SongSelect : Control
 
 	private void Search(string value)
 	{
-		BeatmapLegend result = SettingsOperator.Beatmaps.FirstOrDefault(b => b.Title.Contains(value));
-		if (result != null && value != "")
+		RebuildFilter(value);
+
+		// Clear all rendered cards so ScrollSongs rebuilds from filtered indices
+		for (int i = SongEntry.Count - 1; i >= 0; i--)
+			SongEntry[i].QueueFree();
+		SongEntry.Clear();
+
+		if (FilteredIndices.Count > 0)
 		{
-			SettingsOperator.SelectSongID(result.ID);
-			scrollmode(exactvalue: SettingsOperator.SongID);
+			int firstReal = FilteredIndices[0];
+			SettingsOperator.SelectSongID(firstReal);
+			scrollBar.Value = 0;
 		}
+		else if (string.IsNullOrEmpty(value))
+		{
+			scrollBar.Value = Math.Max(0, SettingsOperator.SongID);
+		} else if (FilteredIndices.Count == 0)
+		{
+			scrollBar.Value = 0;
+		}
+
+		scrollBar.MaxValue = FilteredIndices.Count;
+		ScrollSongs();
 	}
 	
 	public override void _Ready()
@@ -260,6 +300,7 @@ public partial class SongSelect : Control
 		CheckLeaderboardMode();
 
 		check_modscreen();
+		RebuildFilter(""); // Populate FilteredIndices with all songs on load
 		ScrollSongs();
 
 		OldSongID = SettingsOperator.SongID;
@@ -333,9 +374,9 @@ public partial class SongSelect : Control
 		int cardHeight = (int)(CardSize.Y + 5);
 		int itemCount = (int)(WindowSize.Y / cardHeight);
 		int startIndex = Math.Max(0, (int)scrollBar.Value - (itemCount / 2));
-		int endIndex = Math.Min(SettingsOperator.Beatmaps.Count,
+		int endIndex = Math.Min(FilteredIndices.Count > 0 ? FilteredIndices.Count : SettingsOperator.Beatmaps.Count,
 			(int)scrollBar.Value + (itemCount / 2) + 2);
-
+		
 		var visible = new Dictionary<int, Button>(SongEntry.Count);
 		for (int i = 0; i < SongEntry.Count; i++)
 		{
@@ -360,7 +401,8 @@ public partial class SongSelect : Control
 				visible.Remove(buttonIndex);
 			}
 		}
-
+		if (FilteredIndices.Count < 1 && !string.IsNullOrEmpty(Searchtext)) 
+			return;
 		for (int i = startIndex; i < endIndex; i++)
 		{
 			Button entry;
@@ -482,6 +524,8 @@ public partial class SongSelect : Control
 		}
 	}
 
+	private string NoBeatmapCount = "You have no beatmaps!\nvisit the catalog to find some!\n<3";
+	private string NoBeatmapSearch = "You might need to narrow your search terms\n</3";
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
@@ -490,7 +534,12 @@ public partial class SongSelect : Control
 		CheckRankStatus();
 		// Show Play button if SongID is set.
 		StartButton.Visible = (SettingsOperator.SongID != -1);
-		NoBeatmap.Visible = (SettingsOperator.Beatmaps.Count < 1);
+		NoBeatmap.Visible = (SettingsOperator.Beatmaps.Count == 0) || (FilteredIndices.Count == 0 && !string.IsNullOrEmpty(Searchtext));
+
+		if (SettingsOperator.Beatmaps.Count == 0 && NoBeatmap.Text != NoBeatmapCount && !string.IsNullOrEmpty(Searchtext))
+			NoBeatmap.Text = NoBeatmapCount;
+		else if (FilteredIndices.Count == 0 & NoBeatmap.Text != NoBeatmapCount)
+			NoBeatmap.Text = NoBeatmapSearch;
 
 		if (Input.IsMouseButtonPressed(MouseButton.Right) && SettingsOperator.SongIDHighlighted != -1)
 		{
@@ -531,7 +580,7 @@ public partial class SongSelect : Control
 			GetTree().ReloadCurrentScene();
 		}
 		check_modscreen();
-		scrollBar.MaxValue = SettingsOperator.Beatmaps.Count;
+		scrollBar.MaxValue = FilteredIndices.Count > 0 ? FilteredIndices.Count : SettingsOperator.Beatmaps.Count;
 
 		if (!AnimationSong)
 		{
@@ -541,72 +590,69 @@ public partial class SongSelect : Control
 		checksongpanel();
 
 		if (Input.IsActionJustPressed("Songup"))
-		{
-			if (SettingsOperator.SongID - 1 >= 0 && SettingsOperator.SongID != -1)
-			{
-				SettingsOperator.SelectSongID(SettingsOperator.SongID - 1);
-			}
-			else if (SettingsOperator.SongID != -1)
-			{
-				SettingsOperator.SelectSongID((int)SettingsOperator.Beatmaps.Count - 1);
-			}
-			scrollmode(exactvalue: SettingsOperator.SongID);
-		}
-		else if (Input.IsActionJustPressed("Songdown"))
-		{
-			if (SettingsOperator.SongID + 1 < (int)SettingsOperator.Beatmaps.Count && SettingsOperator.SongID != -1)
-			{
-				SettingsOperator.SelectSongID(SettingsOperator.SongID + 1);
-			}
-			else if (SettingsOperator.SongID != -1)
-			{
-				SettingsOperator.SelectSongID(0);
-			}
-			scrollmode(exactvalue: SettingsOperator.SongID);
-		}
-		else if (Input.IsActionJustPressed("Mod"))
-		{
-			_Mods_show();
-		}
-		else if (Input.IsActionJustPressed("Random"))
-		{
-			_on_random();
-		}
-		else if (Input.IsActionJustPressed("Collections"))
-		{
-		}
-		else if (Input.IsActionJustPressed("scrolldown") && scrollBar.Value + 1 < SettingsOperator.Beatmaps.Count && SongPanelAccess)
-		{
-			if (scrollvelocity < 0)
-			{
-				scrollvelocity = 0;
-			}
-			scrollvelocity = Math.Min(scrollvelocity + 1, 2);
-			scrollmode(1 + scrollvelocity);
-		}
-		else if (Input.IsActionJustPressed("scrollup") && scrollBar.Value - 1 > -1 && SongPanelAccess)
-		{
-			if (scrollvelocity > 0)
-			{
-				scrollvelocity = 0;
-			}
-			scrollvelocity = Math.Max(scrollvelocity - 1, -2);
-			scrollmode(-1 + scrollvelocity);
-		}
-		else if (Input.IsActionJustPressed("ui_accept") && SettingsOperator.Beatmaps.Count > 0)
-		{
-			_Start();
-		}
-		else if (MusicCard.Connection_Button && OldSongID == SettingsOperator.SongID)
-		{
-			_Start();
-			MusicCard.Connection_Button = false;
-		}
-		else if (MusicCard.Connection_Button && OldSongID != SettingsOperator.SongID)
-		{
-			scrollmode(exactvalue: SettingsOperator.SongID);
-			MusicCard.Connection_Button = false;
-		}
+	    {
+	        if (FilteredIndices.Count > 0)
+	        {
+	            int currentPos = FilteredIndices.IndexOf(SettingsOperator.SongID);
+	            int prevPos = currentPos - 1 >= 0 ? currentPos - 1 : FilteredIndices.Count - 1;
+	            SettingsOperator.SelectSongID(FilteredIndices[prevPos]);
+	            scrollmode(exactvalue: prevPos);
+	        }
+	    }
+	    else if (Input.IsActionJustPressed("Songdown"))
+	    {
+	        if (FilteredIndices.Count > 0)
+	        {
+	            int currentPos = FilteredIndices.IndexOf(SettingsOperator.SongID);
+	            int nextPos = currentPos + 1 < FilteredIndices.Count ? currentPos + 1 : 0;
+	            SettingsOperator.SelectSongID(FilteredIndices[nextPos]);
+	            scrollmode(exactvalue: nextPos);
+	        }
+	    }
+	    else if (Input.IsActionJustPressed("Mod"))
+	    {
+	        _Mods_show();
+	    }
+	    else if (Input.IsActionJustPressed("Random"))
+	    {
+	        _on_random();
+	    }
+	    else if (Input.IsActionJustPressed("Collections"))
+	    {
+	    }
+	    else if (Input.IsActionJustPressed("scrolldown") && scrollBar.Value + 1 < FilteredIndices.Count && SongPanelAccess)
+	    {
+	        if (scrollvelocity < 0)
+	        {
+	            scrollvelocity = 0;
+	        }
+	        scrollvelocity = Math.Min(scrollvelocity + 1, 2);
+	        scrollmode(1 + scrollvelocity);
+	    }
+	    else if (Input.IsActionJustPressed("scrollup") && scrollBar.Value - 1 > -1 && SongPanelAccess)
+	    {
+	        if (scrollvelocity > 0)
+	        {
+	            scrollvelocity = 0;
+	        }
+	        scrollvelocity = Math.Max(scrollvelocity - 1, -2);
+	        scrollmode(-1 + scrollvelocity);
+	    }
+	    else if (Input.IsActionJustPressed("ui_accept") && FilteredIndices.Count > 0 && !blockinputwhentext)
+	    {
+	        _Start();
+	    }
+	    else if (MusicCard.Connection_Button && OldSongID == SettingsOperator.SongID && !blockinputwhentext)
+	    {
+	        _Start();
+	        MusicCard.Connection_Button = false;
+	    }
+	    else if (MusicCard.Connection_Button && OldSongID != SettingsOperator.SongID && !blockinputwhentext)
+	    {
+	        int filteredPos = FilteredIndices.IndexOf(SettingsOperator.SongID);
+	        scrollmode(exactvalue: filteredPos >= 0 ? filteredPos : 0);
+	        MusicCard.Connection_Button = false;
+	    }
 	}
 
 	private bool ModsScreenActive = false;
