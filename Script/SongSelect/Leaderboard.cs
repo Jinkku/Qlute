@@ -1,6 +1,6 @@
 using Godot;
 using System;
-
+using Game;
 public partial class Leaderboard : Button
 {
 	// Called when the node enters the scene tree for the first time.

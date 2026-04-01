@@ -216,7 +216,7 @@ public static class Replay
                 FileCache += $"#Username: {ApiOperator.Username}\n";
                 FileCache += $"#BeatmapID: {SettingsOperator.BeatmapID}\n";
                 FileCache += $"#BeatmapSetID: {SettingsOperator.BeatmapSetID}\n";
-                FileCache += $"#Score: {SettingsOperator.Gameplaycfg.Score}\n";
+                FileCache += $"#Score: {Gameplay.score}\n";
                 FileCache += $"#Max: {SettingsOperator.Gameplaycfg.Max}\n";
                 FileCache += $"#Great: {SettingsOperator.Gameplaycfg.Great}\n";
                 FileCache += $"#Meh: {SettingsOperator.Gameplaycfg.Meh}\n";

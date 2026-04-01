@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Game;
 using System.Reflection.Metadata;
 public class NotesEn {
 	public int timing {get;set;}
@@ -54,7 +55,7 @@ public partial class Gameplay : Control
 	public TextureRect Beatmap_Background { get; set; }
 	private Node PauseMenu { get; set; }
 	private bool Finished { get; set; }
-	private int score { get; set; }
+	public static int score { get; set; }
 	public static List<DanceCounter> dance { get; set; }
 	private int DanceIndex { get; set; }
 	private Label debugtext { get; set; }
@@ -330,16 +331,6 @@ public partial class Gameplay : Control
 
 		return (float)SettingsOperator.Gameplaycfg.Time;
 	}
-    /// <summary>
-    /// Gets the Score calculated
-    /// </summary>
-    private int Get_Score(double pp, double maxpp, float multiplier)
-    {
-	    maxpp *= ModsMulti.multiplier;
-	    double baseScore = (pp / maxpp) * 1000000;
-	    double finalScore = baseScore * multiplier;
-	    return (int)Math.Round(finalScore);
-    }
 
 	/// <summary>
 	/// Starts Playback
@@ -575,12 +566,15 @@ public partial class Gameplay : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if ( (scoretween == null || !scoretween.IsRunning()) & scoreint != Get_Score(SettingsOperator.Gameplaycfg.pp, SettingsOperator.Gameplaycfg.maxpp, ModsMulti.multiplier))
+		score = new Game.ScoreCalculator().ProcessScore(SettingsOperator.Gameplaycfg.Max,
+			SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh,
+			SettingsOperator.Gameplaycfg.NoteCount, ModsMulti.multiplier);
+		if ( (scoretween == null || !scoretween.IsRunning()) & scoreint != score)
 		{
 			scoretween?.Kill();
 			scoretween = CreateTween();
 			scoretween.TweenProperty(this, "scoreint",
-				Get_Score(SettingsOperator.Gameplaycfg.pp, SettingsOperator.Gameplaycfg.maxpp, ModsMulti.multiplier), 0.3f);
+				score, 0.3f);
 			scoretween.Play();
 		}
 		SettingsOperator.Gameplaycfg.Score = scoreint; // Set the score of the player

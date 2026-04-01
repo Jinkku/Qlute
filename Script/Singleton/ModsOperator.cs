@@ -4,6 +4,8 @@ using System;
 
 public partial class ModsOperator : Node
 {
+	public float DTSpeedMultiplier { get; set; } = 1.25f;
+	public float HTSpeedMultiplier { get; set; } = 0.5f;
 	public static void Reset()
 	{
 		foreach(var mod in Mods)
@@ -29,6 +31,67 @@ public partial class ModsOperator : Node
 			AudioPlayer.Instance.PitchScale = 1f;
 		}
 		var modalias = GetModAlias();
+	}
+
+	/// <summary>
+	/// Simulate the multiplier
+	/// </summary>
+	public float ProcessMultiplierByMod(string Mods)
+	{
+		var multiplier= 1.0f;
+		if (Mods.Contains("DT"))
+		{
+			multiplier *= 1.15f * (AudioPlayer.Instance.PitchScale / DTSpeedMultiplier);
+		}
+		else if (Mods.Contains("HT"))
+		{
+			multiplier *= 0.3f * (AudioPlayer.Instance.PitchScale / HTSpeedMultiplier);
+		}
+		else if (Mods.Contains("SL"))
+		{
+			multiplier *= 1.05f;
+		}
+		else if (Mods.Contains("BT"))
+		{
+			multiplier *= 1.15f;
+		}
+		else if (Mods.Contains("NF"))
+		{
+			multiplier *= 0.5f;
+		}
+		return multiplier;
+	}
+	/// <summary>
+	/// Simulate the multiplier
+	/// </summary>
+	public float ProcessMultiplierByModList(Dictionary<string, bool> Mods)
+	{
+		var multiplier= 1.0f;
+		foreach (var mod in Mods)
+		{
+			if (mod.Value && mod.Key == "dt")
+			{
+				multiplier *= 1.15f * (AudioPlayer.Instance.PitchScale / DTSpeedMultiplier);
+			}
+			else if (mod.Value && mod.Key == "ht")
+			{
+				multiplier *= 0.3f * (AudioPlayer.Instance.PitchScale / HTSpeedMultiplier);
+			}
+			else if (mod.Value && mod.Key == "no-fail")
+			{
+				multiplier *= 0.5f;
+			}
+			else if (mod.Value && mod.Key == "black-out")
+			{
+				multiplier *= 1.15f;
+			}
+			else if (mod.Value && mod.Key != "auto" && mod.Key != "random")
+			{
+				multiplier *= 1.05f;
+			} 
+		}
+
+		return multiplier;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

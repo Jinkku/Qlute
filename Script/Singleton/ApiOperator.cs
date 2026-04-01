@@ -6,6 +6,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Game;
 using DiscordRPC;
 public class BeatmapDownloader
 {
@@ -144,13 +145,14 @@ public partial class ApiOperator : Node
 			foreach (var leaderboardEntry in LeaderboardList)
 			{
 				var client = new System.Net.Http.HttpClient();
-				client.DefaultRequestHeaders.Add("USERNAME", leaderboardEntry.username); // <- add custom header
+				client.DefaultRequestHeaders.Add("USERNAME", leaderboardEntry.username);
 				var pfp_path = await client.GetStringAsync(SettingsOperator.GetSetting("api") + "apiv2/getstat/pfp_path");
 				pfp_path = JsonDocument.Parse(pfp_path).RootElement.GetProperty("url").GetString();
 				await DownloadImage(pfp_path, (ImageTexture texture) =>
 				{
 					leaderboardEntry.ProfilePicture = texture;
 				});
+				leaderboardEntry.score = new ScoreCalculator().ProcessScore(leaderboardEntry.MAX, leaderboardEntry.GOOD, leaderboardEntry.MEH, leaderboardEntry.MAX + leaderboardEntry.GOOD + leaderboardEntry.MEH + leaderboardEntry.BAD, new ModsOperator().ProcessMultiplierByMod(leaderboardEntry.mods));
 			}
 			GD.Print("Leaderboard loaded successfully.");
 		}

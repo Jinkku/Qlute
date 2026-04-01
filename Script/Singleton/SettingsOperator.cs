@@ -225,6 +225,7 @@ public partial class SettingsOperator : Node
             Gameplaycfg.TimeTotalGame = beatmap.Timetotal * 0.001f;
             Sessioncfg["beatmapmapper"] = beatmap.Mapper;
             Gameplaycfg.Accuracy = (int)beatmap.Accuracy;
+            Gameplaycfg.NoteCount = (int)beatmap.NoteCount;
             //Gameplaycfg.SampleSet = beatmap.SampleSet;
             Gameplaycfg.SampleSet = SampleSet.Type[1];
             LevelRating = beatmap.Levelrating;
@@ -400,6 +401,7 @@ public partial class SettingsOperator : Node
         legend.Levelrating = GetLevelRating(hitCount, lastNoteTime * 0.001f);
         legend.Path = filename.Replace(filename.Split("/").Last(), "");
         legend.Rawurl = filename;
+        legend.NoteCount = hitCount;
         
         Beatmaps.Add(legend);
         
@@ -494,6 +496,7 @@ public partial class SettingsOperator : Node
         public static string SampleSet { get; set; }
         public static int Combo { get; set; }
         public static int MaxCombo { get; set; }
+        public static int NoteCount { get; set; }
         public static int Max { get; set; }
         public static int Great { get; set; }
         public static int Meh { get; set; }

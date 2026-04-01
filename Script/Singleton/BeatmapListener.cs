@@ -100,6 +100,10 @@ public class BeatmapLegend
 	/// </summary>
 	public string Audio { get; set; } = null;
 	/// <summary>
+	/// Note Count
+	/// </summary>
+	public int NoteCount { get; set; } = 0;
+	/// <summary>
 	/// Raw URL for the beatmap, used for downloading
 	/// </summary>
 	public string Rawurl { get; set; } = null;
