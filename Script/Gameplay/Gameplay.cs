@@ -217,21 +217,21 @@ public partial class Gameplay : Control
 		
 		meh = new ColorRect();
 		meh.Color = new Color(0.5f, 0f, 0f, 0.3f);
-		meh.Visible = true;
+		meh.Visible = false;
 		meh.Size = new Vector2(450, SettingsOperator.MehJudge);
 		meh.Position = new Vector2(0, -SettingsOperator.MehJudge / 2);
 		GetNode<ColorRect>("Playfield/Guard").AddChild(meh);
 
 		great = new ColorRect();
 		great.Color = new Color(0f, 0.5f, 0f, 0.3f);
-		great.Visible = true;
+		great.Visible = false;
 		great.Size = new Vector2(450, SettingsOperator.GreatJudge);
 		great.Position = new Vector2(0, -SettingsOperator.GreatJudge / 2);
 		GetNode<ColorRect>("Playfield/Guard").AddChild(great);
 
 		perfect = new ColorRect();
 		perfect.Color = new Color(0f, 0f, 0.5f, 0.3f);
-		perfect.Visible = true;
+		perfect.Visible = false;
 		perfect.Size = new Vector2(450, SettingsOperator.PerfectJudge * 2);
 		perfect.Position = new Vector2(0, -SettingsOperator.PerfectJudge);
 		GetNode<ColorRect>("Playfield/Guard").AddChild(perfect);
