@@ -255,7 +255,7 @@ public partial class Gameplay : Control
 			SettingsOperator.SpectatorMode = true; // Enables Spectator Mode to play the Replay, without this it won't know it even existed lol :p
 			foreach (NotesEn note in Notes)
 			{
-				var time = -note.timing - 50  + (SettingsOperator.MehJudge / 2);
+				var time = -note.timing - 50;
 				var key = note.NoteSection;
 				Replay.AddReplay(time, key); // Adds the input into the Replay Cache.
 			}
