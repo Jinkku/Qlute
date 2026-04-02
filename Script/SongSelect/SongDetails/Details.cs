@@ -17,7 +17,7 @@ public partial class Details : PanelContainer
 
 	private void CheckValue()
 	{
-		Accuracy.Value = SettingsOperator.Gameplaycfg.Accuracy;
+		Accuracy.Value = SettingsOperator.Gameplaycfg.BeatmapAccuracy;
 		Difficulty.Value = SettingsOperator.LevelRating;
 		//NoteCount.Text = SettingsOperator.LevelRating;
 	}

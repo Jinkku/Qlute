@@ -59,6 +59,10 @@ public partial class ModsOperator : Node
 		{
 			multiplier *= 0.5f;
 		}
+		else if (Mods.Contains("AM"))
+		{
+			multiplier *= 0.5f;
+		}
 		return multiplier;
 	}
 	/// <summary>
@@ -78,6 +82,10 @@ public partial class ModsOperator : Node
 				multiplier *= 0.3f * (AudioPlayer.Instance.PitchScale / HTSpeedMultiplier);
 			}
 			else if (mod.Value && mod.Key == "no-fail")
+			{
+				multiplier *= 0.5f;
+			}
+			else if (mod.Value && mod.Key == "am")
 			{
 				multiplier *= 0.5f;
 			}
@@ -128,6 +136,10 @@ public partial class ModsOperator : Node
 		{
 			modsparsed.Add("NF");
 		}
+		else if (modalias.Contains("AM"))
+		{
+			modsparsed.Add("AM");
+		}
 		return modsparsed;
 	}
 	public static string GetModAlias()
@@ -173,6 +185,11 @@ public partial class ModsOperator : Node
 					modalias += "NF";
 					ModsEnabled.Add("NF");
 				}
+				else if (modst == "am")
+				{
+					modalias += "AM";
+					ModsEnabled.Add("AM");
+				}
 			}
 		}
 		return modalias;
@@ -217,6 +234,11 @@ public partial class ModsOperator : Node
 			Mods["no-fail"] = true;
 			ModsEnabled.Add("NF");
 		}
+		else if (modalias == "AM")
+		{
+			Mods["am"] = true;
+			ModsEnabled.Add("AM");
+		}
 		Refresh();
 	}
     public static Dictionary<string, bool> Mods { get; set; } = new Dictionary<string, bool>
@@ -228,5 +250,6 @@ public partial class ModsOperator : Node
 		{"random", false},
 		{"slice", false},
 		{"black-out", false},
+		{"am", false},
 	};
 }

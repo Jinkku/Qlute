@@ -180,7 +180,7 @@ public partial class SettingsOperator : Node
     public static List<int> MarathonMapPaths { get; set; } = new List<int>();
     public static bool Marathon { get; set; } = false; // Marathon mode flag
     public static int MarathonID { get; set; } = -1; // ID of the current marathon song
-    public static int PerfectJudge { get; set; } = 105; // Judge Perfect
+    public static int PerfectJudge { get; set; } = 120; // Judge Perfect
     public static readonly int PerfectJudgeMin = PerfectJudge;
     public static int GreatJudge { get; set; } = -1; // Judge Great
     public static int MehJudge { get; set; } = -1; // Judge Meh
@@ -224,7 +224,7 @@ public partial class SettingsOperator : Node
             bpm = (int)beatmap.Bpm;
             Gameplaycfg.TimeTotalGame = beatmap.Timetotal * 0.001f;
             Sessioncfg["beatmapmapper"] = beatmap.Mapper;
-            Gameplaycfg.Accuracy = (int)beatmap.Accuracy;
+            Gameplaycfg.BeatmapAccuracy = (int)beatmap.Accuracy;
             Gameplaycfg.NoteCount = (int)beatmap.NoteCount;
             //Gameplaycfg.SampleSet = beatmap.SampleSet;
             Gameplaycfg.SampleSet = SampleSet.Type[1];

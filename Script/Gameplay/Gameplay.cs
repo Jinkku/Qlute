@@ -163,11 +163,25 @@ public partial class Gameplay : Control
 		}
 		MaxNotes = Notes.Count;
 	}
-	public override void _Ready()
+
+	public override void _EnterTree()
 	{
 		SettingsOperator.inGameplay = true;
 		oldtitle = GetWindow().Title;
 		DisplayServer.WindowSetTitle($"{oldtitle} - {SettingsOperator.Sessioncfg["beatmapartist"] ?? ""} - {SettingsOperator.Sessioncfg["beatmaptitle"] ?? ""}");
+		SettingsOperator.Gameplaycfg.Username = ApiOperator.Username;
+		SettingsOperator.Gameplaycfg.EpochTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+		float scale = 1f - (SettingsOperator.Gameplaycfg.BeatmapAccuracy / 10f);
+		SettingsOperator.PerfectJudge = (int)(SettingsOperator.PerfectJudgeMin * scale);
+		SettingsOperator.GreatJudge = (int)(SettingsOperator.PerfectJudge * 4);
+		SettingsOperator.MehJudge = (int)(SettingsOperator.PerfectJudge * 6);
+		SettingsOperator.ResetScore();
+		SettingsOperator.Resetms();
+	}
+
+	public override void _Ready()
+	{
+		
 		speedold = AudioPlayer.Instance.PitchScale;
 		seed = new Random().Next(1,214562543);
 		ReplayINT = 0;
@@ -178,8 +192,6 @@ public partial class Gameplay : Control
 		WaitClock = GetNode<Timer>("Wait");
 		AudioPlayer.Instance.Stop();
 		ClipContents = true;
-		SettingsOperator.Gameplaycfg.Username = ApiOperator.Username;
-		SettingsOperator.Gameplaycfg.EpochTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 		HUD = GetNode<Control>("HUD");
 		HideHUD = Check.CheckBoolValue(SettingsOperator.GetSetting("hidehud").ToString());
 		HUD.Visible = !HideHUD;
@@ -202,29 +214,26 @@ public partial class Gameplay : Control
 		hittext.ZIndex = 100;
 		GetNode<Control>("Playfield").AddChild(hittext);
 		hittextoldpos = hittext.Position;
-		SettingsOperator.PerfectJudge = (int)(SettingsOperator.PerfectJudgeMin -Math.Min( 5 * SettingsOperator.Gameplaycfg.BeatmapAccuracy,50));
-		SettingsOperator.GreatJudge = (int)(SettingsOperator.PerfectJudge * 4);
-		SettingsOperator.MehJudge = (int)(SettingsOperator.PerfectJudge * 6);
-
+		
 		meh = new ColorRect();
+		meh.Color = new Color(0.5f, 0f, 0f, 0.3f);
+		meh.Visible = true;
 		meh.Size = new Vector2(450, SettingsOperator.MehJudge);
 		meh.Position = new Vector2(0, -SettingsOperator.MehJudge / 2);
-		meh.Color = new Color(0.5f, 0f, 0f, 0.3f);
-		meh.Visible = false;
 		GetNode<ColorRect>("Playfield/Guard").AddChild(meh);
 
 		great = new ColorRect();
+		great.Color = new Color(0f, 0.5f, 0f, 0.3f);
+		great.Visible = true;
 		great.Size = new Vector2(450, SettingsOperator.GreatJudge);
 		great.Position = new Vector2(0, -SettingsOperator.GreatJudge / 2);
-		great.Color = new Color(0f, 0.5f, 0f, 0.3f);
-		great.Visible = false;
 		GetNode<ColorRect>("Playfield/Guard").AddChild(great);
 
 		perfect = new ColorRect();
+		perfect.Color = new Color(0f, 0f, 0.5f, 0.3f);
+		perfect.Visible = true;
 		perfect.Size = new Vector2(450, SettingsOperator.PerfectJudge * 2);
 		perfect.Position = new Vector2(0, -SettingsOperator.PerfectJudge);
-		perfect.Color = new Color(0f, 0f, 0.5f, 0.3f);
-		perfect.Visible = false;
 		GetNode<ColorRect>("Playfield/Guard").AddChild(perfect);
 
 		foreach (int i in Enumerable.Range(1, 4))
@@ -236,8 +245,6 @@ public partial class Gameplay : Control
 
 		maxrndvalue = (int)(1000000 * ModsMulti.multiplier);
 
-		SettingsOperator.ResetScore();
-		SettingsOperator.Resetms();
 		HitOffsets.Clear();
 		Array.Fill(LastKeyPressTime, float.MinValue);
 		if (SettingsOperator.Sessioncfg["beatmapurl"] != null) ReloadBeatmap(SettingsOperator.Sessioncfg["beatmapurl"].ToString());
@@ -248,7 +255,7 @@ public partial class Gameplay : Control
 			SettingsOperator.SpectatorMode = true; // Enables Spectator Mode to play the Replay, without this it won't know it even existed lol :p
 			foreach (NotesEn note in Notes)
 			{
-				var time = -note.timing - 50;
+				var time = -note.timing - 50  + (SettingsOperator.MehJudge / 2);
 				var key = note.NoteSection;
 				Replay.AddReplay(time, key); // Adds the input into the Replay Cache.
 			}
@@ -566,6 +573,10 @@ public partial class Gameplay : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		
+		
+		
+		
 		score = new Game.ScoreCalculator().ProcessScore(SettingsOperator.Gameplaycfg.Max,
 			SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh,
 			SettingsOperator.Gameplaycfg.NoteCount, ModsMulti.multiplier);
@@ -743,7 +754,7 @@ public partial class Gameplay : Control
 	}
 	public int checkjudge(int timing, bool keyvalue, NotesEn Note)
 	{
-		if (timing + nodeSize > HitPoint - SettingsOperator.PerfectJudge && timing + nodeSize < HitPoint + SettingsOperator.PerfectJudge && keyvalue && Note.Node.Visible)
+		if (timing + nodeSize > HitPoint - SettingsOperator.PerfectJudge - 5 && timing + nodeSize < HitPoint + SettingsOperator.PerfectJudge + 5 && keyvalue && Note.Node.Visible)
 		{
 			SettingsOperator.Gameplaycfg.Max++;
 			SettingsOperator.Gameplaycfg.Combo++;
@@ -754,7 +765,7 @@ public partial class Gameplay : Control
 			HealthBar.Heal((5 * (SettingsOperator.Gameplaycfg.Combo / 100)) + 1);
 			return 0;
 		}
-		else if (timing + nodeSize > HitPoint - (SettingsOperator.GreatJudge / 2) && timing + nodeSize < HitPoint + (SettingsOperator.GreatJudge / 2) && keyvalue && Note.Node.Visible)
+		else if (timing + nodeSize > HitPoint - (SettingsOperator.GreatJudge / 2) - 5 && timing + nodeSize < HitPoint + (SettingsOperator.GreatJudge / 2) + 5 && keyvalue && Note.Node.Visible)
 		{
 			SettingsOperator.Gameplaycfg.Great++;
 			SettingsOperator.Gameplaycfg.Combo++;
@@ -765,7 +776,7 @@ public partial class Gameplay : Control
 			HealthBar.Heal((3 * (SettingsOperator.Gameplaycfg.Combo / 300)) + 1);
 			return 1;
 		}
-		else if (timing + nodeSize > HitPoint - (SettingsOperator.MehJudge / 2) && timing + nodeSize < HitPoint + (SettingsOperator.MehJudge / 2) && keyvalue && Note.Node.Visible)
+		else if (timing + nodeSize > HitPoint - (SettingsOperator.MehJudge / 2) - 15 && timing + nodeSize < HitPoint + (SettingsOperator.MehJudge / 2) + 15 && keyvalue && Note.Node.Visible)
 		{
 			Hittext(Skin.Element.JudgeMeh);
 			SettingsOperator.Gameplaycfg.Meh++;

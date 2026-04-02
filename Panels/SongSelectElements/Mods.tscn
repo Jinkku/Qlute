@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dpjsc7sxiwkm7"]
+[gd_scene format=3 uid="uid://dpjsc7sxiwkm7"]
 
 [ext_resource type="Script" uid="uid://dxbbl1s8m45so" path="res://Script/Mods/Mods.cs" id="1_7gucc"]
 [ext_resource type="Script" uid="uid://b4xchyvoqsbhp" path="res://Script/Mods/CustomizeMenu.cs" id="1_u70wj"]
@@ -47,7 +47,7 @@ content_margin_right = 15.0
 content_margin_bottom = 15.0
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 0.588235)
 
-[node name="ModMenu" type="Control"]
+[node name="ModMenu" type="Control" unique_id=824965548]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -56,7 +56,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Customize" type="PanelContainer" parent="."]
+[node name="Customize" type="PanelContainer" parent="." unique_id=478270640]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 1
 anchors_preset = 11
@@ -71,34 +71,34 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_smilj")
 script = ExtResource("1_u70wj")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Customize"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Customize" unique_id=1327711976]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="DT Custom" type="VBoxContainer" parent="Customize/VBoxContainer"]
+[node name="DT Custom" type="VBoxContainer" parent="Customize/VBoxContainer" unique_id=1084896326]
 layout_mode = 2
 script = ExtResource("2_k155b")
 
-[node name="DTM" type="Label" parent="Customize/VBoxContainer/DT Custom"]
+[node name="DTM" type="Label" parent="Customize/VBoxContainer/DT Custom" unique_id=968467697]
 layout_mode = 2
 text = "DT Speed 1.5x"
 
-[node name="DTMS" type="HSlider" parent="Customize/VBoxContainer/DT Custom"]
+[node name="DTMS" type="HSlider" parent="Customize/VBoxContainer/DT Custom" unique_id=1915129025]
 layout_mode = 2
 min_value = 1.1
 max_value = 2.0
 step = 0.01
 value = 1.5
 
-[node name="HT Custom" type="VBoxContainer" parent="Customize/VBoxContainer"]
+[node name="HT Custom" type="VBoxContainer" parent="Customize/VBoxContainer" unique_id=1874021574]
 layout_mode = 2
 script = ExtResource("3_b2hs3")
 
-[node name="HTM" type="Label" parent="Customize/VBoxContainer/HT Custom"]
+[node name="HTM" type="Label" parent="Customize/VBoxContainer/HT Custom" unique_id=365147113]
 layout_mode = 2
 text = "HT Speed 0.5x"
 
-[node name="HTMS" type="HSlider" parent="Customize/VBoxContainer/HT Custom"]
+[node name="HTMS" type="HSlider" parent="Customize/VBoxContainer/HT Custom" unique_id=777507952]
 self_modulate = Color(0.320312, 1, 0.330933, 1)
 layout_mode = 2
 min_value = 0.1
@@ -106,7 +106,7 @@ max_value = 0.9
 step = 0.01
 value = 0.5
 
-[node name="Title" type="PanelContainer" parent="."]
+[node name="Title" type="PanelContainer" parent="." unique_id=2146027013]
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 1
 anchors_preset = 10
@@ -114,11 +114,11 @@ anchor_right = 1.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_u70wj")
 
-[node name="Info" type="HBoxContainer" parent="Title"]
+[node name="Info" type="HBoxContainer" parent="Title" unique_id=1219764218]
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="Title" type="Label" parent="Title/Info"]
+[node name="Title" type="Label" parent="Title/Info" unique_id=1687894648]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_font_sizes/font_size = 32
@@ -126,19 +126,19 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_u70wj")
 text = "Mods"
 vertical_alignment = 2
 
-[node name="ModsMulti" type="Label" parent="Title/Info"]
+[node name="ModsMulti" type="Label" parent="Title/Info" unique_id=123168767]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_wqe06")
 text = "1.0x"
 script = ExtResource("2_caatv")
 
-[node name="Level" type="Label" parent="Title/Info"]
+[node name="Level" type="Label" parent="Title/Info" unique_id=1676021603]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_wqe06")
 text = "Lv. ??"
 script = ExtResource("5_vbcbr")
 
-[node name="Reset" type="Button" parent="Title/Info"]
+[node name="Reset" type="Button" parent="Title/Info" unique_id=432727906]
 self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
 custom_minimum_size = Vector2(150, 40)
 layout_mode = 2
@@ -148,7 +148,7 @@ script = ExtResource("6_8k74e")
 StringText = "Reset"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
-[node name="Customize" type="Button" parent="Title/Info"]
+[node name="Customize" type="Button" parent="Title/Info" unique_id=999691596]
 self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
 custom_minimum_size = Vector2(150, 40)
 layout_mode = 2
@@ -158,11 +158,11 @@ script = ExtResource("6_8k74e")
 StringText = "Customize"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
-[node name="ControlPanel" parent="." instance=ExtResource("5_smilj")]
+[node name="ControlPanel" parent="." unique_id=71034536 instance=ExtResource("5_smilj")]
 visible = false
 layout_mode = 1
 
-[node name="Mods" type="PanelContainer" parent="."]
+[node name="Mods" type="PanelContainer" parent="." unique_id=399949908]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -174,12 +174,12 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_133ox")
 script = ExtResource("1_7gucc")
 
-[node name="ModsEntries" type="GridContainer" parent="Mods"]
+[node name="ModsEntries" type="GridContainer" parent="Mods" unique_id=1920573934]
 layout_mode = 2
 size_flags_horizontal = 4
 columns = 3
 
-[node name="ModButton" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
+[node name="ModButton" parent="Mods/ModsEntries" unique_id=923109892 instance=ExtResource("6_133ox")]
 layout_mode = 2
 button_pressed = false
 metadata/Title = "Auto"
@@ -187,7 +187,7 @@ metadata/Desc = "Perfect play"
 metadata/ModName = "auto"
 metadata/ModNameSmall = "AT"
 
-[node name="ModButton2" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
+[node name="ModButton2" parent="Mods/ModsEntries" unique_id=312177105 instance=ExtResource("6_133ox")]
 layout_mode = 2
 button_pressed = false
 metadata/Title = "Nightcore"
@@ -195,7 +195,7 @@ metadata/Desc = "Have that classic 2012 feel~"
 metadata/ModName = "dt"
 metadata/ModNameSmall = "DT"
 
-[node name="ModButton3" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
+[node name="ModButton3" parent="Mods/ModsEntries" unique_id=1849130414 instance=ExtResource("6_133ox")]
 layout_mode = 2
 button_pressed = false
 metadata/Title = "Half Time"
@@ -203,7 +203,7 @@ metadata/Desc = "Very slooooow"
 metadata/ModName = "ht"
 metadata/ModNameSmall = "HT"
 
-[node name="ModButton5" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
+[node name="ModButton5" parent="Mods/ModsEntries" unique_id=542039168 instance=ExtResource("6_133ox")]
 layout_mode = 2
 button_pressed = false
 metadata/Title = "Random"
@@ -211,7 +211,7 @@ metadata/Desc = "A ramdomized beatmap"
 metadata/ModName = "random"
 metadata/ModNameSmall = "RND"
 
-[node name="ModButton6" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
+[node name="ModButton6" parent="Mods/ModsEntries" unique_id=942363165 instance=ExtResource("6_133ox")]
 layout_mode = 2
 button_pressed = false
 metadata/Title = "Slice"
@@ -219,7 +219,7 @@ metadata/Desc = "Half of the screen is covered -w-"
 metadata/ModName = "slice"
 metadata/ModNameSmall = "SL"
 
-[node name="ModButton7" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
+[node name="ModButton7" parent="Mods/ModsEntries" unique_id=1610832971 instance=ExtResource("6_133ox")]
 layout_mode = 2
 button_pressed = false
 metadata/Title = "Black out"
@@ -227,13 +227,22 @@ metadata/Desc = "Who turn off the lights?!"
 metadata/ModName = "black-out"
 metadata/ModNameSmall = "BO"
 
-[node name="ModButton8" parent="Mods/ModsEntries" instance=ExtResource("6_133ox")]
+[node name="ModButton8" parent="Mods/ModsEntries" unique_id=1126802774 instance=ExtResource("6_133ox")]
 layout_mode = 2
 button_pressed = false
 metadata/Title = "No Fail"
 metadata/Desc = "Your immortal!"
 metadata/ModName = "no-fail"
 metadata/ModNameSmall = "NF"
+
+[node name="ModButton9" parent="Mods/ModsEntries" unique_id=759460673 instance=ExtResource("6_133ox")]
+visible = false
+layout_mode = 2
+button_pressed = false
+metadata/Title = "Accuracy Modifier"
+metadata/Desc = "Modify how lenient the judgement is"
+metadata/ModName = "am"
+metadata/ModNameSmall = "AM"
 
 [connection signal="value_changed" from="Customize/VBoxContainer/DT Custom/DTMS" to="Customize/VBoxContainer/DT Custom" method="_valuechanged"]
 [connection signal="value_changed" from="Customize/VBoxContainer/HT Custom/HTMS" to="Customize/VBoxContainer/HT Custom" method="_valuechanged"]
@@ -248,5 +257,6 @@ metadata/ModNameSmall = "NF"
 [connection signal="pressed" from="Mods/ModsEntries/ModButton6" to="Mods/ModsEntries/ModButton6" method="_modpressed"]
 [connection signal="pressed" from="Mods/ModsEntries/ModButton7" to="Mods/ModsEntries/ModButton7" method="_modpressed"]
 [connection signal="pressed" from="Mods/ModsEntries/ModButton8" to="Mods/ModsEntries/ModButton8" method="_modpressed"]
+[connection signal="pressed" from="Mods/ModsEntries/ModButton9" to="Mods/ModsEntries/ModButton9" method="_modpressed"]
 
 [editable path="ControlPanel"]

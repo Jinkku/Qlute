@@ -26,6 +26,7 @@ run/main_scene="res://Panels/Screens/bootstrap.tscn"
 run/print_header=false
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Qlute"
+config/disable_project_settings_override=true
 config/features=PackedStringArray("4.6", "C#", "Mobile")
 run/flush_stdout_on_print=true
 boot_splash/bg_color=Color(0, 0, 0, 1)
@@ -130,11 +131,13 @@ screenshot={
 Songup={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194320,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":11,"pressure":0.0,"pressed":false,"script":null)
 ]
 }
 Songdown={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194322,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":12,"pressure":0.0,"pressed":false,"script":null)
 ]
 }
 Random={

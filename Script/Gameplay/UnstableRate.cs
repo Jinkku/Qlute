@@ -9,13 +9,16 @@ public partial class UnstableRate : ColorRect
 	private float SMG { get; set; }
 	private ColorRect Perfect { get; set; }
 	private ColorRect Great { get; set; }
+	private int oldsizey { get; set; }
 	public override void _Ready()
 	{
 		SMG = (float)SettingsOperator.PerfectJudge / (float)SettingsOperator.PerfectJudgeMin;
+		oldsizey = (int)Size.Y;
 		Space = (float)SMG * Size.Y / 6;
 		Perfect = GetNode<ColorRect>("Perfect");
 		Great = GetNode<ColorRect>("Great");
 		Size = new Vector2(Size.X, Space * 6);
+		Position = new Vector2(Position.X, oldsizey / 2 - Size.Y / 2 ); // making it center because it didn't the last time.
 		Great.Size = new Vector2(Size.X, Space * 4);
 		Perfect.Size = new Vector2(Size.X, Space);
 
