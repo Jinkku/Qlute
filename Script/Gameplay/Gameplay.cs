@@ -70,6 +70,7 @@ public partial class Gameplay : Control
 	private Control HUD { get; set; }
 	private float speedold = 1f;
 	private double ppmisspower = 1.2;
+	private float audioOffset { get; set; } = 0;
 
 	// Spam protection: minimum ms between accepted key presses per column
 	private const float SPAM_COOLDOWN_MS = 80f; // 80ms — matches osu!mania's input buffer
@@ -271,7 +272,9 @@ public partial class Gameplay : Control
 			Replay.ResetReplay();
 			Cursor.CursorVisible = false;
 		}
+		audioOffset = !SettingsOperator.SpectatorMode ? SettingsOperator.AudioOffset * 0.001f : 0f;
 		GD.Print($"Spectator mode: {SettingsOperator.SpectatorMode}");
+		GD.Print($"Your offset is currently: {audioOffset / 0.001}ms");
 	}
 
 	public Texture2D NoteSkinBack { get; set; }
@@ -293,7 +296,7 @@ public partial class Gameplay : Control
 				name = SampleSet.Drum.First();
 			}
 			Sample.PlaySample("res://SelectableSkins/Slia/Sounds/" + name);
-			if (!SettingsOperator.SpectatorMode) Replay.AddReplay(est, Keyx);
+			if (!SettingsOperator.SpectatorMode) Replay.AddReplay(est - (int)(audioOffset / 0.001), Keyx);
 			key.Node.SelfModulate = Skin.Element.LaneNotes[Keyx];
 			key.Ani?.Kill(); // Abort the previous animation
 			key.Ani = Keys[Keyx].Node.CreateTween();
@@ -315,7 +318,7 @@ public partial class Gameplay : Control
     /// <summary>
 	/// Game Clock
 	/// </summary>
-	public float GetRemainingTime(bool GameMode = false, float delta = 1f)
+	public float GetRemainingTime(float delta = 1f)
 	{
 		if (AudioPlayer.Instance.Playing)
 		{
@@ -329,8 +332,6 @@ public partial class Gameplay : Control
 			if (Mathf.Abs(truePos - smoothTime) > 0.05f) // 50ms tolerance
 				smoothTime = truePos;
 		}
-		
-		var audioOffset = GameMode ? SettingsOperator.AudioOffset * 0.001f : 0f;
 
 		SettingsOperator.Gameplaycfg.Time = -WaitClock.TimeLeft + smoothTime;
 		SettingsOperator.Gameplaycfg.Time -= startedtime;
@@ -388,7 +389,7 @@ public partial class Gameplay : Control
 			    // force a miss and ignore the input so it can't farm pp.
 			    if (pressed)
 			    {
-				    float nowMs = est; // est is already in ms
+				    float nowMs = gametime; // est is already in ms
 				    float elapsed = nowMs - LastKeyPressTime[i];
 				    if (elapsed < SPAM_COOLDOWN_MS && elapsed >= 0f)
 				    {
@@ -399,7 +400,7 @@ public partial class Gameplay : Control
 				    LastKeyPressTime[i] = nowMs;
 			    }
 
-			    hitnote(i, pressed, (int)est);
+			    hitnote(i, pressed, (int)gametime);
 		    }
 	    }
     }
@@ -447,7 +448,8 @@ public partial class Gameplay : Control
 		AudioPlayer.Instance.PitchScale = speedold;
     }
 
-	private float est { get; set; }
+    private float gametime { get; set; }
+    private float gametimeraw { get; set; }
 	private int NoteTick { get; set; }
 	private bool BreakTime { get; set; }
 	private int NoteBreakTiming { get; set; }
@@ -465,7 +467,7 @@ public partial class Gameplay : Control
 	}
 	private void _GameNoteTick(double delta)
 	{
-		est = GetRemainingTime(GameMode: true, delta: (float)delta) / 0.001f;
+		gametime = GetRemainingTime(delta: (float)delta) / 0.001f;
 
 		//var scrollspeed = ComputeScrollTime(int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString())); // Scroll speed for the notes
 		var scrollspeed = 1;
@@ -480,7 +482,7 @@ public partial class Gameplay : Control
 
 		var NoteCount = 0;
 		
-		if (!BreakTime && songstarted && Notes[Math.Min(Notes.Count - 1, NoteTick)].timing  + est + HitPoint <= -4500)
+		if (!BreakTime && songstarted && Notes[Math.Min(Notes.Count - 1, NoteTick)].timing  + gametime + HitPoint <= -4500)
 		{
 			BreakTime = true;
 			NoteBreakTiming = -(int)(Notes[Math.Min(Notes.Count - 1, NoteTick)].timing);
@@ -490,7 +492,7 @@ public partial class Gameplay : Control
 		for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
 		{
 			var Note = Notes[i];
-			var notex = Note.timing + est + HitPoint;
+			var notex = Note.timing + gametime + HitPoint;
 			if (notex > -150 && notex < viewportSize + 150 && !Note.hit)
 			{
 				BreakTime = false;
@@ -662,19 +664,19 @@ public partial class Gameplay : Control
 			}
 			//debugtext.Text = $"est: {est}\nDanceIndex:{DanceIndex}\nTimeindex:{dance[DanceIndex].time}";
 
-			if ((int)est >= dance[DanceIndex].time + BeatmapBackground.bpm && BeatmapBackground.FlashEnable)
+			if ((int)gametime >= dance[DanceIndex].time + BeatmapBackground.bpm && BeatmapBackground.FlashEnable)
 			{
 				Transitioning(dance[DanceIndex].flash);
 				IncreaseDanceIndex();
 			}
-			else if ((int)est >= dance[DanceIndex].time && !BeatmapBackground.FlashEnable)
+			else if ((int)gametime >= dance[DanceIndex].time && !BeatmapBackground.FlashEnable)
 			{
 				Transitioning(dance[DanceIndex].flash);
 				IncreaseDanceIndex();
 			}
 
 			_GameNoteTick(delta);
-			CheckReplayKey((int)est);
+			CheckReplayKey((int)gametime);
 		}
 		catch (Exception e)
 		{
