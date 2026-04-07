@@ -348,27 +348,32 @@ public partial class Gameplay : Control
 		songstarted = true;
 		AudioPlayer.Instance.Play();
 	}
-
+	
+	private ReplayLegend Replayindex { get; set; }
+	private float _lastReplayGametime = float.MinValue;
     /// <summary>
     /// If SettingsOperator.ReplayMode is enabled, this will check at the specified index of the replay cache to simulate a keypress in Spectator Mode.
     /// </summary>
 	private void CheckReplayKey(int est)
 	{
 		// Replay part (if enabled)
-		if (SettingsOperator.SpectatorMode && Replay.ReplayCache.Count >0)
+		if (SettingsOperator.SpectatorMode && Replay.ReplayCache.Count > 0)
 		{
-			var Replayindex = Replay.ReplayCache[Math.Min(ReplayINT,Replay.ReplayCache.Count-1)];
+			Replayindex = Replay.ReplayCache[Math.Min(ReplayINT, Replay.ReplayCache.Count - 1)];
 			if (est > Replayindex.Time)
 			{
 				if (ReplayINT < Replay.ReplayCache.Count())
 				{
 					hitnote(Replayindex.NoteTap, true, est);
 					ReplayINT++;
-				} else if (ReplayINT > 0 && Keys[Replay.ReplayCache[ReplayINT-1].NoteTap].hit) {
-					hitnote(Replay.ReplayCache[ReplayINT-1].NoteTap, false, est);
+				}
+				else if (ReplayINT > 0 && Keys[Replay.ReplayCache[ReplayINT - 1].NoteTap].hit)
+				{
+					hitnote(Replay.ReplayCache[ReplayINT - 1].NoteTap, false, est);
 				}
 			}
 		}
+		else return;
 	}
     /// <summary>
     /// This is the one that controls the Player input.
@@ -526,7 +531,7 @@ public partial class Gameplay : Control
 					if (JudgeResult < 3) // Only count actual hits (perfect/great/meh), not misses
 					{
 						// True hit offset in ms: how far the note was from the hit line when struck.
-						// Negative = early, Positive = late — exactly like osu!mania.
+						// Negative = early, Positive = late
 						float hitOffsetMs = notex - HitPoint;
 						SettingsOperator.Addms(hitOffsetMs + 50);
 						SettingsOperator.Gameplaycfg.ms = ComputeUnstableRate();
@@ -675,8 +680,8 @@ public partial class Gameplay : Control
 				IncreaseDanceIndex();
 			}
 
-			_GameNoteTick(delta);
 			CheckReplayKey((int)gametime);
+			_GameNoteTick(delta);
 		}
 		catch (Exception e)
 		{
