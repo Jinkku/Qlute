@@ -68,7 +68,7 @@ offset_top = -30.0
 offset_right = 20.0
 offset_bottom = -11.0
 grow_horizontal = 2
-text = "Late"
+text = "Early"
 horizontal_alignment = 1
 
 [node name="Early" type="Label" parent="UR" unique_id=1513426547]
@@ -84,5 +84,5 @@ offset_right = 20.0
 offset_bottom = 29.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "Early"
+text = "Late"
 horizontal_alignment = 1
