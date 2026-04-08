@@ -52,6 +52,8 @@ public partial class ApiOperator : Node
 	public static Texture2D PictureData { get; set; }
 	public static Texture2D CardBorderData { get; set; }
 	public DiscordRpcClient Client { get; private set; }
+	public static string AgentString { get; set; }
+	public static string[] AgentHeaders { get; set; }
 
 	/// <summary>
 	/// Submits a score to the dedicated server. (New Version)
@@ -85,7 +87,8 @@ public partial class ApiOperator : Node
 				$"Version: {ProjectSettings.GetSetting("application/config/version")}",
 				$"Branch: {ProjectSettings.GetSetting("application/config/branch")}",
 				$"MULTIPLIER: {AudioPlayer.Instance.PitchScale}",
-				$"Mods: {ModsOperator.GetModAlias()}"
+				$"Mods: {ModsOperator.GetModAlias()}",
+				$"User-Agent: {AgentString}"
 			};
 			SubmitApi.Request(SettingsOperator.GetSetting("api") + "apiv2/ss", Headers,method: HttpClient.Method.Post, requestData: Replay.FileCache);
 		}
@@ -121,7 +124,8 @@ public partial class ApiOperator : Node
 			$"COMBO: {COMBO}",
 			$"Version: {ProjectSettings.GetSetting("application/config/version")}",
 			$"Branch: {ProjectSettings.GetSetting("application/config/branch")}",
-			$"Mods: {ModsOperator.GetModAlias()}"
+			$"Mods: {ModsOperator.GetModAlias()}",
+			$"User-Agent: {AgentString}"
 		};
 			SubmitApi.Request(SettingsOperator.GetSetting("api") + "apiv2/submitscore", Headers);
 		}
@@ -170,7 +174,7 @@ public partial class ApiOperator : Node
 		}
 		else if (SettingsOperator.LeaderboardType == 1)
 		{
-			LeaderboardAPI.Request(SettingsOperator.GetSetting("api") + "apiv2/getleaderboard", new string[] { $"BEATMAPID: {BeatmapID}" });
+			LeaderboardAPI.Request(SettingsOperator.GetSetting("api") + "apiv2/getleaderboard", new string[] { $"BEATMAPID: {BeatmapID}" , $"User-Agent: {AgentString}"});
 			LeaderboardStatus = 1; // Set status to loading
 		}
 		else
@@ -184,6 +188,11 @@ public partial class ApiOperator : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		AgentString = $"{ProjectSettings.GetSetting("application/config/name").ToString()}-{SettingsOperator.GameChecksum}";
+		AgentHeaders = new string[]
+		{
+			$"User-Agent: {AgentString}"
+		};
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		Instance = this;
 		Username = SettingsOperator.GetSetting("username")?.ToString();
@@ -209,8 +218,10 @@ public partial class ApiOperator : Node
 		InfoApi.Connect("request_completed", new Callable(this, nameof(_on_info_request_completed)));
 		SubmitApi.Connect("request_completed", new Callable(this, nameof(_Submitrequest)));
 		if (Check.CheckBoolValue(SettingsOperator.GetSetting("discord-rpc").ToString())) 
+		{
 			Client = new DiscordRpcClient("1484981423684452684");	// Creates the client
 			Client.Initialize();
+		}
 		if ((Username != null || PasswordHash != null) && (bool)SettingsOperator.Sessioncfg["loggedin"] == false && Check.CheckBoolValue(SettingsOperator.GetSetting("stayloggedin").ToString()))
 		{
 			GD.Print("Attempting to login with username: " + Username);
@@ -299,7 +310,7 @@ public partial class ApiOperator : Node
 		RankApi?.CancelRequest();
 		if (SettingsOperator.SongID != -1 && !SettingsOperator.NoConnectionToGameServer)
 		{
-			RankApi.Request($"{SettingsOperator.GetSetting("api")}apiv2/s/{SettingsOperator.BeatmapID}");
+			RankApi.Request($"{SettingsOperator.GetSetting("api")}apiv2/s/{SettingsOperator.BeatmapID}",customHeaders: AgentHeaders);
 		}
 	}
 	/// <summary>
@@ -404,7 +415,7 @@ public partial class ApiOperator : Node
 	public void Check_Info(string Username)
 	{
 		GD.Print("Using Profile: " + Username);
-		InfoApi.Request(SettingsOperator.GetSetting("api") + "apiv2/getstat/full", new string[] { $"USERNAME: {Username}" });
+		InfoApi.Request(SettingsOperator.GetSetting("api") + "apiv2/getstat/full", new string[] { $"USERNAME: {Username}", $"User-Agent: {AgentString}" });
 	}
 
 	private void _on_login_api_request_completed(long result, long responseCode, string[] headers, byte[] body)
@@ -472,7 +483,8 @@ public partial class ApiOperator : Node
 		PasswordHash = password;
 		string[] Headers = new string[] {
 			$"USERNAME: {username}",
-			$"PASSWORD: {password}"
+			$"PASSWORD: {password}",
+			$"User-Agent: {AgentString}"
 		};
 		NoticeText = "Connecting...";
 		LoginApi.Request(SettingsOperator.GetSetting("api") + "apiv2/chkprofile", Headers);
@@ -505,6 +517,7 @@ public partial class ApiOperator : Node
 		$"NOWPLAYING: {Status}",
 		$"USERNAME: {SettingsOperator.GetSetting("username")}",
 		$"PASSWORD: {SettingsOperator.GetSetting("password")}",
+		$"User-Agent: {AgentString}"
 		};
 		StatusChecker.Request(SettingsOperator.GetSetting("api") + "apiv2/setstatus", Headers);
 		
@@ -617,7 +630,7 @@ public partial class ApiOperator : Node
 				downloadRequest.Timeout = 0;
 				downloadRequest.RequestCompleted += (long result, long responseCode, string[] headers, byte[] body) => _on_download_completed(result, responseCode, headers, body, id);
 				downloadRequest.DownloadFile = Path.Combine(SettingsOperator.downloadsdir, $"{id}.osz.tmp");
-				downloadRequest.Request(url, method: HttpClient.Method.Get);
+				downloadRequest.Request(url, method: HttpClient.Method.Get, customHeaders: AgentHeaders);
 
 				downloader.Request = downloadRequest;
 
