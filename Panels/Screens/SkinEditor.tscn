@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://beeu7jswbwsts"]
+[gd_scene format=3 uid="uid://beeu7jswbwsts"]
 
 [ext_resource type="Script" uid="uid://do76anrqegieu" path="res://Script/SkinEditor/SkinEditor.cs" id="1_wk53w"]
 [ext_resource type="Script" uid="uid://bnanjd0tugo0w" path="res://Script/SkinEditor/elementslist.gd" id="2_ujy7e"]
@@ -22,18 +22,16 @@ bg_color = Color(0.0790558, 0.0977497, 0.128906, 1)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ee5vh"]
 content_margin_left = 25.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wk53w"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ujy7e"]
-bg_color = Color(1, 1, 1, 0.2)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_17725"]
+bg_color = Color(1, 1, 1, 0.1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yvt2e"]
 bg_color = Color(1, 1, 1, 0.3)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_17725"]
-bg_color = Color(1, 1, 1, 0.1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ujy7e"]
+bg_color = Color(1, 1, 1, 0.2)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yvt2e"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wk53w"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_imael"]
 content_margin_left = 10.0
@@ -46,27 +44,29 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yvt2e"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xm3b"]
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y7e17"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wjbl6"]
-content_margin_left = 10.0
-content_margin_right = 20.0
-bg_color = Color(0.92549, 0.294118, 0.180392, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ul0k5"]
-content_margin_left = 10.0
-content_margin_right = 20.0
-bg_color = Color(0.666667, 0.222387, 0.142361, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_724hy"]
 content_margin_left = 10.0
 content_margin_right = 20.0
 bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
 
-[node name="Skin Editor" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ul0k5"]
+content_margin_left = 10.0
+content_margin_right = 20.0
+bg_color = Color(0.666667, 0.222387, 0.142361, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wjbl6"]
+content_margin_left = 10.0
+content_margin_right = 20.0
+bg_color = Color(0.92549, 0.294118, 0.180392, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y7e17"]
+
+[node name="Skin Editor" type="Control" unique_id=555093259]
 z_index = 1000
 layout_mode = 3
 anchors_preset = 15
@@ -77,7 +77,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_wk53w")
 
-[node name="Missing" type="PanelContainer" parent="."]
+[node name="Missing" type="PanelContainer" parent="." unique_id=1143613862]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -91,7 +91,7 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_q65qw")
 script = ExtResource("8_yvt2e")
 
-[node name="Label" type="Label" parent="Missing"]
+[node name="Label" type="Label" parent="Missing" unique_id=1745690443]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Skinning not supported on this menu
@@ -99,7 +99,7 @@ ono"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Creativity" type="PanelContainer" parent="."]
+[node name="Creativity" type="PanelContainer" parent="." unique_id=591275010]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -109,17 +109,17 @@ offset_bottom = -50.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wk53w")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Creativity"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Creativity" unique_id=1594010357]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Creativity/VBoxContainer"]
+[node name="Label" type="Label" parent="Creativity/VBoxContainer" unique_id=619076220]
 visible = false
 layout_mode = 2
 text = "Layers"
 
-[node name="OptionButton" type="OptionButton" parent="Creativity/VBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="Creativity/VBoxContainer" unique_id=1286871107]
 visible = false
 layout_mode = 2
 selected = 0
@@ -129,16 +129,16 @@ popup/item_0/id = 0
 popup/item_1/text = "Gameplay"
 popup/item_1/id = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Creativity/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Creativity/VBoxContainer" unique_id=1426901875]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="Elements" type="VBoxContainer" parent="Creativity/VBoxContainer/ScrollContainer"]
+[node name="Elements" type="VBoxContainer" parent="Creativity/VBoxContainer/ScrollContainer" unique_id=1024836411]
 layout_mode = 2
 script = ExtResource("2_ujy7e")
 
-[node name="Extras" type="PanelContainer" parent="."]
+[node name="Extras" type="PanelContainer" parent="." unique_id=1485082968]
 custom_minimum_size = Vector2(230, 0)
 layout_mode = 1
 anchors_preset = 11
@@ -152,15 +152,15 @@ grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wk53w")
 
-[node name="Scroll" type="ScrollContainer" parent="Extras"]
+[node name="Scroll" type="ScrollContainer" parent="Extras" unique_id=32320020]
 layout_mode = 2
 
-[node name="Rows" type="VBoxContainer" parent="Extras/Scroll"]
+[node name="Rows" type="VBoxContainer" parent="Extras/Scroll" unique_id=1862925043]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ToolBar" type="PanelContainer" parent="."]
+[node name="ToolBar" type="PanelContainer" parent="." unique_id=1623092946]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -168,25 +168,25 @@ offset_bottom = 104.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jucc0")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ToolBar"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ToolBar" unique_id=1952685125]
 layout_mode = 2
 
-[node name="PartA" type="HBoxContainer" parent="ToolBar/VBoxContainer"]
+[node name="PartA" type="HBoxContainer" parent="ToolBar/VBoxContainer" unique_id=2080813745]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartA"]
+[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartA" unique_id=339012968]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ee5vh")
 text = "Skin Editor"
 
-[node name="MarginContainer" type="MarginContainer" parent="ToolBar/VBoxContainer/PartA"]
+[node name="MarginContainer" type="MarginContainer" parent="ToolBar/VBoxContainer/PartA" unique_id=1971343195]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
-[node name="File" type="MenuButton" parent="ToolBar/VBoxContainer/PartA"]
+[node name="File" type="MenuButton" parent="ToolBar/VBoxContainer/PartA" unique_id=919514036]
 custom_minimum_size = Vector2(80, 50)
 layout_mode = 2
 text = "File"
@@ -200,7 +200,7 @@ popup/item_2/id = 2
 popup/item_3/text = "Reload skin"
 popup/item_3/id = 3
 
-[node name="Edit" type="MenuButton" parent="ToolBar/VBoxContainer/PartA"]
+[node name="Edit" type="MenuButton" parent="ToolBar/VBoxContainer/PartA" unique_id=1710507326]
 custom_minimum_size = Vector2(80, 50)
 layout_mode = 2
 text = "Edit"
@@ -215,88 +215,88 @@ popup/item_2/text = "Paste"
 popup/item_2/id = 2
 popup/item_2/disabled = true
 
-[node name="ViewPoints" type="HBoxContainer" parent="ToolBar/VBoxContainer/PartA"]
+[node name="ViewPoints" type="HBoxContainer" parent="ToolBar/VBoxContainer/PartA" unique_id=941097110]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartA/ViewPoints"]
+[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartA/ViewPoints" unique_id=1651036965]
 layout_mode = 2
 text = "View Points"
 
-[node name="MarginContainer" type="MarginContainer" parent="ToolBar/VBoxContainer/PartA/ViewPoints"]
+[node name="MarginContainer" type="MarginContainer" parent="ToolBar/VBoxContainer/PartA/ViewPoints" unique_id=1706059809]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
-[node name="GameplayViewpoints" type="HBoxContainer" parent="ToolBar/VBoxContainer/PartA/ViewPoints"]
+[node name="GameplayViewpoints" type="HBoxContainer" parent="ToolBar/VBoxContainer/PartA/ViewPoints" unique_id=1941988927]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Main" type="Button" parent="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints"]
+[node name="Main" type="Button" parent="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints" unique_id=664194958]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 tooltip_text = "View the preview of the game."
-theme_override_styles/focus = SubResource("StyleBoxEmpty_wk53w")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ujy7e")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_yvt2e")
 theme_override_styles/normal = SubResource("StyleBoxFlat_17725")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_yvt2e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ujy7e")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wk53w")
 text = "Game"
 
-[node name="Sprites" type="Button" parent="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints"]
+[node name="Sprites" type="Button" parent="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints" unique_id=348308535]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 tooltip_text = "Change the feel."
-theme_override_styles/focus = SubResource("StyleBoxEmpty_wk53w")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ujy7e")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_yvt2e")
 theme_override_styles/normal = SubResource("StyleBoxFlat_17725")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_yvt2e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ujy7e")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wk53w")
 text = "Sprites"
 
-[node name="Settings" type="Button" parent="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints"]
+[node name="Settings" type="Button" parent="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints" unique_id=509786375]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 tooltip_text = "Tweak skin settings"
-theme_override_styles/focus = SubResource("StyleBoxEmpty_wk53w")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ujy7e")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_yvt2e")
 theme_override_styles/normal = SubResource("StyleBoxFlat_17725")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_yvt2e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ujy7e")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wk53w")
 text = "Skin
 Settings"
 
-[node name="PartB" type="HBoxContainer" parent="ToolBar/VBoxContainer"]
+[node name="PartB" type="HBoxContainer" parent="ToolBar/VBoxContainer" unique_id=1952167047]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB"]
+[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB" unique_id=288254316]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ee5vh")
 text = "Skin Elements"
 
-[node name="ScreensParts" type="MarginContainer" parent="ToolBar/VBoxContainer/PartB"]
+[node name="ScreensParts" type="MarginContainer" parent="ToolBar/VBoxContainer/PartB" unique_id=1953210741]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Screens" type="HBoxContainer" parent="ToolBar/VBoxContainer/PartB/ScreensParts"]
+[node name="Screens" type="HBoxContainer" parent="ToolBar/VBoxContainer/PartB/ScreensParts" unique_id=1324418984]
 layout_mode = 2
 
-[node name="Gameplay" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens"]
+[node name="Gameplay" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens" unique_id=730326349]
 visible = false
 self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_yvt2e")
-theme_override_styles/hover = SubResource("StyleBoxFlat_imael")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_imael")
 theme_override_styles/normal = SubResource("StyleBoxFlat_imael")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_imael")
+theme_override_styles/hover = SubResource("StyleBoxFlat_imael")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yvt2e")
 script = ExtResource("5_imael")
 
-[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay"]
+[node name="Label" type="Label" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens/Gameplay" unique_id=559765902]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -307,7 +307,7 @@ text = "Gameplay"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ControlPanel" type="PanelContainer" parent="."]
+[node name="ControlPanel" type="PanelContainer" parent="." unique_id=1049483679]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -318,16 +318,16 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7xm3b")
 
-[node name="Box" type="HBoxContainer" parent="ControlPanel"]
+[node name="Box" type="HBoxContainer" parent="ControlPanel" unique_id=655345718]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Button" type="Button" parent="ControlPanel/Box"]
+[node name="Button" type="Button" parent="ControlPanel/Box" unique_id=1999889661]
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_y7e17")
-theme_override_styles/hover = SubResource("StyleBoxFlat_wjbl6")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_ul0k5")
 theme_override_styles/normal = SubResource("StyleBoxFlat_724hy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ul0k5")
+theme_override_styles/hover = SubResource("StyleBoxFlat_wjbl6")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_y7e17")
 text = "  Back"
 icon = ExtResource("4_ujy7e")
 
