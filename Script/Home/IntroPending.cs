@@ -92,7 +92,7 @@ public partial class IntroPending : Control
 		Logo.Scale = new Vector2(IScale.X + 0.02777777778f, IScale.Y + 0.02777777778f);
 		LogoTween?.Kill();
 		LogoTween = Logo.CreateTween();
-		LogoTween.Parallel().TweenProperty(Logo, "scale", IScale, 60000 / (SettingsOperator.bpm * AudioPlayer.Instance.PitchScale) * 0.001)
+		LogoTween.Parallel().TweenProperty(Logo, "scale", IScale, 60000 / (SettingsOperator.SessionConfig.bpm * AudioPlayer.Instance.PitchScale) * 0.001)
 			.SetTrans(Tween.TransitionType.Cubic)
 			.SetEase(Tween.EaseType.Out);
 		LogoTween.Play();

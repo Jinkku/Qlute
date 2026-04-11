@@ -82,7 +82,7 @@ public partial class SongSelect : Control
 
 	private void scrollmode(int ement = 0, int exactvalue = 0)
 	{
-		OldSongID = SettingsOperator.SongID;
+		OldSongID = SettingsOperator.SessionConfig.SongID;
 		double value = ement != 0 ? scrollBar.Value + ement : exactvalue;
 		scrolltween?.Kill();
 		scrolltween = CreateTween();
@@ -127,7 +127,7 @@ public partial class SongSelect : Control
 	private void _on_random()
 	{
 		SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
-		scrollmode(exactvalue: SettingsOperator.SongID);
+		scrollmode(exactvalue: SettingsOperator.SessionConfig.SongID);
 	}
 
 	private Tween Ani { get; set; }
@@ -245,7 +245,7 @@ public partial class SongSelect : Control
 		}
 		else if (string.IsNullOrEmpty(value))
 		{
-			scrollBar.Value = Math.Max(0, SettingsOperator.SongID);
+			scrollBar.Value = Math.Max(0, SettingsOperator.SessionConfig.SongID);
 		} else if (FilteredIndices.Count == 0)
 		{
 			scrollBar.Value = 0;
@@ -296,14 +296,14 @@ public partial class SongSelect : Control
 		Leaderboardinfo = GetNode<ScrollContainer>("SongDetails/Leaderboard Panel/Rows/LeaderboardInfo");
 		StartButton = GetNode<TextureButton>("BottomBar/Start");
 		StartButton.Visible = false; // Start the button off with being hidden.
-		scrollBar.Value = SettingsOperator.SongID;
+		scrollBar.Value = SettingsOperator.SessionConfig.SongID;
 		CheckLeaderboardMode();
 
 		check_modscreen();
 		RebuildFilter(""); // Populate FilteredIndices with all songs on load
 		ScrollSongs();
 
-		OldSongID = SettingsOperator.SongID;
+		OldSongID = SettingsOperator.SessionConfig.SongID;
 		
 		_res_resize();
 		checksongpanel();
@@ -335,7 +335,7 @@ public partial class SongSelect : Control
 		StartButton.Scale = new Vector2(Scale.X + 0.02777777778f, Scale.Y + 0.02777777778f);
 		StartTween2?.Kill();
 		StartTween2 = StartButton.CreateTween();
-		StartTween2.TweenProperty(StartButton, "scale",new Vector2(1f, 1f), 60000 / (SettingsOperator.bpm * AudioPlayer.Instance.PitchScale) * 0.001)
+		StartTween2.TweenProperty(StartButton, "scale",new Vector2(1f, 1f), 60000 / (SettingsOperator.SessionConfig.bpm * AudioPlayer.Instance.PitchScale) * 0.001)
 			.SetTrans(Tween.TransitionType.Cubic)
 			.SetEase(Tween.EaseType.Out);
 		StartTween2.Play();
@@ -444,15 +444,15 @@ public partial class SongSelect : Control
 
 	private void checksongpanel()
 	{
-		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No song selected.";
-		if (SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.Sessioncfg["beatmaptitle"] != null)
+		SongTitle.Text = SettingsOperator.SessionConfig.BeatmapTitle?.ToString() ?? "No song selected.";
+		if (SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.SessionConfig.BeatmapTitle != null)
 		{
 			// Update song details
-			ExSongInfo.Text = $"by {SettingsOperator.Sessioncfg["beatmapartist"]}\nmapped by {SettingsOperator.Sessioncfg["beatmapmapper"]}\nDifficulty: {SettingsOperator.Sessioncfg["beatmapdiff"]}";
+			ExSongInfo.Text = $"by {SettingsOperator.SessionConfig.BeatmapArtist}\nmapped by {SettingsOperator.SessionConfig.BeatmapMapper}\nDifficulty: {SettingsOperator.SessionConfig.BeatmapDifficultyName}";
 			InfoBox.Text(Songpp, "+" + (SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier).ToString("N0") + "pp");
-			InfoBox.Text(LevelRating, "Lv. " + (SettingsOperator.LevelRating * ModsMulti.multiplier).ToString("N0") ?? "Lv. 0");
-			LevelRating.SelfModulate = SettingsOperator.ReturnLevelColour((int)(SettingsOperator.LevelRating * ModsMulti.multiplier));
-			InfoBox.Text(SongBPM, (SettingsOperator.bpm * AudioPlayer.Instance.PitchScale).ToString("N0") ?? "???");
+			InfoBox.Text(LevelRating, "Lv. " + (SettingsOperator.SessionConfig.LevelRating * ModsMulti.multiplier).ToString("N0") ?? "Lv. 0");
+			LevelRating.SelfModulate = SettingsOperator.ReturnLevelColour((int)(SettingsOperator.SessionConfig.LevelRating * ModsMulti.multiplier));
+			InfoBox.Text(SongBPM, (SettingsOperator.SessionConfig.bpm * AudioPlayer.Instance.PitchScale).ToString("N0") ?? "???");
 			InfoBox.Text(SongLen, TimeSpan.FromMilliseconds((SettingsOperator.Gameplaycfg.TimeTotalGame / 0.001f) / AudioPlayer.Instance.PitchScale).ToString(@"mm\:ss") ?? "00:00");
 
 			SetControlsVisibility(true);
@@ -462,10 +462,10 @@ public partial class SongSelect : Control
 			SetControlsVisibility(false);
 		}
 
-		if (SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.SongID == -1)
+		if (SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.SessionConfig.SongID == -1)
 		{
 			SettingsOperator.SelectSongID(0);
-			scrollmode(exactvalue: SettingsOperator.SongID);
+			scrollmode(exactvalue: SettingsOperator.SessionConfig.SongID);
 		}
 	}
 
@@ -533,7 +533,7 @@ public partial class SongSelect : Control
 		CheckLeaderboardMode();
 		CheckRankStatus();
 		// Show Play button if SongID is set.
-		StartButton.Visible = (SettingsOperator.SongID != -1);
+		StartButton.Visible = (SettingsOperator.SessionConfig.SongID != -1);
 		NoBeatmap.Visible = (SettingsOperator.Beatmaps.Count == 0) || (FilteredIndices.Count == 0 && !string.IsNullOrEmpty(Searchtext));
 
 		if (SettingsOperator.Beatmaps.Count == 0 && NoBeatmap.Text != NoBeatmapCount && !string.IsNullOrEmpty(Searchtext))
@@ -541,9 +541,9 @@ public partial class SongSelect : Control
 		else if (FilteredIndices.Count == 0 & NoBeatmap.Text != NoBeatmapCount)
 			NoBeatmap.Text = NoBeatmapSearch;
 
-		if (Input.IsMouseButtonPressed(MouseButton.Right) && SettingsOperator.SongIDHighlighted != -1)
+		if (Input.IsMouseButtonPressed(MouseButton.Right) && SettingsOperator.SessionConfig.SongIDHighlighted != -1)
 		{
-			ContextMenu.SongID = SettingsOperator.SongIDHighlighted;
+			ContextMenu.SongID = SettingsOperator.SessionConfig.SongIDHighlighted;
 			ContextMenuActive = true;
 			ContextMenu.Visible = true;
 			ContextMenuAni?.Kill();
@@ -571,12 +571,12 @@ public partial class SongSelect : Control
 		if (SettingsOperator.Start_reloadLeaderboard && SettingsOperator.Beatmaps.Count > 0)
 		{
 			SettingsOperator.Start_reloadLeaderboard = false;
-			GD.Print("Loading Leaderboard for: " + SettingsOperator.BeatmapID);
-			ApiOperator.ReloadLeaderboard(SettingsOperator.BeatmapID);
+			GD.Print("Loading Leaderboard for: " + SettingsOperator.SessionConfig.BeatmapID);
+			ApiOperator.ReloadLeaderboard(SettingsOperator.SessionConfig.BeatmapID);
 		}
-		if ((bool)SettingsOperator.Sessioncfg["reloaddb"])
+		if ((bool)SettingsOperator.SessionConfig.ReloadDB)
 		{
-			SettingsOperator.Sessioncfg["reloaddb"] = false;
+			SettingsOperator.SessionConfig.ReloadDB = false;
 			GetTree().ReloadCurrentScene();
 		}
 		check_modscreen();
@@ -585,7 +585,7 @@ public partial class SongSelect : Control
 		if (!AnimationSong)
 		{
 			AnimationSong = !AnimationSong;
-			scrollBar.Value = SettingsOperator.SongID;
+			scrollBar.Value = SettingsOperator.SessionConfig.SongID;
 		}
 		checksongpanel();
 
@@ -593,7 +593,7 @@ public partial class SongSelect : Control
 	    {
 	        if (FilteredIndices.Count > 0)
 	        {
-	            int currentPos = FilteredIndices.IndexOf(SettingsOperator.SongID);
+	            int currentPos = FilteredIndices.IndexOf(SettingsOperator.SessionConfig.SongID);
 	            int prevPos = currentPos - 1 >= 0 ? currentPos - 1 : FilteredIndices.Count - 1;
 	            SettingsOperator.SelectSongID(FilteredIndices[prevPos]);
 	            scrollmode(exactvalue: prevPos);
@@ -603,7 +603,7 @@ public partial class SongSelect : Control
 	    {
 	        if (FilteredIndices.Count > 0)
 	        {
-	            int currentPos = FilteredIndices.IndexOf(SettingsOperator.SongID);
+	            int currentPos = FilteredIndices.IndexOf(SettingsOperator.SessionConfig.SongID);
 	            int nextPos = currentPos + 1 < FilteredIndices.Count ? currentPos + 1 : 0;
 	            SettingsOperator.SelectSongID(FilteredIndices[nextPos]);
 	            scrollmode(exactvalue: nextPos);
@@ -642,14 +642,14 @@ public partial class SongSelect : Control
 	    {
 	        _Start();
 	    }
-	    else if (MusicCard.Connection_Button && OldSongID == SettingsOperator.SongID && !blockinputwhentext)
+	    else if (MusicCard.Connection_Button && OldSongID == SettingsOperator.SessionConfig.SongID && !blockinputwhentext)
 	    {
 	        _Start();
 	        MusicCard.Connection_Button = false;
 	    }
-	    else if (MusicCard.Connection_Button && OldSongID != SettingsOperator.SongID && !blockinputwhentext)
+	    else if (MusicCard.Connection_Button && OldSongID != SettingsOperator.SessionConfig.SongID && !blockinputwhentext)
 	    {
-	        int filteredPos = FilteredIndices.IndexOf(SettingsOperator.SongID);
+	        int filteredPos = FilteredIndices.IndexOf(SettingsOperator.SessionConfig.SongID);
 	        scrollmode(exactvalue: filteredPos >= 0 ? filteredPos : 0);
 	        MusicCard.Connection_Button = false;
 	    }
@@ -718,7 +718,7 @@ public partial class SongSelect : Control
 
 	private void _openexternal()
 	{
-		OS.ShellOpen($"{SettingsOperator.GetSetting("api")}beatmapset/{SettingsOperator.BeatmapSetID}/{SettingsOperator.BeatmapID}");
+		OS.ShellOpen($"{SettingsOperator.GetSetting("api")}beatmapset/{SettingsOperator.SessionConfig.BeatmapSetID}/{SettingsOperator.SessionConfig.BeatmapID}");
 	}
 	///<summary>
 	/// Check Rank status

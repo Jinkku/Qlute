@@ -47,7 +47,6 @@ public partial class SettingsOperator : Node
     public static bool loopaudio = false;
     public static bool jukebox = false;
     public static string GameChecksum { get; set; }
-    public int backgrounddim { get; set; }
     public int scrollspeed { get; set; }
     public static bool SpectatorMode { get; set; } = false;
     public static float AllMiliSecondsFromBeatmap { get; set; }
@@ -142,7 +141,7 @@ public partial class SettingsOperator : Node
         tween.TweenProperty(AudioPlayer.Instance, "volume_db", -40f, QuitSpeed);
         tween.TweenCallback(Callable.From(() => GetTree().Quit())).SetDelay(QuitSpeed + 0.5f);
     }
-    public static Texture2D GetNullImage() => ResourceLoader.Load<CompressedTexture2D>("res://Resources/System/SongSelect/NoBG.png");
+    public static Texture2D GetNullImage() => ResourceLoader.Load<CompressedTexture2D>("res://DefaultWallpaper/the_one.png");
 
     public static Texture2D LoadImage(string path)
     {
@@ -187,60 +186,60 @@ public partial class SettingsOperator : Node
 
     public static void ReloadInfo()
     {
-        if (Beatmaps.Count > 0 && SongID != -1)
+        if (Beatmaps.Count > 0 && SessionConfig.SongID != -1)
         {
-            var beatmap = Beatmaps[SongID];
+            var beatmap = Beatmaps[SessionConfig.SongID];
             if (Check.CheckBoolValue(GetSetting("showunicode").ToString()) && beatmap.TitleUnicode != null && beatmap.ArtistUnicode != null)
             {
-                Sessioncfg["beatmaptitle"] = beatmap.TitleUnicode;
-                Sessioncfg["beatmapartist"] = beatmap.ArtistUnicode;
+                SessionConfig.BeatmapTitle = beatmap.TitleUnicode;
+                SessionConfig.BeatmapArtist = beatmap.ArtistUnicode;
             } else
             {
-                Sessioncfg["beatmaptitle"] = beatmap.Title;
-                Sessioncfg["beatmapartist"] = beatmap.Artist;
+                SessionConfig.BeatmapTitle = beatmap.Title;
+                SessionConfig.BeatmapArtist = beatmap.Artist;
             }
         }
     }
     public void SelectSongID(int id, float seek = -1)
     {
-        if (Beatmaps.ElementAt(id) != null && SongID != id)
+        if (Beatmaps.ElementAt(id) != null && SessionConfig.SongID != id)
         {
             ApiOperator.LeaderboardStatus = 0; // Reset leaderboard status
             ApiOperator.LeaderboardList.Clear(); // Clear the leaderboard list
             if (!Marathon) MarathonMapPaths.Clear(); // Clear marathon map paths if not in marathon mode
             Start_reloadLeaderboard = true;
             var beatmap = Beatmaps[id];
-            Sessioncfg["beatmapurl"] = beatmap.Rawurl;
+            SessionConfig.BeatmapURL = beatmap.Rawurl;
             if (beatmap.TitleUnicode != null && beatmap.ArtistUnicode != null)
             {
-                Sessioncfg["beatmaptitle"] = beatmap.TitleUnicode;
-                Sessioncfg["beatmapartist"] = beatmap.ArtistUnicode;
+                SessionConfig.BeatmapTitle = beatmap.TitleUnicode;
+                SessionConfig.BeatmapArtist = beatmap.ArtistUnicode;
             }else if (!Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString()) || ( beatmap.TitleUnicode == null && beatmap.ArtistUnicode == null ) )
             {
-                Sessioncfg["beatmaptitle"] = beatmap.Title;
-                Sessioncfg["beatmapartist"] = beatmap.Artist;
+                SessionConfig.BeatmapTitle = beatmap.Title;
+                SessionConfig.BeatmapArtist = beatmap.Artist;
             }
-            Sessioncfg["beatmapdiff"] = beatmap.Version;
-            bpm = (int)beatmap.Bpm;
+            SessionConfig.BeatmapDifficultyName = beatmap.Version;
+            SessionConfig.bpm = (int)beatmap.Bpm;
             Gameplaycfg.TimeTotalGame = beatmap.Timetotal * 0.001f;
-            Sessioncfg["beatmapmapper"] = beatmap.Mapper;
+            SessionConfig.BeatmapMapper = beatmap.Mapper;
             Gameplaycfg.BeatmapAccuracy = (int)beatmap.Accuracy;
             Gameplaycfg.NoteCount = (int)beatmap.NoteCount;
             //Gameplaycfg.SampleSet = beatmap.SampleSet;
             Gameplaycfg.SampleSet = SampleSet.Type[1];
-            LevelRating = beatmap.Levelrating;
-            BeatmapID =  beatmap.BeatmapID;
-            BeatmapSetID = beatmap.BeatmapSetID;
-            SongID = id;
+            SessionConfig.LevelRating = beatmap.Levelrating;
+            SessionConfig.BeatmapID =  beatmap.BeatmapID;
+            SessionConfig.BeatmapSetID = beatmap.BeatmapSetID;
+            SessionConfig.SongID = id;
             string bgpath = beatmap.Path.PathJoin(beatmap.Background.ToString());
             string checksumbg = null;
             if (System.IO.File.Exists(bgpath))
                 checksumbg = ChecksumUtil.GetSha256(bgpath);
-            if (BackgroundChecksum != checksumbg && checksumbg != null)
-                Background = null;
-            if (beatmap.Path != null && beatmap.Background != null && BackgroundChecksum != checksumbg)
-                Background = LoadImage(bgpath);
-            BackgroundChecksum = checksumbg;
+            if (SessionConfig.BackgroundChecksum != checksumbg && checksumbg != null)
+                SessionConfig.Background = null;
+            if (beatmap.Path != null && beatmap.Background != null && SessionConfig.BackgroundChecksum != checksumbg)
+                SessionConfig.Background = LoadImage(bgpath);
+            SessionConfig.BackgroundChecksum = checksumbg;
             if (seek == -1)
             {
                 seek = beatmap.PreviewTime;
@@ -278,8 +277,8 @@ public partial class SettingsOperator : Node
             
             ApiOperator.CheckBeatmapRankStatus();
         }
-        else if (SongID != id) { GD.PrintErr("Can't select a song that don't exist :/"); }
-        else if (SongID == id)
+        else if (SessionConfig.SongID != id) { GD.PrintErr("Can't select a song that don't exist :/"); }
+        else if (SessionConfig.SongID == id)
         {
             GD.PrintErr("The song is already picked :^");
         }
@@ -509,44 +508,46 @@ public partial class SettingsOperator : Node
         public static string Username { get; set; } = "Guest";
     }
 
-    public static int SongID { get; set; } = -1;
-    public static int SongIDHighlighted { get; set; } = -1; // Highlighted song ID for the song select screen
-    public static double LevelRating { get; set; } = -1;
-    public static int BeatmapID { get; set; } = -1;
-    public static int BeatmapSetID { get; set; } = -1;
-    public static int bpm { get; set; } = 180;
-    public static Texture2D Background { get; set; }
-    public static string BackgroundChecksum { get; set; }
-
-    public static Dictionary<string, object> Sessioncfg { get; set; } = new Dictionary<string, object>
+    public static class SessionConfig
     {
-        { "TopPanelSlideip", false },
-        { "toppanelhide", false },
-        { "Reloadmap", false },
-        { "reloaddb", false },
-        { "localpp", (double)0 },
-        { "loggedin", false },
-        { "loggingin", false },
-        { "showaccountpro", false },
-        { "settingspanelv", false },
-        { "chatboxv", false },
-        { "notificationpanelv", false },
-        { "playercolour", null },
-        { "totalbeatmaps", 0 },
-        { "beatmapurl", null },
-        { "beatmaptitle", null },
-        { "beatmapartist", "" },
-        { "beatmapmapper", "" },
-        { "beatmapaccuracy", (int)1 },
-        { "beatmapdiff", "" },
-        { "customapi", false},
-        { "multiplier" , 1.0f},
-        { "fps" , 0},
-        { "ms" , 0.0f},
-        { "background" , null},
-        { "client-id", null },
-        { "client-secret", null },
-    };
+        public static int SongID { get; set; } = -1;
+        public static int SongIDHighlighted { get; set; } = -1; // Highlighted song ID for the song select screen
+        public static double LevelRating { get; set; } = -1;
+        public static int BeatmapID { get; set; } = -1;
+        public static int BeatmapSetID { get; set; } = -1;
+        public static int bpm { get; set; } = 180;
+        public static Texture2D Background { get; set; }
+        public static string BackgroundChecksum { get; set; }
+        public static bool TopPanelSlideip { get; set; } = false;
+        public static bool TopPanelHide { get; set; } = false;
+        public static bool Reloadmap { get; set; } = false;
+        public static bool ReloadDB { get; set; } = false;
+        public static double Localpp { get; set; } = 0;
+        public static bool Loggedin { get; set; } = false;
+        public static bool Loggingin { get; set; } = false;
+        public static bool ShowAccountProfile { get; set; } = false;
+        public static bool SettingsPanelVisible { get; set; } = false;
+        public static bool ChatBoxVisible { get; set; } = false;
+        public static bool NotificationPanelVisible { get; set; } = false;
+        public static Color PlayerColour { get; set; }
+        public static int TotalBeatmaps { get; set; } = 0;
+        public static string BeatmapURL { get; set; }
+        public static string BeatmapTitle { get; set; }
+        public static string BeatmapArtist { get; set; }
+        public static string BeatmapMapper { get; set; }
+        public static string BeatmapDifficultyName { get; set; }
+        public static int Backgrounddim { get; set; }
+        public static bool CustomAPI { get; set; }
+        public static float Multiplier { get; set; } = 1.0f;
+        public static int FPS { get; set; } = 0;
+        public static float ms { get; set; } = 0.0f;
+        public static string ClientID { get; set; }
+        public static string ClientSecret { get; set; }
+        public static int BeatmapAccuracy { get; set; } = 1;
+
+
+
+    }
 
     private Tween TopPanelAnimation { get; set; }
     public void toppaneltoggle(bool value, bool noani = false)
@@ -554,7 +555,7 @@ public partial class SettingsOperator : Node
         ColorRect TopPanel = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar");
         TopPanelAnimation?.Kill();
         TopPanelAnimation = CreateTween();
-        Sessioncfg["toppanelhide"] = !value;
+        SessionConfig.TopPanelHide = !value;
         if (value && noani)
             TopPanel.Position = new Vector2(TopPanel.Position.X, 0);
         else if (!value && noani)
@@ -578,7 +579,7 @@ public partial class SettingsOperator : Node
         TopPanelPosition = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar").Position.Y + 50;
         if (Input.IsActionJustPressed("Hide Panel"))
         {
-            toppaneltoggle((bool)Sessioncfg["toppanelhide"]);
+            toppaneltoggle(SessionConfig.TopPanelHide);
         }
     }
 
@@ -637,7 +638,7 @@ public partial class SettingsOperator : Node
             }
         }
 
-        backgrounddim = int.TryParse(GetSetting("backgrounddim").ToString(), out int bkd) ? bkd : 70;
+        SessionConfig.Backgrounddim = int.TryParse(GetSetting("backgrounddim").ToString(), out int bkd) ? bkd : 70;
         var resolutionIndex = int.TryParse(GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
         changeres(resolutionIndex);
         RefreshFPS();

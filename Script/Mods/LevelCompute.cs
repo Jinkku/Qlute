@@ -6,6 +6,6 @@ public partial class LevelCompute : Label
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (SettingsOperator.SongID != -1) Text = $"Lv. {(SettingsOperator.LevelRating * ModsMulti.multiplier).ToString("N0")}";
+		if (SettingsOperator.SessionConfig.SongID != -1) Text = $"Lv. {(SettingsOperator.SessionConfig.LevelRating * ModsMulti.multiplier).ToString("N0")}";
 	}
 }

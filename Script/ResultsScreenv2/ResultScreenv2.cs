@@ -260,7 +260,7 @@ public partial class ResultScreenv2 : Control
 		MInfo.Visible = false;
 		NA.Visible = false;
 		Banner = GetNode<TextureRect>("Ranking/Ranking/VBoxContainer/Banner/Banner");
-		Banner.Texture = SettingsOperator.Background;
+		Banner.Texture = SettingsOperator.SessionConfig.Background;
 		RTitle = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/Title");
 		RArtist = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/Artist");
 		RMapper = GetNode<Label>("Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer/mapped");
@@ -465,11 +465,11 @@ public partial class ResultScreenv2 : Control
 	private bool ChangedStats { get; set; }
 	public override void _PhysicsProcess(double delta)
 	{
-		Title.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No Beatmaps Selected";
-		Artist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "Please select a Beatmap!";
-		Mapper.Text = "mapped by " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString();
-		Difficulty.Text = SettingsOperator.Sessioncfg["beatmapdiff"]?.ToString();
-		Level.Text = $"Lv. {SettingsOperator.LevelRating:N0}";
+		Title.Text = SettingsOperator.SessionConfig.BeatmapTitle?.ToString() ?? "No Beatmaps Selected";
+		Artist.Text = SettingsOperator.SessionConfig.BeatmapArtist?.ToString() ?? "Please select a Beatmap!";
+		Mapper.Text = "mapped by " + SettingsOperator.SessionConfig.BeatmapMapper?.ToString();
+		Difficulty.Text = SettingsOperator.SessionConfig.BeatmapDifficultyName?.ToString();
+		Level.Text = $"Lv. {SettingsOperator.SessionConfig.LevelRating:N0}";
 		RTitle.Text = Title.Text;
 		RArtist.Text = Artist.Text;
 		RMapper.Text = Mapper.Text;

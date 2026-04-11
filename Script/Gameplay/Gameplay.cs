@@ -120,7 +120,7 @@ public partial class Gameplay : Control
 		var BaseRnd = new Random(seed);
 		var isHitObjectSection = false;
 		int index = 0;
-		BeatmapLegend beatmap = SettingsOperator.Beatmaps[SettingsOperator.SongID];
+		BeatmapLegend beatmap = SettingsOperator.Beatmaps[SettingsOperator.SessionConfig.SongID];
 		dance = beatmap.Dance;
 		foreach (string line in lines)
 		{
@@ -169,7 +169,7 @@ public partial class Gameplay : Control
 	{
 		SettingsOperator.inGameplay = true;
 		oldtitle = GetWindow().Title;
-		DisplayServer.WindowSetTitle($"{oldtitle} - {SettingsOperator.Sessioncfg["beatmapartist"] ?? ""} - {SettingsOperator.Sessioncfg["beatmaptitle"] ?? ""}");
+		DisplayServer.WindowSetTitle($"{oldtitle} - {SettingsOperator.SessionConfig.BeatmapArtist ?? ""} - {SettingsOperator.SessionConfig.BeatmapTitle ?? ""}");
 		SettingsOperator.Gameplaycfg.Username = ApiOperator.Username;
 		SettingsOperator.Gameplaycfg.EpochTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 		float scale = 1f - (SettingsOperator.Gameplaycfg.BeatmapAccuracy / 10f);
@@ -203,7 +203,7 @@ public partial class Gameplay : Control
 		}
 
 		Dead = false;
-		Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)));
+		Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f)));
 		BeatmapBackground.FlashEnable = false;
 
 		HealthBar.Reset();
@@ -248,7 +248,7 @@ public partial class Gameplay : Control
 
 		HitOffsets.Clear();
 		Array.Fill(LastKeyPressTime, float.MinValue);
-		if (SettingsOperator.Sessioncfg["beatmapurl"] != null) ReloadBeatmap(SettingsOperator.Sessioncfg["beatmapurl"].ToString());
+		if (SettingsOperator.SessionConfig.BeatmapURL != null) ReloadBeatmap(SettingsOperator.SessionConfig.BeatmapURL.ToString());
 		// If auto is enabled, it will make a Replay file with Auto being the player playing the beatmap. Before this it didn't make the replay file, it just plays.
 		// I am doing this because it's simpler for me and don't have to worry about breaking auto (Qlutina)
 		if (ModsOperator.Mods["auto"]) {
@@ -632,7 +632,7 @@ public partial class Gameplay : Control
 				SettingsOperator.Gameplaycfg.MaxCombo = SettingsOperator.Gameplaycfg.Combo;
 			}
 
-			Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.backgrounddim * 0.01f)));
+			Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f)));
 			SettingsOperator.Gameplaycfg.Accuracy = ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 			if (Input.IsActionJustPressed("pausemenu") && SettingsOperator.SpectatorMode)
 			{

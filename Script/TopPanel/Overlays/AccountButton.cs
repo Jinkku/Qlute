@@ -108,10 +108,10 @@ public partial class AccountButton : Button
 	public Control Card;
 	public Tween acctween;
 	public void toggleaccountpanel(){
-		var loggedin = (bool)SettingsOperator.Sessioncfg["loggedin"];
+		var loggedin = SettingsOperator.SessionConfig.Loggedin;
 		acctween?.Kill();
 		acctween = CreateTween();
-		if (!(bool)SettingsOperator.Sessioncfg["showaccountpro"])
+		if (!SettingsOperator.SessionConfig.ShowAccountProfile)
 		{
 			Card = GD.Load<PackedScene>("res://Panels/Overlays/AccountPrompt.tscn").Instantiate().GetNode<Control>(".");
 			Card.ZIndex = -1;
@@ -125,5 +125,5 @@ public partial class AccountButton : Button
 			acctween.TweenProperty(Card, "position", new Vector2(0,-265), 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 			acctween.TweenCallback(Callable.From(Card.QueueFree));
 		}
-		SettingsOperator.Sessioncfg["showaccountpro"] = !(bool)SettingsOperator.Sessioncfg["showaccountpro"];}
+		SettingsOperator.SessionConfig.ShowAccountProfile = !SettingsOperator.SessionConfig.ShowAccountProfile;}
 }

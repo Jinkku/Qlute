@@ -18,8 +18,8 @@ public partial class Details : PanelContainer
 	private void CheckValue()
 	{
 		Accuracy.Value = SettingsOperator.Gameplaycfg.BeatmapAccuracy;
-		Difficulty.Value = SettingsOperator.LevelRating;
-		//NoteCount.Text = SettingsOperator.LevelRating;
+		Difficulty.Value = SettingsOperator.SessionConfig.LevelRating;
+		//NoteCount.Text = SettingsOperator.SessionConfig.LevelRating;
 	}
 	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

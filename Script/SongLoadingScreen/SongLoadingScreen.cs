@@ -42,11 +42,11 @@ public partial class SongLoadingScreen : Control
 		SongDiff = GetNode<Label>("InfoBox/Box/Difficulty");
 		SongMapper = GetNode<Label>("InfoBox/Box/Creator");
 		SongRating = GetNode<Label>("InfoBox/Box/Infos/Sections/Level");
-		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No Beatmaps Selected";
-		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "Please select a Beatmap!";
-		SongMapper.Text = "Creator: " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString();
-		SongDiff.Text = SettingsOperator.Sessioncfg["beatmapdiff"]?.ToString();
-		SongRating.Text = "Lv. " + (SettingsOperator.LevelRating * ModsMulti.multiplier).ToString("N0");
+		SongTitle.Text = SettingsOperator.SessionConfig.BeatmapTitle?.ToString() ?? "No Beatmaps Selected";
+		SongArtist.Text = SettingsOperator.SessionConfig.BeatmapArtist?.ToString() ?? "Please select a Beatmap!";
+		SongMapper.Text = "Creator: " + SettingsOperator.SessionConfig.BeatmapMapper?.ToString();
+		SongDiff.Text = SettingsOperator.SessionConfig.BeatmapDifficultyName?.ToString();
+		SongRating.Text = "Lv. " + (SettingsOperator.SessionConfig.LevelRating * ModsMulti.multiplier).ToString("N0");
 	}
 	private void _Animationf(){
 		ArtificialLoad.Start();

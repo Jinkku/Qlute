@@ -65,8 +65,8 @@ public partial class ApiOperator : Node
 			Submitted = false;
 			SettingsOperator.JustPlayedScore = false;
 			GD.Print("Submitting score....");
-			int BeatmapID = SettingsOperator.BeatmapID;
-			int BeatmapSetID = SettingsOperator.BeatmapSetID;
+			int BeatmapID = SettingsOperator.SessionConfig.BeatmapID;
+			int BeatmapSetID = SettingsOperator.SessionConfig.BeatmapSetID;
 			double MAX = SettingsOperator.Gameplaycfg.Max;
 			double GREAT = SettingsOperator.Gameplaycfg.Great;
 			double MEH = SettingsOperator.Gameplaycfg.Meh;
@@ -103,8 +103,8 @@ public partial class ApiOperator : Node
 			Submitted = false;
 			SettingsOperator.JustPlayedScore = false;
 			GD.Print("Submitting score....");
-			int BeatmapID = SettingsOperator.BeatmapID;
-			int BeatmapSetID = SettingsOperator.BeatmapSetID;
+			int BeatmapID = SettingsOperator.SessionConfig.BeatmapID;
+			int BeatmapSetID = SettingsOperator.SessionConfig.BeatmapSetID;
 			double MAX = SettingsOperator.Gameplaycfg.Max;
 			double GREAT = SettingsOperator.Gameplaycfg.Great;
 			double MEH = SettingsOperator.Gameplaycfg.Meh;
@@ -222,7 +222,7 @@ public partial class ApiOperator : Node
 			Client = new DiscordRpcClient("1484981423684452684");	// Creates the client
 			Client.Initialize();
 		}
-		if ((Username != null || PasswordHash != null) && (bool)SettingsOperator.Sessioncfg["loggedin"] == false && Check.CheckBoolValue(SettingsOperator.GetSetting("stayloggedin").ToString()))
+		if ((Username != null || PasswordHash != null) && SettingsOperator.SessionConfig.Loggedin == false && Check.CheckBoolValue(SettingsOperator.GetSetting("stayloggedin").ToString()))
 		{
 			GD.Print("Attempting to login with username: " + Username);
 			UPlayerName.Instance.Text = Username;
@@ -260,7 +260,7 @@ public partial class ApiOperator : Node
 			SettingsOperator.OAccuracy = (float)json["accuracy"];
 			SettingsOperator.OCombo = json["max_combo"].AsInt32();
 			if (SettingsOperator.LeaderboardType == 1)
-				ReloadLeaderboard(SettingsOperator.BeatmapID);
+				ReloadLeaderboard(SettingsOperator.SessionConfig.BeatmapID);
 		}
 		if (json["msg"].ToString() != "")
 		{
@@ -308,9 +308,9 @@ public partial class ApiOperator : Node
 	public static void CheckBeatmapRankStatus()
 	{
 		RankApi?.CancelRequest();
-		if (SettingsOperator.SongID != -1 && !SettingsOperator.NoConnectionToGameServer)
+		if (SettingsOperator.SessionConfig.SongID != -1 && !SettingsOperator.NoConnectionToGameServer)
 		{
-			RankApi.Request($"{SettingsOperator.GetSetting("api")}apiv2/s/{SettingsOperator.BeatmapID}",customHeaders: AgentHeaders);
+			RankApi.Request($"{SettingsOperator.GetSetting("api")}apiv2/s/{SettingsOperator.SessionConfig.BeatmapID}",customHeaders: AgentHeaders);
 		}
 	}
 	/// <summary>
@@ -357,7 +357,7 @@ public partial class ApiOperator : Node
 		{
 			RankedStatus = RankStatusLegend.Unknown;
 		}
-		SettingsOperator.Beatmaps[SettingsOperator.SongID].RankStatus = RankedStatus;
+		SettingsOperator.Beatmaps[SettingsOperator.SessionConfig.SongID].RankStatus = RankedStatus;
 	}
 
 	public static void DownloadBeatmap(int id, int index)
@@ -430,7 +430,7 @@ public partial class ApiOperator : Node
 			{
 				Notify.Post(json["notification"].ToString());
 			}
-			SettingsOperator.Sessioncfg["loggingin"] = false;
+			SettingsOperator.SessionConfig.Loggingin = false;
 			if ((bool)json["success"] && responseCode == 200)
 			{
 				GetNotices();
@@ -443,7 +443,7 @@ public partial class ApiOperator : Node
 					SettingsOperator.SetSetting("password", PasswordHash);
 				else
 					SettingsOperator.SetSetting("password", "");
-				SettingsOperator.Sessioncfg["loggedin"] = true;
+				SettingsOperator.SessionConfig.Loggedin = true;
 				NoticeText = "";
 			}
 			else if (Username != "Guest" && PasswordHash != null && responseCode != 200)
@@ -462,8 +462,8 @@ public partial class ApiOperator : Node
 		{
 			GD.PrintErr("Error parsing JSON: " + e.Message);
 			Notify.Post("Error parsing JSON: " + e.Message);
-			SettingsOperator.Sessioncfg["loggingin"] = false;
-			SettingsOperator.Sessioncfg["loggedin"] = false;
+			SettingsOperator.SessionConfig.Loggingin = false;
+			SettingsOperator.SessionConfig.Loggedin = false;
 		}
 	}
 	public static string ComputeSha256Hash(string rawData)
@@ -478,7 +478,7 @@ public partial class ApiOperator : Node
 	}
 	public static void Login(string username, string password)
 	{
-		SettingsOperator.Sessioncfg["loggingin"] = true;
+		SettingsOperator.SessionConfig.Loggingin = true;
 		Username = username;
 		PasswordHash = password;
 		string[] Headers = new string[] {
@@ -495,10 +495,10 @@ public partial class ApiOperator : Node
 	private void CheckStatus()
 	{
 		var Status = "N/A";
-		var Title = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "";
-		var Artist = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
-		var Difficulty = SettingsOperator.Sessioncfg["beatmapdiff"]?.ToString() ?? "";
-		var Mapper = SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString() ?? "";
+		var Title = SettingsOperator.SessionConfig.BeatmapTitle?.ToString() ?? "";
+		var Artist = SettingsOperator.SessionConfig.BeatmapArtist?.ToString() ?? "";
+		var Difficulty = SettingsOperator.SessionConfig.BeatmapDifficultyName?.ToString() ?? "";
+		var Mapper = SettingsOperator.SessionConfig.BeatmapMapper?.ToString() ?? "";
 		if (GetTree().CurrentScene == null || SettingsOperator.NoConnectionToGameServer) return; // Skips everything if these were triggered.
 		
 		if (GetTree().CurrentScene.Name == "Gameplay")
@@ -611,7 +611,7 @@ public partial class ApiOperator : Node
 	}
 	public override void _Process(double delta)
 	{
-		if ((bool)SettingsOperator.Sessioncfg["loggedin"] && DateTimeOffset.Now.ToUnixTimeSeconds() - Timer > 3)
+		if (SettingsOperator.SessionConfig.Loggedin && DateTimeOffset.Now.ToUnixTimeSeconds() - Timer > 3)
 		{
 			Timer = DateTimeOffset.Now.ToUnixTimeSeconds();
 			CheckStatus();

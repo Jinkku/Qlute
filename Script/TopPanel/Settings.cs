@@ -23,19 +23,19 @@ public partial class Settings : Button
 		}
 	}
 	private bool chksettingsv(){
-		return (bool)SettingsOperator.Sessioncfg["settingspanelv"];
+		return SettingsOperator.SessionConfig.SettingsPanelVisible;
 	}
 	private bool chknotifv(){
-		return (bool)SettingsOperator.Sessioncfg["notificationpanelv"];
+		return SettingsOperator.SessionConfig.NotificationPanelVisible;
 	}
 	private bool chkaccountpos(){
-		return (bool)SettingsOperator.Sessioncfg["showaccountpro"];
+		return SettingsOperator.SessionConfig.ShowAccountProfile;
 	}
 	public void togglesettingspanel(){
 		if (chknotifv()){
 			togglenotificationpanel();
 		}
-		if (!(bool)SettingsOperator.Sessioncfg["settingspanelv"])
+		if (!SettingsOperator.SessionConfig.SettingsPanelVisible)
 		{
 			if (IsInstanceValid(SettingsPanel))
 			{
@@ -76,13 +76,13 @@ public partial class Settings : Button
 				.SetEase(Tween.EaseType.Out);
 			_tween.Play();
 		}
-		SettingsOperator.Sessioncfg["settingspanelv"] = !(bool)SettingsOperator.Sessioncfg["settingspanelv"];
+		SettingsOperator.SessionConfig.SettingsPanelVisible = !SettingsOperator.SessionConfig.SettingsPanelVisible;
 	}
 	private void togglenotificationpanel(){
 		if (chksettingsv()){
 			togglesettingspanel();
 		}
-		if (!(bool)SettingsOperator.Sessioncfg["notificationpanelv"])
+		if (!SettingsOperator.SessionConfig.NotificationPanelVisible)
 		{
 			if (IsInstanceValid(NotificationPanel))
 			{
@@ -124,18 +124,18 @@ public partial class Settings : Button
 				.SetEase(Tween.EaseType.Out);
 			_tween.Play();
 		}
-		SettingsOperator.Sessioncfg["notificationpanelv"] = !(bool)SettingsOperator.Sessioncfg["notificationpanelv"];
+		SettingsOperator.SessionConfig.NotificationPanelVisible = !SettingsOperator.SessionConfig.NotificationPanelVisible;
 	}
 
 	private void _settings_pressed(){
 		if (chkaccountpos()) {
-			GetNode<AccountButton>("../AccountButton").toggleaccountpanel();
+			GetNode<AccountButton>("../../AccountButton").toggleaccountpanel();
 		}
 		togglesettingspanel();
 	}
 	private void _on_notifications(){
 		if (chkaccountpos()) {
-			GetNode<AccountButton>("../AccountButton").toggleaccountpanel();
+			GetNode<AccountButton>("../../AccountButton").toggleaccountpanel();
 		}
 		togglenotificationpanel();
 	}

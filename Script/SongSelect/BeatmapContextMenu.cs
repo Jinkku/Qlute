@@ -26,7 +26,7 @@ public partial class BeatmapContextMenu : PanelContainer
 			CreateEditor.EditorSongInfo.SongArtist =  SettingsOperator.Beatmaps[SongID].Artist;
 			CreateEditor.EditorSongInfo.SongDifficulty =  SettingsOperator.Beatmaps[SongID].Version;
 			CreateEditor.EditorSongInfo.FilePath =  SettingsOperator.Beatmaps[SongID].Path;
-			CreateEditor.EditorSongInfo.Background = SettingsOperator.Background;
+			CreateEditor.EditorSongInfo.Background = SettingsOperator.SessionConfig.Background;
 			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
 		}
 	}
@@ -46,13 +46,13 @@ public partial class BeatmapContextMenu : PanelContainer
 				Directory.Delete(beatmap.Path, true);
 			}
 			SettingsOperator.Beatmaps.RemoveAll(beatmap => beatmap.SetID == SetID);
-			SettingsOperator.Sessioncfg["reloaddb"] = true;
+			SettingsOperator.SessionConfig.ReloadDB = true;
 
-			if (SettingsOperator.SongID >= SettingsOperator.Beatmaps.Count - 1)
+			if (SettingsOperator.SessionConfig.SongID >= SettingsOperator.Beatmaps.Count - 1)
 			{
-				SettingsOperator.SongID = SettingsOperator.Beatmaps.Count - 1;
+				SettingsOperator.SessionConfig.SongID = SettingsOperator.Beatmaps.Count - 1;
 			}
-			SettingsOperator.SelectSongID(SettingsOperator.SongID);
+			SettingsOperator.SelectSongID(SettingsOperator.SessionConfig.SongID);
 		}
 		else
 		{
@@ -70,17 +70,17 @@ public partial class BeatmapContextMenu : PanelContainer
 				Notify.Post(message);
 			}
 			SettingsOperator.Beatmaps.Remove(beatmap);
-			SettingsOperator.Sessioncfg["reloaddb"] = true;
+			SettingsOperator.SessionConfig.ReloadDB = true;
 			if (File.Exists(beatmap.Rawurl))
 			{
 				File.Delete(beatmap.Rawurl);
 			}
 
-			if (SettingsOperator.SongID >= SettingsOperator.Beatmaps.Count - 1)
+			if (SettingsOperator.SessionConfig.SongID >= SettingsOperator.Beatmaps.Count - 1)
 			{
-				SettingsOperator.SongID = SettingsOperator.Beatmaps.Count - 1;
+				SettingsOperator.SessionConfig.SongID = SettingsOperator.Beatmaps.Count - 1;
 			}
-			SettingsOperator.SelectSongID(SettingsOperator.SongID);
+			SettingsOperator.SelectSongID(SettingsOperator.SessionConfig.SongID);
 		}
 		else
 		{

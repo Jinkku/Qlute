@@ -27,11 +27,11 @@ public partial class NowPlaying : PanelContainer
 	}
 	private void Prev()
 	{
-		if (SettingsOperator.SongID - 1 >= 0 && SettingsOperator.SongID != -1 && !SettingsOperator.inGameplay)
+		if (SettingsOperator.SessionConfig.SongID - 1 >= 0 && SettingsOperator.SessionConfig.SongID != -1 && !SettingsOperator.inGameplay)
 		{
-			SettingsOperator.SelectSongID(SettingsOperator.SongID - 1,seek: 0);
+			SettingsOperator.SelectSongID(SettingsOperator.SessionConfig.SongID - 1,seek: 0);
 		}
-		else if (SettingsOperator.SongID != -1 && !SettingsOperator.inGameplay)
+		else if (SettingsOperator.SessionConfig.SongID != -1 && !SettingsOperator.inGameplay)
 		{
 			SettingsOperator.SelectSongID((int)SettingsOperator.Beatmaps.Count - 1,seek: 0);
 		}
@@ -42,11 +42,11 @@ public partial class NowPlaying : PanelContainer
 	}
 	private void Next()
 	{
-		if (SettingsOperator.SongID + 1 < (int)SettingsOperator.Beatmaps.Count && SettingsOperator.SongID != -1 && !SettingsOperator.inGameplay)
+		if (SettingsOperator.SessionConfig.SongID + 1 < (int)SettingsOperator.Beatmaps.Count && SettingsOperator.SessionConfig.SongID != -1 && !SettingsOperator.inGameplay)
 		{
-			SettingsOperator.SelectSongID(SettingsOperator.SongID + 1,seek: 0);
+			SettingsOperator.SelectSongID(SettingsOperator.SessionConfig.SongID + 1,seek: 0);
 		}
-		else if (SettingsOperator.SongID != -1 && !SettingsOperator.inGameplay)
+		else if (SettingsOperator.SessionConfig.SongID != -1 && !SettingsOperator.inGameplay)
 		{
 			SettingsOperator.SelectSongID(0,seek: 0);
 		}
@@ -67,9 +67,9 @@ public partial class NowPlaying : PanelContainer
 		{
 			Pause.Icon = PauseIcon;
 		}
-		if (Background.Texture != SettingsOperator.Background && SettingsOperator.SongID != -1)
+		if (Background.Texture != SettingsOperator.SessionConfig.Background && SettingsOperator.SessionConfig.SongID != -1)
 		{
-			Background.Texture = SettingsOperator.Background;
+			Background.Texture = SettingsOperator.SessionConfig.Background;
 		}
 	}
 }

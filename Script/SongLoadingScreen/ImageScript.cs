@@ -8,6 +8,6 @@ public partial class ImageScript : TextureRect
 	public override void _Ready()
 	{
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		Texture = SettingsOperator.Background;
+		Texture = SettingsOperator.SessionConfig.Background;
 	}
 }

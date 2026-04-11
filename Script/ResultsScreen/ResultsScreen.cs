@@ -64,10 +64,10 @@ public partial class ResultsScreen : Control
 		TRankBox = GetNode<PanelContainer>("AlertBox/Box/Info/TRank");
 		TppBox = GetNode<PanelContainer>("AlertBox/Box/Info/TPP");
 		Username.Text = "played by " + ApiOperator.Username;
-		SongTitle.Text = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No Beatmaps Selected";
-		SongArtist.Text = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "Please select a Beatmap!";
-		SongMapper.Text = "Creator: " + SettingsOperator.Sessioncfg["beatmapmapper"]?.ToString();
-		SongDiff.Text = SettingsOperator.Sessioncfg["beatmapdiff"]?.ToString();
+		SongTitle.Text = SettingsOperator.SessionConfig.BeatmapTitle?.ToString() ?? "No Beatmaps Selected";
+		SongArtist.Text = SettingsOperator.SessionConfig.BeatmapArtist?.ToString() ?? "Please select a Beatmap!";
+		SongMapper.Text = "Creator: " + SettingsOperator.SessionConfig.BeatmapMapper?.ToString();
+		SongDiff.Text = SettingsOperator.SessionConfig.BeatmapDifficultyName?.ToString();
 		Max.Text = SettingsOperator.Gameplaycfg.Max.ToString("N0");
 		Great.Text = SettingsOperator.Gameplaycfg.Great.ToString("N0");
 		Meh.Text = SettingsOperator.Gameplaycfg.Meh.ToString("N0");

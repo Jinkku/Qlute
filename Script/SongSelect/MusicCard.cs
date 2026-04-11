@@ -203,18 +203,18 @@ public partial class MusicCard : Button
 	private void _highlight() => AnimationButton(highlightcolour);
 	private void _focus()
 	{
-		SettingsOperator.SongIDHighlighted = SongID;
+		SettingsOperator.SessionConfig.SongIDHighlighted = SongID;
 		AnimationButton(Focuscolour, true);
 	}
 	private void _unfocus()
 	{
-		SettingsOperator.SongIDHighlighted = -1;
+		SettingsOperator.SessionConfig.SongIDHighlighted = -1;
 		AnimationButton(Checkid() ? toggledcolour : Idlecolour, false);
 	}
 	public void _on_pressed()
 	{
 		Connection_Button = true;
-		if (SettingsOperator.SongID != SongID)
+		if (SettingsOperator.SessionConfig.SongID != SongID)
 		{
 			SettingsOperator.SelectSongID(SongID);	
 		}
@@ -223,7 +223,7 @@ public partial class MusicCard : Button
 	public static bool Connection_Button = false;
 	public bool Checkid()
 	{
-		return SettingsOperator.SongID.ToString().Equals(SongID.ToString());
+		return SettingsOperator.SessionConfig.SongID.ToString().Equals(SongID.ToString());
 	}
 
 	public override void _PhysicsProcess(double delta)

@@ -141,7 +141,7 @@ public partial class BeatmapListener : Node
 		foreach (string file in files)
 		{
 			Name = SettingsOperator.Parse_Beatmapfile(file.Replace("\\", "/"), SetID: SetID); // Parse the beatmap file and add it to the beatmaps list
-			SettingsOperator.Sessioncfg["reloaddb"] = true;
+			SettingsOperator.SessionConfig.ReloadDB = true;
 		}
 		SetID++; // Increment SetID for each beatmap directory parsed
 		return Name;

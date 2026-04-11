@@ -23,7 +23,7 @@ public partial class Signup : ColorRect
 	{
 		username = UserLine.Text;
 		password = ApiOperator.ComputeSha256Hash(PassLine.Text);
-		SettingsOperator.Sessioncfg["loggingin"] = true;
+		SettingsOperator.SessionConfig.Loggingin = true;
 		ApiOperator.Username = username;
 		ApiOperator.PasswordHash = password;
 		string[] Headers = new string[] {
@@ -35,7 +35,7 @@ public partial class Signup : ColorRect
 	private void complete(long result, long responseCode, string[] headers, byte[] body)
 	{
 		Modulate = new Color(1f, 1f, 1f, 1f);
-		SettingsOperator.Sessioncfg["loggingin"] = false;
+		SettingsOperator.SessionConfig.Loggingin = false;
 		if (responseCode == 200)
 		{
 			Notify.Post("Account created, welcome to Qlute!");

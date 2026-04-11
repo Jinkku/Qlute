@@ -27,7 +27,7 @@ public partial class AccountPrompt : Control
 	}
 	public override void _Process(double _delta)
 	{
-		if ((bool)SettingsOperator.Sessioncfg["loggedin"] == true && !SettingsOperator.NoConnectionToGameServer)
+		if (SettingsOperator.SessionConfig.Loggedin == true && !SettingsOperator.NoConnectionToGameServer)
 		{
 			Log.Visible = true;
 			NotLog.Visible = false;
@@ -70,12 +70,12 @@ public partial class AccountPrompt : Control
 		NotLog.Visible = true;
 		Retring.Visible = true;
 		ApiOperator.NoticeText = "";
-		SettingsOperator.Sessioncfg["loggingin"] = false;
+		SettingsOperator.SessionConfig.Loggingin = false;
 		ApiOperator.LoginApi.CancelRequest();
 		SettingsOperator.NoConnectionToGameServer = false;
 		SettingsOperator.SetSetting("username",null);
 		SettingsOperator.SetSetting("password",null);
-		SettingsOperator.Sessioncfg["loggedin"] = false;
+		SettingsOperator.SessionConfig.Loggedin = false;
 		PlayerName.Text = "Guest";
 	}
 }

@@ -22,10 +22,10 @@ public partial class InfoBar : ColorRect
 		TopPanel = this;
 	}
 	private void _Slidepanelstart(string ani){
-		SettingsOperator.Sessioncfg["TopPanelSlideip"] = true;
+		SettingsOperator.SessionConfig.TopPanelSlideip = true;
 	}
 	private void _Slidepanelfinished(string ani){
-		SettingsOperator.Sessioncfg["TopPanelSlideip"] = false;
+		SettingsOperator.SessionConfig.TopPanelSlideip = false;
 	}
 
 	private void ShadowAni(int opt)
@@ -68,7 +68,7 @@ public partial class InfoBar : ColorRect
 
 	private void _ChatRoom()
 	{
-		if (!(bool)SettingsOperator.Sessioncfg["chatboxv"])
+		if (!SettingsOperator.SessionConfig.ChatBoxVisible)
 		{
 			ChatBox?.QueueFree();
 			ChatBox = GD.Load<PackedScene>("res://Panels/Overlays/ChatOverlay.tscn").Instantiate().GetNode<PanelContainer>(".");
@@ -109,7 +109,7 @@ public partial class InfoBar : ColorRect
 				.SetEase(Tween.EaseType.Out);
 			_tween.Play();
 		}
-		SettingsOperator.Sessioncfg["chatboxv"] = !(bool)SettingsOperator.Sessioncfg["chatboxv"];
+		SettingsOperator.SessionConfig.ChatBoxVisible = !SettingsOperator.SessionConfig.ChatBoxVisible;
 	}
 
 	private void _on_browse_pressed()
@@ -120,7 +120,7 @@ public partial class InfoBar : ColorRect
 	private Control VolumePanel { get; set; }
 	public override void _Process(double _delta)
 	{
-		Loadingicon.Visible = (bool)SettingsOperator.Sessioncfg["loggingin"];
+		Loadingicon.Visible = (bool)SettingsOperator.SessionConfig.Loggingin;
 
 		if (Input.IsActionJustPressed("Special"))
 		{

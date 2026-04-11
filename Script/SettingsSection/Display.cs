@@ -16,12 +16,12 @@ public partial class Display : PanelContainer
 		Windowmode = GetNode<OptionButton>("Rows/WindowSelector");
 		ShowUnicode.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString());
 		Windowmode.Selected = int.TryParse(SettingsOperator.GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
-		BackgroundDim.Value = SettingsOperator.backgrounddim;
+		BackgroundDim.Value = SettingsOperator.SessionConfig.Backgrounddim;
 	}
 	
 	private void _backgrounddim_started(float value)
 	{
-		SettingsOperator.backgrounddim = (int)BackgroundDim.Value;
+		SettingsOperator.SessionConfig.Backgrounddim = (int)BackgroundDim.Value;
 	}
 	private void _backgrounddim_ended(int value)
 	{

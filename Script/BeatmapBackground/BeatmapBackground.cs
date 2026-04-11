@@ -20,7 +20,7 @@ public partial class BeatmapBackground : TextureRect
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		Flash = GetNode<TextureRect>("Flash");
 		TempImage = GetNode<TextureRect>("TempImage");
-		Texture = SettingsOperator.Background;
+		Texture = SettingsOperator.SessionConfig.Background;
 		check_background(true);
 		resettime();
 	}
@@ -84,14 +84,14 @@ public partial class BeatmapBackground : TextureRect
 
 		Position = new Vector2(offsetX, offsetY); // Sets the position via mouse movements.
 
-		if (Texture != SettingsOperator.Background && SettingsOperator.SongID != -1 && SettingsOperator.Background != null)
+		if (Texture != SettingsOperator.SessionConfig.Background && SettingsOperator.SessionConfig.SongID != -1 && SettingsOperator.SessionConfig.Background != null)
 		{
 			GD.Print("[Qlute] Switching to Specified image");
-			Switch_Background(SettingsOperator.Background, Instant);
+			Switch_Background(SettingsOperator.SessionConfig.Background, Instant);
 			Size = new Vector2(GetViewportRect().Size[0] + 20, GetViewportRect().Size[1] + 20);
 			Position = new Vector2(GetViewportRect().Size[0] - 5, GetViewportRect().Size[1] - 5);
 		}
-		else if (Texture != SettingsOperator.GetNullImage() && SettingsOperator.Background == null)
+		else if (Texture != SettingsOperator.GetNullImage() && SettingsOperator.SessionConfig.Background == null)
 		{
 			GD.Print("[Qlute] Switching to Default background");
 			Switch_Background(SettingsOperator.GetNullImage(), Instant);
@@ -110,7 +110,7 @@ public partial class BeatmapBackground : TextureRect
 	{
 		oldmod = SelfModulate;
 
-		bpm = 60000 / (SettingsOperator.bpm * AudioPlayer.Instance.PitchScale) * 0.001f;
+		bpm = 60000 / (SettingsOperator.SessionConfig.bpm * AudioPlayer.Instance.PitchScale) * 0.001f;
 		bpmtime = Extras.GetMilliseconds();
 		if (bpmtimewait - bpmtime < 0) // Ticks for BPM
 		{

@@ -8,8 +8,8 @@ public partial class SongIndication : Label
 	private string newText { get; set; }
 	private void ReloadSongText()
 	{
-		var Title = SettingsOperator.Sessioncfg["beatmaptitle"]?.ToString() ?? "No song selected";
-		var Artist = SettingsOperator.Sessioncfg["beatmapartist"]?.ToString() ?? "";
+		var Title = SettingsOperator.SessionConfig.BeatmapTitle?.ToString() ?? "No song selected";
+		var Artist = SettingsOperator.SessionConfig.BeatmapArtist?.ToString() ?? "";
 		if (Artist == "")
 		{
 			newText = Title;

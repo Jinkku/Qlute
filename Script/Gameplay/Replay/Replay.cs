@@ -186,7 +186,7 @@ public static class Replay
     {
         ReplayCache.Clear();
         GD.Print("[Qlute] Resetting Replay cache...");
-        FilePath = $"{SettingsOperator.replaydir}/[{ApiOperator.Username}] [{SettingsOperator.Sessioncfg["beatmapmapper"].ToString()}] {SettingsOperator.Sessioncfg["beatmapartist"].ToString()} - {SettingsOperator.Sessioncfg["beatmaptitle"].ToString()} [{SettingsOperator.Sessioncfg["beatmapdiff"].ToString()}]-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.qrf";
+        FilePath = $"{SettingsOperator.replaydir}/[{ApiOperator.Username}] [{SettingsOperator.SessionConfig.BeatmapMapper.ToString()}] {SettingsOperator.SessionConfig.BeatmapArtist.ToString()} - {SettingsOperator.SessionConfig.BeatmapTitle.ToString()} [{SettingsOperator.SessionConfig.BeatmapDifficultyName.ToString()}]-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.qrf";
         if (!quiet) GD.Print($"[Qlute] Set file path to {FilePath}");
         SettingsOperator.SpectatorMode = false;
     }
@@ -214,8 +214,8 @@ public static class Replay
                 FileCache =
                     $"#Qlute Version: {ProjectSettings.GetSetting("application/config/version")}-{ProjectSettings.GetSetting("application/config/branch")}\n";
                 FileCache += $"#Username: {ApiOperator.Username}\n";
-                FileCache += $"#BeatmapID: {SettingsOperator.BeatmapID}\n";
-                FileCache += $"#BeatmapSetID: {SettingsOperator.BeatmapSetID}\n";
+                FileCache += $"#BeatmapID: {SettingsOperator.SessionConfig.BeatmapID}\n";
+                FileCache += $"#BeatmapSetID: {SettingsOperator.SessionConfig.BeatmapSetID}\n";
                 FileCache += $"#Score: {Gameplay.score}\n";
                 FileCache += $"#Max: {SettingsOperator.Gameplaycfg.Max}\n";
                 FileCache += $"#Great: {SettingsOperator.Gameplaycfg.Great}\n";
@@ -238,7 +238,7 @@ public static class Replay
                 file.Close();
                 Parse(FilePath);
                 if (SettingsOperator.LeaderboardType == 0)
-                    ApiOperator.ReloadLeaderboard(SettingsOperator.BeatmapID);
+                    ApiOperator.ReloadLeaderboard(SettingsOperator.SessionConfig.BeatmapID);
                 GD.Print("[Qlute] Completed Successfully!");
             }
             catch (Exception err)
