@@ -510,39 +510,142 @@ public partial class SettingsOperator : Node
 
     public static class SessionConfig
     {
+        /// <summary>
+        /// Get the ID of the song in the beatmap list.
+        /// </summary>
         public static int SongID { get; set; } = -1;
-        public static int SongIDHighlighted { get; set; } = -1; // Highlighted song ID for the song select screen
+        /// <summary>
+        /// The highlighted ID of the song in the beatmap list.
+        /// </summary>
+        public static int SongIDHighlighted { get; set; } = -1;
+        /// <summary>
+        /// The current Level Rating for the selected beatmap.
+        /// </summary>
         public static double LevelRating { get; set; } = -1;
+        /// <summary>
+        /// Get the Selected Beatmap ID for the server to recognise.
+        /// </summary>
         public static int BeatmapID { get; set; } = -1;
+        /// <summary>
+        /// The current Beatmap Set ID for the server to recognise.
+        /// </summary>
         public static int BeatmapSetID { get; set; } = -1;
+        /// <summary>
+        /// The current BPM of the selected beatmap.
+        /// </summary>
         public static int bpm { get; set; } = 180;
+        /// <summary>
+        /// The cached background of the beatmap.
+        /// </summary>
         public static Texture2D Background { get; set; }
+        /// <summary>
+        /// Get the checksum of the background so that u don't need to load the beatmap background again.
+        /// </summary>
         public static string BackgroundChecksum { get; set; }
+        /// <summary>
+        /// Toggling the visiblility of the top panel
+        /// </summary>
         public static bool TopPanelSlideip { get; set; } = false;
+        /// <summary>
+        /// Toggling the visiblility of the top panel
+        /// guessing this is the same too :/
+        /// </summary>
         public static bool TopPanelHide { get; set; } = false;
+        /// <summary>
+        /// Reloading the current beatmap.
+        /// </summary>
         public static bool Reloadmap { get; set; } = false;
+        /// <summary>
+        /// Reload the DB when there is a new beatmap waiting to import.
+        /// </summary>
         public static bool ReloadDB { get; set; } = false;
+        /// <summary>
+        /// Local pp
+        /// </summary>
         public static double Localpp { get; set; } = 0;
+        /// <summary>
+        /// Status of being logged in.
+        /// </summary>
         public static bool Loggedin { get; set; } = false;
+        /// <summary>
+        /// Status of logging in.
+        /// </summary>
         public static bool Loggingin { get; set; } = false;
+        /// <summary>
+        /// Profile visibility status.
+        /// </summary>
         public static bool ShowAccountProfile { get; set; } = false;
+        /// <summary>
+        /// Settings visibility status.
+        /// </summary>
         public static bool SettingsPanelVisible { get; set; } = false;
+        /// <summary>
+        /// Chat box visibility status.
+        /// </summary>
         public static bool ChatBoxVisible { get; set; } = false;
+        /// <summary>
+        /// Notification visibility status.
+        /// </summary>
         public static bool NotificationPanelVisible { get; set; } = false;
+        /// <summary>
+        /// Player colour hue.
+        /// </summary>
         public static Color PlayerColour { get; set; }
+        /// <summary>
+        /// Total beatmaps inside the DB
+        /// </summary>
         public static int TotalBeatmaps { get; set; } = 0;
+        /// <summary>
+        /// Beatmap URL for reference
+        /// </summary>
         public static string BeatmapURL { get; set; }
+        /// <summary>
+        /// Curent beatmap title
+        /// </summary>
         public static string BeatmapTitle { get; set; }
+        /// <summary>
+        /// Current beatmap artist
+        /// </summary>
         public static string BeatmapArtist { get; set; }
+        /// <summary>
+        /// Current beatmap mapper
+        /// </summary>
         public static string BeatmapMapper { get; set; }
+        /// <summary>
+        /// Current Difficulty name of the beatmap.
+        /// </summary>
         public static string BeatmapDifficultyName { get; set; }
+        /// <summary>
+        /// Background dim percentile
+        /// </summary>
         public static int Backgrounddim { get; set; }
+        /// <summary>
+        /// Ticks if it detects using a custom API.
+        /// </summary>
         public static bool CustomAPI { get; set; }
+        /// <summary>
+        /// Multiplier for pp & level rating
+        /// </summary>
         public static float Multiplier { get; set; } = 1.0f;
+        /// <summary>
+        /// Frames per second
+        /// </summary>
         public static int FPS { get; set; } = 0;
+        /// <summary>
+        /// Miliseconds
+        /// </summary>
         public static float ms { get; set; } = 0.0f;
+        /// <summary>
+        /// Client ID
+        /// </summary>
         public static string ClientID { get; set; }
+        /// <summary>
+        /// Client Secret
+        /// </summary>
         public static string ClientSecret { get; set; }
+        /// <summary>
+        /// Beatmap Accuracy for stricter inputs.
+        /// </summary>
         public static int BeatmapAccuracy { get; set; } = 1;
 
 
