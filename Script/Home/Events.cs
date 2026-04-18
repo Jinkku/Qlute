@@ -70,7 +70,7 @@ public partial class Events : TextureButton
 
 	private void Pressed()
 	{
-		if (Event.redirect != "")
+		if (Event.redirect != null | Event.redirect != "")
 		{
 			OS.ShellOpen(Event.redirect);
 		}

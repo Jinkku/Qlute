@@ -15,13 +15,16 @@ public partial class BeatmapBackground : TextureRect
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		_Resized();
 		DefaultImage = Texture;
 		FlashEnable = true;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		Flash = GetNode<TextureRect>("Flash");
 		TempImage = GetNode<TextureRect>("TempImage");
 		Texture = SettingsOperator.SessionConfig.Background;
-		check_background(true);
+		check_background( true);
+		SettingsOperator.BackgroundChanged += OnBackgroundChanged;
+
 		resettime();
 	}
 	public void _flashstart()
@@ -67,7 +70,7 @@ public partial class BeatmapBackground : TextureRect
 				TempImage,
 				"modulate:a",
 				0f,
-				0.5f
+				0.2f
 			);
 			ImageTween.TweenCallback(Callable.From(() => TempImage.Hide()));
 		} catch (Exception err)
@@ -75,15 +78,12 @@ public partial class BeatmapBackground : TextureRect
 			GD.PrintErr(err.Message);
 		}
 	}
+	private void OnBackgroundChanged()
+	{
+		check_background();
+	}
 	private void check_background(bool Instant = false)
 	{
-		Vector2 screenSize = GetViewportRect().Size;
-
-		float offsetX = (SettingsOperator.MouseMovement.X / screenSize.X * 10) - 10;
-		float offsetY = (SettingsOperator.MouseMovement.Y / screenSize.Y * 10) - 10;
-
-		Position = new Vector2(offsetX, offsetY); // Sets the position via mouse movements.
-
 		if (Texture != SettingsOperator.SessionConfig.Background && SettingsOperator.SessionConfig.SongID != -1 && SettingsOperator.SessionConfig.Background != null)
 		{
 			GD.Print("[Qlute] Switching to Specified image");
@@ -99,16 +99,34 @@ public partial class BeatmapBackground : TextureRect
 			Position = new Vector2(GetViewportRect().Size[0] - 5, GetViewportRect().Size[1] - 5);	
 		}
 	}
+	public override void _ExitTree()
+	{
+		if (SettingsOperator != null)
+		{
+			SettingsOperator.BackgroundChanged -= OnBackgroundChanged;
+		}
+	}
 	public static float bpm {get;set;}
 	public double bpmtimewait {get;set;}
 	public double bpmtime {get;set;}
 	public void resettime(){
 		bpmtimewait = bpmtime + (bpm/0.001f);
 	}
+	
+	private Vector2 screenSize;
+	private void _Resized()
+	{
+		screenSize = GetViewportRect().Size;
+	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
 		oldmod = SelfModulate;
+		
+		float offsetX = (SettingsOperator.MouseMovement.X / screenSize.X * 10) - 10;
+		float offsetY = (SettingsOperator.MouseMovement.Y / screenSize.Y * 10) - 10;
+
+		Position = new Vector2(offsetX, offsetY); // Sets the position via mouse movements.
 
 		bpm = 60000 / (SettingsOperator.SessionConfig.bpm * AudioPlayer.Instance.PitchScale) * 0.001f;
 		bpmtime = Extras.GetMilliseconds();
@@ -127,7 +145,5 @@ public partial class BeatmapBackground : TextureRect
 		{
 			Flash.Visible = false;
 		}
-
-		check_background(Instant: false);
 	}
 }

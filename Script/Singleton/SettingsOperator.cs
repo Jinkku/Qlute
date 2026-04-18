@@ -200,6 +200,8 @@ public partial class SettingsOperator : Node
             }
         }
     }
+    [Signal]
+    public delegate void BackgroundChangedEventHandler();
     public void SelectSongID(int id, float seek = -1)
     {
         if (Beatmaps.ElementAt(id) != null && SessionConfig.SongID != id)
@@ -240,6 +242,7 @@ public partial class SettingsOperator : Node
             if (beatmap.Path != null && beatmap.Background != null && SessionConfig.BackgroundChecksum != checksumbg)
                 SessionConfig.Background = LoadImage(bgpath);
             SessionConfig.BackgroundChecksum = checksumbg;
+            EmitSignal(SignalName.BackgroundChanged);
             if (seek == -1)
             {
                 seek = beatmap.PreviewTime;

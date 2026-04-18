@@ -49,4 +49,5 @@ expand_mode = 1
 wait_time = 0.2
 one_shot = true
 
+[connection signal="resized" from="." to="." method="_Resized"]
 [connection signal="timeout" from="Wait" to="." method="check_background" flags=3 binds= [false]]
