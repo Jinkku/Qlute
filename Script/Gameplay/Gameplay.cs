@@ -115,53 +115,48 @@ public partial class Gameplay : Control
 		var lines = text.Split("\n");
 		var part = 0;
 		var timing = 0;
-		var sampletype = 0;
 		var timen = -1;
 		var BaseRnd = new Random(seed);
 		var isHitObjectSection = false;
 		int index = 0;
 		BeatmapLegend beatmap = SettingsOperator.Beatmaps[SettingsOperator.SessionConfig.SongID];
 		dance = beatmap.Dance;
+
+		var seen = new HashSet<(int timing, int section)>();
+
 		foreach (string line in lines)
 		{
-			if (line.Trim() == "[HitObjects]")
+			if (line.Trim() == "[HitObjects]") { isHitObjectSection = true; continue; }
+			if (!isHitObjectSection) continue;
+			if (string.IsNullOrWhiteSpace(line) || line.StartsWith('[')) break;
+
+			string[] section = line.Split(':', ',');
+			timing = Convert.ToInt32(section[2]);
+
+			if (ModsOperator.Mods["random"])
+				part = BaseRnd.Next(0, 4);
+			else
 			{
-				isHitObjectSection = true;
-				continue;
+				part = Convert.ToInt32(section[0]);
+				part = Math.Clamp((int)Math.Floor(part * 4 / 512.0), 0, 3);
 			}
 
-			if (isHitObjectSection)
-			{
-				// Break if we reach an empty line or another section
-				if (string.IsNullOrWhiteSpace(line) || line.StartsWith('['))
-					break;
-				string[] section = line.Split(':', ',');
-				timing = Convert.ToInt32(section[2]);
-				if (ModsOperator.Mods["random"])
-				{
-					part = BaseRnd.Next(0, 4);
-				}
-				else
-				{
-					part = Convert.ToInt32(section[0]);
-					int indexpart = (int)Math.Floor(part * 4 / 512.0);
-					part = Math.Clamp(indexpart, 0, 4 - 1);
-				}
+			timen = -timing;
+			var key = (timen, part);
 
-				timen = -timing;
-				Notes.Add(new NotesEn
-				{
-					timing = timen,
-					NoteSection = part,
-					ppv2xp = beatmap.ppv2sets[index] * ModsMulti.multiplier // Multiplier when adding mods onto the pp system
-				});
-				index++;
-				if (!Notes.Any(n => n.timing == timen && n.NoteSection == part))
-				{
-					Notes.Add(new NotesEn { timing = timen, NoteSection = part });
-				} // So that there's no overlapping notes :)
-			}
+			// ✅ Skip duplicates in O(1), no linear scan
+			if (seen.Contains(key)) { index++; continue; }
+			seen.Add(key);
+
+			Notes.Add(new NotesEn
+			{
+				timing = timen,
+				NoteSection = part,
+				ppv2xp = beatmap.ppv2sets[index] * ModsMulti.multiplier
+			});
+			index++;
 		}
+
 		MaxNotes = Notes.Count;
 	}
 
@@ -173,7 +168,7 @@ public partial class Gameplay : Control
 		SettingsOperator.Gameplaycfg.Username = ApiOperator.Username;
 		SettingsOperator.Gameplaycfg.EpochTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 		float scale = 1f - (SettingsOperator.Gameplaycfg.BeatmapAccuracy / 10f);
-		SettingsOperator.PerfectJudge = (int)(SettingsOperator.PerfectJudgeMin * scale);
+		SettingsOperator.PerfectJudge = (int)Math.Max(16,SettingsOperator.PerfectJudgeMin * scale);
 		SettingsOperator.GreatJudge = (int)(SettingsOperator.PerfectJudge * 4);
 		SettingsOperator.MehJudge = (int)(SettingsOperator.PerfectJudge * 6);
 		SettingsOperator.ResetScore();
@@ -183,6 +178,7 @@ public partial class Gameplay : Control
 	public override void _Ready()
 	{
 		
+		GD.Print("Setting up stuff...");
 		speedold = AudioPlayer.Instance.PitchScale;
 		seed = new Random().Next(1,214562543);
 		ReplayINT = 0;
@@ -248,6 +244,7 @@ public partial class Gameplay : Control
 
 		HitOffsets.Clear();
 		Array.Fill(LastKeyPressTime, float.MinValue);
+		GD.Print("Loading beatmap...");
 		if (SettingsOperator.SessionConfig.BeatmapURL != null) ReloadBeatmap(SettingsOperator.SessionConfig.BeatmapURL.ToString());
 		// If auto is enabled, it will make a Replay file with Auto being the player playing the beatmap. Before this it didn't make the replay file, it just plays.
 		// I am doing this because it's simpler for me and don't have to worry about breaking auto (Qlutina)
@@ -470,7 +467,7 @@ public partial class Gameplay : Control
 		Break.MaxTick = NoteBreakTiming * 0.001;
 		AddChild(Break);
 	}
-	private void _GameNoteTick(double delta)
+private void _GameNoteTick(double delta)
 	{
 		gametime = GetRemainingTime(delta: (float)delta) / 0.001f;
 
