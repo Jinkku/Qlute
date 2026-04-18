@@ -76,6 +76,5 @@ public partial class AccountPrompt : Control
 		SettingsOperator.SetSetting("username",null);
 		SettingsOperator.SetSetting("password",null);
 		SettingsOperator.SessionConfig.Loggedin = false;
-		PlayerName.Text = "Guest";
 	}
 }
