@@ -278,6 +278,7 @@ public partial class SettingsOperator : Node
                     AudioPlayer.checksum = chk;
                     AudioPlayer.Instance.Stream = filestream;
                     AudioPlayer.Instance.Play(seek);
+                    Gameplaycfg.TimeTotal = (float)(AudioPlayer.Instance.Stream?.GetLength() ?? 0);
                 }
             }
             else

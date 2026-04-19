@@ -43,7 +43,6 @@ public partial class AudioPlayer : AudioStreamPlayer
         if (SettingsOperator.loopaudio) AudioLoop();
         BrowsePreview.VolumeDb = VolumeDb;
         SettingsOperator.Gameplaycfg.Time = GetPlaybackPosition();
-        SettingsOperator.Gameplaycfg.TimeTotal = (float)(Stream?.GetLength() ?? 0);
         Sample.VolumeDb = ToDB(SampleVol);
     }
 
