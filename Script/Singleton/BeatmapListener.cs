@@ -54,11 +54,11 @@ public class BeatmapLegend
 	/// <summary>
 	/// old pp system
 	/// </summary>
-	public double pp { get; set; } = 0.0;
+	public float pp { get; set; } = 0.0f;
 	/// <summary>
 	/// ppv2 set for caching the points.
 	/// </summary>
-	public List<double> ppv2sets { get; set; } = new List<double>();
+	public List<float> ppv2sets { get; set; } = new List<float>();
 	/// <summary>
 	/// Beatmap ID for the dedicated server
 	/// </summary>
@@ -90,7 +90,7 @@ public class BeatmapLegend
 	/// <summary>
 	/// Accuracy Difficulty for the beatmap
 	/// </summary>
-	public double Accuracy { get; set; } = 0.0;
+	public float Accuracy { get; set; } = 0.0f;
 	/// <summary>
 	/// Background of the beatmap
 	/// </summary>

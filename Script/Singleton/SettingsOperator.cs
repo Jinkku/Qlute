@@ -303,6 +303,8 @@ public partial class SettingsOperator : Node
         //ppvalue /= 1 + (int)(TimeTotal / TimeCap); FutureRelease
         return Math.Max(0, ppvalue);
     }
+
+    public static float MaxPPCap = 4000f; // don't make this static and PLEASE FIX THIS AFTERWARDS
     public static string Parse_Beatmapfile(string filename, int SetID = 0)
     {
         var legend = new BeatmapLegend {ID = Beatmaps.Count , SetID = SetID };
@@ -400,7 +402,7 @@ public partial class SettingsOperator : Node
         }
 
         legend.Timetotal = lastNoteTime;
-        legend.Levelrating = GetLevelRating(hitCount, lastNoteTime * 0.001f);
+        legend.Levelrating = Mathf.Pow(legend.pp / MaxPPCap, 0.7f) * 100f;
         legend.Path = filename.Replace(filename.Split("/").Last(), "");
         legend.Rawurl = filename;
         legend.NoteCount = hitCount;
@@ -437,38 +439,36 @@ public partial class SettingsOperator : Node
         MiliSecondsFromBeatmapTimes = 0;
     }
 
-    public static List<Color> LevelColours = new List<Color>([new Color("5ec4ff"), new Color("4abf3f"), new Color("f7cf4a"), new Color("db7740"), new Color("E32929"), new Color("FF5151"), new Color("000000")]);
+    private static readonly (float pos, Color col)[] Stops = new[]
+    {
+        (0.00f, new Color("#5ec4ff")), // 0   Easy
+        (0.10f, new Color("#4abf3f")), // 10  Normal
+        (0.20f, new Color("#f7cf4a")), // 20  Hard
+        (0.35f, new Color("#db7740")), // 35  Insane
+        (0.50f, new Color("#E32929")), // 50  Expert
+        (0.70f, new Color("#FF5151")), // 70  Expert+
+        (1.00f, new Color("#000000"))  // 100 black
+    };
 
     public static Color ReturnLevelColour(int level)
     {
+        // Snap if you want hard cap
         if (level > 100)
+            return new Color("#000000");
+
+        float t = Mathf.Clamp(level / 100.0f, 0f, 1f);
+
+        // Find which segment we're in
+        for (int i = 0; i < Stops.Length - 1; i++)
         {
-            return LevelColours.Last();
+            if (t >= Stops[i].pos && t <= Stops[i + 1].pos)
+            {
+                float segmentT = (t - Stops[i].pos) / (Stops[i + 1].pos - Stops[i].pos);
+                return Stops[i].col.Lerp(Stops[i + 1].col, segmentT);
+            }
         }
-        else if (level > 70)
-        {
-            return LevelColours[5];
-        }
-        else if (level >50)
-        {
-            return LevelColours[4];
-        }
-        else if (level > 36)
-        {
-            return LevelColours[3];
-        }
-        else if (level > 20)
-        {
-            return LevelColours[2];
-        }
-        else if (level > 10)
-        {
-            return LevelColours[1];
-        }
-        else
-        {
-            return LevelColours.First();
-        }
+
+        return Stops[^1].col; // fallback
     }
     public static void ResetScore()
     {
