@@ -141,7 +141,53 @@ public partial class SettingsOperator : Node
         tween.TweenProperty(AudioPlayer.Instance, "volume_db", -40f, QuitSpeed);
         tween.TweenCallback(Callable.From(() => GetTree().Quit())).SetDelay(QuitSpeed + 0.5f);
     }
-    public static Texture2D GetNullImage() => ResourceLoader.Load<CompressedTexture2D>("res://DefaultWallpaper/the_one.png");
+
+    public static List<string> Images = new List<string>();
+    public void ParseBackgroundDefault()
+    {
+        string folderPath = "res://DefaultWallpaper/";
+        Images.Clear();
+
+        using var dir = DirAccess.Open(folderPath);
+        if (dir != null)
+        {
+            dir.ListDirBegin();
+            string fileName;
+
+            while ((fileName = dir.GetNext()) != "")
+            {
+                if (!dir.CurrentIsDir())
+                {
+                    // Filter common image formats
+                    if (fileName.EndsWith(".png") || fileName.EndsWith(".jpg") || fileName.EndsWith(".jpeg") || fileName.EndsWith(".webp"))
+                    {
+                        Images.Add(folderPath + fileName);
+                    }
+                }
+            }
+
+            dir.ListDirEnd();
+        }
+
+        if (Images.Count == 0)
+        {
+            GD.PrintErr("No images found.");
+            return;
+        }
+    }
+    public static Texture2D GetNullImage()
+    {
+
+
+        // Step 2: Pick random image
+        var rng = new Random();
+        string randomImagePath = Images[rng.Next(Images.Count)];
+
+        GD.Print("Loading: " + randomImagePath);
+
+        // Step 3: Load it
+        return GD.Load<Texture2D>(randomImagePath);
+    }
 
     public static Texture2D LoadImage(string path)
     {
@@ -714,6 +760,7 @@ public partial class SettingsOperator : Node
     {
         args = OS.GetCmdlineArgs();
         Configurationbk = new Dictionary<string, object>(Configuration);
+        ParseBackgroundDefault();
         GD.Print("Please wait...");
         GD.Print("Checking if config file is saved...");
         if (System.IO.File.Exists(settingsfile))
