@@ -118,7 +118,7 @@ public partial class BeatmapInfo : Control
 			BPM.Text = BeatmapList[BeatmapIndex].bpm.ToString("N0");
 			MaxPP.Text = $"{BeatmapList[BeatmapIndex].pp.ToString("N0")}pp";
 			NoteCount.Text = NoteCountTotal.ToString("N0");
-			LevelRating.Text = (SettingsOperator.GetLevelRating(NoteCountTotal, BeatmapList[BeatmapIndex].total_length)).ToString("N0");
+			LevelRating.Text = SettingsOperator.GetLevelRating(BeatmapList[BeatmapIndex].pp).ToString("N0");
 			Title.Text = cache.title;
 			Artist.Text = cache.artist;
 			Mapper.Text = $"mapped by {cache.creator}";

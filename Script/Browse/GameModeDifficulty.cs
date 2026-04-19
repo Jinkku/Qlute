@@ -15,7 +15,7 @@ public partial class GameModeDifficulty : TextureButton
 			rootindex = (int)GetMeta("rootindex");
 			Num = GetNode<Label>("Num");
 			var cache = Browse.BrowseCatalog[rootindex].beatmaps;
-			var level = cache[index].level;
+			var level = SettingsOperator.GetLevelRating(cache[index].pp);
 			Num.Text = $"{(level).ToString("N0")}";
 			SelfModulate = SettingsOperator.ReturnLevelColour((int)level);
 			Idlecolour = SelfModulate;
@@ -50,10 +50,5 @@ public partial class GameModeDifficulty : TextureButton
 	{
 		BeatmapInfo.BeatmapIndexH = -1;
 		AnimationButton(Idlecolour);
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
 	}
 }

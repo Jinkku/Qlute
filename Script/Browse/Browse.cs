@@ -26,8 +26,8 @@ public class CatalogCardLegend
 public class CatalogBeatmapInfoLegend
 {
 	public int id { get; set; }
-	public double level { get; set; }
-	public double pp { get; set; }
+	public float level { get; set; }
+	public float pp { get; set; }
 	public int count_circles { get; set; }
 	public int count_sliders { get; set; }
 	public int? max_combo { get; set; }
@@ -272,8 +272,8 @@ public partial class Browse : Control
 				Element.Mapper.Text = $"mapped by {line.creator ?? "unknown"}";
 				Element.RankColour.SelfModulate = ConvertTypetoColor(first.ranked);
 				Element.RankText.Text = ConvertTypetoRank(first.ranked);
-				Element.LvStart.Text = $"Lv. {first.level}";
-				Element.LvEnd.Text   = $"Lv. {last.level}";
+				Element.LvStart.Text = $"Lv. {SettingsOperator.GetLevelRating(first.pp).ToString("N0")}";
+				Element.LvEnd.Text   = $"Lv. {SettingsOperator.GetLevelRating(last.pp).ToString("N0")}";
 				Element.Modulate = new Color(1f, 1f, 1f, 0f);
 
 				index++;
