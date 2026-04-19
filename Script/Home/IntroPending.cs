@@ -5,7 +5,6 @@ public partial class IntroPending : Control
 {
 	public  SettingsOperator SettingsOperator { get; set; }
 	public PanelContainer HomeButtons {get;set;}
-	public static bool AlreadyStarted { get; set; }
 	public static Vector2 HomeButtonsPOS { get; set; }
 	private Vector2 HomeLogoSize {get;set;}
 	private Vector2 HomeLogoPos {get;set;}
@@ -26,12 +25,12 @@ public partial class IntroPending : Control
 		Logo.PivotOffset = Logo.Size / 2;
 		Visible = true;
 		HomeButtons.Visible = false;
-		if (AlreadyStarted)
+		if (hidden)
 		{
+			GobackHome.Start();
 			Visible = false;
 			HomeButtons.Visible = true;
 		}
-		AlreadyStarted = true;
 	}
 	private void _hover()
 	{
@@ -106,7 +105,7 @@ public partial class IntroPending : Control
 		else beattick++; // for the feedback of hovering the Qlute logo
 		StartLogoBounce();
 	}
-	private bool hidden { get; set; }
+	public static bool hidden { get; set; }
 	private float time { get; set; } = 0.3f;
 	private Tween _tween { get; set; }
 	private void AnimationTick(bool type)
