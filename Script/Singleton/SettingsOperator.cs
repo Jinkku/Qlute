@@ -156,10 +156,12 @@ public partial class SettingsOperator : Node
             using var image = Image.LoadFromFile(path);
             if (image == null)
             {
+                GD.Print("Image return null");
                 return GetNullImage();
             }
             else
             {
+                GD.Print("Image found displaying it now");
                 return ImageTexture.CreateFromImage(image);
             }
         }
@@ -237,11 +239,16 @@ public partial class SettingsOperator : Node
             string checksumbg = null;
             if (System.IO.File.Exists(bgpath))
                 checksumbg = ChecksumUtil.GetSha256(bgpath);
-            if (SessionConfig.BackgroundChecksum != checksumbg && checksumbg != null)
-                SessionConfig.Background = null;
-            if (beatmap.Path != null && beatmap.Background != null && SessionConfig.BackgroundChecksum != checksumbg)
+            
+            if (System.IO.File.Exists(bgpath) && SessionConfig.BackgroundChecksum != checksumbg)
+            {
                 SessionConfig.Background = LoadImage(bgpath);
-            SessionConfig.BackgroundChecksum = checksumbg;
+            }
+            else if (checksumbg == null)
+            {
+                SessionConfig.Background = SettingsOperator.GetNullImage();
+            }
+            SessionConfig.BackgroundChecksum = checksumbg;   
             EmitSignal(SignalName.BackgroundChanged);
             if (seek == -1)
             {
@@ -275,6 +282,9 @@ public partial class SettingsOperator : Node
             }
             else
             {
+                AudioPlayer.checksum = null;
+                AudioPlayer.Instance.Stream = null;
+                AudioPlayer.Instance.Stop();
                 GD.PrintErr("Audio file not found: " + audioPath);
             }
             
@@ -289,7 +299,7 @@ public partial class SettingsOperator : Node
 
     public static float TimeCap = 120;
 
-    public static float GetLevelRating(int Objects, float TimeTotal) => (Objects * levelweight) / (TimeTotal / TimeCap);
+    public static float GetLevelRating(float pp) => Mathf.Pow(pp / MaxPPCap, 0.7f) * 100f;
     public static double Get_ppvalue(int max, int great, int meh, int bad, float multiplier = 1, int combo = 0, double TimeTotal = 0)
     {
         //bad = Math.Max(1,bad);
@@ -402,7 +412,7 @@ public partial class SettingsOperator : Node
         }
 
         legend.Timetotal = lastNoteTime;
-        legend.Levelrating = Mathf.Pow(legend.pp / MaxPPCap, 0.7f) * 100f;
+        legend.Levelrating = GetLevelRating(legend.pp);
         legend.Path = filename.Replace(filename.Split("/").Last(), "");
         legend.Rawurl = filename;
         legend.NoteCount = hitCount;

@@ -21,7 +21,6 @@ public partial class BeatmapBackground : TextureRect
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		Flash = GetNode<TextureRect>("Flash");
 		TempImage = GetNode<TextureRect>("TempImage");
-		Texture = SettingsOperator.SessionConfig.Background;
 		check_background( true);
 		SettingsOperator.BackgroundChanged += OnBackgroundChanged;
 
@@ -80,6 +79,7 @@ public partial class BeatmapBackground : TextureRect
 	}
 	private void OnBackgroundChanged()
 	{
+		GD.Print("Detected a emit of background being changed.");
 		check_background();
 	}
 	private void check_background(bool Instant = false)
