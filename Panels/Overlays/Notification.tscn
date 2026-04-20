@@ -1,8 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://hbkr7peitwa8"]
+[gd_scene format=3 uid="uid://hbkr7peitwa8"]
 
 [ext_resource type="Texture2D" uid="uid://dnnbwt8nqekwl" path="res://Resources/System/Notification/NotificationApplet.png" id="1_c7mxw"]
-[ext_resource type="Texture2D" uid="uid://b000ela4rhy4h" path="res://Resources/NotificationIcons/warning.svg" id="1_l5pyg"]
 [ext_resource type="Script" uid="uid://cvflkvt032pog" path="res://Script/TopPanel/Overlays/NotificationApplet.cs" id="2_2gkms"]
+[ext_resource type="Texture2D" uid="uid://dq4vpgd24m6gm" path="res://Resources/NotificationIcons/Info.png" id="2_c7mxw"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_36gcf"]
 content_margin_left = 15.0
@@ -84,7 +84,7 @@ corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_36gcf"]
 
-[node name="Notification" type="Button"]
+[node name="Notification" type="Button" unique_id=744179172]
 clip_children = 2
 custom_minimum_size = Vector2(338, 80)
 offset_right = 303.0
@@ -99,7 +99,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_5g2n4")
 theme_override_styles/hover = SubResource("StyleBoxTexture_c7mxw")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_dt3ms")
 text = "There is a beatmap that needs an update!"
-icon = ExtResource("1_l5pyg")
+icon = ExtResource("2_c7mxw")
 alignment = 0
 text_overrun_behavior = 3
 autowrap_mode = 3
@@ -107,7 +107,7 @@ clip_text = true
 script = ExtResource("2_2gkms")
 metadata/is_popup = true
 
-[node name="Info" type="PanelContainer" parent="."]
+[node name="Info" type="PanelContainer" parent="." unique_id=1952149203]
 custom_minimum_size = Vector2(35, 0)
 layout_mode = 1
 anchors_preset = 11
@@ -119,11 +119,11 @@ grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_c7mxw")
 
-[node name="V" type="VBoxContainer" parent="Info"]
+[node name="V" type="VBoxContainer" parent="Info" unique_id=825653320]
 layout_mode = 2
 alignment = 1
 
-[node name="Close" type="Button" parent="Info/V"]
+[node name="Close" type="Button" parent="Info/V" unique_id=12226738]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_vertical = 3
@@ -134,7 +134,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_5g2n4")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_36gcf")
 text = "X"
 
-[node name="ProgressBar" type="ProgressBar" parent="."]
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1305251227]
 visible = false
 self_modulate = Color(0.503906, 0.558167, 1, 1)
 custom_minimum_size = Vector2(0, 5)

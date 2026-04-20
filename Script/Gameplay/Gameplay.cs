@@ -293,7 +293,7 @@ public partial class Gameplay : Control
 				name = SampleSet.Drum.First();
 			}
 			Sample.PlaySample("res://SelectableSkins/Slia/Sounds/" + name);
-			if (!SettingsOperator.SpectatorMode) Replay.AddReplay(est - (int)(audioOffset / 0.001), Keyx);
+			if (!SettingsOperator.SpectatorMode) Replay.AddReplay(est, Keyx);
 			key.Node.SelfModulate = Skin.Element.LaneNotes[Keyx];
 			key.Ani?.Kill(); // Abort the previous animation
 			key.Ani = Keys[Keyx].Node.CreateTween();
