@@ -92,8 +92,10 @@ public partial class MarathonMode : ColorRect
     }
     private void _start()
     {
+        Sample.PlaySample("res://SelectableSkins/Slia/Sounds/play.wav");
         SettingsOperator.MarathonID = 0; // Set the first map as the starting point
         SettingsOperator.SelectSongID(SettingsOperator.MarathonMapPaths[SettingsOperator.MarathonID]);
+        SettingsOperator.loopaudio = false;
         GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
     }
 }
