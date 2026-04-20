@@ -1,18 +1,8 @@
 [gd_scene format=3 uid="uid://bptvmibdlnj35"]
 
+[ext_resource type="StyleBox" uid="uid://c0bgbcbhjckmy" path="res://Resources/System/SettingsTab.tres" id="1_3oobx"]
 [ext_resource type="Script" uid="uid://cnw2awjuhd0no" path="res://Script/SettingsSection/InputSettings.cs" id="1_jqh0c"]
 [ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="2_3oobx"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aae3n"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
-bg_color = Color(0.21484375, 0.21484375, 0.21484375, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
 
 [sub_resource type="FontVariation" id="FontVariation_q0wcy"]
 variation_opentype = {
@@ -22,7 +12,7 @@ variation_opentype = {
 [node name="Input" type="PanelContainer" unique_id=1784822534]
 offset_right = 384.0
 offset_bottom = 300.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_aae3n")
+theme_override_styles/panel = ExtResource("1_3oobx")
 script = ExtResource("1_jqh0c")
 
 [node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]

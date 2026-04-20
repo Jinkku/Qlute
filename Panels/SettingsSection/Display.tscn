@@ -1,20 +1,10 @@
 [gd_scene format=3 uid="uid://dm6msw184a5v7"]
 
+[ext_resource type="StyleBox" uid="uid://c0bgbcbhjckmy" path="res://Resources/System/SettingsTab.tres" id="1_3rl3a"]
 [ext_resource type="Script" uid="uid://b06qkmq57nsx0" path="res://Script/SettingsSection/Display.cs" id="1_lcyqc"]
 [ext_resource type="Script" uid="uid://btixh3f5pu736" path="res://Script/SettingsPanel/FpsModes.cs" id="2_3rl3a"]
 [ext_resource type="Script" uid="uid://clv5506kqlat3" path="res://Script/SettingsPanel/Resolution.cs" id="3_j1mlw"]
 [ext_resource type="Script" uid="uid://dp53wl7qkvxyq" path="res://Script/SettingsPanel/FpsShow.cs" id="4_2y1b4"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aae3n"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
-bg_color = Color(0.21484375, 0.21484375, 0.21484375, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u12hm"]
 
@@ -54,7 +44,7 @@ corner_radius_bottom_left = 5
 custom_minimum_size = Vector2(0, 480)
 offset_right = 40.0
 offset_bottom = 40.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_aae3n")
+theme_override_styles/panel = ExtResource("1_3rl3a")
 script = ExtResource("1_lcyqc")
 
 [node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]

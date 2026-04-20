@@ -163,7 +163,7 @@ public partial class Kiko : Node
         {
             if (code == 200)
             {
-                Notify.Post("Update is ready to install!\nClick to install the update.", uri:$"updatefile:/{KikoApi.DownloadFile}");
+                Notify.Post("Update is ready to install!\nClick to install the update.", uri:$"updatefile:/{KikoApi.DownloadFile}", Type: NotificationIcons.NotificationType.Download);
             }
         };
         if (responseCode == 200)
@@ -175,7 +175,7 @@ public partial class Kiko : Node
                 KikoApi.DownloadFile = Path.Combine(Path.GetTempPath(), platformZip);
                 KikoApi.Timeout = 0;
                 KikoApi.Request($"https://github.com/Jinkkuu/Qlute/releases/latest/download/{platformZip}");
-                Notify.Post($"Downloading update...", ProgressGetter: () => KikoApi.GetDownloadedBytes(), Max: () => KikoApi.GetBodySize());
+                Notify.Post($"Downloading update...", ProgressGetter: () => KikoApi.GetDownloadedBytes(), Max: () => KikoApi.GetBodySize(), Type: NotificationIcons.NotificationType.Download);
             }
         }
         else

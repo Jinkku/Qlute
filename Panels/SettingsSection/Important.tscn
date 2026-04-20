@@ -1,15 +1,6 @@
 [gd_scene format=3 uid="uid://62fdbfcux0rs"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aae3n"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
-bg_color = Color(0.21484375, 0.21484375, 0.21484375, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+[ext_resource type="StyleBox" uid="uid://c0bgbcbhjckmy" path="res://Resources/System/SettingsTab.tres" id="1_0ggam"]
 
 [sub_resource type="FontVariation" id="FontVariation_q0wcy"]
 variation_opentype = {
@@ -19,7 +10,7 @@ variation_opentype = {
 [node name="Important" type="PanelContainer" unique_id=1784822534]
 offset_right = 40.0
 offset_bottom = 40.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_aae3n")
+theme_override_styles/panel = ExtResource("1_0ggam")
 
 [node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]
 layout_mode = 2

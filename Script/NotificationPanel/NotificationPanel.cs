@@ -4,9 +4,11 @@ using System;
 public partial class NotificationPanel : ColorRect
 {
 	private Button ClearAll { get; set; }
+	private VBoxContainer NotificationCards { get; set; }
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		NotificationCards = GetNode<VBoxContainer>("MarginContainer/ScrollContainer/VBoxContainer");
 		for (int i = NotificationListener.NotificationList.Count - 1; i >= 0; i--)
 		{
 			var NotiInfo = NotificationListener.NotificationList[i];
@@ -15,7 +17,7 @@ public partial class NotificationPanel : ColorRect
 				var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/Notification.tscn").Instantiate().GetNode<Button>(".");
 				NotiCard.SetMeta("is_popup", false);
 				NotiCard.SetMeta("listid", Math.Max(0, (int)NotiInfo.id));
-				GetNode<VBoxContainer>("MarginContainer/ScrollContainer/VBoxContainer").AddChild(NotiCard);
+				NotificationCards.AddChild(NotiCard);
 				NotiCard.Text = NotiInfo.Title;
 			}
 		}
@@ -28,7 +30,7 @@ public partial class NotificationPanel : ColorRect
 		var tick = 0;
 		NotificationListener.NotificationList.Clear();
 		NotificationListener.NotificationCards.Clear();
-		foreach (var Node in GetNode<VBoxContainer>("MarginContainer/ScrollContainer/VBoxContainer").GetChildren())
+		foreach (var Node in NotificationCards.GetChildren())
 		{
 			if (tick > 1)
 			{

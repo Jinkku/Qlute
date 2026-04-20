@@ -137,7 +137,7 @@ public partial class ApiOperator : Node
 		if (responseCode != 200)
 		{
 			GD.PrintErr("Leaderboard API request failed with response code: " + responseCode);
-			Notify.Post("Failed to load leaderboard. Please try again later.");
+			Notify.Post("Failed to load leaderboard. Please try again later.",Type: NotificationIcons.NotificationType.Warning);
 			LeaderboardStatus = 0; // Set status to not loaded
 			return;
 		}
@@ -264,7 +264,7 @@ public partial class ApiOperator : Node
 		}
 		if (json["msg"].ToString() != "")
 		{
-			Notify.Post(json["msg"].ToString());
+			Notify.Post(json["msg"].ToString(), Type: NotificationIcons.NotificationType.Warning);
 		}
 	}
 	private void _on_info_request_completed(long result, long responseCode, string[] headers, byte[] body)
@@ -428,7 +428,7 @@ public partial class ApiOperator : Node
 			if (responseCode == 200) json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
 			if (responseCode == 200 && json["notification"].ToString() != "")
 			{
-				Notify.Post(json["notification"].ToString());
+				Notify.Post(json["notification"].ToString(), Type: NotificationIcons.NotificationType.Warning);
 			}
 			SettingsOperator.SessionConfig.Loggingin = false;
 			if ((bool)json["success"] && responseCode == 200)
@@ -634,7 +634,7 @@ public partial class ApiOperator : Node
 
 				downloader.Request = downloadRequest;
 
-				Notify.Post($"Downloading {Info}", ProgressGetter: () => downloadRequest.GetDownloadedBytes(), Max: () => downloadRequest.GetBodySize());
+				Notify.Post($"Downloading {Info}", ProgressGetter: () => downloadRequest.GetDownloadedBytes(), Max: () => downloadRequest.GetBodySize(), Type: NotificationIcons.NotificationType.Download);
 			}
 			else
 			{

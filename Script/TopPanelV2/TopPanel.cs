@@ -154,13 +154,12 @@ public partial class TopPanel : ColorRect
 			_tween.Play();
 		}
 
-		// Move notification handling inside _Process
 		foreach (var NotiInfo in NotificationListener.NotificationList)
 		{
 			if (!NotiInfo.Finished)
 			{
 				Sample.PlaySample("res://SelectableSkins/Slia/Sounds/notification.wav");
-				var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/Notification.tscn").Instantiate().GetNode<Button>(".");
+				var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/Notification.tscn").Instantiate().GetNode<NotificationApplet>(".");
 				NotificationListener.NotificationCards.Add(NotiCard);
 				NotiCard.Position = new Vector2(GetViewportRect().Size.X, 60 + ((NotiCard.Size.Y + 10) * NotificationListener.Count));
 				NotiCard.Text = NotiInfo.Title;
@@ -168,8 +167,13 @@ public partial class TopPanel : ColorRect
 				NotiCard.SetMeta("listid", NotificationListener.NotificationList.Count - 1);
 				NotiCard.SetMeta("time", NotiInfo.Time);
 				AddChild(NotiCard);
+				NotiCard.Modulate = new Color(1f, 1f, 1f, 0f);
 				var tween = NotiCard.CreateTween();
-				tween.TweenProperty(NotiCard, "position:x", GetViewportRect().Size.X - NotiCard.Size.X - 10, 0.2f)
+				tween.SetParallel(true);
+				tween.TweenProperty(NotiCard, "position:x", GetViewportRect().Size.X - NotiCard.Size.X - 10, 0.4f)
+					.SetTrans(Tween.TransitionType.Cubic)
+					.SetEase(Tween.EaseType.Out);
+				tween.TweenProperty(NotiCard, "modulate", new Color(1f, 1f, 1f, 1f), 0.4f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
 				tween.Play();

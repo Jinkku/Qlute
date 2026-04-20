@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://jbmm2metmyvr" path="res://Panels/SettingsSection/Debug.tscn" id="12_fn636"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fn636"]
-bg_color = Color(0.15294118, 0.15294118, 0.15294118, 1)
+bg_color = Color(0.06666667, 0.06666667, 0.078431375, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5b8eh"]
 bg_color = Color(0, 0, 0, 0.392157)

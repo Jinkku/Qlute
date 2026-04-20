@@ -84,7 +84,7 @@ public partial class BeatmapContextMenu : PanelContainer
 		}
 		else
 		{
-			Notify.Post("Can't delete beatmap, it doesn't exist.");
+			Notify.Post("Can't delete beatmap, it doesn't exist.", Type:NotificationIcons.NotificationType.Warning);
 		}
 	}
 }

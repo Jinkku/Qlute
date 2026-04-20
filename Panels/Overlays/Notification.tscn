@@ -41,12 +41,7 @@ modulate_color = Color(1.1, 1.1, 1.1, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dt3ms"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7mxw"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(1, 1, 1, 0.1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c7mxw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fso4t"]
 content_margin_left = 2.0
@@ -117,7 +112,7 @@ anchor_bottom = 1.0
 offset_left = -40.0
 grow_horizontal = 0
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_c7mxw")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_c7mxw")
 
 [node name="V" type="VBoxContainer" parent="Info" unique_id=825653320]
 layout_mode = 2

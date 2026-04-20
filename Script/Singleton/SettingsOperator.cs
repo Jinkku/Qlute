@@ -213,7 +213,7 @@ public partial class SettingsOperator : Node
         }
         catch (Exception)
         {
-            Notify.Post("Failed to load image!");
+            Notify.Post("Failed to load image!", Type: NotificationIcons.NotificationType.Warning);
             return GetNullImage();
         }
     }

@@ -10,6 +10,32 @@ public partial class NotificationApplet : Button
 	private ProgressBar ProgressBar { get; set; }
 	private Button Close { get; set; }
 	private int startpos { get; set; }
+	private NotificationLegend Notification { get; set; }
+	public override void _Ready()
+	{
+		startpos = (int)(GetViewportRect().Size.X - Size.X);
+		ID = (int)GetMeta("listid");
+		Close = GetNode<Button>("Info/V/Close");
+		ProgressBar = GetNode<ProgressBar>("ProgressBar");
+		Notification = NotificationListener.NotificationList[ID];
+		if (Notification.type != NotificationIcons.NotificationType.Info)
+			Icon = NotificationIcons.GetIcon(Notification.type);
+		if (Notification.ShowProgress)
+		{
+			ProgressBar.Visible = true;
+			Close.Visible = false;
+			ProgressShow = true;
+		}
+		else
+		{
+			Pressed += _pressed;
+		}
+
+		if (HasMeta("is_popup") && (bool)GetMeta("is_popup"))
+		{
+			ZIndex = 4096;
+		}
+	}
 	private void _remove()
 	{
 		try
@@ -32,15 +58,19 @@ public partial class NotificationApplet : Button
 
 		if (HasMeta("is_popup") && (bool)GetMeta("is_popup")) // To do: FIX THIS SHIT
 		{
-			tween.TweenProperty(this, "position:x", GetViewportRect().Size.X, 0.2f)
+			tween.SetParallel(true);
+			tween.TweenProperty(this, "position:x", GetViewportRect().Size.X, 0.4f)
 					.SetTrans(Tween.TransitionType.Cubic)
+				.SetEase(Tween.EaseType.Out);
+			tween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 0f), 0.4f)
+				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
 			tween.Connect("finished", new Callable(this, nameof(_anifin)));
 			tween.Play();
 		}
 		else // if on Notification Panel
 		{
-			tween.TweenProperty(this, "modulate", new Color(0f,0f,0f,0f), 0.2f)
+			tween.TweenProperty(this, "modulate", new Color(0f,0f,0f,0f), 0.4f)
 					.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
 			tween.Connect("finished", new Callable(this, nameof(_anifin)));
@@ -70,29 +100,6 @@ public partial class NotificationApplet : Button
 		_remove();
 		CloseOut();
 	}
-
-	public override void _Ready()
-	{
-		startpos = (int)(GetViewportRect().Size.X - Size.X);
-		ID = (int)GetMeta("listid");
-		Close = GetNode<Button>("Info/V/Close");
-		ProgressBar = GetNode<ProgressBar>("ProgressBar");
-		if (NotificationListener.NotificationList[ID].ShowProgress)
-		{
-			ProgressBar.Visible = true;
-			Close.Visible = false;
-			ProgressShow = true;
-		}
-		else
-		{
-			Pressed += _pressed;
-		}
-
-		if (HasMeta("is_popup") && (bool)GetMeta("is_popup"))
-		{
-			ZIndex = 4096;
-		}
-    }
 	private bool Finished { get; set; }
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
@@ -117,9 +124,9 @@ public partial class NotificationApplet : Button
 		ProgressBar.Visible = (ProgressBar.Value < ProgressBar.MaxValue && ProgressShow);
 		if (ProgressShow)
 		{
-			ProgressBar.Value = NotificationListener.NotificationList[ID].Progress;
-			ProgressBar.MaxValue = NotificationListener.NotificationList[ID].MaxProgress;
-			if (NotificationListener.NotificationList[ID].MaxProgress != -1 && ProgressBar.Value > ProgressBar.MaxValue - 1 && !Finished)
+			ProgressBar.Value = Notification.Progress;
+			ProgressBar.MaxValue = Notification.MaxProgress;
+			if (Notification.MaxProgress != -1 && ProgressBar.Value > ProgressBar.MaxValue - 1 && !Finished)
 			{
 				CloseOut();
 				Finished = true;

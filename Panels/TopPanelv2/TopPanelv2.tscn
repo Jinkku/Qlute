@@ -77,7 +77,7 @@ custom_minimum_size = Vector2(0, 50)
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
-color = Color(0.15170373, 0.15170373, 0.15170373, 0.851)
+color = Color(0.07016479, 0.07016479, 0.07846785, 0.85)
 script = ExtResource("1_0d1ka")
 
 [node name="Shadow" type="TextureRect" parent="." unique_id=305836170]

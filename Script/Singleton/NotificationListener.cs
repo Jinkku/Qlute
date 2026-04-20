@@ -2,8 +2,30 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-
-static class Notify
+public static class NotificationIcons
+{
+    public enum NotificationType
+    {
+        Warning,
+        VolumeMuted,
+        UserOnline,
+        UserOffline,
+        Upload,
+        Trash,
+        Send,
+        Report,
+        NoInternet,
+        Info,
+        Gift,
+        Download
+    }
+    public static Texture2D GetIcon(NotificationType type)
+    {
+        string path = $"res://Resources/NotificationIcons/{type}.png";
+        return GD.Load<Texture2D>(path);
+    }
+}
+static public class Notify
 {
     /// <summary>
     /// Post Notifications to the board.
@@ -13,7 +35,7 @@ static class Notify
     /// <param name="text"></param>
     /// <param name="uri"></param>
     /// <param name="ProgressGetter"></param>
-    public static void Post(string text, string uri = "", Func<int> ProgressGetter = null, Func<int> Max = null)
+    public static void Post(string text, string uri = "", Func<int> ProgressGetter = null, Func<int> Max = null, NotificationIcons.NotificationType Type =  NotificationIcons.NotificationType.Info)
     {
         var legend = new NotificationLegend
         {
@@ -21,6 +43,7 @@ static class Notify
             Title = text,
             Text = "a",
             uri = uri,
+            type = Type,
             id = NotificationListener.NotificationList.Count
         };
         if (ProgressGetter != null)
@@ -40,6 +63,7 @@ public class NotificationLegend
     public string Title {get;set;}
     public string Text {get;set;}
     public string uri {get;set;}
+    public NotificationIcons.NotificationType type {get;set;}
     public Func<int> _progressGetter = () => 0;
     public Func<int> _MaxValueGetter = () => 0;
 
