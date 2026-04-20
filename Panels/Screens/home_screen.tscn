@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://e3cikike8fhn"]
+[gd_scene format=3 uid="uid://e3cikike8fhn"]
 
 [ext_resource type="Script" uid="uid://bxurggbxgjswg" path="res://Script/Home/HomeScreen.cs" id="1_vj7aj"]
 [ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="2_ouv1d"]
@@ -9,7 +9,6 @@
 [ext_resource type="Script" uid="uid://cnaimpbrbt36j" path="res://Script/Home/SubButton.cs" id="6_bh2cj"]
 [ext_resource type="Script" uid="uid://d3kp8agi7f31r" path="res://Script/Home/HomeButtonBg.cs" id="6_rg0tv"]
 [ext_resource type="Script" uid="uid://y3i7cbqspnfj" path="res://Script/Home/Events.cs" id="7_1l3bn"]
-[ext_resource type="Script" uid="uid://btpasgcq7n7n6" path="res://Script/Effects/ButtonBounce.cs" id="8_qhwge"]
 [ext_resource type="Texture2D" uid="uid://b2ef26vxyoi26" path="res://Resources/System/MainMenu/Play.svg" id="9_bb0aq"]
 [ext_resource type="Texture2D" uid="uid://b1puke3u03rm6" path="res://Resources/System/MainMenu/Edit.svg" id="10_rmu25"]
 [ext_resource type="PackedScene" uid="uid://b6nsgo8yvtu0m" path="res://Panels/Overlays/HomeBladeButton.tscn" id="10_whutp"]
@@ -38,23 +37,6 @@ corner_radius_bottom_left = 15
 expand_margin_left = 25.0
 expand_margin_right = 25.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nktxj"]
-content_margin_left = 0.0
-bg_color = Color(0.588235, 0.588235, 0.588235, 1)
-skew = Vector2(0.5, 0)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nwgwj"]
-content_margin_left = 0.0
-bg_color = Color(0.54902, 0.54902, 0.54902, 1)
-skew = Vector2(0.5, 0)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e1jv3"]
-content_margin_left = 0.0
-bg_color = Color(0.705882, 0.705882, 0.705882, 1)
-skew = Vector2(0.5, 0)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qejje"]
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yu1gh"]
 bg_color = Color(0.1640625, 0.1640625, 0.1640625, 1)
 
@@ -80,7 +62,7 @@ gravity = Vector3(0, 0, 0)
 scale_min = 0.5
 scale_max = 0.5
 
-[node name="Home Screen" type="Control"]
+[node name="Home Screen" type="Control" unique_id=1284159594]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -89,10 +71,10 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_vj7aj")
 
-[node name="BeatmapBackground" parent="." instance=ExtResource("2_ouv1d")]
+[node name="BeatmapBackground" parent="." unique_id=560686729 instance=ExtResource("2_ouv1d")]
 layout_mode = 1
 
-[node name="SongIndication" parent="." instance=ExtResource("3_bb0aq")]
+[node name="SongIndication" parent="." unique_id=423755491 instance=ExtResource("3_bb0aq")]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 1
 anchors_preset = 10
@@ -101,7 +83,7 @@ offset_right = 0.0
 offset_bottom = 22.333334
 grow_horizontal = 2
 
-[node name="Shadow" type="TextureRect" parent="."]
+[node name="Shadow" type="TextureRect" parent="." unique_id=1947907746]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -114,7 +96,7 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_dq1lp")
 flip_v = true
 
-[node name="Version" type="Label" parent="Shadow"]
+[node name="Version" type="Label" parent="Shadow" unique_id=340265143]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -130,185 +112,34 @@ text = "Qlute/dev (0.0.0)"
 horizontal_alignment = 1
 script = ExtResource("6_1tkmr")
 
-[node name="SubButton" type="PanelContainer" parent="."]
-visible = false
+[node name="SubButton" type="PanelContainer" parent="." unique_id=1242065355]
 layout_mode = 1
 offset_right = 462.0
 offset_bottom = 40.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_bh2cj")
 script = ExtResource("6_bh2cj")
 
-[node name="SubButtons" type="HBoxContainer" parent="SubButton"]
+[node name="SubButtons" type="HBoxContainer" parent="SubButton" unique_id=536744087]
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Play_Solo" type="Button" parent="SubButton/SubButtons"]
-visible = false
-self_modulate = Color(0.414497, 0.650241, 0.994792, 1)
+[node name="Play_Solo" parent="SubButton/SubButtons" unique_id=487116703 instance=ExtResource("10_whutp")]
 custom_minimum_size = Vector2(154, 40)
 layout_mode = 2
-theme_override_constants/icon_max_width = 32
-theme_override_font_sizes/font_size = 32
-theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
-icon_alignment = 1
-script = ExtResource("8_qhwge")
-metadata/ID = 1
+Text = "Singleplayer"
+ButtonID = 0
+SubButton = true
 
-[node name="Label" type="Label" parent="SubButton/SubButtons/Play_Solo"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -25.0
-offset_top = -14.0
-offset_right = 25.0
-offset_bottom = 14.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 14
-text = "Singleplayer"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Play_Multi" type="Button" parent="SubButton/SubButtons"]
-visible = false
-self_modulate = Color(1, 0.582031, 0.78775, 1)
+[node name="Play_Marathon" parent="SubButton/SubButtons" unique_id=1842194931 instance=ExtResource("10_whutp")]
+self_modulate = Color(0.53333336, 0.38039216, 0.9098039, 1)
 custom_minimum_size = Vector2(154, 40)
 layout_mode = 2
-theme_override_constants/icon_max_width = 32
-theme_override_font_sizes/font_size = 32
-theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
-icon_alignment = 1
-script = ExtResource("8_qhwge")
-metadata/ID = 0
+Text = "Marathon Mode"
+ButtonID = 0
+SubButton = true
 
-[node name="Label" type="Label" parent="SubButton/SubButtons/Play_Multi"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -25.0
-offset_top = -14.0
-offset_right = 25.0
-offset_bottom = 14.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 14
-text = "Multiplayer"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Play_Marathon" type="Button" parent="SubButton/SubButtons"]
-visible = false
-self_modulate = Color(0.533545, 0.380417, 0.910156, 1)
-custom_minimum_size = Vector2(154, 40)
-layout_mode = 2
-theme_override_constants/icon_max_width = 32
-theme_override_font_sizes/font_size = 32
-theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
-icon_alignment = 1
-script = ExtResource("8_qhwge")
-metadata/ID = 1
-
-[node name="Label" type="Label" parent="SubButton/SubButtons/Play_Marathon"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -25.0
-offset_top = -14.0
-offset_right = 25.0
-offset_bottom = 14.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 14
-text = "Marathon Mode"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Create_Beatmap" type="Button" parent="SubButton/SubButtons"]
-visible = false
-self_modulate = Color(0.264893, 0.574486, 0.847656, 1)
-custom_minimum_size = Vector2(154, 40)
-layout_mode = 2
-theme_override_constants/icon_max_width = 32
-theme_override_font_sizes/font_size = 32
-theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
-icon_alignment = 1
-script = ExtResource("8_qhwge")
-metadata/ID = 0
-
-[node name="Label" type="Label" parent="SubButton/SubButtons/Create_Beatmap"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -25.0
-offset_top = -14.0
-offset_right = 25.0
-offset_bottom = 14.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 14
-text = "Beatmap Editor"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Create_Skin" type="Button" parent="SubButton/SubButtons"]
-visible = false
-self_modulate = Color(0.320312, 0.761047, 1, 1)
-custom_minimum_size = Vector2(154, 40)
-layout_mode = 2
-theme_override_constants/icon_max_width = 32
-theme_override_font_sizes/font_size = 32
-theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
-theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
-icon_alignment = 1
-script = ExtResource("8_qhwge")
-metadata/ID = 0
-
-[node name="Label" type="Label" parent="SubButton/SubButtons/Create_Skin"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -25.0
-offset_top = -14.0
-offset_right = 25.0
-offset_bottom = 14.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 14
-text = "Skin Editor"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="HomeButtonBG" type="PanelContainer" parent="."]
+[node name="HomeButtonBG" type="PanelContainer" parent="." unique_id=245319508]
 visible = false
 layout_mode = 1
 anchors_preset = 14
@@ -324,35 +155,36 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_yu1gh")
 script = ExtResource("6_rg0tv")
 
-[node name="HomeButtons" type="HBoxContainer" parent="HomeButtonBG"]
+[node name="HomeButtons" type="HBoxContainer" parent="HomeButtonBG" unique_id=709184235]
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Play" parent="HomeButtonBG/HomeButtons" instance=ExtResource("10_whutp")]
+[node name="Play" parent="HomeButtonBG/HomeButtons" unique_id=1902487022 instance=ExtResource("10_whutp")]
 layout_mode = 2
 Text = "Play"
 Texture = ExtResource("9_bb0aq")
+ButtonID = 0
 
-[node name="Create" parent="HomeButtonBG/HomeButtons" instance=ExtResource("10_whutp")]
+[node name="Create" parent="HomeButtonBG/HomeButtons" unique_id=1442740216 instance=ExtResource("10_whutp")]
 self_modulate = Color(0.537255, 0.631373, 0.819608, 1)
 layout_mode = 2
 Text = "Create"
 Texture = ExtResource("10_rmu25")
 
-[node name="Browse" parent="HomeButtonBG/HomeButtons" instance=ExtResource("10_whutp")]
+[node name="Browse" parent="HomeButtonBG/HomeButtons" unique_id=1994008175 instance=ExtResource("10_whutp")]
 self_modulate = Color(0.317647, 0.639216, 0.305882, 1)
 layout_mode = 2
 Text = "Browse"
 Texture = ExtResource("11_ohewd")
 
-[node name="Leave" parent="HomeButtonBG/HomeButtons" instance=ExtResource("10_whutp")]
+[node name="Leave" parent="HomeButtonBG/HomeButtons" unique_id=1834446728 instance=ExtResource("10_whutp")]
 self_modulate = Color(1, 0.443137, 0.443137, 1)
 layout_mode = 2
 Text = "Leave"
 Texture = ExtResource("11_ioq3m")
 
-[node name="IntroPending" type="Control" parent="."]
+[node name="IntroPending" type="Control" parent="." unique_id=956667730]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -361,7 +193,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("11_gngjn")
 
-[node name="logo" type="TextureButton" parent="IntroPending"]
+[node name="logo" type="TextureButton" parent="IntroPending" unique_id=2006884886]
 z_index = 3
 custom_minimum_size = Vector2(360, 148)
 layout_mode = 1
@@ -380,25 +212,25 @@ texture_normal = ExtResource("16_ohewd")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="MusicBar" parent="IntroPending/logo" instance=ExtResource("18_ldbht")]
+[node name="MusicBar" parent="IntroPending/logo" unique_id=556049205 instance=ExtResource("18_ldbht")]
 z_index = -1
 layout_mode = 1
 
-[node name="Accessory" type="Sprite2D" parent="IntroPending/logo"]
+[node name="Accessory" type="Sprite2D" parent="IntroPending/logo" unique_id=2106276264]
 visible = false
 texture = ExtResource("17_jpc6g")
 offset = Vector2(300, 20)
 
-[node name="Bpmtick" type="Timer" parent="IntroPending"]
+[node name="Bpmtick" type="Timer" parent="IntroPending" unique_id=1427838248]
 wait_time = 0.375
 autostart = true
 script = ExtResource("14_1vpa7")
 
-[node name="GobackLogo" type="Timer" parent="IntroPending"]
+[node name="GobackLogo" type="Timer" parent="IntroPending" unique_id=1254629486]
 wait_time = 60.0
 one_shot = true
 
-[node name="Events" type="TextureButton" parent="."]
+[node name="Events" type="TextureButton" parent="." unique_id=1198979015]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -415,11 +247,11 @@ ignore_texture_size = true
 stretch_mode = 5
 script = ExtResource("7_1l3bn")
 
-[node name="Delay" type="Timer" parent="Events"]
+[node name="Delay" type="Timer" parent="Events" unique_id=651097443]
 wait_time = 5.0
 autostart = true
 
-[node name="Logo" type="TextureRect" parent="."]
+[node name="Logo" type="TextureRect" parent="." unique_id=1623376669]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 1
 anchors_preset = 2
@@ -431,7 +263,7 @@ grow_vertical = 0
 texture = ExtResource("3_rmu25")
 expand_mode = 1
 
-[node name="Desc" type="Label" parent="Logo"]
+[node name="Desc" type="Label" parent="Logo" unique_id=1036661995]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -445,7 +277,7 @@ text = "Jinkku Productions
 2023-2026"
 vertical_alignment = 1
 
-[node name="Blast1" type="GPUParticles2D" parent="."]
+[node name="Blast1" type="GPUParticles2D" parent="." unique_id=1135153375]
 modulate = Color(1, 1, 1, 0.3)
 position = Vector2(426, 720)
 rotation = 0.87266463
@@ -456,7 +288,7 @@ lifetime = 3.0
 fixed_fps = 15
 process_material = SubResource("ParticleProcessMaterial_ldbht")
 
-[node name="Blast2" type="GPUParticles2D" parent="."]
+[node name="Blast2" type="GPUParticles2D" parent="." unique_id=1951622531]
 modulate = Color(1, 1, 1, 0.3)
 position = Vector2(852, 720)
 rotation = 2.0943952
@@ -467,31 +299,8 @@ lifetime = 3.0
 fixed_fps = 15
 process_material = SubResource("ParticleProcessMaterial_ldbht")
 
-[connection signal="button_down" from="SubButton/SubButtons/Play_Solo" to="SubButton/SubButtons/Play_Solo" method="_down"]
-[connection signal="button_up" from="SubButton/SubButtons/Play_Solo" to="SubButton/SubButtons/Play_Solo" method="_up"]
-[connection signal="mouse_entered" from="SubButton/SubButtons/Play_Solo" to="SubButton/SubButtons/Play_Solo" method="_focus"]
-[connection signal="mouse_exited" from="SubButton/SubButtons/Play_Solo" to="SubButton/SubButtons/Play_Solo" method="_unfocus"]
 [connection signal="pressed" from="SubButton/SubButtons/Play_Solo" to="." method="_play"]
-[connection signal="button_down" from="SubButton/SubButtons/Play_Multi" to="SubButton/SubButtons/Play_Multi" method="_down"]
-[connection signal="button_up" from="SubButton/SubButtons/Play_Multi" to="SubButton/SubButtons/Play_Multi" method="_up"]
-[connection signal="mouse_entered" from="SubButton/SubButtons/Play_Multi" to="SubButton/SubButtons/Play_Multi" method="_focus"]
-[connection signal="mouse_exited" from="SubButton/SubButtons/Play_Multi" to="SubButton/SubButtons/Play_Multi" method="_unfocus"]
-[connection signal="pressed" from="SubButton/SubButtons/Play_Multi" to="." method="Multiplayer"]
-[connection signal="button_down" from="SubButton/SubButtons/Play_Marathon" to="SubButton/SubButtons/Play_Marathon" method="_down"]
-[connection signal="button_up" from="SubButton/SubButtons/Play_Marathon" to="SubButton/SubButtons/Play_Marathon" method="_up"]
-[connection signal="mouse_entered" from="SubButton/SubButtons/Play_Marathon" to="SubButton/SubButtons/Play_Marathon" method="_focus"]
-[connection signal="mouse_exited" from="SubButton/SubButtons/Play_Marathon" to="SubButton/SubButtons/Play_Marathon" method="_unfocus"]
 [connection signal="pressed" from="SubButton/SubButtons/Play_Marathon" to="." method="_marathonmode"]
-[connection signal="button_down" from="SubButton/SubButtons/Create_Beatmap" to="SubButton/SubButtons/Create_Beatmap" method="_down"]
-[connection signal="button_up" from="SubButton/SubButtons/Create_Beatmap" to="SubButton/SubButtons/Create_Beatmap" method="_up"]
-[connection signal="mouse_entered" from="SubButton/SubButtons/Create_Beatmap" to="SubButton/SubButtons/Create_Beatmap" method="_focus"]
-[connection signal="mouse_exited" from="SubButton/SubButtons/Create_Beatmap" to="SubButton/SubButtons/Create_Beatmap" method="_unfocus"]
-[connection signal="pressed" from="SubButton/SubButtons/Create_Beatmap" to="." method="_marathonmode"]
-[connection signal="button_down" from="SubButton/SubButtons/Create_Skin" to="SubButton/SubButtons/Create_Skin" method="_down"]
-[connection signal="button_up" from="SubButton/SubButtons/Create_Skin" to="SubButton/SubButtons/Create_Skin" method="_up"]
-[connection signal="mouse_entered" from="SubButton/SubButtons/Create_Skin" to="SubButton/SubButtons/Create_Skin" method="_focus"]
-[connection signal="mouse_exited" from="SubButton/SubButtons/Create_Skin" to="SubButton/SubButtons/Create_Skin" method="_unfocus"]
-[connection signal="pressed" from="SubButton/SubButtons/Create_Skin" to="." method="_marathonmode"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Play" to="." method="_play"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Create" to="." method="_create"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Browse" to="." method="_browse"]

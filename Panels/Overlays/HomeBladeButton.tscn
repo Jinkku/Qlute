@@ -1,13 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://b6nsgo8yvtu0m"]
+[gd_scene format=3 uid="uid://b6nsgo8yvtu0m"]
 
 [ext_resource type="Script" uid="uid://btpasgcq7n7n6" path="res://Script/Effects/ButtonBounce.cs" id="1_7h7yx"]
 [ext_resource type="Texture2D" uid="uid://b2ef26vxyoi26" path="res://Resources/System/MainMenu/Play.svg" id="2_ae3t0"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qejje"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e1jv3"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nktxj"]
 content_margin_left = 0.0
-bg_color = Color(0.705882, 0.705882, 0.705882, 1)
+bg_color = Color(0.588235, 0.588235, 0.588235, 1)
 skew = Vector2(0.5, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nwgwj"]
@@ -15,25 +13,27 @@ content_margin_left = 0.0
 bg_color = Color(0.54902, 0.54902, 0.54902, 1)
 skew = Vector2(0.5, 0)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nktxj"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e1jv3"]
 content_margin_left = 0.0
-bg_color = Color(0.588235, 0.588235, 0.588235, 1)
+bg_color = Color(0.705882, 0.705882, 0.705882, 1)
 skew = Vector2(0.5, 0)
 
-[node name="Blade Button" type="Button"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qejje"]
+
+[node name="Blade Button" type="Button" unique_id=1455467787]
 self_modulate = Color(0.414497, 0.650241, 0.994792, 1)
 custom_minimum_size = Vector2(154, 95)
 theme_override_constants/icon_max_width = 32
 theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
-theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
 theme_override_styles/normal = SubResource("StyleBoxFlat_nktxj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nwgwj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_e1jv3")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qejje")
 icon_alignment = 1
 script = ExtResource("1_7h7yx")
 metadata/home = true
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1306873038]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -50,7 +50,7 @@ theme_override_font_sizes/font_size = 14
 text = "Dummy Button"
 horizontal_alignment = 1
 
-[node name="Pic" type="TextureRect" parent="Label"]
+[node name="Pic" type="TextureRect" parent="Label" unique_id=1275731759]
 texture_filter = 2
 layout_mode = 1
 anchors_preset = 5

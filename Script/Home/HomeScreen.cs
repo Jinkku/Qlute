@@ -75,16 +75,6 @@ public partial class HomeScreen : Control
 	private void _leave() {
 		SettingsOperator.Quit();
 	}
-	private void _playf()
-	{
-		HomeButtonID.ID = 1;
-	}
-	private void _browsef() { HomeButtonID.ID = -1; }
-	private void _leavef() { HomeButtonID.ID = -1; }
-	private void _createf()
-	{
-		HomeButtonID.ID = -1;
-	}
 	private void _subunf()
 	{
 		if ((SettingsOperator.MouseMovement.Y < HomePanel.Position.Y && SubButtons.Visible) | (SettingsOperator.MouseMovement.Y > SubButtons.Position.Y + SubButtons.Size.Y && SubButtons.Visible))
