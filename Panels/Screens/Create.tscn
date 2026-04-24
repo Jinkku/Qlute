@@ -577,7 +577,9 @@ theme_override_icons/grabber_highlight = ExtResource("9_cxjes")
 theme_override_styles/slider = SubResource("StyleBoxFlat_fn0xp")
 theme_override_styles/grabber_area = SubResource("StyleBoxFlat_255xm")
 theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_7ryu8")
+min_value = -1.0
 step = 0.001
+value = -1.0
 
 [node name="TimeBox" type="PanelContainer" parent="ControlPanel/Box" index="2" unique_id=1172322703]
 custom_minimum_size = Vector2(120, 0)

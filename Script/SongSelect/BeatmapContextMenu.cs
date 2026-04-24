@@ -25,7 +25,8 @@ public partial class BeatmapContextMenu : PanelContainer
 			CreateEditor.EditorSongInfo.SongTitle =  SettingsOperator.Beatmaps[SongID].Title;
 			CreateEditor.EditorSongInfo.SongArtist =  SettingsOperator.Beatmaps[SongID].Artist;
 			CreateEditor.EditorSongInfo.SongDifficulty =  SettingsOperator.Beatmaps[SongID].Version;
-			CreateEditor.EditorSongInfo.FilePath =  SettingsOperator.Beatmaps[SongID].Path;
+			CreateEditor.EditorSongInfo.FilePath =  SettingsOperator.Beatmaps[SongID].Rawurl;
+			CreateEditor.EditorSongInfo.ParentPath =  SettingsOperator.Beatmaps[SongID].Path;
 			CreateEditor.EditorSongInfo.Background = SettingsOperator.SessionConfig.Background;
 			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
 		}

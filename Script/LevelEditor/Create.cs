@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class Create : Control
 {
@@ -32,8 +33,6 @@ public override void _Ready()
 	{
 		if (AudioPlayer.Instance.Stream != null)
 			AudioPlayer.Instance.StreamPaused = true;
-		SectionSample = GetNode<Control>("Compose/Ground/Playfield/ChartSections/Section1");
-		SizeYSection = SectionSample.Size.Y;
 		SelectedPos = GetNode<Label>("Compose/Info/ContextSections/SelectedPos");
 		Seeker = GetNode<HSlider>("ControlPanel/Box/PlayerControl/Seek");
 		EditorPlayer = GetNode<AudioStreamPlayer>("EditorPlayer");
@@ -45,6 +44,8 @@ public override void _Ready()
 		InfoN = GetNode<Control>("Info");
 		ComposeN = GetNode<Control>("Compose");
 		Playfield = ComposeN.GetNode<Control>("Ground/Playfield");
+		SectionSample = NoteSectionSelect(1);
+		SizeYSection = SectionSample.Size.Y;
 		TimingN = GetNode<Control>("Timing");
 		VerifyN = GetNode<Control>("Verify");
 		InfoN.Modulate = new Color(1, 1, 1, 0f);
@@ -67,6 +68,8 @@ public override void _Ready()
 		SongDifficulty.Text = CreateEditor.EditorSongInfo.SongDifficulty;
 		EditorBackground.Texture = CreateEditor.EditorSongInfo.Background;
 		EditorBackgroundPreview.Texture = EditorBackground.Texture;
+		if (CreateEditor.EditorSongInfo.FilePath != null) 
+			ReloadBeatmap(CreateEditor.EditorSongInfo.FilePath);
 
 	}
 
@@ -181,6 +184,9 @@ public override void _Ready()
 
 		return (float)EditorTime;
 	}
+
+	private Control NoteSectionSelect(int NoteID) =>
+		Playfield.GetNode<Control>($"ChartSections/Section{NoteID}/Control");
 	private void Place()
 	{
 		if (NoteID != 0)
@@ -188,7 +194,7 @@ public override void _Ready()
 			var Notetmp = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate().GetNode<NoteSkinning>(".");
 			Notetmp.NotePart = NoteID - 1;
 			Notes.Add(Notetmp);
-			Playfield.GetNode<Control>($"ChartSections/Section{NoteID}/Control").AddChild(Notetmp);
+			NoteSectionSelect(NoteID).AddChild(Notetmp);
 			Notetmp.Time = NoteHighlight.Time;
 			Notetmp.Position = new Vector2(NoteHighlight.Position.X, SizeYSection - Notetmp.Time - 200 + (float)SongProgress);
 		}
@@ -269,6 +275,59 @@ public override void _Ready()
 		{
 			note.Position = new Vector2(note.Position.X,SizeYSection - note.Time - 200 + (float)SongProgress);
 		}
+	}
+	private List<DanceCounter> dance { get; set; }
+	public void ReloadBeatmap(string filepath)
+	{
+		Notes.Clear();
+		GD.Print(filepath);
+		using var file = FileAccess.Open(filepath, FileAccess.ModeFlags.Read);
+		var text = file.GetAsText();
+		var lines = text.Split("\n");
+		var part = 0;
+		var timing = 0;
+		var timen = -1;
+		var isHitObjectSection = false;
+		int index = 0;
+		BeatmapLegend beatmap = SettingsOperator.Beatmaps[SettingsOperator.SessionConfig.SongID];
+		dance = beatmap.Dance;
+
+		var seen = new HashSet<(int timing, int section)>();
+
+		foreach (string line in lines)
+		{
+			if (line.Trim() == "[HitObjects]") { isHitObjectSection = true; continue; }
+			if (!isHitObjectSection) continue;
+			if (string.IsNullOrWhiteSpace(line) || line.StartsWith('[')) break;
+
+			string[] section = line.Split(':', ',');
+			timing = Convert.ToInt32(section[2]);
+			part = Convert.ToInt32(section[0]);
+			part = Math.Clamp((int)Math.Floor(part * 4 / 512.0), 0, 3);
+
+			timen = -timing;
+			var key = (timen, part);
+
+			// ✅ Skip duplicates in O(1), no linear scan
+			if (seen.Contains(key)) { index++; continue; }
+			seen.Add(key);
+			GD.Print(part);
+			_enter(part);
+			NoteHighlight.Time = -timen;
+			
+//			Notes.Add(new NotesEn #Disable for now
+//			{
+//				timing = timen,
+//				NoteSection = part,
+//				ppv2xp = beatmap.ppv2sets[index] * ModsMulti.multiplier
+//			});
+			//			Notetmp.NotePart = NoteID - 1;
+			// Notetmp.Time = NoteHighlight.Time;
+			Place();
+			_off(NoteID);
+			index++;
+		}
+		Seeker.MaxValue = -timen * 0.001f;
 	}
 	public override void _Process(double delta)
 	{
