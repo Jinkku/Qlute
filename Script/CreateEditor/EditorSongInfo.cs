@@ -11,7 +11,6 @@ public class EditorSongInfo
     public static int SongLvRating { get; set; } = 0;
     public static string SongMapper { get; set; } = "Unknown Mapper";
     public static string FilePath { get; set; } = null;
-    public static string ParentPath { get; set; } = null;
     public static Texture2D Background { get; set; } = SettingsOperator.GetNullImage();
 
     public static void Reset()

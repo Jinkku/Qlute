@@ -28,6 +28,8 @@ public partial class Create : Control
 	private LineEdit SongTitle { get; set; }
 	private LineEdit SongArtist { get; set; }
 	private LineEdit SongDifficulty { get; set; }
+	private ButtonFade PlayPause { get; set; }
+	private string ParentPath { get; set; }
 
 public override void _Ready()
 	{
@@ -60,6 +62,8 @@ public override void _Ready()
 		VerifyN.Modulate = new Color(1, 1, 1, 0f);
 		VerifyN.MouseFilter = MouseFilterEnum.Ignore;
 		VerifyN.Visible = true;
+		PlayPause = GetNode<ButtonFade>("ControlPanel/Box/Player/Columns/PlayPause");
+		
 		SongTitle = GetNode<LineEdit>("Info/Panel/Scroll/GridContainer/Setting1/Value");
 		SongArtist = GetNode<LineEdit>("Info/Panel/Scroll/GridContainer/Setting2/Value");
 		SongDifficulty = GetNode<LineEdit>("Info/Panel/Scroll/GridContainer/Setting3/Value");
@@ -68,6 +72,7 @@ public override void _Ready()
 		SongDifficulty.Text = CreateEditor.EditorSongInfo.SongDifficulty;
 		EditorBackground.Texture = CreateEditor.EditorSongInfo.Background;
 		EditorBackgroundPreview.Texture = EditorBackground.Texture;
+		ParentPath = CreateEditor.EditorSongInfo.FilePath.TrimEnd(CreateEditor.EditorSongInfo.FilePath.Split("/").Last()).ToString();
 		if (CreateEditor.EditorSongInfo.FilePath != null) 
 			ReloadBeatmap(CreateEditor.EditorSongInfo.FilePath);
 
@@ -296,22 +301,32 @@ public override void _Ready()
 
 		foreach (string line in lines)
 		{
-			if (line.Trim() == "[HitObjects]") { isHitObjectSection = true; continue; }
-			if (!isHitObjectSection) continue;
-			if (string.IsNullOrWhiteSpace(line) || line.StartsWith('[')) break;
 
-			string[] section = line.Split(':', ',');
+			if (line.Contains(":")) 
+			{
+				var parts = line.Split(":", 2);
+				var key = parts[0].Trim();
+				var value = parts[1].Trim();
+				switch (key)
+				{
+					case "AudioFilename": EditorPlayer.Stream = new AudioPlayer().AutoDetectFormat(ParentPath.PathJoin(value)); break;
+				}
+			} 
+			if (line.Trim() == "[HitObjects]") { isHitObjectSection = true; continue; }
+			if (string.IsNullOrWhiteSpace(line) || line.StartsWith('[')) continue;
+			if (!isHitObjectSection) continue;
+
+			
+			string[] section = line.Split(':', ',');	
 			timing = Convert.ToInt32(section[2]);
 			part = Convert.ToInt32(section[0]);
 			part = Math.Clamp((int)Math.Floor(part * 4 / 512.0), 0, 3);
 
 			timen = -timing;
-			var key = (timen, part);
+			var keyb = (timen, part);
 
-			// ✅ Skip duplicates in O(1), no linear scan
-			if (seen.Contains(key)) { index++; continue; }
-			seen.Add(key);
-			GD.Print(part);
+			if (seen.Contains(keyb)) { index++; continue; }
+			seen.Add(keyb);
 			_enter(part);
 			NoteHighlight.Time = -timen;
 			

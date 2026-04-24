@@ -600,7 +600,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_8ecv8")
 [node name="Columns" type="HBoxContainer" parent="ControlPanel/Box/Player" unique_id=1990051256]
 layout_mode = 2
 
-[node name="ButtonFade" type="Button" parent="ControlPanel/Box/Player/Columns" unique_id=475583245]
+[node name="SkipBack" type="Button" parent="ControlPanel/Box/Player/Columns" unique_id=475583245]
 self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
 custom_minimum_size = Vector2(39, 39)
 layout_mode = 2
@@ -608,7 +608,7 @@ script = ExtResource("6_fn0xp")
 StringText = "X"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
-[node name="ButtonFade2" type="Button" parent="ControlPanel/Box/Player/Columns" unique_id=862566763]
+[node name="PlayPause" type="Button" parent="ControlPanel/Box/Player/Columns" unique_id=862566763]
 self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
 custom_minimum_size = Vector2(39, 39)
 layout_mode = 2
@@ -616,7 +616,7 @@ script = ExtResource("6_fn0xp")
 StringText = "X"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
-[node name="ButtonFade3" type="Button" parent="ControlPanel/Box/Player/Columns" unique_id=752541916]
+[node name="SkipForward" type="Button" parent="ControlPanel/Box/Player/Columns" unique_id=752541916]
 self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
 custom_minimum_size = Vector2(39, 39)
 layout_mode = 2
@@ -660,6 +660,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ddpis")
 [connection signal="pressed" from="ToolBar/HBoxContainer/Menus/Verify" to="." method="Verify"]
 [connection signal="pressed" from="ControlPanel/Box/BackButton" to="." method="_on_back"]
 [connection signal="value_changed" from="ControlPanel/Box/PlayerControl/Seek" to="." method="ValueChanged"]
+[connection signal="pressed" from="ControlPanel/Box/Player/Columns/PlayPause" to="." method="PlayPause"]
 
 [editable path="Compose/Ground/Playfield"]
 [editable path="ControlPanel"]
