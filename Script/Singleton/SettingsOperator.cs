@@ -303,37 +303,7 @@ public partial class SettingsOperator : Node
             Gameplaycfg.maxpp = beatmap.pp;
 
             string audioPath = beatmap.Path + "" + beatmap.Audio;
-            string chk = ChecksumUtil.GetSha256(audioPath);
-            if (System.IO.File.Exists(audioPath))
-            {
-                AudioStream filestream = null;
-                if (audioPath.EndsWith(".mp3"))
-                {
-                    filestream = AudioPlayer.LoadMP3(audioPath);
-                }
-                else if (audioPath.EndsWith(".wav"))
-                {
-                    filestream = AudioPlayer.LoadWAV(audioPath);
-                }
-                else if (audioPath.EndsWith(".ogg"))
-                {
-                    filestream = AudioPlayer.LoadOGG(audioPath);
-                }
-                if (AudioPlayer.checksum != chk)
-                {
-                    AudioPlayer.checksum = chk;
-                    AudioPlayer.Instance.Stream = filestream;
-                    AudioPlayer.Instance.Play(seek);
-                    Gameplaycfg.TimeTotal = (float)(AudioPlayer.Instance.Stream?.GetLength() ?? 0);
-                }
-            }
-            else
-            {
-                AudioPlayer.checksum = null;
-                AudioPlayer.Instance.Stream = null;
-                AudioPlayer.Instance.Stop();
-                GD.PrintErr("Audio file not found: " + audioPath);
-            }
+            AudioPlayer.LoadMusic(audioPath, seek);
             
             ApiOperator.CheckBeatmapRankStatus();
         }

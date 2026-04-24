@@ -46,6 +46,49 @@ public partial class AudioPlayer : AudioStreamPlayer
         Sample.VolumeDb = ToDB(SampleVol);
     }
 
+    public AudioStream AutoDetectFormat(string audioPath)
+    {
+        AudioFormat? format = AudioPlayer.GetAudioFormat(audioPath);
+
+        AudioStream? fileStream = format switch
+        {
+            AudioFormat.WAV => AudioPlayer.LoadWAV(audioPath),
+            AudioFormat.OGG => AudioPlayer.LoadOGG(audioPath),
+            AudioFormat.MP3 => AudioPlayer.LoadMP3(audioPath),
+            _               => null
+        };
+
+        if (fileStream == null)
+        {
+            GD.PrintErr($"[AutoDetect] Unrecognised format: {format}");
+            return null;
+        }
+
+        return fileStream;
+    }
+    public static void LoadMusic(string audioPath, float seek = 0)
+    {
+        if (System.IO.File.Exists(audioPath))
+        {
+            string chk = ChecksumUtil.GetSha256(audioPath);
+            AudioStream filestream = new AudioPlayer().AutoDetectFormat(audioPath);
+            if (AudioPlayer.checksum != chk)
+            {
+                AudioPlayer.checksum = chk;
+                AudioPlayer.Instance.Stream = filestream;
+                AudioPlayer.Instance.Play(seek);
+                SettingsOperator.Gameplaycfg.TimeTotal = (float)(AudioPlayer.Instance.Stream?.GetLength() ?? 0);
+            }
+        }
+        else
+        {
+            AudioPlayer.checksum = null;
+            AudioPlayer.Instance.Stream = null;
+            AudioPlayer.Instance.Stop();
+            GD.PrintErr("Audio file not found: " + audioPath);
+        }
+    }
+
     public static AudioStreamMP3 LoadMP3(string path)
     {
         using var file = Godot.FileAccess.Open(path, Godot.FileAccess.ModeFlags.Read);
