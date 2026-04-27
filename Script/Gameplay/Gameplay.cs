@@ -578,9 +578,6 @@ private void _GameNoteTick(double delta)
 	public override void _Process(double delta)
 	{
 		
-		
-		
-		
 		score = new Game.ScoreCalculator().ProcessScore(SettingsOperator.Gameplaycfg.Max,
 			SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh,
 			SettingsOperator.Gameplaycfg.NoteCount, ModsMulti.multiplier);

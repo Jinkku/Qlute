@@ -129,8 +129,10 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="EditorPlayer" type="AudioStreamPlayer" parent="." unique_id=2005766747]
+pitch_scale = 0.8
 
 [node name="Info" type="Control" parent="." unique_id=1503606035]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -314,7 +316,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Compose" type="Control" parent="." unique_id=400814062]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -577,9 +578,7 @@ theme_override_icons/grabber_highlight = ExtResource("9_cxjes")
 theme_override_styles/slider = SubResource("StyleBoxFlat_fn0xp")
 theme_override_styles/grabber_area = SubResource("StyleBoxFlat_255xm")
 theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_7ryu8")
-min_value = -1.0
 step = 0.001
-value = -1.0
 
 [node name="TimeBox" type="PanelContainer" parent="ControlPanel/Box" index="2" unique_id=1172322703]
 custom_minimum_size = Vector2(120, 0)

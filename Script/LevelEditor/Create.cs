@@ -28,7 +28,7 @@ public partial class Create : Control
 	private LineEdit SongTitle { get; set; }
 	private LineEdit SongArtist { get; set; }
 	private LineEdit SongDifficulty { get; set; }
-	private ButtonFade PlayPause { get; set; }
+	private ButtonFade PlayPauseNode { get; set; }
 	private string ParentPath { get; set; }
 
 public override void _Ready()
@@ -47,7 +47,6 @@ public override void _Ready()
 		ComposeN = GetNode<Control>("Compose");
 		Playfield = ComposeN.GetNode<Control>("Ground/Playfield");
 		SectionSample = NoteSectionSelect(1);
-		SizeYSection = SectionSample.Size.Y;
 		TimingN = GetNode<Control>("Timing");
 		VerifyN = GetNode<Control>("Verify");
 		InfoN.Modulate = new Color(1, 1, 1, 0f);
@@ -62,7 +61,7 @@ public override void _Ready()
 		VerifyN.Modulate = new Color(1, 1, 1, 0f);
 		VerifyN.MouseFilter = MouseFilterEnum.Ignore;
 		VerifyN.Visible = true;
-		PlayPause = GetNode<ButtonFade>("ControlPanel/Box/Player/Columns/PlayPause");
+		PlayPauseNode = GetNode<ButtonFade>("ControlPanel/Box/Player/Columns/PlayPause");
 		
 		SongTitle = GetNode<LineEdit>("Info/Panel/Scroll/GridContainer/Setting1/Value");
 		SongArtist = GetNode<LineEdit>("Info/Panel/Scroll/GridContainer/Setting2/Value");
@@ -73,6 +72,7 @@ public override void _Ready()
 		EditorBackground.Texture = CreateEditor.EditorSongInfo.Background;
 		EditorBackgroundPreview.Texture = EditorBackground.Texture;
 		ParentPath = CreateEditor.EditorSongInfo.FilePath.TrimEnd(CreateEditor.EditorSongInfo.FilePath.Split("/").Last()).ToString();
+		SectionResized();
 		if (CreateEditor.EditorSongInfo.FilePath != null) 
 			ReloadBeatmap(CreateEditor.EditorSongInfo.FilePath);
 
@@ -80,8 +80,25 @@ public override void _Ready()
 
 	private void SectionResized()
 	{
-		SizeYSection =  SectionSample.Size.Y;
+		SizeYSection =  SectionSample.Size.Y + 400;
 	}
+	
+	private bool PauseTag { get; set; }
+	
+	private void PlayPause()
+	{
+		PauseTag = !PauseTag;
+		if (PauseTag)
+		{
+			EditorPlayer.Play(SongProgress * 0.001f);
+		}
+		else
+		{
+			EditorPlayer.StreamPaused = !EditorPlayer.StreamPaused;
+		}
+
+	}
+	
 	private Tween MenuTween { get; set; }
 	/// <summary>
 	/// 0 = Info
@@ -171,13 +188,13 @@ public override void _Ready()
 	/// </summary>
 	public float GetRemainingTime(float delta = 1f)
 	{
-		if (AudioPlayer.Instance.Playing)
+		if (EditorPlayer.Playing)
 		{
 			// increment smoothly
-			smoothTime += delta * AudioPlayer.Instance.PitchScale;
+			smoothTime += delta * EditorPlayer.PitchScale;
 
 			// occasional hard resync if drift gets big
-			float truePos = AudioPlayer.Instance.GetPlaybackPosition()
+			float truePos = EditorPlayer.GetPlaybackPosition()
 			                + (float)AudioServer.GetTimeSinceLastMix();
 
 			if (Mathf.Abs(truePos - smoothTime) > 0.05f) // 50ms tolerance
@@ -269,7 +286,7 @@ public override void _Ready()
 			}
 		}
 	}
-	private double SongProgress => Seeker.Value * 1000;
+	private float SongProgress => (float)Seeker.Value * 1000f;
 	private void ValueChanged(float value)
 	{
 		// reference 
@@ -348,6 +365,12 @@ public override void _Ready()
 	{
 		EditorPlayer.VolumeDb = AudioPlayer.Instance.VolumeDb;
 		NoteCount.Text = $"{Notes.Count:N0} Notes";
+
+		if (EditorPlayer.IsPlaying())
+		{
+			Seeker.Value = GetRemainingTime((float)delta);
+		}
+		
 		if (NoteHighlight != null)
 		{
 			NoteHighlight.Time = SizeYSection - SettingsOperator.MouseMovement.Y - NoteHighlight.Texture.GetSize().Y + (float)SongProgress;
