@@ -359,7 +359,7 @@ public override void _Ready()
 			_off(NoteID);
 			index++;
 		}
-		Seeker.MaxValue = -timen * 0.001f;
+		Seeker.MaxValue = (float)(EditorPlayer.Stream?.GetLength() ?? 120);
 	}
 	public override void _Process(double delta)
 	{
