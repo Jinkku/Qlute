@@ -51,9 +51,11 @@ public partial class ApiOperator : Node
 	public static string Beatmapapi = "https://catboy.best";
 	public static Texture2D PictureData { get; set; }
 	public static Texture2D CardBorderData { get; set; }
-	public DiscordRpcClient Client { get; private set; }
+	public static DiscordRpcClient Client { get; private set; }
 	public static string AgentString { get; set; }
 	public static string[] AgentHeaders { get; set; }
+	[Signal]
+	public delegate void DiscordEventHandler(bool enabled);
 
 	/// <summary>
 	/// Submits a score to the dedicated server. (New Version)
@@ -184,6 +186,45 @@ public partial class ApiOperator : Node
 			LeaderboardStatus = 2; // Set status to Loaded
 		}
 	}
+
+	public static void InitDiscord()
+	{
+		Notify.Post("Init Discord DEBUG");
+        
+		if (Client != null)
+		{
+			KillDiscord();
+		}
+
+		Client = new DiscordRpcClient("1484981423684452684");
+        
+
+		Client.Initialize();    
+	}
+
+	public static void KillDiscord()
+	{
+		Notify.Post("Kill Discord DEBUG");
+        
+		if (Client != null)
+		{
+			try
+			{
+				Client.ClearPresence();
+				Client.Dispose(); // Kills client, background pipe threads, and closes the socket connections
+			}
+			catch (Exception e)
+			{
+				GD.PrintErr($"Error closing Discord client: {e.Message}");
+			}
+			finally
+			{
+				Client = null; // Zero out reference so _Process stops executing Invoke loops
+			}
+		}
+	}
+
+	
 	public static int LeaderboardStatus = 0; // 0 = Not loaded, 1 = Loading, 2 = Loaded
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -217,10 +258,9 @@ public partial class ApiOperator : Node
 		LeaderboardAPI.Connect("request_completed", new Callable(this, nameof(_LeaderboardAPIDone)));
 		InfoApi.Connect("request_completed", new Callable(this, nameof(_on_info_request_completed)));
 		SubmitApi.Connect("request_completed", new Callable(this, nameof(_Submitrequest)));
-		if (Check.CheckBoolValue(SettingsOperator.GetSetting("discord-rpc").ToString())) 
+		if (Check.CheckBoolValue(SettingsOperator.GetSetting("discord-rpc").ToString()))
 		{
-			Client = new DiscordRpcClient("1484981423684452684");	// Creates the client
-			Client.Initialize();
+			InitDiscord();
 		}
 		if ((Username != null || PasswordHash != null) && SettingsOperator.SessionConfig.Loggedin == false && Check.CheckBoolValue(SettingsOperator.GetSetting("stayloggedin").ToString()))
 		{
@@ -491,10 +531,10 @@ public partial class ApiOperator : Node
 	}
 	
 	private long Timer { get; set; }
+	private string Status = "N/A";
 
 	private void CheckStatus()
 	{
-		var Status = "N/A";
 		var Title = SettingsOperator.SessionConfig.BeatmapTitle?.ToString() ?? "";
 		var Artist = SettingsOperator.SessionConfig.BeatmapArtist?.ToString() ?? "";
 		var Difficulty = SettingsOperator.SessionConfig.BeatmapDifficultyName?.ToString() ?? "";
@@ -520,18 +560,29 @@ public partial class ApiOperator : Node
 		$"User-Agent: {AgentString}"
 		};
 		StatusChecker.Request(SettingsOperator.GetSetting("api") + "apiv2/setstatus", Headers);
-		
+		CheckStatusDC();
+	}
+
+	public void CheckStatusDC()
+	{
 		// Discord RPC Part
-		if (Check.CheckBoolValue(SettingsOperator.GetSetting("discord-rpc").ToString()) && Client != null) 
-			Client.SetPresence(new RichPresence()
-			{
-			State = Status,
-			Assets = new Assets()
-			{
-				LargeImageKey = "main-logo",
-				LargeImageText = $"{Username} (#{SettingsOperator.Rank:N0})",
-			}
-		});
+		try
+		{
+			if (Check.CheckBoolValue(SettingsOperator.GetSetting("discord-rpc").ToString()) && Client != null)
+				Client.SetPresence(new RichPresence()
+				{
+					State = Status,
+					Assets = new Assets()
+					{
+						LargeImageKey = "main-logo",
+						LargeImageText = $"{Username} (#{SettingsOperator.Rank:N0})",
+					}
+				});
+		}
+		catch (Exception e)
+		{
+			GD.Print(e.Message);
+		}
 	}
 	
 	static bool IsJpeg(byte[] data)
@@ -611,6 +662,7 @@ public partial class ApiOperator : Node
 	}
 	public override void _Process(double delta)
 	{
+		Client?.Invoke();
 		if (SettingsOperator.SessionConfig.Loggedin && DateTimeOffset.Now.ToUnixTimeSeconds() - Timer > 3)
 		{
 			Timer = DateTimeOffset.Now.ToUnixTimeSeconds();

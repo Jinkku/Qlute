@@ -6,11 +6,11 @@
 [ext_resource type="Script" uid="uid://b2fdn4oh7m0p8" path="res://Script/TopPanel/NowPlayer.cs" id="3_0d1ka"]
 [ext_resource type="Texture2D" uid="uid://dnhwv61vkgn0d" path="res://Resources/System/TopPanel/NowPlaying.png" id="4_21f6s"]
 [ext_resource type="Texture2D" uid="uid://ci24g7ndyah7y" path="res://Resources/System/MainMenu/Browse.svg" id="5_ruc5v"]
-[ext_resource type="Texture2D" uid="uid://cpp14plc7cctp" path="res://Resources/System/TopPanel/Chat.svg" id="6_jvorr"]
-[ext_resource type="Texture2D" uid="uid://4uedtgsvw7ep" path="res://Resources/System/TopPanel/Settings.svg" id="7_j48p2"]
+[ext_resource type="Texture2D" uid="uid://cg16i4vhaidnq" path="res://Resources/System/TopPanel/Chat.png" id="7_0d1ka"]
+[ext_resource type="Texture2D" uid="uid://dll721e1csj7v" path="res://Resources/System/TopPanel/Settings.png" id="8_21f6s"]
 [ext_resource type="Script" uid="uid://ddvycljmp7l70" path="res://Script/TopPanel/Settings.cs" id="8_dcn2n"]
 [ext_resource type="Script" uid="uid://duhirqs3mbsn6" path="res://Script/TopPanelV2/ClockV2.cs" id="9_phkx3"]
-[ext_resource type="Texture2D" uid="uid://dbrt8ltwm3upi" path="res://Resources/System/TopPanel/Notifications.svg" id="10_dvigu"]
+[ext_resource type="Texture2D" uid="uid://c2l75n07es5id" path="res://Resources/System/TopPanel/Notifications.png" id="11_ruc5v"]
 
 [sub_resource type="Gradient" id="Gradient_n7q28"]
 colors = PackedColorArray(0, 0, 0, 0.568627, 0, 0, 0, 0)
@@ -171,7 +171,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_88b8v")
 theme_override_styles/hover = SubResource("StyleBoxFlat_nny0l")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ank2i")
 keep_pressed_outside = true
-icon = ExtResource("6_jvorr")
+icon = ExtResource("7_0d1ka")
 icon_alignment = 1
 
 [node name="Settings" type="Button" parent="Widgets" unique_id=1999111531]
@@ -187,7 +187,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_88b8v")
 theme_override_styles/hover = SubResource("StyleBoxFlat_nny0l")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ank2i")
 keep_pressed_outside = true
-icon = ExtResource("7_j48p2")
+icon = ExtResource("8_21f6s")
 icon_alignment = 1
 script = ExtResource("8_dcn2n")
 
@@ -222,7 +222,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_0d1ka")
 theme_override_styles/hover = SubResource("StyleBoxFlat_21f6s")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ank2i")
 keep_pressed_outside = true
-icon = ExtResource("10_dvigu")
+icon = ExtResource("11_ruc5v")
 icon_alignment = 1
 
 [connection signal="mouse_entered" from="." to="." method="_hovered"]

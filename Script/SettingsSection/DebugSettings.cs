@@ -5,9 +5,14 @@ public partial class DebugSettings : PanelContainer
 {
 	private CheckButton DevHide { get; set; }
 	private CheckButton DiscordRPC { get; set; }
+	private Signal Discord { get; set; }
+	private ApiOperator ApiOperator { get; set; }
+
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		ApiOperator = new ApiOperator();
 		DiscordRPC = GetNode<CheckButton>("Rows/DiscordRPC");
 		DevHide = GetNode<CheckButton>("Rows/HideDevDisclaimer");
 		DevHide.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("hidedevintro").ToString());
@@ -21,6 +26,16 @@ public partial class DebugSettings : PanelContainer
 	}
 	private void _discordrpc()
 	{
+		
 		SettingsOperator.SetSetting("discord-rpc", DiscordRPC.ButtonPressed);
+		if (DiscordRPC.ButtonPressed)
+		{
+			ApiOperator.InitDiscord();
+			ApiOperator.CheckStatusDC();
+		}
+		else
+		{
+			ApiOperator.KillDiscord();
+		}
 	}
 }
