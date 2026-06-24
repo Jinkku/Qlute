@@ -199,7 +199,6 @@ public partial class Gameplay : Control
 		}
 
 		Dead = false;
-		Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f)));
 		BeatmapBackground.FlashEnable = false;
 
 		HealthBar.Reset();
@@ -272,6 +271,7 @@ public partial class Gameplay : Control
 		audioOffset = !SettingsOperator.SpectatorMode ? SettingsOperator.AudioOffset * 0.001f : 0f;
 		GD.Print($"Spectator mode: {SettingsOperator.SpectatorMode}");
 		GD.Print($"Your offset is currently: {audioOffset / 0.001}ms");
+		
 	}
 
 	public Texture2D NoteSkinBack { get; set; }
@@ -342,6 +342,7 @@ public partial class Gameplay : Control
 	/// </summary>
 	private void StartPlay()
 	{
+		BreakOver();
 		songstarted = true;
 		AudioPlayer.Instance.Play();
 	}
@@ -453,12 +454,18 @@ public partial class Gameplay : Control
     private float gametime { get; set; }
     private float gametimeraw { get; set; }
 	private int NoteTick { get; set; }
-	private bool BreakTime { get; set; }
+	private bool BreakTime { get; set; } = true;
 	private int NoteBreakTiming { get; set; }
 	private Break Break { get; set; }
-
+	private Tween BreakBGTween { get; set; }
 	private void BreakNow()
 	{
+		BreakTime = true;
+		BreakBGTween?.Kill();
+		BreakBGTween = GetTree().CreateTween();
+		BreakBGTween.SetTrans(Tween.TransitionType.Cubic);
+		BreakBGTween.SetEase(Tween.EaseType.Out);
+		BreakBGTween.TweenProperty(Beatmap_Background, "self_modulate", new Color(1f, 1f, 1f, 1f), 0.5f);
 		if (IsInstanceValid(Break))
 		{
 			Break?.QueueFree();
@@ -466,6 +473,20 @@ public partial class Gameplay : Control
 		Break = GD.Load<PackedScene>("res://Panels/Screens/Break.tscn").Instantiate().GetNode<Break>(".");
 		Break.MaxTick = NoteBreakTiming * 0.001;
 		AddChild(Break);
+		Break.BreakFinished += () =>
+		{
+			BreakOver();
+		};
+	}
+
+	private void BreakOver()
+	{
+		BreakBGTween?.Kill();
+		BreakBGTween = GetTree().CreateTween();
+		BreakBGTween.SetTrans(Tween.TransitionType.Cubic);
+		BreakBGTween.SetEase(Tween.EaseType.Out);
+		BreakBGTween.TweenProperty(Beatmap_Background, "self_modulate", new Color(dim, dim, dim, 1f), 0.5f);
+		BreakBGTween.TweenCallback(Callable.From((() => {BreakTime = false;})));
 	}
 private void _GameNoteTick(double delta)
 	{
@@ -486,7 +507,6 @@ private void _GameNoteTick(double delta)
 		
 		if (!BreakTime && songstarted && Notes[Math.Min(Notes.Count - 1, NoteTick)].timing  + gametime + HitPoint <= -4500)
 		{
-			BreakTime = true;
 			NoteBreakTiming = -(int)(Notes[Math.Min(Notes.Count - 1, NoteTick)].timing);
 			BreakNow();
 		}
@@ -497,7 +517,6 @@ private void _GameNoteTick(double delta)
 			var notex = Note.timing + gametime + HitPoint;
 			if (notex > -150 && notex < viewportSize + 150 && !Note.hit)
 			{
-				BreakTime = false;
 				NoteCount++;
 				if (!Note.hit && Note.Node == null)
 				{
@@ -573,11 +592,12 @@ private void _GameNoteTick(double delta)
 			HUDTween.TweenProperty(HUD, "modulate:a", 1f, 0.5f);
 		}
 	}
-
+	private float dim { get; set; }
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		
+		dim = 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f));
 		score = new Game.ScoreCalculator().ProcessScore(SettingsOperator.Gameplaycfg.Max,
 			SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh,
 			SettingsOperator.Gameplaycfg.NoteCount, ModsMulti.multiplier);
@@ -626,7 +646,8 @@ private void _GameNoteTick(double delta)
 				SettingsOperator.Gameplaycfg.MaxCombo = SettingsOperator.Gameplaycfg.Combo;
 			}
 
-			Beatmap_Background.SelfModulate = new Color(1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f)), 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f)));
+			if (!BreakTime)
+				Beatmap_Background.SelfModulate = new Color(dim, dim, dim);
 			SettingsOperator.Gameplaycfg.Accuracy = ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 			if (Input.IsActionJustPressed("pausemenu") && SettingsOperator.SpectatorMode)
 			{

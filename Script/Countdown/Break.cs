@@ -13,6 +13,8 @@ public partial class Break : TextureProgressBar
 	private double GetMaxTick() => MaxTick / AudioPlayer.Instance.PitchScale;
 
 	private double GetValueTick() => MaxTick - (SettingsOperator.Gameplaycfg.Time - GameTickDep);
+	[Signal]
+	public delegate void BreakFinishedEventHandler();
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -45,6 +47,7 @@ public partial class Break : TextureProgressBar
 		}
 	if (MaxTick - (SettingsOperator.Gameplaycfg.Time - GameTickDep) <= 0)
 	{
+		EmitSignal(SignalName.BreakFinished);
 		QueueFree();
 	}
 		MaxValue = GetMaxTick();
