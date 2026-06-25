@@ -134,6 +134,7 @@ public class Skin
     }
     public static SkinningLegend Element = new SkinningLegend();
     public static List<SkinningLegend> List = new List<SkinningLegend>();
+    public static SkinningLegend  PreElement = new SkinningLegend();
     public static int SkinIndex { get; set; }
     public static List<string> ImageNames = new List<string>(["Backgroundnote.png","Foregroundnote.png","cursor.png","MAX.png","Good.png","Bad.png","FC.png", "JudgePerfect.png", "JudgeGreat.png", "JudgeMeh.png", "JudgeMiss.png"]);
     public static SkinningLegend ReloadSkin(string path)
@@ -180,11 +181,12 @@ public class Skin
     }
     public static int LoadSkin(string path)
     {
+        GD.Print(path);
         if (!List.Any(legend => legend.SkinPath == path))
         {
             List.Add(ReloadSkin(path));
             return List.Last().ID;
         }
-        return 0;
+        return List.First(legend => legend.SkinPath == path).ID;
     }
 }

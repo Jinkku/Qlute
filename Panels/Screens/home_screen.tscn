@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://cnaimpbrbt36j" path="res://Script/Home/SubButton.cs" id="6_bh2cj"]
 [ext_resource type="Script" uid="uid://d3kp8agi7f31r" path="res://Script/Home/HomeButtonBg.cs" id="6_rg0tv"]
 [ext_resource type="Script" uid="uid://y3i7cbqspnfj" path="res://Script/Home/Events.cs" id="7_1l3bn"]
-[ext_resource type="Texture2D" uid="uid://b2ef26vxyoi26" path="res://Resources/System/MainMenu/Play.svg" id="9_bb0aq"]
+[ext_resource type="Texture2D" uid="uid://spd8rxctqc85" path="res://Icons/logo.png" id="9_jpc6g"]
 [ext_resource type="Texture2D" uid="uid://b1puke3u03rm6" path="res://Resources/System/MainMenu/Edit.svg" id="10_rmu25"]
 [ext_resource type="PackedScene" uid="uid://b6nsgo8yvtu0m" path="res://Panels/Overlays/HomeBladeButton.tscn" id="10_whutp"]
 [ext_resource type="Script" uid="uid://dlmyeuotf5af7" path="res://Script/Home/IntroPending.cs" id="11_gngjn"]
@@ -163,7 +163,7 @@ alignment = 1
 [node name="Play" parent="HomeButtonBG/HomeButtons" unique_id=1902487022 instance=ExtResource("10_whutp")]
 layout_mode = 2
 Text = "Play"
-Texture = ExtResource("9_bb0aq")
+Texture = ExtResource("9_jpc6g")
 ButtonID = 0
 
 [node name="Create" parent="HomeButtonBG/HomeButtons" unique_id=1442740216 instance=ExtResource("10_whutp")]

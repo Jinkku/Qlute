@@ -15,6 +15,7 @@ public partial class SkinEditor : Control
 	private PopupMenu FileMenu { get; set; }
 	public override void _Ready()
 	{
+		Skin.PreElement = Skin.Element;
 		currentScene = GetTree().CurrentScene;
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		Menu = GetNode<VBoxContainer>("Creativity/VBoxContainer/ScrollContainer/Elements");
@@ -37,63 +38,63 @@ public partial class SkinEditor : Control
 		ZipFile.CreateFromDirectory(path, SettingsOperator.exportdir.PathJoin($"{Skin.Element.Name}.qsk"), CompressionLevel.Optimal, true);
 		Notify.Post($"Exported {Skin.Element.Name}.\nClick to view.", $"file://{SettingsOperator.exportdir}");
 	}
-	private void SaveChanges()
-	{
-		SkinningLegend PreElement = Skin.Element;
-		bool New = false;
-		if (PreElement.Name.Length < 1)
-		{
-			PreElement.Name = new SkinningLegend().Name;
-		}
-		Dictionary<string, object> SkinSettings = new Dictionary<string, object> // Settings for the skin!!!!
-		{
-			{"Name" , Skin.Element.Name},
-			{"NoteLane1" , Skin.Element.LaneNotes[0].ToHtml(false)},
-			{"NoteLane2" , Skin.Element.LaneNotes[1].ToHtml(false)},
-			{"NoteLane3" , Skin.Element.LaneNotes[2].ToHtml(false)},
-			{"NoteLane4" , Skin.Element.LaneNotes[3].ToHtml(false)},
-		};
-		var path = PreElement.SkinPath;
-		if (PreElement.SkinPath == null || Skin.Element.SkinPath.StartsWith("res://"))
-		{
-			path = SettingsOperator.skinsdir.PathJoin(Skin.Element.Name);
-		}
-		if (!Directory.Exists(path))
-		{
-			System.IO.Directory.CreateDirectory(path);
-			New = true;
-		}
-		var index = 0;
-		foreach (Texture2D img in new List<Texture2D>([PreElement.NoteBack, PreElement.NoteFore, PreElement.Cursor, PreElement.Perfect, PreElement.Good, PreElement.Bad, PreElement.FullCombo, PreElement.JudgePerfect, PreElement.JudgeGreat, PreElement.JudgeMeh, PreElement.JudgeMiss]))
-		{
-			Error resultPng = img.GetImage().SavePng(path.PathJoin(Skin.ImageNames[index]));
-			if (resultPng == Error.Ok)
-			{
-				GD.Print($"Image saved successfully to: {path.PathJoin(Skin.ImageNames[index])}");
-			}
-			else
-			{
-				GD.PrintErr($"Failed to save image to PNG: {resultPng}");
-			}
-			index++;
-		}
-		using var saveFile = Godot.FileAccess.Open(path.PathJoin("settings.json"), Godot.FileAccess.ModeFlags.Write);
-		var json = JsonSerializer.Serialize(SkinSettings);
-		saveFile.StoreString(json);
-		saveFile.Close();
-		if (New)
-		{
-			int ind = Skin.LoadSkin(path);
-			Skin.Element = Skin.List[ind];
-			SettingsOperator.SetSetting("skin", ind);
-			Skin.SkinIndex = ind;
-		}
-		else
-		{
-			Skin.Element = PreElement;
-		}
-		Notify.Post($"Saved {Skin.Element.Name}");
-	}
+private void SaveChanges()
+{
+    SkinningLegend PreElement = Skin.Element;
+    bool New = false;
+    if (PreElement.Name.Length < 1)
+    {
+        PreElement.Name = new SkinningLegend().Name;
+    }
+    Dictionary<string, object> SkinSettings = new Dictionary<string, object> // Settings for the skin!!!!
+    {
+        {"Name" , Skin.Element.Name},
+        {"NoteLane1" , Skin.Element.LaneNotes[0].ToHtml(false)},
+        {"NoteLane2" , Skin.Element.LaneNotes[1].ToHtml(false)},
+        {"NoteLane3" , Skin.Element.LaneNotes[2].ToHtml(false)},
+        {"NoteLane4" , Skin.Element.LaneNotes[3].ToHtml(false)},
+    };
+    var path = PreElement.SkinPath;
+    if (PreElement.SkinPath == null || Skin.Element.SkinPath.StartsWith("res://"))
+    {
+        path = SettingsOperator.skinsdir.PathJoin(Skin.Element.Name);
+    }
+    if (!Directory.Exists(path))
+    {
+        System.IO.Directory.CreateDirectory(path);
+        New = true;
+    }
+    var index = 0;
+    foreach (Texture2D img in new List<Texture2D>([PreElement.NoteBack, PreElement.NoteFore, PreElement.Cursor, PreElement.Perfect, PreElement.Good, PreElement.Bad, PreElement.FullCombo, PreElement.JudgePerfect, PreElement.JudgeGreat, PreElement.JudgeMeh, PreElement.JudgeMiss]))
+    {
+        Error resultPng = img.GetImage().SavePng(path.PathJoin(Skin.ImageNames[index]));
+        if (resultPng == Error.Ok)
+        {
+            GD.Print($"Image saved successfully to: {path.PathJoin(Skin.ImageNames[index])}");
+        }
+        else
+        {
+            GD.PrintErr($"Failed to save image to PNG: {resultPng}");
+        }
+        index++;
+    }
+    using var saveFile = Godot.FileAccess.Open(path.PathJoin("settings.json"), Godot.FileAccess.ModeFlags.Write);
+    var json = JsonSerializer.Serialize(SkinSettings);
+    saveFile.StoreString(json);
+    saveFile.Close();
+    PreElement.SkinPath = path; 
+    if (New)
+    {
+	    Skin.List.Add(PreElement);
+	    Skin.List[Skin.SkinIndex] = new SkinningLegend
+	    {
+		    Name = "Slia (Qlute's Default skin 2025)"
+	    };
+	    Skin.SkinIndex = Skin.List.Count - 1;
+	    SettingsOperator.SetSetting("skin", Skin.SkinIndex);
+    }
+    Notify.Post($"Saved {Skin.Element.Name}");
+}
 	private bool MissingFunction { get; set; } = false;
 	private Container MissingDisclaimer { get; set; } = null;
 

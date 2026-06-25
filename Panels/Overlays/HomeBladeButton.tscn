@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b6nsgo8yvtu0m"]
 
 [ext_resource type="Script" uid="uid://btpasgcq7n7n6" path="res://Script/Effects/ButtonBounce.cs" id="1_7h7yx"]
-[ext_resource type="Texture2D" uid="uid://b2ef26vxyoi26" path="res://Resources/System/MainMenu/Play.svg" id="2_ae3t0"]
+[ext_resource type="Texture2D" uid="uid://spd8rxctqc85" path="res://Icons/logo.png" id="2_7h7yx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nktxj"]
 content_margin_left = 0.0
@@ -61,8 +61,9 @@ offset_top = -40.0
 offset_right = 15.0
 offset_bottom = -10.0
 grow_horizontal = 2
+offset_transform_enabled = true
 mouse_filter = 2
-texture = ExtResource("2_ae3t0")
+texture = ExtResource("2_7h7yx")
 expand_mode = 1
 
 [connection signal="button_down" from="." to="." method="_down"]

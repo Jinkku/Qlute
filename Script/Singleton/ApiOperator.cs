@@ -189,7 +189,6 @@ public partial class ApiOperator : Node
 
 	public static void InitDiscord()
 	{
-		Notify.Post("Init Discord DEBUG");
         
 		if (Client != null)
 		{
@@ -204,7 +203,6 @@ public partial class ApiOperator : Node
 
 	public static void KillDiscord()
 	{
-		Notify.Post("Kill Discord DEBUG");
         
 		if (Client != null)
 		{
