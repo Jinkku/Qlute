@@ -272,7 +272,6 @@ public partial class SongSelect : Control
 	{
 		PrepareMainComponents(); // Prepares Song Select v2 components.
 		AnimationScene(0); // Makes all elements invisible when ready to start.
-
 		SettingsOperator.loopaudio = true;
 		scrollBar = GetNode<VScrollBar>("SongPanel/VScrollBar");
 		RankStatus = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Column1/RankBox");
@@ -298,10 +297,11 @@ public partial class SongSelect : Control
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SongTitle = GetNode<Label>("SongDetails/SongInfo/Rows/Column1/Title");
 		ExSongInfo = GetNode<Label>("SongDetails/SongInfo/Rows/ExSongInfo");
-
-		CardSize = InitiateMusicCard().Size;
+		
+		var MusicCardTemp = InitiateMusicCard();
+		CardSize = MusicCardTemp.Size;
 		CardSize = new Vector2(CardSize.X, CardSize.Y + 5);
-
+		MusicCardTemp.QueueFree();	
 		LevelRating = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/Level");
 		Songpp = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/Points");
 		SongBPM = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/BPM");
@@ -450,10 +450,6 @@ public partial class SongSelect : Control
 
 			if (!Mathf.IsEqualApprox(entry.Position.Y, targetY))
 				entry.Position = new Vector2(entry.Position.X, targetY);
-
-			// =========================
-			// 🔥 RADIAL SCROLL EFFECT 🔥
-			// =========================
 
 			float screenY = entry.GlobalPosition.Y + (entry.Size.Y * 0.5f);
 			float distance = Mathf.Abs(screenY - WindowSizeCenter.Y);

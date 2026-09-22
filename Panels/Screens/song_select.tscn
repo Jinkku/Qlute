@@ -763,8 +763,8 @@ script = ExtResource("20_ihwey")
 [connection signal="button_up" from="BottomBar/Start" to="." method="_start_focus"]
 [connection signal="mouse_entered" from="BottomBar/Start" to="." method="_start_focus"]
 [connection signal="mouse_exited" from="BottomBar/Start" to="." method="_start_unfocus"]
-[connection signal="pressed" from="BottomBar/Start" to="." method="_Start"]
 [connection signal="pressed" from="BottomBar/Start" to="." method="_resetreplay"]
+[connection signal="pressed" from="BottomBar/Start" to="." method="_Start"]
 [connection signal="timeout" from="Bpmtick" to="." method="_tick"]
 
 [editable path="BottomBar/ControlPanel"]
