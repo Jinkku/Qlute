@@ -343,7 +343,7 @@ public partial class SettingsOperator : Node
         return Math.Max(0, ppvalue);
     }
 
-    public int ConvertModeIDFromOsu(int Mode)
+    public static int ConvertModeIDFromOsu(int Mode)
     {
         switch (Mode)
         {
@@ -399,7 +399,7 @@ public partial class SettingsOperator : Node
                     case "BeatmapID": legend.BeatmapID = int.TryParse(value, out var bid) ? bid : -1; break;
                     case "BeatmapSetID": legend.BeatmapSetID = int.TryParse(value, out var bset) ? bset : -1; break;
                     case "PreviewTime": legend.PreviewTime = (float.TryParse(value, out var pt) ? pt : 0) * 0.001f; break;
-                    case "Mode": legend.GameModeID = new SettingsOperator().ConvertModeIDFromOsu(int.TryParse(value, out var bgid) ? bgid : -1); break;
+                    case "Mode": legend.GameModeID = ConvertModeIDFromOsu(int.TryParse(value, out var bgid) ? bgid : -1); break;
                 }
             }
 

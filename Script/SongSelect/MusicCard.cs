@@ -4,6 +4,9 @@ using System.IO;
 using System.Threading.Tasks;
 using FileAccess = Godot.FileAccess;
 using System.Collections.Generic;
+using System.Threading;
+using Timer = Godot.Timer;
+
 public partial class MusicCard : Button
 {
 	private SettingsOperator SettingsOperator { get; set; }
@@ -35,40 +38,12 @@ public partial class MusicCard : Button
 			texture.Dispose();
 			texture = null;
 		}
-		GC.Collect();
-		GC.WaitForPendingFinalizers();
 	}
-
-	private async void LoadExternalImage(string path)
+	private void ApplyLoadedImage(Image data)
 	{
-		if (isLoadingImage || string.IsNullOrEmpty(path)) 
-			return;
+		if (!IsInstanceValid(this)) { data?.Dispose(); return; }
 
-		isLoadingImage = true;
-
-		await Task.Delay(250); // Wait half a second
-
-		if (!IsInstanceValid(this))
-			return; // The node has perished… abort mission!
-
-		var data = await Task.Run(() =>
-		{
-			if (FileAccess.FileExists(path))
-				return Image.LoadFromFile(path);
-			else
-				return null;
-		});
-
-// Optional: check again if the node still exists before using `data`
-		if (!IsInstanceValid(this))
-			return;
-
-		// Dispose the old texture before replacing
-		if (texture != null)
-		{
-			texture.Dispose();
-			texture = null;
-		}
+		if (texture != null) { texture.Dispose(); texture = null; }
 
 		if (data == null)
 		{
@@ -77,23 +52,41 @@ public partial class MusicCard : Button
 		else
 		{
 			texture = ImageTexture.CreateFromImage(data);
-			data.Dispose(); // free the Image after creating texture
+			data.Dispose();
 		}
 
-		// Assign to the Preview node if it's still valid
 		if (texture != null && IsInstanceValid(Preview))
 		{
+			LoadTween?.Kill();
 			LoadTween = CreateTween();
 			LoadTween.TweenProperty(Preview, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f)
-					.SetEase(Tween.EaseType.Out)
-					.SetTrans(Tween.TransitionType.Cubic);
+				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 			LoadTween.Play();
-
 			Preview.Texture = texture;
 		}
 
 		isLoadingImage = false;
 	}
+	private CancellationTokenSource _loadCts;
+	private async void LoadExternalImage(string path)
+	{
+		if (isLoadingImage || string.IsNullOrEmpty(path)) return;
+		isLoadingImage = true;
+		_loadCts = new CancellationTokenSource();
+		var token = _loadCts.Token;
+
+		try
+		{
+			await Task.Delay(250, token);
+			var data = await Task.Run(() =>
+				FileAccess.FileExists(path) ? Image.LoadFromFile(path) : null, token);
+
+			if (!IsInstanceValid(this) || token.IsCancellationRequested) return;
+			CallDeferred(nameof(ApplyLoadedImage), data);
+		}
+		catch (TaskCanceledException) { }
+	}
+
 
 	private Tween LoadTween { get; set; }
 	private bool Unicode { get; set; }

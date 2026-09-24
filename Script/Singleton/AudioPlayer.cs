@@ -47,7 +47,7 @@ public partial class AudioPlayer : AudioStreamPlayer
         Sample.VolumeDb = ToDB(SampleVol);
     }
 
-    public AudioStream AutoDetectFormat(string audioPath)
+    public static AudioStream AutoDetectFormat(string audioPath)
     {
         AudioFormat? format = AudioPlayer.GetAudioFormat(audioPath);
 
@@ -75,7 +75,7 @@ public partial class AudioPlayer : AudioStreamPlayer
         if (System.IO.File.Exists(audioPath))
         {
             string chk = ChecksumUtil.GetSha256(audioPath);
-            AudioStream filestream = new AudioPlayer().AutoDetectFormat(audioPath);
+            AudioStream filestream = AudioPlayer.AutoDetectFormat(audioPath);
             if (AudioPlayer.checksum != chk)
             {
                 AudioPlayer.checksum = chk;

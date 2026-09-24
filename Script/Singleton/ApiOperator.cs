@@ -158,7 +158,7 @@ public partial class ApiOperator : Node
 				{
 					leaderboardEntry.ProfilePicture = texture;
 				});
-				leaderboardEntry.score = new ScoreCalculator().ProcessScore(leaderboardEntry.MAX, leaderboardEntry.GOOD, leaderboardEntry.MEH, leaderboardEntry.MAX + leaderboardEntry.GOOD + leaderboardEntry.MEH + leaderboardEntry.BAD, new ModsOperator().ProcessMultiplierByMod(leaderboardEntry.mods));
+				leaderboardEntry.score = new ScoreCalculator().ProcessScore(leaderboardEntry.MAX, leaderboardEntry.GOOD, leaderboardEntry.MEH, leaderboardEntry.MAX + leaderboardEntry.GOOD + leaderboardEntry.MEH + leaderboardEntry.BAD, ModsOperator.ProcessMultiplierByMod(leaderboardEntry.mods));
 			}
 			GD.Print("Leaderboard loaded successfully.");
 		}

@@ -50,7 +50,8 @@ public partial class SongSelect : Control
 	private Button LeaderboardDetails { get; set; }
 	private PanelContainer DetailsExtended { get; set; }
 	private ScrollContainer Leaderboardinfo { get; set; }
-	private Vector2 CardSize { get; set; }
+	private static Vector2? _cachedCardSize;
+	private Vector2 CardSize;
 	private bool Update { get; set; }
 
 	private int OldSongID { get; set; }
@@ -90,6 +91,7 @@ public partial class SongSelect : Control
 		double value = ement != 0 ? scrollBar.Value + ement : exactvalue;
 		scrolltween?.Kill();
 		scrolltween = CreateTween();
+		scrolltween.BindNode(scrollBar);
 		scrolltween.TweenProperty(scrollBar, "value", value, 0.5f).SetEase(Tween.EaseType.Out)
 			.SetTrans(Tween.TransitionType.Cubic);
 		scrolltween.Play();
@@ -109,18 +111,10 @@ public partial class SongSelect : Control
 		ScrollSongs();
 	}
 
-	///<summary>
-	/// Initiates Music Card then returns into a button.
-	/// </summary>
-	private MusicCard InitiateMusicCard()
-	{
-		return (MusicCard)musiccardtemplate.Instantiate();
-	}
-
 	public void AddSongList(int virtualId)
 	{
 		int realId = FilteredIndices.Count > 0 ? FilteredIndices[virtualId] : virtualId;
-		MusicCard button = InitiateMusicCard();
+		MusicCard button = (MusicCard)musiccardtemplate.Instantiate();
 		var Rating = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Rating");
 		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Version");
 		button.Position = new Vector2(0, startposition + (CardSize.Y * virtualId));
@@ -244,10 +238,17 @@ public partial class SongSelect : Control
 	{
 		RebuildFilter(value);
 
-		// Clear all rendered cards so ScrollSongs rebuilds from filtered indices
 		for (int i = SongEntry.Count - 1; i >= 0; i--)
-			SongEntry[i].QueueFree();
+		{
+			var entry = SongEntry[i];
+			entry.GetParent()?.RemoveChild(entry);
+			entry.Free();
+		}
 		SongEntry.Clear();
+
+		// force ScrollSongs to rebuild even if the index range is numerically unchanged
+		_lastStartIndex = int.MinValue;
+		_lastEndIndex = int.MinValue;
 
 		if (FilteredIndices.Count > 0)
 		{
@@ -297,11 +298,6 @@ public partial class SongSelect : Control
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SongTitle = GetNode<Label>("SongDetails/SongInfo/Rows/Column1/Title");
 		ExSongInfo = GetNode<Label>("SongDetails/SongInfo/Rows/ExSongInfo");
-		
-		var MusicCardTemp = InitiateMusicCard();
-		CardSize = MusicCardTemp.Size;
-		CardSize = new Vector2(CardSize.X, CardSize.Y + 5);
-		MusicCardTemp.QueueFree();	
 		LevelRating = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/Level");
 		Songpp = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/Points");
 		SongBPM = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Misc/BPM");
@@ -314,8 +310,18 @@ public partial class SongSelect : Control
 		StartButton = GetNode<TextureButton>("BottomBar/Start");
 		StartButton.Visible = false; // Start the button off with being hidden.
 		scrollBar.Value = SettingsOperator.SessionConfig.SongID;
+		if (_cachedCardSize == null)
+		{
+			var MusicCardTemp = (MusicCard)musiccardtemplate.Instantiate();
+			_cachedCardSize = new Vector2(MusicCardTemp.Size.X, MusicCardTemp.Size.Y + 5);
+			MusicCardTemp.Free();	
+			GD.Print("Setting card size for the first time");
+		}
+		CardSize = _cachedCardSize.Value;
 		CheckLeaderboardMode();
 		RebuildFilter(""); // Populate FilteredIndices with all songs on load
+		_lastStartIndex = int.MinValue;
+		_lastEndIndex = int.MinValue;
 		ScrollSongs();
 
 		OldSongID = SettingsOperator.SessionConfig.SongID;
@@ -386,85 +392,87 @@ public partial class SongSelect : Control
 			.SetTrans(Tween.TransitionType.Cubic);
 		StartTween.Play();
 	}
-
+	private int _lastStartIndex = int.MinValue;
+	private int _lastEndIndex = int.MinValue;
 	private void ScrollSongs()
 	{
-		if (scrollBar == null)
-			return;
+	    if (scrollBar == null)
+	        return;
 
-		SongLoaded = 0;
+	    int cardHeight = (int)(CardSize.Y + 5);
+	    int itemCount = (int)(WindowSize.Y / cardHeight);
+	    int totalCount = FilteredIndices.Count > 0 ? FilteredIndices.Count : SettingsOperator.Beatmaps.Count;
 
-		int cardHeight = (int)(CardSize.Y + 5);
-		int itemCount = (int)(WindowSize.Y / cardHeight);
-		int startIndex = Math.Max(0, (int)scrollBar.Value - (itemCount / 2));
-		int endIndex = Math.Min(FilteredIndices.Count > 0 ? FilteredIndices.Count : SettingsOperator.Beatmaps.Count,
-			(int)scrollBar.Value + (itemCount / 2) + 2);
+	    int startIndex = Math.Max(0, (int)scrollBar.Value - (itemCount / 2));
+	    int endIndex = Math.Min(totalCount, (int)scrollBar.Value + (itemCount / 2) + 2);
 
-		var visible = new Dictionary<int, Button>(SongEntry.Count);
-		for (int i = 0; i < SongEntry.Count; i++)
-		{
-			Button btn = SongEntry[i];
-			if (btn != null && btn.HasMeta("SongIndex"))
-			{
-				int idx = (int)btn.GetMeta("SongIndex");
-				visible[idx] = btn;
-			}
-		}
+	    bool noResults = FilteredIndices.Count < 1 && !string.IsNullOrEmpty(Searchtext);
+	    bool rangeChanged = startIndex != _lastStartIndex || endIndex != _lastEndIndex;
 
-		for (int i = SongEntry.Count - 1; i >= 0; i--)
-		{
-			Button button = SongEntry[i];
-			if (!button.HasMeta("SongIndex"))
-			{
-				SongEntry.RemoveAt(i);
-				continue;
-			}
+	    if (rangeChanged && !noResults)
+	    {
+	        _lastStartIndex = startIndex;
+	        _lastEndIndex = endIndex;
 
-			int buttonIndex = (int)button.GetMeta("SongIndex");
+	        var visible = new Dictionary<int, Button>(SongEntry.Count);
+	        for (int i = 0; i < SongEntry.Count; i++)
+	        {
+	            Button btn = SongEntry[i];
+	            if (btn != null && btn.HasMeta("SongIndex"))
+	                visible[(int)btn.GetMeta("SongIndex")] = btn;
+	        }
 
-			if (buttonIndex < startIndex || buttonIndex >= endIndex)
-			{
-				button.QueueFree();
-				SongEntry.RemoveAt(i);
-				visible.Remove(buttonIndex);
-			}
-		}
+	        for (int i = SongEntry.Count - 1; i >= 0; i--)
+	        {
+	            Button button = SongEntry[i];
+	            if (!button.HasMeta("SongIndex"))
+	            {
+	                SongEntry.RemoveAt(i);
+	                continue;
+	            }
 
-		if (FilteredIndices.Count < 1 && !string.IsNullOrEmpty(Searchtext))
-			return;
-		for (int i = startIndex; i < endIndex; i++)
-		{
-			Button entry;
-			if (!visible.TryGetValue(i, out entry))
-			{
-				AddSongList(i);
-				entry = SongEntry.Last();
-				visible[i] = entry;
-				SongLoaded++;
-			}
+	            int buttonIndex = (int)button.GetMeta("SongIndex");
+	            if (buttonIndex < startIndex || buttonIndex >= endIndex)
+	            {
+	                button.GetParent()?.RemoveChild(button);
+	                button.Free();
+	                SongEntry.RemoveAt(i);
+	                visible.Remove(buttonIndex);
+	            }
+	        }
 
-			float targetY =
-				startposition +
-				(CardSize.Y * i) -
-				(CardSize.Y * (float)scrollBar.Value);
+	        SongLoaded = 0;
+	        for (int i = startIndex; i < endIndex; i++)
+	        {
+	            if (!visible.ContainsKey(i))
+	            {
+	                AddSongList(i);
+	                SongLoaded++;
+	            }
+	        }
+	    }
 
-			if (!Mathf.IsEqualApprox(entry.Position.Y, targetY))
-				entry.Position = new Vector2(entry.Position.X, targetY);
+	    if (noResults)
+	        return;
 
-			float screenY = entry.GlobalPosition.Y + (entry.Size.Y * 0.5f);
-			float distance = Mathf.Abs(screenY - WindowSizeCenter.Y);
+	    // Always refresh position/scale so the scroll animation stays smooth every frame
+	    foreach (var entry in SongEntry)
+	    {
+	        if (!entry.HasMeta("SongIndex")) continue;
+	        int i = (int)entry.GetMeta("SongIndex");
 
-			float radial = Mathf.Clamp(distance / WindowSizeCenter.Y, 0f, 1f);
-			radial = Mathf.Pow(radial, 0.6f);
+	        float targetY = startposition + (CardSize.Y * i) - (CardSize.Y * (float)scrollBar.Value);
+	        if (!Mathf.IsEqualApprox(entry.Position.Y, targetY))
+	            entry.Position = new Vector2(entry.Position.X, targetY);
 
-			// scale
-			float scale = 1.0f - (radial * 0.15f);
+	        float screenY = entry.GlobalPosition.Y + (entry.Size.Y * 0.5f);
+	        float distance = Mathf.Abs(screenY - WindowSizeCenter.Y);
+	        float radial = Mathf.Pow(Mathf.Clamp(distance / WindowSizeCenter.Y, 0f, 1f), 0.6f);
+	        float scale = 1.0f - (radial * 0.15f);
 
-			entry.Scale = new Vector2(scale, scale);
-
-			entry.ZIndex = 0;
-			SongLoaded++;
-		}
+	        entry.Scale = new Vector2(scale, scale);
+	        entry.ZIndex = 0;
+	    }
 	}
 
 	private void checksongpanel()

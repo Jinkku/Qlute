@@ -9,7 +9,7 @@ public partial class ModsMulti : Label
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
-		multiplier = new ModsOperator().ProcessMultiplierByModList(ModsOperator.Mods);
+		multiplier = ModsOperator.ProcessMultiplierByModList(ModsOperator.Mods);
 		Text = multiplier.ToString("0.00")+"x";
 	}
 }

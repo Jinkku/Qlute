@@ -326,7 +326,7 @@ public override void _Ready()
 				var value = parts[1].Trim();
 				switch (key)
 				{
-					case "AudioFilename": EditorPlayer.Stream = new AudioPlayer().AutoDetectFormat(ParentPath.PathJoin(value)); break;
+					case "AudioFilename": EditorPlayer.Stream = AudioPlayer.AutoDetectFormat(ParentPath.PathJoin(value)); break;
 				}
 			} 
 			if (line.Trim() == "[HitObjects]") { isHitObjectSection = true; continue; }

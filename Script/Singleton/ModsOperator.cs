@@ -4,8 +4,8 @@ using System;
 
 public partial class ModsOperator : Node
 {
-	public float DTSpeedMultiplier { get; set; } = 1.25f;
-	public float HTSpeedMultiplier { get; set; } = 0.5f;
+	public static float DTSpeedMultiplier { get; set; } = 1.25f;
+	public static float HTSpeedMultiplier { get; set; } = 0.5f;
 	public static void Reset()
 	{
 		foreach(var mod in Mods)
@@ -36,7 +36,7 @@ public partial class ModsOperator : Node
 	/// <summary>
 	/// Simulate the multiplier
 	/// </summary>
-	public float ProcessMultiplierByMod(string Mods)
+	public static float ProcessMultiplierByMod(string Mods)
 	{
 		var multiplier= 1.0f;
 		if (Mods.Contains("DT"))
@@ -68,7 +68,7 @@ public partial class ModsOperator : Node
 	/// <summary>
 	/// Simulate the multiplier
 	/// </summary>
-	public float ProcessMultiplierByModList(Dictionary<string, bool> Mods)
+	public static float ProcessMultiplierByModList(Dictionary<string, bool> Mods)
 	{
 		var multiplier= 1.0f;
 		foreach (var mod in Mods)
