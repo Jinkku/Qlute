@@ -71,7 +71,7 @@ public override void _Ready()
 		SongDifficulty.Text = CreateEditor.EditorSongInfo.SongDifficulty;
 		EditorBackground.Texture = CreateEditor.EditorSongInfo.Background;
 		EditorBackgroundPreview.Texture = EditorBackground.Texture;
-		ParentPath = CreateEditor.EditorSongInfo.FilePath.TrimEnd(CreateEditor.EditorSongInfo.FilePath.Split("/").Last()).ToString();
+		ParentPath = System.IO.Path.GetDirectoryName(CreateEditor.EditorSongInfo.FilePath);
 		SectionResized();
 		if (CreateEditor.EditorSongInfo.FilePath != null) 
 			ReloadBeatmap(CreateEditor.EditorSongInfo.FilePath);
