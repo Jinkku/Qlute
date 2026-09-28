@@ -46,6 +46,11 @@ layout_mode = 2
 mouse_filter = 0
 text = "Using xx render"
 
+[node name="NETVersion" type="Label" parent="Rows" unique_id=942122029]
+layout_mode = 2
+mouse_filter = 0
+text = "Using .NET x.x"
+
 [node name="GameVersion" type="Label" parent="Rows" unique_id=107603884]
 layout_mode = 2
 mouse_filter = 0

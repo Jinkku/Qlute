@@ -1,10 +1,12 @@
 using Godot;
 using System;
+using Environment = System.Environment;
 
 public partial class DebugSettings : PanelContainer
 {
 	private CheckButton DevHide { get; set; }
 	private CheckButton DiscordRPC { get; set; }
+	private Label NetVersion { get; set; }
 	private Signal Discord { get; set; }
 	private ApiOperator ApiOperator { get; set; }
 
@@ -13,11 +15,13 @@ public partial class DebugSettings : PanelContainer
 	public override void _Ready()
 	{
 		ApiOperator = new ApiOperator();
+		NetVersion = GetNode<Label>("Rows/NETVersion");
 		DiscordRPC = GetNode<CheckButton>("Rows/DiscordRPC");
 		DevHide = GetNode<CheckButton>("Rows/HideDevDisclaimer");
 		DevHide.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("hidedevintro").ToString());
 		DiscordRPC.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("discord-rpc").ToString());
 		GetNode<Label>("Rows/GodotEngineVersion").Text = $"Godot Version {Engine.GetVersionInfo()["major"]}.{Engine.GetVersionInfo()["minor"]}";
+		NetVersion.Text = $"Using .NET {Environment.Version}";
 	}
 
 	private void _devsel()
