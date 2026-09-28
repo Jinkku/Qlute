@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c8egllgadndpy"]
+[gd_scene format=3 uid="uid://c8egllgadndpy"]
 
 [ext_resource type="Script" uid="uid://ddyso8ifkfuv2" path="res://Script/SongSelect/Modscfg.cs" id="1_wunyc"]
 [ext_resource type="PackedScene" uid="uid://cs1yw4bti3qhr" path="res://Panels/Overlays/ModEmblemResults.tscn" id="2_w2ft7"]
@@ -61,16 +61,17 @@ content_margin_right = 5.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j7feq"]
 content_margin_left = 5.0
-content_margin_top = 2.0
+content_margin_top = 0.0
 content_margin_right = 5.0
 content_margin_bottom = 2.0
 bg_color = Color(1, 1, 1, 0.1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
 corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+expand_margin_left = 6.0
+expand_margin_top = 6.0
+expand_margin_right = 10.0
+expand_margin_bottom = 10.0
 
-[node name="ModButton" type="Button"]
+[node name="ModButton" type="Button" unique_id=481407611]
 custom_minimum_size = Vector2(400, 65)
 offset_right = 8.0
 offset_bottom = 8.0
@@ -87,7 +88,7 @@ metadata/Desc = "This mod will explode your enemies with 9999 HP damage!"
 metadata/ModName = "Sample"
 metadata/ModNameSmall = "SPL"
 
-[node name="Margin" type="PanelContainer" parent="."]
+[node name="Margin" type="PanelContainer" parent="." unique_id=1061159376]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -97,21 +98,21 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_xnhch")
 
-[node name="H" type="HBoxContainer" parent="Margin"]
+[node name="H" type="HBoxContainer" parent="Margin" unique_id=9393891]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="ModEmblem" parent="Margin/H" instance=ExtResource("2_w2ft7")]
+[node name="ModEmblem" parent="Margin/H" unique_id=1476244224 instance=ExtResource("2_w2ft7")]
 layout_mode = 2
 text = "NA"
 
-[node name="Pill" type="VBoxContainer" parent="Margin/H"]
+[node name="Pill" type="VBoxContainer" parent="Margin/H" unique_id=148253781]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 7
 alignment = 1
 
-[node name="Title" type="Label" parent="Margin/H/Pill"]
+[node name="Title" type="Label" parent="Margin/H/Pill" unique_id=1437972188]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
@@ -119,7 +120,7 @@ theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("StyleBoxEmpty_w2ft7")
 text = "Mod Title"
 
-[node name="Desc" type="Label" parent="Margin/H/Pill"]
+[node name="Desc" type="Label" parent="Margin/H/Pill" unique_id=400515516]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -128,5 +129,4 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_j7feq")
 text = "Damage"
 vertical_alignment = 1
 autowrap_mode = 3
-clip_text = true
 text_overrun_behavior = 4
