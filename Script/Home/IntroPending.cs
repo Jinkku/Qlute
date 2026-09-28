@@ -110,6 +110,7 @@ public partial class IntroPending : Control
 	private Tween _tween { get; set; }
 	private void AnimationTick(bool type)
 	{
+		_tween?.Kill();
 		_tween = GetTree().CreateTween();
 		_tween.SetParallel(true);
 		if (type)
