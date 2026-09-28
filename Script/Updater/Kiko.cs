@@ -120,6 +120,8 @@ public partial class Kiko : Node
         {
             GD.Print("Ignored updates for now...");
         }
+        GD.Print("Kiko is now done. Now killing node...");
+        QueueFree();
     }
 
     public void PrepareUpdateProcess()
