@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 public enum AudioFormat { MP3, WAV, OGG }
 public partial class AudioPlayer : AudioStreamPlayer
@@ -11,6 +12,7 @@ public partial class AudioPlayer : AudioStreamPlayer
     public static int SampleVol { get; set; } = 70;
     private bool _isPlaying = false;
     public static bool _isogg = false;
+    public static bool _isLoading = false;
     public static string checksum { get; set; }
     private float _seekPosition = 0.0f;
     public static int PreviewID { get; set; } = 0;
@@ -69,38 +71,48 @@ public partial class AudioPlayer : AudioStreamPlayer
     }
 
     public static bool isMasterMuted() => (MasterVol == 0);
-    
-    public static void LoadMusic(string audioPath, float seek = 0)
+    public static async void LoadMusic(string audioPath, float seek = 0)
     {
-        if (System.IO.File.Exists(audioPath))
+        if (!System.IO.File.Exists(audioPath))
         {
-            string chk = ChecksumUtil.GetSha256(audioPath);
-            AudioStream filestream = AudioPlayer.AutoDetectFormat(audioPath);
+            AudioPlayer.checksum = null;
+            Instance.Stream = null;
+            Instance.Stop();
+            GD.PrintErr("Audio file not found: " + audioPath);
+            return;
+        }
+
+        if (_isLoading) return;
+        _isLoading = true;
+
+        try
+        {
+            // Compute SHA-256 and read audio bytes on a background thread
+            string chk = await Task.Run(() => ChecksumUtil.GetSha256(audioPath));
+
             if (AudioPlayer.checksum != chk)
             {
                 AudioPlayer.checksum = chk;
-                AudioPlayer.Instance.Stream = filestream;
-                AudioPlayer.Instance.Play(seek);
-                SettingsOperator.Gameplaycfg.TimeTotal = (float)(AudioPlayer.Instance.Stream?.GetLength() ?? 0);
+                
+                // Read and decode stream asynchronously
+                AudioStream filestream = await Task.Run(() => AutoDetectFormat(audioPath));
+
+                if (filestream != null)
+                {
+                    Instance.Stream = filestream;
+                    Instance.Play(seek);
+                    SettingsOperator.Gameplaycfg.TimeTotal = (float)(Instance.Stream?.GetLength() ?? 0);
+                }
             }
         }
-        else
+        catch (Exception ex)
         {
-            AudioPlayer.checksum = null;
-            AudioPlayer.Instance.Stream = null;
-            AudioPlayer.Instance.Stop();
-            GD.PrintErr("Audio file not found: " + audioPath);
+            GD.PrintErr($"Failed to load audio asynchronously: {ex.Message}");
         }
-    }
-
-    public static AudioStreamMP3 LoadMP3(string path)
-    {
-        using var file = Godot.FileAccess.Open(path, Godot.FileAccess.ModeFlags.Read);
-        var sound = new AudioStreamMP3();
-        _isogg = false;
-        sound.Data = file.GetBuffer((long)file.GetLength());
-        GD.Print($"Loaded MP3"); 
-        return sound;
+        finally
+        {
+            _isLoading = false;
+        }
     }
 	public void AudioLoop(){
 		if (SettingsOperator.Gameplaycfg.TimeTotal - GetPlaybackPosition() < 0.1 && SettingsOperator.loopaudio)
@@ -108,21 +120,38 @@ public partial class AudioPlayer : AudioStreamPlayer
 			AudioPlayer.Instance.Play();
 		}
 	}
-    public static AudioStreamOggVorbis LoadOGG(string path) 
-    { 
-         GD.Print($"Loaded OGG"); 
-         return AudioStreamOggVorbis.LoadFromFile(path);
-    }
-    public static AudioStreamWav LoadWAV(string path)
+    public static AudioStreamMP3 LoadMP3(string path)
     {
         _isogg = false;
-        using var file = Godot.FileAccess.Open(path, Godot.FileAccess.ModeFlags.Read);
-        var sound = new AudioStreamWav();
-        sound.Data = file.GetBuffer((long)file.GetLength());
-        GD.Print($"Loaded WAV");
+        byte[] data = System.IO.File.ReadAllBytes(path);
+        
+        var sound = new AudioStreamMP3
+        {
+            Data = data
+        };
         return sound;
     }
 
+    public static AudioStreamOggVorbis LoadOGG(string path)
+    {
+        _isogg = true;
+        return AudioStreamOggVorbis.LoadFromFile(path);
+    }
+
+    public static AudioStreamWav LoadWAV(string path)
+    {
+        _isogg = false;
+        byte[] data = System.IO.File.ReadAllBytes(path);
+
+        var sound = new AudioStreamWav
+        {
+            Data = data,
+            Format = AudioStreamWav.FormatEnum.Format16Bits, // Prevents real-time conversion stalls
+            MixRate = 48000,                                 // Matches default driver rate
+            Stereo = true
+        };
+        return sound;
+    }
     public static AudioFormat? GetAudioFormat(string filePath)
     {
         try
