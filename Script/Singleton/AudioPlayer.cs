@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 public enum AudioFormat { MP3, WAV, OGG }
 public partial class AudioPlayer : AudioStreamPlayer
 {
-    public static AudioStreamPlayer Instance;
+    public static AudioPlayer Instance;
     public static AudioStreamPlayer BrowsePreview;
+    private AudioEffectEQ _eqEffect;
     public static int MasterVol { get; set; } = 80;
     public static int SampleVol { get; set; } = 70;
     private bool _isPlaying = false;
@@ -19,6 +20,8 @@ public partial class AudioPlayer : AudioStreamPlayer
 
     public override void _Ready()
     {
+        int busIdx = AudioServer.GetBusIndex("Music");
+        _eqEffect = AudioServer.GetBusEffect(busIdx, 1) as AudioEffectEQ;
         Instance = this;
         BrowsePreview = new AudioStreamPlayer();
         BrowsePreview.Finished += OnAudioFinished;
@@ -32,7 +35,44 @@ public partial class AudioPlayer : AudioStreamPlayer
     }
 
     public static float ToDB(float value) => Mathf.LinearToDb(value / 100.0f) - 10f;
-    
+    public Tween TweenEQ { get; set; }
+
+    public void MuffledEQ()
+    {
+        TweenEQ?.Kill();
+        TweenEQ = CreateTween().BindNode(this);
+        TweenEQ.SetParallel(true);
+        TweenEQ.TweenMethod(
+            Callable.From<float>(val => _eqEffect.SetBandGainDb(3, val)),
+            0f, -60f, 0.25f).SetTrans(Tween.TransitionType.Linear).SetEase(Tween.EaseType.Out);
+
+        TweenEQ.TweenMethod(
+            Callable.From<float>(val => _eqEffect.SetBandGainDb(4, val)),
+            0f, -60f, 0.25f).SetTrans(Tween.TransitionType.Linear).SetEase(Tween.EaseType.Out);
+
+        TweenEQ.TweenMethod(
+            Callable.From<float>(val => _eqEffect.SetBandGainDb(5, val)),
+            0f, -60f, 0.25f).SetTrans(Tween.TransitionType.Linear).SetEase(Tween.EaseType.Out);
+        TweenEQ.Play();
+    }
+    public void RevertEQ()
+    {
+        TweenEQ?.Kill();
+        TweenEQ = CreateTween().BindNode(this);
+        TweenEQ.SetParallel(true);
+        TweenEQ.TweenMethod(
+            Callable.From<float>(val => _eqEffect.SetBandGainDb(3, val)),
+            -60f, 0f, 0.25f).SetTrans(Tween.TransitionType.Linear).SetEase(Tween.EaseType.Out);
+
+        TweenEQ.TweenMethod(
+            Callable.From<float>(val => _eqEffect.SetBandGainDb(4, val)),
+            -60f, 0f, 0.25f).SetTrans(Tween.TransitionType.Linear).SetEase(Tween.EaseType.Out);
+
+        TweenEQ.TweenMethod(
+            Callable.From<float>(val => _eqEffect.SetBandGainDb(5, val)),
+            -60f, 0f, 0.25f).SetTrans(Tween.TransitionType.Linear).SetEase(Tween.EaseType.Out);
+        TweenEQ.Play();
+    }
     private void OnAudioFinished()
     {
         if (Stream != null)

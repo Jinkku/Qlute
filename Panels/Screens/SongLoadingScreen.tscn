@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dgy27wulmugfs"]
+[gd_scene format=3 uid="uid://dgy27wulmugfs"]
 
 [ext_resource type="Script" uid="uid://dtqpa0tsirnjp" path="res://Script/SongLoadingScreen/SongLoadingScreen.cs" id="1_2kt4t"]
 [ext_resource type="Texture2D" uid="uid://sfbrs7c6t7dr" path="res://DefaultWallpaper/future.png" id="1_4pmu1"]
@@ -70,7 +70,7 @@ corner_radius_bottom_left = 5
 shader = ExtResource("4_5hbj0")
 shader_parameter/x_offset = -10.0
 
-[node name="Song Loading Screen" type="Control"]
+[node name="Song Loading Screen" type="Control" unique_id=683434051]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -79,7 +79,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2kt4t")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2124903474]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -88,11 +88,11 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0784314, 0.0784314, 0.0784314, 1)
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=1572569047]
 wait_time = 1.5
 one_shot = true
 
-[node name="Previewimage" type="PanelContainer" parent="."]
+[node name="Previewimage" type="PanelContainer" parent="." unique_id=600511256]
 clip_children = 2
 custom_minimum_size = Vector2(600, 400)
 layout_mode = 1
@@ -107,10 +107,10 @@ pivot_offset = Vector2(311, 298)
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_28gti")
 
-[node name="a" type="Control" parent="Previewimage"]
+[node name="a" type="Control" parent="Previewimage" unique_id=1604099250]
 layout_mode = 2
 
-[node name="Objimg" type="TextureRect" parent="Previewimage/a"]
+[node name="Objimg" type="TextureRect" parent="Previewimage/a" unique_id=1316294982]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -123,7 +123,7 @@ expand_mode = 1
 stretch_mode = 6
 script = ExtResource("2_yjtgo")
 
-[node name="InfoBox" type="PanelContainer" parent="."]
+[node name="InfoBox" type="PanelContainer" parent="." unique_id=289028688]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -138,12 +138,12 @@ grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ukgnb")
 
-[node name="Box" type="VBoxContainer" parent="InfoBox"]
+[node name="Box" type="VBoxContainer" parent="InfoBox" unique_id=2080953949]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="Title" type="Label" parent="InfoBox/Box"]
+[node name="Title" type="Label" parent="InfoBox/Box" unique_id=843293484]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxEmpty_28gti")
@@ -151,7 +151,7 @@ text = "Sweet Dreams"
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="Artist" type="Label" parent="InfoBox/Box"]
+[node name="Artist" type="Label" parent="InfoBox/Box" unique_id=471813600]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxEmpty_cviis")
@@ -159,7 +159,7 @@ text = "Tokana Nanashi"
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="Difficulty" type="Label" parent="InfoBox/Box"]
+[node name="Difficulty" type="Label" parent="InfoBox/Box" unique_id=1106519377]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxEmpty_731vf")
@@ -167,7 +167,7 @@ text = "Love me like you take me away~"
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="Source" type="Label" parent="InfoBox/Box"]
+[node name="Source" type="Label" parent="InfoBox/Box" unique_id=1647018462]
 visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
@@ -176,7 +176,7 @@ text = "Source: MAKA PIE?!"
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="Creator" type="Label" parent="InfoBox/Box"]
+[node name="Creator" type="Label" parent="InfoBox/Box" unique_id=1956341986]
 material = SubResource("ShaderMaterial_pj3ow")
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
@@ -184,33 +184,33 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_bbpbm")
 text = "Creator: dummy"
 text_overrun_behavior = 3
 
-[node name="Infos" type="PanelContainer" parent="InfoBox/Box"]
+[node name="Infos" type="PanelContainer" parent="InfoBox/Box" unique_id=961638920]
 material = SubResource("ShaderMaterial_5hbj0")
 custom_minimum_size = Vector2(0, 19)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5hbj0")
 
-[node name="Sections" type="HBoxContainer" parent="InfoBox/Box/Infos"]
+[node name="Sections" type="HBoxContainer" parent="InfoBox/Box/Infos" unique_id=1205121533]
 use_parent_material = true
 layout_mode = 2
 
-[node name="Level" type="Label" parent="InfoBox/Box/Infos/Sections"]
+[node name="Level" type="Label" parent="InfoBox/Box/Infos/Sections" unique_id=1219921058]
 use_parent_material = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_cviis")
 text = "Lv. 42"
 
-[node name="Mods" type="HBoxContainer" parent="InfoBox/Box"]
+[node name="Mods" type="HBoxContainer" parent="InfoBox/Box" unique_id=1717659836]
 material = SubResource("ShaderMaterial_731vf")
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 script = ExtResource("5_cviis")
 
-[node name="ControlPanel" parent="." instance=ExtResource("4_28gti")]
+[node name="ControlPanel" parent="." unique_id=159937989 instance=ExtResource("4_28gti")]
 layout_mode = 1
 
-[node name="Disclaimers" type="VBoxContainer" parent="."]
+[node name="Disclaimers" type="VBoxContainer" parent="." unique_id=1154997436]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0

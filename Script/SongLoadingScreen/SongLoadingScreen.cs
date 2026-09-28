@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public partial class SongLoadingScreen : Control
 {
-	// Called when the node enters the scene tree for the first time.
 	private Tween Animation {get;set;}
 	private SettingsOperator SettingsOperator {get;set;}
 	private Timer ArtificialLoad {get;set;}
@@ -30,11 +29,14 @@ public partial class SongLoadingScreen : Control
 		ArtificialLoad =GetNode<Timer>("./Timer");
 		PicturePanel.Modulate = new Color(1f,1f,1f,0f);
 		InfoBox.Modulate = new Color(1f,1f,1f,0f);
+
+		// Fetch the existing EQ effect from the bus (slot 0)
 		Animation = CreateTween();
 		Animation.SetParallel(true);
 		Animation.TweenProperty(PicturePanel, "position", new Vector2(0,PicturePanel.Position.Y), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		Animation.TweenProperty(InfoBox, "modulate", new Color(1f,1f,1f,1f), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 		Animation.TweenProperty(PicturePanel, "modulate", new Color(1f,1f,1f,1f), 0.5f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		AudioPlayer.Instance.MuffledEQ();
 		Animation.Play();
 		Animation.Connect("finished", new Callable(this, nameof(_Animationf)));
 		SongTitle = GetNode<Label>("InfoBox/Box/Title");
@@ -52,16 +54,21 @@ public partial class SongLoadingScreen : Control
 	private void _Animationf(){
 		ArtificialLoad.Start();
 	}
+	
 	private void _on_back(){
+		AudioPlayer.Instance.RevertEQ();
 		if (SettingsOperator.Marathon) GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MarathonMode.tscn");
 		else GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 		ArtificialLoad.Stop();
 	}
 	private void _Timer_load(){
+		AudioPlayer.Instance.RevertEQ();
 		SettingsOperator.toppaneltoggle(false);
 		ArtificialLoad.Stop();
+		Animation?.Kill();
 		GetNode<SceneTransition>("/root/Transition").Switch(SettingsOperator.ReturnGameModeTscn(SettingsOperator.SessionConfig.GameMode));
 	}
+
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
