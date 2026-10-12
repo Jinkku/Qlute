@@ -23,6 +23,12 @@ public partial class RankTest : Control
 		SettingsOperator.ranked_points = 2999;
 		RankUpdate.Update(200000, 4000);
 	}
+	private void rank0()
+	{
+		SettingsOperator.Rank = 0;
+		SettingsOperator.ranked_points = 0;
+		RankUpdate.Update(200000, 4000);
+	}
 	private void _rankdown()
 	{
 		SettingsOperator.Rank = 200000;

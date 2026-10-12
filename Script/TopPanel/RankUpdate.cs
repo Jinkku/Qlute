@@ -93,6 +93,8 @@ public partial class RankUpdate : Control
 
 			tweenNum?.Kill();
 			tweenNum = CreateTween();
+			GD.Print(SettingsOperator.Rank);
+			GD.Print(RL.rawoutput);
 			tweenNum.Parallel().TweenProperty(this, "RankDisplay", SettingsOperator.Rank - RL.rawoutput, 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(1);
 			tweenNum.Parallel().TweenProperty(this, "PerfDisplay", SettingsOperator.ranked_points - PL.rawoutput, 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(1);
 			tweenNum.Parallel().TweenProperty(this, "ORankDisplay", 0, 1f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out).SetDelay(1);
@@ -112,11 +114,6 @@ public partial class RankUpdate : Control
 
 		if (Realtime)
 		{
-			if (RankDisplay == 0 && PerfDisplay == 0)
-			{
-				Realtime = false;
-			}
-
 			Rank.Text = $"#{RankDisplay:N0}";
 			OperatorRank.Text = $"{RL.prefix} #{ORankDisplay:N0}";
 
