@@ -49,9 +49,8 @@ public partial class Bootstrap : Control
 			NewTween.TweenProperty(AudioPlayer.Instance, "volume_db", init, time).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			NewTween.Play();
 			var num = SettingsOperator.RndSongID();
-			var PreviewTime = SettingsOperator.Beatmaps[num].PreviewTime - time;
+			var PreviewTime = Math.Max(SettingsOperator.Beatmaps[num].PreviewTime - time, 0f);
 			SettingsOperator.SelectSongID(num, PreviewTime);
-			AudioPlayer.Instance.Play(PreviewTime);
 		}
 	}
 	public void _intro_finished(string animationame)
