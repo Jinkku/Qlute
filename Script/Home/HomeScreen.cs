@@ -28,7 +28,6 @@ public partial class HomeScreen : Control
 		HomePanel = GetNode<PanelContainer>("HomeButtonBG");
 		SettingsOperator.loopaudio = false;
 		SongIndicator = GetNode<Label>("SongIndication");
-		AnimationPlayer ani = GetNode<AnimationPlayer>("Flash/AnimationPlayer");
 		HomeButtonID.ID = -1;
 	}
 
