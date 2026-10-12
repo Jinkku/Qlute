@@ -16,9 +16,9 @@
 [ext_resource type="Texture2D" uid="uid://detqod6pcb68a" path="res://Resources/System/MainMenu/Exit.svg" id="11_ioq3m"]
 [ext_resource type="Texture2D" uid="uid://ci24g7ndyah7y" path="res://Resources/System/MainMenu/Browse.svg" id="11_ohewd"]
 [ext_resource type="Script" uid="uid://0xn63uccdk6j" path="res://Script/TimerwithBPM/Bpmtick.cs" id="14_1vpa7"]
+[ext_resource type="Script" uid="uid://c40mib6kg0fhn" path="res://Script/MusicVisualizer/MusicVisualizer.cs" id="15_jpc6g"]
 [ext_resource type="Texture2D" uid="uid://bthaemtfa0cbe" path="res://Resources/System/mainmenulogo.png" id="16_ohewd"]
 [ext_resource type="Texture2D" uid="uid://84eme8uqluil" path="res://Resources/System/MainMenu/santahat.png" id="17_jpc6g"]
-[ext_resource type="PackedScene" uid="uid://d2hnxlea2j351" path="res://Panels/Overlays/MusicBar.tscn" id="18_ldbht"]
 [ext_resource type="Texture2D" uid="uid://dyrairg2m2il6" path="res://Resources/System/emit.png" id="19_whutp"]
 
 [sub_resource type="Gradient" id="Gradient_5vo6i"]
@@ -39,6 +39,15 @@ expand_margin_right = 25.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yu1gh"]
 bg_color = Color(0.1640625, 0.1640625, 0.1640625, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n13r0"]
+bg_color = Color(1, 1, 1, 1)
+draw_center = false
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
 
 [sub_resource type="Curve" id="Curve_whutp"]
 _limits = [-360.0, 360.0, 0.0, 1.0]
@@ -193,6 +202,77 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("11_gngjn")
 
+[node name="MusicVisualizerBass" type="PanelContainer" parent="IntroPending" unique_id=1312770672]
+modulate = Color(1, 0, 0, 1)
+self_modulate = Color(1, 1, 1, 0.5882353)
+z_index = -1
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.7853982
+pivot_offset = Vector2(200, 200)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_n13r0")
+script = ExtResource("15_jpc6g")
+
+[node name="MusicVisualizerLMid" type="PanelContainer" parent="IntroPending" unique_id=798201491]
+modulate = Color(0.061828613, 1, 0, 1)
+self_modulate = Color(1, 1, 1, 0.5882353)
+z_index = -1
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.43633232
+pivot_offset = Vector2(200, 200)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_n13r0")
+script = ExtResource("15_jpc6g")
+Range = Vector2(250, 500)
+
+[node name="MusicVisualizerMid" type="PanelContainer" parent="IntroPending" unique_id=1487235993]
+modulate = Color(0.06567383, 0, 1, 1)
+self_modulate = Color(1, 1, 1, 0.5882353)
+z_index = -1
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.2617994
+pivot_offset = Vector2(200, 200)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_n13r0")
+script = ExtResource("15_jpc6g")
+Range = Vector2(500, 4000)
+
 [node name="logo" type="TextureButton" parent="IntroPending" unique_id=2006884886]
 z_index = 3
 custom_minimum_size = Vector2(360, 148)
@@ -212,10 +292,6 @@ texture_normal = ExtResource("16_ohewd")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="MusicBar" parent="IntroPending/logo" unique_id=556049205 instance=ExtResource("18_ldbht")]
-z_index = -1
-layout_mode = 1
-
 [node name="Accessory" type="Sprite2D" parent="IntroPending/logo" unique_id=2106276264]
 visible = false
 texture = ExtResource("17_jpc6g")
@@ -231,6 +307,7 @@ wait_time = 60.0
 one_shot = true
 
 [node name="Events" type="TextureButton" parent="." unique_id=1198979015]
+z_index = 5
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
