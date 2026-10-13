@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://e23sgokrubcw" path="res://Panels/Overlays/TopPanelv2/AccountButton.tscn" id="1_6cgag"]
 [ext_resource type="Texture2D" uid="uid://xt04iwux1uyt" path="res://Resources/System/TopPanel/Changelog.png" id="2_phkx3"]
 [ext_resource type="Script" uid="uid://b2fdn4oh7m0p8" path="res://Script/TopPanel/NowPlayer.cs" id="3_0d1ka"]
+[ext_resource type="Texture2D" uid="uid://blm2onyp8mud4" path="res://Resources/NotificationIcons/UserOnline.png" id="3_21f6s"]
 [ext_resource type="Texture2D" uid="uid://dnhwv61vkgn0d" path="res://Resources/System/TopPanel/NowPlaying.png" id="4_21f6s"]
 [ext_resource type="Texture2D" uid="uid://ci24g7ndyah7y" path="res://Resources/System/MainMenu/Browse.svg" id="5_ruc5v"]
 [ext_resource type="Texture2D" uid="uid://cg16i4vhaidnq" path="res://Resources/System/TopPanel/Chat.png" id="7_0d1ka"]
@@ -109,6 +110,22 @@ offset_left = -99.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_constants/separation = 5
+
+[node name="UserList" type="Button" parent="Widgets" unique_id=1762351887]
+process_mode = 3
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+theme_override_constants/icon_max_width = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_e57m5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_88b8v")
+theme_override_styles/hover = SubResource("StyleBoxFlat_nny0l")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ank2i")
+keep_pressed_outside = true
+icon = ExtResource("3_21f6s")
+icon_alignment = 1
 
 [node name="ChangeLog" type="Button" parent="Widgets" unique_id=1519787787]
 process_mode = 3
@@ -230,6 +247,7 @@ icon_alignment = 1
 
 [connection signal="mouse_entered" from="." to="." method="_hovered"]
 [connection signal="mouse_exited" from="." to="." method="_unhover"]
+[connection signal="pressed" from="Widgets/UserList" to="." method="toggledashboard"]
 [connection signal="pressed" from="Widgets/ChangeLog" to="." method="_ChangeLog"]
 [connection signal="pressed" from="Widgets/NowPlayer" to="Widgets/NowPlayer" method="toggleaccountpanel"]
 [connection signal="pressed" from="Widgets/Browse" to="." method="_on_browse_pressed"]

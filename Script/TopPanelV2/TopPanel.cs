@@ -53,7 +53,7 @@ public partial class TopPanel : ColorRect
 			GetTree().CurrentScene.AddChild(ChangeLog);
 		}
 	}
-
+	public void toggledashboard(){}
 	public void _hovered()
 	{
 		ShadowAni(1);
