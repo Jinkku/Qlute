@@ -16,7 +16,6 @@ public partial class SongSelect : Control
 	// Called when the node enters the scene tree for the first time.
 	public SettingsOperator SettingsOperator { get; set; }
 	public PackedScene musiccardtemplate;
-	private GpuParticles2D Particle { get; set; }
 	public Label SongTitle { get; set; }
 	public Label ExSongInfo { get; set; }
 	private PanelContainer LevelRating { get; set; }
@@ -282,10 +281,6 @@ public partial class SongSelect : Control
 		NoBeatmap.Visible = true;
 		SongETick = 0;
 		startposition = ((int)GetViewportRect().Size.Y / 2) - 166;
-
-		// Particle
-		Particle = GetNode<GpuParticles2D>("Particle");
-		Particle.Emitting = true; // Enables it
 
 		SettingsOperator.Marathon = false;
 		ModScreen = GetNode<Control>("ModsScreen");
