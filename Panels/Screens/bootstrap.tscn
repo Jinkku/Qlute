@@ -5,7 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://dslgn8830dspf" path="res://SelectableSkins/Slia/Sounds/jingle.mp3" id="2_yphwi"]
 [ext_resource type="Texture2D" uid="uid://dswumgvij18fg" path="res://Resources/System/Browse/Heart2x.png" id="4_8teab"]
 [ext_resource type="Texture2D" uid="uid://6wek04j8vw17" path="res://Resources/System/Intro/alert.png" id="4_yphwi"]
-[ext_resource type="PackedScene" uid="uid://d2hnxlea2j351" path="res://Panels/Overlays/MusicBar.tscn" id="6_h1edo"]
+[ext_resource type="PackedScene" uid="uid://bd5a0hbjwgdvq" path="res://Panels/Overlays/MusicVisualizer.tscn" id="6_h1edo"]
 
 [sub_resource type="Animation" id="Animation_v5m8g"]
 resource_name = "Intro"
@@ -64,7 +64,7 @@ tracks/4/path = NodePath("../../Welcome:self_modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(-0.16666675, 0.5666666),
+"times": PackedFloat32Array(-0.1667, 0.5666666),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(0, 0, 0, 0), Color(1, 1, 1, 1)]
@@ -101,14 +101,14 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("../../Welcome/MusicBar:modulate")
+tracks/7/path = NodePath("../../MusicVisualizer:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.13333334),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(-0.16666667, 0.5666667, 1.5333333, 2.0333333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.25)]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.3137255), Color(1, 1, 1, 0.3137255), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_yphwi"]
@@ -209,14 +209,14 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("../../Welcome/MusicBar:modulate")
+tracks/7/path = NodePath("../../MusicVisualizer:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(2.95, 3.0833335),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(2.8, 3.5333333, 4.5, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.25)]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.3137255), Color(1, 1, 1, 0.3137255), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_s0vrs"]
@@ -284,7 +284,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("../../Welcome/MusicBar:modulate")
+tracks/5/path = NodePath("../../MusicVisualizer:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -448,10 +448,9 @@ text = "Welcome"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MusicBar" parent="Welcome" unique_id=1414914611 instance=ExtResource("6_h1edo")]
+[node name="MusicVisualizer" parent="." unique_id=1490893864 instance=ExtResource("6_h1edo")]
 modulate = Color(1, 1, 1, 0)
+z_index = 1
 layout_mode = 1
-grow_horizontal = 1
-grow_vertical = 1
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_intro_finished"]

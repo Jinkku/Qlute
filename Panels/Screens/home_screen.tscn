@@ -18,7 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://detqod6pcb68a" path="res://Resources/System/MainMenu/Exit.svg" id="11_ioq3m"]
 [ext_resource type="Texture2D" uid="uid://ci24g7ndyah7y" path="res://Resources/System/MainMenu/Browse.svg" id="11_ohewd"]
 [ext_resource type="Script" uid="uid://0xn63uccdk6j" path="res://Script/TimerwithBPM/Bpmtick.cs" id="14_1vpa7"]
-[ext_resource type="Script" uid="uid://c40mib6kg0fhn" path="res://Script/MusicVisualizer/MusicVisualizer.cs" id="15_jpc6g"]
+[ext_resource type="PackedScene" uid="uid://bd5a0hbjwgdvq" path="res://Panels/Overlays/MusicVisualizer.tscn" id="16_1l3bn"]
 [ext_resource type="Texture2D" uid="uid://bthaemtfa0cbe" path="res://Resources/System/mainmenulogo.png" id="16_ohewd"]
 [ext_resource type="Texture2D" uid="uid://84eme8uqluil" path="res://Resources/System/MainMenu/santahat.png" id="17_jpc6g"]
 [ext_resource type="Texture2D" uid="uid://dyrairg2m2il6" path="res://Resources/System/emit.png" id="19_whutp"]
@@ -53,16 +53,6 @@ expand_margin_right = 25.0
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yu1gh"]
 bg_color = Color(0.1640625, 0.1640625, 0.1640625, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n13r0"]
-bg_color = Color(1, 1, 1, 1)
-draw_center = false
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(1, 1, 1, 1)
-shadow_size = 10
-
 [sub_resource type="Curve" id="Curve_whutp"]
 _limits = [-360.0, 360.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -95,6 +85,10 @@ grow_vertical = 2
 script = ExtResource("1_vj7aj")
 
 [node name="BeatmapBackground" parent="." unique_id=560686729 instance=ExtResource("2_ouv1d")]
+layout_mode = 1
+
+[node name="MusicVisualizer" parent="." unique_id=1490893864 instance=ExtResource("16_1l3bn")]
+modulate = Color(1, 1, 1, 0.67973864)
 layout_mode = 1
 
 [node name="SongIndication" parent="." unique_id=423755491 instance=ExtResource("3_bb0aq")]
@@ -229,77 +223,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("11_gngjn")
-
-[node name="MusicVisualizerBass" type="PanelContainer" parent="IntroPending" unique_id=1312770672]
-modulate = Color(0.68540955, 0.2550101, 0.2550101, 1)
-self_modulate = Color(1, 1, 1, 0.5882353)
-z_index = -1
-custom_minimum_size = Vector2(400, 400)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -200.0
-offset_right = 200.0
-offset_bottom = 200.0
-grow_horizontal = 2
-grow_vertical = 2
-rotation = -0.7853982
-pivot_offset = Vector2(200, 200)
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_n13r0")
-script = ExtResource("15_jpc6g")
-
-[node name="MusicVisualizerLMid" type="PanelContainer" parent="IntroPending" unique_id=798201491]
-modulate = Color(0.52211833, 0.5780068, 0.9805298, 1)
-self_modulate = Color(1, 1, 1, 0.5882353)
-z_index = -1
-custom_minimum_size = Vector2(400, 400)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -200.0
-offset_right = 200.0
-offset_bottom = 200.0
-grow_horizontal = 2
-grow_vertical = 2
-rotation = 0.43633232
-pivot_offset = Vector2(200, 200)
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_n13r0")
-script = ExtResource("15_jpc6g")
-Range = Vector2(250, 500)
-
-[node name="MusicVisualizerMid" type="PanelContainer" parent="IntroPending" unique_id=1487235993]
-modulate = Color(0.49745393, 0.9905548, 0.68939424, 1)
-self_modulate = Color(1, 1, 1, 0.5882353)
-z_index = -1
-custom_minimum_size = Vector2(400, 400)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -200.0
-offset_right = 200.0
-offset_bottom = 200.0
-grow_horizontal = 2
-grow_vertical = 2
-rotation = 0.2617994
-pivot_offset = Vector2(200, 200)
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_n13r0")
-script = ExtResource("15_jpc6g")
-Range = Vector2(500, 4000)
 
 [node name="logo" type="TextureButton" parent="IntroPending" unique_id=2006884886]
 z_index = 3
