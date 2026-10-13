@@ -127,6 +127,18 @@ script = ExtResource("4_2y1b4")
 layout_mode = 2
 text = "Use original language for beatmaps"
 
+[node name="Flashing" type="CheckButton" parent="Rows" unique_id=1776345167]
+layout_mode = 2
+text = "Disable flashing effects"
+
+[node name="Darkening" type="CheckButton" parent="Rows" unique_id=1283614272]
+layout_mode = 2
+text = "Disable darkening playfield"
+
+[node name="Fadeout" type="CheckButton" parent="Rows" unique_id=934960947]
+layout_mode = 2
+text = "Fade out when on break"
+
 [node name="WindowNotice2" type="Label" parent="Rows" unique_id=1627156756]
 layout_mode = 2
 mouse_filter = 0
@@ -141,24 +153,12 @@ visible = false
 layout_mode = 2
 text = "Remove animations"
 
-[node name="CheckButton3" type="CheckButton" parent="Rows" unique_id=934960947]
-visible = false
-layout_mode = 2
-text = "Fade out when on break"
-
-[node name="CheckButton4" type="CheckButton" parent="Rows" unique_id=1776345167]
-visible = false
-layout_mode = 2
-text = "Disable flashing effects"
-
-[node name="CheckButton5" type="CheckButton" parent="Rows" unique_id=1238309320]
-visible = false
-layout_mode = 2
-text = "Switch to 24-Hour Clock"
-
 [connection signal="item_selected" from="Rows/WindowSelector" to="." method="_changed_resolution"]
 [connection signal="item_selected" from="Rows/FPSModes" to="Rows/FPSModes" method="_fpsselected"]
 [connection signal="pressed" from="Rows/FPSShow" to="Rows/FPSShow" method="_toggled"]
 [connection signal="pressed" from="Rows/OriginalLanguage" to="." method="_originallanguage"]
+[connection signal="pressed" from="Rows/Flashing" to="." method="Flashing"]
+[connection signal="pressed" from="Rows/Darkening" to="." method="Darkening"]
+[connection signal="pressed" from="Rows/Fadeout" to="." method="Fadeout"]
 [connection signal="drag_ended" from="Rows/BackgroundDim" to="." method="_backgrounddim_ended"]
 [connection signal="value_changed" from="Rows/BackgroundDim" to="." method="_backgrounddim_started"]

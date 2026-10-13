@@ -461,11 +461,14 @@ public partial class Gameplay : Control
 	private void BreakNow()
 	{
 		BreakTime = true;
-		BreakBGTween?.Kill();
-		BreakBGTween = GetTree().CreateTween();
-		BreakBGTween.SetTrans(Tween.TransitionType.Cubic);
-		BreakBGTween.SetEase(Tween.EaseType.Out);
-		BreakBGTween.TweenProperty(Beatmap_Background, "self_modulate", new Color("7a7a7a"), 0.5f);
+		if (!DisableFadeSetting)
+		{
+			BreakBGTween?.Kill();
+			BreakBGTween = GetTree().CreateTween();
+			BreakBGTween.SetTrans(Tween.TransitionType.Cubic);
+			BreakBGTween.SetEase(Tween.EaseType.Out);
+			BreakBGTween.TweenProperty(Beatmap_Background, "self_modulate", new Color("7a7a7a"), 0.5f);
+		}
 		if (IsInstanceValid(Break))
 		{
 			Break?.QueueFree();
@@ -481,12 +484,19 @@ public partial class Gameplay : Control
 
 	private void BreakOver()
 	{
-		BreakBGTween?.Kill();
-		BreakBGTween = GetTree().CreateTween();
-		BreakBGTween.SetTrans(Tween.TransitionType.Cubic);
-		BreakBGTween.SetEase(Tween.EaseType.Out);
-		BreakBGTween.TweenProperty(Beatmap_Background, "self_modulate", new Color(dim, dim, dim, 1f), 0.5f);
-		BreakBGTween.TweenCallback(Callable.From((() => {BreakTime = false;})));
+		if (!DisableFadeSetting)
+		{
+			BreakBGTween?.Kill();
+			BreakBGTween = GetTree().CreateTween();
+			BreakBGTween.SetTrans(Tween.TransitionType.Cubic);
+			BreakBGTween.SetEase(Tween.EaseType.Out);
+			BreakBGTween.TweenProperty(Beatmap_Background, "self_modulate", new Color(dim, dim, dim, 1f), 0.5f);
+			BreakBGTween.TweenCallback(Callable.From((() => { BreakTime = false; })));
+		}
+		else
+		{
+			BreakTime = false;
+		}
 	}
 private void _GameNoteTick(double delta)
 	{
@@ -593,10 +603,13 @@ private void _GameNoteTick(double delta)
 		}
 	}
 	private float dim { get; set; }
+	private bool DisableDarkeningSetting { get; set; }
+	private bool DisableFadeSetting { get; set; }
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		
+		DisableDarkeningSetting = Check.CheckBoolValue(SettingsOperator.GetSetting("ddarkening").ToString());
+		DisableFadeSetting = Check.CheckBoolValue(SettingsOperator.GetSetting("dfadeout").ToString());
 		dim = 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f));
 		score = new Game.ScoreCalculator().ProcessScore(SettingsOperator.Gameplaycfg.Max,
 			SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh,
@@ -646,7 +659,7 @@ private void _GameNoteTick(double delta)
 				SettingsOperator.Gameplaycfg.MaxCombo = SettingsOperator.Gameplaycfg.Combo;
 			}
 
-			if (!BreakTime)
+			if (!BreakTime | DisableFadeSetting)
 				Beatmap_Background.SelfModulate = new Color(dim, dim, dim);
 			SettingsOperator.Gameplaycfg.Accuracy = ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 			if (Input.IsActionJustPressed("pausemenu") && SettingsOperator.SpectatorMode)
@@ -723,7 +736,8 @@ private void _GameNoteTick(double delta)
 	private Tween DancePrepare { get; set; }
 	private void Transitioning(bool value)
 	{
-		if (value)
+		if (DisableDarkeningSetting) return;
+		else if (value)
 		{
 			DancePrepare?.Kill();
 			DancePrepare = GetTree().CreateTween();

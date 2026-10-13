@@ -109,6 +109,7 @@ public partial class BeatmapBackground : TextureRect
 	public static float bpm {get;set;}
 	public double bpmtimewait {get;set;}
 	public double bpmtime {get;set;}
+	private bool FlashingDisableSetting { get; set; }
 	public void resettime(){
 		bpmtimewait = bpmtime + (bpm/0.001f);
 	}
@@ -121,6 +122,7 @@ public partial class BeatmapBackground : TextureRect
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
+		FlashingDisableSetting = Check.CheckBoolValue(SettingsOperator.GetSetting("dflashing").ToString());
 		oldmod = SelfModulate;
 		
 		float offsetX = (SettingsOperator.MouseMovement.X / screenSize.X * 10) - 10;
@@ -130,18 +132,18 @@ public partial class BeatmapBackground : TextureRect
 
 		bpm = 60000 / (SettingsOperator.SessionConfig.bpm * AudioPlayer.Instance.PitchScale) * 0.001f;
 		bpmtime = Extras.GetMilliseconds();
-		if (bpmtimewait - bpmtime < 0) // Ticks for BPM
+		if (bpmtimewait - bpmtime < 0 && !FlashingDisableSetting) // Ticks for BPM
 		{
 			resettime();
 			_flashstart();
 		}
-		if (!Flash.Visible && FlashEnable)
+		if (!Flash.Visible && FlashEnable && !FlashingDisableSetting)
 		{
 			Flash.Visible = true;
 			resettime();
 			_flashstart();
 		}
-		else if (Flash.Visible && !FlashEnable)
+		else if (FlashingDisableSetting | Flash.Visible && !FlashEnable)
 		{
 			Flash.Visible = false;
 		}
