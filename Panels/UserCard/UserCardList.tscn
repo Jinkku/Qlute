@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://qrfvoky5ix18"]
+
+[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="2_omlwx"]
+[ext_resource type="Script" uid="uid://ghpc6kek438b" path="res://Script/UserCard/dot.gd" id="3_omlwx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yln2i"]
+bg_color = Color(0.1897483, 0.1897483, 0.1897483, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sdynv"]
+bg_color = Color(0, 0, 0, 0.25)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ri41b"]
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 15
+corner_radius_bottom_right = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ri41b"]
+content_margin_left = 5.0
+content_margin_top = 0.0
+content_margin_right = 5.0
+content_margin_bottom = 0.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vdvmb"]
+content_margin_left = 15.0
+content_margin_top = 5.0
+content_margin_right = 15.0
+bg_color = Color(0, 0, 0, 0.25)
+draw_center = false
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="UserCard" type="PanelContainer" unique_id=620956131]
+custom_minimum_size = Vector2(280, 120)
+offset_right = 280.0
+offset_bottom = 120.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_yln2i")
+
+[node name="SplitV" type="VBoxContainer" parent="." unique_id=341707609]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TopPart" type="PanelContainer" parent="SplitV" unique_id=1660300274]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sdynv")
+
+[node name="Sections" type="HBoxContainer" parent="SplitV/TopPart" unique_id=1405609724]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="RoundPicture" type="PanelContainer" parent="SplitV/TopPart/Sections" unique_id=385986349]
+clip_children = 2
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ri41b")
+
+[node name="ProfilePicture" type="TextureRect" parent="SplitV/TopPart/Sections/RoundPicture" unique_id=1467913089]
+layout_mode = 2
+texture = ExtResource("2_omlwx")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Username" type="Label" parent="SplitV/TopPart/Sections" unique_id=53595250]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ri41b")
+text = "Random user that got good bois"
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="BottomPart" type="PanelContainer" parent="SplitV" unique_id=1508128668]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vdvmb")
+
+[node name="Sections" type="HBoxContainer" parent="SplitV/BottomPart" unique_id=939837100]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Dot" type="Control" parent="SplitV/BottomPart/Sections" unique_id=1934074138]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("3_omlwx")
+
+[node name="Label" type="Label" parent="SplitV/BottomPart/Sections" unique_id=615244193]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Online but hiding their usage."

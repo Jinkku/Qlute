@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://b0fwu35nxlxsw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tivcd"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.2627451, 0.21960784, 0.27450982, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d5ayf"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.101960786)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="ChangeLog" type="Control" unique_id=339398508]
+z_index = 4
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+mouse_behavior_recursive = 1
+
+[node name="Pill" type="PanelContainer" parent="." unique_id=150418604]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 140.0
+offset_right = -140.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_behavior_recursive = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tivcd")
+
+[node name="Scroll" type="ScrollContainer" parent="Pill" unique_id=1120355435]
+layout_mode = 2
+
+[node name="Rows" type="VBoxContainer" parent="Pill/Scroll" unique_id=251362089]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 25
+
+[node name="Title" type="Label" parent="Pill/Scroll/Rows" unique_id=1098374529]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_d5ayf")
+text = "User List"
+
+[node name="GridContainer" type="GridContainer" parent="Pill/Scroll/Rows" unique_id=836640211]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+columns = 3
