@@ -1,12 +1,9 @@
 [gd_scene format=3 uid="uid://d0qmsp3ewrdj4"]
 
 [ext_resource type="Script" uid="uid://bcpf58suyr63f" path="res://Script/SettingsPanel/SettingsPanel.cs" id="1_gfh6f"]
-[ext_resource type="Texture2D" uid="uid://cj5ugwjbsax06" path="res://Resources/SettingsIcon/display.png" id="2_r347j"]
-[ext_resource type="Texture2D" uid="uid://c0ap610fbkw4r" path="res://Resources/SettingsIcon/audio.png" id="3_tkltb"]
-[ext_resource type="Texture2D" uid="uid://ccai8irwy3t26" path="res://Resources/SettingsIcon/debug.png" id="4_b8fcs"]
-[ext_resource type="Texture2D" uid="uid://wbwc1tqoq28f" path="res://Resources/SettingsIcon/skinning.png" id="4_k6rhm"]
-[ext_resource type="Texture2D" uid="uid://cygc8ovbmjkwv" path="res://Resources/SettingsIcon/input.png" id="5_fn636"]
+[ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="2_k6nch"]
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="5_k6nch"]
+[ext_resource type="PackedScene" uid="uid://bmujpxpt8s27u" path="res://Panels/SettingsSection/Gameplay.tscn" id="7_4moo3"]
 [ext_resource type="PackedScene" uid="uid://dm6msw184a5v7" path="res://Panels/SettingsSection/Display.tscn" id="8_4moo3"]
 [ext_resource type="PackedScene" uid="uid://62fdbfcux0rs" path="res://Panels/SettingsSection/Important.tscn" id="8_k6rhm"]
 [ext_resource type="PackedScene" uid="uid://bi4keuwyc22ju" path="res://Panels/SettingsSection/Skinning.tscn" id="9_k6rhm"]
@@ -43,8 +40,8 @@ content_margin_top = 25.0
 [node name="SettingsPanel" type="PanelContainer" unique_id=1763606212]
 z_index = 3
 z_as_relative = false
+custom_minimum_size = Vector2(600, 0)
 clip_contents = true
-custom_minimum_size = Vector2(480, 0)
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 74.0
@@ -56,8 +53,8 @@ script = ExtResource("1_gfh6f")
 layout_mode = 2
 
 [node name="Catagories" type="PanelContainer" parent="Panels" unique_id=593390362]
+custom_minimum_size = Vector2(150, 0)
 clip_contents = true
-custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5b8eh")
 
@@ -66,55 +63,70 @@ clip_contents = true
 layout_mode = 2
 alignment = 1
 
-[node name="Display" type="Button" parent="Panels/Catagories/Cata" unique_id=1182856902]
+[node name="Display" type="Button" parent="Panels/Catagories/Cata" unique_id=346485907]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
 theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
-icon = ExtResource("2_r347j")
 icon_alignment = 1
+script = ExtResource("2_k6nch")
+StringText = "Display"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
-[node name="Audio" type="Button" parent="Panels/Catagories/Cata" unique_id=1748706413]
+[node name="Audio" type="Button" parent="Panels/Catagories/Cata" unique_id=102082461]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
 theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
-icon = ExtResource("3_tkltb")
 icon_alignment = 1
+script = ExtResource("2_k6nch")
+StringText = "Audio"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
-[node name="Skinning" type="Button" parent="Panels/Catagories/Cata" unique_id=1599312474]
+[node name="Skinning" type="Button" parent="Panels/Catagories/Cata" unique_id=1722935615]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
 theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
-icon = ExtResource("4_k6rhm")
 icon_alignment = 1
+script = ExtResource("2_k6nch")
+StringText = "Skinning"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
-[node name="Input" type="Button" parent="Panels/Catagories/Cata" unique_id=633582479]
+[node name="Input" type="Button" parent="Panels/Catagories/Cata" unique_id=958047629]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
 theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
-icon = ExtResource("5_fn636")
 icon_alignment = 1
+script = ExtResource("2_k6nch")
+StringText = "Input"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
-[node name="Debug" type="Button" parent="Panels/Catagories/Cata" unique_id=624146245]
+[node name="Debug" type="Button" parent="Panels/Catagories/Cata" unique_id=1165767190]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
 theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
-icon = ExtResource("4_b8fcs")
 icon_alignment = 1
+script = ExtResource("2_k6nch")
+StringText = "Debug"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Scroll" type="ScrollContainer" parent="Panels" unique_id=924770767]
 clip_contents = false
@@ -146,6 +158,9 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Audio" parent="Panels/Scroll/Sections" unique_id=1435959226 instance=ExtResource("10_4moo3")]
+layout_mode = 2
+
+[node name="Gameplay" parent="Panels/Scroll/Sections" unique_id=1368643504 instance=ExtResource("7_4moo3")]
 layout_mode = 2
 
 [node name="Skinning" parent="Panels/Scroll/Sections" unique_id=1237445482 instance=ExtResource("9_k6rhm")]

@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://bmujpxpt8s27u"]
+
+[ext_resource type="StyleBox" uid="uid://c0bgbcbhjckmy" path="res://Resources/System/SettingsTab.tres" id="1_a1pxt"]
+[ext_resource type="Script" uid="uid://dw3mrygoabesl" path="res://Script/SettingsSection/GameplaySettings.cs" id="2_a1pxt"]
+
+[node name="Gameplay" type="PanelContainer" unique_id=1784822534]
+custom_minimum_size = Vector2(250, 0)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = ExtResource("1_a1pxt")
+script = ExtResource("2_a1pxt")
+
+[node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Rows" unique_id=528032714]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.47058824, 0.7490196, 0.9529412, 1)
+text = "Gameplay"
+
+[node name="Flashing" type="CheckButton" parent="Rows" unique_id=100626743]
+layout_mode = 2
+text = "Disable flashing lights"
+
+[node name="Darkening" type="CheckButton" parent="Rows" unique_id=987898871]
+layout_mode = 2
+text = "Disable darkening playfield"
+
+[connection signal="pressed" from="Rows/Flashing" to="." method="Flashing"]
+[connection signal="pressed" from="Rows/Darkening" to="." method="Darkening"]
