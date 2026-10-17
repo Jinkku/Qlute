@@ -417,7 +417,7 @@ public partial class Gameplay : Control
 	    for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
 	    {
 		    var Note = Notes[i];
-		    if (Note.NotePart == column && !Note.exist)
+		    if (Note.NotePart == column && !Note.hit)
 		    {
 			    // Register miss
 			    Hittext(Skin.Element.JudgeMiss);
@@ -435,7 +435,6 @@ public partial class Gameplay : Control
 				    .SetTrans(Tween.TransitionType.Cubic)
 				    .SetEase(Tween.EaseType.Out);
 			    Note.hit = true;
-			    Note.exist = true;
 			    break;
 		    }
 	    }
@@ -539,13 +538,14 @@ private void _GameNoteTick(double delta)
 					float hitOffsetMs = Note.timing + notex - HitPoint;
 					SettingsOperator.Addms(hitOffsetMs + 50); 
 					SettingsOperator.Gameplaycfg.ms = ComputeUnstableRate();
-					if (JudgeResult < 4)
-					{
-						Keys[Note.NotePart].hit = false; 
-						Note.hit = true;
-					}
-					else { Keys[Note.NotePart].hit = false; }
+
 				}
+				if (JudgeResult < 4)
+				{
+					Keys[Note.NotePart].hit = false; 
+					Note.hit = true;
+				}
+				else { Keys[Note.NotePart].hit = false; }
 
 			}
 			else if (Note.timing + notex > viewportSize + 150)
@@ -763,7 +763,7 @@ private void _GameNoteTick(double delta)
 	}
 	public int checkjudge(int timing, bool keyvalue, NotesEn Note)
 	{
-		if (timing + nodeSize > HitPoint - SettingsOperator.PerfectJudge - 5 && timing + nodeSize < HitPoint + SettingsOperator.PerfectJudge + 15 && keyvalue)
+		if (timing + nodeSize > HitPoint - SettingsOperator.PerfectJudge - 5 && timing + nodeSize < HitPoint + SettingsOperator.PerfectJudge + 15  && keyvalue && !Note.hit)
 		{
 			SettingsOperator.Gameplaycfg.Max++;
 			SettingsOperator.Gameplaycfg.Combo++;
@@ -774,7 +774,7 @@ private void _GameNoteTick(double delta)
 			HealthBar.Heal((5 * (SettingsOperator.Gameplaycfg.Combo / 100)) + 1);
 			return 0;
 		}
-		else if (timing + nodeSize > HitPoint - (SettingsOperator.GreatJudge / 2) - 5 && timing + nodeSize < HitPoint + (SettingsOperator.GreatJudge / 2) + 15 && keyvalue)
+		else if (timing + nodeSize > HitPoint - (SettingsOperator.GreatJudge / 2) - 5 && timing + nodeSize < HitPoint + (SettingsOperator.GreatJudge / 2) + 15 && keyvalue && !Note.hit)
 		{
 			SettingsOperator.Gameplaycfg.Great++;
 			SettingsOperator.Gameplaycfg.Combo++;
@@ -796,7 +796,7 @@ private void _GameNoteTick(double delta)
 			HealthBar.Heal((1 * (SettingsOperator.Gameplaycfg.Combo / 500)) + 1);
 			return 2;
 		}
-		else if (timing + nodeSize > GetViewportRect().Size.Y + 60)
+		else if (timing + nodeSize > GetViewportRect().Size.Y + 60 && !Note.hit)
 		{
 			Hittext(Skin.Element.JudgeMiss);
 			SettingsOperator.Gameplaycfg.Bad++;

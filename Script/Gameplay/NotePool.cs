@@ -51,7 +51,7 @@ public partial class NotePool : Control
 			float alpha = 1f;
 			if (slice)
 			{
-				alpha = Math.Min(hitPoint, y - 350) * invHit;
+				alpha = (note.timing + scroll) / (viewHeight / 2);
 				if (alpha <= 0f) continue;                 // invisible, don't draw
 				if (alpha > 1f) alpha = 1f;
 			}
