@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bq7vnj4ufmi3q" path="res://Panels/GameplayElements/Customizable/SongProgress.tscn" id="4_alds2"]
 [ext_resource type="PackedScene" uid="uid://lfqbgfx32hxt" path="res://Panels/GameplayElements/Customizable/ComboCounter.tscn" id="5_dhhkq"]
 [ext_resource type="PackedScene" uid="uid://chb8dgjfmmjgt" path="res://Panels/GameplayElements/Customizable/Playfield.tscn" id="5_j387h"]
+[ext_resource type="PackedScene" uid="uid://c22fwcwopdf8m" path="res://Panels/Overlays/LatencyProfiler.tscn" id="5_wpryt"]
 [ext_resource type="PackedScene" uid="uid://dp0inqauwdmyy" path="res://Panels/GameplayElements/Customizable/unstablerate.tscn" id="8_acwn2"]
 [ext_resource type="PackedScene" uid="uid://bj38y6tgytge3" path="res://Panels/GameplayElements/Customizable/LeaderboardPanel.tscn" id="10_wpryt"]
 
@@ -54,6 +55,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="LatencyProfiler" parent="HUD" unique_id=431232302 instance=ExtResource("5_wpryt")]
+layout_mode = 0
+offset_left = 874.0
+offset_top = 309.0
+offset_right = 1013.0
+offset_bottom = 350.0
 
 [node name="ScoreBar" parent="HUD" unique_id=1893795981 instance=ExtResource("2_tii4h")]
 layout_mode = 1

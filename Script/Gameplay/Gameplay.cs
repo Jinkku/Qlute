@@ -6,9 +6,9 @@ using Game;
 using System.Reflection.Metadata;
 public class NotesEn {
 	public int timing {get;set;}
-	public int NoteSection {get;set;}
-	public NoteSkinning Node {get;set;}
+	public int NotePart { get; set; } = -1;
 	public bool hit {get;set;}
+	public bool exist {get;set;}
 	public string Sample => SampleSet.Normal.First();
 	public double ppv2xp { get; set; }
 }
@@ -22,6 +22,7 @@ public class KeyL
 
 public partial class Gameplay : Control
 {
+	public static Gameplay Instance;
 	private string oldtitle = "";
 	private SettingsOperator SettingsOperator { get; set; }
 	private int BadCombo { get; set; }
@@ -29,7 +30,7 @@ public partial class Gameplay : Control
 	//public static Label Ttiming { get; set; }
 	//public static Label Hits { get; set; }
 	public HBoxContainer Chart { get; set; }
-	private int HitPoint { get; set; }
+	public int HitPoint { get; set; }
 	private Tween MainScreenAnimation { get; set; }
 	public List<KeyL> Keys = new List<KeyL>();
 	public int JudgeResult = -1;
@@ -51,7 +52,7 @@ public partial class Gameplay : Control
 	private Tween HurtAnimation { get; set; }
 	public Vector2 hittextoldpos { get; set; }
 	public Timer WaitClock { get; set; }
-	public List<NotesEn> Notes = new List<NotesEn>();
+	public static List<NotesEn> Notes = new List<NotesEn>();
 	public TextureRect Beatmap_Background { get; set; }
 	private Node PauseMenu { get; set; }
 	private bool Finished { get; set; }
@@ -64,7 +65,7 @@ public partial class Gameplay : Control
 	private int scoreint { get; set; }
 	private Control SpectatorPanel { get; set; }
 	private Tween scoretween { get; set; }
-	private int MaxNotes { get; set; }
+	public int MaxNotes { get; set; }
 	private Label ComboCounter { get; set; }
 	public static int seed = 0;
 	private Control HUD { get; set; }
@@ -151,7 +152,7 @@ public partial class Gameplay : Control
 			Notes.Add(new NotesEn
 			{
 				timing = timen,
-				NoteSection = part,
+				NotePart = part,
 				ppv2xp = beatmap.ppv2sets[index] * ModsMulti.multiplier
 			});
 			index++;
@@ -174,7 +175,7 @@ public partial class Gameplay : Control
 		SettingsOperator.ResetScore();
 		SettingsOperator.Resetms();
 	}
-
+	 public Vector2 PlayFieldPOS { get; set; }
 	public override void _Ready()
 	{
 		
@@ -238,9 +239,9 @@ public partial class Gameplay : Control
 			Keys.Add(new KeyL { Node = notet, hit = false , KeyCode = SettingsOperator.GetSetting($"Key{i - 1}").ToString()});
 			notet.SelfModulate = Skin.Element.LaneNotes[i - 1] / 2;
 		}
-
+		PlayFieldPOS =GetNode<HBoxContainer>($"Playfield/ChartSections").Position;
 		maxrndvalue = (int)(1000000 * ModsMulti.multiplier);
-
+	
 		HitOffsets.Clear();
 		Array.Fill(LastKeyPressTime, float.MinValue);
 		GD.Print("Loading beatmap...");
@@ -253,7 +254,7 @@ public partial class Gameplay : Control
 			foreach (NotesEn note in Notes)
 			{
 				var time = -note.timing - 50;
-				var key = note.NoteSection;
+				var key = note.NotePart;
 				Replay.AddReplay(time, key); // Adds the input into the Replay Cache.
 			}
 		}
@@ -416,7 +417,7 @@ public partial class Gameplay : Control
 	    for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
 	    {
 		    var Note = Notes[i];
-		    if (Note.NoteSection == column && !Note.hit && Note.Node != null && Note.Node.Visible)
+		    if (Note.NotePart == column && !Note.exist)
 		    {
 			    // Register miss
 			    Hittext(Skin.Element.JudgeMiss);
@@ -434,7 +435,7 @@ public partial class Gameplay : Control
 				    .SetTrans(Tween.TransitionType.Cubic)
 				    .SetEase(Tween.EaseType.Out);
 			    Note.hit = true;
-			    Note.Node.Visible = false;
+			    Note.exist = true;
 			    break;
 		    }
 	    }
@@ -451,9 +452,9 @@ public partial class Gameplay : Control
 		AudioPlayer.Instance.PitchScale = speedold;
     }
 
-    private float gametime { get; set; }
+    public float gametime { get; set; }
     private float gametimeraw { get; set; }
-	private int NoteTick { get; set; }
+	public int NoteTick { get; set; }
 	private bool BreakTime { get; set; } = true;
 	private int NoteBreakTiming { get; set; }
 	private Break Break { get; set; }
@@ -498,6 +499,7 @@ public partial class Gameplay : Control
 			BreakTime = false;
 		}
 	}
+	public float notex { get; set; }
 private void _GameNoteTick(double delta)
 	{
 		gametime = GetRemainingTime(delta: (float)delta) / 0.001f;
@@ -524,61 +526,31 @@ private void _GameNoteTick(double delta)
 		for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
 		{
 			var Note = Notes[i];
-			var notex = Note.timing + gametime + HitPoint;
-			if (notex > -150 && notex < viewportSize + 150 && !Note.hit)
+			notex = gametime + HitPoint;
+			if (Note.timing + notex > -150 && Note.timing + notex < viewportSize + 150 && !Note.hit)
 			{
-				NoteCount++;
-				if (!Note.hit && Note.Node == null)
+				NoteCount++; 
+				Ttick++;
+				JudgeResult = checkjudge((int)(Note.timing + notex), Keys[Note.NotePart].hit, Note);
+				if (JudgeResult < 3) // Only count actual hits (perfect/great/meh), not misses
 				{
-					var playfieldpart =
-						GetNode<Control>($"Playfield/ChartSections/Section{Note.NoteSection + 1}/Control");
-					Note.Node = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/note.tscn").Instantiate()
-						.GetNode<NoteSkinning>(".");
-					Note.Node.NotePart = Note.NoteSection;
-					Note.Node.SelfModulate = new Color(0.83f, 0f, 1f);
-					playfieldpart.AddChild(Note.Node);
-				}
-
-				if (ModsOperator.Mods["slice"] && Note.Node != null)
-				{
-					Note.Node.Modulate =
-						new Color(1f, 1f, 1f, Math.Min(HitPoint, Note.Node.Position.Y - 350) / HitPoint);
-				}
-				else if (ModsOperator.Mods["black-out"] && Note.Node != null)
-				{
-					Note.Node.Modulate = new Color(0f, 0f, 0f, 0f);
-				}
-
-				if (Note.Node != null)
-				{
-					Note.Node.Position = new Vector2(0, (notex * scrollspeed) - (HitPoint * (scrollspeed - 1)));
-					Ttick++;
-					JudgeResult = checkjudge((int)notex, Keys[Note.Node.NotePart].hit, Note);
-					if (JudgeResult < 3) // Only count actual hits (perfect/great/meh), not misses
+					// True hit offset in ms: how far the note was from the hit line when struck.
+					// Negative = early, Positive = late
+					float hitOffsetMs = Note.timing + notex - HitPoint;
+					SettingsOperator.Addms(hitOffsetMs + 50); 
+					SettingsOperator.Gameplaycfg.ms = ComputeUnstableRate();
+					if (JudgeResult < 4)
 					{
-						// True hit offset in ms: how far the note was from the hit line when struck.
-						// Negative = early, Positive = late
-						float hitOffsetMs = notex - HitPoint;
-						SettingsOperator.Addms(hitOffsetMs + 50);
-						SettingsOperator.Gameplaycfg.ms = ComputeUnstableRate();
-					}
-				if (JudgeResult < 4)
-					{
-						Keys[Note.Node.NotePart].hit = false;
+						Keys[Note.NotePart].hit = false; 
 						Note.hit = true;
-						Note.Node.Visible = false;
 					}
-					else
-					{
-						Keys[Note.Node.NotePart].hit = false;
-					}
+					else { Keys[Note.NotePart].hit = false; }
 				}
+
 			}
-			else if (notex > viewportSize + 150 && Note.Node != null)
+			else if (Note.timing + notex > viewportSize + 150)
 			{
 				NoteTick++;
-				Note.Node.QueueFree();
-				Note.Node = null;
 			}
 		}
 	}
@@ -602,6 +574,7 @@ private void _GameNoteTick(double delta)
 			HUDTween.TweenProperty(HUD, "modulate:a", 1f, 0.5f);
 		}
 	}
+
 	private float dim { get; set; }
 	private bool DisableDarkeningSetting { get; set; }
 	private bool DisableFadeSetting { get; set; }
@@ -790,7 +763,7 @@ private void _GameNoteTick(double delta)
 	}
 	public int checkjudge(int timing, bool keyvalue, NotesEn Note)
 	{
-		if (timing + nodeSize > HitPoint - SettingsOperator.PerfectJudge - 5 && timing + nodeSize < HitPoint + SettingsOperator.PerfectJudge + 15 && keyvalue && Note.Node.Visible)
+		if (timing + nodeSize > HitPoint - SettingsOperator.PerfectJudge - 5 && timing + nodeSize < HitPoint + SettingsOperator.PerfectJudge + 15 && keyvalue)
 		{
 			SettingsOperator.Gameplaycfg.Max++;
 			SettingsOperator.Gameplaycfg.Combo++;
@@ -801,7 +774,7 @@ private void _GameNoteTick(double delta)
 			HealthBar.Heal((5 * (SettingsOperator.Gameplaycfg.Combo / 100)) + 1);
 			return 0;
 		}
-		else if (timing + nodeSize > HitPoint - (SettingsOperator.GreatJudge / 2) - 5 && timing + nodeSize < HitPoint + (SettingsOperator.GreatJudge / 2) + 15 && keyvalue && Note.Node.Visible)
+		else if (timing + nodeSize > HitPoint - (SettingsOperator.GreatJudge / 2) - 5 && timing + nodeSize < HitPoint + (SettingsOperator.GreatJudge / 2) + 15 && keyvalue)
 		{
 			SettingsOperator.Gameplaycfg.Great++;
 			SettingsOperator.Gameplaycfg.Combo++;
@@ -812,7 +785,7 @@ private void _GameNoteTick(double delta)
 			HealthBar.Heal((3 * (SettingsOperator.Gameplaycfg.Combo / 300)) + 1);
 			return 1;
 		}
-		else if (timing + nodeSize > HitPoint - (SettingsOperator.MehJudge / 2) - 15 && timing + nodeSize < HitPoint + (SettingsOperator.MehJudge / 2) + 15 && keyvalue && Note.Node.Visible)
+		else if (timing + nodeSize > HitPoint - (SettingsOperator.MehJudge / 2) - 15 && timing + nodeSize < HitPoint + (SettingsOperator.MehJudge / 2) + 15 && keyvalue)
 		{
 			Hittext(Skin.Element.JudgeMeh);
 			SettingsOperator.Gameplaycfg.Meh++;
@@ -823,7 +796,7 @@ private void _GameNoteTick(double delta)
 			HealthBar.Heal((1 * (SettingsOperator.Gameplaycfg.Combo / 500)) + 1);
 			return 2;
 		}
-		else if (timing + nodeSize > GetViewportRect().Size.Y + 60 && Note.Node.Visible)
+		else if (timing + nodeSize > GetViewportRect().Size.Y + 60)
 		{
 			Hittext(Skin.Element.JudgeMiss);
 			SettingsOperator.Gameplaycfg.Bad++;
