@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://b0f11jnivkb1b" path="res://Panels/GameplayElements/Customizable/ScoreOverlay.tscn" id="2_tii4h"]
 [ext_resource type="Script" uid="uid://c7iip2lp2n35g" path="res://Script/Gameplay/NotePool.cs" id="4_7if88"]
 [ext_resource type="PackedScene" uid="uid://bq7vnj4ufmi3q" path="res://Panels/GameplayElements/Customizable/SongProgress.tscn" id="4_alds2"]
+[ext_resource type="PackedScene" uid="uid://b4kqcesxtcg7p" path="res://Panels/GameplayElements/Static/Effect.tscn" id="4_cgjlm"]
 [ext_resource type="PackedScene" uid="uid://lfqbgfx32hxt" path="res://Panels/GameplayElements/Customizable/ComboCounter.tscn" id="5_dhhkq"]
 [ext_resource type="PackedScene" uid="uid://chb8dgjfmmjgt" path="res://Panels/GameplayElements/Customizable/Playfield.tscn" id="5_j387h"]
 [ext_resource type="PackedScene" uid="uid://dp0inqauwdmyy" path="res://Panels/GameplayElements/Customizable/unstablerate.tscn" id="8_acwn2"]
@@ -19,6 +20,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_33mgo")
+EffectTemplate = ExtResource("4_cgjlm")
 
 [node name="Beatmap_Background" parent="." unique_id=2097677040 instance=ExtResource("1_uf7ne")]
 self_modulate = Color(0.479167, 0.479167, 0.479167, 1)

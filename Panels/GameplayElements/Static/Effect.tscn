@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://b4kqcesxtcg7p"]
+
+[ext_resource type="Script" uid="uid://rwfsjvygiflk" path="res://Script/Gameplay/Effect.cs" id="1_crgm6"]
+
+[node name="EffectNode" type="Control" unique_id=252804529]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_crgm6")

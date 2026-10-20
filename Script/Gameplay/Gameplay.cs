@@ -43,6 +43,7 @@ public partial class Gameplay : Control
 	public float mshitold { get; set; }
 	public long startedtime { get; set; } = 0;
 	public bool songstarted = false;
+	//private Control PlayfieldNode { get; set; }
 	public Node2D noteblock { get; set; }
 	private Label ppv2LabelTest { get; set; }
 	public bool hittextinit = false;
@@ -72,6 +73,8 @@ public partial class Gameplay : Control
 	private float speedold = 1f;
 	private double ppmisspower = 1.2;
 	private float audioOffset { get; set; } = 0;
+	[Export] private PackedScene EffectTemplate;
+	private Effect EffectNode { get; set; }
 
 	// Spam protection: minimum ms between accepted key presses per column
 	private const float SPAM_COOLDOWN_MS = 80f; // 80ms — matches osu!mania's input buffer
@@ -188,6 +191,10 @@ public partial class Gameplay : Control
 		ApiOperator = GetNode<ApiOperator>("/root/ApiOperator");
 		Beatmap_Background = GetNode<TextureRect>("./Beatmap_Background");
 		WaitClock = GetNode<Timer>("Wait");
+		EffectNode = EffectTemplate.Instantiate<Effect>();
+		EffectNode.Template = true;
+		GetTree().CurrentScene.AddChild(EffectNode);
+		EffectNode.SelfModulate = new Color(1f, 1f, 1f, 0f);
 		AudioPlayer.Instance.Stop();
 		ClipContents = true;
 		HUD = GetNode<Control>("HUD");
@@ -203,7 +210,7 @@ public partial class Gameplay : Control
 		BeatmapBackground.FlashEnable = false;
 
 		HealthBar.Reset();
-		Control P = GetNode<Control>("Playfield");
+		//PlayfieldNode = GetNode<Control>("Playfield");
 		Chart = GetNode<HBoxContainer>("Playfield/ChartSections");
 		hittext = GD.Load<PackedScene>("res://Panels/GameplayElements/Static/hittext.tscn").Instantiate().GetNode<TextureRect>(".");
 		hittextinit = true;
@@ -535,6 +542,12 @@ private void _GameNoteTick(double delta)
 				{
 					// True hit offset in ms: how far the note was from the hit line when struck.
 					// Negative = early, Positive = late
+//					Effect copy = (Effect)EffectNode.Duplicate();
+//					copy.Template = false;
+//					Effect CopyTemplate = EffectTemplate.Instantiate<Effect>();
+//					CopyTemplate.Template = false;
+//					PlayfieldNode.AddChild(CopyTemplate);
+//					CopyTemplate.Position = new Vector2(105 * Note.NotePart, (int)(Note.timing + notex));
 					float hitOffsetMs = Note.timing + notex - HitPoint;
 					SettingsOperator.Addms(hitOffsetMs + 50); 
 					SettingsOperator.Gameplaycfg.ms = ComputeUnstableRate();
