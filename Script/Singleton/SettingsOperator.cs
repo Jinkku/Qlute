@@ -140,7 +140,8 @@ public partial class SettingsOperator : Node
         tween.TweenProperty(GetTree().CurrentScene, "modulate:a", 0f, QuitSpeed);
         tween.TweenProperty(GetTree().CurrentScene, "scale", tmp.Scale / 1.5f, QuitSpeed);
         tween.TweenProperty(GetTree().CurrentScene, "rotation", 0.25f, QuitSpeed);
-        tween.TweenProperty(AudioPlayer.Instance, "volume_db", -40f, QuitSpeed);
+        if (!float.IsNaN(AudioPlayer.Instance.VolumeDb))
+            tween.TweenProperty(AudioPlayer.Instance, "volume_db", -40f, QuitSpeed);
         tween.TweenCallback(Callable.From(() => GetTree().Quit())).SetDelay(QuitSpeed + 0.5f);
     }
 

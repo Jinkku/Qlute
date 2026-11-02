@@ -34,7 +34,13 @@ public partial class AudioPlayer : AudioStreamPlayer
         VolumeKnob.SavedValue = AudioPlayer.MasterVol;
     }
 
-    public static float ToDB(float value) => Mathf.LinearToDb(value / 100.0f) - 10f;
+    public static float ToDB(float value)
+    {
+        if (float.IsNaN(value))
+            value = 0;
+        return Mathf.LinearToDb(value / 100.0f) - 10f;
+    }
+
     public Tween TweenEQ { get; set; }
 
     public void MuffledEQ()

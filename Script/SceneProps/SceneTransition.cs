@@ -44,7 +44,7 @@ public partial class SceneTransition : Node
             // even if the original C# reference went stale
             Node old = GetTree().Root.GetNodeOrNull(oldScenePath);
             old?.QueueFree();
-            if (newScene != null)
+            if (GodotObject.IsInstanceValid(newScene))
                 newScene.Set("modulate", new Color(1f,1f,1f,1f));
         }));
         _tween.TweenProperty(newScene, "modulate", new Color(1f,1f,1f,1f), _time);

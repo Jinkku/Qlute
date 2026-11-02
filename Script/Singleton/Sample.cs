@@ -33,7 +33,10 @@ public partial class Sample : Node
     foreach (var stream in Streams)
     {
       AddChild(stream);
-      stream.VolumeDb = VolumeDb;
+      float db = VolumeDb;
+      if (float.IsNaN(db))
+        db = 0;
+      stream.VolumeDb = db;
       stream.Play();
       stream.Finished += () => stream.QueueFree();
     }
