@@ -15,13 +15,18 @@ public partial class Comboa : Label
 		PivotOffset = Size / 2;
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	private int _lastCombo = -1;
 	public override void _Process(double delta)
 	{
 		if (SettingsOperator.Gameplaycfg.Combo == 0){
 			Visible = false;
 		} else{
 			Visible = true;
-			Text = SettingsOperator.Gameplaycfg.Combo.ToString("N0");
+			if (_lastCombo != SettingsOperator.Gameplaycfg.Combo)
+			{
+				_lastCombo = SettingsOperator.Gameplaycfg.Combo;
+				Text = _lastCombo.ToString("N0");
+			}
 		}
 	}
 }

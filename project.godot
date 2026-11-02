@@ -65,6 +65,7 @@ window/size/viewport_height=720
 window/size/mode=4
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+display_server/driver.linuxbsd="wayland"
 window/vsync/vsync_mode=0
 mouse_cursor/custom_image="uid://b4xgcysrsgvmn"
 mouse_cursor/tooltip_position_offset=Vector2(30, 30)

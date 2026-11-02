@@ -58,31 +58,47 @@ public partial class LeaderboardGameplay : PanelContainer
 		}
 		refresh_rank();
 	}
+	private string _lastRank;
 	private void refresh_rank()
 	{
 		if (!HasMeta("rank"))
 		{
 			Rank.Text = "0";
+			_lastRank = null;
 		}
 		else
 		{
-			Rank.Text = "#" + GetMeta("rank").ToString();
+			var rank = GetMeta("rank").ToString();
+			if (rank != _lastRank)
+			{
+				_lastRank = rank;
+				Rank.Text = "#" + rank;
+			}
 		}
 	}
 	private LeaderboardEntry info { get; set; }
+	private (int Score, int Combo, float Accuracy) _lastPlaying = (int.MinValue, int.MinValue, float.NaN);
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		if (HasMeta("playing") && (bool)GetMeta("playing"))
 		{
-			Score.Text = SettingsOperator.Gameplaycfg.Score.ToString("N0");
-			Combo.Text = SettingsOperator.Gameplaycfg.Combo + "x";
-			Accuracy.Text = SettingsOperator.Gameplaycfg.Accuracy.ToString("P2");
+			// Only re-format strings when the values actually change.
+			var cur = (SettingsOperator.Gameplaycfg.Score, SettingsOperator.Gameplaycfg.Combo, SettingsOperator.Gameplaycfg.Accuracy);
+			if (cur != _lastPlaying)
+			{
+				_lastPlaying = cur;
+				Score.Text = cur.Score.ToString("N0");
+				Combo.Text = cur.Combo + "x";
+				Accuracy.Text = cur.Accuracy.ToString("P2");
+			}
 			refresh_rank();
 		}
 		else
 		{
-			info = ApiOperator.LeaderboardList[(int)GetMeta("id")];
+			var newInfo = ApiOperator.LeaderboardList[(int)GetMeta("id")];
+			bool changed = !ReferenceEquals(newInfo, info);
+			info = newInfo;
 			if (Picture.Texture != info.ProfilePicture && info.ProfilePicture != null)
 			{
 				Picture.Texture = info.ProfilePicture;
@@ -91,7 +107,7 @@ public partial class LeaderboardGameplay : PanelContainer
 			{
 				Picture.Texture = GuestPicture;
 			}
-			refresh_info();
+			if (changed) refresh_info();
 		}
 	}
 }

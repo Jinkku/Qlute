@@ -1,18 +1,13 @@
+using System;
+
 public static class Check
 {
+	// Called every frame from several places, so avoid ToLower() allocations.
 	public static bool CheckBoolValue(string value)
 	{
-		if (value.ToLower() == "true" || value == "1" || value.ToLower() == "yes")
-		{
-			return true;
-		}
-		else if (value.ToLower() == "false" || value == "0" || value.ToLower() == "no")
-		{
-			return false;
-		}
-		else
-		{
-			return false;
-		}
+		if (value == null) return false;
+		return value == "1"
+			|| value.Equals("true", StringComparison.OrdinalIgnoreCase)
+			|| value.Equals("yes", StringComparison.OrdinalIgnoreCase);
 	}
 }

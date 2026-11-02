@@ -36,9 +36,12 @@ public partial class AudioPlayer : AudioStreamPlayer
 
     public static float ToDB(float value)
     {
-        if (float.IsNaN(value))
-            value = 0;
-        return Mathf.LinearToDb(value / 100.0f) - 10f;
+        // Volume 0 would give -inf dB; tweening to/from -inf produces NaN (-inf * 0), which Godot rejects.
+        // -80 dB is effectively silent, so clamp to that to keep every value finite.
+        const float SilentDb = -80f;
+        if (float.IsNaN(value) || value <= 0)
+            return SilentDb;
+        return Mathf.Max(Mathf.LinearToDb(value / 100.0f) - 10f, SilentDb);
     }
 
     public Tween TweenEQ { get; set; }

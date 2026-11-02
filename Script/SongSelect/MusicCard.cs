@@ -106,9 +106,12 @@ public partial class MusicCard : Button
 	}
 	private List<Color> Colors = new List<Color>([new Color(1, 0, 0),new Color(0, 1, 0), new Color(1, 1, 0), new Color(0, 0, 0)]);
 
+	private int _lastRankId = int.MinValue;
 	private void RefreshRank()
 	{
 		var rankid = SettingsOperator.Beatmaps[SongID].RankStatus;
+		if (rankid == _lastRankId) return;
+		_lastRankId = rankid;
 		if (rankid == 0)
 		{
 			RankedText.Text = "Unranked";
@@ -236,7 +239,7 @@ public partial class MusicCard : Button
 	public static bool Connection_Button = false;
 	public bool Checkid()
 	{
-		return SettingsOperator.SessionConfig.SongID.ToString().Equals(SongID.ToString());
+		return SettingsOperator.SessionConfig.SongID == SongID;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -247,9 +250,10 @@ public partial class MusicCard : Button
 
 	public override void _Process(double _delta)
 	{
-		if (ButtonPressed != Checkid())
+		bool selected = Checkid();
+		if (ButtonPressed != selected)
 		{
-			ButtonPressed = Checkid();
+			ButtonPressed = selected;
 			Accessed = true;
 		}
 		if (ButtonPressed && Accessed)

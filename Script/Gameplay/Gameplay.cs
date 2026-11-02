@@ -82,6 +82,7 @@ public partial class Gameplay : Control
 
 	// Unstable Rate: stores raw hit offsets (ms) to compute std-dev * 10
 	private List<float> HitOffsets = new List<float>();
+	private static readonly Game.ScoreCalculator ScoreCalc = new Game.ScoreCalculator();
 	private float ComputeUnstableRate()
 	{
 		if (HitOffsets.Count < 2) return 0f;
@@ -287,20 +288,18 @@ public partial class Gameplay : Control
 	public Color chartclear = new Color(0.03f, 0.03f, 0.03f, 0.78f);
 	public Color chartbeam = new Color(0.20f, 0.0f, 0.20f, 0.78f);
 	
+	private string _hitSoundPath;
+	private string HitSoundPath => _hitSoundPath ??= "res://SelectableSkins/Slia/Sounds/" + (
+		SettingsOperator.Gameplaycfg.SampleSet == SampleSet.Type[0] ? SampleSet.Normal.First() :
+		SettingsOperator.Gameplaycfg.SampleSet == SampleSet.Type[1] ? SampleSet.Soft.First() :
+		SettingsOperator.Gameplaycfg.SampleSet == SampleSet.Type[2] ? SampleSet.Drum.First() : "");
+
 	public void hitnote(int Keyx, bool hit, int est)
 	{
 		var key = Keys[Keyx];
 		if (hit)
 		{
-			var name = "";
-			if (SettingsOperator.Gameplaycfg.SampleSet == SampleSet.Type[0]) {
-				name = SampleSet.Normal.First();
-			} else if (SettingsOperator.Gameplaycfg.SampleSet == SampleSet.Type[1]) {
-				name = SampleSet.Soft.First();
-			} else if (SettingsOperator.Gameplaycfg.SampleSet == SampleSet.Type[2]) {
-				name = SampleSet.Drum.First();
-			}
-			Sample.PlaySample("res://SelectableSkins/Slia/Sounds/" + name);
+			Sample.PlaySample(HitSoundPath);
 			if (!SettingsOperator.SpectatorMode) Replay.AddReplay(est, Keyx);
 			key.Node.SelfModulate = Skin.Element.LaneNotes[Keyx];
 			key.Ani?.Kill(); // Abort the previous animation
@@ -388,11 +387,11 @@ public partial class Gameplay : Control
     {
 	    if (SettingsOperator.SpectatorMode) return;
 
+	    if (!(@event is InputEventKey Key)) return;
+	    var keycode = Key.Keycode.ToString();
 	    for (int i = 0; i < 4; i++)
 	    {
-		    var keyName = "Key" + (i + 1);
-		    if ( !(@event is InputEventKey Key) ) return;
-		    else if (Key.Keycode.ToString() == Keys[i].KeyCode)
+		    if (keycode == Keys[i].KeyCode)
 		    {
 			    bool pressed = @event.IsPressed();
 
@@ -520,6 +519,7 @@ private void _GameNoteTick(double delta)
 		{
 			viewportSize = GetViewportRect().Size.Y;
 		}
+		_viewportHeight = viewportSize;
 
 		var NoteCount = 0;
 		
@@ -597,7 +597,7 @@ private void _GameNoteTick(double delta)
 		DisableDarkeningSetting = Check.CheckBoolValue(SettingsOperator.GetSetting("ddarkening").ToString());
 		DisableFadeSetting = Check.CheckBoolValue(SettingsOperator.GetSetting("dfadeout").ToString());
 		dim = 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f));
-		score = new Game.ScoreCalculator().ProcessScore(SettingsOperator.Gameplaycfg.Max,
+		score = ScoreCalc.ProcessScore(SettingsOperator.Gameplaycfg.Max,
 			SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh,
 			SettingsOperator.Gameplaycfg.NoteCount, ModsMulti.multiplier);
 		if ( (scoretween == null || !scoretween.IsRunning()) & scoreint != score)
@@ -774,6 +774,7 @@ private void _GameNoteTick(double delta)
 			ComboTween.Play();
 		}
 	}
+	private float _viewportHeight;
 	public int checkjudge(int timing, bool keyvalue, NotesEn Note)
 	{
 		if (timing + nodeSize > HitPoint - SettingsOperator.PerfectJudge - 5 && timing + nodeSize < HitPoint + SettingsOperator.PerfectJudge + 15  && keyvalue && !Note.hit)
@@ -809,7 +810,7 @@ private void _GameNoteTick(double delta)
 			HealthBar.Heal((1 * (SettingsOperator.Gameplaycfg.Combo / 500)) + 1);
 			return 2;
 		}
-		else if (timing + nodeSize > GetViewportRect().Size.Y + 60 && !Note.hit)
+		else if (timing + nodeSize > _viewportHeight + 60 && !Note.hit)
 		{
 			Hittext(Skin.Element.JudgeMiss);
 			SettingsOperator.Gameplaycfg.Bad++;

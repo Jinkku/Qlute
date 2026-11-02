@@ -94,6 +94,7 @@ public partial class TaikoGameCore : Control
 
 	// Unstable Rate: stores raw hit offsets (ms) to compute std-dev * 10
 	private List<float> HitOffsets = new List<float>();
+	private static readonly Game.ScoreCalculator ScoreCalc = new Game.ScoreCalculator();
 	private float ComputeUnstableRate()
 	{
 		if (HitOffsets.Count < 2) return 0f;
@@ -730,7 +731,7 @@ private void _GameNoteTick(double delta)
 	public override void _Process(double delta)
 	{
 		dim = 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f));
-		score = new Game.ScoreCalculator().ProcessScore(SettingsOperator.Gameplaycfg.Max,
+		score = ScoreCalc.ProcessScore(SettingsOperator.Gameplaycfg.Max,
 			SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh,
 			SettingsOperator.Gameplaycfg.NoteCount, ModsMulti.multiplier);
 		if ( (scoretween == null || !scoretween.IsRunning()) & scoreint != score)

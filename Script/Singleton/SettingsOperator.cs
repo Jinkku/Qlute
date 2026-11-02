@@ -64,13 +64,23 @@ public partial class SettingsOperator : Node
     private int UnfocusedFPS = 15;
     private bool Unfocused { get; set; }
 
+    // Launch with `-- --uncapped` to force unlimited FPS regardless of saved settings/focus (benchmarking).
+    public static readonly bool Bench = OS.GetCmdlineUserArgs().Contains("--bench");
+    public static readonly bool ForceUncapped = Bench || OS.GetCmdlineUserArgs().Contains("--uncapped");
     public void RefreshFPS()
     {
+        if (ForceUncapped)
+        {
+            DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
+            Engine.MaxFps = 0;
+            return;
+        }
         if (Unfocused) return;
         var fps = int.TryParse(GetSetting("fpsmode").ToString(), out int fpsm) ? (int)fpsm : 1;
         if (fps == 0)
         {
             DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Enabled);
+            Engine.MaxFps = 0; // vsync is the limiter; clear any previous cap
         }
         else if (fps == 1)
         {
@@ -140,7 +150,7 @@ public partial class SettingsOperator : Node
         tween.TweenProperty(GetTree().CurrentScene, "modulate:a", 0f, QuitSpeed);
         tween.TweenProperty(GetTree().CurrentScene, "scale", tmp.Scale / 1.5f, QuitSpeed);
         tween.TweenProperty(GetTree().CurrentScene, "rotation", 0.25f, QuitSpeed);
-        if (!float.IsNaN(AudioPlayer.Instance.VolumeDb))
+        if (float.IsFinite(AudioPlayer.Instance.VolumeDb))
             tween.TweenProperty(AudioPlayer.Instance, "volume_db", -40f, QuitSpeed);
         tween.TweenCallback(Callable.From(() => GetTree().Quit())).SetDelay(QuitSpeed + 0.5f);
     }
@@ -732,16 +742,22 @@ public partial class SettingsOperator : Node
         TopPanelAnimation.Play();
     }
     public static float TopPanelPosition { get; set; } = 0.0f;
+    private string _lastAudioOffsetRaw;
+    private ColorRect _infoBar;
     private double oldtime = 0.0f;
     public static Vector2 MouseMovement { get; set; }
     public override void _Process(double _delta)
     {
         MouseMovement = GetViewport().GetMousePosition(); 
-        var aud = GetSetting("audiooffset").ToString();
-        if (aud == null) AudioOffset = 0; // AudioOffset Subsystem
-        else AudioOffset = float.Parse(aud);
+        var aud = GetSetting("audiooffset")?.ToString();
+        if (aud != _lastAudioOffsetRaw) // AudioOffset Subsystem (only re-parse when the setting changes)
+        {
+            _lastAudioOffsetRaw = aud;
+            AudioOffset = aud == null ? 0 : float.Parse(aud);
+        }
 
-        TopPanelPosition = GetTree().Root.GetNode<ColorRect>("TopPanelOnTop/InfoBar").Position.Y + 50;
+        if (!IsInstanceValid(_infoBar)) _infoBar = GetTree().Root.GetNodeOrNull<ColorRect>("TopPanelOnTop/InfoBar");
+        if (_infoBar != null) TopPanelPosition = _infoBar.Position.Y + 50;
         if (Input.IsActionJustPressed("Hide Panel"))
         {
             toppaneltoggle(SessionConfig.TopPanelHide);
@@ -761,6 +777,7 @@ public partial class SettingsOperator : Node
     public override void _Ready()
     {
         args = OS.GetCmdlineArgs();
+        if (Bench) GetTree().Root.CallDeferred(Node.MethodName.AddChild, new Benchmark());
         Configurationbk = new Dictionary<string, object>(Configuration);
         ParseBackgroundDefault();
         GD.Print("Please wait...");
@@ -834,7 +851,7 @@ public partial class SettingsOperator : Node
             case (int)NotificationApplicationFocusOut:
                 GD.Print($"Detected not focused going to {UnfocusedFPS} FPS");
                 Unfocused = true;
-                if (!SettingsOperator.inGameplay)
+                if (!SettingsOperator.inGameplay && !ForceUncapped)
                     Engine.MaxFps = UnfocusedFPS;
                 break;
         }

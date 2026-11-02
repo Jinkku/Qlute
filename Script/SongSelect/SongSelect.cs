@@ -469,8 +469,18 @@ public partial class SongSelect : Control
 	    }
 	}
 
+	private object _songPanelState;
 	private void checksongpanel()
 	{
+		// Rebuilding these strings and calling into GDScript every frame is expensive; only do it when something changed.
+		var state = (SettingsOperator.SessionConfig.BeatmapTitle, SettingsOperator.SessionConfig.BeatmapArtist,
+			SettingsOperator.SessionConfig.BeatmapMapper, SettingsOperator.SessionConfig.BeatmapDifficultyName,
+			SettingsOperator.Gameplaycfg.maxpp, ModsMulti.multiplier, SettingsOperator.SessionConfig.LevelRating,
+			SettingsOperator.SessionConfig.bpm, AudioPlayer.Instance.PitchScale, SettingsOperator.Gameplaycfg.TimeTotalGame,
+			SettingsOperator.Beatmaps.Count > 0, SettingsOperator.SessionConfig.SongID);
+		if (state.Equals(_songPanelState)) return;
+		_songPanelState = state;
+
 		SongTitle.Text = SettingsOperator.SessionConfig.BeatmapTitle?.ToString() ?? "No song selected.";
 		if (SettingsOperator.Beatmaps.Count > 0 && SettingsOperator.SessionConfig.BeatmapTitle != null)
 		{
@@ -798,8 +808,12 @@ private void _Mods_show()
 	///<summary>
 	/// Check Rank status
 	/// </summary>
+	private int _lastRankStatus = int.MinValue;
 	private void CheckRankStatus()
 	{
-		RankStatus.Set("Rankid", ApiOperator.RankedStatus);
+		// RankBox's setter re-applies self_modulate (forcing a redraw), so only set it when it changes.
+		if (_lastRankStatus == ApiOperator.RankedStatus) return;
+		_lastRankStatus = ApiOperator.RankedStatus;
+		RankStatus.Set("Rankid", _lastRankStatus);
 	}
 }

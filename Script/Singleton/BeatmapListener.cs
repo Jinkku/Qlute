@@ -233,8 +233,13 @@ public partial class BeatmapListener : Node
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	private double _oszScanTimer = 0;
 	public override void _Process(double delta)
 	{
+		// Scanning the filesystem every frame is expensive (thousands of syscalls/sec at high FPS); once a second is plenty.
+		_oszScanTimer -= delta;
+		if (_oszScanTimer > 0) return;
+		_oszScanTimer = 1.0;
 		CheckAndExtractOszFiles();
 	}
 }

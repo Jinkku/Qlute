@@ -3,12 +3,7 @@ using System;
 
 public partial class TimeLeft : Label
 {
-	// Called when the node enters the scene tree for the first time.
-	private SettingsOperator SettingsOperator { get; set; }
-	public override void _Ready()
-	{
-		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-	}
+	private long _lastSecond = long.MinValue;
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
@@ -18,6 +13,9 @@ public partial class TimeLeft : Label
 		{
 			etho = 0;
 		}
-		Text = "-" + TimeSpan.FromMilliseconds(etho).ToString(@"mm\:ss") ?? "-00:00";
+		long second = (long)Math.Floor(etho / 1000.0);
+		if (second == _lastSecond) return; // only changes once a second
+		_lastSecond = second;
+		Text = "-" + TimeSpan.FromMilliseconds(etho).ToString(@"mm\:ss");
 	}
 }
