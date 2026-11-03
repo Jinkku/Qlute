@@ -90,7 +90,7 @@ public partial class Kiko : Node
 
     public override void _Ready()
     {
-        if (SettingsOperator.GetSetting("updatebranch") != "stable") CurrentUpdateChannel = UpdateChannel.Experimental;
+        if (SettingsOperator.GetSetting("updatebranch").ToString() != "stable") CurrentUpdateChannel = UpdateChannel.Experimental;
         
         CheckUpdates();
     }
