@@ -91,6 +91,7 @@ public partial class Kiko : Node
     public override void _Ready()
     {
         if (SettingsOperator.GetSetting("updatebranch") != "stable") CurrentUpdateChannel = UpdateChannel.Experimental;
+        
         CheckUpdates();
     }
 
@@ -99,7 +100,6 @@ public partial class Kiko : Node
     /// </summary>
     public void CheckUpdates(bool isinSettings = false)
     {
-        CheckingUpdates = true;
         args = OS.GetCmdlineArgs();
         if (args.Contains("--update"))
         {
@@ -108,7 +108,7 @@ public partial class Kiko : Node
         }
         else if (!args.Contains("--ignore-update"))
         {
-//#if !DEBUG
+#if !DEBUG
             if (isinSettings) Notify.Post("Checking for updates...");
             GD.Print("Checking for updates....");
             isUpdating = true;
@@ -130,11 +130,11 @@ public partial class Kiko : Node
                 "https://api.github.com/repos/Jinkku/Qlute/releases",
                 new string[] { $"User-Agent: QluteUpdater/{Version}" }
             );
-//#endif
-//#if DEBUG
-//            if (isinSettings) Notify.Post("Skipping updates because your on debug build.");
-//            GD.Print("Skipping checking for updates because debug tick is enabled.");
-//#endif
+#endif
+#if DEBUG
+            if (isinSettings) Notify.Post("Skipping updates because your on debug build.");
+            GD.Print("Skipping checking for updates because debug tick is enabled.");
+#endif
         }
         else if (args.Contains("--ignore-update"))
         {
@@ -267,6 +267,5 @@ public partial class Kiko : Node
             ProgressGetter: () => KikoApi.GetDownloadedBytes(),
             Max: () => KikoApi.GetBodySize(),
             Type: NotificationIcons.NotificationType.Download);
-        CheckingUpdates = false;
     }
 }
