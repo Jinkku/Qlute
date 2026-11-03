@@ -17,6 +17,13 @@ public partial class NotificationApplet : Button
 		ID = (int)GetMeta("listid");
 		Close = GetNode<Button>("Info/V/Close");
 		ProgressBar = GetNode<ProgressBar>("ProgressBar");
+		// "listid" is only valid right now: removing other notifications shifts the list,
+		// so keep a reference to our notification and never look it up by index again.
+		if (ID < 0 || ID >= NotificationListener.NotificationList.Count)
+		{
+			QueueFree();
+			return;
+		}
 		Notification = NotificationListener.NotificationList[ID];
 		if (Notification.type != NotificationIcons.NotificationType.Info)
 			Icon = NotificationIcons.GetIcon(Notification.type);
@@ -38,14 +45,9 @@ public partial class NotificationApplet : Button
 	}
 	private void _remove()
 	{
-		try
-		{
-			NotificationListener.NotificationList.RemoveAt(ID);
-		}
-		catch
-		{
-			GD.Print("[Qlute] Either this has already been removed, or it just doesn't exist- (this can be ignored, this just means this notification applet had already been deleted from the game :>)");
-		}
+		// Remove by reference: an index would point at the wrong notification once others were removed.
+		// (Already gone, e.g. after "Clear all", is fine.)
+		NotificationListener.NotificationList.Remove(Notification);
 	}
 	private void _anifin(){
 		NotificationListener.NotificationCards.Remove(this);
@@ -85,9 +87,9 @@ public partial class NotificationApplet : Button
 	private void _pressed()
 	{
 		// Check if uri is set, if so, open it
-		if (NotificationListener.NotificationList.ElementAt<NotificationLegend>(ID).uri != "")
+		var uri = Notification?.uri;
+		if (!string.IsNullOrEmpty(uri))
 		{
-			var uri = NotificationListener.NotificationList.ElementAt<NotificationLegend>(ID).uri;
 			if (uri.StartsWith("http"))
 			{
 				OS.ShellOpen(uri);

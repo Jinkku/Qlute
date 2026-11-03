@@ -194,7 +194,7 @@ public partial class TaikoGameCore : Control
 			if (seen.Contains(key)) { index++; continue; }
 			seen.Add(key);
 			PreLegend.timing = timen; 
-			PreLegend.ppv2xp = beatmap.ppv2sets[index] * ModsMulti.multiplier;
+			PreLegend.ppv2xp = beatmap.ppv2sets[index] * ModsOperator.ProcessMultiplierByModList(ModsOperator.Mods);
 			Notes.Add(PreLegend);
 			
 			index++;
@@ -260,7 +260,7 @@ public partial class TaikoGameCore : Control
 		Keys.Add(new DKeyL { Node = (Sprite2D)TaikoDrums[3], hit = false , KeyCode = SettingsOperator.GetSetting($"Key2").ToString(), DrumType = DrumTypeGroup.Inside});
 		Keys.Add(new DKeyL { Node = (Sprite2D)TaikoDrums[1], hit = false , KeyCode = SettingsOperator.GetSetting($"Key3").ToString(), DrumType = DrumTypeGroup.Outside});
 
-		maxrndvalue = (int)(1000000 * ModsMulti.multiplier);
+		maxrndvalue = (int)(1000000 * ModsOperator.ProcessMultiplierByModList(ModsOperator.Mods));
 
 		HitOffsets.Clear();
 		Array.Fill(LastKeyPressTime, float.MinValue);
@@ -733,7 +733,7 @@ private void _GameNoteTick(double delta)
 		dim = 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f));
 		score = ScoreCalc.ProcessScore(SettingsOperator.Gameplaycfg.Max,
 			SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh,
-			SettingsOperator.Gameplaycfg.NoteCount, ModsMulti.multiplier);
+			SettingsOperator.Gameplaycfg.NoteCount, ModsOperator.ProcessMultiplierByModList(ModsOperator.Mods));
 		if ( (scoretween == null || !scoretween.IsRunning()) & scoreint != score)
 		{
 			scoretween?.Kill();

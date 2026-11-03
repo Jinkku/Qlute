@@ -19,11 +19,15 @@ using System.Threading.Tasks;
 /// - Rooms have no player cap beyond ENet's own limit (4095 peers), so effectively anyone can join.
 /// - Flow: host picks a beatmap -> "time till play" countdown runs -> drops to 5s once everyone is ready ->
 ///   ready players load in -> live scores stream to the host -> results when everyone finished -> back to lobby.
+/// - "Server" vs "host": the player who created the room is the server (peer 1) for its whole life. The *host*
+///   is whoever holds the room controls (<see cref="LanRoomState.HostId"/>) and can be handed to anyone;
+///   their requests go through the server like everything else.
 /// </summary>
 public partial class LanNetwork : Node
 {
 	public const string BeaconTag = "qlute-lan";
-	public const int Protocol = 1;
+	public const int Protocol = 2;
+	public const int MaxRoomNameLength = 40;
 	public const int DiscoveryPort = 8911;
 	public const int DefaultGamePort = 8912;
 	public const int MaxPeers = 4095; // ENet's hard limit; rooms are otherwise unlimited.
@@ -41,7 +45,10 @@ public partial class LanNetwork : Node
 
 	// ---- Session state (read by the UI; mutate only through the methods below) ----
 	public LanRoomState State { get; private set; }
-	public bool IsHost { get; private set; }
+	/// <summary>True on the machine running the room (peer 1). Leaving closes the room for everyone.</summary>
+	public bool IsServer { get; private set; }
+	/// <summary>True when the local player holds the host controls.</summary>
+	public bool IsHost => State != null && LocalId != 0 && State.HostId == LocalId;
 	public bool LocalInMatch { get; private set; }
 	public int StateVersion { get; private set; }
 	public int GamePort { get; private set; }
@@ -72,12 +79,12 @@ public partial class LanNetwork : Node
 	private double _syncTimer;
 	private double _scoreTimer;
 	private int _lastBeatmapCount = -1;
-	private int _hostBeatmapIndex = -1;
 	private readonly Dictionary<string, string> _checksumCache = new();
 
 	private class OutgoingTransfer { public long Peer; public string FileName; public byte[] Data; public int Next; public int Total; }
 	private readonly List<OutgoingTransfer> _outgoing = new();
 	private MemoryStream _incoming;
+	private long _incomingFrom;
 
 	public override void _Ready()
 	{
@@ -129,10 +136,11 @@ public partial class LanNetwork : Node
 		}
 		Multiplayer.MultiplayerPeer = peer;
 		GamePort = port;
-		IsHost = true;
+		IsServer = true;
 		State = new LanRoomState
 		{
-			Name = Clean(roomName, 40, $"{LocalName()}'s room"),
+			Name = Clean(roomName, MaxRoomNameLength, $"{LocalName()}'s room"),
+			HostId = 1,
 			HostName = LocalName(),
 			Players = { new LanPlayer { Id = 1, Name = LocalName() } },
 		};
@@ -158,7 +166,7 @@ public partial class LanNetwork : Node
 			return false;
 		}
 		Multiplayer.MultiplayerPeer = peer;
-		IsHost = false;
+		IsServer = false;
 		_joining = true;
 		Notify.Post($"Connecting to {address}:{port}...");
 		GD.Print($"[LAN] Joining {address}:{port}");
@@ -171,7 +179,7 @@ public partial class LanNetwork : Node
 		if (Multiplayer.MultiplayerPeer is ENetMultiplayerPeer peer)
 		{
 			peer.Close();
-			if (!silent) Notify.Post(IsHost ? "Closed the LAN room." : "Left the LAN room.");
+			if (!silent) Notify.Post(IsServer ? "Closed the LAN room." : "Left the LAN room.");
 		}
 		Multiplayer.MultiplayerPeer = new OfflineMultiplayerPeer();
 		ResetSession();
@@ -180,29 +188,28 @@ public partial class LanNetwork : Node
 	public void SetReady(bool ready)
 	{
 		if (State == null) return;
-		if (IsHost) HostSetReady(1, ready);
+		if (IsServer) ServerSetReady(1, ready);
 		else RpcId(1, MethodName.RpcSetReady, ready);
 	}
 
 	public void SendChat(string text)
 	{
 		if (State == null || string.IsNullOrWhiteSpace(text)) return;
-		if (IsHost) HostChat(1, text);
+		if (IsServer) ServerChat(1, text);
 		else RpcId(1, MethodName.RpcChat, text);
 	}
 
-	/// <summary>Host only: pick the beatmap everyone will play.</summary>
+	/// <summary>Host only: pick the beatmap everyone will play (index into the local library).</summary>
 	public void HostSelectBeatmap(int index, bool announce = true)
 	{
-		if (!IsHost || State == null || State.Phase != LanPhase.Lobby) return;
+		if (!IsHost || State.Phase != LanPhase.Lobby) return;
 		if (index < 0 || index >= SettingsOperator.Beatmaps.Count) return;
 		var b = SettingsOperator.Beatmaps[index];
 		var checksum = Checksum(b.Rawurl);
 		if (checksum == null) { Notify.Post("Couldn't read that beatmap file.", Type: NotificationIcons.NotificationType.Warning); return; }
 		if (State.Beatmap?.Checksum == checksum) return;
 
-		_hostBeatmapIndex = index;
-		State.Beatmap = new LanBeatmapRef
+		var map = new LanBeatmapRef
 		{
 			BeatmapID = b.BeatmapID,
 			BeatmapSetID = b.BeatmapSetID,
@@ -214,44 +221,50 @@ public partial class LanNetwork : Node
 			Levelrating = b.Levelrating,
 			LengthMs = b.Timetotal,
 		};
-		foreach (var p in State.Players)
-		{
-			p.Ready = false;
-			p.HasMap = p.Id == 1; // clients re-report once they've checked their library
-		}
-		State.CountdownActive = false; // restarts the "time till play" timer
 		if (SettingsOperator.SessionConfig.SongID != index) SelectSong(index);
-		if (announce) HostChat(0, $"Beatmap changed to {State.Beatmap.Display}");
-		MarkDirty();
+		if (IsServer) ServerSetBeatmap(1, map, announce);
+		else RpcId(1, MethodName.RpcSelectBeatmap, JsonSerializer.Serialize(map));
 	}
 
 	/// <summary>Host only: change the lobby countdown length.</summary>
 	public void HostAdjustTimer(int deltaSeconds)
 	{
-		if (!IsHost || State == null) return;
-		State.LobbyTimer = Math.Clamp(State.LobbyTimer + deltaSeconds, MinLobbyTimer, MaxLobbyTimer);
-		if (State.CountdownActive && State.TimeLeft > State.LobbyTimer) State.TimeLeft = State.LobbyTimer;
-		MarkDirty();
+		if (!IsHost) return;
+		if (IsServer) ServerAdjustTimer(1, deltaSeconds);
+		else RpcId(1, MethodName.RpcAdjustTimer, deltaSeconds);
 	}
 
 	/// <summary>Host only: skip the rest of the countdown (ready players start in 5 seconds).</summary>
 	public void HostStartNow()
 	{
-		if (!IsHost || State == null || !State.CountdownActive) return;
-		if (State.TimeLeft > AllReadyCountdown)
-		{
-			State.TimeLeft = AllReadyCountdown;
-			HostChat(0, $"Host is starting the match in {AllReadyCountdown:0} seconds!");
-			MarkDirty();
-		}
+		if (!IsHost) return;
+		if (IsServer) ServerStartNow(1);
+		else RpcId(1, MethodName.RpcStartNow);
 	}
 
-	/// <summary>Ask the host to send us the selected beatmap over the LAN.</summary>
+	/// <summary>Host only: rename the room (shows up in everyone's lobby and the LAN room list).</summary>
+	public void HostRename(string name)
+	{
+		if (!IsHost) return;
+		if (IsServer) ServerRename(1, name);
+		else RpcId(1, MethodName.RpcRename, name ?? "");
+	}
+
+	/// <summary>Host only: hand the host controls to another player in the room.</summary>
+	public void HostTransfer(long playerId)
+	{
+		if (!IsHost || playerId == LocalId) return;
+		if (IsServer) ServerTransferHost(1, playerId);
+		else RpcId(1, MethodName.RpcTransferHost, playerId);
+	}
+
+	/// <summary>Ask the room for the selected beatmap; the server or the host sends it over the LAN.</summary>
 	public void RequestBeatmapFromHost()
 	{
-		if (State?.Beatmap == null || IsHost || TransferProgress >= 0) return;
+		if (State?.Beatmap == null || TransferProgress >= 0 || FindLocalBeatmap(State.Beatmap) >= 0) return;
 		TransferProgress = 0;
-		RpcId(1, MethodName.RpcRequestBeatmap);
+		if (IsServer) ServerRouteBeatmapRequest(1);
+		else RpcId(1, MethodName.RpcRequestBeatmap);
 	}
 
 	/// <summary>Called when the local player's gameplay ends (finished or quit).</summary>
@@ -263,7 +276,7 @@ public partial class LanNetwork : Node
 		var c = (SettingsOperator.Gameplaycfg.Score, SettingsOperator.Gameplaycfg.MaxCombo, Accuracy: LocalAccuracy(),
 			SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 		if (State == null) return; // host vanished mid-match
-		if (IsHost) HostFinished(1, c.Score, c.MaxCombo, c.Accuracy, c.Max, c.Great, c.Meh, c.Bad, quit);
+		if (IsServer) ServerFinished(1, c.Score, c.MaxCombo, c.Accuracy, c.Max, c.Great, c.Meh, c.Bad, quit);
 		else RpcId(1, MethodName.RpcFinished, c.Score, c.MaxCombo, c.Accuracy, c.Max, c.Great, c.Meh, c.Bad, quit);
 	}
 
@@ -315,12 +328,12 @@ public partial class LanNetwork : Node
 		if (State.CountdownActive && State.Phase == LanPhase.Lobby)
 			TimeLeftNow = Math.Max(0, TimeLeftNow - delta);
 
-		if (IsHost)
+		if (IsServer)
 		{
-			HostTick(delta);
+			ServerTick(delta);
 			SendBeacon(delta);
-			PumpOutgoingTransfers();
 		}
+		PumpOutgoingTransfers(); // anyone holding the map may be asked to share it
 
 		// Beatmap library changed (e.g. a map arrived from the host) -> re-check whether we can play.
 		if (_lastBeatmapCount != SettingsOperator.Beatmaps.Count)
@@ -339,7 +352,7 @@ public partial class LanNetwork : Node
 				var g = (SettingsOperator.Gameplaycfg.Score, SettingsOperator.Gameplaycfg.Combo, SettingsOperator.Gameplaycfg.MaxCombo,
 					Accuracy: LocalAccuracy(), SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great,
 					SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
-				if (IsHost) HostScore(1, g.Score, g.Combo, g.MaxCombo, g.Accuracy, g.Max, g.Great, g.Meh, g.Bad);
+				if (IsServer) ServerScore(1, g.Score, g.Combo, g.MaxCombo, g.Accuracy, g.Max, g.Great, g.Meh, g.Bad);
 				else RpcId(1, MethodName.RpcScore, g.Score, g.Combo, g.MaxCombo, g.Accuracy, g.Max, g.Great, g.Meh, g.Bad);
 			}
 		}
@@ -349,7 +362,7 @@ public partial class LanNetwork : Node
 	// Host logic (authoritative)
 	// =====================================================================
 
-	private void HostTick(double delta)
+	private void ServerTick(double delta)
 	{
 		var s = State;
 		if (s.Phase == LanPhase.Lobby)
@@ -370,7 +383,7 @@ public partial class LanNetwork : Node
 				if (s.Players.All(p => p.Ready) && s.TimeLeft > AllReadyCountdown)
 				{
 					s.TimeLeft = AllReadyCountdown;
-					HostChat(0, $"Everyone is ready! Starting in {AllReadyCountdown:0} seconds.");
+					ServerChat(0, $"Everyone is ready! Starting in {AllReadyCountdown:0} seconds.");
 					MarkDirty();
 				}
 
@@ -384,12 +397,12 @@ public partial class LanNetwork : Node
 					if (players.Count == 0)
 					{
 						s.TimeLeft = s.LobbyTimer;
-						HostChat(0, "Nobody was ready, so the timer restarted.");
+						ServerChat(0, "Nobody was ready, so the timer restarted.");
 						MarkDirty();
 					}
 					else
 					{
-						HostStartMatch(players);
+						ServerStartMatch(players);
 					}
 				}
 			}
@@ -403,7 +416,7 @@ public partial class LanNetwork : Node
 		}
 	}
 
-	private void HostStartMatch(List<LanPlayer> players)
+	private void ServerStartMatch(List<LanPlayer> players)
 	{
 		var s = State;
 		s.Phase = LanPhase.Playing;
@@ -418,13 +431,13 @@ public partial class LanNetwork : Node
 			p.Score = p.Combo = p.MaxCombo = p.Max = p.Great = p.Meh = p.Bad = 0;
 			p.Accuracy = 1f;
 		}
-		HostChat(0, $"Match started with {players.Count} player{(players.Count == 1 ? "" : "s")}: {string.Join(", ", players.Select(p => p.Name))}");
+		ServerChat(0, $"Match started with {players.Count} player{(players.Count == 1 ? "" : "s")}: {string.Join(", ", players.Select(p => p.Name))}");
 		BroadcastState(); // reliable + ordered: clients get the InMatch flags before the start signal
 		Rpc(MethodName.RpcStartMatch, s.MatchId);
 		OnStartMatch(s.MatchId);
 	}
 
-	private void HostEndMatchIfDone()
+	private void ServerEndMatchIfDone()
 	{
 		var s = State;
 		if (s == null || s.Phase != LanPhase.Playing) return;
@@ -442,15 +455,15 @@ public partial class LanNetwork : Node
 		s.CountdownActive = false;
 		foreach (var p in s.Players) { p.InMatch = false; p.Ready = false; }
 
-		HostChat(0, "Match finished! Results:");
+		ServerChat(0, "Match finished! Results:");
 		foreach (var r in s.LastResults)
-			HostChat(0, r.Quit
+			ServerChat(0, r.Quit
 				? $"#{r.Rank} {r.Name} - quit"
 				: $"#{r.Rank} {r.Name} - {r.Score:N0} ({r.Accuracy:P2}, {r.MaxCombo}x)");
 		MarkDirty();
 	}
 
-	private void HostSetReady(long id, bool ready)
+	private void ServerSetReady(long id, bool ready)
 	{
 		var p = FindPlayer(id);
 		if (p == null || State.Phase != LanPhase.Lobby) return;
@@ -460,7 +473,7 @@ public partial class LanNetwork : Node
 		MarkDirty();
 	}
 
-	private void HostSetHasMap(long id, bool has, string checksum)
+	private void ServerSetHasMap(long id, bool has, string checksum)
 	{
 		var p = FindPlayer(id);
 		if (p == null) return;
@@ -470,7 +483,105 @@ public partial class LanNetwork : Node
 		MarkDirty();
 	}
 
-	private void HostChat(long id, string text)
+	// ---- Host controls (validated against State.HostId, whoever sent them) ----
+
+	private bool SentByHost(long sender) => State != null && sender == State.HostId && FindPlayer(sender) != null;
+
+	private void ServerSetBeatmap(long sender, LanBeatmapRef map, bool announce)
+	{
+		if (!SentByHost(sender) || State.Phase != LanPhase.Lobby || string.IsNullOrEmpty(map?.Checksum)) return;
+		if (State.Beatmap?.Checksum == map.Checksum) return;
+
+		map.Title = Clean(map.Title, 200, "Unknown");
+		map.Artist = Clean(map.Artist, 200, "Unknown");
+		map.Version = Clean(map.Version, 100, "?");
+		map.Mapper = Clean(map.Mapper, 100, "?");
+		State.Beatmap = map;
+		foreach (var p in State.Players)
+		{
+			p.Ready = false;
+			p.HasMap = p.Id == sender; // everyone else re-reports once they've checked their library
+		}
+		State.CountdownActive = false; // restarts the "time till play" timer
+		if (announce) ServerChat(0, $"Beatmap changed to {map.Display}");
+		if (sender != 1) RecheckLocalMap(force: true); // the server player needs the map too
+		MarkDirty();
+	}
+
+	private void ServerAdjustTimer(long sender, int deltaSeconds)
+	{
+		if (!SentByHost(sender)) return;
+		State.LobbyTimer = Math.Clamp(State.LobbyTimer + deltaSeconds, MinLobbyTimer, MaxLobbyTimer);
+		if (State.CountdownActive && State.TimeLeft > State.LobbyTimer) State.TimeLeft = State.LobbyTimer;
+		MarkDirty();
+	}
+
+	private void ServerStartNow(long sender)
+	{
+		if (!SentByHost(sender) || !State.CountdownActive || State.TimeLeft <= AllReadyCountdown) return;
+		State.TimeLeft = AllReadyCountdown;
+		ServerChat(0, $"Host is starting the match in {AllReadyCountdown:0} seconds!");
+		MarkDirty();
+	}
+
+	private void ServerRename(long sender, string name)
+	{
+		if (!SentByHost(sender)) return;
+		name = Clean(name, MaxRoomNameLength, null);
+		if (name == null || name == State.Name) return;
+		State.Name = name;
+		_beaconTimer = 0; // let the LAN room list pick the new name up right away
+		ServerChat(0, $"Room renamed to \"{name}\".");
+		MarkDirty();
+	}
+
+	private void ServerTransferHost(long sender, long target)
+	{
+		if (!SentByHost(sender) || sender == target) return;
+		var to = FindPlayer(target);
+		if (to == null) return;
+		SetHost(to, $"{FindPlayer(sender)?.Name} made {to.Name} the host.");
+	}
+
+	private void SetHost(LanPlayer to, string announcement)
+	{
+		State.HostId = to.Id;
+		State.HostName = to.Name;
+		_beaconTimer = 0;
+		ServerChat(0, announcement);
+		if (to.Id == 1) Notify.Post("You're the host now!");
+		MarkDirty();
+	}
+
+	/// <summary>Finds someone who can send the selected beatmap to <paramref name="requester"/>.</summary>
+	private void ServerRouteBeatmapRequest(long requester)
+	{
+		if (State.Beatmap == null) { SendUnavailable(requester, "No beatmap is selected yet."); return; }
+		if (requester != 1 && FindLocalBeatmap(State.Beatmap) >= 0) { SendBeatmapTo(requester); return; }
+
+		// The server doesn't have it: ask the host first, then anyone else who does.
+		var source = State.Players
+			.Where(p => p.Id != requester && p.Id != 1 && p.HasMap)
+			.OrderByDescending(p => p.Id == State.HostId)
+			.FirstOrDefault();
+		if (source != null) RpcId(source.Id, MethodName.RpcSendBeatmapTo, requester);
+		else SendUnavailable(requester, "Nobody in the room can share this beatmap right now.");
+	}
+
+	private void SendUnavailable(long peer, string reason)
+	{
+		if (peer == LocalId) OnBeatmapUnavailable(reason);
+		else RpcId(peer, MethodName.RpcBeatmapUnavailable, reason);
+	}
+
+	private void OnBeatmapUnavailable(string reason)
+	{
+		TransferProgress = -1;
+		_incoming = null;
+		Notify.Post(reason, Type: NotificationIcons.NotificationType.Warning);
+	}
+
+	private void ServerChat(long id, string text)
 	{
 		text = Clean(text, 300, null);
 		if (text == null) return;
@@ -485,7 +596,7 @@ public partial class LanNetwork : Node
 		Rpc(MethodName.RpcChatLine, name ?? "", text);
 	}
 
-	private void HostScore(long id, int score, int combo, int maxCombo, float acc, int max, int great, int meh, int bad)
+	private void ServerScore(long id, int score, int combo, int maxCombo, float acc, int max, int great, int meh, int bad)
 	{
 		var p = FindPlayer(id);
 		if (p == null || !p.InMatch || p.Finished) return;
@@ -494,7 +605,7 @@ public partial class LanNetwork : Node
 		MarkDirty();
 	}
 
-	private void HostFinished(long id, int score, int maxCombo, float acc, int max, int great, int meh, int bad, bool quit)
+	private void ServerFinished(long id, int score, int maxCombo, float acc, int max, int great, int meh, int bad, bool quit)
 	{
 		var p = FindPlayer(id);
 		if (p == null || !p.InMatch || p.Finished) return;
@@ -502,22 +613,24 @@ public partial class LanNetwork : Node
 		p.Max = max; p.Great = great; p.Meh = meh; p.Bad = bad;
 		p.Finished = true;
 		p.Quit = quit;
-		HostChat(0, quit ? $"{p.Name} quit the match." : $"{p.Name} finished with {score:N0}.");
-		HostEndMatchIfDone();
+		ServerChat(0, quit ? $"{p.Name} quit the match." : $"{p.Name} finished with {score:N0}.");
+		ServerEndMatchIfDone();
 		MarkDirty();
 	}
 
-	private void HostSendBeatmap(long peer)
+	/// <summary>Zips the selected beatmap's folder and streams it to <paramref name="peer"/>. Works on any player that has it.</summary>
+	private void SendBeatmapTo(long peer)
 	{
 		var s = State;
-		if (s?.Beatmap == null || _hostBeatmapIndex < 0 || _hostBeatmapIndex >= SettingsOperator.Beatmaps.Count)
+		int index = s?.Beatmap == null ? -1 : FindLocalBeatmap(s.Beatmap);
+		if (index < 0)
 		{
-			RpcId(peer, MethodName.RpcBeatmapUnavailable, "The host has no beatmap selected.");
+			SendUnavailable(peer, "That beatmap couldn't be found to share.");
 			return;
 		}
 		if (_outgoing.Any(t => t.Peer == peer)) return;
 
-		var b = SettingsOperator.Beatmaps[_hostBeatmapIndex];
+		var b = SettingsOperator.Beatmaps[index];
 		var folder = b.Path.TrimEnd('/', '\\');
 		var checksum = s.Beatmap.Checksum;
 		var safeFolder = string.Concat(Path.GetFileName(folder).Select(ch => Path.GetInvalidFileNameChars().Contains(ch) ? '_' : ch));
@@ -550,10 +663,10 @@ public partial class LanNetwork : Node
 
 	private void QueueTransfer(long peer, string fileName, byte[] data)
 	{
-		if (State == null || !Multiplayer.GetPeers().Contains((int)peer)) return;
+		if (State == null || FindPlayer(peer) == null) return;
 		if (data == null)
 		{
-			RpcId(peer, MethodName.RpcBeatmapUnavailable, "The host couldn't share this beatmap.");
+			SendUnavailable(peer, "That beatmap couldn't be packaged for sharing.");
 			return;
 		}
 		_outgoing.Add(new OutgoingTransfer
@@ -570,7 +683,7 @@ public partial class LanNetwork : Node
 		for (int i = _outgoing.Count - 1; i >= 0; i--)
 		{
 			var t = _outgoing[i];
-			if (!Multiplayer.GetPeers().Contains((int)t.Peer)) { _outgoing.RemoveAt(i); continue; }
+			if (State == null || FindPlayer(t.Peer) == null) { _outgoing.RemoveAt(i); continue; }
 			for (int n = 0; n < 4 && t.Next < t.Total; n++, t.Next++)
 			{
 				int offset = t.Next * ChunkSize;
@@ -642,20 +755,24 @@ public partial class LanNetwork : Node
 		if (old?.Beatmap?.Checksum != newState.Beatmap?.Checksum)
 			RecheckLocalMap(force: true);
 
+		if (old != null && old.HostId != newState.HostId && newState.HostId == LocalId)
+			Notify.Post("You're the host now!");
+
 		UpdateMatchLeaderboard();
 	}
 
-	/// <summary>Works out whether we have the selected beatmap and tells the host.</summary>
+	/// <summary>Works out whether we have the selected beatmap and tells the server.</summary>
 	private void RecheckLocalMap(bool force = false)
 	{
-		if (State?.Beatmap == null || IsHost) return;
+		if (State?.Beatmap == null) return;
 		int index = FindLocalBeatmap(State.Beatmap);
 		bool has = index >= 0;
 		if (has && State.Phase == LanPhase.Lobby && !SettingsOperator.inGameplay && SettingsOperator.SessionConfig.SongID != index)
 			SelectSong(index); // preview music + background follow the host's pick
 		var me = LocalPlayer;
-		if (force || me == null || me.HasMap != has)
-			RpcId(1, MethodName.RpcSetHasMap, has, State.Beatmap.Checksum);
+		if (!force && me != null && me.HasMap == has) return;
+		if (IsServer) ServerSetHasMap(1, has, State.Beatmap.Checksum);
+		else RpcId(1, MethodName.RpcSetHasMap, has, State.Beatmap.Checksum);
 	}
 
 	/// <summary>Index into SettingsOperator.Beatmaps of the exact same chart, or -1.</summary>
@@ -717,18 +834,21 @@ public partial class LanNetwork : Node
 
 	private void OnPeerConnected(long id)
 	{
-		if (IsHost) GD.Print($"[LAN] Peer {id} connected, waiting for hello");
+		if (IsServer) GD.Print($"[LAN] Peer {id} connected, waiting for hello");
 	}
 
 	private void OnPeerDisconnected(long id)
 	{
-		if (!IsHost || State == null) return;
+		if (!IsServer || State == null) return;
 		var p = FindPlayer(id);
 		if (p == null) return;
 		State.Players.Remove(p);
 		_outgoing.RemoveAll(t => t.Peer == id);
-		HostChat(0, $"{p.Name} left the room.");
-		HostEndMatchIfDone();
+		ServerChat(0, $"{p.Name} left the room.");
+		// The host left: the controls go back to whoever runs the room.
+		if (id == State.HostId && FindPlayer(1) is { } server)
+			SetHost(server, $"{server.Name} is the host again.");
+		ServerEndMatchIfDone();
 		MarkDirty();
 	}
 
@@ -759,11 +879,10 @@ public partial class LanNetwork : Node
 	private void ResetSession()
 	{
 		State = null;
-		IsHost = false;
+		IsServer = false;
 		LocalInMatch = false;
 		_joining = false;
 		_dirty = false;
-		_hostBeatmapIndex = -1;
 		_outgoing.Clear();
 		_incoming = null;
 		TransferProgress = -1;
@@ -779,7 +898,7 @@ public partial class LanNetwork : Node
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	private void RpcHello(string name, int protocol, string version)
 	{
-		if (!IsHost || State == null) return;
+		if (!IsServer || State == null) return;
 		long id = Multiplayer.GetRemoteSenderId();
 		if (protocol != Protocol)
 		{
@@ -794,7 +913,7 @@ public partial class LanNetwork : Node
 		for (int n = 2; State.Players.Any(p => p.Name == unique); n++) unique = $"{baseName} ({n})";
 
 		State.Players.Add(new LanPlayer { Id = id, Name = unique });
-		HostChat(0, $"{unique} joined the room.");
+		ServerChat(0, $"{unique} joined the room.");
 		MarkDirty();
 		BroadcastState(); // send the newcomer the room right away
 	}
@@ -802,37 +921,80 @@ public partial class LanNetwork : Node
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	private void RpcSetReady(bool ready)
 	{
-		if (IsHost && State != null) HostSetReady(Multiplayer.GetRemoteSenderId(), ready);
+		if (IsServer && State != null) ServerSetReady(Multiplayer.GetRemoteSenderId(), ready);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	private void RpcSetHasMap(bool has, string checksum)
 	{
-		if (IsHost && State != null) HostSetHasMap(Multiplayer.GetRemoteSenderId(), has, checksum);
+		if (IsServer && State != null) ServerSetHasMap(Multiplayer.GetRemoteSenderId(), has, checksum);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	private void RpcChat(string text)
 	{
-		if (IsHost && State != null) HostChat(Multiplayer.GetRemoteSenderId(), text);
+		if (IsServer && State != null) ServerChat(Multiplayer.GetRemoteSenderId(), text);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.UnreliableOrdered)]
 	private void RpcScore(int score, int combo, int maxCombo, float acc, int max, int great, int meh, int bad)
 	{
-		if (IsHost && State != null) HostScore(Multiplayer.GetRemoteSenderId(), score, combo, maxCombo, acc, max, great, meh, bad);
+		if (IsServer && State != null) ServerScore(Multiplayer.GetRemoteSenderId(), score, combo, maxCombo, acc, max, great, meh, bad);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	private void RpcFinished(int score, int maxCombo, float acc, int max, int great, int meh, int bad, bool quit)
 	{
-		if (IsHost && State != null) HostFinished(Multiplayer.GetRemoteSenderId(), score, maxCombo, acc, max, great, meh, bad, quit);
+		if (IsServer && State != null) ServerFinished(Multiplayer.GetRemoteSenderId(), score, maxCombo, acc, max, great, meh, bad, quit);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	private void RpcRequestBeatmap()
 	{
-		if (IsHost && State != null) HostSendBeatmap(Multiplayer.GetRemoteSenderId());
+		if (IsServer && State != null) ServerRouteBeatmapRequest(Multiplayer.GetRemoteSenderId());
+	}
+
+	// ---- Host controls: any peer may call these; the server checks the sender is the host ----
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void RpcSelectBeatmap(string json)
+	{
+		if (!IsServer || State == null) return;
+		LanBeatmapRef map;
+		try { map = JsonSerializer.Deserialize<LanBeatmapRef>(json); }
+		catch { return; }
+		ServerSetBeatmap(Multiplayer.GetRemoteSenderId(), map, announce: true);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void RpcAdjustTimer(int deltaSeconds)
+	{
+		if (IsServer && State != null) ServerAdjustTimer(Multiplayer.GetRemoteSenderId(), deltaSeconds);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void RpcStartNow()
+	{
+		if (IsServer && State != null) ServerStartNow(Multiplayer.GetRemoteSenderId());
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void RpcRename(string name)
+	{
+		if (IsServer && State != null) ServerRename(Multiplayer.GetRemoteSenderId(), name);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void RpcTransferHost(long target)
+	{
+		if (IsServer && State != null) ServerTransferHost(Multiplayer.GetRemoteSenderId(), target);
+	}
+
+	/// <summary>Server -> a player who has the map: please send it to <paramref name="target"/>.</summary>
+	[Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void RpcSendBeatmapTo(long target)
+	{
+		if (State != null && !IsServer) SendBeatmapTo(target);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
@@ -861,20 +1023,25 @@ public partial class LanNetwork : Node
 		Notify.Post(reason, Type: NotificationIcons.NotificationType.Warning);
 	}
 
-	[Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	// Beatmaps can come from the server or (relayed through it) from another player, so these are AnyPeer;
+	// we only accept them while we're waiting for a transfer, and only from someone in the room.
+	private bool AcceptTransferFrom(long sender) =>
+		TransferProgress >= 0 && State != null && (sender == 1 || FindPlayer(sender) != null);
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	private void RpcBeatmapUnavailable(string reason)
 	{
-		TransferProgress = -1;
-		_incoming = null;
-		Notify.Post(reason, Type: NotificationIcons.NotificationType.Warning);
+		if (AcceptTransferFrom(Multiplayer.GetRemoteSenderId())) OnBeatmapUnavailable(reason);
 	}
 
 	// Separate channel so a big transfer doesn't hold up chat/state updates.
-	[Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 1)]
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 1)]
 	private void RpcBeatmapChunk(string fileName, int index, int total, byte[] data)
 	{
-		if (index == 0) _incoming = new MemoryStream();
-		if (_incoming == null) return;
+		long sender = Multiplayer.GetRemoteSenderId();
+		if (!AcceptTransferFrom(sender)) return;
+		if (index == 0) { _incoming = new MemoryStream(); _incomingFrom = sender; }
+		if (_incoming == null || sender != _incomingFrom) return;
 		_incoming.Write(data, 0, data.Length);
 		TransferProgress = (index + 1) / (float)total;
 		if (index < total - 1) return;
@@ -891,7 +1058,7 @@ public partial class LanNetwork : Node
 			File.WriteAllBytes(tmp, bytes);
 			File.Move(tmp, Path.Combine(target, safeName), overwrite: true);
 			GD.Print($"[LAN] Received {safeName} ({bytes.Length / 1024} KB)");
-			Notify.Post("Got the beatmap from the host, importing...");
+			Notify.Post("Got the beatmap, importing...");
 			// BeatmapListener imports *.osz from the downloads folder; RecheckLocalMap runs once it shows up.
 		}
 		catch (Exception e)

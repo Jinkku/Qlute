@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://bqa67fhh17u7e"]
+
+[ext_resource type="Theme" uid="uid://phcyox1n5ls3" path="res://Resources/Multiplayer/LobbyTheme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://8ibsgft47rxn" path="res://Script/Multiplayer/Lobby/LobbyPlayerList.cs" id="2_script"]
+[ext_resource type="PackedScene" path="res://Panels/Multiplayer/Lobby/LobbyPlayerRow.tscn" id="3_row"]
+
+[node name="LobbyPlayerList" type="PanelContainer" unique_id=1388032684 node_paths=PackedStringArray("CountLabel", "Rows", "ResultsSection", "Results")]
+custom_minimum_size = Vector2(320, 0)
+theme = ExtResource("1_theme")
+theme_type_variation = &"LobbyCard"
+script = ExtResource("2_script")
+RowScene = ExtResource("3_row")
+CountLabel = NodePath("V/HeaderRow/Count")
+Rows = NodePath("V/Scroll/Content/Rows")
+ResultsSection = NodePath("V/Scroll/Content/ResultsSection")
+Results = NodePath("V/Scroll/Content/ResultsSection/Results")
+
+[node name="V" type="VBoxContainer" parent="." unique_id=1463731796]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HeaderRow" type="HBoxContainer" parent="V" unique_id=301192146]
+layout_mode = 2
+
+[node name="Heading" type="Label" parent="V/HeaderRow" unique_id=1806281665]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LobbyHeading"
+text = "Players"
+
+[node name="Count" type="Label" parent="V/HeaderRow" unique_id=1859548172]
+layout_mode = 2
+theme_type_variation = &"LobbyAccentPill"
+text = "0"
+
+[node name="Scroll" type="ScrollContainer" parent="V" unique_id=461359525]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Content" type="VBoxContainer" parent="V/Scroll" unique_id=481113300]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Rows" type="VBoxContainer" parent="V/Scroll/Content" unique_id=255715037]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ResultsSection" type="VBoxContainer" parent="V/Scroll/Content" unique_id=1684741373]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Separator" type="HSeparator" parent="V/Scroll/Content/ResultsSection" unique_id=255182619]
+layout_mode = 2
+
+[node name="Heading" type="Label" parent="V/Scroll/Content/ResultsSection" unique_id=420945044]
+layout_mode = 2
+theme_type_variation = &"LobbyHeading"
+text = "LAST MATCH"
+
+[node name="Results" type="VBoxContainer" parent="V/Scroll/Content/ResultsSection" unique_id=481603020]
+layout_mode = 2
+theme_override_constants/separation = 4

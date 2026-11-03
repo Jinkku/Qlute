@@ -1,8 +1,16 @@
 using Godot;
+using System;
 
-/// <summary>Styling for buttons created in code, matching the menus' blue-grey buttons.</summary>
+/// <summary>Shared LAN UI helpers: styling for buttons created in code, and formatting.</summary>
 public static class LanUi
 {
+	/// <summary>Seconds -> "m:ss", rounded up so a countdown never shows 0:00 early.</summary>
+	public static string FormatTime(double seconds)
+	{
+		var t = TimeSpan.FromSeconds(Math.Max(0, Math.Ceiling(seconds)));
+		return $"{(int)t.TotalMinutes}:{t.Seconds:00}";
+	}
+
 	private static StyleBoxFlat Box(Color c)
 	{
 		var sb = new StyleBoxFlat { BgColor = c };

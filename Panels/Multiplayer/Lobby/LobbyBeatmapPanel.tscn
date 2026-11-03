@@ -1,0 +1,152 @@
+[gd_scene format=3 uid="uid://bnekeu7ge6i3n"]
+
+[ext_resource type="Theme" uid="uid://phcyox1n5ls3" path="res://Resources/Multiplayer/LobbyTheme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://h6t45w4nvt15" path="res://Script/Multiplayer/Lobby/LobbyBeatmapPanel.cs" id="2_script"]
+[ext_resource type="Texture2D" uid="uid://fgbtqxkt8lm" path="res://DefaultWallpaper/attack.png" id="3_ku2br"]
+
+[sub_resource type="Gradient" id="Gradient_shade"]
+offsets = PackedFloat32Array(0, 0.65, 1)
+colors = PackedColorArray(0.03, 0.03, 0.05, 0.92, 0.03, 0.03, 0.05, 0.55, 0.03, 0.03, 0.05, 0.15)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_shade"]
+gradient = SubResource("Gradient_shade")
+
+[node name="LobbyBeatmapPanel" type="PanelContainer" unique_id=1154276679 node_paths=PackedStringArray("Cover", "MapTitle", "MapArtist", "Chips", "DifficultyChip", "LevelChip", "LengthChip", "MapperChip", "MissingRow", "DownloadButton", "TransferBar", "Search", "MapList")]
+offset_right = 602.0
+offset_bottom = 287.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.6
+theme = ExtResource("1_theme")
+theme_type_variation = &"LobbyCard"
+script = ExtResource("2_script")
+Cover = NodePath("V/Hero/Cover")
+MapTitle = NodePath("V/Hero/Margin/Info/Title")
+MapArtist = NodePath("V/Hero/Margin/Info/Artist")
+Chips = NodePath("V/Hero/Margin/Info/Chips")
+DifficultyChip = NodePath("V/Hero/Margin/Info/Chips/Difficulty")
+LevelChip = NodePath("V/Hero/Margin/Info/Chips/Level")
+LengthChip = NodePath("V/Hero/Margin/Info/Chips/Length")
+MapperChip = NodePath("V/Hero/Margin/Info/Chips/Mapper")
+MissingRow = NodePath("V/MissingRow")
+DownloadButton = NodePath("V/MissingRow/Download")
+TransferBar = NodePath("V/MissingRow/TransferBar")
+Search = NodePath("V/Search")
+MapList = NodePath("V/MapList")
+
+[node name="V" type="VBoxContainer" parent="." unique_id=1451521263]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Heading" type="Label" parent="V" unique_id=119099045]
+layout_mode = 2
+theme_type_variation = &"LobbyHeading"
+text = "Beatmap Info"
+
+[node name="Hero" type="PanelContainer" parent="V" unique_id=632535259]
+clip_children = 2
+custom_minimum_size = Vector2(0, 170)
+clip_contents = true
+layout_mode = 2
+theme_type_variation = &"LobbyHero"
+
+[node name="Cover" type="TextureRect" parent="V/Hero" unique_id=1747901873]
+visible = false
+self_modulate = Color(0.85, 0.85, 0.85, 1)
+layout_mode = 2
+texture = ExtResource("3_ku2br")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Shade" type="TextureRect" parent="V/Hero" unique_id=473549009]
+layout_mode = 2
+texture = SubResource("GradientTexture2D_shade")
+expand_mode = 1
+
+[node name="Margin" type="MarginContainer" parent="V/Hero" unique_id=1004412267]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 16
+
+[node name="Info" type="VBoxContainer" parent="V/Hero/Margin" unique_id=1179784516]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="V/Hero/Margin/Info" unique_id=51513822]
+layout_mode = 2
+theme_type_variation = &"LobbyMapTitle"
+text = "Waiting for the host to pick a beatmap..."
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Artist" type="Label" parent="V/Hero/Margin/Info" unique_id=973041710]
+layout_mode = 2
+theme_type_variation = &"LobbySubtle"
+theme_override_font_sizes/font_size = 16
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Chips" type="HBoxContainer" parent="V/Hero/Margin/Info" unique_id=1813234657]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Difficulty" type="Label" parent="V/Hero/Margin/Info/Chips" unique_id=218118891]
+layout_mode = 2
+theme_type_variation = &"LobbyAccentPill"
+text = "Difficulty"
+
+[node name="Level" type="Label" parent="V/Hero/Margin/Info/Chips" unique_id=2034426669]
+layout_mode = 2
+theme_type_variation = &"LobbyPill"
+text = "Lv. 0"
+
+[node name="Length" type="Label" parent="V/Hero/Margin/Info/Chips" unique_id=1470574554]
+layout_mode = 2
+theme_type_variation = &"LobbyPill"
+text = "0:00"
+
+[node name="Mapper" type="Label" parent="V/Hero/Margin/Info/Chips" unique_id=1394849649]
+layout_mode = 2
+theme_type_variation = &"LobbyPill"
+text = "mapped by ..."
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="MissingRow" type="HBoxContainer" parent="V" unique_id=254971332]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="V/MissingRow" unique_id=793972411]
+layout_mode = 2
+theme_type_variation = &"LobbyWarning"
+text = "You don't have this beatmap."
+
+[node name="Download" type="Button" parent="V/MissingRow" unique_id=959958208]
+layout_mode = 2
+theme_type_variation = &"LobbyGhostButton"
+text = "Get it from the room"
+
+[node name="TransferBar" type="ProgressBar" parent="V/MissingRow" unique_id=208285623]
+visible = false
+custom_minimum_size = Vector2(160, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+show_percentage = false
+
+[node name="Search" type="LineEdit" parent="V" unique_id=968226192]
+layout_mode = 2
+placeholder_text = "Search your beatmaps..."
+clear_button_enabled = true
+
+[node name="MapList" type="ItemList" parent="V" unique_id=1255087593]
+layout_mode = 2
+size_flags_vertical = 3
+
+[connection signal="pressed" from="V/MissingRow/Download" to="." method="OnDownloadPressed"]
+[connection signal="text_changed" from="V/Search" to="." method="OnSearchChanged"]
+[connection signal="item_selected" from="V/MapList" to="." method="OnMapSelected"]

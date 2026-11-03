@@ -16,7 +16,7 @@ public partial class NotificationPanel : ColorRect
 			{
 				var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/Notification.tscn").Instantiate().GetNode<Button>(".");
 				NotiCard.SetMeta("is_popup", false);
-				NotiCard.SetMeta("listid", Math.Max(0, (int)NotiInfo.id));
+				NotiCard.SetMeta("listid", i); // current index; the card keeps a reference after this
 				NotificationCards.AddChild(NotiCard);
 				NotiCard.Text = NotiInfo.Title;
 			}

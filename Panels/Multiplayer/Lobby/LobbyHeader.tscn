@@ -1,0 +1,164 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://Resources/Multiplayer/LobbyTheme.tres" id="1_theme"]
+[ext_resource type="Script" path="res://Script/Multiplayer/Lobby/LobbyHeader.cs" id="2_script"]
+
+[node name="LobbyHeader" type="PanelContainer" node_paths=PackedStringArray("RoomTitle", "RenameEdit", "RenameButton", "HostPill", "PlayersPill", "PhasePill", "TimerCaption", "TimerLabel", "TimerBar", "HostControls", "TimerMinusButton", "TimerValue", "TimerPlusButton", "StartNowButton", "ReadyButton", "LeaveButton")]
+theme = ExtResource("1_theme")
+theme_type_variation = &"LobbyHeaderCard"
+script = ExtResource("2_script")
+RoomTitle = NodePath("H/Info/TitleRow/RoomTitle")
+RenameEdit = NodePath("H/Info/TitleRow/RenameEdit")
+RenameButton = NodePath("H/Info/TitleRow/Rename")
+HostPill = NodePath("H/Info/Pills/Host")
+PlayersPill = NodePath("H/Info/Pills/Players")
+PhasePill = NodePath("H/Info/Pills/Phase")
+TimerCaption = NodePath("H/Countdown/Caption")
+TimerLabel = NodePath("H/Countdown/Time")
+TimerBar = NodePath("H/Countdown/Bar")
+HostControls = NodePath("H/HostControls")
+TimerMinusButton = NodePath("H/HostControls/TimerRow/Minus")
+TimerValue = NodePath("H/HostControls/TimerRow/Value")
+TimerPlusButton = NodePath("H/HostControls/TimerRow/Plus")
+StartNowButton = NodePath("H/HostControls/StartNow")
+ReadyButton = NodePath("H/Ready")
+LeaveButton = NodePath("H/Leave")
+
+[node name="H" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Info" type="VBoxContainer" parent="H"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 8
+
+[node name="TitleRow" type="HBoxContainer" parent="H/Info"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RoomTitle" type="Label" parent="H/Info/TitleRow"]
+layout_mode = 2
+theme_type_variation = &"LobbyTitle"
+text = "Room name"
+
+[node name="RenameEdit" type="LineEdit" parent="H/Info/TitleRow"]
+visible = false
+custom_minimum_size = Vector2(340, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+placeholder_text = "Room name"
+max_length = 40
+select_all_on_focus = true
+
+[node name="Rename" type="Button" parent="H/Info/TitleRow"]
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Rename the room (Enter to save, Esc to cancel)"
+theme_type_variation = &"LobbyGhostButton"
+text = "Rename"
+
+[node name="Pills" type="HBoxContainer" parent="H/Info"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Host" type="Label" parent="H/Info/Pills"]
+layout_mode = 2
+theme_type_variation = &"LobbyAccentPill"
+text = "HOST  name"
+
+[node name="Players" type="Label" parent="H/Info/Pills"]
+layout_mode = 2
+theme_type_variation = &"LobbyPill"
+text = "1 PLAYER"
+
+[node name="Phase" type="Label" parent="H/Info/Pills"]
+layout_mode = 2
+theme_type_variation = &"LobbyPill"
+text = "IN LOBBY"
+
+[node name="Countdown" type="VBoxContainer" parent="H"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 2
+
+[node name="Caption" type="Label" parent="H/Countdown"]
+layout_mode = 2
+theme_type_variation = &"LobbySubtle"
+theme_override_font_sizes/font_size = 12
+text = "WAITING FOR A BEATMAP"
+horizontal_alignment = 1
+
+[node name="Time" type="Label" parent="H/Countdown"]
+layout_mode = 2
+theme_type_variation = &"LobbyTimer"
+text = "-:--"
+horizontal_alignment = 1
+
+[node name="Bar" type="ProgressBar" parent="H/Countdown"]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+show_percentage = false
+
+[node name="HostControls" type="VBoxContainer" parent="H"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 6
+
+[node name="TimerRow" type="HBoxContainer" parent="H/HostControls"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Minus" type="Button" parent="H/HostControls/TimerRow"]
+custom_minimum_size = Vector2(62, 0)
+layout_mode = 2
+tooltip_text = "Shorter countdown"
+text = "-15s"
+
+[node name="Value" type="Label" parent="H/HostControls/TimerRow"]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+tooltip_text = "Countdown length"
+mouse_filter = 0
+text = "1:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Plus" type="Button" parent="H/HostControls/TimerRow"]
+custom_minimum_size = Vector2(62, 0)
+layout_mode = 2
+tooltip_text = "Longer countdown"
+text = "+15s"
+
+[node name="StartNow" type="Button" parent="H/HostControls"]
+layout_mode = 2
+tooltip_text = "Start in 5 seconds with whoever is ready"
+text = "Start now"
+
+[node name="Ready" type="Button" parent="H"]
+custom_minimum_size = Vector2(170, 60)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LobbyReadyButton"
+toggle_mode = true
+text = "Ready up"
+
+[node name="Leave" type="Button" parent="H"]
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LobbyDangerButton"
+text = "Leave"
+
+[connection signal="pressed" from="H/Info/TitleRow/Rename" to="." method="OnRenamePressed"]
+[connection signal="text_submitted" from="H/Info/TitleRow/RenameEdit" to="." method="OnRenameTextSubmitted"]
+[connection signal="focus_exited" from="H/Info/TitleRow/RenameEdit" to="." method="OnRenameFocusExited"]
+[connection signal="gui_input" from="H/Info/TitleRow/RenameEdit" to="." method="OnRenameGuiInput"]
+[connection signal="pressed" from="H/HostControls/TimerRow/Minus" to="." method="OnTimerMinusPressed"]
+[connection signal="pressed" from="H/HostControls/TimerRow/Plus" to="." method="OnTimerPlusPressed"]
+[connection signal="pressed" from="H/HostControls/StartNow" to="." method="OnStartNowPressed"]
+[connection signal="toggled" from="H/Ready" to="." method="OnReadyToggled"]
+[connection signal="pressed" from="H/Leave" to="." method="OnLeavePressed"]

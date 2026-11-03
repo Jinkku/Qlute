@@ -6,6 +6,7 @@ using System.Linq;
 /// Dev-only LAN smoke test. Run two instances (e.g. with --headless):
 ///   ... -- --lan-test-host
 ///   ... -- --lan-test-join [--lan-test-nomap --lan-test-out=/some/dir]
+/// Add --lan-test-transfer to both: the host hands host to the joiner, who renames the room and bumps the timer.
 /// Add --lan-test-quit=SECONDS to exit automatically. Output lines are prefixed with [LANTEST].
 /// </summary>
 public partial class LanSelfTest : Node
@@ -44,6 +45,7 @@ public partial class LanSelfTest : Node
 		Log($"screenshot {path}");
 	}
 	private bool _forfeited;
+	private bool _transferred, _renamed;
 
 	public override void _Ready()
 	{
@@ -103,6 +105,25 @@ public partial class LanSelfTest : Node
 			Log("readied up");
 		}
 
+		// --lan-test-transfer: exercise host hand-off + rename from a non-server host.
+		if (Has("--lan-test-transfer") && _net.State != null)
+		{
+			if (host && !_transferred && _net.IsHost && _net.State.Players.Count > 1)
+			{
+				_transferred = true;
+				var other = _net.State.Players.First(p => p.Id != _net.LocalId);
+				Log($"transferring host to {other.Name} (id {other.Id})");
+				_net.HostTransfer(other.Id);
+			}
+			if (!host && !_renamed && _net.IsHost)
+			{
+				_renamed = true;
+				Log("I am the host now: renaming room and raising the timer");
+				_net.HostRename("Renamed by client");
+				_net.HostAdjustTimer(15);
+			}
+		}
+
 		// --lan-test-forfeit=SECONDS: quit the match after that long in gameplay (exercises results/back-to-lobby).
 		if (LanNetwork.InMatch && SettingsOperator.inGameplay && double.TryParse(Value("--lan-test-forfeit="), out var ff))
 		{
@@ -129,7 +150,7 @@ public partial class LanSelfTest : Node
 		{
 			_logTimer = 2;
 			var players = string.Join(" | ", s.Players.Select(p => $"{p.Name}(id {p.Id}) ready={p.Ready} map={p.HasMap} inMatch={p.InMatch} score={p.Score} acc={p.Accuracy:P1}"));
-			Log($"t={_t:0} scene={GetTree().CurrentScene?.Name} phase={s.Phase} timer={(s.CountdownActive ? _net.TimeLeftNow.ToString("0.0") : "-")} map={s.Beatmap?.Display} transfer={_net.TransferProgress:0.00} :: {players}");
+			Log($"t={_t:0} scene={GetTree().CurrentScene?.Name} room='{s.Name}' hostId={s.HostId} isHost={_net.IsHost} lobbyTimer={s.LobbyTimer} phase={s.Phase} timer={(s.CountdownActive ? _net.TimeLeftNow.ToString("0.0") : "-")} map={s.Beatmap?.Display} transfer={_net.TransferProgress:0.00} :: {players}");
 		}
 	}
 }

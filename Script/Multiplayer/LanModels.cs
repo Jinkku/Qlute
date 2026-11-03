@@ -52,6 +52,9 @@ public class LanResult
 public class LanRoomState
 {
 	public string Name { get; set; }
+	/// <summary>Player id holding the host controls (pick map, timer, rename, hand off host).
+	/// Can move between players; peer 1 always runs the room itself.</summary>
+	public long HostId { get; set; } = 1;
 	public string HostName { get; set; }
 	public LanPhase Phase { get; set; } = LanPhase.Lobby;
 	public List<LanPlayer> Players { get; set; } = new();
