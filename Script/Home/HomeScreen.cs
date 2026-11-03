@@ -54,10 +54,10 @@ public partial class HomeScreen : Control
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 	}
 #pragma warning disable CS0108 // Member hides inherited member; missing new keyword
-    private void Multiplayer()
+    private void _multiplayer()
 #pragma warning restore CS0108 // Member hides inherited member; missing new keyword
     {
-		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MultiplayerList.tscn");
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MultiplayerLobby.tscn");
 	}
 	private void _browse() {
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Browse.tscn");

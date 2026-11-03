@@ -57,7 +57,12 @@ public partial class SongLoadingScreen : Control
 	
 	private void _on_back(){
 		AudioPlayer.Instance.RevertEQ();
-		if (SettingsOperator.Marathon) GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MarathonMode.tscn");
+		if (LanNetwork.InMatch)
+		{
+			LanNetwork.Instance.ReportFinished(quit: true);
+			GetNode<SceneTransition>("/root/Transition").Switch(LanNetwork.Instance.ReturnScene);
+		}
+		else if (SettingsOperator.Marathon) GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MarathonMode.tscn");
 		else GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 		ArtificialLoad.Stop();
 	}

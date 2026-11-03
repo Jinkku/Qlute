@@ -162,6 +162,14 @@ Text = "Singleplayer"
 ButtonID = 0
 SubButton = true
 
+[node name="Multiplayer" parent="SubButton/SubButtons" unique_id=1455467787 instance=ExtResource("10_whutp")]
+self_modulate = Color(0.9056679, 0.3803921, 0.9098039, 1)
+custom_minimum_size = Vector2(154, 40)
+layout_mode = 2
+Text = "Multiplayer"
+ButtonID = 0
+SubButton = true
+
 [node name="Play_Marathon" parent="SubButton/SubButtons" unique_id=1842194931 instance=ExtResource("10_whutp")]
 self_modulate = Color(0.53333336, 0.38039216, 0.9098039, 1)
 custom_minimum_size = Vector2(154, 40)
@@ -328,6 +336,7 @@ fixed_fps = 15
 process_material = SubResource("ParticleProcessMaterial_ldbht")
 
 [connection signal="pressed" from="SubButton/SubButtons/Play_Solo" to="." method="_play"]
+[connection signal="pressed" from="SubButton/SubButtons/Multiplayer" to="." method="_multiplayer"]
 [connection signal="pressed" from="SubButton/SubButtons/Play_Marathon" to="." method="_marathonmode"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Play" to="." method="_play"]
 [connection signal="pressed" from="HomeButtonBG/HomeButtons/Create" to="." method="_create"]

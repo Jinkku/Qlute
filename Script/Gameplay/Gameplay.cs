@@ -614,7 +614,7 @@ private void _GameNoteTick(double delta)
 		{
 			// DEATH
 
-			if (HealthBar.Health == 0 && !Dead && !ModsOperator.Mods["no-fail"])
+			if (HealthBar.Health == 0 && !Dead && !ModsOperator.Mods["no-fail"] && !LanNetwork.InMatch) // LAN matches are no-fail
 			{
 				Dead = !Dead;
 				FailAnimation();
@@ -654,6 +654,16 @@ private void _GameNoteTick(double delta)
 				SettingsOperator.toppaneltoggle(true);
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 			}
+			else if (Input.IsActionJustPressed("pausemenu") && LanNetwork.InMatch)
+			{
+				// Can't pause a LAN match (the others keep playing): Esc forfeits back to the room.
+				LanNetwork.Instance.ReportFinished(quit: true);
+				Cursor.CursorVisible = true;
+				BeatmapBackground.FlashEnable = true;
+				SettingsOperator.toppaneltoggle(true);
+				AudioPlayer.Instance.PitchScale = speedold;
+				GetNode<SceneTransition>("/root/Transition").Switch(LanNetwork.Instance.ReturnScene);
+			}
 			else if (Input.IsActionJustPressed("pausemenu") && !SettingsOperator.Marathon)
 			{
 				Cursor.CursorVisible = true;
@@ -667,7 +677,7 @@ private void _GameNoteTick(double delta)
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MarathonMode.tscn");
 				SettingsOperator.Marathon = false;
 			}
-			else if (Input.IsActionJustPressed("retry") && !SettingsOperator.Marathon)
+			else if (Input.IsActionJustPressed("retry") && !SettingsOperator.Marathon && !LanNetwork.InMatch)
 			{
 				BeatmapBackground.FlashEnable = true;
 				SettingsOperator.toppaneltoggle(true);

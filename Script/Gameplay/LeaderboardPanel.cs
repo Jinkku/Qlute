@@ -13,6 +13,8 @@ public class LeaderboardStatus
 	public PanelContainer Node { get; set; }
 	public Tween tween { get; set; }
 	public bool Active { get; set; }
+	/// <summary>Live entry (LAN multiplayer) whose score keeps changing during the song.</summary>
+	public LeaderboardEntry Source { get; set; }
 }
 public partial class LeaderboardPanel : PanelContainer
 {
@@ -71,7 +73,8 @@ public partial class LeaderboardPanel : PanelContainer
 					Score = entry.score,
 					Playing = false,
 					Node = leaderboardEntry,
-					tween = null
+					tween = null,
+					Source = LanNetwork.InMatch ? entry : null
 			});
 			ranknum++;
 			id++;
@@ -126,6 +129,7 @@ public partial class LeaderboardPanel : PanelContainer
 			for (int i = 0; i < LeaderboardEntries.Count; i++)
 			{
 				LeaderboardStatus entry = LeaderboardEntries[i];
+				if (entry.Source != null) entry.Score = entry.Source.score; // LAN opponents' live scores
 				SetColourLead(entry, i);
 				if (entry.Active && entry.Username == User)
 				{

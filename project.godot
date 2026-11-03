@@ -52,6 +52,7 @@ BeatmapListener="*res://Script/Singleton/BeatmapListener.cs"
 ModsOperator="*res://Script/Singleton/ModsOperator.cs"
 Sample="*res://Script/Singleton/Sample.cs"
 ApiOperator="*res://Script/Singleton/ApiOperator.cs"
+LanNetwork="*res://Script/Multiplayer/LanNetwork.cs"
 
 [debug]
 

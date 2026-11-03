@@ -27,6 +27,13 @@ public partial class EndScreen : ColorRect
 	{
 		SettingsOperator.toppaneltoggle(true);
 		BeatmapBackground.FlashEnable = true;
+		if (LanNetwork.InMatch || LanNetwork.Instance?.State != null)
+		{
+			// LAN match: report the final score and head back to the room (results show there).
+			LanNetwork.Instance.ReportFinished(quit: false);
+			GetNode<SceneTransition>("/root/Transition").Switch(LanNetwork.Instance.ReturnScene);
+			return;
+		}
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultScreenv2.tscn");
 	}
 

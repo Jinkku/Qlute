@@ -46,6 +46,7 @@ public partial class LeaderboardGameplay : PanelContainer
 	{
 		if (HasMeta("id"))
 		{
+			info ??= ApiOperator.LeaderboardList[(int)GetMeta("id")];
 			Score.Text = string.Format("{0:N0}", info.score);
 			Combo.Text = $"{info.combo}x";
 			Accuracy.Text = info.Accuracy.ToString("P2");
@@ -77,6 +78,7 @@ public partial class LeaderboardGameplay : PanelContainer
 		}
 	}
 	private LeaderboardEntry info { get; set; }
+	private (int, int, float) _lastInfoStats;
 	private (int Score, int Combo, float Accuracy) _lastPlaying = (int.MinValue, int.MinValue, float.NaN);
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
@@ -97,7 +99,10 @@ public partial class LeaderboardGameplay : PanelContainer
 		else
 		{
 			var newInfo = ApiOperator.LeaderboardList[(int)GetMeta("id")];
-			bool changed = !ReferenceEquals(newInfo, info);
+			// LAN opponents' entries update live, so also refresh when their numbers move.
+			var stats = (newInfo.score, newInfo.combo, newInfo.Accuracy);
+			bool changed = !ReferenceEquals(newInfo, info) || stats != _lastInfoStats;
+			_lastInfoStats = stats;
 			info = newInfo;
 			if (Picture.Texture != info.ProfilePicture && info.ProfilePicture != null)
 			{

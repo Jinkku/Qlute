@@ -89,7 +89,7 @@ public partial class TaikoGameCore : Control
 	private Sprite2D HitBoxNode { get; set; }
 
 	// Spam protection: minimum ms between accepted key presses per column
-	private const float SPAM_COOLDOWN_MS = 80f; // 80ms — matches osu!mania's input buffer
+	private const float SPAM_COOLDOWN_MS = 80f; // 80ms-matches osu!mania's input buffer
 	private float[] LastKeyPressTime = new float[4] { float.MinValue, float.MinValue, float.MinValue, float.MinValue };
 
 	// Unstable Rate: stores raw hit offsets (ms) to compute std-dev * 10
