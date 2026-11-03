@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dl7cw2xx5dgea"]
+[gd_scene format=3 uid="uid://bakq8eqsvxmqa"]
 
 [ext_resource type="Script" uid="uid://blbe3d2880su3" path="res://Script/Effects/ScreenElementButton.cs" id="1_621yd"]
 [ext_resource type="PackedScene" uid="uid://23bfviyiqln0" path="res://Panels/Multiplayer/MultiplayerListRoom.tscn" id="1_r6ipc"]
@@ -16,8 +16,6 @@ content_margin_top = 15.0
 content_margin_right = 15.0
 content_margin_bottom = 20.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tmh7k"]
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nyj5r"]
 content_margin_left = 10.0
 content_margin_top = 5.0
@@ -28,6 +26,8 @@ corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tmh7k"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rw8iw"]
 
@@ -42,7 +42,7 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[node name="PanelContainer" type="PanelContainer"]
+[node name="PanelContainer" type="PanelContainer" unique_id=100824197]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -51,19 +51,19 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_rw8iw")
 script = ExtResource("1_tmh7k")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1904698653]
 layout_mode = 2
 
-[node name="Title" type="PanelContainer" parent="VBoxContainer"]
+[node name="Title" type="PanelContainer" parent="VBoxContainer" unique_id=131790557]
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_r6ipc")
 
-[node name="H" type="HBoxContainer" parent="VBoxContainer/Title"]
+[node name="H" type="HBoxContainer" parent="VBoxContainer/Title" unique_id=721502595]
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="Title" type="Label" parent="VBoxContainer/Title/H"]
+[node name="Title" type="Label" parent="VBoxContainer/Title/H" unique_id=1600240066]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_font_sizes/font_size = 24
@@ -71,7 +71,7 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_diqlj")
 text = "Multiplayer List"
 vertical_alignment = 2
 
-[node name="Marg" type="MarginContainer" parent="VBoxContainer/Title/H"]
+[node name="Marg" type="MarginContainer" parent="VBoxContainer/Title/H" unique_id=657397393]
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_constants/margin_left = 15
@@ -79,15 +79,15 @@ theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 15
 
-[node name="Tools" type="HBoxContainer" parent="VBoxContainer/Title/H/Marg"]
+[node name="Tools" type="HBoxContainer" parent="VBoxContainer/Title/H/Marg" unique_id=1318270261]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/Title/H/Marg/Tools"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/Title/H/Marg/Tools" unique_id=556793730]
 layout_mode = 2
 text = "Show in progress "
 
-[node name="Type" type="OptionButton" parent="VBoxContainer/Title/H/Marg/Tools"]
+[node name="Type" type="OptionButton" parent="VBoxContainer/Title/H/Marg/Tools" unique_id=995167881]
 layout_mode = 2
 selected = 0
 item_count = 3
@@ -98,17 +98,17 @@ popup/item_1/id = 1
 popup/item_2/text = "Locked"
 popup/item_2/id = 2
 
-[node name="Refresh" type="Button" parent="VBoxContainer/Title/H/Marg/Tools"]
+[node name="Refresh" type="Button" parent="VBoxContainer/Title/H/Marg/Tools" unique_id=1154956953]
 self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_tmh7k")
-theme_override_styles/hover = SubResource("StyleBoxFlat_nyj5r")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nyj5r")
 theme_override_styles/normal = SubResource("StyleBoxFlat_nyj5r")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nyj5r")
+theme_override_styles/hover = SubResource("StyleBoxFlat_nyj5r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tmh7k")
 script = ExtResource("1_621yd")
 
-[node name="Label" type="Label" parent="VBoxContainer/Title/H/Marg/Tools/Refresh"]
+[node name="Label" type="Label" parent="VBoxContainer/Title/H/Marg/Tools/Refresh" unique_id=700518424]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -119,17 +119,17 @@ text = "Refresh"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CR2" type="Button" parent="VBoxContainer/Title/H/Marg/Tools"]
+[node name="CR2" type="Button" parent="VBoxContainer/Title/H/Marg/Tools" unique_id=1645453357]
 self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_tmh7k")
-theme_override_styles/hover = SubResource("StyleBoxFlat_nyj5r")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nyj5r")
 theme_override_styles/normal = SubResource("StyleBoxFlat_nyj5r")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nyj5r")
+theme_override_styles/hover = SubResource("StyleBoxFlat_nyj5r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tmh7k")
 script = ExtResource("1_621yd")
 
-[node name="Label" type="Label" parent="VBoxContainer/Title/H/Marg/Tools/CR2"]
+[node name="Label" type="Label" parent="VBoxContainer/Title/H/Marg/Tools/CR2" unique_id=1583873881]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -140,22 +140,22 @@ text = "Create Room"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=125681276]
 layout_mode = 2
 theme_override_constants/separation = 25
 theme_override_styles/separator = SubResource("StyleBoxEmpty_rw8iw")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=1451045385]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer" unique_id=1508342007]
 custom_minimum_size = Vector2(700, 0)
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 3
 
-[node name="LAN" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="LAN" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer" unique_id=1341249512]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.488281, 0.784119, 1, 1)
@@ -163,10 +163,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_o5vd0")
 text = "(0) LAN Rooms"
 vertical_alignment = 1
 
-[node name="MultiplayerRoom" parent="VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("1_r6ipc")]
+[node name="MultiplayerRoom" parent="VBoxContainer/ScrollContainer/VBoxContainer" unique_id=552107075 instance=ExtResource("1_r6ipc")]
 layout_mode = 2
 
-[node name="Online" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="Online" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer" unique_id=842641331]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.488281, 0.784119, 1, 1)
@@ -174,7 +174,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_o5vd0")
 text = "(0) Online Rooms"
 vertical_alignment = 1
 
-[node name="Searching" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="Searching" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer" unique_id=1883745126]
 layout_mode = 2
 size_flags_vertical = 6
 text = "Searching for rooms....
