@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bcpf58suyr63f" path="res://Script/SettingsPanel/SettingsPanel.cs" id="1_gfh6f"]
 [ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="2_k6nch"]
 [ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="5_k6nch"]
+[ext_resource type="PackedScene" uid="uid://bkthtehvcsdyf" path="res://Panels/SettingsSection/Updates.tscn" id="5_k6rhm"]
 [ext_resource type="PackedScene" uid="uid://bmujpxpt8s27u" path="res://Panels/SettingsSection/Gameplay.tscn" id="7_4moo3"]
 [ext_resource type="PackedScene" uid="uid://dm6msw184a5v7" path="res://Panels/SettingsSection/Display.tscn" id="8_4moo3"]
 [ext_resource type="PackedScene" uid="uid://62fdbfcux0rs" path="res://Panels/SettingsSection/Important.tscn" id="8_k6rhm"]
@@ -62,6 +63,19 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_5b8eh")
 clip_contents = true
 layout_mode = 2
 alignment = 1
+
+[node name="Updates" type="Button" parent="Panels/Catagories/Cata" unique_id=113264100]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
+theme_override_styles/hover = SubResource("StyleBoxFlat_crlok")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_n2spt")
+icon_alignment = 1
+script = ExtResource("2_k6nch")
+StringText = "Updates"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Display" type="Button" parent="Panels/Catagories/Cata" unique_id=346485907]
 self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
@@ -154,6 +168,9 @@ text = "Settings"
 [node name="Important" parent="Panels/Scroll/Sections" unique_id=1784822534 instance=ExtResource("8_k6rhm")]
 layout_mode = 2
 
+[node name="Updates" parent="Panels/Scroll/Sections" unique_id=28156558 instance=ExtResource("5_k6rhm")]
+layout_mode = 2
+
 [node name="Display" parent="Panels/Scroll/Sections" unique_id=1206613156 instance=ExtResource("8_4moo3")]
 layout_mode = 2
 
@@ -172,6 +189,7 @@ layout_mode = 2
 [node name="Debug" parent="Panels/Scroll/Sections" unique_id=2026888216 instance=ExtResource("12_fn636")]
 layout_mode = 2
 
+[connection signal="pressed" from="Panels/Catagories/Cata/Updates" to="." method="_display"]
 [connection signal="pressed" from="Panels/Catagories/Cata/Display" to="." method="_display"]
 [connection signal="pressed" from="Panels/Catagories/Cata/Audio" to="." method="_audio"]
 [connection signal="pressed" from="Panels/Catagories/Cata/Skinning" to="." method="_skinning"]

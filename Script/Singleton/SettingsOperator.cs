@@ -130,6 +130,7 @@ public partial class SettingsOperator : Node
         { "dflashing", 0 },
         { "ddarkening", 0 },
         { "dfadeout", 0 },
+        { "updatebranch", "stable" },
         { "Key0", "D" },
         { "Key1", "F" },
         { "Key2", "J" },

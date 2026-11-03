@@ -11,8 +11,13 @@ public partial class Kiko : Node
     public string[] args { get; set; }
     private HttpRequest KikoApi { get; set; }
     public static Version VersionCode { get; set; }
-    private Version Version { get; set; }
+    public static Version Version { get; set; }
+    public static string UpdateChannelTagName { get; set; } = "x.x.x-x";
+    
+    public enum UpdateChannel { Stable, Experimental }
+    public static UpdateChannel CurrentUpdateChannel { get; set; } = UpdateChannel.Stable;
     public static bool isUpdating { get; set; }
+    public static bool CheckingUpdates = false;
 	public static readonly string extractPath = Path.Combine(Path.GetTempPath(), "QluteUpdateFile");
     public static readonly string platformZip = OS.GetName() switch
     {
@@ -85,6 +90,16 @@ public partial class Kiko : Node
 
     public override void _Ready()
     {
+        if (SettingsOperator.GetSetting("updatebranch") != "stable") CurrentUpdateChannel = UpdateChannel.Experimental;
+        CheckUpdates();
+    }
+
+    /// <summary>
+    /// Checks for updates for the game.
+    /// </summary>
+    public void CheckUpdates(bool isinSettings = false)
+    {
+        CheckingUpdates = true;
         args = OS.GetCmdlineArgs();
         if (args.Contains("--update"))
         {
@@ -93,7 +108,8 @@ public partial class Kiko : Node
         }
         else if (!args.Contains("--ignore-update"))
         {
-#if !DEBUG
+//#if !DEBUG
+            if (isinSettings) Notify.Post("Checking for updates...");
             GD.Print("Checking for updates....");
             isUpdating = true;
             // Remove extractPath directory if it exists
@@ -110,18 +126,20 @@ public partial class Kiko : Node
             AddChild(KikoApi);
             KikoApi.Timeout = 30;
             KikoApi.Connect("request_completed", new Callable(this, nameof(_KikoApiDone)));
-            KikoApi.Request("https://github.com/Jinkkuu/Qlute/releases/latest/download/RELEASE");
-#endif
-#if DEBUG
-            GD.Print("Skipping checking for updates because debug tick is enabled.");
-#endif
+            KikoApi.Request(
+                "https://api.github.com/repos/Jinkku/Qlute/releases",
+                new string[] { $"User-Agent: QluteUpdater/{Version}" }
+            );
+//#endif
+//#if DEBUG
+//            if (isinSettings) Notify.Post("Skipping updates because your on debug build.");
+//            GD.Print("Skipping checking for updates because debug tick is enabled.");
+//#endif
         }
         else if (args.Contains("--ignore-update"))
         {
             GD.Print("Ignored updates for now...");
         }
-        GD.Print("Kiko is now done. Now killing node...");
-        QueueFree();
     }
 
     public void PrepareUpdateProcess()
@@ -161,28 +179,94 @@ public partial class Kiko : Node
     private void _KikoApiDone(long result, long responseCode, string[] headers, byte[] body)
     {
         KikoApi.Disconnect("request_completed", new Callable(this, nameof(_KikoApiDone)));
-        KikoApi.RequestCompleted += (result, code, headers, body) =>
+
+        if (responseCode != 200)
+        {
+            GD.PrintErr("Kiko failed with response code: " + responseCode);
+            isUpdating = false;
+            return;
+        }
+
+        string jsonText = Encoding.UTF8.GetString(body);
+        var json = new Json();
+        if (json.Parse(jsonText) != Error.Ok)
+        {
+            GD.PrintErr("Failed to parse release JSON: " + json.GetErrorMessage());
+            isUpdating = false;
+            return;
+        }
+
+        var releases = json.Data.AsGodotArray();
+
+        Godot.Collections.Dictionary chosen = null;
+        foreach (var item in releases)
+        {
+            var release = item.AsGodotDictionary();
+            bool isDraft = release["draft"].AsBool();
+            bool isPrerelease = release["prerelease"].AsBool();
+            if (isDraft) continue;
+
+            // Stable channel: skip prereleases, take the first (newest) match.
+            // Experimental channel: take the very first entry regardless (GitHub lists newest first).
+            if (CurrentUpdateChannel == UpdateChannel.Stable && isPrerelease) continue;
+
+            chosen = release;
+            break;
+        }
+
+        if (chosen == null)
+        {
+            GD.Print("No matching release found for channel: " + CurrentUpdateChannel);
+            isUpdating = false;
+            return;
+        }
+
+        string tagName = chosen["tag_name"].AsString();
+        string versionPart = tagName.Split('-')[0];
+        string suffix = tagName.Contains('-') ? tagName.Substring(tagName.IndexOf('-') + 1) : null;
+        VersionCode = new Version(versionPart);
+
+        if (VersionCode == Version)
+        {
+            GD.Print("Already up to date.");
+            isUpdating = false;
+            return;
+        }
+
+        string downloadUrl = null;
+        foreach (var a in chosen["assets"].AsGodotArray())
+        {
+            var asset = a.AsGodotDictionary();
+            if (asset["name"].AsString() == platformZip)
+            {
+                downloadUrl = asset["browser_download_url"].AsString();
+                break;
+            }
+        }
+
+        if (downloadUrl == null)
+        {
+            GD.PrintErr($"No matching asset '{platformZip}' found in release {tagName}");
+            isUpdating = false;
+            return;
+        }
+
+        KikoApi.Timeout = 0;
+        KikoApi.DownloadFile = Path.Combine(Path.GetTempPath(), platformZip);
+        KikoApi.RequestCompleted += (res, code, hdrs, bdy) =>
         {
             if (code == 200)
             {
-                Notify.Post("Update is ready to install!\nClick to install the update.", uri:$"updatefile:/{KikoApi.DownloadFile}", Type: NotificationIcons.NotificationType.Download);
+                Notify.Post("Update is ready to install!\nClick to install the update.",
+                    uri: $"updatefile:/{KikoApi.DownloadFile}",
+                    Type: NotificationIcons.NotificationType.Download);
             }
         };
-        if (responseCode == 200)
-        {
-            isUpdating = false;
-            VersionCode = new Version(Encoding.UTF8.GetString(body).TrimEnd(System.Environment.NewLine.ToCharArray()));
-            if (VersionCode > Version)
-            {
-                KikoApi.DownloadFile = Path.Combine(Path.GetTempPath(), platformZip);
-                KikoApi.Timeout = 0;
-                KikoApi.Request($"https://github.com/Jinkkuu/Qlute/releases/latest/download/{platformZip}");
-                Notify.Post($"Downloading update...", ProgressGetter: () => KikoApi.GetDownloadedBytes(), Max: () => KikoApi.GetBodySize(), Type: NotificationIcons.NotificationType.Download);
-            }
-        }
-        else
-        {
-            GD.PrintErr("Kiko failed with response code: " + responseCode);
-        }
+        KikoApi.Request(downloadUrl, new string[] { "User-Agent: Qlute-Updater" });
+        Notify.Post("Downloading update...",
+            ProgressGetter: () => KikoApi.GetDownloadedBytes(),
+            Max: () => KikoApi.GetBodySize(),
+            Type: NotificationIcons.NotificationType.Download);
+        CheckingUpdates = false;
     }
 }

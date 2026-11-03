@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://bkthtehvcsdyf"]
+
+[ext_resource type="StyleBox" uid="uid://c0bgbcbhjckmy" path="res://Resources/System/SettingsTab.tres" id="1_0mio6"]
+[ext_resource type="Script" uid="uid://c42ulhmxrrssw" path="res://Script/SettingsPanel/Updates.cs" id="2_0ug4e"]
+[ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="2_x21se"]
+
+[sub_resource type="FontVariation" id="FontVariation_q0wcy"]
+variation_opentype = {
+2003265652: 700
+}
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0mio6"]
+
+[node name="Updates" type="PanelContainer" unique_id=1784822534]
+custom_minimum_size = Vector2(300, 0)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = ExtResource("1_0mio6")
+script = ExtResource("2_0ug4e")
+
+[node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Section" type="Label" parent="Rows" unique_id=118251586]
+layout_mode = 2
+mouse_filter = 0
+theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
+theme_override_fonts/font = SubResource("FontVariation_q0wcy")
+text = "Updates"
+
+[node name="Branch" type="Label" parent="Rows" unique_id=1856277918]
+layout_mode = 2
+mouse_filter = 0
+text = "Update branch"
+
+[node name="BranchSelector" type="OptionButton" parent="Rows" unique_id=1668842475]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_0mio6")
+theme_override_constants/arrow_margin = 10
+selected = 0
+item_count = 2
+popup/item_0/text = "Stable"
+popup/item_0/id = 0
+popup/item_1/text = "Experimental"
+popup/item_1/id = 1
+
+[node name="Version" type="Label" parent="Rows" unique_id=701559414]
+layout_mode = 2
+mouse_filter = 0
+text = "Checking version..."
+
+[node name="Warning" type="Label" parent="Rows" unique_id=293036900]
+layout_mode = 2
+mouse_filter = 0
+theme_override_colors/font_color = Color(1, 0.9375, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "Using this branch could make your game more buggy.
+Only go on this branch if u don't care about bugs and want new stuff"
+autowrap_mode = 2
+
+[node name="Check for Updates" type="Button" parent="Rows" unique_id=855584170]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+script = ExtResource("2_x21se")
+StringText = "Check for updates"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[connection signal="item_selected" from="Rows/BranchSelector" to="." method="changedbranch"]
+[connection signal="pressed" from="Rows/Check for Updates" to="." method="Update"]
