@@ -16,6 +16,7 @@ public partial class Updates : PanelContainer
 		VersionNode = GetNode<Label>("Rows/Version");
 		if (Kiko.CurrentUpdateChannel == Kiko.UpdateChannel.Stable) BranchSelector.Selected = 0;
 		else BranchSelector.Selected = 1;
+		Warning.Visible = (Kiko.CurrentUpdateChannel != Kiko.UpdateChannel.Stable);
 	}
 
 	private void changedbranch(int value)

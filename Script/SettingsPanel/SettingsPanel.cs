@@ -26,6 +26,10 @@ public partial class SettingsPanel : Control
 	{
 		Scrolls.GetVScrollBar().Value = GetNode<PanelContainer>("Panels/Scroll/Sections/Audio").Position.Y;
 	}
+	private void _updates()
+	{
+		Scrolls.GetVScrollBar().Value = GetNode<PanelContainer>("Panels/Scroll/Sections/Updates").Position.Y;
+	}
 	private void _debug()
 	{
 		Scrolls.GetVScrollBar().Value = GetNode<PanelContainer>("Panels/Scroll/Sections/Debug").Position.Y;
