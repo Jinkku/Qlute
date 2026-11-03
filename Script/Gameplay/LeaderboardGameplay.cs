@@ -44,9 +44,11 @@ public partial class LeaderboardGameplay : PanelContainer
 
 	private void refresh_info()
 	{
-		if (HasMeta("id"))
+		int id = HasMeta("id") ? (int)GetMeta("id") : -1;
+		if (info == null && id >= 0 && id < ApiOperator.LeaderboardList.Count)
+			info = ApiOperator.LeaderboardList[id];
+		if (info != null)
 		{
-			info ??= ApiOperator.LeaderboardList[(int)GetMeta("id")];
 			Score.Text = string.Format("{0:N0}", info.score);
 			Combo.Text = $"{info.combo}x";
 			Accuracy.Text = info.Accuracy.ToString("P2");
@@ -98,7 +100,12 @@ public partial class LeaderboardGameplay : PanelContainer
 		}
 		else
 		{
-			var newInfo = ApiOperator.LeaderboardList[(int)GetMeta("id")];
+			// The list can be cleared/rebuilt under us (e.g. LAN match ending or rebuilding the
+			// opponent list) while this scene is still alive; keep showing the last data.
+			if (!HasMeta("id")) return;
+			int id = (int)GetMeta("id");
+			if (id < 0 || id >= ApiOperator.LeaderboardList.Count) return;
+			var newInfo = ApiOperator.LeaderboardList[id];
 			// LAN opponents' entries update live, so also refresh when their numbers move.
 			var stats = (newInfo.score, newInfo.combo, newInfo.Accuracy);
 			bool changed = !ReferenceEquals(newInfo, info) || stats != _lastInfoStats;

@@ -189,7 +189,7 @@ layout_mode = 2
 [node name="Debug" parent="Panels/Scroll/Sections" unique_id=2026888216 instance=ExtResource("12_fn636")]
 layout_mode = 2
 
-[connection signal="pressed" from="Panels/Catagories/Cata/Updates" to="." method="_display"]
+[connection signal="pressed" from="Panels/Catagories/Cata/Updates" to="." method="_updates"]
 [connection signal="pressed" from="Panels/Catagories/Cata/Display" to="." method="_display"]
 [connection signal="pressed" from="Panels/Catagories/Cata/Audio" to="." method="_audio"]
 [connection signal="pressed" from="Panels/Catagories/Cata/Skinning" to="." method="_skinning"]
