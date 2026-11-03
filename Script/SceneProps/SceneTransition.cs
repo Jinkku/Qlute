@@ -8,7 +8,7 @@ public partial class SceneTransition : Node
 
     public void Switch(string sceneName)
     {
-        // Store the path, not the node reference — the C# wrapper for
+        // Store the path, not the node reference-the C# wrapper for
         // CurrentScene can become stale/invalid even if the node is still alive
         Node oldScene = GetTree().CurrentScene;
         NodePath oldScenePath = oldScene.GetPath();

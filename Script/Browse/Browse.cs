@@ -12,7 +12,7 @@ public class CatalogCardLegend
 	public string? List { get; set; }
 	public string? SlimCover { get; set; }
 
-	// JSON property aliases — kept lowercase to match the API response
+	// JSON property aliases-kept lowercase to match the API response
 	[System.Text.Json.Serialization.JsonPropertyName("cover")]
 	public string? cover { get => Cover; set => Cover = value; }
 	[System.Text.Json.Serialization.JsonPropertyName("card")]
@@ -193,7 +193,7 @@ public partial class Browse : Control
 
 	private void _BrowseAPI_finished(long result, long responseCode, string[] headers, byte[] body)
 	{
-		// Deserialise — guard against null or empty responses
+		// Deserialise-guard against null or empty responses
 		List<BrowseCatalogLegend>? items = null;
 		try
 		{

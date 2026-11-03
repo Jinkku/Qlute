@@ -264,8 +264,19 @@ public partial class SettingsOperator : Node
     }
     [Signal]
     public delegate void BackgroundChangedEventHandler();
-    public void SelectSongID(int id, float seek = -1)
+
+    /// <summary>
+    /// For weird things in home menu.
+    /// </summary>
+    private long SongPauser { get; set; } = 0;
+
+    public void SelectSongID(int id, float seek = -1, bool ishome = false)
     {
+        if (ishome && DateTimeOffset.UtcNow.ToUnixTimeSeconds() > SongPauser)
+        {
+            SongPauser = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        }
+        else if (ishome) return;
         if (Beatmaps.ElementAt(id) != null && SessionConfig.SongID != id)
         {
             ApiOperator.LeaderboardStatus = 0; // Reset leaderboard status

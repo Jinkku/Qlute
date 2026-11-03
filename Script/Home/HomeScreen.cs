@@ -40,7 +40,7 @@ public partial class HomeScreen : Control
 	{
 		if (SettingsOperator.Gameplaycfg.TimeTotal - SettingsOperator.Gameplaycfg.Time < 0.1f && SettingsOperator.Beatmaps.Count > 0)
 		{
-			SettingsOperator.SelectSongID(SettingsOperator.RndSongID(), seek: 0);
+			SettingsOperator.SelectSongID(SettingsOperator.RndSongID(), seek: 0, ishome: true);
 		}
 		SongIndicator.Position = new Vector2(SongIndicator.Position.X, SettingsOperator.TopPanelPosition + 10);
 		_subunf();
