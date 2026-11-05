@@ -135,6 +135,9 @@ public partial class SettingsOperator : Node
         { "Key1", "F" },
         { "Key2", "J" },
         { "Key3", "K" },
+        { "TapKey0", "Z" },
+        { "TapKey1", "X" },
+        { "gamemode", 0 },
     };
     public Dictionary<string, object> Configurationbk { get; set; }
 
@@ -306,7 +309,7 @@ public partial class SettingsOperator : Node
             SessionConfig.BeatmapID =  beatmap.BeatmapID;
             SessionConfig.BeatmapSetID = beatmap.BeatmapSetID;
             //SessionConfig.GameMode = beatmap.GameModeID; 
-            SessionConfig.GameMode = 0; // Use the gamemodeID later when done. 
+            SessionConfig.GameMode = GetSelectedGameMode(); // Mode picked in song select (0 Mania, 1 Taiko, 3 Tap!)
             SessionConfig.SongID = id;
             string bgpath = beatmap.Path.PathJoin(beatmap.Background.ToString());
             string checksumbg = null;
@@ -341,11 +344,16 @@ public partial class SettingsOperator : Node
         }
     }
 
+    public static int GetSelectedGameMode() =>
+        int.TryParse(GetSetting("gamemode")?.ToString(), out int gm) ? gm : 0;
+
     public static string ReturnGameModeTscn(int mode)
     {
+        if (LanNetwork.InMatch) mode = 0; // LAN matches + spectating are built around the Mania playfield
         switch (mode)
         {
             case 1 : return "res://Panels/GameModes/Taiko.tscn";
+            case 3 : return "res://Panels/GameModes/Tap.tscn";
         }
 
         return "res://Panels/GameModes/Mania.tscn";

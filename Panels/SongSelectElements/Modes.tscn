@@ -23,15 +23,18 @@ layout_mode = 2
 text = "Taiko"
 icon = ExtResource("2_1ve1i")
 NewGameMode = true
+ModeID = 1
 
 [node name="Button3" parent="Mode" unique_id=1554289843 instance=ExtResource("1_1mrv0")]
 visible = false
 layout_mode = 2
 text = "Dash!"
 icon = ExtResource("3_xrmeo")
+ModeID = 2
 
 [node name="Button4" parent="Mode" unique_id=2032024027 instance=ExtResource("1_1mrv0")]
-visible = false
 layout_mode = 2
 text = "Tap!"
 icon = ExtResource("4_lxfj7")
+NewGameMode = true
+ModeID = 3
