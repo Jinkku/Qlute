@@ -46,6 +46,8 @@ public partial class LanSelfTest : Node
 	}
 	private bool _forfeited;
 	private bool _transferred, _renamed;
+	private bool _spectating;
+	private double _specLog;
 
 	public override void _Ready()
 	{
@@ -66,6 +68,7 @@ public partial class LanSelfTest : Node
 			{
 				Log($"hosting: {_net.Host("LAN Test Room")}");
 				_net.HostAdjustTimer(-10000); // shortest countdown
+				if (SettingsOperator.SessionConfig.SongID >= 0) _net.AddToQueue(SettingsOperator.SessionConfig.SongID);
 			}
 			else
 			{
@@ -96,9 +99,36 @@ public partial class LanSelfTest : Node
 		{
 			_chatted = true;
 			_net.SendChat(host ? "hello from the host" : "hello from the client");
+			// --lan-test-queue: the joiner adds two picks, so the round-robin order can be checked in the log.
+			if (!host && Has("--lan-test-queue") && SettingsOperator.Beatmaps.Count > 1)
+			{
+				int a = (Math.Max(0, SettingsOperator.SessionConfig.SongID) + 1) % SettingsOperator.Beatmaps.Count;
+				ModsOperator.Mods["dt"] = true; DtCustom.Speed = 1.5f; // first pick is room-wide DT 1.5x
+				_net.AddToQueue(a);
+				ModsOperator.Mods["dt"] = false; ModsOperator.Refresh();
+				_net.AddToQueue((a + 1) % SettingsOperator.Beatmaps.Count);
+				Log("added two beatmaps to the queue");
+			}
 			if (ForceMissingMap) { Log("requesting beatmap from host"); _net.RequestBeatmapFromHost(); }
 		}
-		if (me != null && me.HasMap && !_readied && !ForceMissingMap && _net.State.Phase == LanPhase.Lobby && (host ? _net.State.Players.Count > 1 : true))
+		// --lan-test-spectate (joiner): don't play; watch the match in the spectate screen and log the live feed.
+		if (Has("--lan-test-spectate") && !host && me != null)
+		{
+			if (_net.CanSpectate && GetTree().CurrentScene?.SceneFilePath != LanNetwork.SpectateScene && !_spectating)
+			{
+				_spectating = true;
+				Log("spectating");
+				_net.BeginSpectate();
+			}
+			_specLog -= GetProcessDeltaTime();
+			if (_specLog <= 0 && _net.Feeds.Count > 0)
+			{
+				_specLog = 2;
+				foreach (var (id, f) in _net.Feeds)
+					Log($"live feed from {id}: chart={f.Times.Length} notes, songMs={f.SongMs:0}, judged={f.Judged.Count(j => j)}, lanesDown={string.Join("", f.LaneDown.Select(d => d ? "1" : "0"))}, combo={f.Combo}");
+			}
+		}
+		if (me != null && me.HasMap && !_readied && !ForceMissingMap && !Has("--lan-test-spectate") && _net.State.Phase == LanPhase.Lobby && (host ? _net.State.Players.Count > 1 : true))
 		{
 			_readied = true;
 			_net.SetReady(true);
@@ -150,7 +180,7 @@ public partial class LanSelfTest : Node
 		{
 			_logTimer = 2;
 			var players = string.Join(" | ", s.Players.Select(p => $"{p.Name}(id {p.Id}) ready={p.Ready} map={p.HasMap} inMatch={p.InMatch} score={p.Score} acc={p.Accuracy:P1}"));
-			Log($"t={_t:0} scene={GetTree().CurrentScene?.Name} room='{s.Name}' hostId={s.HostId} isHost={_net.IsHost} lobbyTimer={s.LobbyTimer} phase={s.Phase} timer={(s.CountdownActive ? _net.TimeLeftNow.ToString("0.0") : "-")} map={s.Beatmap?.Display} transfer={_net.TransferProgress:0.00} :: {players}");
+			Log($"t={_t:0} scene={GetTree().CurrentScene?.Name} room='{s.Name}' hostId={s.HostId} isHost={_net.IsHost} lobbyTimer={s.LobbyTimer} phase={s.Phase} timer={(s.CountdownActive ? _net.TimeLeftNow.ToString("0.0") : "-")} map={s.Beatmap?.Display} queue=[{string.Join(", ", s.Queue.Select(q => $"#{q.Id} {q.OwnerName}: {q.Beatmap?.Title} {LanNetwork.GlobalModLabel(q.Mods, q.Speed)}"))}] roomMods={LanNetwork.GlobalModLabel(s.CurrentMods, s.CurrentSpeed)} pitch={AudioPlayer.Instance.PitchScale:0.00} transfer={_net.TransferProgress:0.00} :: {players}");
 		}
 	}
 }

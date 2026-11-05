@@ -242,6 +242,13 @@ public partial class ResultScreenv2 : Control
 		AccuracyProgress = GetNode<TextureProgressBar>("MainScreen/Rank/AccuracyProgress");
 		Rank = GetNode<TextureRect>("MainScreen/Rank/AccuracyProgress/RankEmblem");
 		WatchReplayButton = GetNode<Button>("BottomBar/HBoxContainer/WatchReplay");
+		if (LanNetwork.ShowingMatchResults)
+		{
+			// After a LAN match: no solo retry/replay, Back continues to the room.
+			GetNode<Button>("BottomBar/HBoxContainer/PlayAgain").Visible = false;
+			WatchReplayButton.Visible = false;
+			if (GetNode("BottomBar/HBoxContainer/Back") is ButtonFade back) back.StringText = "Continue";
+		}
 		RankGainPanel = GetNode<PanelContainer>("MainScreen/Additional/Rankgain");
 		PerfectEmblem = GetNode<TextureRect>("MainScreen/ScoreCount/HBoxContainer/Perfect");
 		RankLead = GetNode<Label>("MainScreen/Additional2/Card/Column/Number/RankLead");
@@ -418,7 +425,12 @@ public partial class ResultScreenv2 : Control
 		else
 		{
 			SettingsOperator.OldRank = SettingsOperator.Rank;
-			AnimationMode(1);
+			if (LanNetwork.ShowingMatchResults && LanNetwork.Instance != null)
+			{
+				LanNetwork.ShowingMatchResults = false;
+				AnimationMode(1, scene: LanNetwork.Instance.ReturnScene); // back to the room (or the lounge if it closed)
+			}
+			else AnimationMode(1);
 			if (!AudioPlayer.Instance.IsPlaying())
 				AudioPlayer.Instance.Play();
 			Replay.FilePath = "";
@@ -455,6 +467,7 @@ public partial class ResultScreenv2 : Control
 	}
 	public void Retry()
 	{
+		if (LanNetwork.ShowingMatchResults) return;
 		SettingsOperator.OldRank = SettingsOperator.Rank;
 		AnimationMode(1, scene: "res://Panels/Screens/SongLoadingScreen.tscn");
 	}

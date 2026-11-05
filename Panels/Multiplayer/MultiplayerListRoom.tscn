@@ -135,4 +135,5 @@ visible = false
 layout_mode = 2
 
 [node name="Player6" parent="MarginContainer/Columns/PanelContainer/Players" unique_id=1379687013 instance=ExtResource("1_r3avh")]
+visible = false
 layout_mode = 2

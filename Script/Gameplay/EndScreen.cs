@@ -29,9 +29,8 @@ public partial class EndScreen : ColorRect
 		BeatmapBackground.FlashEnable = true;
 		if (LanNetwork.InMatch || LanNetwork.Instance?.State != null)
 		{
-			// LAN match: report the final score and head back to the room (results show there).
-			LanNetwork.Instance.ReportFinished(quit: false);
-			GetNode<SceneTransition>("/root/Transition").Switch(LanNetwork.Instance.ReturnScene);
+			// LAN match: report the final score, then show the results screen; its Back button returns to the room.
+			LanNetwork.Instance.FinishMatchToResults();
 			return;
 		}
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultScreenv2.tscn");

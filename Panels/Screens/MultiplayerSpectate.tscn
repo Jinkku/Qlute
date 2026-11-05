@@ -1,0 +1,134 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/Multiplayer/MultiplayerSpectate.cs" id="1_spec"]
+[ext_resource type="Theme" uid="uid://phcyox1n5ls3" path="res://Resources/Multiplayer/LobbyTheme.tres" id="2_theme"]
+[ext_resource type="PackedScene" uid="uid://ddx76ex477v4a" path="res://Panels/Overlays/beatmap_background.tscn" id="3_bg"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_mode"]
+
+[node name="MultiplayerSpectate" type="Control" node_paths=PackedStringArray("TitleLabel", "BackButton", "GridButton", "SingleButton", "SingleNav", "PrevButton", "FocusLabel", "NextButton", "Grid", "StatusLabel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_spec")
+TitleLabel = NodePath("Margin/Root/Bar/H/Title")
+BackButton = NodePath("Margin/Root/Bar/H/Back")
+GridButton = NodePath("Margin/Root/Bar/H/Grid")
+SingleButton = NodePath("Margin/Root/Bar/H/Single")
+SingleNav = NodePath("Margin/Root/Bar/H/SingleNav")
+PrevButton = NodePath("Margin/Root/Bar/H/SingleNav/Prev")
+FocusLabel = NodePath("Margin/Root/Bar/H/SingleNav/Focus")
+NextButton = NodePath("Margin/Root/Bar/H/SingleNav/Next")
+Grid = NodePath("Margin/Root/Grid")
+StatusLabel = NodePath("Status")
+
+[node name="Background" parent="." instance=ExtResource("3_bg")]
+self_modulate = Color(0.3, 0.3, 0.35, 1)
+layout_mode = 1
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 72
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Root" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Bar" type="PanelContainer" parent="Margin/Root"]
+layout_mode = 2
+theme_type_variation = &"LobbyHeaderCard"
+
+[node name="H" type="HBoxContainer" parent="Margin/Root/Bar"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Back" type="Button" parent="Margin/Root/Bar/H"]
+custom_minimum_size = Vector2(120, 44)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LobbyGhostButton"
+text = "Back to lobby"
+
+[node name="Title" type="Label" parent="Margin/Root/Bar/H"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LobbyTitle"
+text = "Spectating"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="SingleNav" type="HBoxContainer" parent="Margin/Root/Bar/H"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Prev" type="Button" parent="Margin/Root/Bar/H/SingleNav"]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LobbyGhostButton"
+text = "<"
+
+[node name="Focus" type="Label" parent="Margin/Root/Bar/H/SingleNav"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+horizontal_alignment = 1
+text = "-"
+
+[node name="Next" type="Button" parent="Margin/Root/Bar/H/SingleNav"]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LobbyGhostButton"
+text = ">"
+
+[node name="Grid" type="Button" parent="Margin/Root/Bar/H"]
+custom_minimum_size = Vector2(90, 44)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LobbyGhostButton"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_mode")
+text = "Grid"
+
+[node name="Single" type="Button" parent="Margin/Root/Bar/H"]
+custom_minimum_size = Vector2(90, 44)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LobbyGhostButton"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_mode")
+text = "1 by 1"
+
+[node name="Grid" type="GridContainer" parent="Margin/Root"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="Status" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"LobbyTitle"
+text = "Nobody else is playing right now."
+horizontal_alignment = 1

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public enum LanPhase { Lobby = 0, Playing = 1 }
 
+/// <summary>What a player is doing while they're not in a match.</summary>
+public enum LanActivity { Lobby = 0, Selecting = 1, Results = 2, Spectating = 3 }
+
 public class LanPlayer
 {
 	public long Id { get; set; }
@@ -21,6 +24,26 @@ public class LanPlayer
 	public int Great { get; set; }
 	public int Meh { get; set; }
 	public int Bad { get; set; }
+	public LanActivity Activity { get; set; }
+	/// <summary>Who this player is spectating: -1 nobody, 0 everyone in the match (grid), otherwise a player id.</summary>
+	public long WatchTarget { get; set; } = -1;
+	/// <summary>Difficulty this player plays instead of the queue item's (same beatmap set). Null = the item's own.</summary>
+	public LanBeatmapRef Difficulty { get; set; }
+	/// <summary>Mod keys (ModsOperator.Mods) this player plays with. Only <see cref="LanNetwork.AllowedMods"/> are kept.</summary>
+	public List<string> Mods { get; set; } = new();
+}
+
+/// <summary>A beatmap someone put in the round-robin queue.</summary>
+public class LanQueueItem
+{
+	public int Id { get; set; }
+	public long OwnerId { get; set; }
+	public string OwnerName { get; set; }
+	public LanBeatmapRef Beatmap { get; set; }
+	/// <summary>Room-wide mods everyone plays this item with (only <see cref="LanNetwork.GlobalMods"/>: DT / HT).</summary>
+	public List<string> Mods { get; set; } = new();
+	/// <summary>Song speed for DT / HT (1 when neither is on).</summary>
+	public float Speed { get; set; } = 1f;
 }
 
 public class LanBeatmapRef
@@ -47,6 +70,8 @@ public class LanResult
 	public float Accuracy { get; set; }
 	public int MaxCombo { get; set; }
 	public bool Quit { get; set; }
+	public string Version { get; set; }
+	public string Mods { get; set; }
 }
 
 public class LanRoomState
@@ -58,7 +83,20 @@ public class LanRoomState
 	public string HostName { get; set; }
 	public LanPhase Phase { get; set; } = LanPhase.Lobby;
 	public List<LanPlayer> Players { get; set; } = new();
+	/// <summary>The map being played (Playing) or up next (Lobby: mirrors Queue[0]). Players may swap difficulty.</summary>
 	public LanBeatmapRef Beatmap { get; set; }
+	/// <summary>Upcoming picks, already sorted round-robin by the server. Queue[0] is up next.</summary>
+	public List<LanQueueItem> Queue { get; set; } = new();
+	/// <summary>Queue item id that <see cref="Beatmap"/> came from (0 = none).</summary>
+	public int CurrentItemId { get; set; }
+	public long CurrentOwnerId { get; set; }
+	public string CurrentOwnerName { get; set; }
+	/// <summary>Room-wide mods + speed of the item up next / being played (copied from its queue item).</summary>
+	public List<string> CurrentMods { get; set; } = new();
+	public float CurrentSpeed { get; set; } = 1f;
+	/// <summary>Owner of the last item that was played; the rotation continues with the next player.</summary>
+	public long LastPickOwnerId { get; set; }
+	public int NextQueueId { get; set; } = 1;
 	/// <summary>Seconds until the match auto-starts ("time till play").</summary>
 	public double TimeLeft { get; set; }
 	public bool CountdownActive { get; set; }

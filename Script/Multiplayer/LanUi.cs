@@ -11,6 +11,17 @@ public static class LanUi
 		return $"{(int)t.TotalMinutes}:{t.Seconds:00}";
 	}
 
+	/// <summary>
+	/// Keeps lobby/spectate music at normal speed. Needed because SceneTransition frees the old scene about a
+	/// second after the new one is ready, and Gameplay._ExitTree then restores the DT/HT speed it saved.
+	/// </summary>
+	public static void KeepNormalSpeed()
+	{
+		if (SettingsOperator.inGameplay || ModsOperator.Mods["dt"] || ModsOperator.Mods["ht"]) return;
+		if (AudioPlayer.Instance != null && !Mathf.IsEqualApprox(AudioPlayer.Instance.PitchScale, 1f))
+			AudioPlayer.Instance.PitchScale = 1f;
+	}
+
 	private static StyleBoxFlat Box(Color c)
 	{
 		var sb = new StyleBoxFlat { BgColor = c };

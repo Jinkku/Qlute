@@ -36,6 +36,7 @@ public partial class MultiplayerLobby : Control
 		GetNode<SettingsOperator>("/root/SettingsOperator").toppaneltoggle(true);
 		Cursor.CursorVisible = true;
 		Chat.SetPlayerName(LanNetwork.LocalName());
+		Net.OnLobbyOpened(); // back from song select / results: sync mods + status, preview the next map
 	}
 
 	public override void _Process(double delta)
@@ -69,6 +70,7 @@ public partial class MultiplayerLobby : Control
 		}
 
 		Header.UpdateCountdown(s, Net.TimeLeftNow);
+		LanUi.KeepNormalSpeed();
 		Beatmap.UpdateTransfer(Net.TransferProgress);
 	}
 
@@ -93,7 +95,12 @@ public partial class MultiplayerLobby : Control
 	private void OnRenameSubmitted(string newName) => Net.HostRename(newName);
 	private void OnTimerAdjusted(int deltaSeconds) => Net.HostAdjustTimer(deltaSeconds);
 	private void OnStartNowPressed() => Net.HostStartNow();
-	private void OnBeatmapPicked(int libraryIndex) => Net.HostSelectBeatmap(libraryIndex);
+	private void OnSpectatePressed() => Net.BeginSpectate();
+	// Queue picks open song select, which comes back here when a beatmap is picked (or Back is pressed).
+	private void OnAddBeatmapRequested() => Net.BeginPick(LanNetwork.PickMode.AddToQueue);
+	private void OnEditItemRequested(int itemId) => Net.BeginPick(LanNetwork.PickMode.ReplaceItem, itemId);
+	private void OnRemoveItemRequested(int itemId) => Net.RemoveQueueItem(itemId);
+	private void OnEditDifficultyRequested() => Net.BeginPick(LanNetwork.PickMode.OwnDifficulty);
 	private void OnDownloadRequested() => Net.RequestBeatmapFromHost();
 	private void OnChatSubmitted(string text) => Net.SendChat(text);
 
@@ -104,7 +111,7 @@ public partial class MultiplayerLobby : Control
 		_pendingHostTarget = playerId;
 		if (TransferHostDialog == null) { OnTransferHostConfirmed(); return; }
 		TransferHostDialog.DialogText = Net.IsServer
-			? $"Make {target.Name} the host?\n\nThey'll pick beatmaps and run the timer. The room still runs on your game, so it closes if you leave."
+			? $"Make {target.Name} the host?\n\nThey'll run the timer and can remove anyone's queue picks. The room still runs on your game, so it closes if you leave."
 			: $"Make {target.Name} the host?\n\nYou won't be able to take it back unless they hand it to you.";
 		TransferHostDialog.PopupCentered();
 	}

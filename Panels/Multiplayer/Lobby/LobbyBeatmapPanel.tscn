@@ -2,7 +2,9 @@
 
 [ext_resource type="Theme" uid="uid://phcyox1n5ls3" path="res://Resources/Multiplayer/LobbyTheme.tres" id="1_theme"]
 [ext_resource type="Script" uid="uid://h6t45w4nvt15" path="res://Script/Multiplayer/Lobby/LobbyBeatmapPanel.cs" id="2_script"]
+[ext_resource type="Script" uid="uid://s3i5b8frncgd" path="res://Script/Effects/ButtonFade.cs" id="3_1iqwh"]
 [ext_resource type="Texture2D" uid="uid://fgbtqxkt8lm" path="res://DefaultWallpaper/attack.png" id="3_ku2br"]
+[ext_resource type="PackedScene" uid="uid://cjkpa2f4ut3w6" path="res://Panels/Multiplayer/Overlay/LobbyBeatmapCard.tscn" id="5_1iqwh"]
 
 [sub_resource type="Gradient" id="Gradient_shade"]
 offsets = PackedFloat32Array(0, 0.65, 1)
@@ -11,7 +13,7 @@ colors = PackedColorArray(0.03, 0.03, 0.05, 0.92, 0.03, 0.03, 0.05, 0.55, 0.03, 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_shade"]
 gradient = SubResource("Gradient_shade")
 
-[node name="LobbyBeatmapPanel" type="PanelContainer" unique_id=1154276679 node_paths=PackedStringArray("Cover", "MapTitle", "MapArtist", "Chips", "DifficultyChip", "LevelChip", "LengthChip", "MapperChip", "MissingRow", "DownloadButton", "TransferBar", "Search", "MapList")]
+[node name="LobbyBeatmapPanel" type="PanelContainer" unique_id=1154276679 node_paths=PackedStringArray("AddButton", "QueueHeading", "QueueList", "OwnHeading", "OwnCard", "MissingRow", "DownloadButton", "TransferBar")]
 offset_right = 602.0
 offset_bottom = 287.0
 size_flags_horizontal = 3
@@ -19,19 +21,15 @@ size_flags_stretch_ratio = 1.6
 theme = ExtResource("1_theme")
 theme_type_variation = &"LobbyCard"
 script = ExtResource("2_script")
-Cover = NodePath("V/Hero/Cover")
-MapTitle = NodePath("V/Hero/Margin/Info/Title")
-MapArtist = NodePath("V/Hero/Margin/Info/Artist")
-Chips = NodePath("V/Hero/Margin/Info/Chips")
-DifficultyChip = NodePath("V/Hero/Margin/Info/Chips/Difficulty")
-LevelChip = NodePath("V/Hero/Margin/Info/Chips/Level")
-LengthChip = NodePath("V/Hero/Margin/Info/Chips/Length")
-MapperChip = NodePath("V/Hero/Margin/Info/Chips/Mapper")
+AddButton = NodePath("V/ButtonFade")
+QueueHeading = NodePath("V/Queue")
+QueueList = NodePath("V/ScrollContainer/Beatmaps")
+CardScene = ExtResource("5_1iqwh")
+OwnHeading = NodePath("V/Heading3")
+OwnCard = NodePath("V/CurrentDifficulty")
 MissingRow = NodePath("V/MissingRow")
 DownloadButton = NodePath("V/MissingRow/Download")
 TransferBar = NodePath("V/MissingRow/TransferBar")
-Search = NodePath("V/Search")
-MapList = NodePath("V/MapList")
 
 [node name="V" type="VBoxContainer" parent="." unique_id=1451521263]
 layout_mode = 2
@@ -40,9 +38,24 @@ theme_override_constants/separation = 12
 [node name="Heading" type="Label" parent="V" unique_id=119099045]
 layout_mode = 2
 theme_type_variation = &"LobbyHeading"
-text = "Beatmap Info"
+text = "Beatmap"
+
+[node name="ButtonFade" type="Button" parent="V" unique_id=1938684832]
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+script = ExtResource("3_1iqwh")
+StringText = "Add beatmap"
+metadata/_custom_type_script = "uid://s3i5b8frncgd"
+
+[node name="Queue" type="Label" parent="V" unique_id=159213703]
+layout_mode = 2
+theme_type_variation = &"LobbyHeading"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Queue (x)"
 
 [node name="Hero" type="PanelContainer" parent="V" unique_id=632535259]
+visible = false
 clip_children = 2
 custom_minimum_size = Vector2(0, 170)
 clip_contents = true
@@ -58,6 +71,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Shade" type="TextureRect" parent="V/Hero" unique_id=473549009]
+visible = false
 layout_mode = 2
 texture = SubResource("GradientTexture2D_shade")
 expand_mode = 1
@@ -131,22 +145,32 @@ theme_type_variation = &"LobbyGhostButton"
 text = "Get it from the room"
 
 [node name="TransferBar" type="ProgressBar" parent="V/MissingRow" unique_id=208285623]
-visible = false
 custom_minimum_size = Vector2(160, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 show_percentage = false
 
-[node name="Search" type="LineEdit" parent="V" unique_id=968226192]
+[node name="HBoxContainer" type="HBoxContainer" parent="V/MissingRow" unique_id=273647169]
 layout_mode = 2
-placeholder_text = "Search your beatmaps..."
-clear_button_enabled = true
 
-[node name="MapList" type="ItemList" parent="V" unique_id=1255087593]
+[node name="ScrollContainer" type="ScrollContainer" parent="V" unique_id=1055383942]
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="Beatmaps" type="VBoxContainer" parent="V/ScrollContainer" unique_id=1061157441]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading3" type="Label" parent="V" unique_id=1229992229]
+layout_mode = 2
+theme_type_variation = &"LobbyHeading"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Your difficulty"
+
+[node name="CurrentDifficulty" parent="V" unique_id=993070310 instance=ExtResource("5_1iqwh")]
+layout_mode = 2
+IsOwnDifficulty = true
+
+[connection signal="pressed" from="V/ButtonFade" to="." method="Addbeatmap"]
 [connection signal="pressed" from="V/MissingRow/Download" to="." method="OnDownloadPressed"]
-[connection signal="text_changed" from="V/Search" to="." method="OnSearchChanged"]
-[connection signal="item_selected" from="V/MapList" to="." method="OnMapSelected"]

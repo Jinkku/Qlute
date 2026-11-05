@@ -55,8 +55,11 @@ public partial class LobbyPlayerRow : PanelContainer
 		YouBadge.Visible = isLocal;
 		MakeHostButton.Visible = canMakeHost && !isHost && !isLocal;
 
-		DetailLabel.Visible = playing;
-		if (playing) DetailLabel.Text = $"{p.Score:N0}   {p.Accuracy:P2}   {p.Combo}x";
+		// Live score while playing; otherwise the difficulty + mods they'll play with (if not the default).
+		var mods = LanNetwork.ModAlias(p.Mods);
+		var loadout = (p.Difficulty != null ? $"[{p.Difficulty.Version}]" : "") + (mods.Length > 0 ? $"  +{mods}" : "");
+		DetailLabel.Visible = playing || loadout.Length > 0;
+		DetailLabel.Text = playing ? $"{p.Score:N0}   {p.Accuracy:P2}   {p.Combo}x" : loadout.Trim();
 
 		var (status, color) = Status(p, s);
 		StatusPill.Text = status;
@@ -68,6 +71,9 @@ public partial class LobbyPlayerRow : PanelContainer
 	{
 		if (s.Phase == LanPhase.Playing && p.InMatch)
 			return (p.Finished ? (p.Quit ? "QUIT" : "DONE") : "PLAYING", PlayingColor);
+		if (p.Activity == LanActivity.Selecting) return ("PICKING", NotReadyColor);
+		if (p.Activity == LanActivity.Results) return ("RESULTS", NotReadyColor);
+		if (p.Activity == LanActivity.Spectating) return ("WATCHING", PlayingColor);
 		if (!p.HasMap && s.Beatmap != null) return ("NO MAP", NoMapColor);
 		if (p.Ready) return ("READY", ReadyColor);
 		return (s.Phase == LanPhase.Playing ? "WAITING" : "NOT READY", NotReadyColor);

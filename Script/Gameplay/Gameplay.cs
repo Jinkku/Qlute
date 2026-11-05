@@ -267,6 +267,9 @@ public partial class Gameplay : Control
 			}
 		}
 
+		// LAN match: send the chart once so spectators can draw this playfield live.
+		if (LanNetwork.InMatch) LanNetwork.Instance.SpecSendChart(Notes, (int)GetViewportRect().Size.Y);
+
 		if (SettingsOperator.SpectatorMode)
 		{
 			AddChild(SpectatorPanel);
@@ -297,6 +300,7 @@ public partial class Gameplay : Control
 	public void hitnote(int Keyx, bool hit, int est)
 	{
 		var key = Keys[Keyx];
+		if (!SettingsOperator.SpectatorMode && LanNetwork.InMatch) LanNetwork.Instance.SpecKey(Keyx, hit, est);
 		if (hit)
 		{
 			Sample.PlaySample(HitSoundPath);
@@ -441,6 +445,7 @@ public partial class Gameplay : Control
 				    .SetTrans(Tween.TransitionType.Cubic)
 				    .SetEase(Tween.EaseType.Out);
 			    Note.hit = true;
+			    if (LanNetwork.InMatch) LanNetwork.Instance.SpecJudge(i, 3, gametime);
 			    break;
 		    }
 	    }
@@ -555,6 +560,7 @@ private void _GameNoteTick(double delta)
 				}
 				if (JudgeResult < 4)
 				{
+					if (LanNetwork.InMatch) LanNetwork.Instance.SpecJudge(i, JudgeResult, gametime);
 					Keys[Note.NotePart].hit = false; 
 					Note.hit = true;
 				}
@@ -706,6 +712,7 @@ private void _GameNoteTick(double delta)
 
 			CheckReplayKey((int)gametime);
 			_GameNoteTick(delta);
+			if (LanNetwork.InMatch) LanNetwork.Instance.SpecTime(gametime); // spectators follow this clock
 		}
 		catch (Exception e)
 		{

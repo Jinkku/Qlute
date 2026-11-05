@@ -62,9 +62,11 @@ public partial class SongSelect : Control
 	{
 		FilteredIndices.Clear();
 		bool hasQuery = !string.IsNullOrEmpty(query);
+		bool lanFilter = LanNetwork.Picking != LanNetwork.PickMode.None && LanNetwork.Instance != null;
 		for (int i = 0; i < SettingsOperator.Beatmaps.Count; i++)
 		{
 			var b = SettingsOperator.Beatmaps[i];
+			if (lanFilter && !LanNetwork.Instance.PickFilter(i)) continue; // e.g. only the up-next set's difficulties
 			if (!hasQuery ||
 			    b.Title.Contains(query, StringComparison.OrdinalIgnoreCase) ||
 			    b.Artist.Contains(query, StringComparison.OrdinalIgnoreCase) ||
@@ -314,6 +316,23 @@ public partial class SongSelect : Control
 		CardSize = _cachedCardSize.Value;
 		CheckLeaderboardMode();
 		RebuildFilter(""); // Populate FilteredIndices with all songs on load
+		// Setting scrollBar.Value above already spawned a few cards from the unfiltered list; drop them so a
+		// filtered list (e.g. the LAN difficulty picker) doesn't keep cards from other songs.
+		for (int i = SongEntry.Count - 1; i >= 0; i--)
+		{
+			SongEntry[i].GetParent()?.RemoveChild(SongEntry[i]);
+			SongEntry[i].Free();
+		}
+		SongEntry.Clear();
+		if (LanNetwork.Picking != LanNetwork.PickMode.None && FilteredIndices.Count > 0 && FilteredIndices.Count < SettingsOperator.Beatmaps.Count)
+		{
+			// The LAN picker is filtered, so scroll positions are filtered indices rather than SongIDs.
+			int pos = FilteredIndices.IndexOf(SettingsOperator.SessionConfig.SongID);
+			if (pos < 0) { pos = 0; SettingsOperator.SelectSongID(FilteredIndices[0]); }
+			scrollBar.MaxValue = FilteredIndices.Count;
+			scrollBar.Value = pos;
+			AnimationSong = true; // skip the first-frame jump to SongID
+		}
 		_lastStartIndex = int.MinValue;
 		_lastEndIndex = int.MinValue;
 		ScrollSongs();
@@ -781,11 +800,23 @@ private void _Mods_show()
 		SettingsOperator.SpectatorMode = false;
 	}
 
+	private bool _lanPickDone; // the LAN pick was handed over; ignore further presses while the scene fades out
+
 	private void _Start()
 	{
+		if (_lanPickDone) return;
 		if (ModsScreenActive)
 		{
 			_Mods_show();
+		}
+		if (LanNetwork.Picking != LanNetwork.PickMode.None && LanNetwork.Instance != null)
+		{
+			// Picking for a LAN room: hand the beatmap to the room and go back to the lobby instead of playing.
+			_lanPickDone = true;
+			Sample.PlaySample("res://SelectableSkins/Slia/Sounds/selected.wav");
+			AnimationScene(1);
+			LanNetwork.Instance.FinishPick(SettingsOperator.SessionConfig.SongID);
+			return;
 		}
 		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/play.wav");
 
@@ -796,7 +827,14 @@ private void _Mods_show()
 	}
 	private void _on_back_pressed()
 	{
+		if (_lanPickDone) return;
 		AnimationScene(1);
+		if (LanNetwork.Picking != LanNetwork.PickMode.None && LanNetwork.Instance != null)
+		{
+			_lanPickDone = true;
+			LanNetwork.Instance.FinishPick(null); // cancelled: back to the room
+			return;
+		}
 		if (SettingsOperator.CreateSelectingBeatmap) GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
 		else GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
 	}

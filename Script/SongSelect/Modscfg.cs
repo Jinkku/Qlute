@@ -29,6 +29,18 @@ public partial class Modscfg : Button
 
     public override void _PhysicsProcess(double _delta)
 	{
+        // LAN rooms only allow mods that keep scores fair. DT / HT are room-wide, so only when adding a beatmap.
+        var lanMod = GetMeta("ModName").ToString();
+        if (SettingsOperator.MultiSelectingBeatmap && !LanNetwork.IsModSelectable(lanMod))
+        {
+            DisabledButton();
+            TooltipText = LanNetwork.GlobalMods.Contains(lanMod)
+                ? "Speed mods are set for the whole room when adding a beatmap"
+                : "Not allowed in multiplayer";
+            _Ready();
+            return;
+        }
+        TooltipText = "";
         // This makes it so that if one of the mods don't conflict with one another
         if (ModsOperator.Mods["dt"] && GetMeta("ModName").ToString() == "ht")
         {

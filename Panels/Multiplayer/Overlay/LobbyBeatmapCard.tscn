@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://cjkpa2f4ut3w6"]
+
+[ext_resource type="Script" uid="uid://ckg6synhqevho" path="res://Script/Multiplayer/LobbyBeatmapCard.cs" id="1_0nbsq"]
+[ext_resource type="Theme" uid="uid://phcyox1n5ls3" path="res://Resources/Multiplayer/LobbyTheme.tres" id="1_6hl5t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x7i82"]
+bg_color = Color(1, 1, 1, 0.05)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="LobbyBeatmapCard" type="PanelContainer" unique_id=1211084889]
+offset_right = 400.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_x7i82")
+script = ExtResource("1_0nbsq")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=470003250]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=2020286649]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1683001389]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Title" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1156664232]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Song Artist - Song Title  [Difficulty]"
+
+[node name="Mapper" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1821690241]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "mapped by Mapper name"
+
+[node name="User" type="Label" parent="MarginContainer/HBoxContainer" unique_id=271126781]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "aquapoki"
+horizontal_alignment = 2
+
+[node name="Edit" type="Button" parent="MarginContainer/HBoxContainer" unique_id=188703940]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme = ExtResource("1_6hl5t")
+theme_override_font_sizes/font_size = 10
+text = "Edit"
+
+[node name="Delete" type="Button" parent="MarginContainer/HBoxContainer" unique_id=693726703]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme = ExtResource("1_6hl5t")
+theme_override_font_sizes/font_size = 10
+text = "X"
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Edit" to="." method="EditBeatmap"]

@@ -14,6 +14,7 @@ public partial class LobbyHeader : PanelContainer
 	[Signal] public delegate void RenameSubmittedEventHandler(string newName);
 	[Signal] public delegate void TimerAdjustedEventHandler(int deltaSeconds);
 	[Signal] public delegate void StartNowPressedEventHandler();
+	[Signal] public delegate void SpectatePressedEventHandler();
 
 	[ExportGroup("Behaviour")]
 	/// <summary>Seconds added/removed by the host's -/+ timer buttons.</summary>
@@ -45,6 +46,7 @@ public partial class LobbyHeader : PanelContainer
 	[Export] public Button StartNowButton { get; set; }
 
 	[ExportGroup("Actions")]
+	[Export] public Button SpectateButton { get; set; }
 	[Export] public Button ReadyButton { get; set; }
 	[Export] public Button LeaveButton { get; set; }
 
@@ -79,6 +81,7 @@ public partial class LobbyHeader : PanelContainer
 		TimerPlusButton.Disabled = s.LobbyTimer >= LanNetwork.MaxLobbyTimer;
 		StartNowButton.Disabled = !lobby || !s.CountdownActive;
 
+		if (SpectateButton != null) SpectateButton.Visible = net.CanSpectate;
 		ReadyButton.Disabled = me == null || !lobby || !me.HasMap;
 		ReadyButton.SetPressedNoSignal(me?.Ready ?? false);
 		ReadyButton.Text = !lobby ? "In progress"
@@ -98,7 +101,7 @@ public partial class LobbyHeader : PanelContainer
 		float fraction;
 		if (s.Phase == LanPhase.Playing) { caption = "MATCH IN PROGRESS"; time = "LIVE"; fraction = 1; }
 		else if (s.CountdownActive) { caption = "TIME TILL PLAY"; time = LanUi.FormatTime(timeLeft); fraction = (float)(timeLeft / Mathf.Max(1, s.LobbyTimer)); }
-		else { caption = "WAITING FOR A BEATMAP"; time = "-:--"; fraction = 0; }
+		else { caption = "QUEUE IS EMPTY"; time = "-:--"; fraction = 0; }
 
 		TimerBar.Value = Mathf.Clamp(fraction, 0, 1) * 100;
 		if (caption + time == _lastCountdown) return;
@@ -155,4 +158,5 @@ public partial class LobbyHeader : PanelContainer
 	private void OnTimerMinusPressed() => EmitSignal(SignalName.TimerAdjusted, -TimerStep);
 	private void OnTimerPlusPressed() => EmitSignal(SignalName.TimerAdjusted, TimerStep);
 	private void OnStartNowPressed() => EmitSignal(SignalName.StartNowPressed);
+	private void OnSpectatePressed() => EmitSignal(SignalName.SpectatePressed);
 }

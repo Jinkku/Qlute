@@ -17,8 +17,10 @@ using System.Threading.Tasks;
 /// - Session: ENet. The host is authoritative and owns the room state; it pushes the whole state to everyone
 ///   when it changes. Clients send requests (ready, chat, scores...) to the host.
 /// - Rooms have no player cap beyond ENet's own limit (4095 peers), so effectively anyone can join.
-/// - Flow: host picks a beatmap -> "time till play" countdown runs -> drops to 5s once everyone is ready ->
-///   ready players load in -> live scores stream to the host -> results when everyone finished -> back to lobby.
+/// - Flow (round robin): everyone adds beatmaps to a shared queue -> the server orders it so players take turns ->
+///   the head of the queue is "up next" and the "time till play" countdown runs -> drops to 5s once everyone is ready ->
+///   ready players load in (each on their own difficulty of that set, with their own allowed mods) -> live scores stream
+///   to the host -> each player sees the results screen -> back to lobby, the played item leaves the queue.
 /// - "Server" vs "host": the player who created the room is the server (peer 1) for its whole life. The *host*
 ///   is whoever holds the room controls (<see cref="LanRoomState.HostId"/>) and can be handed to anyone;
 ///   their requests go through the server like everything else.
@@ -35,6 +37,29 @@ public partial class LanNetwork : Node
 	public const int MinLobbyTimer = 15, MaxLobbyTimer = 600;
 	public const string LobbyScene = "res://Panels/Screens/MultiplayerLobby.tscn";
 	public const string LoungeScene = "res://Panels/Screens/MultiplayerList.tscn";
+	public const string SongSelectScene = "res://Panels/Screens/song_select.tscn";
+	public const string ResultsScene = "res://Panels/Screens/ResultScreenv2.tscn";
+	public const string SpectateScene = "res://Panels/Screens/MultiplayerSpectate.tscn";
+	/// <summary>How often a watched player sends their live play (song time, key presses, judgements).</summary>
+	public const double SpectateTickSeconds = 0.05;
+	private const int MaxSpectatePacket = 64 * 1024;
+	private const int MaxChartNotes = 100_000;
+	public const int MaxQueuePerPlayer = 5;
+	public const int MaxQueueTotal = 50;
+
+	/// <summary>Mods players may pick in a LAN match. Anything that changes song speed or plays for you
+	/// (auto, DT, HT...) would make scores unfair, so it's left out.</summary>
+	public static readonly HashSet<string> AllowedMods = new() { "no-fail", "random", "slice", "black-out" };
+	/// <summary>Mods the person adding a beatmap can put on the queue item. They apply to everyone, so the
+	/// match stays fair, and can't be picked per player (your own difficulty / mods).</summary>
+	public static readonly HashSet<string> GlobalMods = new() { "dt", "ht" };
+	public const float MinDtSpeed = 1.1f, MaxDtSpeed = 2f, MinHtSpeed = 0.1f, MaxHtSpeed = 0.9f;
+
+	private static readonly Dictionary<string, string> ModAliases = new()
+	{
+		{ "auto", "AT" }, { "no-fail", "NF" }, { "dt", "DT" }, { "ht", "HT" },
+		{ "random", "RND" }, { "slice", "SL" }, { "black-out", "BT" }, { "am", "AM" },
+	};
 	private const int ChunkSize = 60 * 1024;
 	private const long MaxShareBytes = 200L * 1024 * 1024;
 	private const int MaxChatLines = 200;
@@ -42,6 +67,13 @@ public partial class LanNetwork : Node
 	public static LanNetwork Instance { get; private set; }
 	/// <summary>True while the local player is playing a LAN match.</summary>
 	public static bool InMatch => Instance != null && Instance.LocalInMatch;
+
+	/// <summary>Song select is open to pick something for the LAN room (see <see cref="BeginPick"/>).</summary>
+	public enum PickMode { None, AddToQueue, ReplaceItem, OwnDifficulty }
+	public static PickMode Picking { get; private set; } = PickMode.None;
+	/// <summary>Set when the results screen was opened after a LAN match, so it returns to the room.</summary>
+	public static bool ShowingMatchResults { get; set; }
+	private int _pickItemId;
 
 	// ---- Session state (read by the UI; mutate only through the methods below) ----
 	public LanRoomState State { get; private set; }
@@ -63,6 +95,14 @@ public partial class LanNetwork : Node
 
 	/// <summary>-1 when idle, otherwise 0..1 progress of a beatmap being received from the host.</summary>
 	public float TransferProgress { get; private set; } = -1;
+
+	// ---- Spectating (live: charts + inputs, drawn locally by LanPlayfieldView) ----
+	/// <summary>Live play of each player in the match, filled while we're spectating.</summary>
+	public readonly Dictionary<long, LanSpectateFeed> Feeds = new();
+	private readonly LanSpectateFeed.Writer _specOut = new();
+	private double _specTimer;
+	/// <summary>Server: everyone's chart for the current match, so late spectators can still get it.</summary>
+	private readonly Dictionary<long, (int[] Times, byte[] Lanes, int Height)> _specCharts = new();
 
 	// ---- Discovery ----
 	public readonly Dictionary<string, LanRoomInfo> Rooms = new();
@@ -145,9 +185,7 @@ public partial class LanNetwork : Node
 			Players = { new LanPlayer { Id = 1, Name = LocalName() } },
 		};
 		ChatLog.Clear();
-		AddChatLine(null, $"Room created on port {port}. Pick a beatmap, then everyone readies up!");
-		if (SettingsOperator.SessionConfig.SongID >= 0 && SettingsOperator.SessionConfig.SongID < SettingsOperator.Beatmaps.Count)
-			HostSelectBeatmap(SettingsOperator.SessionConfig.SongID, announce: false);
+		AddChatLine(null, $"Room created on port {port}. Everyone can add beatmaps to the queue; picks take turns (round robin).");
 		_beaconTimer = 0;
 		MarkDirty();
 		GD.Print($"[LAN] Hosting \"{State.Name}\" on port {port}");
@@ -199,31 +237,232 @@ public partial class LanNetwork : Node
 		else RpcId(1, MethodName.RpcChat, text);
 	}
 
-	/// <summary>Host only: pick the beatmap everyone will play (index into the local library).</summary>
-	public void HostSelectBeatmap(int index, bool announce = true)
-	{
-		if (!IsHost || State.Phase != LanPhase.Lobby) return;
-		if (index < 0 || index >= SettingsOperator.Beatmaps.Count) return;
-		var b = SettingsOperator.Beatmaps[index];
-		var checksum = Checksum(b.Rawurl);
-		if (checksum == null) { Notify.Post("Couldn't read that beatmap file.", Type: NotificationIcons.NotificationType.Warning); return; }
-		if (State.Beatmap?.Checksum == checksum) return;
+	// ---- Round-robin queue + per-player loadout (anyone in the room) ----
 
-		var map = new LanBeatmapRef
+	/// <summary>Put a beatmap (index into the local library) in the queue.</summary>
+	public void AddToQueue(int index)
+	{
+		if (State == null) return;
+		var map = BuildRef(index);
+		if (map == null) return;
+		var (mods, speed) = LocalGlobalMods();
+		if (IsServer) ServerAddToQueue(1, map, mods.ToArray(), speed);
+		else RpcId(1, MethodName.RpcAddToQueue, JsonSerializer.Serialize(map), mods.ToArray(), speed);
+	}
+
+	/// <summary>Swap the beatmap of one of your own queue items.</summary>
+	public void ReplaceQueueItem(int itemId, int index)
+	{
+		if (State == null) return;
+		var map = BuildRef(index);
+		if (map == null) return;
+		var (mods, speed) = LocalGlobalMods();
+		if (IsServer) ServerReplaceQueueItem(1, itemId, map, mods.ToArray(), speed);
+		else RpcId(1, MethodName.RpcReplaceQueueItem, itemId, JsonSerializer.Serialize(map), mods.ToArray(), speed);
+	}
+
+	/// <summary>Remove a queue item (your own, or anyone's if you're the host).</summary>
+	public void RemoveQueueItem(int itemId)
+	{
+		if (State == null) return;
+		if (IsServer) ServerRemoveQueueItem(1, itemId);
+		else RpcId(1, MethodName.RpcRemoveQueueItem, itemId);
+	}
+
+	/// <summary>Play a different difficulty of the up-next beatmap set (-1 = back to the queue item's own).</summary>
+	public void SetDifficulty(int index)
+	{
+		if (State?.Beatmap == null) return;
+		var map = index < 0 ? null : BuildRef(index);
+		if (index >= 0 && map == null) return;
+		if (map != null && !SameSet(map, State.Beatmap))
 		{
-			BeatmapID = b.BeatmapID,
-			BeatmapSetID = b.BeatmapSetID,
-			Title = b.Title,
-			Artist = b.Artist,
-			Version = b.Version,
-			Mapper = b.Mapper,
-			Checksum = checksum,
-			Levelrating = b.Levelrating,
-			LengthMs = b.Timetotal,
+			Notify.Post("Pick a difficulty from the same song as the one up next.", Type: NotificationIcons.NotificationType.Warning);
+			return;
+		}
+		var json = map == null ? "" : JsonSerializer.Serialize(map);
+		if (IsServer) ServerSetDifficulty(1, json);
+		else RpcId(1, MethodName.RpcSetDifficulty, json);
+	}
+
+	/// <summary>Sends the local mod selection (allowed mods only) to the room if it changed.</summary>
+	public void SendLocalMods()
+	{
+		if (State == null) return;
+		var mods = LocalAllowedMods();
+		var me = LocalPlayer;
+		if (me != null && me.Mods.SequenceEqual(mods)) return;
+		if (IsServer) ServerSetMods(1, mods.ToArray());
+		else RpcId(1, MethodName.RpcSetMods, mods.ToArray());
+	}
+
+	public void SetActivity(LanActivity activity)
+	{
+		if (State == null || LocalPlayer?.Activity == activity) return;
+		if (IsServer) ServerSetActivity(1, (int)activity);
+		else RpcId(1, MethodName.RpcSetActivity, (int)activity);
+	}
+
+	/// <summary>The chart the local player will play: their own difficulty pick, or the up-next item's.</summary>
+	public LanBeatmapRef LocalChart => ChartFor(LocalPlayer);
+
+	public LanBeatmapRef ChartFor(LanPlayer p) => p?.Difficulty ?? State?.Beatmap;
+
+	/// <summary>Number of queue items the player owns.</summary>
+	public int QueueCountFor(long playerId) => State?.Queue.Count(q => q.OwnerId == playerId) ?? 0;
+
+	public static bool IsModAllowed(string mod) => AllowedMods.Contains(mod);
+
+	/// <summary>Whether song select's mod screen should let this mod be turned on right now.</summary>
+	public static bool IsModSelectable(string mod) =>
+		IsModAllowed(mod) || ((Picking == PickMode.AddToQueue || Picking == PickMode.ReplaceItem) && GlobalMods.Contains(mod));
+
+	/// <summary>"DT 1.50x" style label for room-wide mods ("" when none).</summary>
+	public static string GlobalModLabel(List<string> mods, float speed)
+	{
+		var alias = ModAlias(mods);
+		return alias.Length == 0 ? "" : $"{alias} {speed:0.##}x";
+	}
+
+	public static string ModAlias(IEnumerable<string> mods)
+	{
+		var parts = mods?.Select(m => ModAliases.TryGetValue(m, out var a) ? a : m).ToList();
+		return parts == null || parts.Count == 0 ? "" : string.Join(" ", parts);
+	}
+
+	/// <summary>Turns off mods that aren't allowed in LAN matches.</summary>
+	public static void StripDisallowedMods()
+	{
+		bool changed = false;
+		foreach (var key in ModsOperator.Mods.Keys.ToList())
+		{
+			if (!ModsOperator.Mods[key] || IsModAllowed(key)) continue;
+			ModsOperator.Mods[key] = false;
+			changed = true;
+		}
+		if (changed) ModsOperator.Refresh();
+		ModsOperator.GetModAlias(); // refreshes ModsEnabled
+	}
+
+	// ---- Song select as a picker ----
+
+	/// <summary>Opens song select to pick a beatmap for the room. Song select calls <see cref="FinishPick"/>.</summary>
+	public void BeginPick(PickMode mode, int itemId = 0)
+	{
+		if (State == null || mode == PickMode.None) return;
+		if (mode == PickMode.AddToQueue && QueueCountFor(LocalId) >= MaxQueuePerPlayer)
+		{
+			Notify.Post($"You can have up to {MaxQueuePerPlayer} beatmaps in the queue.", Type: NotificationIcons.NotificationType.Warning);
+			return;
+		}
+		Picking = mode;
+		_pickItemId = itemId;
+		SettingsOperator.MultiSelectingBeatmap = true;
+		StripDisallowedMods();
+		if (mode == PickMode.ReplaceItem && State.Queue.FirstOrDefault(q => q.Id == itemId) is { } editing)
+			ApplyGlobalMods(editing.Mods, editing.Speed); // start from the item's current DT / HT
+		if (LocalPlayer?.Ready == true) SetReady(false); // don't get pulled into a match from song select
+		SetActivity(LanActivity.Selecting);
+
+		// Start song select on something that makes sense for what we're picking.
+		int focus = mode switch
+		{
+			PickMode.OwnDifficulty => FindLocalBeatmap(LocalChart),
+			PickMode.ReplaceItem => FindLocalBeatmap(State.Queue.FirstOrDefault(q => q.Id == itemId)?.Beatmap),
+			_ => -1,
 		};
-		if (SettingsOperator.SessionConfig.SongID != index) SelectSong(index);
-		if (IsServer) ServerSetBeatmap(1, map, announce);
-		else RpcId(1, MethodName.RpcSelectBeatmap, JsonSerializer.Serialize(map));
+		if (focus >= 0 && SettingsOperator.SessionConfig.SongID != focus) SelectSong(focus);
+		GetNode<SceneTransition>("/root/Transition").Switch(SongSelectScene);
+	}
+
+	/// <summary>Song select is done: <paramref name="index"/> is the picked library index, or null if cancelled.</summary>
+	public void FinishPick(int? index)
+	{
+		var mode = Picking;
+		Picking = PickMode.None;
+		SettingsOperator.MultiSelectingBeatmap = false;
+		if (State != null && index is int i && i >= 0 && i < SettingsOperator.Beatmaps.Count)
+		{
+			switch (mode)
+			{
+				case PickMode.AddToQueue: AddToQueue(i); break;
+				case PickMode.ReplaceItem: ReplaceQueueItem(_pickItemId, i); break;
+				case PickMode.OwnDifficulty: SetDifficulty(FindLocalBeatmap(State.Beatmap) == i ? -1 : i); break;
+			}
+		}
+		StripDisallowedMods(); // DT / HT went onto the queue item; they aren't part of your own loadout
+		GetNode<SceneTransition>("/root/Transition").Switch(ReturnScene);
+	}
+
+	/// <summary>Which library entries song select lists while picking (only the up-next set when changing difficulty).</summary>
+	public bool PickFilter(int index)
+	{
+		return Picking != PickMode.OwnDifficulty || InUpNextSet(index);
+	}
+
+	private bool InUpNextSet(int index)
+	{
+		if (State?.Beatmap == null || index < 0 || index >= SettingsOperator.Beatmaps.Count) return false;
+		var b = SettingsOperator.Beatmaps[index];
+		var r = State.Beatmap;
+		return (r.BeatmapSetID > 0 && b.BeatmapSetID == r.BeatmapSetID) || (b.Title == r.Title && b.Artist == r.Artist);
+	}
+
+	/// <summary>True when the local library has any difficulty of the up-next set.</summary>
+	public bool HasLocalSet()
+	{
+		if (State?.Beatmap == null) return false;
+		if (FindLocalBeatmap(LocalChart) >= 0) return true;
+		for (int i = 0; i < SettingsOperator.Beatmaps.Count; i++)
+			if (InUpNextSet(i)) return true;
+		return false;
+	}
+
+	/// <summary>The lobby screen opened (from song select, results or a match): sync mods, status and the preview song.</summary>
+	public void OnLobbyOpened()
+	{
+		if (State == null) return;
+		Picking = PickMode.None;
+		SettingsOperator.MultiSelectingBeatmap = false;
+		ShowingMatchResults = false;
+		StripDisallowedMods();
+		SendLocalMods();
+		SetWatchTarget(-1);
+		Feeds.Clear();
+		SetActivity(LanActivity.Lobby);
+		int index = FindLocalBeatmap(LocalChart);
+		if (index >= 0 && State.Phase == LanPhase.Lobby && SettingsOperator.SessionConfig.SongID != index) SelectSong(index);
+	}
+
+	// ---- Spectating ----
+
+	/// <summary>Can the local player watch the match right now? (it's running and we're not playing in it)</summary>
+	public bool CanSpectate => State?.Phase == LanPhase.Playing && LocalPlayer is { } me && (!me.InMatch || me.Finished)
+		&& State.Players.Any(p => p.InMatch && p.Id != LocalId);
+
+	public void BeginSpectate()
+	{
+		if (!CanSpectate) return;
+		Feeds.Clear();
+		SetWatchTarget(0);
+		GetNode<SceneTransition>("/root/Transition").Switch(SpectateScene);
+	}
+
+	/// <summary>-1 stop watching, 0 watch everyone (grid), or a player id (one by one).</summary>
+	public void SetWatchTarget(long target)
+	{
+		if (State == null || LocalPlayer == null || LocalPlayer.WatchTarget == target) return;
+		if (IsServer) ServerSetWatchTarget(1, target);
+		else RpcId(1, MethodName.RpcSetWatchTarget, target);
+	}
+
+	/// <summary>The local match ended: report it and show the results screen.</summary>
+	public void FinishMatchToResults()
+	{
+		ReportFinished(quit: false);
+		ShowingMatchResults = true;
+		SetActivity(LanActivity.Results);
+		GetNode<SceneTransition>("/root/Transition").Switch(ResultsScene);
 	}
 
 	/// <summary>Host only: change the lobby countdown length.</summary>
@@ -342,6 +581,8 @@ public partial class LanNetwork : Node
 			RecheckLocalMap();
 		}
 
+		PumpSpectateFeed(delta);
+
 		// Stream our live score to the host while playing.
 		if (LocalInMatch && SettingsOperator.inGameplay)
 		{
@@ -422,6 +663,12 @@ public partial class LanNetwork : Node
 		s.Phase = LanPhase.Playing;
 		s.MatchId++;
 		s.CountdownActive = false;
+		var item = s.Queue.FirstOrDefault(q => q.Id == s.CurrentItemId);
+		if (item != null)
+		{
+			s.Queue.Remove(item); // played items leave the queue; the rotation moves on from its owner
+			s.LastPickOwnerId = item.OwnerId;
+		}
 		foreach (var p in s.Players)
 		{
 			p.InMatch = players.Contains(p);
@@ -431,6 +678,7 @@ public partial class LanNetwork : Node
 			p.Score = p.Combo = p.MaxCombo = p.Max = p.Great = p.Meh = p.Bad = 0;
 			p.Accuracy = 1f;
 		}
+		_specCharts.Clear();
 		ServerChat(0, $"Match started with {players.Count} player{(players.Count == 1 ? "" : "s")}: {string.Join(", ", players.Select(p => p.Name))}");
 		BroadcastState(); // reliable + ordered: clients get the InMatch flags before the start signal
 		Rpc(MethodName.RpcStartMatch, s.MatchId);
@@ -448,6 +696,7 @@ public partial class LanNetwork : Node
 		s.LastResults = ranked.Select((p, i) => new LanResult
 		{
 			Rank = i + 1, Name = p.Name, Score = p.Score, Accuracy = p.Accuracy, MaxCombo = p.MaxCombo, Quit = p.Quit,
+			Version = ChartFor(p)?.Version, Mods = ModAlias(s.CurrentMods.Concat(p.Mods)),
 		}).ToList();
 		// Players who left mid-match aren't in s.Players anymore, so results only list who stayed.
 
@@ -457,9 +706,13 @@ public partial class LanNetwork : Node
 
 		ServerChat(0, "Match finished! Results:");
 		foreach (var r in s.LastResults)
+		{
+			var extra = $"[{r.Version}]{(string.IsNullOrEmpty(r.Mods) ? "" : " +" + r.Mods)}";
 			ServerChat(0, r.Quit
 				? $"#{r.Rank} {r.Name} - quit"
-				: $"#{r.Rank} {r.Name} - {r.Score:N0} ({r.Accuracy:P2}, {r.MaxCombo}x)");
+				: $"#{r.Rank} {r.Name} - {r.Score:N0} ({r.Accuracy:P2}, {r.MaxCombo}x) {extra}");
+		}
+		ServerQueueChanged(); // next pick in the rotation is up
 		MarkDirty();
 	}
 
@@ -477,7 +730,7 @@ public partial class LanNetwork : Node
 	{
 		var p = FindPlayer(id);
 		if (p == null) return;
-		if (checksum != State.Beatmap?.Checksum) return; // stale answer for a previous beatmap
+		if (checksum != ChartFor(p)?.Checksum) return; // stale answer for a previous beatmap / difficulty
 		p.HasMap = has;
 		if (!has) p.Ready = false;
 		MarkDirty();
@@ -487,26 +740,218 @@ public partial class LanNetwork : Node
 
 	private bool SentByHost(long sender) => State != null && sender == State.HostId && FindPlayer(sender) != null;
 
-	private void ServerSetBeatmap(long sender, LanBeatmapRef map, bool announce)
-	{
-		if (!SentByHost(sender) || State.Phase != LanPhase.Lobby || string.IsNullOrEmpty(map?.Checksum)) return;
-		if (State.Beatmap?.Checksum == map.Checksum) return;
+	// ---- Queue (anyone may add; owners edit/remove their own, the host may remove anything) ----
 
+	private LanBeatmapRef SanitizeMap(LanBeatmapRef map)
+	{
+		if (string.IsNullOrEmpty(map?.Checksum) || map.Checksum.Length < 8) return null;
 		map.Title = Clean(map.Title, 200, "Unknown");
 		map.Artist = Clean(map.Artist, 200, "Unknown");
 		map.Version = Clean(map.Version, 100, "?");
 		map.Mapper = Clean(map.Mapper, 100, "?");
-		State.Beatmap = map;
-		foreach (var p in State.Players)
+		if (!float.IsFinite(map.Levelrating)) map.Levelrating = 0;
+		if (!float.IsFinite(map.LengthMs)) map.LengthMs = 0;
+		return map;
+	}
+
+	private void ServerAddToQueue(long sender, LanBeatmapRef map, string[] mods, float speed)
+	{
+		var p = FindPlayer(sender);
+		map = SanitizeMap(map);
+		if (p == null || map == null) return;
+		if (State.Queue.Count(q => q.OwnerId == sender) >= MaxQueuePerPlayer || State.Queue.Count >= MaxQueueTotal)
 		{
-			p.Ready = false;
-			p.HasMap = p.Id == sender; // everyone else re-reports once they've checked their library
+			SendNotice(sender, "The queue is full for you right now.");
+			return;
 		}
-		State.CountdownActive = false; // restarts the "time till play" timer
-		if (announce) ServerChat(0, $"Beatmap changed to {map.Display}");
-		if (sender != 1) RecheckLocalMap(force: true); // the server player needs the map too
+		var (cleanMods, cleanSpeed) = CleanGlobalMods(mods, speed);
+		State.Queue.Add(new LanQueueItem { Id = State.NextQueueId++, OwnerId = sender, OwnerName = p.Name, Beatmap = map, Mods = cleanMods, Speed = cleanSpeed });
+		var label = GlobalModLabel(cleanMods, cleanSpeed);
+		ServerChat(0, $"{p.Name} added {map.Display}{(label.Length > 0 ? " +" + label : "")} to the queue.");
+		ServerQueueChanged();
+	}
+
+	private void ServerReplaceQueueItem(long sender, int itemId, LanBeatmapRef map, string[] mods, float speed)
+	{
+		var item = State.Queue.FirstOrDefault(q => q.Id == itemId);
+		map = SanitizeMap(map);
+		if (item == null || map == null || item.OwnerId != sender) return;
+		var (cleanMods, cleanSpeed) = CleanGlobalMods(mods, speed);
+		if (item.Beatmap?.Checksum == map.Checksum && item.Mods.SequenceEqual(cleanMods) && item.Speed == cleanSpeed) return;
+		item.Beatmap = map;
+		item.Mods = cleanMods;
+		item.Speed = cleanSpeed;
+		var label = GlobalModLabel(cleanMods, cleanSpeed);
+		ServerChat(0, $"{item.OwnerName} changed their pick to {map.Display}{(label.Length > 0 ? " +" + label : "")}.");
+		ServerQueueChanged();
+	}
+
+	private void ServerRemoveQueueItem(long sender, int itemId)
+	{
+		var item = State.Queue.FirstOrDefault(q => q.Id == itemId);
+		if (item == null || (item.OwnerId != sender && !SentByHost(sender))) return;
+		State.Queue.Remove(item);
+		var by = item.OwnerId == sender ? item.OwnerName : $"The host ({FindPlayer(sender)?.Name})";
+		ServerChat(0, $"{by} removed {item.Beatmap?.Display} from the queue.");
+		ServerQueueChanged();
+	}
+
+	private void ServerSetDifficulty(long sender, string json)
+	{
+		var p = FindPlayer(sender);
+		if (p == null || State.Phase != LanPhase.Lobby || State.Beatmap == null) return;
+		LanBeatmapRef map = null;
+		if (!string.IsNullOrEmpty(json))
+		{
+			try { map = SanitizeMap(JsonSerializer.Deserialize<LanBeatmapRef>(json)); }
+			catch { return; }
+			if (map == null || !SameSet(map, State.Beatmap)) return;
+			if (map.Checksum == State.Beatmap.Checksum) map = null; // same as the item's own difficulty
+		}
+		if (p.Difficulty?.Checksum == map?.Checksum) return;
+		p.Difficulty = map;
+		p.Ready = false;
+		p.HasMap = map != null; // they picked it from their library; otherwise they re-report for the default
+		if (sender == 1) RecheckLocalMap(force: true); // clients recheck when the new state arrives
 		MarkDirty();
 	}
+
+	private void ServerSetMods(long sender, string[] mods)
+	{
+		var p = FindPlayer(sender);
+		if (p == null || mods == null) return; // fine mid-match too: mods are applied when the next match starts
+		var clean = mods.Where(IsModAllowed).Distinct().ToList();
+		if (clean.Contains("black-out")) clean.Remove("slice"); // these two don't stack
+		if (p.Mods.SequenceEqual(clean)) return;
+		p.Mods = clean;
+		MarkDirty();
+	}
+
+	private void ServerSetActivity(long sender, int activity)
+	{
+		var p = FindPlayer(sender);
+		if (p == null || !Enum.IsDefined(typeof(LanActivity), activity)) return;
+		p.Activity = (LanActivity)activity;
+		MarkDirty();
+	}
+
+	private void ServerSetWatchTarget(long sender, long target)
+	{
+		var p = FindPlayer(sender);
+		if (p == null || target < -1 || target == sender) return;
+		bool wasWatching = p.WatchTarget >= 0;
+		p.WatchTarget = target;
+		if (target >= 0 && !wasWatching)
+			foreach (var (id, c) in _specCharts) SendChartTo(sender, id, c.Times, c.Lanes, c.Height); // joined mid-song
+		if (target >= 0) p.Activity = LanActivity.Spectating;
+		else if (p.Activity == LanActivity.Spectating) p.Activity = LanActivity.Lobby;
+		MarkDirty();
+	}
+
+	/// <summary>Passes a player's live play on to whoever is watching them.</summary>
+	private void ServerRelaySpec(long from, byte[] packet)
+	{
+		var p = FindPlayer(from);
+		if (p == null || !p.InMatch || packet == null || packet.Length == 0 || packet.Length > MaxSpectatePacket) return;
+		foreach (var v in State.Players)
+		{
+			if (v.Id == from || (v.WatchTarget != 0 && v.WatchTarget != from)) continue;
+			if (v.Id == LocalId) OnSpecTick(from, packet);
+			else RpcId(v.Id, MethodName.RpcSpecTickFrom, from, packet);
+		}
+	}
+
+	private void ServerStoreChart(long from, int[] times, byte[] lanes, int height)
+	{
+		var p = FindPlayer(from);
+		if (p == null || !p.InMatch || times == null || lanes == null || times.Length != lanes.Length || times.Length > MaxChartNotes) return;
+		_specCharts[from] = (times, lanes, height);
+		foreach (var v in State.Players)
+			if (v.Id != from && v.WatchTarget >= 0) SendChartTo(v.Id, from, times, lanes, height);
+	}
+
+	private void SendChartTo(long viewer, long player, int[] times, byte[] lanes, int height)
+	{
+		if (viewer == LocalId) OnSpecChart(player, times, lanes, height);
+		else RpcId(viewer, MethodName.RpcSpecChartFrom, player, times, lanes, height);
+	}
+
+	/// <summary>Re-sorts the queue round-robin	/// <summary>Re-sorts the queue round-robin and, in the lobby, makes its head the beatmap up next.</summary>
+	private void ServerQueueChanged()
+	{
+		ServerReorderQueue();
+		if (State.Phase == LanPhase.Lobby) ServerSyncHead();
+		MarkDirty();
+	}
+
+	/// <summary>
+	/// Round robin: players take turns in join order, starting with whoever comes after the owner of the last
+	/// played item. Round 1 is everyone's first pick, round 2 everyone's second pick, and so on; each player's
+	/// own picks keep the order they added them in. Once the countdown is in its last seconds the head stays put.
+	/// </summary>
+	private void ServerReorderQueue()
+	{
+		var s = State;
+		var order = s.Players.Select(p => p.Id).ToList();
+		int last = order.IndexOf(s.LastPickOwnerId);
+		if (last >= 0) order = order.Skip(last + 1).Concat(order.Take(last + 1)).ToList();
+
+		var byOwner = order.ToDictionary(id => id, id => s.Queue.Where(q => q.OwnerId == id).OrderBy(q => q.Id).ToList());
+		var sorted = new List<LanQueueItem>(s.Queue.Count);
+		for (int round = 0; ; round++)
+		{
+			bool any = false;
+			foreach (var id in order)
+			{
+				if (round >= byOwner[id].Count) continue;
+				sorted.Add(byOwner[id][round]);
+				any = true;
+			}
+			if (!any) break;
+		}
+		sorted.AddRange(s.Queue.Where(q => !sorted.Contains(q)).OrderBy(q => q.Id)); // owner gone: play them last
+
+		bool lockHead = s.Phase == LanPhase.Lobby && s.CountdownActive && s.TimeLeft <= AllReadyCountdown;
+		var head = lockHead ? sorted.FirstOrDefault(q => q.Id == s.CurrentItemId) : null;
+		if (head != null) { sorted.Remove(head); sorted.Insert(0, head); }
+		s.Queue = sorted;
+	}
+
+	/// <summary>Points <see cref="LanRoomState.Beatmap"/> at the head of the queue, resetting readiness if it changed.</summary>
+	private void ServerSyncHead()
+	{
+		var s = State;
+		var head = s.Queue.FirstOrDefault();
+		if (head?.Id == s.CurrentItemId && head?.Beatmap?.Checksum == s.Beatmap?.Checksum && (head != null || s.Beatmap == null)
+			&& (head == null || (head.Mods.SequenceEqual(s.CurrentMods) && head.Speed == s.CurrentSpeed))) return;
+
+		s.CurrentItemId = head?.Id ?? 0;
+		s.CurrentMods = head?.Mods.ToList() ?? new List<string>();
+		s.CurrentSpeed = head?.Speed ?? 1f;
+		s.CurrentOwnerId = head?.OwnerId ?? 0;
+		s.CurrentOwnerName = head?.OwnerName;
+		s.Beatmap = head?.Beatmap;
+		foreach (var p in s.Players)
+		{
+			p.Ready = false;
+			p.Difficulty = null;
+			p.HasMap = head != null && p.Id == head.OwnerId; // everyone else re-reports once they've checked their library
+		}
+		s.CountdownActive = false; // restarts the "time till play" timer
+		var upNextMods = head == null ? "" : GlobalModLabel(head.Mods, head.Speed);
+		if (head != null) ServerChat(0, $"Up next: {head.Beatmap.Display}{(upNextMods.Length > 0 ? " +" + upNextMods : "")}, picked by {head.OwnerName}.");
+		RecheckLocalMap(force: true); // the server player needs the map too
+		MarkDirty();
+	}
+
+	private void SendNotice(long peer, string text)
+	{
+		if (peer == LocalId) Notify.Post(text, Type: NotificationIcons.NotificationType.Warning);
+		else RpcId(peer, MethodName.RpcKicked, text); // RpcKicked just shows a warning
+	}
+
+	private static bool SameSet(LanBeatmapRef a, LanBeatmapRef b) =>
+		a != null && b != null && ((a.BeatmapSetID > 0 && a.BeatmapSetID == b.BeatmapSetID) || (a.Title == b.Title && a.Artist == b.Artist));
 
 	private void ServerAdjustTimer(long sender, int deltaSeconds)
 	{
@@ -623,6 +1068,7 @@ public partial class LanNetwork : Node
 	{
 		var s = State;
 		int index = s?.Beatmap == null ? -1 : FindLocalBeatmap(s.Beatmap);
+		if (index < 0) index = FindLocalBeatmap(LocalPlayer?.Difficulty); // same set, so the folder has it too
 		if (index < 0)
 		{
 			SendUnavailable(peer, "That beatmap couldn't be found to share.");
@@ -716,7 +1162,7 @@ public partial class LanNetwork : Node
 	{
 		var me = LocalPlayer;
 		if (me == null || !me.InMatch) return; // not ready: watch the live scores from the lobby
-		int index = FindLocalBeatmap(State.Beatmap);
+		int index = FindLocalBeatmap(ChartFor(me));
 		if (index < 0)
 		{
 			LocalInMatch = true;
@@ -726,8 +1172,11 @@ public partial class LanNetwork : Node
 
 		LocalInMatch = true;
 		_scoreTimer = 0;
-		ModsOperator.Reset();             // everyone plays nomod so scores are comparable
-		ModsOperator.ModsEnabled.Clear();
+		// Everyone plays their own loadout, limited to mods that keep scores fair.
+		ModsOperator.Reset();
+		foreach (var mod in me.Mods)
+			if (IsModAllowed(mod) && ModsOperator.Mods.ContainsKey(mod)) ModsOperator.Mods[mod] = true;
+		ApplyGlobalMods(State.CurrentMods, State.CurrentSpeed); // DT / HT from the queue item, same speed for everyone
 		SettingsOperator.Marathon = false;
 		SettingsOperator.SpectatorMode = false;
 		if (SettingsOperator.SessionConfig.SongID != index) SelectSong(index);
@@ -752,7 +1201,8 @@ public partial class LanNetwork : Node
 			GetNode<SceneTransition>("/root/Transition").Switch(LobbyScene);
 		}
 
-		if (old?.Beatmap?.Checksum != newState.Beatmap?.Checksum)
+		var oldChart = old?.Players.FirstOrDefault(p => p.Id == LocalId) is { } oldMe ? oldMe.Difficulty ?? old.Beatmap : old?.Beatmap;
+		if (oldChart?.Checksum != LocalChart?.Checksum)
 			RecheckLocalMap(force: true);
 
 		if (old != null && old.HostId != newState.HostId && newState.HostId == LocalId)
@@ -764,15 +1214,18 @@ public partial class LanNetwork : Node
 	/// <summary>Works out whether we have the selected beatmap and tells the server.</summary>
 	private void RecheckLocalMap(bool force = false)
 	{
-		if (State?.Beatmap == null) return;
-		int index = FindLocalBeatmap(State.Beatmap);
+		var chart = LocalChart;
+		if (chart == null) return;
+		int index = FindLocalBeatmap(chart);
 		bool has = index >= 0;
-		if (has && State.Phase == LanPhase.Lobby && !SettingsOperator.inGameplay && SettingsOperator.SessionConfig.SongID != index)
-			SelectSong(index); // preview music + background follow the host's pick
+		// Preview music + background follow what's up next, but only in the lobby (not while browsing song select).
+		if (has && State.Phase == LanPhase.Lobby && !SettingsOperator.inGameplay && SettingsOperator.SessionConfig.SongID != index
+			&& GetTree().CurrentScene?.SceneFilePath == LobbyScene)
+			SelectSong(index);
 		var me = LocalPlayer;
 		if (!force && me != null && me.HasMap == has) return;
-		if (IsServer) ServerSetHasMap(1, has, State.Beatmap.Checksum);
-		else RpcId(1, MethodName.RpcSetHasMap, has, State.Beatmap.Checksum);
+		if (IsServer) ServerSetHasMap(1, has, chart.Checksum);
+		else RpcId(1, MethodName.RpcSetHasMap, has, chart.Checksum);
 	}
 
 	/// <summary>Index into SettingsOperator.Beatmaps of the exact same chart, or -1.</summary>
@@ -845,6 +1298,8 @@ public partial class LanNetwork : Node
 		State.Players.Remove(p);
 		_outgoing.RemoveAll(t => t.Peer == id);
 		ServerChat(0, $"{p.Name} left the room.");
+		int removed = State.Queue.RemoveAll(q => q.OwnerId == id);
+		if (removed > 0) ServerQueueChanged(); // their picks leave with them
 		// The host left: the controls go back to whoever runs the room.
 		if (id == State.HostId && FindPlayer(1) is { } server)
 			SetHost(server, $"{server.Name} is the host again.");
@@ -886,6 +1341,9 @@ public partial class LanNetwork : Node
 		_outgoing.Clear();
 		_incoming = null;
 		TransferProgress = -1;
+		Feeds.Clear();
+		_specCharts.Clear();
+		_specOut.Clear();
 		if (_matchEntries.Count > 0) ApiOperator.LeaderboardList.Clear();
 		_matchEntries.Clear();
 		StateVersion++;
@@ -956,14 +1414,79 @@ public partial class LanNetwork : Node
 
 	// ---- Host controls: any peer may call these; the server checks the sender is the host ----
 
-	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
-	private void RpcSelectBeatmap(string json)
+	// ---- Queue + loadout: any player may call these ----
+
+	private static LanBeatmapRef ParseMap(string json)
 	{
-		if (!IsServer || State == null) return;
-		LanBeatmapRef map;
-		try { map = JsonSerializer.Deserialize<LanBeatmapRef>(json); }
-		catch { return; }
-		ServerSetBeatmap(Multiplayer.GetRemoteSenderId(), map, announce: true);
+		try { return JsonSerializer.Deserialize<LanBeatmapRef>(json); }
+		catch { return null; }
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void RpcAddToQueue(string json, string[] mods, float speed)
+	{
+		if (IsServer && State != null) ServerAddToQueue(Multiplayer.GetRemoteSenderId(), ParseMap(json), mods, speed);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void RpcReplaceQueueItem(int itemId, string json, string[] mods, float speed)
+	{
+		if (IsServer && State != null) ServerReplaceQueueItem(Multiplayer.GetRemoteSenderId(), itemId, ParseMap(json), mods, speed);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void RpcRemoveQueueItem(int itemId)
+	{
+		if (IsServer && State != null) ServerRemoveQueueItem(Multiplayer.GetRemoteSenderId(), itemId);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void RpcSetDifficulty(string json)
+	{
+		if (IsServer && State != null) ServerSetDifficulty(Multiplayer.GetRemoteSenderId(), json ?? "");
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void RpcSetMods(string[] mods)
+	{
+		if (IsServer && State != null) ServerSetMods(Multiplayer.GetRemoteSenderId(), mods);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void RpcSetWatchTarget(long target)
+	{
+		if (IsServer && State != null) ServerSetWatchTarget(Multiplayer.GetRemoteSenderId(), target);
+	}
+
+	// Live play goes reliably on its own channel so a big chart never holds up chat / room state.
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 2)]
+	private void RpcSpecChart(int[] times, byte[] lanes, int height)
+	{
+		if (IsServer && State != null) ServerStoreChart(Multiplayer.GetRemoteSenderId(), times, lanes, height);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 2)]
+	private void RpcSpecChartFrom(long from, int[] times, byte[] lanes, int height)
+	{
+		if (State != null) OnSpecChart(from, times, lanes, height);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 2)]
+	private void RpcSpecTick(byte[] packet)
+	{
+		if (IsServer && State != null) ServerRelaySpec(Multiplayer.GetRemoteSenderId(), packet);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 2)]
+	private void RpcSpecTickFrom(long from, byte[] packet)
+	{
+		if (State != null && LocalPlayer?.WatchTarget >= 0) OnSpecTick(from, packet);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void RpcSetActivity(int activity)
+	{
+		if (IsServer && State != null) ServerSetActivity(Multiplayer.GetRemoteSenderId(), activity);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
@@ -1069,6 +1592,68 @@ public partial class LanNetwork : Node
 	}
 
 	// =====================================================================
+	// Live spectating: the player sends their chart once, then song time + inputs + judgements
+	// =====================================================================
+
+	/// <summary>Gameplay calls this once the chart is loaded (LAN matches only).</summary>
+	public void SpecSendChart(List<NotesEn> notes, int viewHeight)
+	{
+		if (!LocalInMatch || State == null || notes == null) return;
+		var times = notes.Select(n => -n.timing).ToArray(); // NotesEn.timing is stored negative
+		var lanes = notes.Select(n => (byte)Math.Clamp(n.NotePart, 0, 3)).ToArray();
+		_specOut.Clear();
+		_specTimer = 0;
+		if (IsServer) ServerStoreChart(1, times, lanes, viewHeight);
+		else RpcId(1, MethodName.RpcSpecChart, times, lanes, viewHeight);
+	}
+
+	private float _specSongMs;
+
+	/// <summary>Gameplay: its song clock this frame (same clock as the key / judge times).</summary>
+	public void SpecTime(float songMs) => _specSongMs = songMs;
+
+	/// <summary>Gameplay: a key went down / up at <paramref name="songMs"/>.</summary>
+	public void SpecKey(int lane, bool down, float songMs)
+	{
+		if (LocalInMatch) _specOut.Key(songMs, lane, down);
+	}
+
+	/// <summary>Gameplay: note <paramref name="index"/> was judged (0 perfect, 1 great, 2 meh, 3 miss).</summary>
+	public void SpecJudge(int index, int judge, float songMs)
+	{
+		if (LocalInMatch) _specOut.Judge(songMs, index, judge);
+	}
+
+	private void OnSpecChart(long from, int[] times, byte[] lanes, int height)
+	{
+		if (!Feeds.TryGetValue(from, out var f)) Feeds[from] = f = new LanSpectateFeed();
+		f.SetChart(times, lanes, height);
+	}
+
+	private void OnSpecTick(long from, byte[] packet)
+	{
+		if (!Feeds.TryGetValue(from, out var f)) Feeds[from] = f = new LanSpectateFeed();
+		f.Apply(packet);
+	}
+
+	/// <summary>True when someone in the room is watching the local player.</summary>
+	private bool IsWatched() => State.Players.Any(v => v.Id != LocalId && (v.WatchTarget == 0 || v.WatchTarget == LocalId));
+
+	private void PumpSpectateFeed(double delta)
+	{
+		if (!LocalInMatch || !SettingsOperator.inGameplay || LocalPlayer?.Finished != false) return;
+		_specTimer -= delta;
+		if (_specTimer > 0) return;
+		_specTimer = SpectateTickSeconds;
+		if (!IsWatched()) { _specOut.Clear(); return; } // nobody watching: don't send anything
+		var packet = _specOut.Flush(_specSongMs, SettingsOperator.Gameplaycfg.Combo,
+			SettingsOperator.Gameplaycfg.Score, LocalAccuracy());
+		if (IsServer) ServerRelaySpec(1, packet);
+		else RpcId(1, MethodName.RpcSpecTick, packet);
+	}
+
+	// =====================================================================
+	// Discovery internals	// =====================================================================
 	// Discovery internals
 	// =====================================================================
 
@@ -1180,6 +1765,62 @@ public partial class LanNetwork : Node
 		var a = SettingsOperator.Gameplaycfg.Accuracy;
 		if (g == 0 || !float.IsFinite(a)) return 1f;
 		return Math.Clamp(a, 0f, 1f);
+	}
+
+	/// <summary>Describes a library beatmap for the room (null if its file can't be read).</summary>
+	private LanBeatmapRef BuildRef(int index)
+	{
+		if (index < 0 || index >= SettingsOperator.Beatmaps.Count) return null;
+		var b = SettingsOperator.Beatmaps[index];
+		var checksum = Checksum(b.Rawurl);
+		if (checksum == null) { Notify.Post("Couldn't read that beatmap file.", Type: NotificationIcons.NotificationType.Warning); return null; }
+		return new LanBeatmapRef
+		{
+			BeatmapID = b.BeatmapID,
+			BeatmapSetID = b.BeatmapSetID,
+			Title = b.Title,
+			Artist = b.Artist,
+			Version = b.Version,
+			Mapper = b.Mapper,
+			Checksum = checksum,
+			Levelrating = b.Levelrating,
+			LengthMs = b.Timetotal,
+		};
+	}
+
+	/// <summary>The DT / HT the local player has on in song select, with its speed.</summary>
+	private static (List<string>, float) LocalGlobalMods()
+	{
+		if (ModsOperator.Mods["dt"]) return (new List<string> { "dt" }, DtCustom.Speed);
+		if (ModsOperator.Mods["ht"]) return (new List<string> { "ht" }, HtCustom.Speed);
+		return (new List<string>(), 1f);
+	}
+
+	private static (List<string>, float) CleanGlobalMods(string[] mods, float speed)
+	{
+		var list = mods?.Where(GlobalMods.Contains).Distinct().ToList() ?? new List<string>();
+		if (list.Contains("dt")) return (new List<string> { "dt" }, float.IsFinite(speed) ? Math.Clamp(speed, MinDtSpeed, MaxDtSpeed) : DtCustom.DTSpeed);
+		if (list.Contains("ht")) return (new List<string> { "ht" }, float.IsFinite(speed) ? Math.Clamp(speed, MinHtSpeed, MaxHtSpeed) : HtCustom.HTSpeed);
+		return (new List<string>(), 1f);
+	}
+
+	/// <summary>Turns on room-wide DT / HT locally at the given speed (keeps the other mods as they are).</summary>
+	private static void ApplyGlobalMods(List<string> mods, float speed)
+	{
+		ModsOperator.Mods["dt"] = mods.Contains("dt");
+		ModsOperator.Mods["ht"] = !ModsOperator.Mods["dt"] && mods.Contains("ht");
+		if (ModsOperator.Mods["dt"]) DtCustom.Speed = speed;
+		if (ModsOperator.Mods["ht"]) HtCustom.Speed = speed;
+		ModsOperator.Refresh(); // sets the default DT / HT pitch...
+		if (ModsOperator.Mods["dt"] || ModsOperator.Mods["ht"]) AudioPlayer.Instance.PitchScale = speed; // ...then the item's speed
+		ModsOperator.GetModAlias();
+	}
+
+	private static List<string> LocalAllowedMods()
+	{
+		var mods = ModsOperator.Mods.Where(m => m.Value && IsModAllowed(m.Key)).Select(m => m.Key).ToList();
+		if (mods.Contains("black-out")) mods.Remove("slice");
+		return mods;
 	}
 
 	private void SelectSong(int index) => GetNode<SettingsOperator>("/root/SettingsOperator").SelectSongID(index);
