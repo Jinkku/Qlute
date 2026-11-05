@@ -311,9 +311,9 @@ public partial class SettingsOperator : Node
             //SessionConfig.GameMode = beatmap.GameModeID; 
             SessionConfig.GameMode = GetSelectedGameMode(); // Mode picked in song select (0 Mania, 1 Taiko, 3 Tap!)
             SessionConfig.SongID = id;
-            string bgpath = beatmap.Path.PathJoin(beatmap.Background.ToString());
+            string bgpath = beatmap.Path.PathJoin(beatmap.Background ?? "");
             string checksumbg = null;
-            if (System.IO.File.Exists(bgpath))
+            if (!string.IsNullOrEmpty(beatmap.Background) && System.IO.File.Exists(bgpath))
                 checksumbg = ChecksumUtil.GetSha256(bgpath);
             
             if (System.IO.File.Exists(bgpath) && SessionConfig.BackgroundChecksum != checksumbg)

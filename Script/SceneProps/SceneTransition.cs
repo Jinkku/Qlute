@@ -8,6 +8,12 @@ public partial class SceneTransition : Node
 
     public void Switch(string sceneName)
     {
+        // Leaving gameplay after a test play from the beatmap editor: go back to the editor instead of song select.
+        if (CreateEditor.EditorSongInfo.ReturnToEditor && sceneName == "res://Panels/Screens/song_select.tscn")
+        {
+            CreateEditor.EditorSongInfo.ReturnToEditor = false;
+            sceneName = "res://Panels/Screens/Create.tscn";
+        }
         // Store the path, not the node reference-the C# wrapper for
         // CurrentScene can become stale/invalid even if the node is still alive
         Node oldScene = GetTree().CurrentScene;

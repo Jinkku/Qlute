@@ -809,6 +809,15 @@ private void _Mods_show()
 		{
 			_Mods_show();
 		}
+		if (SettingsOperator.CreateSelectingBeatmap && SettingsOperator.SessionConfig.SongID >= 0 && SettingsOperator.SessionConfig.SongID < SettingsOperator.Beatmaps.Count)
+		{
+			// File > Open in the beatmap editor: open the picked difficulty instead of playing it.
+			SettingsOperator.CreateSelectingBeatmap = false;
+			CreateEditor.EditorSongInfo.LoadFromBeatmap(SettingsOperator.Beatmaps[SettingsOperator.SessionConfig.SongID]);
+			AnimationScene(1);
+			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
+			return;
+		}
 		if (LanNetwork.Picking != LanNetwork.PickMode.None && LanNetwork.Instance != null)
 		{
 			// Picking for a LAN room: hand the beatmap to the room and go back to the lobby instead of playing.
