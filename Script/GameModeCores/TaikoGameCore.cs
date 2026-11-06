@@ -307,6 +307,14 @@ public partial class TaikoGameCore : Control
 			Cursor.CursorVisible = false;
 		}
 		audioOffset = !SettingsOperator.SpectatorMode ? SettingsOperator.AudioOffset * 0.001f : 0f;
+		// LAN match: send the chart once so spectators can draw this playfield live.
+		if (LanNetwork.InMatch) LanNetwork.Instance.SpecSendChart(new LanSpecChart
+		{
+			Mode = 1,
+			Height = (int)GetViewportRect().Size.X,
+			Times = Notes.Select(n => -n.timing).ToArray(), // DrumEn.timing is stored negative
+			Lanes = Notes.Select(n => (byte)((int)n.DrumType + (n.DrumBig ? 2 : 0))).ToArray(),
+		});
 		GD.Print($"Spectator mode: {SettingsOperator.SpectatorMode}");
 		GD.Print($"Your offset is currently: {audioOffset / 0.001}ms");
 		
@@ -320,6 +328,7 @@ public partial class TaikoGameCore : Control
 	public void hitnote(int Keyx, bool hit, int est)
 	{
 		var key = Keys[Keyx];
+		if (!SettingsOperator.SpectatorMode && LanNetwork.InMatch) LanNetwork.Instance.SpecKey(Keyx, hit, est);
 		if (hit)
 		{
 			var name = "";
@@ -348,27 +357,16 @@ public partial class TaikoGameCore : Control
 		return ((float)max + ((float)great / 2) + ((float)meh / 3)) / ((float)max + (float)great + (float)meh + (float)bad);
 	}
 	
-	private float smoothTime = 0f;
+	private readonly SongClock Clock = new SongClock();
 
     /// <summary>
 	/// Game Clock
 	/// </summary>
-	public float GetRemainingTime(float delta = 1f)
+	public float GetRemainingTime(float delta = 0f)
 	{
-		if (AudioPlayer.Instance.Playing)
-		{
-			// increment smoothly
-			smoothTime += delta * AudioPlayer.Instance.PitchScale;
+		double songTime = Clock.Update(AudioPlayer.Instance, delta);
 
-			// occasional hard resync if drift gets big
-			float truePos = AudioPlayer.Instance.GetPlaybackPosition()
-						+ (float)AudioServer.GetTimeSinceLastMix();
-
-			if (Mathf.Abs(truePos - smoothTime) > 0.05f) // 50ms tolerance
-				smoothTime = truePos;
-		}
-
-		SettingsOperator.Gameplaycfg.Time = -WaitClock.TimeLeft + smoothTime;
+		SettingsOperator.Gameplaycfg.Time = -WaitClock.TimeLeft + songTime;
 		SettingsOperator.Gameplaycfg.Time -= startedtime;
 		SettingsOperator.Gameplaycfg.Time += audioOffset;
 
@@ -506,8 +504,10 @@ private void TriggerSpamMiss(DrumTypeGroup column)
                 .SetEase(Tween.EaseType.Out);
                 
             // Mark note as processed so it doesn't get judged again
+            if (LanNetwork.InMatch) LanNetwork.Instance.SpecJudge(i, 3, gametime);
             Note.hit = true;
-            Note.Node.Visible = false;
+            Note.Node.QueueFree(); // free judged drums instead of hiding them forever
+            Note.Node = null;
             
             break; // Break loop immediately after processing the first eligible missed note
         }
@@ -516,6 +516,8 @@ private void TriggerSpamMiss(DrumTypeGroup column)
 
     public override void _ExitTree()
     {
+	    // Only added to the tree when spectating; otherwise it was an orphan that leaked every play.
+	    if (IsInstanceValid(SpectatorPanel) && !SpectatorPanel.IsInsideTree()) SpectatorPanel.Free();
 	    SettingsOperator.inGameplay = false;
 	    DisplayServer.WindowSetTitle(oldtitle);
 	    HurtAnimation?.Kill();
@@ -693,12 +695,17 @@ private void _GameNoteTick(double delta)
                     if (noteGroup == DrumTypeGroup.Inside) insideGroupHit = false;
                     else outsideGroupHit = false;
 
+                    if (LanNetwork.InMatch) LanNetwork.Instance.SpecJudge(i, JudgeResult, gametime);
                     Note.hit = true;
-                    Note.Node.Visible = false;
+                    Note.Node.QueueFree(); // free judged drums instead of hiding them forever
+                    Note.Node = null;
                 }
             }
         }
     }
+
+    // Move the 256-note window past notes that are done, otherwise nothing after the first 256 is ever judged.
+    while (NoteTick < MaxNotes && Notes[NoteTick].hit) NoteTick++;
 
     // 3. FORCE RESET: "Let go" of all buttons at the end of the frame processing tick
     Keys[0].hit = false;
@@ -749,7 +756,7 @@ private void _GameNoteTick(double delta)
 
 			// End Game
 
-			if (SettingsOperator.Gameplaycfg.TimeTotalGame - SettingsOperator.Gameplaycfg.Time <= 0 && !Finished && (HealthBar.Health >= HealthBar.MaxHealth / 2 || ModsOperator.Mods["no-fail"]))
+			if (SettingsOperator.Gameplaycfg.TimeTotalGame - SettingsOperator.Gameplaycfg.Time <= 0 && !Finished && (HealthBar.Health >= HealthBar.MaxHealth / 2 || ModsOperator.Mods["no-fail"] || LanNetwork.InMatch)) // LAN matches are no-fail
 			{
 				Finished = true;
 				Replay.SaveReplay();
@@ -787,6 +794,16 @@ private void _GameNoteTick(double delta)
 				SettingsOperator.toppaneltoggle(true);
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 			}
+			else if (Input.IsActionJustPressed("pausemenu") && LanNetwork.InMatch)
+			{
+				// Can't pause a LAN match (the others keep playing): Esc forfeits back to the room.
+				LanNetwork.Instance.ReportFinished(quit: true);
+				Cursor.CursorVisible = true;
+				BeatmapBackground.FlashEnable = true;
+				SettingsOperator.toppaneltoggle(true);
+				AudioPlayer.Instance.PitchScale = speedold;
+				GetNode<SceneTransition>("/root/Transition").Switch(LanNetwork.Instance.ReturnScene);
+			}
 			else if (Input.IsActionJustPressed("pausemenu") && !SettingsOperator.Marathon)
 			{
 				Cursor.CursorVisible = true;
@@ -800,7 +817,7 @@ private void _GameNoteTick(double delta)
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MarathonMode.tscn");
 				SettingsOperator.Marathon = false;
 			}
-			else if (Input.IsActionJustPressed("retry") && !SettingsOperator.Marathon)
+			else if (Input.IsActionJustPressed("retry") && !SettingsOperator.Marathon && !LanNetwork.InMatch)
 			{
 				BeatmapBackground.FlashEnable = true;
 				SettingsOperator.toppaneltoggle(true);
@@ -830,6 +847,7 @@ private void _GameNoteTick(double delta)
 
 			CheckReplayKey((int)gametime);
 			_GameNoteTick(delta);
+			if (LanNetwork.InMatch) LanNetwork.Instance.SpecTime(gametime); // spectators follow this clock
 		}
 		catch (Exception e)
 		{

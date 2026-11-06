@@ -51,6 +51,9 @@ public class TapObject
 	public float SpinLastAngle = float.NaN;
 	public float SpinRequired = 1f;
 
+	/// <summary>Position in TapGameCore.Objects (judgements are sent to LAN spectators by index).</summary>
+	public int Index;
+
 	public float Duration => Math.Max(1, EndTime - Time);
 	public float TotalLength => PathLen == null || PathLen.Count == 0 ? 0f : PathLen[^1];
 
@@ -128,7 +131,7 @@ public partial class TapGameCore : Control
 	private double ppmisspower = 1.2;
 	private float audioOffset { get; set; } = 0;
 	private float gametime { get; set; }
-	private float smoothTime = 0f;
+	private readonly SongClock Clock = new SongClock();
 	private long startedtime { get; set; } = 0;
 	private int scoreint { get; set; }
 	private Tween scoretween { get; set; }
@@ -510,6 +513,7 @@ public partial class TapGameCore : Control
 		HitOffsets.Clear();
 		if (SettingsOperator.SessionConfig.BeatmapURL != null) ReloadBeatmap(SettingsOperator.SessionConfig.BeatmapURL.ToString());
 		if (Objects.Count > 0) CursorPos = Objects[0].Pos;
+		for (int i = 0; i < Objects.Count; i++) Objects[i].Index = i;
 
 		Auto = ModsOperator.Mods["auto"];
 		if (Auto)
@@ -526,6 +530,45 @@ public partial class TapGameCore : Control
 		}
 		Cursor.CursorVisible = true;
 		audioOffset = !SettingsOperator.SpectatorMode ? SettingsOperator.AudioOffset * 0.001f : 0f;
+		if (LanNetwork.InMatch) LanNetwork.Instance.SpecSendChart(BuildSpecChart());
+	}
+
+	/// <summary>The chart as LAN spectators draw it: object kind, times and a few points along each slider.</summary>
+	private LanSpecChart BuildSpecChart()
+	{
+		const int SliderSamples = 12;
+		var pts = new List<float>();
+		var starts = new int[Objects.Count];
+		for (int i = 0; i < Objects.Count; i++)
+		{
+			var o = Objects[i];
+			starts[i] = pts.Count / 2;
+			if (o.Type == TapObjectType.Slider && o.TotalLength > 0)
+			{
+				for (int k = 0; k <= SliderSamples; k++)
+				{
+					var p = o.PathAt(o.TotalLength * k / SliderSamples);
+					pts.Add(p.X); pts.Add(p.Y);
+				}
+			}
+			else
+			{
+				var p = o.Type == TapObjectType.Spinner ? SpinnerCenter : o.Pos;
+				pts.Add(p.X); pts.Add(p.Y);
+			}
+		}
+		return new LanSpecChart
+		{
+			Mode = 3,
+			Height = 384,
+			Preempt = Preempt,
+			Radius = Radius,
+			Times = Objects.Select(o => o.Time).ToArray(),
+			Ends = Objects.Select(o => o.Type == TapObjectType.Circle ? o.Time : o.EndTime).ToArray(),
+			Lanes = Objects.Select(o => (byte)((int)o.Type | (Math.Clamp(o.Slides, 1, 63) << 2))).ToArray(), // type + repeats
+			PtStart = starts,
+			Pts = pts.ToArray(),
+		};
 	}
 
 	public override void _Notification(int what)
@@ -536,6 +579,8 @@ public partial class TapGameCore : Control
 
 	public override void _ExitTree()
 	{
+		// Only added to the tree when spectating; otherwise it was an orphan that leaked every play.
+		if (IsInstanceValid(SpectatorPanel) && !SpectatorPanel.IsInsideTree()) SpectatorPanel.Free();
 		SettingsOperator.inGameplay = false;
 		DisplayServer.WindowSetTitle(oldtitle);
 		HurtAnimation?.Kill();
@@ -552,15 +597,10 @@ public partial class TapGameCore : Control
 		AudioPlayer.Instance.Play();
 	}
 
-	public float GetRemainingTime(float delta = 1f)
+	public float GetRemainingTime(float delta = 0f)
 	{
-		if (AudioPlayer.Instance.Playing)
-		{
-			smoothTime += delta * AudioPlayer.Instance.PitchScale;
-			float truePos = AudioPlayer.Instance.GetPlaybackPosition() + (float)AudioServer.GetTimeSinceLastMix();
-			if (Mathf.Abs(truePos - smoothTime) > 0.05f) smoothTime = truePos;
-		}
-		SettingsOperator.Gameplaycfg.Time = -WaitClock.TimeLeft + smoothTime;
+		double songTime = Clock.Update(AudioPlayer.Instance, delta);
+		SettingsOperator.Gameplaycfg.Time = -WaitClock.TimeLeft + songTime;
 		SettingsOperator.Gameplaycfg.Time -= startedtime;
 		SettingsOperator.Gameplaycfg.Time += audioOffset;
 		return (float)SettingsOperator.Gameplaycfg.Time;
@@ -589,6 +629,7 @@ public partial class TapGameCore : Control
 		if (slot < 0) return;
 		bool wasDown = Pressed[slot];
 		Pressed[slot] = down;
+		if (wasDown != down && LanNetwork.InMatch) LanNetwork.Instance.SpecKey(slot, down, gametime);
 		if (down && !wasDown)
 		{
 			if (Field != null) CursorPos = FromScreen(Field.GetLocalMousePosition());
@@ -646,6 +687,7 @@ public partial class TapGameCore : Control
 		o.Judged = true;
 		o.Result = result;
 		o.JudgedAt = now;
+		if (LanNetwork.InMatch) LanNetwork.Instance.SpecJudge(o.Index, result, now);
 		switch (result)
 		{
 			case 0:
@@ -751,6 +793,7 @@ public partial class TapGameCore : Control
 
 		if (Auto) UpdateAuto(now);
 		else if (Field != null) CursorPos = FromScreen(Field.GetLocalMousePosition());
+		if (LanNetwork.InMatch) LanNetwork.Instance.SpecCursor(now, CursorPos);
 
 		// Break detection (long gap before the next object)
 		if (!BreakTime && songstarted)
@@ -865,7 +908,7 @@ public partial class TapGameCore : Control
 		{
 			gametime = GetRemainingTime((float)delta) / 0.001f;
 
-			if (HealthBar.Health == 0 && !Dead && !ModsOperator.Mods["no-fail"])
+			if (HealthBar.Health == 0 && !Dead && !ModsOperator.Mods["no-fail"] && !LanNetwork.InMatch) // LAN matches are no-fail
 			{
 				Dead = true;
 				Gameplay.Dead = true;
@@ -902,6 +945,15 @@ public partial class TapGameCore : Control
 				SettingsOperator.toppaneltoggle(true);
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 			}
+			else if (Input.IsActionJustPressed("pausemenu") && LanNetwork.InMatch)
+			{
+				// Can't pause a LAN match (the others keep playing): Esc forfeits back to the room.
+				LanNetwork.Instance.ReportFinished(quit: true);
+				BeatmapBackground.FlashEnable = true;
+				SettingsOperator.toppaneltoggle(true);
+				AudioPlayer.Instance.PitchScale = speedold;
+				GetNode<SceneTransition>("/root/Transition").Switch(LanNetwork.Instance.ReturnScene);
+			}
 			else if (Input.IsActionJustPressed("pausemenu") && !SettingsOperator.Marathon)
 			{
 				ShowPauseMenu();
@@ -913,7 +965,7 @@ public partial class TapGameCore : Control
 				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MarathonMode.tscn");
 				SettingsOperator.Marathon = false;
 			}
-			else if (Input.IsActionJustPressed("retry") && !SettingsOperator.Marathon)
+			else if (Input.IsActionJustPressed("retry") && !SettingsOperator.Marathon && !LanNetwork.InMatch)
 			{
 				BeatmapBackground.FlashEnable = true;
 				SettingsOperator.toppaneltoggle(true);
@@ -943,6 +995,7 @@ public partial class TapGameCore : Control
 			}
 
 			if (!Dead) GameTick(delta);
+			if (LanNetwork.InMatch) LanNetwork.Instance.SpecTime(gametime); // spectators follow this clock
 		}
 		catch (Exception e)
 		{

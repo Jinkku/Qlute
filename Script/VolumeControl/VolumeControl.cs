@@ -22,6 +22,12 @@ public partial class VolumeControl : PanelContainer
 		//MusicSlider.Value = Math.Pow(10, masterv / 10) * 100;
 		WaitTimeout.Start();
 	}
+
+	public override void _ExitTree()
+	{
+		Tween?.Kill();
+		Global.VolumeControlActive = false;
+	}
 	
 	private void _master(float value)
 	{
@@ -50,7 +56,8 @@ public partial class VolumeControl : PanelContainer
 		
 		Tween?.Kill();
 		Tween = CreateTween();
-		GetTree().CurrentScene.GetNode(".").SetProcessInput(true);
+		WaitTimeout.Stop();
+		GetTree().CurrentScene?.SetProcessInput(true);
 		Tween.SetParallel(true);
 		Tween.TweenProperty(this, "position", new Vector2(-Size.X, Position.Y), 0.3f)
 			.SetTrans(Tween.TransitionType.Cubic)
@@ -58,7 +65,14 @@ public partial class VolumeControl : PanelContainer
 		Tween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 0f), 0.3f)
 			.SetTrans(Tween.TransitionType.Cubic)
 			.SetEase(Tween.EaseType.Out);
-		Tween.Play();
-		Tween.TweenCallback(Callable.From(() => Global.VolumeControlActive = false));
+		Tween.SetParallel(false);
+		Tween.TweenCallback(Callable.From(() =>
+		{
+			Global.VolumeControlActive = false;
+			// Free the whole overlay (the CanvasLayer parent lives on /root), not just hide it.
+			var owner = GetParent() as CanvasLayer;
+			if (owner != null) owner.QueueFree();
+			else QueueFree();
+		}));
 	}
 }

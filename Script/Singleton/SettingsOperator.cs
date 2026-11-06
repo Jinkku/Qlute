@@ -160,7 +160,7 @@ public partial class SettingsOperator : Node
     }
 
     public static List<string> Images = new List<string>();
-    public void ParseBackgroundDefault()
+    public static void ParseBackgroundDefault()
     {
         string folderPath = "res://DefaultWallpaper/";
         Images.Clear();
@@ -175,6 +175,9 @@ public partial class SettingsOperator : Node
             {
                 if (!dir.CurrentIsDir())
                 {
+                    // Exported builds list "x.png.import"/".remap" instead of the source file
+                    fileName = fileName.Replace(".import", "").Replace(".remap", "");
+                    if (Images.Contains(folderPath + fileName)) continue;
                     // Filter common image formats
                     if (fileName.EndsWith(".png") || fileName.EndsWith(".jpg") || fileName.EndsWith(".jpeg") || fileName.EndsWith(".webp"))
                     {
@@ -194,10 +197,17 @@ public partial class SettingsOperator : Node
     }
     public static Texture2D GetNullImage()
     {
-
-
+        // Scan the folder once; the list doesn't change at runtime
+        if (Images.Count == 0)
+            ParseBackgroundDefault();
         // Step 2: Pick random image
         var rng = new Random();
+        GD.Print("Picking random default image.");
+        if (Images.Count == 0)
+        {
+            GD.PrintErr("No default wallpapers found in res://DefaultWallpaper/");
+            return null;
+        }
         string randomImagePath = Images[rng.Next(Images.Count)];
 
         GD.Print("Loading: " + randomImagePath);
@@ -349,7 +359,6 @@ public partial class SettingsOperator : Node
 
     public static string ReturnGameModeTscn(int mode)
     {
-        if (LanNetwork.InMatch) mode = 0; // LAN matches + spectating are built around the Mania playfield
         switch (mode)
         {
             case 1 : return "res://Panels/GameModes/Taiko.tscn";
@@ -514,6 +523,8 @@ public partial class SettingsOperator : Node
     {
         AllMiliSecondsFromBeatmap += ms;
         MiliSecondsFromBeatmapTimes++;
+        // Drained by the UnstableRate HUD; cap it so modes/HUDs without that node don't grow it forever.
+        if (UnstableRate.Rate.Count >= 256) UnstableRate.Rate.RemoveAt(0);
         UnstableRate.Rate.Add(ms);
     }
     public static float Getms() {

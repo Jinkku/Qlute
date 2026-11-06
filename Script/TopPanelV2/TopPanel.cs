@@ -124,11 +124,11 @@ public partial class TopPanel : ColorRect
 		if (Input.IsActionJustPressed("Special") && !Global.VolumeControlActive)
 		{
 			Global.VolumeControlActive = true;
-			VolumePanel?.QueueFree();
+			if (IsInstanceValid(VolumeLayer)) VolumeLayer.QueueFree();
 			VolumeLayer = GD.Load<PackedScene>("res://Panels/Overlays/VolumeControl.tscn").Instantiate().GetNode<CanvasLayer>(".");
 			VolumePanel = VolumeLayer.GetNode<Control>("VolumeControl");
 			GetTree().Root.AddChild(VolumeLayer);
-			GetTree().CurrentScene.GetNode(".").SetProcessInput(false);
+			GetTree().CurrentScene?.SetProcessInput(false);
 			var _tween = VolumePanel.CreateTween();
 			VolumePanel.Modulate = new Color(1f, 1f, 1f, 0f);
 			VolumePanel.Position = new Vector2(-VolumePanel.Size.X, VolumePanel.Position.Y);

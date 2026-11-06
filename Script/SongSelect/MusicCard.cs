@@ -33,6 +33,9 @@ public partial class MusicCard : Button
 	private BeatmapLegend Beatmap { get; set; }
 	public override void _ExitTree()
 	{
+		_loadCts?.Cancel();
+		_loadCts?.Dispose();
+		_loadCts = null;
 		if (texture != null)
 		{
 			texture.Dispose();
@@ -72,6 +75,7 @@ public partial class MusicCard : Button
 	{
 		if (isLoadingImage || string.IsNullOrEmpty(path)) return;
 		isLoadingImage = true;
+		_loadCts?.Dispose();
 		_loadCts = new CancellationTokenSource();
 		var token = _loadCts.Token;
 
@@ -81,10 +85,10 @@ public partial class MusicCard : Button
 			var data = await Task.Run(() =>
 				FileAccess.FileExists(path) ? Image.LoadFromFile(path) : null, token);
 
-			if (!IsInstanceValid(this) || token.IsCancellationRequested) return;
+			if (!IsInstanceValid(this) || token.IsCancellationRequested) { data?.Dispose(); return; }
 			CallDeferred(nameof(ApplyLoadedImage), data);
 		}
-		catch (TaskCanceledException) { }
+		catch (OperationCanceledException) { }
 	}
 
 
@@ -144,9 +148,6 @@ public partial class MusicCard : Button
 
 	private void Gamemodeiconchange()
 	{
-		// Temporarily puting this so i can push this release. :< 
-		GameModeIcon.Texture = GD.Load<Texture2D>("res://Resources/System/GamemodeIcons/standard.png");
-		return;
 		switch (GameMode)
 		{
 			case -1 : GameModeIcon.Texture = GD.Load<Texture2D>("res://Resources/System/GamemodeIcons/Unknown.png"); break;
