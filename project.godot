@@ -21,6 +21,7 @@ config/name_localized={
 "zh_CN": "丘律特"
 }
 config/description="Your Keys // Your Rhythm"
+config/version="0.0.0"
 run/main_scene="res://Panels/Screens/bootstrap.tscn"
 run/print_header=false
 config/use_custom_user_dir=true
@@ -52,6 +53,7 @@ ModsOperator="*res://Script/Singleton/ModsOperator.cs"
 Sample="*res://Script/Singleton/Sample.cs"
 ApiOperator="*res://Script/Singleton/ApiOperator.cs"
 LanNetwork="*res://Script/Multiplayer/LanNetwork.cs"
+LanChat="*res://Script/Multiplayer/LanChat.cs"
 
 [debug]
 

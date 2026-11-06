@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://buqt8jubgkav" path="res://Panels/SettingsSection/Audio.tscn" id="10_4moo3"]
 [ext_resource type="PackedScene" uid="uid://bptvmibdlnj35" path="res://Panels/SettingsSection/Input.tscn" id="12_djmes"]
 [ext_resource type="PackedScene" uid="uid://jbmm2metmyvr" path="res://Panels/SettingsSection/Debug.tscn" id="12_fn636"]
+[ext_resource type="PackedScene" path="res://Panels/SettingsSection/Lan.tscn" id="13_lan"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fn636"]
 bg_color = Color(0.06666667, 0.06666667, 0.078431375, 1)
@@ -184,6 +185,9 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Input" parent="Panels/Scroll/Sections" unique_id=1141973016 instance=ExtResource("12_djmes")]
+layout_mode = 2
+
+[node name="Lan" parent="Panels/Scroll/Sections" instance=ExtResource("13_lan")]
 layout_mode = 2
 
 [node name="Debug" parent="Panels/Scroll/Sections" unique_id=2026888216 instance=ExtResource("12_fn636")]

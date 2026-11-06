@@ -138,6 +138,8 @@ public partial class SettingsOperator : Node
         { "TapKey0", "Z" },
         { "TapKey1", "X" },
         { "gamemode", 0 },
+        { "lanchat", true },      // show up in the LAN chat (off = invisible on the network)
+        { "lannickname", "" },    // name used on LAN when not logged in
     };
     public Dictionary<string, object> Configurationbk { get; set; }
 

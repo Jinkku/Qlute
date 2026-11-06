@@ -6,37 +6,41 @@
 [ext_resource type="Texture2D" uid="uid://dvb8ihm6wvypf" path="res://Resources/ThemeNC/Sliderbutton-s02.svg" id="4_m3gsb"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s8vjv"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.390625, 0.390625, 0.390625, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-shadow_color = Color(0.23801, 0.366319, 0.557292, 1)
-shadow_offset = Vector2(0, 4)
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.11038685, 0.093933105, 0.2109375, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c82el"]
-bg_color = Color(1, 1, 1, 0.0980392)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s576e"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rvt4u"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bauue"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.4919991, 0.440094, 0.81640625, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chatbtn_p"]
 content_margin_left = 10.0
-content_margin_top = 10.0
+content_margin_top = 5.0
 content_margin_right = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(0.9063318, 0.9063318, 0.9063318, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-shadow_color = Color(0.23801, 0.366319, 0.557292, 1)
-shadow_offset = Vector2(0, 4)
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.25098)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n13r0"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.3804953, 0.33261108, 0.67578125, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ixd5p"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.546597, 0.47872925, 0.97265625, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bjgno"]
 content_margin_left = 5.0
@@ -257,11 +261,14 @@ content_margin_right = 2.0
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 0.627451)
 
 [resource]
-Button/styles/disabled = SubResource("StyleBoxFlat_s8vjv")
-Button/styles/focus = SubResource("StyleBoxFlat_c82el")
-Button/styles/hover = SubResource("StyleBoxFlat_rvt4u")
-Button/styles/normal = SubResource("StyleBoxFlat_rvt4u")
-Button/styles/pressed = SubResource("StyleBoxFlat_rvt4u")
+ChatboxButton/base_type = &"Button"
+ChatboxButton/colors/font_disabled_color = Color(1, 1, 1, 0.45)
+ChatboxButton/styles/disabled = SubResource("StyleBoxFlat_s8vjv")
+ChatboxButton/styles/focus = SubResource("StyleBoxEmpty_s576e")
+ChatboxButton/styles/hover = SubResource("StyleBoxFlat_bauue")
+ChatboxButton/styles/hover_pressed = SubResource("StyleBoxFlat_chatbtn_p")
+ChatboxButton/styles/normal = SubResource("StyleBoxFlat_n13r0")
+ChatboxButton/styles/pressed = SubResource("StyleBoxFlat_ixd5p")
 CheckButton/icons/checked = ExtResource("1_7xnwh")
 CheckButton/icons/unchecked = ExtResource("2_75n4a")
 CheckButton/styles/disabled = SubResource("StyleBoxEmpty_bjgno")

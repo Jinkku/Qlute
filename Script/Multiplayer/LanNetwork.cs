@@ -150,11 +150,8 @@ public partial class LanNetwork : Node
 	// Public API used by the lounge / lobby / gameplay
 	// =====================================================================
 
-	public static string LocalName()
-	{
-		var name = ApiOperator.Username;
-		return string.IsNullOrWhiteSpace(name) ? "Guest" : name;
-	}
+	/// <summary>Same name as the LAN chat: the account name, or the offline nickname when not logged in.</summary>
+	public static string LocalName() => LanChat.LocalName();
 
 	public static string GameVersion() => ProjectSettings.GetSetting("application/config/version").AsString();
 

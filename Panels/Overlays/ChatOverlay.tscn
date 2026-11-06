@@ -1,6 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://d3gt5fc6h256t"]
+[gd_scene format=3 uid="uid://d3gt5fc6h256t"]
 
-[ext_resource type="Texture2D" uid="uid://cpp14plc7cctp" path="res://Resources/System/TopPanel/Chat.svg" id="1_0r8ct"]
+[ext_resource type="Texture2D" uid="uid://cg16i4vhaidnq" path="res://Resources/System/TopPanel/Chat.png" id="1_0r8ct"]
+[ext_resource type="Script" uid="uid://b1brfnkaa16ao" path="res://Script/ChatRoom/ChatOverlay.cs" id="2_script"]
+[ext_resource type="Theme" uid="uid://cu8ap5uak1q6c" path="res://Resources/System/theme.tres" id="3_xs1ts"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wb4tt"]
 bg_color = Color(0.27884218, 0.23010254, 0.56640625, 1)
@@ -8,219 +10,193 @@ bg_color = Color(0.27884218, 0.23010254, 0.56640625, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lxvh4"]
 content_margin_left = 15.0
 content_margin_top = 5.0
-content_margin_right = 5.0
+content_margin_right = 15.0
 content_margin_bottom = 5.0
 bg_color = Color(0.3736979, 0.328125, 0.65625, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xs1ts"]
-bg_color = Color(0, 0, 0, 0.25)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eye8f"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(0, 0, 0, 0.25098)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2a1my"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(1, 1, 1, 0)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nsfte"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(1, 1, 1, 0.25098)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iha2g"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(1, 1, 1, 0.156863)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_771wj"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(1, 1, 1, 0.156863)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0r8ct"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lxvh4"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2rbjs"]
 content_margin_left = 5.0
 content_margin_right = 5.0
 bg_color = Color(0, 0, 0, 0.470588)
 
-[node name="ChatOverlay" type="PanelContainer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xs1ts"]
+bg_color = Color(0, 0, 0, 0.25)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0r8ct"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lxvh4"]
+content_margin_left = 15.0
+content_margin_top = 10.0
+content_margin_right = 15.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_people"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.25)
+
+[node name="ChatOverlay" type="PanelContainer" unique_id=1920737100 node_paths=PackedStringArray("Status", "RoomList", "NewRoomButton", "Log", "Input", "Empty", "PeopleTitle", "PeopleList", "LeaveButton", "NameEdit", "PowerButton", "TurnOnButton")]
 custom_minimum_size = Vector2(0, 254)
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wb4tt")
+script = ExtResource("2_script")
+Status = NodePath("ChatV/Title/TitleH/Status")
+RoomList = NodePath("ChatV/ChatSect/ChatRooms/RoomsV/ChatScroll/ChatRoomV")
+NewRoomButton = NodePath("ChatV/ChatSect/ChatRooms/RoomsV/NewRoom")
+Log = NodePath("ChatV/ChatSect/ChatTextS/ChatTextSV/Log")
+Input = NodePath("ChatV/ChatSect/ChatTextS/ChatTextSV/LineEdit")
+Empty = NodePath("ChatV/ChatSect/ChatTextS/ChatTextSV/Empty")
+PeopleTitle = NodePath("ChatV/ChatSect/People/PeopleV/PeopleTitle")
+PeopleList = NodePath("ChatV/ChatSect/People/PeopleV/PeopleScroll/PeopleList")
+LeaveButton = NodePath("ChatV/ChatSect/People/PeopleV/Leave")
+NameEdit = NodePath("ChatV/Title/TitleH/NameEdit")
+PowerButton = NodePath("ChatV/Title/TitleH/Power")
+TurnOnButton = NodePath("ChatV/ChatSect/ChatTextS/ChatTextSV/TurnOn")
 
-[node name="ChatV" type="VBoxContainer" parent="."]
+[node name="ChatV" type="VBoxContainer" parent="." unique_id=650553334]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Title" type="PanelContainer" parent="ChatV"]
+[node name="Title" type="PanelContainer" parent="ChatV" unique_id=472841855]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lxvh4")
 
-[node name="TitleH" type="HBoxContainer" parent="ChatV/Title"]
+[node name="TitleH" type="HBoxContainer" parent="ChatV/Title" unique_id=1228261104]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="ChatV/Title/TitleH"]
+[node name="TextureRect" type="TextureRect" parent="ChatV/Title/TitleH" unique_id=484748094]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 texture = ExtResource("1_0r8ct")
 expand_mode = 4
 stretch_mode = 4
 
-[node name="Label" type="Label" parent="ChatV/Title/TitleH"]
+[node name="Label" type="Label" parent="ChatV/Title/TitleH" unique_id=120237236]
 layout_mode = 2
-text = "Qlute/chat (beta)"
+text = "Qlute/chat"
 
-[node name="ChatSect" type="HBoxContainer" parent="ChatV"]
+[node name="Status" type="Label" parent="ChatV/Title/TitleH" unique_id=482074485]
+modulate = Color(1, 1, 1, 0.6)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Looking for players on this network..."
+horizontal_alignment = 2
+
+[node name="NameEdit" type="LineEdit" parent="ChatV/Title/TitleH" unique_id=264784671]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_2rbjs")
+theme_override_styles/focus = SubResource("StyleBoxFlat_2rbjs")
+placeholder_text = "Name when offline"
+max_length = 32
+
+[node name="Power" type="CheckButton" parent="ChatV/Title/TitleH" unique_id=1755520700]
+layout_mode = 2
+tooltip_text = "When off, you're invisible on the local network and won't see anyone in the LAN chat."
+text = "Visible on LAN"
+
+[node name="ChatSect" type="HBoxContainer" parent="ChatV" unique_id=1837520649]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="ChatRooms" type="PanelContainer" parent="ChatV/ChatSect"]
-custom_minimum_size = Vector2(180, 0)
+[node name="ChatRooms" type="PanelContainer" parent="ChatV/ChatSect" unique_id=1653973637]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_xs1ts")
 
-[node name="ChatScroll" type="ScrollContainer" parent="ChatV/ChatSect/ChatRooms"]
+[node name="RoomsV" type="VBoxContainer" parent="ChatV/ChatSect/ChatRooms" unique_id=351670179]
 layout_mode = 2
 
-[node name="ChatRoomV" type="VBoxContainer" parent="ChatV/ChatSect/ChatRooms/ChatScroll"]
+[node name="ChatScroll" type="ScrollContainer" parent="ChatV/ChatSect/ChatRooms/RoomsV" unique_id=183271596]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ChatRoomV" type="VBoxContainer" parent="ChatV/ChatSect/ChatRooms/RoomsV/ChatScroll" unique_id=2052208794]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="Local" type="Label" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
-visible = false
+[node name="NewRoom" type="Button" parent="ChatV/ChatSect/ChatRooms/RoomsV" unique_id=23606791]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_eye8f")
-text = "Local"
+theme = ExtResource("3_xs1ts")
+theme_type_variation = &"ChatboxButton"
+text = "+ Private room"
 
-[node name="ChatRoom4" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
-visible = false
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
-theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
-theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
-text = "SweetyTweety"
-alignment = 0
-
-[node name="PublicChannels" type="Label" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
-visible = false
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_eye8f")
-text = "Public Channels"
-
-[node name="ChatRoom" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
-visible = false
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
-theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
-theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
-text = "#general"
-alignment = 0
-
-[node name="ChatRoom2" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
-visible = false
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
-theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
-theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
-text = "#off-topic"
-alignment = 0
-
-[node name="ChatRoom3" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
-visible = false
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
-theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
-theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
-text = "#anime"
-alignment = 0
-
-[node name="Friends" type="Label" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
-visible = false
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_eye8f")
-text = "Friends"
-
-[node name="ChatRoom6" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
-visible = false
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
-theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
-theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
-text = "SweetyTweety"
-alignment = 0
-
-[node name="ChatRoom5" type="Button" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
-visible = false
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_2a1my")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_nsfte")
-theme_override_styles/hover = SubResource("StyleBoxFlat_iha2g")
-theme_override_styles/focus = SubResource("StyleBoxFlat_771wj")
-text = "Epicgamer92"
-alignment = 0
-
-[node name="Beta" type="Label" parent="ChatV/ChatSect/ChatRooms/ChatScroll/ChatRoomV"]
-layout_mode = 2
-size_flags_vertical = 6
-text = "Please check later!
-;w;"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ChatTextS" type="PanelContainer" parent="ChatV/ChatSect"]
-visible = false
+[node name="ChatTextS" type="PanelContainer" parent="ChatV/ChatSect" unique_id=269843534]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_0r8ct")
 
-[node name="ChatTextSV" type="VBoxContainer" parent="ChatV/ChatSect/ChatTextS"]
+[node name="ChatTextSV" type="VBoxContainer" parent="ChatV/ChatSect/ChatTextS" unique_id=1338182080]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="ChatText" type="ScrollContainer" parent="ChatV/ChatSect/ChatTextS/ChatTextSV"]
+[node name="Log" type="RichTextLabel" parent="ChatV/ChatSect/ChatTextS/ChatTextSV" unique_id=799232316]
+visible = false
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_lxvh4")
+focus_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_lxvh4")
+bbcode_enabled = true
+scroll_following = true
+selection_enabled = true
 
-[node name="ChatTextV" type="VBoxContainer" parent="ChatV/ChatSect/ChatTextS/ChatTextSV/ChatText"]
+[node name="Empty" type="Label" parent="ChatV/ChatSect/ChatTextS/ChatTextSV" unique_id=2100376513]
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 3
+text = "Nobody else is playing on this network right now.
+The LAN chat shows up as soon as someone starts the game."
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="LineEdit" type="LineEdit" parent="ChatV/ChatSect/ChatTextS/ChatTextSV"]
+[node name="TurnOn" type="Button" parent="ChatV/ChatSect/ChatTextS/ChatTextSV" unique_id=920343227]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme = ExtResource("3_xs1ts")
+theme_type_variation = &"ChatboxButton"
+text = "Turn on LAN chat"
+
+[node name="LineEdit" type="LineEdit" parent="ChatV/ChatSect/ChatTextS/ChatTextSV" unique_id=942376774]
+visible = false
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_2rbjs")
 theme_override_styles/focus = SubResource("StyleBoxFlat_2rbjs")
 placeholder_text = "You are chatting as: Guest"
+max_length = 500
+
+[node name="People" type="PanelContainer" parent="ChatV/ChatSect" unique_id=877472267]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_people")
+
+[node name="PeopleV" type="VBoxContainer" parent="ChatV/ChatSect/People" unique_id=752045497]
+layout_mode = 2
+
+[node name="PeopleTitle" type="Label" parent="ChatV/ChatSect/People/PeopleV" unique_id=1265915664]
+layout_mode = 2
+text = "On this network"
+
+[node name="PeopleScroll" type="ScrollContainer" parent="ChatV/ChatSect/People/PeopleV" unique_id=141387710]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="PeopleList" type="VBoxContainer" parent="ChatV/ChatSect/People/PeopleV/PeopleScroll" unique_id=2144676501]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Leave" type="Button" parent="ChatV/ChatSect/People/PeopleV" unique_id=1840887976]
+layout_mode = 2
+theme = ExtResource("3_xs1ts")
+theme_type_variation = &"ChatboxButton"
+text = "Leave room"

@@ -1,0 +1,46 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/SettingsSection/LanSettings.cs" id="1_lan"]
+[ext_resource type="StyleBox" uid="uid://c0bgbcbhjckmy" path="res://Resources/System/SettingsTab.tres" id="2_tab"]
+
+[sub_resource type="FontVariation" id="FontVariation_bold"]
+variation_opentype = {
+2003265652: 700
+}
+
+[node name="Lan" type="PanelContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = ExtResource("2_tab")
+script = ExtResource("1_lan")
+
+[node name="Rows" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Section" type="Label" parent="Rows"]
+layout_mode = 2
+mouse_filter = 0
+theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+text = "LAN"
+
+[node name="ChatEnabled" type="CheckButton" parent="Rows"]
+layout_mode = 2
+tooltip_text = "When off, the game doesn't announce you on the local network at all, and you won't see anyone in the LAN chat."
+text = "Show me in the LAN chat"
+
+[node name="NicknameLabel" type="Label" parent="Rows"]
+layout_mode = 2
+text = "Name when offline"
+
+[node name="Nickname" type="LineEdit" parent="Rows"]
+layout_mode = 2
+placeholder_text = "Guest"
+max_length = 32
+
+[node name="NicknameHint" type="Label" parent="Rows"]
+layout_mode = 2
+modulate = Color(1, 1, 1, 0.6)
+text = "Used in LAN chat and LAN rooms while you aren't logged in. Logged-in players always show their account name."
+autowrap_mode = 3

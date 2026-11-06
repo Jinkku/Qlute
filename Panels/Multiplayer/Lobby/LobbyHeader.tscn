@@ -81,7 +81,7 @@ text = "1 PLAYER"
 layout_mode = 2
 theme_type_variation = &"LobbyPill"
 theme_override_font_sizes/font_size = 10
-text = "LOBBY IN PROGRESS"
+text = "IN LOBBY"
 
 [node name="Countdown" type="VBoxContainer" parent="H" unique_id=973230536]
 custom_minimum_size = Vector2(250, 0)
