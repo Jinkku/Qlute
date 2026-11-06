@@ -7,6 +7,7 @@ using System.Linq;
 ///   ... -- --lan-test-host
 ///   ... -- --lan-test-join [--lan-test-nomap --lan-test-out=/some/dir]
 /// Add --lan-test-transfer to both: the host hands host to the joiner, who renames the room and bumps the timer.
+/// Add --lan-test-mode=N on the host to queue its pick in game mode N (0 Mania, 1 Taiko, 3 Tap!).
 /// Add --lan-test-quit=SECONDS to exit automatically. Output lines are prefixed with [LANTEST].
 /// </summary>
 public partial class LanSelfTest : Node
@@ -68,7 +69,14 @@ public partial class LanSelfTest : Node
 			{
 				Log($"hosting: {_net.Host("LAN Test Room")}");
 				_net.HostAdjustTimer(-10000); // shortest countdown
-				if (SettingsOperator.SessionConfig.SongID >= 0) _net.AddToQueue(SettingsOperator.SessionConfig.SongID);
+				if (SettingsOperator.SessionConfig.SongID >= 0)
+				{
+					// --lan-test-mode=N: queue the pick in game mode N (0 Mania, 1 Taiko, 3 Tap!) without touching saved settings.
+					var oldMode = SettingsOperator.GetSetting("gamemode");
+					if (int.TryParse(Value("--lan-test-mode="), out var mode)) SettingsOperator.Configuration["gamemode"] = mode;
+					_net.AddToQueue(SettingsOperator.SessionConfig.SongID);
+					SettingsOperator.Configuration["gamemode"] = oldMode;
+				}
 			}
 			else
 			{
@@ -125,7 +133,7 @@ public partial class LanSelfTest : Node
 			{
 				_specLog = 2;
 				foreach (var (id, f) in _net.Feeds)
-					Log($"live feed from {id}: chart={f.Times.Length} notes, songMs={f.SongMs:0}, judged={f.Judged.Count(j => j)}, lanesDown={string.Join("", f.LaneDown.Select(d => d ? "1" : "0"))}, combo={f.Combo}");
+					Log($"live feed from {id}: mode={f.Mode} chart={f.Times.Length} notes, cursor={(f.HasCursor ? f.Cursor.ToString("0") : "-")}, songMs={f.SongMs:0}, judged={f.Judged.Count(j => j)}, lanesDown={string.Join("", f.LaneDown.Select(d => d ? "1" : "0"))}, combo={f.Combo}");
 			}
 		}
 		if (me != null && me.HasMap && !_readied && !ForceMissingMap && !Has("--lan-test-spectate") && _net.State.Phase == LanPhase.Lobby && (host ? _net.State.Players.Count > 1 : true))

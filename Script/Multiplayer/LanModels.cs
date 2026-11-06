@@ -44,6 +44,8 @@ public class LanQueueItem
 	public List<string> Mods { get; set; } = new();
 	/// <summary>Song speed for DT / HT (1 when neither is on).</summary>
 	public float Speed { get; set; } = 1f;
+	/// <summary>Game mode everyone plays this item in (0 Mania, 1 Taiko, 3 Tap!), picked by its owner.</summary>
+	public int GameMode { get; set; }
 }
 
 public class LanBeatmapRef
@@ -94,6 +96,8 @@ public class LanRoomState
 	/// <summary>Room-wide mods + speed of the item up next / being played (copied from its queue item).</summary>
 	public List<string> CurrentMods { get; set; } = new();
 	public float CurrentSpeed { get; set; } = 1f;
+	/// <summary>Game mode of the item up next / being played (copied from its queue item).</summary>
+	public int CurrentGameMode { get; set; }
 	/// <summary>Owner of the last item that was played; the rotation continues with the next player.</summary>
 	public long LastPickOwnerId { get; set; }
 	public int NextQueueId { get; set; } = 1;

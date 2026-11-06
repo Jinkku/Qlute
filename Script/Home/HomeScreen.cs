@@ -28,6 +28,7 @@ public partial class HomeScreen : Control
 		HomePanel = GetNode<PanelContainer>("HomeButtonBG");
 		SettingsOperator.loopaudio = false;
 		SongIndicator = GetNode<Label>("SongIndication");
+		CreateEditor.EditorSongInfo.Reset();
 		HomeButtonID.ID = -1;
 	}
 
@@ -63,12 +64,7 @@ public partial class HomeScreen : Control
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Browse.tscn");
 	}
 	private void _create() {
-		#if DEBUG
-			CreateEditor.EditorSongInfo.Reset();
-			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
-		#else
-			Notify.Post("Under Construction!");
-		#endif
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/Create.tscn");
 	}
 	private void _leave() {
 		SettingsOperator.Quit();

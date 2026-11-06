@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 public partial class LanNetwork : Node
 {
 	public const string BeaconTag = "qlute-lan";
-	public const int Protocol = 2;
+	public const int Protocol = 3; // 3: queue items carry a game mode, spectator charts carry mode + positions
 	public const int MaxRoomNameLength = 40;
 	public const int DiscoveryPort = 8911;
 	public const int DefaultGamePort = 8912;
@@ -44,6 +44,7 @@ public partial class LanNetwork : Node
 	public const double SpectateTickSeconds = 0.05;
 	private const int MaxSpectatePacket = 64 * 1024;
 	private const int MaxChartNotes = 100_000;
+	private const int MaxChartBytes = 8 * 1024 * 1024;
 	public const int MaxQueuePerPlayer = 5;
 	public const int MaxQueueTotal = 50;
 
@@ -102,7 +103,7 @@ public partial class LanNetwork : Node
 	private readonly LanSpectateFeed.Writer _specOut = new();
 	private double _specTimer;
 	/// <summary>Server: everyone's chart for the current match, so late spectators can still get it.</summary>
-	private readonly Dictionary<long, (int[] Times, byte[] Lanes, int Height)> _specCharts = new();
+	private readonly Dictionary<long, byte[]> _specCharts = new(); // encoded LanSpecChart per player
 
 	// ---- Discovery ----
 	public readonly Dictionary<string, LanRoomInfo> Rooms = new();
@@ -246,8 +247,9 @@ public partial class LanNetwork : Node
 		var map = BuildRef(index);
 		if (map == null) return;
 		var (mods, speed) = LocalGlobalMods();
-		if (IsServer) ServerAddToQueue(1, map, mods.ToArray(), speed);
-		else RpcId(1, MethodName.RpcAddToQueue, JsonSerializer.Serialize(map), mods.ToArray(), speed);
+		int mode = SettingsOperator.GetSelectedGameMode();
+		if (IsServer) ServerAddToQueue(1, map, mods.ToArray(), speed, mode);
+		else RpcId(1, MethodName.RpcAddToQueue, JsonSerializer.Serialize(map), mods.ToArray(), speed, mode);
 	}
 
 	/// <summary>Swap the beatmap of one of your own queue items.</summary>
@@ -257,8 +259,9 @@ public partial class LanNetwork : Node
 		var map = BuildRef(index);
 		if (map == null) return;
 		var (mods, speed) = LocalGlobalMods();
-		if (IsServer) ServerReplaceQueueItem(1, itemId, map, mods.ToArray(), speed);
-		else RpcId(1, MethodName.RpcReplaceQueueItem, itemId, JsonSerializer.Serialize(map), mods.ToArray(), speed);
+		int mode = SettingsOperator.GetSelectedGameMode();
+		if (IsServer) ServerReplaceQueueItem(1, itemId, map, mods.ToArray(), speed, mode);
+		else RpcId(1, MethodName.RpcReplaceQueueItem, itemId, JsonSerializer.Serialize(map), mods.ToArray(), speed, mode);
 	}
 
 	/// <summary>Remove a queue item (your own, or anyone's if you're the host).</summary>
@@ -754,7 +757,7 @@ public partial class LanNetwork : Node
 		return map;
 	}
 
-	private void ServerAddToQueue(long sender, LanBeatmapRef map, string[] mods, float speed)
+	private void ServerAddToQueue(long sender, LanBeatmapRef map, string[] mods, float speed, int mode)
 	{
 		var p = FindPlayer(sender);
 		map = SanitizeMap(map);
@@ -765,24 +768,27 @@ public partial class LanNetwork : Node
 			return;
 		}
 		var (cleanMods, cleanSpeed) = CleanGlobalMods(mods, speed);
-		State.Queue.Add(new LanQueueItem { Id = State.NextQueueId++, OwnerId = sender, OwnerName = p.Name, Beatmap = map, Mods = cleanMods, Speed = cleanSpeed });
+		mode = CleanGameMode(mode);
+		State.Queue.Add(new LanQueueItem { Id = State.NextQueueId++, OwnerId = sender, OwnerName = p.Name, Beatmap = map, Mods = cleanMods, Speed = cleanSpeed, GameMode = mode });
 		var label = GlobalModLabel(cleanMods, cleanSpeed);
-		ServerChat(0, $"{p.Name} added {map.Display}{(label.Length > 0 ? " +" + label : "")} to the queue.");
+		ServerChat(0, $"{p.Name} added {map.Display} [{GameModeName(mode)}]{(label.Length > 0 ? " +" + label : "")} to the queue.");
 		ServerQueueChanged();
 	}
 
-	private void ServerReplaceQueueItem(long sender, int itemId, LanBeatmapRef map, string[] mods, float speed)
+	private void ServerReplaceQueueItem(long sender, int itemId, LanBeatmapRef map, string[] mods, float speed, int mode)
 	{
 		var item = State.Queue.FirstOrDefault(q => q.Id == itemId);
 		map = SanitizeMap(map);
 		if (item == null || map == null || item.OwnerId != sender) return;
 		var (cleanMods, cleanSpeed) = CleanGlobalMods(mods, speed);
-		if (item.Beatmap?.Checksum == map.Checksum && item.Mods.SequenceEqual(cleanMods) && item.Speed == cleanSpeed) return;
+		mode = CleanGameMode(mode);
+		if (item.Beatmap?.Checksum == map.Checksum && item.Mods.SequenceEqual(cleanMods) && item.Speed == cleanSpeed && item.GameMode == mode) return;
 		item.Beatmap = map;
 		item.Mods = cleanMods;
 		item.Speed = cleanSpeed;
+		item.GameMode = mode;
 		var label = GlobalModLabel(cleanMods, cleanSpeed);
-		ServerChat(0, $"{item.OwnerName} changed their pick to {map.Display}{(label.Length > 0 ? " +" + label : "")}.");
+		ServerChat(0, $"{item.OwnerName} changed their pick to {map.Display} [{GameModeName(mode)}]{(label.Length > 0 ? " +" + label : "")}.");
 		ServerQueueChanged();
 	}
 
@@ -842,7 +848,7 @@ public partial class LanNetwork : Node
 		bool wasWatching = p.WatchTarget >= 0;
 		p.WatchTarget = target;
 		if (target >= 0 && !wasWatching)
-			foreach (var (id, c) in _specCharts) SendChartTo(sender, id, c.Times, c.Lanes, c.Height); // joined mid-song
+			foreach (var (id, c) in _specCharts) SendChartTo(sender, id, c); // joined mid-song
 		if (target >= 0) p.Activity = LanActivity.Spectating;
 		else if (p.Activity == LanActivity.Spectating) p.Activity = LanActivity.Lobby;
 		MarkDirty();
@@ -861,19 +867,20 @@ public partial class LanNetwork : Node
 		}
 	}
 
-	private void ServerStoreChart(long from, int[] times, byte[] lanes, int height)
+	private void ServerStoreChart(long from, byte[] chart)
 	{
 		var p = FindPlayer(from);
-		if (p == null || !p.InMatch || times == null || lanes == null || times.Length != lanes.Length || times.Length > MaxChartNotes) return;
-		_specCharts[from] = (times, lanes, height);
+		if (p == null || !p.InMatch || chart == null || chart.Length > MaxChartBytes) return;
+		if (LanSpecChart.Decode(chart, MaxChartNotes) == null) return; // malformed: don't relay it
+		_specCharts[from] = chart;
 		foreach (var v in State.Players)
-			if (v.Id != from && v.WatchTarget >= 0) SendChartTo(v.Id, from, times, lanes, height);
+			if (v.Id != from && v.WatchTarget >= 0) SendChartTo(v.Id, from, chart);
 	}
 
-	private void SendChartTo(long viewer, long player, int[] times, byte[] lanes, int height)
+	private void SendChartTo(long viewer, long player, byte[] chart)
 	{
-		if (viewer == LocalId) OnSpecChart(player, times, lanes, height);
-		else RpcId(viewer, MethodName.RpcSpecChartFrom, player, times, lanes, height);
+		if (viewer == LocalId) OnSpecChart(player, chart);
+		else RpcId(viewer, MethodName.RpcSpecChartFrom, player, chart);
 	}
 
 	/// <summary>Re-sorts the queue round-robin	/// <summary>Re-sorts the queue round-robin and, in the lobby, makes its head the beatmap up next.</summary>
@@ -923,11 +930,12 @@ public partial class LanNetwork : Node
 		var s = State;
 		var head = s.Queue.FirstOrDefault();
 		if (head?.Id == s.CurrentItemId && head?.Beatmap?.Checksum == s.Beatmap?.Checksum && (head != null || s.Beatmap == null)
-			&& (head == null || (head.Mods.SequenceEqual(s.CurrentMods) && head.Speed == s.CurrentSpeed))) return;
+			&& (head == null || (head.Mods.SequenceEqual(s.CurrentMods) && head.Speed == s.CurrentSpeed && head.GameMode == s.CurrentGameMode))) return;
 
 		s.CurrentItemId = head?.Id ?? 0;
 		s.CurrentMods = head?.Mods.ToList() ?? new List<string>();
 		s.CurrentSpeed = head?.Speed ?? 1f;
+		s.CurrentGameMode = head?.GameMode ?? 0;
 		s.CurrentOwnerId = head?.OwnerId ?? 0;
 		s.CurrentOwnerName = head?.OwnerName;
 		s.Beatmap = head?.Beatmap;
@@ -939,7 +947,7 @@ public partial class LanNetwork : Node
 		}
 		s.CountdownActive = false; // restarts the "time till play" timer
 		var upNextMods = head == null ? "" : GlobalModLabel(head.Mods, head.Speed);
-		if (head != null) ServerChat(0, $"Up next: {head.Beatmap.Display}{(upNextMods.Length > 0 ? " +" + upNextMods : "")}, picked by {head.OwnerName}.");
+		if (head != null) ServerChat(0, $"Up next: {head.Beatmap.Display} [{GameModeName(head.GameMode)}]{(upNextMods.Length > 0 ? " +" + upNextMods : "")}, picked by {head.OwnerName}.");
 		RecheckLocalMap(force: true); // the server player needs the map too
 		MarkDirty();
 	}
@@ -1180,6 +1188,7 @@ public partial class LanNetwork : Node
 		SettingsOperator.Marathon = false;
 		SettingsOperator.SpectatorMode = false;
 		if (SettingsOperator.SessionConfig.SongID != index) SelectSong(index);
+		SettingsOperator.SessionConfig.GameMode = CleanGameMode(State.CurrentGameMode); // everyone plays the item's mode
 		BuildMatchLeaderboard();
 		SettingsOperator.loopaudio = false;
 		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/play.wav");
@@ -1423,15 +1432,15 @@ public partial class LanNetwork : Node
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
-	private void RpcAddToQueue(string json, string[] mods, float speed)
+	private void RpcAddToQueue(string json, string[] mods, float speed, int mode)
 	{
-		if (IsServer && State != null) ServerAddToQueue(Multiplayer.GetRemoteSenderId(), ParseMap(json), mods, speed);
+		if (IsServer && State != null) ServerAddToQueue(Multiplayer.GetRemoteSenderId(), ParseMap(json), mods, speed, mode);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
-	private void RpcReplaceQueueItem(int itemId, string json, string[] mods, float speed)
+	private void RpcReplaceQueueItem(int itemId, string json, string[] mods, float speed, int mode)
 	{
-		if (IsServer && State != null) ServerReplaceQueueItem(Multiplayer.GetRemoteSenderId(), itemId, ParseMap(json), mods, speed);
+		if (IsServer && State != null) ServerReplaceQueueItem(Multiplayer.GetRemoteSenderId(), itemId, ParseMap(json), mods, speed, mode);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
@@ -1460,15 +1469,15 @@ public partial class LanNetwork : Node
 
 	// Live play goes reliably on its own channel so a big chart never holds up chat / room state.
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 2)]
-	private void RpcSpecChart(int[] times, byte[] lanes, int height)
+	private void RpcSpecChart(byte[] chart)
 	{
-		if (IsServer && State != null) ServerStoreChart(Multiplayer.GetRemoteSenderId(), times, lanes, height);
+		if (IsServer && State != null) ServerStoreChart(Multiplayer.GetRemoteSenderId(), chart);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 2)]
-	private void RpcSpecChartFrom(long from, int[] times, byte[] lanes, int height)
+	private void RpcSpecChartFrom(long from, byte[] chart)
 	{
-		if (State != null) OnSpecChart(from, times, lanes, height);
+		if (State != null) OnSpecChart(from, chart);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 2)]
@@ -1598,13 +1607,31 @@ public partial class LanNetwork : Node
 	/// <summary>Gameplay calls this once the chart is loaded (LAN matches only).</summary>
 	public void SpecSendChart(List<NotesEn> notes, int viewHeight)
 	{
-		if (!LocalInMatch || State == null || notes == null) return;
-		var times = notes.Select(n => -n.timing).ToArray(); // NotesEn.timing is stored negative
-		var lanes = notes.Select(n => (byte)Math.Clamp(n.NotePart, 0, 3)).ToArray();
+		if (notes == null) return;
+		SpecSendChart(new LanSpecChart
+		{
+			Mode = 0,
+			Height = viewHeight,
+			Times = notes.Select(n => -n.timing).ToArray(), // NotesEn.timing is stored negative
+			Lanes = notes.Select(n => (byte)Math.Clamp(n.NotePart, 0, 3)).ToArray(),
+		});
+	}
+
+	/// <summary>Any game mode: send the chart spectators draw (LAN matches only).</summary>
+	public void SpecSendChart(LanSpecChart chart)
+	{
+		if (!LocalInMatch || State == null || chart == null) return;
 		_specOut.Clear();
 		_specTimer = 0;
-		if (IsServer) ServerStoreChart(1, times, lanes, viewHeight);
-		else RpcId(1, MethodName.RpcSpecChart, times, lanes, viewHeight);
+		var blob = chart.Encode();
+		if (IsServer) ServerStoreChart(1, blob);
+		else RpcId(1, MethodName.RpcSpecChart, blob);
+	}
+
+	/// <summary>Tap!: the cursor position (playfield units) at <paramref name="songMs"/>.</summary>
+	public void SpecCursor(float songMs, Vector2 pos)
+	{
+		if (LocalInMatch) _specOut.Cursor(songMs, pos);
 	}
 
 	private float _specSongMs;
@@ -1624,10 +1651,12 @@ public partial class LanNetwork : Node
 		if (LocalInMatch) _specOut.Judge(songMs, index, judge);
 	}
 
-	private void OnSpecChart(long from, int[] times, byte[] lanes, int height)
+	private void OnSpecChart(long from, byte[] chart)
 	{
+		var c = LanSpecChart.Decode(chart, MaxChartNotes);
+		if (c == null) return;
 		if (!Feeds.TryGetValue(from, out var f)) Feeds[from] = f = new LanSpectateFeed();
-		f.SetChart(times, lanes, height);
+		f.SetChart(c);
 	}
 
 	private void OnSpecTick(long from, byte[] packet)
@@ -1795,6 +1824,11 @@ public partial class LanNetwork : Node
 		if (ModsOperator.Mods["ht"]) return (new List<string> { "ht" }, HtCustom.Speed);
 		return (new List<string>(), 1f);
 	}
+
+	/// <summary>Only modes that have a gameplay scene (0 Mania, 1 Taiko, 3 Tap!); anything else plays Mania.</summary>
+	public static int CleanGameMode(int mode) => mode is 0 or 1 or 3 ? mode : 0;
+
+	public static string GameModeName(int mode) => CleanGameMode(mode) switch { 1 => "Taiko", 3 => "Tap!", _ => "Mania" };
 
 	private static (List<string>, float) CleanGlobalMods(string[] mods, float speed)
 	{

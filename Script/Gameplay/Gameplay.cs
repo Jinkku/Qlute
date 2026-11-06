@@ -321,27 +321,16 @@ public partial class Gameplay : Control
 		return ((float)max + ((float)great / 2) + ((float)meh / 3)) / ((float)max + (float)great + (float)meh + (float)bad);
 	}
 	
-	private float smoothTime = 0f;
+	private readonly SongClock Clock = new SongClock();
 
     /// <summary>
 	/// Game Clock
 	/// </summary>
-	public float GetRemainingTime(float delta = 1f)
+	public float GetRemainingTime(float delta = 0f)
 	{
-		if (AudioPlayer.Instance.Playing)
-		{
-			// increment smoothly
-			smoothTime += delta * AudioPlayer.Instance.PitchScale;
+		double songTime = Clock.Update(AudioPlayer.Instance, delta);
 
-			// occasional hard resync if drift gets big
-			float truePos = AudioPlayer.Instance.GetPlaybackPosition()
-						+ (float)AudioServer.GetTimeSinceLastMix();
-
-			if (Mathf.Abs(truePos - smoothTime) > 0.05f) // 50ms tolerance
-				smoothTime = truePos;
-		}
-
-		SettingsOperator.Gameplaycfg.Time = -WaitClock.TimeLeft + smoothTime;
+		SettingsOperator.Gameplaycfg.Time = -WaitClock.TimeLeft + songTime;
 		SettingsOperator.Gameplaycfg.Time -= startedtime;
 		SettingsOperator.Gameplaycfg.Time += audioOffset;
 
@@ -453,6 +442,8 @@ public partial class Gameplay : Control
 
     public override void _ExitTree()
     {
+	    // Only added to the tree when spectating; otherwise it was an orphan that leaked every play.
+	    if (IsInstanceValid(SpectatorPanel) && !SpectatorPanel.IsInsideTree()) SpectatorPanel.Free();
 	    SettingsOperator.inGameplay = false;
 	    DisplayServer.WindowSetTitle(oldtitle);
 	    HurtAnimation?.Kill();

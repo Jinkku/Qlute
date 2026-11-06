@@ -73,9 +73,9 @@ public partial class LobbyBeatmapPanel : PanelContainer
 			{
 				var mods = LanNetwork.ModAlias(me?.Mods);
 				var room = LanNetwork.GlobalModLabel(s.CurrentMods, s.CurrentSpeed);
-				var label = string.Join(" · ", new[] { room.Length > 0 ? $"room +{room}" : "", mods.Length > 0 ? "+" + mods : "" }.Where(x => x.Length > 0));
+				var label = string.Join(" · ", new[] { LanNetwork.GameModeName(s.CurrentGameMode), room.Length > 0 ? $"room +{room}" : "", mods.Length > 0 ? "+" + mods : "" }.Where(x => x.Length > 0));
 				bool canEdit = lobby && (_localIndex >= 0 || net.HasLocalSet());
-				OwnCard.Setup(net.LocalChart, 0, label.Length == 0 ? "No mods" : label, canEdit, false, false,
+				OwnCard.Setup(net.LocalChart, 0, label, canEdit, false, false,
 					missing: _localIndex < 0);
 			}
 		}
@@ -119,15 +119,15 @@ public partial class LobbyBeatmapPanel : PanelContainer
 		bool playing = s.Phase == LanPhase.Playing && s.Beatmap != null;
 
 		// State arrives several times a second during a match; only rebuild the cards when the queue really changed.
-		var sig = new StringBuilder($"{s.Phase}|{net.LocalId}|{net.IsHost}|{SettingsOperator.Beatmaps.Count}|{s.CurrentItemId}|{s.Beatmap?.Checksum}|{string.Join(",", s.CurrentMods)}{s.CurrentSpeed}");
-		foreach (var q in s.Queue) sig.Append($"|{q.Id}:{q.OwnerId}:{q.Beatmap?.Checksum}:{string.Join(",", q.Mods)}{q.Speed}");
+		var sig = new StringBuilder($"{s.Phase}|{net.LocalId}|{net.IsHost}|{SettingsOperator.Beatmaps.Count}|{s.CurrentItemId}|{s.Beatmap?.Checksum}|{string.Join(",", s.CurrentMods)}{s.CurrentSpeed}|{s.CurrentGameMode}");
+		foreach (var q in s.Queue) sig.Append($"|{q.Id}:{q.OwnerId}:{q.Beatmap?.Checksum}:{string.Join(",", q.Mods)}{q.Speed}:{q.GameMode}");
 		if (sig.ToString() == _queueSignature) return;
 		_queueSignature = sig.ToString();
 
 		foreach (var child in QueueList.GetChildren()) child.QueueFree();
 
 		if (playing)
-			AddCard(s.Beatmap, 0, WithMods($"now playing · {s.CurrentOwnerName}", s.CurrentMods, s.CurrentSpeed), false, false, true,
+			AddCard(s.Beatmap, 0, WithMods($"now playing · {s.CurrentOwnerName}", s.CurrentMods, s.CurrentSpeed, s.CurrentGameMode), false, false, true,
 				net.FindLocalBeatmap(s.Beatmap) < 0);
 
 		for (int i = 0; i < s.Queue.Count; i++)
@@ -135,7 +135,7 @@ public partial class LobbyBeatmapPanel : PanelContainer
 			var q = s.Queue[i];
 			bool own = q.OwnerId == net.LocalId;
 			bool upNext = !playing && i == 0;
-			var who = WithMods(upNext ? $"up next · {q.OwnerName}" : q.OwnerName, q.Mods, q.Speed);
+			var who = WithMods(upNext ? $"up next · {q.OwnerName}" : q.OwnerName, q.Mods, q.Speed, q.GameMode);
 			AddCard(q.Beatmap, q.Id, who, own, own || net.IsHost, upNext, net.FindLocalBeatmap(q.Beatmap) < 0);
 		}
 
@@ -143,9 +143,10 @@ public partial class LobbyBeatmapPanel : PanelContainer
 			AddCard(null, 0, "", false, false, false, false);
 	}
 
-	private static string WithMods(string who, System.Collections.Generic.List<string> mods, float speed)
+	private static string WithMods(string who, System.Collections.Generic.List<string> mods, float speed, int mode)
 	{
 		var label = LanNetwork.GlobalModLabel(mods, speed);
+		who = $"{who} · {LanNetwork.GameModeName(mode)}";
 		return label.Length == 0 ? who : $"{who} · +{label}";
 	}
 

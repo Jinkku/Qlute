@@ -21,7 +21,6 @@ config/name_localized={
 "zh_CN": "丘律特"
 }
 config/description="Your Keys // Your Rhythm"
-config/version="2026.11.03"
 run/main_scene="res://Panels/Screens/bootstrap.tscn"
 run/print_header=false
 config/use_custom_user_dir=true

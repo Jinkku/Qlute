@@ -1,9 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bses1gyafxf3q"]
 
-[ext_resource type="Theme" path="res://Resources/Multiplayer/LobbyTheme.tres" id="1_theme"]
-[ext_resource type="Script" path="res://Script/Multiplayer/Lobby/LobbyHeader.cs" id="2_script"]
+[ext_resource type="Theme" uid="uid://phcyox1n5ls3" path="res://Resources/Multiplayer/LobbyTheme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://dg4kcnwuiy1l7" path="res://Script/Multiplayer/Lobby/LobbyHeader.cs" id="2_script"]
 
-[node name="LobbyHeader" type="PanelContainer" node_paths=PackedStringArray("RoomTitle", "RenameEdit", "RenameButton", "HostPill", "PlayersPill", "PhasePill", "TimerCaption", "TimerLabel", "TimerBar", "HostControls", "TimerMinusButton", "TimerValue", "TimerPlusButton", "StartNowButton", "SpectateButton", "ReadyButton", "LeaveButton")]
+[node name="LobbyHeader" type="PanelContainer" unique_id=599487438 node_paths=PackedStringArray("RoomTitle", "RenameEdit", "RenameButton", "HostPill", "PlayersPill", "PhasePill", "TimerCaption", "TimerLabel", "TimerBar", "HostControls", "TimerMinusButton", "TimerValue", "TimerPlusButton", "StartNowButton", "SpectateButton", "ReadyButton", "LeaveButton")]
 theme = ExtResource("1_theme")
 theme_type_variation = &"LobbyHeaderCard"
 script = ExtResource("2_script")
@@ -25,27 +25,27 @@ SpectateButton = NodePath("H/Spectate")
 ReadyButton = NodePath("H/Ready")
 LeaveButton = NodePath("H/Leave")
 
-[node name="H" type="HBoxContainer" parent="."]
+[node name="H" type="HBoxContainer" parent="." unique_id=753663337]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Info" type="VBoxContainer" parent="H"]
+[node name="Info" type="VBoxContainer" parent="H" unique_id=433247258]
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_constants/separation = 8
 
-[node name="TitleRow" type="HBoxContainer" parent="H/Info"]
+[node name="TitleRow" type="HBoxContainer" parent="H/Info" unique_id=1619868220]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="RoomTitle" type="Label" parent="H/Info/TitleRow"]
+[node name="RoomTitle" type="Label" parent="H/Info/TitleRow" unique_id=1142352440]
 layout_mode = 2
 theme_type_variation = &"LobbyTitle"
 text = "Room name"
 
-[node name="RenameEdit" type="LineEdit" parent="H/Info/TitleRow"]
+[node name="RenameEdit" type="LineEdit" parent="H/Info/TitleRow" unique_id=1978412538]
 visible = false
 custom_minimum_size = Vector2(340, 0)
 layout_mode = 2
@@ -54,72 +54,75 @@ placeholder_text = "Room name"
 max_length = 40
 select_all_on_focus = true
 
-[node name="Rename" type="Button" parent="H/Info/TitleRow"]
+[node name="Rename" type="Button" parent="H/Info/TitleRow" unique_id=171884261]
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Rename the room (Enter to save, Esc to cancel)"
 theme_type_variation = &"LobbyGhostButton"
 text = "Rename"
 
-[node name="Pills" type="HBoxContainer" parent="H/Info"]
+[node name="Pills" type="HBoxContainer" parent="H/Info" unique_id=576668507]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Host" type="Label" parent="H/Info/Pills"]
+[node name="Host" type="Label" parent="H/Info/Pills" unique_id=1654114151]
 layout_mode = 2
 theme_type_variation = &"LobbyAccentPill"
+theme_override_font_sizes/font_size = 10
 text = "HOST  name"
 
-[node name="Players" type="Label" parent="H/Info/Pills"]
+[node name="Players" type="Label" parent="H/Info/Pills" unique_id=1991542315]
 layout_mode = 2
 theme_type_variation = &"LobbyPill"
+theme_override_font_sizes/font_size = 10
 text = "1 PLAYER"
 
-[node name="Phase" type="Label" parent="H/Info/Pills"]
+[node name="Phase" type="Label" parent="H/Info/Pills" unique_id=732306094]
 layout_mode = 2
 theme_type_variation = &"LobbyPill"
-text = "IN LOBBY"
+theme_override_font_sizes/font_size = 10
+text = "LOBBY IN PROGRESS"
 
-[node name="Countdown" type="VBoxContainer" parent="H"]
+[node name="Countdown" type="VBoxContainer" parent="H" unique_id=973230536]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 2
 
-[node name="Caption" type="Label" parent="H/Countdown"]
+[node name="Caption" type="Label" parent="H/Countdown" unique_id=49968946]
 layout_mode = 2
 theme_type_variation = &"LobbySubtle"
 theme_override_font_sizes/font_size = 12
 text = "WAITING FOR A BEATMAP"
 horizontal_alignment = 1
 
-[node name="Time" type="Label" parent="H/Countdown"]
+[node name="Time" type="Label" parent="H/Countdown" unique_id=214471463]
 layout_mode = 2
 theme_type_variation = &"LobbyTimer"
 text = "-:--"
 horizontal_alignment = 1
 
-[node name="Bar" type="ProgressBar" parent="H/Countdown"]
+[node name="Bar" type="ProgressBar" parent="H/Countdown" unique_id=147926364]
 custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
 show_percentage = false
 
-[node name="HostControls" type="VBoxContainer" parent="H"]
+[node name="HostControls" type="VBoxContainer" parent="H" unique_id=355046941]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 6
 
-[node name="TimerRow" type="HBoxContainer" parent="H/HostControls"]
+[node name="TimerRow" type="HBoxContainer" parent="H/HostControls" unique_id=1783281066]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Minus" type="Button" parent="H/HostControls/TimerRow"]
+[node name="Minus" type="Button" parent="H/HostControls/TimerRow" unique_id=11742464]
 custom_minimum_size = Vector2(62, 0)
 layout_mode = 2
 tooltip_text = "Shorter countdown"
 text = "-15s"
 
-[node name="Value" type="Label" parent="H/HostControls/TimerRow"]
+[node name="Value" type="Label" parent="H/HostControls/TimerRow" unique_id=110060925]
 custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
 tooltip_text = "Countdown length"
@@ -128,45 +131,45 @@ text = "1:00"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Plus" type="Button" parent="H/HostControls/TimerRow"]
+[node name="Plus" type="Button" parent="H/HostControls/TimerRow" unique_id=1474023447]
 custom_minimum_size = Vector2(62, 0)
 layout_mode = 2
 tooltip_text = "Longer countdown"
 text = "+15s"
 
-[node name="StartNow" type="Button" parent="H/HostControls"]
+[node name="StartNow" type="Button" parent="H/HostControls" unique_id=1069387657]
 layout_mode = 2
 tooltip_text = "Start in 5 seconds with whoever is ready"
 text = "Start now"
 
-[node name="Spectate" type="Button" parent="H"]
+[node name="Spectate" type="Button" parent="H" unique_id=1769519517]
 visible = false
 custom_minimum_size = Vector2(140, 60)
 layout_mode = 2
 size_flags_vertical = 4
-theme_type_variation = &"LobbyGhostButton"
 tooltip_text = "Watch the players in the match (grid or one by one)"
+theme_type_variation = &"LobbyGhostButton"
 text = "Spectate"
 
-[node name="Ready" type="Button" parent="H"]
-custom_minimum_size = Vector2(170, 60)
+[node name="Ready" type="Button" parent="H" unique_id=1275420087]
+custom_minimum_size = Vector2(140, 60)
 layout_mode = 2
 size_flags_vertical = 4
 theme_type_variation = &"LobbyReadyButton"
 toggle_mode = true
 text = "Ready up"
 
-[node name="Leave" type="Button" parent="H"]
+[node name="Leave" type="Button" parent="H" unique_id=675865480]
 custom_minimum_size = Vector2(120, 60)
 layout_mode = 2
 size_flags_vertical = 4
 theme_type_variation = &"LobbyDangerButton"
 text = "Leave"
 
-[connection signal="pressed" from="H/Info/TitleRow/Rename" to="." method="OnRenamePressed"]
-[connection signal="text_submitted" from="H/Info/TitleRow/RenameEdit" to="." method="OnRenameTextSubmitted"]
 [connection signal="focus_exited" from="H/Info/TitleRow/RenameEdit" to="." method="OnRenameFocusExited"]
 [connection signal="gui_input" from="H/Info/TitleRow/RenameEdit" to="." method="OnRenameGuiInput"]
+[connection signal="text_submitted" from="H/Info/TitleRow/RenameEdit" to="." method="OnRenameTextSubmitted"]
+[connection signal="pressed" from="H/Info/TitleRow/Rename" to="." method="OnRenamePressed"]
 [connection signal="pressed" from="H/HostControls/TimerRow/Minus" to="." method="OnTimerMinusPressed"]
 [connection signal="pressed" from="H/HostControls/TimerRow/Plus" to="." method="OnTimerPlusPressed"]
 [connection signal="pressed" from="H/HostControls/StartNow" to="." method="OnStartNowPressed"]

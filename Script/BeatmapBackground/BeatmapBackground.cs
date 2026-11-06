@@ -82,6 +82,8 @@ public partial class BeatmapBackground : TextureRect
 		GD.Print("Detected a emit of background being changed.");
 		check_background();
 	}
+	// The random default wallpaper this background last switched to
+	private Texture2D DefaultTexture;
 	private void check_background(bool Instant = false)
 	{
 		if (Texture != SettingsOperator.SessionConfig.Background && SettingsOperator.SessionConfig.SongID != -1 && SettingsOperator.SessionConfig.Background != null)
@@ -91,10 +93,11 @@ public partial class BeatmapBackground : TextureRect
 			Size = new Vector2(GetViewportRect().Size[0] + 20, GetViewportRect().Size[1] + 20);
 			Position = new Vector2(GetViewportRect().Size[0] - 5, GetViewportRect().Size[1] - 5);
 		}
-		else if (Texture != SettingsOperator.GetNullImage() && SettingsOperator.SessionConfig.Background == null)
+		else if ((DefaultTexture == null || Texture != DefaultTexture) && SettingsOperator.SessionConfig.Background == null)
 		{
 			GD.Print("[Qlute] Switching to Default background");
-			Switch_Background(SettingsOperator.GetNullImage(), Instant);
+			DefaultTexture = SettingsOperator.GetNullImage();
+			Switch_Background(DefaultTexture, Instant);
 			Size = new Vector2(GetViewportRect().Size[0] + 20, GetViewportRect().Size[1] + 20);
 			Position = new Vector2(GetViewportRect().Size[0] - 5, GetViewportRect().Size[1] - 5);	
 		}
