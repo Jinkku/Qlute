@@ -1,7 +1,7 @@
 using Godot;
 
 /// <summary>
-/// Top bar of the LAN lobby: room name (with inline rename for the host), host / player / phase pills,
+/// Top bar of the lobby (LAN or online room): room name (with inline rename for the host), host / player / phase pills,
 /// the "time till play" countdown, host timer controls, and the Ready / Leave buttons.
 ///
 /// This component only displays state and raises signals; <see cref="MultiplayerLobby"/> decides what they do.
@@ -70,7 +70,7 @@ public partial class LobbyHeader : PanelContainer
 		RoomTitle.Text = s.Name;
 		HostPill.Text = $"HOST  {s.HostName}";
 		PlayersPill.Text = $"{s.Players.Count} PLAYER{(s.Players.Count == 1 ? "" : "S")}";
-		PhasePill.Text = lobby ? "IN LOBBY" : "MATCH IN PROGRESS";
+		PhasePill.Text = (net.IsOnline ? "ONLINE  ·  " : "LAN  ·  ") + (lobby ? "IN LOBBY" : "MATCH IN PROGRESS");
 
 		if (!net.IsHost && _renaming) SetRenaming(false); // lost host while typing
 		RenameButton.Visible = net.IsHost && !_renaming;

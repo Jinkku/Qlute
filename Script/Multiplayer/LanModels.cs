@@ -132,3 +132,40 @@ public class LanRoomInfo
 	public LanBeacon Beacon { get; set; }
 	public ulong LastSeenMs { get; set; }
 }
+
+/// <summary>A room on the online server, as the lounge lists it.</summary>
+public class OnlineRoomInfo
+{
+	public long Id { get; set; }
+	public string Name { get; set; }
+	public string Host { get; set; }
+	public int Players { get; set; }
+	public int Phase { get; set; }
+	public string Map { get; set; }
+	public int Proto { get; set; }
+	public string Version { get; set; }
+}
+
+/// <summary>The Create Room dialog's choices. Kept here so they survive a trip to song select for the starting beatmap.</summary>
+public static class RoomDraft
+{
+	public static string Name;
+	public static bool Online;
+	/// <summary>Library index of the starting beatmap (-1 = none).</summary>
+	public static int BeatmapIndex = -1;
+	/// <summary>Room-wide DT / HT for the starting beatmap (picked in song select).</summary>
+	public static List<string> Mods = new();
+	public static float Speed = 1f;
+	/// <summary>Set when song select returns to the lounge, so the dialog opens again.</summary>
+	public static bool Reopen;
+
+	public static void Reset()
+	{
+		Name = null;
+		Online = false;
+		BeatmapIndex = -1;
+		Mods = new List<string>();
+		Speed = 1f;
+		Reopen = false;
+	}
+}

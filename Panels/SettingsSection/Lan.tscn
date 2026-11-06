@@ -23,12 +23,17 @@ layout_mode = 2
 mouse_filter = 0
 theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
 theme_override_fonts/font = SubResource("FontVariation_bold")
-text = "LAN"
+text = "LAN & Online"
 
 [node name="ChatEnabled" type="CheckButton" parent="Rows"]
 layout_mode = 2
 tooltip_text = "When off, the game doesn't announce you on the local network at all, and you won't see anyone in the LAN chat."
 text = "Show me in the LAN chat"
+
+[node name="OnlineChat" type="CheckButton" parent="Rows"]
+layout_mode = 2
+tooltip_text = "Connect to the server's chat (#general and private rooms) while you're logged in. Other online players can see that you're online."
+text = "Connect to online chat"
 
 [node name="NicknameLabel" type="Label" parent="Rows"]
 layout_mode = 2

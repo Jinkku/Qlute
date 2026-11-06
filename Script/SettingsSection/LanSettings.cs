@@ -1,9 +1,9 @@
 using Godot;
 
-/// <summary>Settings > LAN: LAN chat privacy toggle and the offline name.</summary>
+/// <summary>Settings > LAN &amp; Online: LAN chat privacy toggle, online chat toggle and the offline name.</summary>
 public partial class LanSettings : PanelContainer
 {
-	private CheckButton _enabled;
+	private CheckButton _enabled, _online;
 	private LineEdit _nickname;
 	private Label _hint;
 
@@ -15,6 +15,9 @@ public partial class LanSettings : PanelContainer
 
 		_enabled.ButtonPressed = LanChat.Enabled;
 		_enabled.Toggled += on => LanChat.Instance?.SetEnabled(on);
+		_online = GetNode<CheckButton>("Rows/OnlineChat");
+		_online.ButtonPressed = OnlineChat.Enabled;
+		_online.Toggled += on => OnlineChat.Instance?.SetEnabled(on);
 
 		_nickname.Text = LanChat.Nickname;
 		_nickname.TextSubmitted += Save;
@@ -30,6 +33,7 @@ public partial class LanSettings : PanelContainer
 	private void Refresh()
 	{
 		_enabled.SetPressedNoSignal(LanChat.Enabled);
+		_online.SetPressedNoSignal(OnlineChat.Enabled);
 		_nickname.Editable = LanChat.CanUseNickname;
 		_nickname.TooltipText = LanChat.CanUseNickname ? "" : "You're logged in, so your account name is used.";
 	}

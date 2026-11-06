@@ -140,6 +140,7 @@ public partial class SettingsOperator : Node
         { "gamemode", 0 },
         { "lanchat", true },      // show up in the LAN chat (off = invisible on the network)
         { "lannickname", "" },    // name used on LAN when not logged in
+        { "onlinechat", true },   // connect to the server's chat while logged in
     };
     public Dictionary<string, object> Configurationbk { get; set; }
 

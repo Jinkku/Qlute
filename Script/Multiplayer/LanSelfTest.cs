@@ -9,6 +9,8 @@ using System.Linq;
 /// Add --lan-test-transfer to both: the host hands host to the joiner, who renames the room and bumps the timer.
 /// Add --lan-test-mode=N on the host to queue its pick in game mode N (0 Mania, 1 Taiko, 3 Tap!).
 /// Add --lan-test-quit=SECONDS to exit automatically. Output lines are prefixed with [LANTEST].
+/// Add --lan-test-online to both to go through the online server instead (with --online-test-user=NAME
+/// --online-test-pass=SHA256 to log in without the real login flow, and QLUTE_WS_BASE=ws://host:port for a local server).
 /// </summary>
 public partial class LanSelfTest : Node
 {
@@ -46,6 +48,8 @@ public partial class LanSelfTest : Node
 		Log($"screenshot {path}");
 	}
 	private bool _forfeited;
+	private bool _loggedIn, _dialogShot;
+	private double _dialogAt = -1;
 	private bool _transferred, _renamed;
 	private bool _spectating;
 	private double _specLog;
@@ -62,12 +66,21 @@ public partial class LanSelfTest : Node
 		_t += delta;
 		bool host = Has("--lan-test-host");
 
+		bool online = Has("--lan-test-online");
+		if (online && !_loggedIn && Value("--online-test-user=") is { } user)
+		{
+			_loggedIn = true;
+			ApiOperator.Username = user;
+			ApiOperator.PasswordHash = Value("--online-test-pass=");
+			SettingsOperator.SessionConfig.Loggedin = true;
+		}
+
 		if (!_started && _t > 6)
 		{
 			_started = true;
 			if (host)
 			{
-				Log($"hosting: {_net.Host("LAN Test Room")}");
+				Log($"hosting: {(online ? _net.HostOnline("Online Test Room") : _net.Host("LAN Test Room"))}");
 				_net.HostAdjustTimer(-10000); // shortest countdown
 				if (SettingsOperator.SessionConfig.SongID >= 0)
 				{
@@ -82,19 +95,39 @@ public partial class LanSelfTest : Node
 			{
 				Log("searching for rooms");
 				if (Value("--lan-test-shot=") != null) GetNode<SceneTransition>("/root/Transition").Switch(LanNetwork.LoungeScene);
-				_net.StartDiscovery();
+				else if (online) _net.StartOnlineBrowse();
+				else _net.StartDiscovery();
 			}
 		}
 
 		// --lan-test-shot=PREFIX: save screenshots of the lounge and the lobby (windowed runs only).
 		var shot = Value("--lan-test-shot=");
-		if (shot != null && !host && _net.Rooms.Count > 0 && _foundAt < 0) _foundAt = _t;
+		if (shot != null && !host && (_net.Rooms.Count > 0 || _net.OnlineRooms.Count > 0) && _foundAt < 0) _foundAt = _t;
 		if (shot != null && !host && _foundAt >= 0 && !_loungeShot && _t > _foundAt + 2.5) { _loungeShot = true; Screenshot(shot + "_lounge.png"); }
 		if (shot != null && _net.State != null && GetTree().CurrentScene?.Name == "MultiplayerLobby" && _lobbySeenAt < 0) _lobbySeenAt = _t;
 		if (shot != null && _lobbySeenAt >= 0 && !_lobbyShot && _t > _lobbySeenAt + 3) { _lobbyShot = true; Screenshot(shot + "_lobby.png"); }
 		if (shot != null && !host && !_loungeShot) return; // wait for the lounge screenshot before joining
+		// --lan-test-dialog (with --lan-test-shot): also screenshot the Create Room dialog before joining.
+		if (shot != null && !host && Has("--lan-test-dialog") && !_dialogShot)
+		{
+			if (_dialogAt < 0) { _dialogAt = _t; (GetTree().CurrentScene as MultiplayerList)?.OpenCreateDialog(); }
+			else if (_t > _dialogAt + 1.5)
+			{
+				_dialogShot = true;
+				Screenshot(shot + "_dialog.png");
+				foreach (var d in GetTree().CurrentScene.GetChildren().OfType<CreateRoomDialog>()) d.QueueFree();
+			}
+			return;
+		}
 
-		if (!host && _started && _net.State == null && _net.Rooms.Count > 0 && !_requested)
+		if (online && !host && _started && _net.State == null && _net.OnlineRooms.Count > 0 && !_requested)
+		{
+			var room = _net.OnlineRooms[0];
+			Log($"found online room '{room.Name}' #{room.Id} hosted by {room.Host} with {room.Players} player(s), map: {room.Map}");
+			_requested = true;
+			_net.JoinOnline(room.Id);
+		}
+		if (!online && !host && _started && _net.State == null && _net.Rooms.Count > 0 && !_requested)
 		{
 			var room = _net.Rooms.Values.First();
 			Log($"found room '{room.Beacon.name}' at {room.Address}:{room.Port} with {room.Beacon.players} player(s), map: {room.Beacon.map}");

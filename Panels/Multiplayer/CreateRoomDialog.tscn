@@ -1,0 +1,147 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://Script/Multiplayer/CreateRoomDialog.cs" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 24.0
+content_margin_top = 20.0
+content_margin_right = 24.0
+content_margin_bottom = 20.0
+bg_color = Color(0.141176, 0.164706, 0.219608, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_map"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(0, 0, 0, 0.25)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="CreateRoomDialog" type="Control" node_paths=PackedStringArray("NameEdit", "Visibility", "VisibilityHint", "BeatmapName", "ChangeBeatmap", "ClearBeatmap", "CancelButton", "CreateButton")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+NameEdit = NodePath("Center/Panel/Rows/NameEdit")
+Visibility = NodePath("Center/Panel/Rows/Visibility")
+VisibilityHint = NodePath("Center/Panel/Rows/VisibilityHint")
+BeatmapName = NodePath("Center/Panel/Rows/BeatmapRow/BeatmapBox/BeatmapName")
+ChangeBeatmap = NodePath("Center/Panel/Rows/BeatmapRow/Change")
+ClearBeatmap = NodePath("Center/Panel/Rows/BeatmapRow/Clear")
+CancelButton = NodePath("Center/Panel/Rows/Buttons/Cancel")
+CreateButton = NodePath("Center/Panel/Rows/Buttons/Create")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Rows" type="VBoxContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Center/Panel/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.488281, 0.784119, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "Create a room"
+
+[node name="NameLabel" type="Label" parent="Center/Panel/Rows"]
+layout_mode = 2
+text = "Room name"
+
+[node name="NameEdit" type="LineEdit" parent="Center/Panel/Rows"]
+layout_mode = 2
+max_length = 40
+
+[node name="VisibilityLabel" type="Label" parent="Center/Panel/Rows"]
+layout_mode = 2
+text = "Who can see it"
+
+[node name="Visibility" type="OptionButton" parent="Center/Panel/Rows"]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "LAN - people on your network"
+popup/item_0/id = 0
+popup/item_1/text = "Online - anyone on the server"
+popup/item_1/id = 1
+
+[node name="VisibilityHint" type="Label" parent="Center/Panel/Rows"]
+modulate = Color(1, 1, 1, 0.6)
+custom_minimum_size = Vector2(570, 0)
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="BeatmapLabel" type="Label" parent="Center/Panel/Rows"]
+layout_mode = 2
+text = "Starting beatmap"
+
+[node name="BeatmapRow" type="HBoxContainer" parent="Center/Panel/Rows"]
+layout_mode = 2
+
+[node name="BeatmapBox" type="PanelContainer" parent="Center/Panel/Rows/BeatmapRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_map")
+
+[node name="BeatmapName" type="Label" parent="Center/Panel/Rows/BeatmapRow/BeatmapBox"]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+text = "None"
+text_overrun_behavior = 3
+
+[node name="Change" type="Button" parent="Center/Panel/Rows/BeatmapRow"]
+layout_mode = 2
+text = "Change..."
+
+[node name="Clear" type="Button" parent="Center/Panel/Rows/BeatmapRow"]
+layout_mode = 2
+text = "Clear"
+
+[node name="Spacer" type="Control" parent="Center/Panel/Rows"]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Center/Panel/Rows"]
+layout_mode = 2
+alignment = 2
+
+[node name="Cancel" type="Button" parent="Center/Panel/Rows/Buttons"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Cancel"
+
+[node name="Create" type="Button" parent="Center/Panel/Rows/Buttons"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+text = "Create room"

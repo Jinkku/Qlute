@@ -1,10 +1,12 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
-/// The chat overlay opened from the top panel. Shows the LAN chat (<see cref="LanChat"/>):
-/// rooms + invites on the left, the selected room in the middle, people on the network on the right.
+/// The chat overlay opened from the top panel. Shows both chats side by side:
+/// online (<see cref="OnlineChat"/>: server channels + private rooms, needs a login) and LAN (<see cref="LanChat"/>).
+/// Rooms + invites on the left, the selected room in the middle, people on the right.
 /// </summary>
 public partial class ChatOverlay : PanelContainer
 {
@@ -24,103 +26,159 @@ public partial class ChatOverlay : PanelContainer
 
 	/// <summary>Theme type variation (Resources/System/theme.tres) every chat box button uses.</summary>
 	public const string ButtonVariation = "ChatboxButton";
+	private const int MaxPeopleShown = 100;
 
-	/// <summary>Remembered across open/close of the overlay.</summary>
-	private static string _selected = LanChat.PublicRoomId;
-	private int _shownVersion = -1;
+	private const string LanPrefix = "lan:", OnlinePrefix = "on:";
+
+	/// <summary>Selected room key ("on:#general", "lan:lan"...). Remembered across open/close of the overlay.</summary>
+	private static string _selected;
+	private int _shownLan = -1, _shownOnline = -1;
 	private string _shownRoom;
+	private PopupMenu _newRoomMenu;
+	private string _inviteDraft = "";
+
+	private static LanChat Lan => LanChat.Instance;
+	private static OnlineChat Online => OnlineChat.Instance;
 
 	public override void _Ready()
 	{
 		NewRoomButton.ThemeTypeVariation = ButtonVariation;
 		LeaveButton.ThemeTypeVariation = ButtonVariation;
-		NewRoomButton.Pressed += () =>
-		{
-			var c = LanChat.Instance;
-			if (c == null) return;
-			_selected = c.CreatePrivateRoom(null);
-			Refresh(force: true);
-		};
+		TurnOnButton.ThemeTypeVariation = ButtonVariation;
+
+		_newRoomMenu = new PopupMenu();
+		_newRoomMenu.AddItem("Online room (invite by username)", 0);
+		_newRoomMenu.AddItem("LAN room (people on this network)", 1);
+		_newRoomMenu.IdPressed += id => CreateRoom(online: id == 0);
+		AddChild(_newRoomMenu);
+		NewRoomButton.Pressed += OnNewRoomPressed;
+
 		LeaveButton.Pressed += () =>
 		{
-			LanChat.Instance?.LeaveRoom(_selected);
-			_selected = LanChat.PublicRoomId;
-			Refresh(force: true);
+			if (IsOnlineKey(_selected)) Online?.LeaveRoom(RoomId(_selected));
+			else Lan?.LeaveRoom(RoomId(_selected));
+			_selected = null;
+			Refresh();
 		};
-		TurnOnButton.ThemeTypeVariation = ButtonVariation;
-		TurnOnButton.Pressed += () => LanChat.Instance?.SetEnabled(true);
-		PowerButton.Toggled += on => LanChat.Instance?.SetEnabled(on);
+		TurnOnButton.Pressed += () => Lan?.SetEnabled(true);
+		PowerButton.Toggled += on => Lan?.SetEnabled(on);
 		NameEdit.Text = LanChat.Nickname;
 		NameEdit.TextSubmitted += text => { SaveName(text); NameEdit.ReleaseFocus(); };
 		NameEdit.FocusExited += () => SaveName(NameEdit.Text);
 		Input.TextSubmitted += text =>
 		{
 			Input.Clear();
-			LanChat.Instance?.Send(_selected, text);
+			if (_selected == null) return;
+			if (IsOnlineKey(_selected)) Online?.Send(RoomId(_selected), text);
+			else Lan?.Send(RoomId(_selected), text);
 		};
-		Refresh(force: true);
+		Refresh();
 	}
 
 	public override void _Process(double delta)
 	{
-		var c = LanChat.Instance;
-		if (c == null) return;
-		if (c.Version != _shownVersion || _shownRoom != _selected) Refresh(force: false);
+		if (Online?.JustCreated is { } created)
+		{
+			Online.JustCreated = null;
+			_selected = OnlinePrefix + created;
+		}
+		if ((Lan?.Version ?? 0) != _shownLan || (Online?.Version ?? 0) != _shownOnline || _shownRoom != _selected) Refresh();
 	}
 
-	private void Refresh(bool force)
+	// =====================================================================
+	// Rooms from both chats
+	// =====================================================================
+
+	private static bool IsOnlineKey(string key) => key?.StartsWith(OnlinePrefix) == true;
+	private static string RoomId(string key) => key == null ? null : key[(IsOnlineKey(key) ? OnlinePrefix.Length : LanPrefix.Length)..];
+
+	private static List<(string key, LanChat.Room room)> OnlineRooms() =>
+		Online?.HasSession == true ? Online.Rooms.Values.Select(r => (OnlinePrefix + r.Id, r)).ToList() : new();
+
+	private static List<(string key, LanChat.Room room)> LanRooms() =>
+		Lan?.Running == true ? Lan.VisibleRooms().Select(r => (LanPrefix + r.Id, r)).ToList() : new();
+
+	private static LanChat.Room Find(string key)
 	{
-		var c = LanChat.Instance;
-		if (c == null) return;
-		_shownVersion = c.Version;
-		_shownRoom = _selected;
+		if (key == null) return null;
+		if (IsOnlineKey(key)) return Online?.HasSession == true && Online.Rooms.TryGetValue(RoomId(key), out var o) ? o : null;
+		return Lan?.Running == true && Lan.VisibleRooms().FirstOrDefault(r => r.Id == RoomId(key)) is { } l ? l : null;
+	}
+
+	private void Refresh()
+	{
+		_shownLan = Lan?.Version ?? 0;
+		_shownOnline = Online?.Version ?? 0;
 		RefreshName();
 		PowerButton.SetPressedNoSignal(LanChat.Enabled);
-		TurnOnButton.Visible = !LanChat.Enabled;
-		NewRoomButton.Disabled = !c.Running;
-		if (!c.Running)
+
+		var online = OnlineRooms();
+		var lan = LanRooms();
+		if (Find(_selected) == null) _selected = online.FirstOrDefault().key ?? lan.FirstOrDefault().key;
+		var room = Find(_selected);
+		_shownRoom = _selected;
+		if (room != null)
 		{
-			if (LanChat.Enabled)
-			{
-				Status.Text = "LAN chat is unavailable";
-				Empty.Text = $"Couldn't open UDP port {LanChat.PresencePort} (in use or blocked by a firewall).";
-			}
-			else
-			{
-				Status.Text = "You're invisible on this network";
-				Empty.Text = "LAN chat is off. Nobody on the network can see you, and you can't see them.";
-			}
-			foreach (var child in RoomList.GetChildren()) child.QueueFree();
-			foreach (var child in PeopleList.GetChildren()) child.QueueFree();
-			PeopleTitle.Text = "";
-			ShowEmpty(true);
+			if (IsOnlineKey(_selected)) Online.MarkRead(room.Id); else Lan.MarkRead(room.Id);
+			_shownLan = Lan?.Version ?? 0;
+			_shownOnline = Online?.Version ?? 0;
+		}
+
+		Status.Text = $"Online: {OnlineSummary()}   ·   LAN: {LanSummary()}";
+		NewRoomButton.Disabled = Online?.Connected != true && Lan?.Running != true;
+		TurnOnButton.Visible = room == null && !LanChat.Enabled;
+
+		BuildRoomList(online, lan);
+		BuildPeople(room);
+
+		ShowEmpty(room == null);
+		if (room == null)
+		{
+			Empty.Text = EmptyText();
 			return;
 		}
-		Empty.Text = "Nobody else is playing on this network right now.\nThe LAN chat shows up as soon as someone starts the game.";
-
-		var rooms = c.VisibleRooms().ToList();
-		if (rooms.All(r => r.Id != _selected)) _selected = rooms.FirstOrDefault()?.Id ?? LanChat.PublicRoomId;
-		bool hasRoom = rooms.Any(r => r.Id == _selected);
-		if (hasRoom) c.MarkRead(_selected);
-		_shownVersion = c.Version;
-
-		Status.Text = c.Peers.Count switch
-		{
-			0 => "Nobody else on this network yet",
-			1 => "1 other player on this network",
-			var n => $"{n} other players on this network",
-		};
-
-		BuildRoomList(c, rooms);
-		BuildPeople(c, hasRoom ? c.Rooms[_selected] : null);
-
-		ShowEmpty(!hasRoom);
-		if (!hasRoom) return;
-		var room = c.Rooms[_selected];
-		Input.PlaceholderText = $"Chatting as {LanChat.LocalName()} in {room.Title}";
+		var me = IsOnlineKey(_selected) ? Online.Username : LanChat.LocalName();
+		Input.PlaceholderText = $"Chatting as {me} in {room.Title}" + (IsOnlineKey(_selected) && room.IsPublic ? " (everyone online can read this)" : "");
+		if (IsOnlineKey(_selected) && !Online.Connected) Input.PlaceholderText = Online.StatusText;
+		Input.Editable = !IsOnlineKey(_selected) || Online.Connected;
 		LeaveButton.Visible = !room.IsPublic;
 		Log.Clear();
-		Log.AppendText(string.Join("\n", room.Lines.Select(Format)));
+		Log.AppendText(string.Join("\n", room.Lines.Select(l => Format(l, IsOnlineKey(_selected)))));
+	}
+
+	private static string OnlineSummary()
+	{
+		var o = Online;
+		if (o == null) return "unavailable";
+		return o.State switch
+		{
+			OnlineChat.ConnState.Online => $"{o.OnlineUsers.Count} player{(o.OnlineUsers.Count == 1 ? "" : "s")} online",
+			_ when o.Reconnecting => "reconnecting...",
+			OnlineChat.ConnState.Connecting => "connecting...",
+			OnlineChat.ConnState.Off => "off",
+			OnlineChat.ConnState.LoggedOut => "log in to chat",
+			_ => "offline",
+		};
+	}
+
+	private static string LanSummary()
+	{
+		var c = Lan;
+		if (c == null || !c.Running) return LanChat.Enabled ? "unavailable" : "invisible";
+		return c.Peers.Count switch { 0 => "nobody else here", 1 => "1 other player", var n => $"{n} other players" };
+	}
+
+	private static string EmptyText()
+	{
+		var lines = new List<string>();
+		var o = Online;
+		if (o != null && o.State != OnlineChat.ConnState.Online) lines.Add(o.StatusText);
+		if (Lan == null || !Lan.Running)
+			lines.Add(LanChat.Enabled
+				? $"LAN chat couldn't open UDP port {LanChat.PresencePort} (in use or blocked by a firewall)."
+				: "LAN chat is off: nobody on the network can see you, and you can't see them.");
+		else lines.Add("Nobody else is playing on this network. The LAN chat shows up as soon as someone starts the game.");
+		return string.Join("\n\n", lines.Where(l => !string.IsNullOrWhiteSpace(l)));
 	}
 
 	private void RefreshName()
@@ -137,7 +195,7 @@ public partial class ChatOverlay : PanelContainer
 	private void SaveName(string text)
 	{
 		if (!LanChat.CanUseNickname || LanChat.Clean(text, LanChat.MaxNameLength, "") == LanChat.Nickname) return;
-		LanChat.Instance?.SetNickname(text);
+		Lan?.SetNickname(text);
 	}
 
 	private void ShowEmpty(bool empty)
@@ -148,30 +206,67 @@ public partial class ChatOverlay : PanelContainer
 		if (empty) LeaveButton.Visible = false;
 	}
 
-	private void BuildRoomList(LanChat c, System.Collections.Generic.List<LanChat.Room> rooms)
+	private void OnNewRoomPressed()
+	{
+		bool online = Online?.Connected == true, lan = Lan?.Running == true;
+		if (online && lan)
+		{
+			var r = NewRoomButton.GetGlobalRect();
+			_newRoomMenu.Popup(new Rect2I((Vector2I)(r.Position + new Vector2(0, -60)), Vector2I.Zero));
+		}
+		else if (online || lan) CreateRoom(online);
+	}
+
+	private void CreateRoom(bool online)
+	{
+		if (online) Online?.CreatePrivateRoom(null); // opens when the server confirms it (JustCreated)
+		else if (Lan != null) _selected = LanPrefix + Lan.CreatePrivateRoom(null);
+		Refresh();
+	}
+
+	// =====================================================================
+	// Left column
+	// =====================================================================
+
+	private void BuildRoomList(List<(string key, LanChat.Room room)> online, List<(string key, LanChat.Room room)> lan)
 	{
 		foreach (var child in RoomList.GetChildren()) child.QueueFree();
 
-		if (rooms.Any(r => r.IsPublic)) RoomList.AddChild(Header("Public"));
-		foreach (var r in rooms.Where(r => r.IsPublic)) RoomList.AddChild(RoomButton(r));
+		RoomList.AddChild(Header("Online"));
+		if (online.Count == 0) RoomList.AddChild(Hint(Online?.StatusText is { Length: > 0 } t ? t : "Not connected."));
+		else if (Online?.Reconnecting == true) RoomList.AddChild(Hint("Reconnecting..."));
+		foreach (var (key, r) in online.Where(x => x.room.IsPublic)) RoomList.AddChild(RoomButton(key, r));
+		if (online.Any(x => !x.room.IsPublic)) RoomList.AddChild(Header("Online · private"));
+		foreach (var (key, r) in online.Where(x => !x.room.IsPublic)) RoomList.AddChild(RoomButton(key, r));
 
-		if (rooms.Any(r => !r.IsPublic)) RoomList.AddChild(Header("Private"));
-		foreach (var r in rooms.Where(r => !r.IsPublic)) RoomList.AddChild(RoomButton(r));
+		RoomList.AddChild(Header("LAN"));
+		if (lan.Count == 0) RoomList.AddChild(Hint(Lan?.Running == true ? "Nobody else on this network." : LanChat.Enabled ? "Unavailable." : "Off (invisible)."));
+		foreach (var (key, r) in lan.Where(x => x.room.IsPublic)) RoomList.AddChild(RoomButton(key, r));
+		if (lan.Any(x => !x.room.IsPublic)) RoomList.AddChild(Header("LAN · private"));
+		foreach (var (key, r) in lan.Where(x => !x.room.IsPublic)) RoomList.AddChild(RoomButton(key, r));
 
-		if (c.Invites.Count > 0) RoomList.AddChild(Header("Invites"));
-		foreach (var inv in c.Invites.ToList())
+		var invites = (Online?.Connected == true ? Online.Invites.Select(i => (online: true, inv: i)) : Enumerable.Empty<(bool, LanChat.Invite)>())
+			.Concat(Lan?.Running == true ? Lan.Invites.Select(i => (online: false, inv: i)) : Enumerable.Empty<(bool, LanChat.Invite)>())
+			.ToList();
+		if (invites.Count > 0) RoomList.AddChild(Header("Invites"));
+		foreach (var (isOnline, inv) in invites)
 		{
 			var box = new VBoxContainer();
 			box.AddChild(new Label
 			{
-				Text = $"{inv.Title}\nfrom {inv.FromName}",
+				Text = $"{inv.Title} ({(isOnline ? "online" : "LAN")})\nfrom {inv.FromName}",
 				AutowrapMode = TextServer.AutowrapMode.WordSmart,
 			});
 			var row = new HBoxContainer();
 			var accept = new Button { Text = "Join", SizeFlagsHorizontal = SizeFlags.ExpandFill, ThemeTypeVariation = ButtonVariation };
 			var decline = new Button { Text = "Decline", SizeFlagsHorizontal = SizeFlags.ExpandFill, ThemeTypeVariation = ButtonVariation };
-			accept.Pressed += () => { c.AcceptInvite(inv); _selected = inv.RoomId; Refresh(true); };
-			decline.Pressed += () => { c.DeclineInvite(inv); Refresh(true); };
+			accept.Pressed += () =>
+			{
+				if (isOnline) Online.AcceptInvite(inv); else Lan.AcceptInvite(inv);
+				_selected = (isOnline ? OnlinePrefix : LanPrefix) + inv.RoomId; // online: opens once the server confirms
+				Refresh();
+			};
+			decline.Pressed += () => { if (isOnline) Online.DeclineInvite(inv); else Lan.DeclineInvite(inv); Refresh(); };
 			row.AddChild(accept);
 			row.AddChild(decline);
 			box.AddChild(row);
@@ -179,56 +274,126 @@ public partial class ChatOverlay : PanelContainer
 		}
 	}
 
-	private Button RoomButton(LanChat.Room r)
+	private Button RoomButton(string key, LanChat.Room r)
 	{
+		var title = r.Title;
 		var b = new Button
 		{
-			Text = r.Unread > 0 && r.Id != _selected ? $"{r.Title}  ({r.Unread})" : r.Title,
+			Text = r.Unread > 0 && key != _selected ? $"{title}  ({r.Unread})" : title,
 			Alignment = HorizontalAlignment.Left,
 			ToggleMode = true,
-			ButtonPressed = r.Id == _selected,
+			ButtonPressed = key == _selected,
 			ThemeTypeVariation = ButtonVariation,
 			TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis,
 		};
-		b.Pressed += () => { _selected = r.Id; Refresh(true); };
+		b.Pressed += () => { _selected = key; Refresh(); };
 		return b;
 	}
 
-	private void BuildPeople(LanChat c, LanChat.Room room)
+	// =====================================================================
+	// Right column
+	// =====================================================================
+
+	private void BuildPeople(LanChat.Room room)
 	{
 		foreach (var child in PeopleList.GetChildren()) child.QueueFree();
+		if (room == null) { PeopleTitle.Text = ""; return; }
+		if (IsOnlineKey(_selected)) BuildOnlinePeople(room);
+		else BuildLanPeople(room);
+	}
 
-		if (room != null && !room.IsPublic)
+	private void BuildOnlinePeople(LanChat.Room room)
+	{
+		var o = Online;
+		if (room.IsPublic)
+		{
+			PeopleTitle.Text = $"Online now ({o.OnlineUsers.Count})";
+			foreach (var name in o.OnlineUsers.Take(MaxPeopleShown))
+				PeopleList.AddChild(PersonLabel(name == o.Username ? $"• {name} (you)" : $"• {name}"));
+			if (o.OnlineUsers.Count > MaxPeopleShown) PeopleList.AddChild(Hint($"and {o.OnlineUsers.Count - MaxPeopleShown} more"));
+			return;
+		}
+
+		PeopleTitle.Text = $"In {room.Title}";
+		foreach (var name in room.Members.Keys.OrderBy(n => n))
+		{
+			var you = name == o.Username ? " (you)" : "";
+			var away = o.IsUserOnline(name) ? "" : " - offline";
+			PeopleList.AddChild(PersonLabel($"• {name}{you}{away}"));
+		}
+
+		PeopleList.AddChild(Header("Invite by username"));
+		var row = new HBoxContainer();
+		var edit = new LineEdit { PlaceholderText = "Username", Text = _inviteDraft, SizeFlagsHorizontal = SizeFlags.ExpandFill, MaxLength = 64 };
+		var send = new Button { Text = "Invite", ThemeTypeVariation = ButtonVariation };
+		var roomId = room.Id;
+		void Submit()
+		{
+			var who = edit.Text.Trim();
+			if (who.Length == 0) return;
+			_inviteDraft = "";
+			o.Invite(roomId, who);
+		}
+		edit.TextChanged += t => _inviteDraft = t;
+		edit.TextSubmitted += _ => Submit();
+		send.Pressed += Submit;
+		row.AddChild(edit);
+		row.AddChild(send);
+		PeopleList.AddChild(row);
+
+		var others = o.OnlineUsers.Where(n => n != o.Username && !room.Members.ContainsKey(n)).Take(MaxPeopleShown).ToList();
+		PeopleList.AddChild(Header(others.Count > 0 ? "Online now" : "Nobody else online to invite"));
+		foreach (var name in others) PeopleList.AddChild(InviteRow(name, null, room.Invited.Contains(name), () => o.Invite(roomId, name)));
+	}
+
+	private void BuildLanPeople(LanChat.Room room)
+	{
+		var c = Lan;
+		if (!room.IsPublic)
 		{
 			PeopleTitle.Text = $"In {room.Title}";
 			foreach (var (id, name) in room.Members.OrderBy(m => m.Value))
 			{
 				var you = id == c.LocalId ? " (you)" : "";
 				var away = c.IsOnline(id) ? "" : " - offline";
-				PeopleList.AddChild(new Label { Text = $"• {name}{you}{away}", TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis });
+				PeopleList.AddChild(PersonLabel($"• {name}{you}{away}"));
 			}
 			var others = c.Peers.Values.Where(p => !room.Members.ContainsKey(p.Id)).OrderBy(p => p.Name).ToList();
 			PeopleList.AddChild(Header(others.Count > 0 ? "Invite from the LAN" : "No one else to invite"));
+			var roomId = room.Id;
 			foreach (var p in others)
 			{
-				var row = new HBoxContainer();
-				row.AddChild(new Label { Text = p.Name, SizeFlagsHorizontal = SizeFlags.ExpandFill, TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis, TooltipText = PeerTooltip(p), MouseFilter = MouseFilterEnum.Pass });
-				bool sent = room.Invited.Contains(p.Id);
-				var invite = new Button { Text = sent ? "Sent" : "Invite", Disabled = sent, ThemeTypeVariation = ButtonVariation };
 				var peerId = p.Id;
-				var roomId = room.Id;
-				invite.Pressed += () => { c.InvitePeer(roomId, peerId); invite.Disabled = true; invite.Text = "Sent"; };
-				row.AddChild(invite);
-				PeopleList.AddChild(row);
+				PeopleList.AddChild(InviteRow(p.Name, PeerTooltip(p), room.Invited.Contains(p.Id), () => c.InvitePeer(roomId, peerId)));
 			}
 			return;
 		}
 
 		PeopleTitle.Text = "On this network";
-		PeopleList.AddChild(new Label { Text = $"• {LanChat.LocalName()} (you)" });
+		PeopleList.AddChild(PersonLabel($"• {LanChat.LocalName()} (you)"));
 		foreach (var p in c.Peers.Values.OrderBy(p => p.Name))
-			PeopleList.AddChild(new Label { Text = $"• {p.Name}", TooltipText = PeerTooltip(p), MouseFilter = MouseFilterEnum.Pass, TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis });
+		{
+			var l = PersonLabel($"• {p.Name}");
+			l.TooltipText = PeerTooltip(p);
+			PeopleList.AddChild(l);
+		}
 	}
+
+	private static HBoxContainer InviteRow(string name, string tooltip, bool sent, Action invite)
+	{
+		var row = new HBoxContainer();
+		var label = PersonLabel(name);
+		label.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+		label.TooltipText = tooltip ?? "";
+		row.AddChild(label);
+		var button = new Button { Text = sent ? "Sent" : "Invite", Disabled = sent, ThemeTypeVariation = ButtonVariation };
+		button.Pressed += () => { invite(); button.Disabled = true; button.Text = "Sent"; };
+		row.AddChild(button);
+		return row;
+	}
+
+	private static Label PersonLabel(string text) =>
+		new() { Text = text, TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis, MouseFilter = MouseFilterEnum.Pass };
 
 	private static string PeerTooltip(LanChat.Peer p) => $"{p.EndPoint?.Address} - game {p.GameVersion}";
 
@@ -239,12 +404,19 @@ public partial class ChatOverlay : PanelContainer
 		return l;
 	}
 
-	private static string Format(LanChat.Line l)
+	private static Label Hint(string text)
+	{
+		var l = new Label { Text = text, AutowrapMode = TextServer.AutowrapMode.WordSmart };
+		l.AddThemeColorOverride("font_color", new Color(1, 1, 1, 0.4f));
+		return l;
+	}
+
+	private static string Format(LanChat.Line l, bool online)
 	{
 		var time = DateTimeOffset.FromUnixTimeMilliseconds(l.Time).ToLocalTime().ToString("HH:mm");
 		var text = Escape(l.Text);
 		if (l.FromId == null) return $"[color=#ffffff80]{time}[/color] [color=#7fc8ff]* {text}[/color]";
-		bool me = l.FromId == LanChat.Instance?.LocalId;
+		bool me = online ? l.FromId == Online?.Username : l.FromId == Lan?.LocalId;
 		return $"[color=#ffffff80]{time}[/color] [color={(me ? "#9dff9d" : "#ffda75")}]{Escape(l.Name)}[/color]: {text}";
 	}
 

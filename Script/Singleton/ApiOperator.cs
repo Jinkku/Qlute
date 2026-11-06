@@ -278,8 +278,21 @@ public partial class ApiOperator : Node
 	public static List<EventLegend> EventData = new List<EventLegend>();
 	private async void GetNotices()
 	{
-		string result = await FetchData($"{SettingsOperator.GetSetting("api").ToString()}apiv2/getnotice");
-		EventData = JsonSerializer.Deserialize<List<EventLegend>>(result);
+		// Notices are optional: a down or erroring server (500, timeout, bad JSON) just means no banners.
+		for (int attempt = 0; attempt < 3; attempt++)
+		{
+			try
+			{
+				string result = await FetchData($"{SettingsOperator.GetSetting("api")}apiv2/getnotice");
+				EventData = JsonSerializer.Deserialize<List<EventLegend>>(result) ?? new List<EventLegend>();
+				return;
+			}
+			catch (Exception e)
+			{
+				GD.Print($"Couldn't load notices (attempt {attempt + 1}/3): {e.Message}");
+			}
+			await Task.Delay(10000);
+		}
 	}
 	private void _Submitrequest(long result, long responseCode, string[] headers, byte[] body)
 	{

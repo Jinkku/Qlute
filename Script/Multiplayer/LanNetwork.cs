@@ -63,6 +63,8 @@ public partial class LanNetwork : Node
 	};
 	private const int ChunkSize = 60 * 1024;
 	private const long MaxShareBytes = 200L * 1024 * 1024;
+	/// <summary>Online, shared beatmaps go through the server, so keep them smaller.</summary>
+	private const long MaxOnlineShareBytes = 64L * 1024 * 1024;
 	private const int MaxChatLines = 200;
 
 	public static LanNetwork Instance { get; private set; }
@@ -70,7 +72,7 @@ public partial class LanNetwork : Node
 	public static bool InMatch => Instance != null && Instance.LocalInMatch;
 
 	/// <summary>Song select is open to pick something for the LAN room (see <see cref="BeginPick"/>).</summary>
-	public enum PickMode { None, AddToQueue, ReplaceItem, OwnDifficulty }
+	public enum PickMode { None, AddToQueue, ReplaceItem, OwnDifficulty, StartingBeatmap }
 	public static PickMode Picking { get; private set; } = PickMode.None;
 	/// <summary>Set when the results screen was opened after a LAN match, so it returns to the room.</summary>
 	public static bool ShowingMatchResults { get; set; }
@@ -85,7 +87,12 @@ public partial class LanNetwork : Node
 	public bool LocalInMatch { get; private set; }
 	public int StateVersion { get; private set; }
 	public int GamePort { get; private set; }
-	public long LocalId => Multiplayer.MultiplayerPeer is ENetMultiplayerPeer ? Multiplayer.GetUniqueId() : 0;
+	public long LocalId => Multiplayer.MultiplayerPeer is ENetMultiplayerPeer or RelayMultiplayerPeer ? Multiplayer.GetUniqueId() : 0;
+	/// <summary>True when the current room goes through the online server instead of the LAN.</summary>
+	public bool IsOnline { get; private set; }
+	/// <summary>"online" / "LAN", for messages.</summary>
+	public string RoomKind => IsOnline ? "online" : "LAN";
+	private RelayMultiplayerPeer Relay => Multiplayer.MultiplayerPeer as RelayMultiplayerPeer;
 	public LanPlayer LocalPlayer => State?.Players.FirstOrDefault(p => p.Id == LocalId);
 	public string ReturnScene => State != null ? LobbyScene : LoungeScene;
 	/// <summary>Countdown smoothed locally between host updates.</summary>
@@ -142,6 +149,7 @@ public partial class LanNetwork : Node
 	public override void _ExitTree()
 	{
 		StopDiscovery();
+		StopOnlineBrowse();
 		_beaconTx?.Close();
 		Leave(silent: true);
 	}
@@ -174,7 +182,38 @@ public partial class LanNetwork : Node
 		}
 		Multiplayer.MultiplayerPeer = peer;
 		GamePort = port;
+		StartHosting(roomName, online: false, $"Room created on port {port}.");
+		GD.Print($"[LAN] Hosting \"{State.Name}\" on port {port}");
+		return true;
+	}
+
+	/// <summary>Create a room on the online server (needs a logged-in account). Same room logic as LAN.</summary>
+	public bool HostOnline(string roomName)
+	{
+		Leave(silent: true);
+		if (!OnlineApi.Available)
+		{
+			Notify.Post("Log in to host online rooms.", Type: NotificationIcons.NotificationType.Warning);
+			return false;
+		}
+		var name = Clean(roomName, MaxRoomNameLength, $"{LocalName()}'s room");
+		var peer = new RelayMultiplayerPeer();
+		var err = peer.Host(name, Protocol, GameVersion());
+		if (err != Error.Ok)
+		{
+			Notify.Post(peer.CloseReason ?? $"Couldn't create an online room ({err}).", Type: NotificationIcons.NotificationType.Warning);
+			return false;
+		}
+		Multiplayer.MultiplayerPeer = peer;
+		StartHosting(name, online: true, "Online room created. Anyone on the server can join from the lounge.");
+		GD.Print($"[ONLINE] Hosting \"{State.Name}\"");
+		return true;
+	}
+
+	private void StartHosting(string roomName, bool online, string firstLine)
+	{
 		IsServer = true;
+		IsOnline = online;
 		State = new LanRoomState
 		{
 			Name = Clean(roomName, MaxRoomNameLength, $"{LocalName()}'s room"),
@@ -183,11 +222,9 @@ public partial class LanNetwork : Node
 			Players = { new LanPlayer { Id = 1, Name = LocalName() } },
 		};
 		ChatLog.Clear();
-		AddChatLine(null, $"Room created on port {port}. Everyone can add beatmaps to the queue; picks take turns (round robin).");
+		AddChatLine(null, $"{firstLine} Everyone can add beatmaps to the queue; picks take turns (round robin).");
 		_beaconTimer = 0;
 		MarkDirty();
-		GD.Print($"[LAN] Hosting \"{State.Name}\" on port {port}");
-		return true;
 	}
 
 	/// <summary>Join a room. The lobby scene opens once the host sends the room state.</summary>
@@ -209,13 +246,38 @@ public partial class LanNetwork : Node
 		return true;
 	}
 
+	/// <summary>Join an online room by its id (from <see cref="OnlineRooms"/>).</summary>
+	public bool JoinOnline(long roomId)
+	{
+		Leave(silent: true);
+		if (!OnlineApi.Available)
+		{
+			Notify.Post("Log in to join online rooms.", Type: NotificationIcons.NotificationType.Warning);
+			return false;
+		}
+		var peer = new RelayMultiplayerPeer();
+		var err = peer.Join(roomId);
+		if (err != Error.Ok)
+		{
+			Notify.Post(peer.CloseReason ?? $"Couldn't reach the server ({err}).", Type: NotificationIcons.NotificationType.Warning);
+			return false;
+		}
+		Multiplayer.MultiplayerPeer = peer;
+		IsServer = false;
+		IsOnline = true;
+		_joining = true;
+		Notify.Post("Joining online room...");
+		GD.Print($"[ONLINE] Joining room {roomId}");
+		return true;
+	}
+
 	/// <summary>Leave the current room (closes it for everyone if we're the host).</summary>
 	public void Leave(bool silent = false)
 	{
-		if (Multiplayer.MultiplayerPeer is ENetMultiplayerPeer peer)
+		if (Multiplayer.MultiplayerPeer is ENetMultiplayerPeer or RelayMultiplayerPeer)
 		{
-			peer.Close();
-			if (!silent) Notify.Post(IsServer ? "Closed the LAN room." : "Left the LAN room.");
+			Multiplayer.MultiplayerPeer.Close();
+			if (!silent) Notify.Post(IsServer ? $"Closed the {RoomKind} room." : $"Left the {RoomKind} room.");
 		}
 		Multiplayer.MultiplayerPeer = new OfflineMultiplayerPeer();
 		ResetSession();
@@ -315,7 +377,7 @@ public partial class LanNetwork : Node
 
 	/// <summary>Whether song select's mod screen should let this mod be turned on right now.</summary>
 	public static bool IsModSelectable(string mod) =>
-		IsModAllowed(mod) || ((Picking == PickMode.AddToQueue || Picking == PickMode.ReplaceItem) && GlobalMods.Contains(mod));
+		IsModAllowed(mod) || ((Picking is PickMode.AddToQueue or PickMode.ReplaceItem or PickMode.StartingBeatmap) && GlobalMods.Contains(mod));
 
 	/// <summary>"DT 1.50x" style label for room-wide mods ("" when none).</summary>
 	public static string GlobalModLabel(List<string> mods, float speed)
@@ -375,12 +437,49 @@ public partial class LanNetwork : Node
 		GetNode<SceneTransition>("/root/Transition").Switch(SongSelectScene);
 	}
 
+	/// <summary>Opens song select to choose the first beatmap of a room that doesn't exist yet (Create Room dialog).</summary>
+	public void BeginStartingBeatmapPick()
+	{
+		Picking = PickMode.StartingBeatmap;
+		SettingsOperator.MultiSelectingBeatmap = true;
+		StripDisallowedMods();
+		ApplyGlobalMods(RoomDraft.Mods, RoomDraft.Speed);
+		if (RoomDraft.BeatmapIndex >= 0 && RoomDraft.BeatmapIndex < SettingsOperator.Beatmaps.Count && SettingsOperator.SessionConfig.SongID != RoomDraft.BeatmapIndex)
+			SelectSong(RoomDraft.BeatmapIndex);
+		GetNode<SceneTransition>("/root/Transition").Switch(SongSelectScene);
+	}
+
+	/// <summary>Create a room from the Create Room dialog: LAN or online, then queue its starting beatmap.</summary>
+	public bool HostRoom(string name, bool online, int startingBeatmap, List<string> mods, float speed)
+	{
+		if (!(online ? HostOnline(name) : Host(name))) return false;
+		if (startingBeatmap >= 0 && startingBeatmap < SettingsOperator.Beatmaps.Count)
+		{
+			ApplyGlobalMods(mods ?? new List<string>(), speed); // room-wide DT / HT on the first item
+			AddToQueue(startingBeatmap);
+			StripDisallowedMods();
+		}
+		return true;
+	}
+
 	/// <summary>Song select is done: <paramref name="index"/> is the picked library index, or null if cancelled.</summary>
 	public void FinishPick(int? index)
 	{
 		var mode = Picking;
 		Picking = PickMode.None;
 		SettingsOperator.MultiSelectingBeatmap = false;
+		if (mode == PickMode.StartingBeatmap)
+		{
+			if (index is int picked && picked >= 0 && picked < SettingsOperator.Beatmaps.Count)
+			{
+				RoomDraft.BeatmapIndex = picked;
+				(RoomDraft.Mods, RoomDraft.Speed) = LocalGlobalMods();
+			}
+			RoomDraft.Reopen = true;
+			StripDisallowedMods();
+			GetNode<SceneTransition>("/root/Transition").Switch(LoungeScene);
+			return;
+		}
 		if (State != null && index is int i && i >= 0 && i < SettingsOperator.Beatmaps.Count)
 		{
 			switch (mode)
@@ -561,6 +660,8 @@ public partial class LanNetwork : Node
 	public override void _Process(double delta)
 	{
 		PollDiscovery();
+		PollOnlineBrowser(delta);
+		RelayMultiplayerPeer.PollLingering();
 
 		if (State == null) return;
 
@@ -570,7 +671,13 @@ public partial class LanNetwork : Node
 		if (IsServer)
 		{
 			ServerTick(delta);
-			SendBeacon(delta);
+			if (IsOnline) UpdateOnlineListing(delta);
+			else SendBeacon(delta);
+			if (IsOnline && Relay?.GetConnectionStatus() == MultiplayerPeer.ConnectionStatus.Disconnected)
+			{
+				LostOnlineHost(Relay.CloseReason ?? "Lost the connection to the server.");
+				return;
+			}
 		}
 		PumpOutgoingTransfers(); // anyone holding the map may be asked to share it
 
@@ -1088,6 +1195,7 @@ public partial class LanNetwork : Node
 		var fileName = $"lan_{checksum[..8]}_{safeFolder}.osz";
 		var zipPath = Path.Combine(SettingsOperator.tempdir, fileName);
 
+		long maxBytes = IsOnline ? MaxOnlineShareBytes : MaxShareBytes;
 		// Zipping can take a moment for big maps, so do it off the main thread.
 		Task.Run(() =>
 		{
@@ -1101,7 +1209,7 @@ public partial class LanNetwork : Node
 					File.Move(tmp, zipPath, overwrite: true);
 				}
 				var info = new FileInfo(zipPath);
-				if (info.Length > MaxShareBytes) return (byte[])null;
+				if (info.Length > maxBytes) return (byte[])null;
 				return File.ReadAllBytes(zipPath);
 			}
 			catch (Exception e)
@@ -1320,7 +1428,7 @@ public partial class LanNetwork : Node
 
 	private void OnConnectionFailed()
 	{
-		Notify.Post("Couldn't connect to that room.", Type: NotificationIcons.NotificationType.Warning);
+		Notify.Post(Relay?.CloseReason ?? "Couldn't connect to that room.", Type: NotificationIcons.NotificationType.Warning);
 		Multiplayer.MultiplayerPeer = new OfflineMultiplayerPeer();
 		ResetSession();
 	}
@@ -1328,10 +1436,11 @@ public partial class LanNetwork : Node
 	private void OnServerDisconnected()
 	{
 		bool wasInRoom = State != null;
+		var reason = Relay?.CloseReason;
 		Multiplayer.MultiplayerPeer = new OfflineMultiplayerPeer();
 		ResetSession();
 		if (!wasInRoom) return;
-		Notify.Post("The host closed the room.", Type: NotificationIcons.NotificationType.Warning);
+		Notify.Post(reason ?? "The host closed the room.", Type: NotificationIcons.NotificationType.Warning);
 		// If we're mid-song, let the player finish; the end screen sends them back to the lounge.
 		if (!SettingsOperator.inGameplay && GetTree().CurrentScene?.SceneFilePath == LobbyScene)
 			GetNode<SceneTransition>("/root/Transition").Switch(LoungeScene);
@@ -1341,6 +1450,8 @@ public partial class LanNetwork : Node
 	{
 		State = null;
 		IsServer = false;
+		IsOnline = false;
+		_listingSent = null;
 		LocalInMatch = false;
 		_joining = false;
 		_dirty = false;
@@ -1372,6 +1483,8 @@ public partial class LanNetwork : Node
 		}
 		if (FindPlayer(id) != null) return;
 
+		// Online, the server tells us who really connected, so nobody can pose as someone else.
+		if (IsOnline && Relay?.PeerUsers.TryGetValue((int)id, out var verified) == true) name = verified;
 		var baseName = Clean(name, 32, "Guest");
 		var unique = baseName;
 		for (int n = 2; State.Players.Any(p => p.Name == unique); n++) unique = $"{baseName} ({n})";
@@ -1676,6 +1789,134 @@ public partial class LanNetwork : Node
 			SettingsOperator.Gameplaycfg.Score, LocalAccuracy());
 		if (IsServer) ServerRelaySpec(1, packet);
 		else RpcId(1, MethodName.RpcSpecTick, packet);
+	}
+
+	// =====================================================================
+	// Online rooms (lounge list + our listing)
+	// =====================================================================
+
+	/// <summary>Rooms on the online server, refreshed while the lounge is open.</summary>
+	public readonly List<OnlineRoomInfo> OnlineRooms = new();
+	public int OnlineRoomsVersion { get; private set; }
+	/// <summary>What the lounge shows under "Online" when there's no list (not logged in, offline...).</summary>
+	public string OnlineStatus { get; private set; } = "";
+	private WebSocketPeer _browser;
+	private double _browseTimer, _browseRetry;
+	private bool _browsing;
+	private string _listingSent;
+	private double _listingTimer;
+
+	public void StartOnlineBrowse()
+	{
+		_browsing = true;
+		_browseRetry = 0;
+		OpenBrowser();
+	}
+
+	public void StopOnlineBrowse()
+	{
+		_browsing = false;
+		_browser?.Close();
+		_browser = null;
+		OnlineRooms.Clear();
+		OnlineRoomsVersion++;
+	}
+
+	public void RefreshOnlineRooms() => _browseTimer = 0;
+
+	private void OpenBrowser()
+	{
+		_browser = null;
+		if (!OnlineApi.Available) { SetOnlineStatus("Log in to see online rooms."); return; }
+		_browser = OnlineApi.Connect("multiplayer", out var err);
+		if (err != Error.Ok) { _browser = null; SetOnlineStatus($"Couldn't reach the server ({err})."); return; }
+		SetOnlineStatus("Looking for online rooms...");
+		_browseTimer = 0;
+	}
+
+	private void SetOnlineStatus(string text)
+	{
+		if (OnlineStatus == text) return;
+		OnlineStatus = text;
+		OnlineRoomsVersion++;
+	}
+
+	private void PollOnlineBrowser(double delta)
+	{
+		if (!_browsing) return;
+		if (_browser == null)
+		{
+			// Retry every few seconds (e.g. after logging in while the lounge is open).
+			_browseRetry -= delta;
+			if (_browseRetry <= 0) { _browseRetry = 5; OpenBrowser(); }
+			return;
+		}
+		_browser.Poll();
+		var state = _browser.GetReadyState();
+		if (state == WebSocketPeer.State.Closed)
+		{
+			bool authFailed = _browser.GetCloseCode() == OnlineApi.AuthFailedCode;
+			SetOnlineStatus(authFailed ? OnlineApi.CloseReason(_browser, "The server refused your login.") : "Can't reach the online server right now.");
+			_browser = null;
+			_browseRetry = authFailed ? 60 : 5;
+			if (OnlineRooms.Count > 0) { OnlineRooms.Clear(); OnlineRoomsVersion++; }
+			return;
+		}
+		if (state != WebSocketPeer.State.Open) return;
+
+		while (_browser.GetAvailablePacketCount() > 0)
+		{
+			var msg = OnlineApi.ParseJson(_browser.GetPacket());
+			var op = OnlineApi.Str(msg, "op");
+			if (op == "error" && OnlineApi.Bool(msg, "fatal")) { SetOnlineStatus(OnlineApi.Str(msg, "text") ?? "The server refused your login."); continue; }
+			if (op != "rooms" || msg["rooms"] is not System.Text.Json.Nodes.JsonArray arr) continue;
+			OnlineRooms.Clear();
+			foreach (var r in arr.OfType<System.Text.Json.Nodes.JsonObject>())
+			{
+				OnlineRooms.Add(new OnlineRoomInfo
+				{
+					Id = OnlineApi.Long(r, "id"),
+					Name = OnlineApi.Str(r, "name") ?? "Room",
+					Host = OnlineApi.Str(r, "host") ?? "?",
+					Players = (int)OnlineApi.Long(r, "players"),
+					Phase = (int)OnlineApi.Long(r, "phase"),
+					Map = OnlineApi.Str(r, "map") ?? "",
+					Proto = (int)OnlineApi.Long(r, "proto"),
+					Version = OnlineApi.Str(r, "ver") ?? "",
+				});
+			}
+			SetOnlineStatus(OnlineRooms.Count == 0 ? "No online rooms right now. Make one!" : "");
+			OnlineRoomsVersion++;
+		}
+		_browseTimer -= delta;
+		if (_browseTimer <= 0)
+		{
+			_browseTimer = 3;
+			OnlineApi.SendJson(_browser, new System.Text.Json.Nodes.JsonObject { ["op"] = "list" });
+		}
+	}
+
+	/// <summary>Host: keep our room's listing current (sends on change, and every 10 s as a heartbeat).</summary>
+	private void UpdateOnlineListing(double delta)
+	{
+		var relay = Relay;
+		if (relay == null || relay.RoomId == 0) return;
+		var map = State.Beatmap?.Display ?? "";
+		var key = $"{State.Name}|{State.Players.Count}|{(int)State.Phase}|{map}";
+		_listingTimer -= delta;
+		if (key == _listingSent && _listingTimer > 0) return;
+		_listingSent = key;
+		_listingTimer = 10;
+		relay.UpdateListing(State.Name, State.Players.Count, (int)State.Phase, map);
+	}
+
+	/// <summary>Our online room lost the server: it's gone for everyone, so tell the player and go back.</summary>
+	private void LostOnlineHost(string reason)
+	{
+		Leave(silent: true);
+		Notify.Post($"Your online room closed: {reason}", Type: NotificationIcons.NotificationType.Warning);
+		if (!SettingsOperator.inGameplay && GetTree().CurrentScene?.SceneFilePath == LobbyScene)
+			GetNode<SceneTransition>("/root/Transition").Switch(LoungeScene);
 	}
 
 	// =====================================================================

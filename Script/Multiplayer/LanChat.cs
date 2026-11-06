@@ -676,6 +676,22 @@ public partial class LanChatSelfTest : Node
 	{
 		var c = LanChat.Instance;
 		_t += delta;
+
+		// --online-chat-test-accept: accept the first online chat invite, then talk in it and in #general.
+		var oc = OnlineChat.Instance;
+		if (Args.Contains("--online-chat-test-accept") && oc != null)
+		{
+			if (_onlineRoom == null && oc.Invites.Count > 0) { _onlineRoom = oc.Invites[0].RoomId; oc.AcceptInvite(oc.Invites[0]); GD.Print($"[LANCHAT] accepted online invite {_onlineRoom}"); }
+			if (_onlineRoom != null && _onlineSaidAt < 0 && oc.Rooms.ContainsKey(_onlineRoom))
+			{
+				_onlineSaidAt = _t;
+				oc.Send(_onlineRoom, "hi bob, joined from the game");
+				oc.Send("#general", "hello #general from the game");
+				GD.Print($"[LANCHAT] online rooms: {string.Join(", ", oc.Rooms.Values.Select(r => r.Title))}; online users: {string.Join(", ", oc.OnlineUsers)}");
+			}
+		}
+		if (Value("--lan-chat-test-shot=") is { } onlineShot && _overlay == null && _onlineSaidAt >= 0 && _t - _onlineSaidAt > 3) OpenOverlayAndShoot(onlineShot);
+
 		if (c.Peers.Count == 0) return;
 		if (_peerAt < 0) { _peerAt = _t; GD.Print($"[LANCHAT] public room visible={c.PublicVisible}"); }
 		if (_t - _peerAt < 1) return;
@@ -713,7 +729,14 @@ public partial class LanChatSelfTest : Node
 		}
 
 		var shot = Value("--lan-chat-test-shot=");
-		if (shot != null && _overlay == null && _t - _peerAt > 6)
+		if (shot != null && _overlay == null && _t - _peerAt > 6) OpenOverlayAndShoot(shot);
+	}
+
+	private string _onlineRoom;
+	private double _onlineSaidAt = -1;
+
+	private void OpenOverlayAndShoot(string shot)
+	{
 		{
 			_overlay = GD.Load<PackedScene>("res://Panels/Overlays/ChatOverlay.tscn").Instantiate<Control>();
 			var layer = new CanvasLayer { Layer = 100 };

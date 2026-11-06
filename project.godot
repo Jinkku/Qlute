@@ -54,6 +54,7 @@ Sample="*res://Script/Singleton/Sample.cs"
 ApiOperator="*res://Script/Singleton/ApiOperator.cs"
 LanNetwork="*res://Script/Multiplayer/LanNetwork.cs"
 LanChat="*res://Script/Multiplayer/LanChat.cs"
+OnlineChat="*res://Script/Online/OnlineChat.cs"
 
 [debug]
 
