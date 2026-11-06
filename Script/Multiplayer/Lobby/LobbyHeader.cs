@@ -22,8 +22,7 @@ public partial class LobbyHeader : PanelContainer
 
 	[ExportGroup("Colours")]
 	[Export] public Color TimerColor { get; set; } = Colors.White;
-	/// <summary>Countdown colour once the match is about to start.</
-summary>
+	/// <summary>Countdown colour once the match is about to start.</summary>
 	[Export] public Color TimerSoonColor { get; set; } = new("#5be37d");
 
 	[ExportGroup("Room info")]
