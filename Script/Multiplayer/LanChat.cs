@@ -71,6 +71,11 @@ public partial class LanChat : Node
 		public readonly HashSet<string> Invited = new();
 		public readonly List<Line> Lines = new();
 		public int Unread;
+		/// <summary>Online direct messages: a one-to-one conversation with <see cref="With"/>.</summary>
+		public bool IsDm;
+		public string With;
+		/// <summary>Someone @mentioned us here since we last looked.</summary>
+		public bool Mentioned;
 	}
 
 	public class Invite

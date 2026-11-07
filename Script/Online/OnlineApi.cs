@@ -29,16 +29,22 @@ public static class OnlineApi
 		return $"{b.TrimEnd('/')}/ws/v1/{path}/";
 	}
 
-	public static WebSocketPeer Connect(string path, out Error err)
+	/// <summary>Close code meaning "your account changed (banned / unbanned): connect again now".</summary>
+	public const int ReconnectCode = 4002;
+
+	/// <param name="features">Optional "Features" header: what this client understands (see PROTOCOL.md).</param>
+	public static WebSocketPeer Connect(string path, out Error err, string features = null)
 	{
+		var headers = new System.Collections.Generic.List<string>
+		{
+			$"Username: {ApiOperator.Username}",
+			$"Password: {ApiOperator.PasswordHash}",
+			$"User-Agent: {ApiOperator.AgentString}",
+		};
+		if (!string.IsNullOrEmpty(features)) headers.Add($"Features: {features}");
 		var ws = new WebSocketPeer
 		{
-			HandshakeHeaders = new[]
-			{
-				$"Username: {ApiOperator.Username}",
-				$"Password: {ApiOperator.PasswordHash}",
-				$"User-Agent: {ApiOperator.AgentString}",
-			},
+			HandshakeHeaders = headers.ToArray(),
 			InboundBufferSize = 4 * 1024 * 1024,
 			OutboundBufferSize = 4 * 1024 * 1024,
 			MaxQueuedPackets = 8192,
