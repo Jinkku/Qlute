@@ -178,11 +178,40 @@ public partial class BeatmapListener : Node
 		GD.Print("Parsed...");
 		Notify.Post("Imported\n" + Name);
 	}
+	/// <summary>Downloads being unzipped in the background right now.</summary>
+	private readonly HashSet<string> _extracting = new();
+
+	/// <summary>Imports new downloads. Unzipping happens off the main thread so the game (chat, multiplayer
+	/// lobby...) doesn't freeze while a big beatmap is extracted; adding it to the library happens back here.</summary>
 	public void CheckAndExtractOszFiles()
 	{
 		foreach (string file in Directory.GetFiles(SettingsOperator.downloadsdir, "*.osz"))
 		{
-			ImportBeatmap(file);
+			if (!_extracting.Add(file)) continue;
+			string beatmapDir = Path.Combine(SettingsOperator.beatmapsdir, Path.GetFileNameWithoutExtension(file));
+			System.Threading.Tasks.Task.Run(() =>
+			{
+				try
+				{
+					Directory.CreateDirectory(beatmapDir);
+					System.IO.Compression.ZipFile.ExtractToDirectory(file, beatmapDir, overwriteFiles: true);
+					File.Delete(file);
+					return true;
+				}
+				catch (Exception e)
+				{
+					GD.PrintErr($"Couldn't extract {file}: {e.Message}");
+					try { File.Move(file, file + ".failed", overwrite: true); } catch { /* leave it */ }
+					return false;
+				}
+			}).ContinueWith(t => Callable.From(() =>
+			{
+				_extracting.Remove(file);
+				if (!t.Result) { Notify.Post("Couldn't import " + Path.GetFileName(file), Type: NotificationIcons.NotificationType.Warning); return; }
+				GD.Print("Extracted and moved " + file + " to " + beatmapDir);
+				var name = Parse_BeatmapDir(beatmapDir.Replace("\\", "/"));
+				Notify.Post("Imported\n" + name);
+			}).CallDeferred());
 		}
 	}
 

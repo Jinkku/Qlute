@@ -2,7 +2,7 @@ using Godot;
 using System.Collections.Generic;
 using System.Linq;
 
-/// <summary>Drop-down list of everyone online, in the website's style. Click a row to open the profile.</summary>
+/// <summary>Drop-down list of everyone online (or your friends), in the website's style. Click a row to open the profile.</summary>
 public partial class PlayerListPanel : PanelContainer
 {
 	private const double RefreshEvery = 10;
@@ -18,6 +18,12 @@ public partial class PlayerListPanel : PanelContainer
 	private double _refresh;
 	private bool _loading;
 	private Tween _tween;
+	/// <summary>Showing friends instead of everyone online. Remembered while the game runs.</summary>
+	private static bool _friendsMode;
+	private Label _title;
+	private Button _onlineTab, _friendsTab;
+	private int _shownFriends = -1;
+	private string _error;
 
 	public override void _Ready()
 	{
@@ -31,7 +37,13 @@ public partial class PlayerListPanel : PanelContainer
 		v.AddThemeConstantOverride("separation", 0);
 		AddChild(v);
 
-		var bar = PlayerOverlays.TitleBar(v, "players online");
+		var bar = PlayerOverlays.TitleBar(v, "players");
+		_onlineTab = PlayerOverlays.FlatButton("online", "Everyone playing right now");
+		_onlineTab.Pressed += () => SetMode(false);
+		bar.AddChild(_onlineTab);
+		_friendsTab = PlayerOverlays.FlatButton("friends", "Players you've added (add people from their profile)");
+		_friendsTab.Pressed += () => SetMode(true);
+		bar.AddChild(_friendsTab);
 		var me = PlayerOverlays.FlatButton("my profile");
 		me.Disabled = !SettingsOperator.SessionConfig.Loggedin;
 		me.Pressed += () => PlayerOverlays.OpenProfile(ApiOperator.Username);
@@ -49,9 +61,9 @@ public partial class PlayerListPanel : PanelContainer
 
 		var head = new HBoxContainer();
 		inner.AddChild(head);
-		var title = PlayerOverlays.Text("Online", 18, bold: true);
-		title.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-		head.AddChild(title);
+		_title = PlayerOverlays.Text("Online", 18, bold: true);
+		_title.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+		head.AddChild(_title);
 		_count = PlayerOverlays.Text("", 18, bold: true);
 		head.AddChild(_count);
 
@@ -74,6 +86,22 @@ public partial class PlayerListPanel : PanelContainer
 
 		_tween = CreateTween().SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		_tween.TweenProperty(this, "position:y", Top() + 8, 0.25f);
+		SetMode(_friendsMode);
+	}
+
+	private void SetMode(bool friends)
+	{
+		_friendsMode = friends;
+		_title.Text = friends ? "Friends" : "Online";
+		// The selected tab looks pressed.
+		_onlineTab.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(friends ? PlayerOverlays.Pill : PlayerOverlays.ModPill, 5, 10, 4));
+		_friendsTab.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(friends ? PlayerOverlays.ModPill : PlayerOverlays.Pill, 5, 10, 4));
+		_players = new();
+		_count.Text = "";
+		_hint.Text = "Loading...";
+		_hint.Visible = true;
+		foreach (var c in _rows.GetChildren()) c.QueueFree();
+		_loading = false;
 		Load();
 	}
 
@@ -94,7 +122,8 @@ public partial class PlayerListPanel : PanelContainer
 	public override void _Process(double delta)
 	{
 		_refresh -= delta;
-		if (_refresh <= 0) Load();
+		// Friends changed (added / removed somewhere, or someone added us back): reload.
+		if (_refresh <= 0 || (_friendsMode && _shownFriends != PlayerApi.FriendsVersion && !_loading)) Load();
 	}
 
 	public override void _Input(InputEvent e)
@@ -107,15 +136,29 @@ public partial class PlayerListPanel : PanelContainer
 		_refresh = RefreshEvery;
 		if (_loading) return;
 		_loading = true;
+		bool friends = _friendsMode;
+		if (friends)
+		{
+			var (list, error) = await PlayerApi.FetchFriends();
+			_loading = false;
+			if (!IsInstanceValid(this) || friends != _friendsMode) return;
+			_shownFriends = PlayerApi.FriendsVersion;
+			_error = error;
+			_players = list ?? new();
+			_count.Text = list == null ? "" : $"{list.Count(p => p.Online)} / {list.Count}";
+			Rebuild();
+			return;
+		}
 		var result = await PlayerApi.FetchOnline();
 		_loading = false;
-		if (!IsInstanceValid(this)) return;
+		if (!IsInstanceValid(this) || friends != _friendsMode) return;
 		if (result == null)
 		{
 			_hint.Text = "Can't reach the server right now. Retrying...";
 			_hint.Visible = true;
 			return;
 		}
+		_error = null;
 		_players = result.Value.players;
 		_count.Text = result.Value.count.ToString("N0");
 		Rebuild();
@@ -127,11 +170,14 @@ public partial class PlayerListPanel : PanelContainer
 		var q = _search.Text.Trim();
 		var shown = _players.Where(p => q.Length == 0 || p.Username.Contains(q, System.StringComparison.OrdinalIgnoreCase))
 			.OrderByDescending(p => p.Username == ApiOperator.Username)
-			.ThenBy(p => p.Rank > 0 ? p.Rank : long.MaxValue)
+			.ThenByDescending(p => _friendsMode && p.Online)
+			.ThenBy(p => _friendsMode ? 0 : p.Rank > 0 ? p.Rank : long.MaxValue)
 			.ThenBy(p => p.Username, System.StringComparer.OrdinalIgnoreCase)
 			.ToList();
 		_hint.Visible = shown.Count == 0;
-		_hint.Text = _players.Count == 0 ? "Nobody is online right now -n-" : $"Nobody online matches \"{q}\". Press Enter to look them up anyway.";
+		_hint.Text = _friendsMode
+			? _error ?? (_players.Count == 0 ? "No friends yet -n- Open someone's profile and press \"add friend\"." : $"None of your friends match \"{q}\".")
+			: _players.Count == 0 ? "Nobody is online right now -n-" : $"Nobody online matches \"{q}\". Press Enter to look them up anyway.";
 		foreach (var p in shown) _rows.AddChild(Row(p));
 	}
 
@@ -176,7 +222,7 @@ public partial class PlayerListPanel : PanelContainer
 
 		var info = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill, Alignment = BoxContainer.AlignmentMode.Center, MouseFilter = MouseFilterEnum.Ignore };
 		info.AddThemeConstantOverride("separation", 2);
-		info.AddChild(PlayerOverlays.Text(p.Username + (p.Username == ApiOperator.Username ? " (you)" : ""), 13, trim: true));
+		info.AddChild(PlayerOverlays.Text(p.Username + (p.Username == ApiOperator.Username ? " (you)" : p.Mutual ? "  · mutual" : ""), 13, trim: true));
 		var statusRow = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
 		statusRow.AddThemeConstantOverride("separation", 6);
 		statusRow.AddChild(new ColorRect { Color = p.Online ? PlayerOverlays.OnlineDot : PlayerOverlays.OfflineDot, CustomMinimumSize = new Vector2(7, 7), SizeFlagsVertical = SizeFlags.ShrinkCenter, MouseFilter = MouseFilterEnum.Ignore });

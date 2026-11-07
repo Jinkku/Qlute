@@ -43,6 +43,13 @@ public static class PlayerOverlays
 		Layer().AddChild(new ReportDialog(username, context));
 	}
 
+	/// <summary>A pop-up message above everything (e.g. the account was just restricted).</summary>
+	public static void ShowMessage(string title, string text, Color accent)
+	{
+		var layer = Layer();
+		layer.AddChild(new MessageDialog(title, text, accent));
+	}
+
 	private static AdminPanel _admin;
 
 	/// <summary>Team only (ModerationApi.IsStaff). username: jump straight to that player.</summary>

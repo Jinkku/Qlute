@@ -108,6 +108,17 @@ public class LanRoomState
 	public int LobbyTimer { get; set; } = 60;
 	public int MatchId { get; set; }
 	public List<LanResult> LastResults { get; set; } = new();
+	/// <summary>Random id for the room's whole life, even when it moves to another game (LAN players find it again by this).</summary>
+	public string RoomToken { get; set; }
+}
+
+/// <summary>Players that changed since the last update (whole players), the full player order (which also says who
+/// left), and the countdown. Sent instead of the whole room when nothing else about the room changed.</summary>
+public class LanPlayersPatch
+{
+	public List<LanPlayer> Changed { get; set; } = new();
+	public List<long> Order { get; set; } = new();
+	public double TimeLeft { get; set; }
 }
 
 /// <summary>UDP beacon a host broadcasts so lounges on the LAN can list the room.</summary>
@@ -122,6 +133,8 @@ public class LanBeacon
 	public int players { get; set; }
 	public int phase { get; set; }
 	public string map { get; set; }
+	/// <summary><see cref="LanRoomState.RoomToken"/>, so players can find the room again after it moves.</summary>
+	public string room { get; set; }
 }
 
 /// <summary>A room seen on the LAN by the lounge.</summary>

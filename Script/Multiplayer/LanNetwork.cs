@@ -21,14 +21,19 @@ using System.Threading.Tasks;
 ///   the head of the queue is "up next" and the "time till play" countdown runs -> drops to 5s once everyone is ready ->
 ///   ready players load in (each on their own difficulty of that set, with their own allowed mods) -> live scores stream
 ///   to the host -> each player sees the results screen -> back to lobby, the played item leaves the queue.
-/// - "Server" vs "host": the player who created the room is the server (peer 1) for its whole life. The *host*
+/// - "Server" vs "host": the game running the room is the server (peer 1), at first whoever created it. The *host*
 ///   is whoever holds the room controls (<see cref="LanRoomState.HostId"/>) and can be handed to anyone;
 ///   their requests go through the server like everything else.
+/// - Migration: when the server leaves (or drops), the room carries on. The successor (<see cref="PickSuccessor"/>:
+///   the host if that's someone else, otherwise the longest-standing player) runs it from its own copy of the state,
+///   and everyone else reconnects and says <see cref="RpcRejoin"/>. Online, the relay server moves the room and
+///   tells everyone; on the LAN, the others find the successor's beacon by <see cref="LanRoomState.RoomToken"/>.
+///   The room only closes once everyone has left.
 /// </summary>
 public partial class LanNetwork : Node
 {
 	public const string BeaconTag = "qlute-lan";
-	public const int Protocol = 3; // 3: queue items carry a game mode, spectator charts carry mode + positions
+	public const int Protocol = 5; // 3: queue items carry a game mode, spectator charts carry mode + positions; 4: host migration; 5: compressed state + packed live scores
 	public const int MaxRoomNameLength = 40;
 	public const int DiscoveryPort = 8911;
 	public const int DefaultGamePort = 8912;
@@ -47,6 +52,8 @@ public partial class LanNetwork : Node
 	private const int MaxChartBytes = 8 * 1024 * 1024;
 	public const int MaxQueuePerPlayer = 5;
 	public const int MaxQueueTotal = 50;
+	/// <summary>After a migration, how long players have to reconnect to the new server before they're dropped.</summary>
+	public const double RejoinSeconds = 15;
 
 	/// <summary>Mods players may pick in a LAN match. Anything that changes song speed or plays for you
 	/// (auto, DT, HT...) would make scores unfair, so it's left out.</summary>
@@ -62,6 +69,11 @@ public partial class LanNetwork : Node
 		{ "random", "RND" }, { "slice", "SL" }, { "black-out", "BT" }, { "am", "AM" },
 	};
 	private const int ChunkSize = 60 * 1024;
+	/// <summary>Beatmap sharing speed. Sending as fast as possible buried chat and room updates behind megabytes of
+	/// chunks (and online, the relay drops anything past 4 MB/s per player, including those updates).</summary>
+	private const double LanSendRate = 3 * 1024 * 1024, OnlineSendRate = 1024 * 1024;
+	/// <summary>Online: hold chunks back while this much is still waiting on the socket.</summary>
+	private const int MaxRelayBacklog = 256 * 1024;
 	private const long MaxShareBytes = 200L * 1024 * 1024;
 	/// <summary>Online, shared beatmaps go through the server, so keep them smaller.</summary>
 	private const long MaxOnlineShareBytes = 64L * 1024 * 1024;
@@ -80,14 +92,17 @@ public partial class LanNetwork : Node
 
 	// ---- Session state (read by the UI; mutate only through the methods below) ----
 	public LanRoomState State { get; private set; }
-	/// <summary>True on the machine running the room (peer 1). Leaving closes the room for everyone.</summary>
+	/// <summary>True on the machine running the room (peer 1). If it leaves, another player's game takes over.</summary>
 	public bool IsServer { get; private set; }
 	/// <summary>True when the local player holds the host controls.</summary>
 	public bool IsHost => State != null && LocalId != 0 && State.HostId == LocalId;
 	public bool LocalInMatch { get; private set; }
 	public int StateVersion { get; private set; }
 	public int GamePort { get; private set; }
-	public long LocalId => Multiplayer.MultiplayerPeer is ENetMultiplayerPeer or RelayMultiplayerPeer ? Multiplayer.GetUniqueId() : 0;
+	public long LocalId => Multiplayer.MultiplayerPeer is (ENetMultiplayerPeer or RelayMultiplayerPeer) and var peer
+		&& peer.GetConnectionStatus() != MultiplayerPeer.ConnectionStatus.Disconnected ? Multiplayer.GetUniqueId() : 0;
+	/// <summary>Our id in the room as of the last state update (still known after the connection drops).</summary>
+	private long _lastLocalId;
 	/// <summary>True when the current room goes through the online server instead of the LAN.</summary>
 	public bool IsOnline { get; private set; }
 	/// <summary>"online" / "LAN", for messages.</summary>
@@ -129,6 +144,23 @@ public partial class LanNetwork : Node
 	private int _lastBeatmapCount = -1;
 	private readonly Dictionary<string, string> _checksumCache = new();
 
+	// ---- Migration ----
+	/// <summary>Server: players from before a migration who haven't reconnected yet (dropped after <see cref="RejoinSeconds"/>).</summary>
+	private readonly HashSet<long> _awaiting = new();
+	private double _awaitingLeft;
+	/// <summary>Client: our player id on the old server; sent with <see cref="RpcRejoin"/> once connected (0 = normal join).</summary>
+	private long _rejoinOldId;
+	/// <summary>LAN client: looking for the new server's beacon (seconds left; 0 = not looking).</summary>
+	private double _reconnectLeft;
+	private bool _reconnectOwnsDiscovery;
+	/// <summary>When the search started: only beacons heard after it count (the old server's last ones are still listed).</summary>
+	private ulong _reconnectSinceMs;
+	/// <summary>True while the room is moving to a new server and we're not connected to it yet.</summary>
+	public bool Reconnecting => State != null && !IsServer && (_reconnectLeft > 0 || _rejoinOldId != 0);
+	/// <summary>Our last finish report, re-sent if the server it went to left before handling it.</summary>
+	private (int matchId, int score, int maxCombo, float acc, int max, int great, int meh, int bad, bool quit)? _lastFinish;
+	private bool _kicked;
+
 	private class OutgoingTransfer { public long Peer; public string FileName; public byte[] Data; public int Next; public int Total; }
 	private readonly List<OutgoingTransfer> _outgoing = new();
 	private MemoryStream _incoming;
@@ -136,14 +168,16 @@ public partial class LanNetwork : Node
 
 	public override void _Ready()
 	{
-		Instance = this;
+		if (!IsBot) Instance = this;
 		ProcessMode = ProcessModeEnum.Always; // keep networking alive while the tree is paused
 		Multiplayer.PeerConnected += OnPeerConnected;
 		Multiplayer.PeerDisconnected += OnPeerDisconnected;
 		Multiplayer.ConnectedToServer += OnConnectedToServer;
 		Multiplayer.ConnectionFailed += OnConnectionFailed;
 		Multiplayer.ServerDisconnected += OnServerDisconnected;
+		if (IsBot) return;
 		LanSelfTest.Attach(this);
+		LanBench.Attach(this);
 	}
 
 	public override void _ExitTree()
@@ -161,12 +195,58 @@ public partial class LanNetwork : Node
 	/// <summary>Same name as the LAN chat: the account name, or the offline nickname when not logged in.</summary>
 	public static string LocalName() => LanChat.LocalName();
 
+	/// <summary>Benchmark bot (LanBench): a stand-in player with its own connection. It plays no gameplay and touches
+	/// nothing global (scenes, notifications, the leaderboard); its matches are fake scores over time.</summary>
+	public bool IsBot { get; init; }
+	public string BotName { get; init; }
+	/// <summary>How long a bot "plays" before it reports its result.</summary>
+	public double BotSongSeconds { get; set; } = 20;
+	private double _botPlayed;
+	private string MyName => IsBot ? BotName : LocalName();
+
+	private void Post(string text, NotificationIcons.NotificationType Type = NotificationIcons.NotificationType.Info)
+	{
+		if (!IsBot) Notify.Post(text, Type: Type);
+	}
+
 	public static string GameVersion() => ProjectSettings.GetSetting("application/config/version").AsString();
 
 	/// <summary>Create a room and become its host.</summary>
 	public bool Host(string roomName)
 	{
 		Leave(silent: true);
+		if (!OpenLanServer()) return false;
+		StartHosting(roomName, online: false, $"Room created on port {GamePort}.");
+		GD.Print($"[LAN] Hosting \"{State.Name}\" on port {GamePort}");
+		return true;
+	}
+
+	/// <summary>Create a room on the online server (needs a logged-in account). Same room logic as LAN.</summary>
+	public bool HostOnline(string roomName)
+	{
+		Leave(silent: true);
+		if (!OnlineApi.Available)
+		{
+			Post("Log in to host online rooms.", Type: NotificationIcons.NotificationType.Warning);
+			return false;
+		}
+		var name = Clean(roomName, MaxRoomNameLength, $"{LocalName()}'s room");
+		var peer = new RelayMultiplayerPeer();
+		var err = peer.Host(name, Protocol, GameVersion());
+		if (err != Error.Ok)
+		{
+			Post(peer.CloseReason ?? $"Couldn't create an online room ({err}).", Type: NotificationIcons.NotificationType.Warning);
+			return false;
+		}
+		Multiplayer.MultiplayerPeer = peer;
+		StartHosting(name, online: true, "Online room created. Anyone on the server can join from the lounge.");
+		GD.Print($"[ONLINE] Hosting \"{State.Name}\"");
+		return true;
+	}
+
+	/// <summary>Starts an ENet server on the first free port from <see cref="DefaultGamePort"/>.</summary>
+	private bool OpenLanServer()
+	{
 		var peer = new ENetMultiplayerPeer();
 		Error err = Error.Failed;
 		int port = DefaultGamePort;
@@ -177,36 +257,11 @@ public partial class LanNetwork : Node
 		}
 		if (err != Error.Ok)
 		{
-			Notify.Post($"Couldn't create a LAN room ({err}).", Type: NotificationIcons.NotificationType.Warning);
+			Post($"Couldn't create a LAN room ({err}).", Type: NotificationIcons.NotificationType.Warning);
 			return false;
 		}
 		Multiplayer.MultiplayerPeer = peer;
 		GamePort = port;
-		StartHosting(roomName, online: false, $"Room created on port {port}.");
-		GD.Print($"[LAN] Hosting \"{State.Name}\" on port {port}");
-		return true;
-	}
-
-	/// <summary>Create a room on the online server (needs a logged-in account). Same room logic as LAN.</summary>
-	public bool HostOnline(string roomName)
-	{
-		Leave(silent: true);
-		if (!OnlineApi.Available)
-		{
-			Notify.Post("Log in to host online rooms.", Type: NotificationIcons.NotificationType.Warning);
-			return false;
-		}
-		var name = Clean(roomName, MaxRoomNameLength, $"{LocalName()}'s room");
-		var peer = new RelayMultiplayerPeer();
-		var err = peer.Host(name, Protocol, GameVersion());
-		if (err != Error.Ok)
-		{
-			Notify.Post(peer.CloseReason ?? $"Couldn't create an online room ({err}).", Type: NotificationIcons.NotificationType.Warning);
-			return false;
-		}
-		Multiplayer.MultiplayerPeer = peer;
-		StartHosting(name, online: true, "Online room created. Anyone on the server can join from the lounge.");
-		GD.Print($"[ONLINE] Hosting \"{State.Name}\"");
 		return true;
 	}
 
@@ -220,6 +275,7 @@ public partial class LanNetwork : Node
 			HostId = 1,
 			HostName = LocalName(),
 			Players = { new LanPlayer { Id = 1, Name = LocalName() } },
+			RoomToken = Guid.NewGuid().ToString("N"),
 		};
 		ChatLog.Clear();
 		AddChatLine(null, $"{firstLine} Everyone can add beatmaps to the queue; picks take turns (round robin).");
@@ -231,18 +287,24 @@ public partial class LanNetwork : Node
 	public bool Join(string address, int port)
 	{
 		Leave(silent: true);
+		if (!ConnectLan(address, port)) return false;
+		_joining = true;
+		Post($"Connecting to {address}:{port}...");
+		GD.Print($"[LAN] Joining {address}:{port}");
+		return true;
+	}
+
+	private bool ConnectLan(string address, int port)
+	{
 		var peer = new ENetMultiplayerPeer();
 		var err = peer.CreateClient(address, port);
 		if (err != Error.Ok)
 		{
-			Notify.Post($"Couldn't connect to {address}:{port} ({err}).", Type: NotificationIcons.NotificationType.Warning);
+			Post($"Couldn't connect to {address}:{port} ({err}).", Type: NotificationIcons.NotificationType.Warning);
 			return false;
 		}
 		Multiplayer.MultiplayerPeer = peer;
 		IsServer = false;
-		_joining = true;
-		Notify.Post($"Connecting to {address}:{port}...");
-		GD.Print($"[LAN] Joining {address}:{port}");
 		return true;
 	}
 
@@ -252,32 +314,33 @@ public partial class LanNetwork : Node
 		Leave(silent: true);
 		if (!OnlineApi.Available)
 		{
-			Notify.Post("Log in to join online rooms.", Type: NotificationIcons.NotificationType.Warning);
+			Post("Log in to join online rooms.", Type: NotificationIcons.NotificationType.Warning);
 			return false;
 		}
 		var peer = new RelayMultiplayerPeer();
 		var err = peer.Join(roomId);
 		if (err != Error.Ok)
 		{
-			Notify.Post(peer.CloseReason ?? $"Couldn't reach the server ({err}).", Type: NotificationIcons.NotificationType.Warning);
+			Post(peer.CloseReason ?? $"Couldn't reach the server ({err}).", Type: NotificationIcons.NotificationType.Warning);
 			return false;
 		}
 		Multiplayer.MultiplayerPeer = peer;
 		IsServer = false;
 		IsOnline = true;
 		_joining = true;
-		Notify.Post("Joining online room...");
+		Post("Joining online room...");
 		GD.Print($"[ONLINE] Joining room {roomId}");
 		return true;
 	}
 
-	/// <summary>Leave the current room (closes it for everyone if we're the host).</summary>
+	/// <summary>Leave the current room. If our game was running it, someone else's takes over (it closes only when empty).</summary>
 	public void Leave(bool silent = false)
 	{
 		if (Multiplayer.MultiplayerPeer is ENetMultiplayerPeer or RelayMultiplayerPeer)
 		{
+			bool alone = State == null || State.Players.Count <= 1;
 			Multiplayer.MultiplayerPeer.Close();
-			if (!silent) Notify.Post(IsServer ? $"Closed the {RoomKind} room." : $"Left the {RoomKind} room.");
+			if (!silent) Post(IsServer && alone ? $"Closed the {RoomKind} room." : $"Left the {RoomKind} room.");
 		}
 		Multiplayer.MultiplayerPeer = new OfflineMultiplayerPeer();
 		ResetSession();
@@ -339,7 +402,7 @@ public partial class LanNetwork : Node
 		if (index >= 0 && map == null) return;
 		if (map != null && !SameSet(map, State.Beatmap))
 		{
-			Notify.Post("Pick a difficulty from the same song as the one up next.", Type: NotificationIcons.NotificationType.Warning);
+			Post("Pick a difficulty from the same song as the one up next.", Type: NotificationIcons.NotificationType.Warning);
 			return;
 		}
 		var json = map == null ? "" : JsonSerializer.Serialize(map);
@@ -414,7 +477,7 @@ public partial class LanNetwork : Node
 		if (State == null || mode == PickMode.None) return;
 		if (mode == PickMode.AddToQueue && QueueCountFor(LocalId) >= MaxQueuePerPlayer)
 		{
-			Notify.Post($"You can have up to {MaxQueuePerPlayer} beatmaps in the queue.", Type: NotificationIcons.NotificationType.Warning);
+			Post($"You can have up to {MaxQueuePerPlayer} beatmaps in the queue.", Type: NotificationIcons.NotificationType.Warning);
 			return;
 		}
 		Picking = mode;
@@ -596,13 +659,152 @@ public partial class LanNetwork : Node
 		else RpcId(1, MethodName.RpcTransferHost, playerId);
 	}
 
-	/// <summary>Ask the room for the selected beatmap; the server or the host sends it over the LAN.</summary>
+	/// <summary>
+	/// Get the selected beatmap. Qlute's servers first (faster, and spares the room's upload); if they can't be
+	/// reached, don't have it, or have a different version of the chart, the room sends it instead.
+	/// </summary>
 	public void RequestBeatmapFromHost()
 	{
-		if (State?.Beatmap == null || TransferProgress >= 0 || FindLocalBeatmap(State.Beatmap) >= 0) return;
+		var map = State?.Beatmap;
+		if (map == null || TransferProgress >= 0 || FindLocalBeatmap(map) >= 0) return;
+		if (map.BeatmapID > 0 && map.BeatmapSetID > 0 && _serverTried != map.Checksum)
+		{
+			_serverTried = map.Checksum;
+			DownloadFromQlute(map);
+			return;
+		}
+		RequestFromRoom();
+	}
+
+	/// <summary>Chart we already started fetching by ourselves (so a failed download isn't retried in a loop).</summary>
+	private string _autoFetched;
+
+	/// <summary>The room's beatmap is missing here: fetch it right away (Qlute first, then the room).</summary>
+	private void AutoFetchBeatmap()
+	{
+		var map = State?.Beatmap;
+		if (map?.Checksum == null || map.Checksum == _autoFetched || TransferProgress >= 0 || LanSelfTest.ForceMissingMap) return;
+		_autoFetched = map.Checksum;
+		if (FindLocalBeatmap(map) < 0) RequestBeatmapFromHost();
+	}
+
+	private void RequestFromRoom()
+	{
 		TransferProgress = 0;
 		if (IsServer) ServerRouteBeatmapRequest(1);
 		else RpcId(1, MethodName.RpcRequestBeatmap);
+	}
+
+	// ---- Download from Qlute's servers ----
+
+	/// <summary>True while <see cref="TransferProgress"/> is a download from Qlute's servers (not from the room).</summary>
+	public bool DownloadingFromQlute => _qluteDownload != null;
+	private const double ImportWaitSeconds = 20;
+	private string _serverTried;                       // chart we already tried Qlute's servers for
+	private System.Threading.CancellationTokenSource _qluteDownload;
+	private double _importWait = -1;                   // downloaded: seconds left to see the chart show up in the library
+	private int _importLibraryCount;
+	private static readonly System.Net.Http.HttpClient QluteHttp = new() { Timeout = TimeSpan.FromMinutes(10) };
+
+	private async void DownloadFromQlute(LanBeatmapRef map)
+	{
+		var cts = new System.Threading.CancellationTokenSource();
+		_qluteDownload = cts;
+		TransferProgress = 0;
+		bool Wanted() => _qluteDownload == cts && !cts.IsCancellationRequested && State?.Beatmap?.Checksum == map.Checksum;
+		string url;
+		try { url = await FindOnQlute(map, cts.Token); }
+		catch (Exception e) { url = null; GD.Print($"[LAN] Qlute's servers can't be reached ({e.Message})"); }
+		if (!Wanted()) return;
+		if (url == null) { FallBackToRoom(null); return; }
+
+		Post("Downloading the beatmap from Qlute...");
+		var tmp = Path.Combine(LanSelfTest.TransferOutputDir ?? SettingsOperator.downloadsdir, $"{map.BeatmapSetID}.osz.part");
+		try
+		{
+			using var req = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, url);
+			req.Headers.TryAddWithoutValidation("User-Agent", ApiOperator.AgentString ?? "Qlute");
+			using var res = await QluteHttp.SendAsync(req, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cts.Token);
+			res.EnsureSuccessStatusCode();
+			long total = res.Content.Headers.ContentLength ?? 0;
+			await using (var body = await res.Content.ReadAsStreamAsync(cts.Token))
+			await using (var file = File.Create(tmp))
+			{
+				var buffer = new byte[81920];
+				long done = 0;
+				int n;
+				while ((n = await body.ReadAsync(buffer, cts.Token)) > 0)
+				{
+					await file.WriteAsync(buffer.AsMemory(0, n), cts.Token);
+					done += n;
+					if (total > 0 && _qluteDownload == cts) TransferProgress = Math.Min(0.99f, done / (float)total);
+				}
+			}
+			if (!Wanted()) { File.Delete(tmp); return; }
+			// BeatmapListener imports *.osz from the downloads folder; _Process watches for the chart to show up.
+			File.Move(tmp, Path.Combine(LanSelfTest.TransferOutputDir ?? SettingsOperator.downloadsdir, $"{map.BeatmapSetID}.osz"), overwrite: true);
+			GD.Print($"[LAN] Downloaded set {map.BeatmapSetID} from Qlute");
+			TransferProgress = 1;
+			_importWait = ImportWaitSeconds;
+			_importLibraryCount = SettingsOperator.Beatmaps.Count;
+		}
+		catch (Exception e)
+		{
+			try { File.Delete(tmp); } catch { /* best effort */ }
+			if (!Wanted()) return;
+			GD.Print($"[LAN] Qlute download failed: {e.Message}");
+			FallBackToRoom("Couldn't download it from Qlute, so getting it from the room instead.");
+		}
+	}
+
+	/// <summary>The set's download link on Qlute's servers, or null if they don't have it.</summary>
+	private static async System.Threading.Tasks.Task<string> FindOnQlute(LanBeatmapRef map, System.Threading.CancellationToken ct)
+	{
+		using var quick = System.Threading.CancellationTokenSource.CreateLinkedTokenSource(ct);
+		quick.CancelAfter(TimeSpan.FromSeconds(8));
+		// apiv2/s/ID: is it on Qlute (and its ranked status, which the search needs).
+		var info = System.Text.Json.Nodes.JsonNode.Parse(await QluteHttp.GetStringAsync($"{PlayerApi.Base}apiv2/s/{map.BeatmapID}", quick.Token)) as System.Text.Json.Nodes.JsonObject;
+		if (info == null || OnlineApi.Long(info, "error") != 0) return null;
+		var status = OnlineApi.Long(info, "RankedStatus");
+		var found = System.Text.Json.Nodes.JsonNode.Parse(await QluteHttp.GetStringAsync(
+			$"{PlayerApi.Base}apiv2/search?query={map.BeatmapSetID}&status={status}", quick.Token)) as System.Text.Json.Nodes.JsonArray;
+		var set = found?.OfType<System.Text.Json.Nodes.JsonObject>().FirstOrDefault(o => OnlineApi.Long(o, "id") == map.BeatmapSetID);
+		var url = OnlineApi.Str(set, "download_url");
+		return string.IsNullOrEmpty(url) ? null : url.Replace(" ", "%20");
+	}
+
+	/// <summary>Downloaded from Qlute: wait for the import, then check it's the room's exact chart.</summary>
+	private void WatchQluteImport(double delta)
+	{
+		if (_importWait < 0) return;
+		if (State?.Beatmap == null) { EndQluteDownload(); return; }
+		if (FindLocalBeatmap(State.Beatmap) >= 0)
+		{
+			EndQluteDownload();
+			Post("Got the beatmap from Qlute!");
+			return;
+		}
+		// The set got imported but the chart isn't there: Qlute has another version. Give it a moment (several difficulties).
+		if (SettingsOperator.Beatmaps.Count != _importLibraryCount) { _importLibraryCount = SettingsOperator.Beatmaps.Count; _importWait = Math.Min(_importWait, 3); }
+		_importWait -= delta;
+		if (_importWait < 0) FallBackToRoom("Qlute has a different version of this beatmap, so getting the room's copy.");
+	}
+
+	private void EndQluteDownload()
+	{
+		_qluteDownload?.Cancel();
+		_qluteDownload = null;
+		_importWait = -1;
+		if (TransferProgress >= 0 && _incoming == null) TransferProgress = -1;
+	}
+
+	private void FallBackToRoom(string reason)
+	{
+		EndQluteDownload();
+		TransferProgress = -1;
+		if (State?.Beatmap == null) return;
+		if (reason != null) Post(reason);
+		RequestFromRoom();
 	}
 
 	/// <summary>Called when the local player's gameplay ends (finished or quit).</summary>
@@ -614,8 +816,23 @@ public partial class LanNetwork : Node
 		var c = (SettingsOperator.Gameplaycfg.Score, SettingsOperator.Gameplaycfg.MaxCombo, Accuracy: LocalAccuracy(),
 			SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 		if (State == null) return; // host vanished mid-match
-		if (IsServer) ServerFinished(1, c.Score, c.MaxCombo, c.Accuracy, c.Max, c.Great, c.Meh, c.Bad, quit);
-		else RpcId(1, MethodName.RpcFinished, c.Score, c.MaxCombo, c.Accuracy, c.Max, c.Great, c.Meh, c.Bad, quit);
+		_lastFinish = (State.MatchId, c.Score, c.MaxCombo, c.Accuracy, c.Max, c.Great, c.Meh, c.Bad, quit);
+		SendFinish();
+	}
+
+	private void SendFinish()
+	{
+		if (_lastFinish is not { } f) return;
+		if (IsServer) ServerFinished(1, f.score, f.maxCombo, f.acc, f.max, f.great, f.meh, f.bad, f.quit);
+		else if (LocalId != 0) RpcId(1, MethodName.RpcFinished, f.score, f.maxCombo, f.acc, f.max, f.great, f.meh, f.bad, f.quit);
+	}
+
+	/// <summary>After a migration: if the room still thinks we're playing but we already finished, the old server never
+	/// got our result (it left first), so send it again. Otherwise the match would wait for us forever.</summary>
+	private void ResendFinishIfLost()
+	{
+		if (LocalInMatch || _lastFinish is not { } f || State == null || f.matchId != State.MatchId) return;
+		if (LocalPlayer is { InMatch: true, Finished: false }) SendFinish();
 	}
 
 	// ---- Discovery ----
@@ -633,7 +850,7 @@ public partial class LanNetwork : Node
 		catch (Exception e)
 		{
 			GD.PrintErr($"[LAN] Couldn't listen for rooms on UDP {DiscoveryPort}: {e.Message}");
-			Notify.Post($"Can't search for LAN rooms (UDP port {DiscoveryPort} unavailable).", Type: NotificationIcons.NotificationType.Warning);
+			Post($"Can't search for LAN rooms (UDP port {DiscoveryPort} unavailable).", Type: NotificationIcons.NotificationType.Warning);
 			_discoveryRx?.Close();
 			_discoveryRx = null;
 		}
@@ -662,6 +879,8 @@ public partial class LanNetwork : Node
 		PollDiscovery();
 		PollOnlineBrowser(delta);
 		RelayMultiplayerPeer.PollLingering();
+		if (Relay?.Handover is { } next) OnlineHandover(Relay, next);
+		PollReconnect(delta);
 
 		if (State == null) return;
 
@@ -679,7 +898,9 @@ public partial class LanNetwork : Node
 				return;
 			}
 		}
-		PumpOutgoingTransfers(); // anyone holding the map may be asked to share it
+		PumpOutgoingTransfers(delta); // anyone holding the map may be asked to share it
+		AutoFetchBeatmap();
+		WatchQluteImport(delta);
 
 		// Beatmap library changed (e.g. a map arrived from the host) -> re-check whether we can play.
 		if (_lastBeatmapCount != SettingsOperator.Beatmaps.Count)
@@ -690,20 +911,40 @@ public partial class LanNetwork : Node
 
 		PumpSpectateFeed(delta);
 
+		if (IsBot) { BotPlay(delta); return; }
+
 		// Stream our live score to the host while playing.
 		if (LocalInMatch && SettingsOperator.inGameplay)
 		{
 			_scoreTimer -= delta;
 			if (_scoreTimer <= 0)
 			{
-				_scoreTimer = 0.25;
+				_scoreTimer = State.Players.Count > 64 ? 0.5 : 0.25; // big rooms: half as often (it's 1 packet per player)
 				var g = (SettingsOperator.Gameplaycfg.Score, SettingsOperator.Gameplaycfg.Combo, SettingsOperator.Gameplaycfg.MaxCombo,
 					Accuracy: LocalAccuracy(), SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great,
 					SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 				if (IsServer) ServerScore(1, g.Score, g.Combo, g.MaxCombo, g.Accuracy, g.Max, g.Great, g.Meh, g.Bad);
-				else RpcId(1, MethodName.RpcScore, g.Score, g.Combo, g.MaxCombo, g.Accuracy, g.Max, g.Great, g.Meh, g.Bad);
+				else if (LocalId != 0) RpcId(1, MethodName.RpcScore, g.Score, g.Combo, g.MaxCombo, g.Accuracy, g.Max, g.Great, g.Meh, g.Bad);
 			}
 		}
+	}
+
+	/// <summary>Bot "gameplay": a live score 4 times a second, like a real player, then a result.</summary>
+	private void BotPlay(double delta)
+	{
+		if (!LocalInMatch || LocalId == 0) return;
+		_botPlayed += delta;
+		int hits = (int)(_botPlayed * 8);
+		if (_botPlayed >= BotSongSeconds)
+		{
+			LocalInMatch = false;
+			RpcId(1, MethodName.RpcFinished, hits * 300, hits, 0.97f, hits, 0, 0, 0, false);
+			return;
+		}
+		_scoreTimer -= delta;
+		if (_scoreTimer > 0) return;
+		_scoreTimer = State.Players.Count > 64 ? 0.5 : 0.25;
+		RpcId(1, MethodName.RpcScore, hits * 300, hits, hits, 0.97f, hits, 0, 0, 0);
 	}
 
 	// =====================================================================
@@ -713,6 +954,12 @@ public partial class LanNetwork : Node
 	private void ServerTick(double delta)
 	{
 		var s = State;
+		if (_awaiting.Count > 0 && (_awaitingLeft -= delta) <= 0)
+		{
+			foreach (var id in _awaiting.ToList())
+				if (FindPlayer(id) is { } p) RemovePlayer(p, $"{p.Name} didn't make it back, so they left the room.");
+			_awaiting.Clear();
+		}
 		if (s.Phase == LanPhase.Lobby)
 		{
 			if (s.Beatmap == null || s.Players.Count == 0)
@@ -735,9 +982,10 @@ public partial class LanNetwork : Node
 					MarkDirty();
 				}
 
-				int before = (int)Math.Ceiling(s.TimeLeft);
+				double before = s.TimeLeft;
 				s.TimeLeft -= delta;
-				if ((int)Math.Ceiling(s.TimeLeft) != before) MarkDirty(); // keep clients' timers honest once a second
+				// Clients count down by themselves; a resync every 10 s keeps them honest.
+				if (Math.Floor(before / 10) != Math.Floor(s.TimeLeft / 10)) MarkDirty();
 
 				if (s.TimeLeft <= 0)
 				{
@@ -756,11 +1004,18 @@ public partial class LanNetwork : Node
 			}
 		}
 
+		// Room changes are batched (a wave of joins or ready-ups is one update), compressed, and sent to everyone.
 		_syncTimer -= delta;
 		if (_dirty && _syncTimer <= 0)
 		{
-			_syncTimer = s.Phase == LanPhase.Playing ? 0.25 : 0.1;
+			_syncTimer = s.Players.Count > 100 ? 0.5 : 0.25;
 			BroadcastState();
+		}
+		_scoreSyncTimer -= delta;
+		if (_scoreDirty.Count > 0 && _scoreSyncTimer <= 0)
+		{
+			_scoreSyncTimer = s.Players.Count > 64 ? ScoreSyncSeconds * 2 : ScoreSyncSeconds;
+			BroadcastScores();
 		}
 	}
 
@@ -1058,7 +1313,7 @@ public partial class LanNetwork : Node
 
 	private void SendNotice(long peer, string text)
 	{
-		if (peer == LocalId) Notify.Post(text, Type: NotificationIcons.NotificationType.Warning);
+		if (peer == LocalId) Post(text, Type: NotificationIcons.NotificationType.Warning);
 		else RpcId(peer, MethodName.RpcKicked, text); // RpcKicked just shows a warning
 	}
 
@@ -1106,7 +1361,7 @@ public partial class LanNetwork : Node
 		State.HostName = to.Name;
 		_beaconTimer = 0;
 		ServerChat(0, announcement);
-		if (to.Id == 1) Notify.Post("You're the host now!");
+		if (to.Id == 1) Post("You're the host now!");
 		MarkDirty();
 	}
 
@@ -1135,7 +1390,14 @@ public partial class LanNetwork : Node
 	{
 		TransferProgress = -1;
 		_incoming = null;
-		Notify.Post(reason, Type: NotificationIcons.NotificationType.Warning);
+		Post(reason, Type: NotificationIcons.NotificationType.Warning);
+	}
+
+	/// <summary>"bob" matches "bob" and "bob (2)" (names get a number when two players share one).</summary>
+	private static bool SameName(string recorded, string sent)
+	{
+		var name = Clean(sent, 32, "Guest");
+		return recorded == name || recorded.StartsWith(name + " (");
 	}
 
 	private void ServerChat(long id, string text)
@@ -1159,7 +1421,7 @@ public partial class LanNetwork : Node
 		if (p == null || !p.InMatch || p.Finished) return;
 		p.Score = score; p.Combo = combo; p.MaxCombo = maxCombo; p.Accuracy = float.IsFinite(acc) ? Math.Clamp(acc, 0f, 1f) : 1f;
 		p.Max = max; p.Great = great; p.Meh = meh; p.Bad = bad;
-		MarkDirty();
+		_scoreDirty.Add(id); // goes out in the next packed score update, not as a whole new room state
 	}
 
 	private void ServerFinished(long id, int score, int maxCombo, float acc, int max, int great, int meh, int bad, bool quit)
@@ -1236,15 +1498,22 @@ public partial class LanNetwork : Node
 		GD.Print($"[LAN] Sending {fileName} ({data.Length / 1024} KB) to peer {peer}");
 	}
 
-	private void PumpOutgoingTransfers()
+	private double _sendBudget;
+
+	/// <summary>Sends beatmap chunks at a steady rate (see <see cref="LanSendRate"/>), taking turns between transfers.</summary>
+	private void PumpOutgoingTransfers(double delta)
 	{
-		// A few chunks per frame keeps the host smooth even while it's playing.
+		if (_outgoing.Count == 0) { _sendBudget = 0; return; }
+		double rate = IsOnline ? OnlineSendRate : LanSendRate;
+		_sendBudget = Math.Min(_sendBudget + rate * delta, Math.Max(ChunkSize, rate * 0.1)); // at most 0.1 s worth at once
+		if (IsOnline && Relay?.OutboundBuffered > MaxRelayBacklog) return; // the socket is still busy: let chat + state through first
 		for (int i = _outgoing.Count - 1; i >= 0; i--)
 		{
 			var t = _outgoing[i];
 			if (State == null || FindPlayer(t.Peer) == null) { _outgoing.RemoveAt(i); continue; }
-			for (int n = 0; n < 4 && t.Next < t.Total; n++, t.Next++)
+			for (; _sendBudget >= ChunkSize && t.Next < t.Total; t.Next++)
 			{
+				_sendBudget -= ChunkSize;
 				int offset = t.Next * ChunkSize;
 				int len = Math.Min(ChunkSize, t.Data.Length - offset);
 				var chunk = new byte[len];
@@ -1255,13 +1524,112 @@ public partial class LanNetwork : Node
 		}
 	}
 
+	// ---- Bandwidth: the room state is the big thing (it lists every player), so it only goes out when something
+	// changed, batched and compressed. Live scores change 4x a second per player, so they travel separately as a
+	// packed list of just the players whose score moved (20 bytes each).
+
+	private const double ScoreSyncSeconds = 0.25;
+	private readonly HashSet<long> _scoreDirty = new();
+	private double _scoreSyncTimer;
+
+	// What everyone was last sent: the room without its players, and each player (live-score fields left out,
+	// those have their own updates). Only what differs goes out next time.
+	private string _sentRoom;
+	private readonly Dictionary<long, string> _sentPlayers = new();
+
 	private void BroadcastState()
 	{
 		_dirty = false;
 		StateVersion++;
 		TimeLeftNow = State.TimeLeft;
+		var room = RoomSignature();
 		if (Multiplayer.GetPeers().Length > 0)
-			Rpc(MethodName.RpcState, JsonSerializer.Serialize(State));
+		{
+			if (room != _sentRoom)
+			{
+				_scoreDirty.Clear(); // the whole room carries every score
+				Rpc(MethodName.RpcStateZ, PackState());
+				_sentPlayers.Clear();
+				foreach (var p in State.Players) _sentPlayers[p.Id] = PlayerSignature(p);
+			}
+			else
+			{
+				var patch = new LanPlayersPatch { Order = State.Players.Select(p => p.Id).ToList(), TimeLeft = State.TimeLeft };
+				foreach (var p in State.Players)
+				{
+					var sig = PlayerSignature(p);
+					if (_sentPlayers.TryGetValue(p.Id, out var sent) && sent == sig) continue;
+					_sentPlayers[p.Id] = sig;
+					patch.Changed.Add(p);
+					_scoreDirty.Remove(p.Id); // its whole record (scores too) is in the patch
+				}
+				foreach (var gone in _sentPlayers.Keys.Where(id => FindPlayer(id) == null).ToList()) _sentPlayers.Remove(gone);
+				Rpc(MethodName.RpcPlayersZ, Pack(patch));
+			}
+		}
+		_sentRoom = room;
+		UpdateMatchLeaderboard();
+	}
+
+	/// <summary>The room minus its players and the ticking countdown.</summary>
+	private string RoomSignature()
+	{
+		var (players, time) = (State.Players, State.TimeLeft);
+		State.Players = new();
+		State.TimeLeft = 0;
+		var sig = JsonSerializer.Serialize(State);
+		(State.Players, State.TimeLeft) = (players, time);
+		return sig;
+	}
+
+	/// <summary>A player minus the live-score fields (every other field counts, including ones added later).</summary>
+	private static string PlayerSignature(LanPlayer p)
+	{
+		var keep = (p.Score, p.Combo, p.MaxCombo, p.Accuracy, p.Max, p.Great, p.Meh, p.Bad);
+		p.Score = p.Combo = p.MaxCombo = p.Max = p.Great = p.Meh = p.Bad = 0;
+		p.Accuracy = 0;
+		var sig = JsonSerializer.Serialize(p);
+		(p.Score, p.Combo, p.MaxCombo, p.Accuracy, p.Max, p.Great, p.Meh, p.Bad) = keep;
+		return sig;
+	}
+
+	private static byte[] Pack<T>(T value)
+	{
+		using var ms = new MemoryStream();
+		using (var gz = new System.IO.Compression.GZipStream(ms, System.IO.Compression.CompressionLevel.Fastest))
+			JsonSerializer.Serialize(gz, value);
+		return ms.ToArray();
+	}
+
+	private static T Unpack<T>(byte[] data)
+	{
+		using var gz = new System.IO.Compression.GZipStream(new MemoryStream(data), System.IO.Compression.CompressionMode.Decompress);
+		return JsonSerializer.Deserialize<T>(gz);
+	}
+
+	/// <summary>Sends the room to one player (someone who just joined or reconnected).</summary>
+	private void SendStateTo(long peer) => RpcId(peer, MethodName.RpcStateZ, PackState());
+
+	private byte[] PackState() => Pack(State);
+
+	private void BroadcastScores()
+	{
+		var players = _scoreDirty.Select(FindPlayer).Where(p => p != null).ToList();
+		_scoreDirty.Clear();
+		if (players.Count == 0) return;
+		var data = new byte[players.Count * 20];
+		int o = 0;
+		foreach (var p in players)
+		{
+			BitConverter.TryWriteBytes(data.AsSpan(o, 4), (int)p.Id);
+			BitConverter.TryWriteBytes(data.AsSpan(o + 4, 4), p.Score);
+			BitConverter.TryWriteBytes(data.AsSpan(o + 8, 4), p.Combo);
+			BitConverter.TryWriteBytes(data.AsSpan(o + 12, 4), p.MaxCombo);
+			BitConverter.TryWriteBytes(data.AsSpan(o + 16, 4), p.Accuracy);
+			o += 20;
+		}
+		if (Multiplayer.GetPeers().Length > 0) Rpc(MethodName.RpcScores, data);
+		StateVersion++;
 		UpdateMatchLeaderboard();
 	}
 
@@ -1275,6 +1643,7 @@ public partial class LanNetwork : Node
 	{
 		var me = LocalPlayer;
 		if (me == null || !me.InMatch) return; // not ready: watch the live scores from the lobby
+		if (IsBot) { LocalInMatch = true; _botPlayed = 0; _scoreTimer = 0; return; }
 		int index = FindLocalBeatmap(ChartFor(me));
 		if (index < 0)
 		{
@@ -1305,6 +1674,7 @@ public partial class LanNetwork : Node
 		var old = State;
 		State = newState;
 		StateVersion++;
+		_lastLocalId = LocalId;
 		TimeLeftNow = newState.TimeLeft;
 
 		if (_joining)
@@ -1312,7 +1682,7 @@ public partial class LanNetwork : Node
 			_joining = false;
 			ChatLog.Clear();
 			AddChatLine(null, $"Joined {newState.Name}. Say hi!");
-			GetNode<SceneTransition>("/root/Transition").Switch(LobbyScene);
+			if (!IsBot) GetNode<SceneTransition>("/root/Transition").Switch(LobbyScene);
 		}
 
 		var oldChart = old?.Players.FirstOrDefault(p => p.Id == LocalId) is { } oldMe ? oldMe.Difficulty ?? old.Beatmap : old?.Beatmap;
@@ -1320,7 +1690,9 @@ public partial class LanNetwork : Node
 			RecheckLocalMap(force: true);
 
 		if (old != null && old.HostId != newState.HostId && newState.HostId == LocalId)
-			Notify.Post("You're the host now!");
+			Post("You're the host now!");
+
+		ResendFinishIfLost();
 
 		UpdateMatchLeaderboard();
 	}
@@ -1333,7 +1705,7 @@ public partial class LanNetwork : Node
 		int index = FindLocalBeatmap(chart);
 		bool has = index >= 0;
 		// Preview music + background follow what's up next, but only in the lobby (not while browsing song select).
-		if (has && State.Phase == LanPhase.Lobby && !SettingsOperator.inGameplay && SettingsOperator.SessionConfig.SongID != index
+		if (has && !IsBot && State.Phase == LanPhase.Lobby && !SettingsOperator.inGameplay && SettingsOperator.SessionConfig.SongID != index
 			&& GetTree().CurrentScene?.SceneFilePath == LobbyScene)
 			SelectSong(index);
 		var me = LocalPlayer;
@@ -1385,7 +1757,7 @@ public partial class LanNetwork : Node
 
 	private void UpdateMatchLeaderboard()
 	{
-		if (!LocalInMatch || State == null) return;
+		if (!LocalInMatch || State == null || IsBot) return;
 		foreach (var p in State.Players)
 		{
 			if (!_matchEntries.TryGetValue(p.Id, out var e)) continue;
@@ -1399,8 +1771,12 @@ public partial class LanNetwork : Node
 	// Connection events
 	// =====================================================================
 
+	/// <summary>ENet drops a peer after 5 s of silence by default; a game busy loading a scene can go that long.</summary>
+	private static void PatientTimeout(ENetPacketPeer p) => p?.SetTimeout(32, 10000, 30000);
+
 	private void OnPeerConnected(long id)
 	{
+		if (Multiplayer.MultiplayerPeer is ENetMultiplayerPeer enet) PatientTimeout(enet.GetPeer((int)id));
 		if (IsServer) GD.Print($"[LAN] Peer {id} connected, waiting for hello");
 	}
 
@@ -1408,10 +1784,17 @@ public partial class LanNetwork : Node
 	{
 		if (!IsServer || State == null) return;
 		var p = FindPlayer(id);
-		if (p == null) return;
+		if (p == null || _awaiting.Contains(id)) return; // still the old connection of someone who's reconnecting
+		RemovePlayer(p, $"{p.Name} left the room.");
+	}
+
+	private void RemovePlayer(LanPlayer p, string line)
+	{
+		long id = p.Id;
 		State.Players.Remove(p);
+		_awaiting.Remove(id);
 		_outgoing.RemoveAll(t => t.Peer == id);
-		ServerChat(0, $"{p.Name} left the room.");
+		ServerChat(0, line);
 		int removed = State.Queue.RemoveAll(q => q.OwnerId == id);
 		if (removed > 0) ServerQueueChanged(); // their picks leave with them
 		// The host left: the controls go back to whoever runs the room.
@@ -1423,27 +1806,215 @@ public partial class LanNetwork : Node
 
 	private void OnConnectedToServer()
 	{
-		RpcId(1, MethodName.RpcHello, LocalName(), Protocol, GameVersion());
+		if (_rejoinOldId != 0 && State != null)
+		{
+			RpcId(1, MethodName.RpcRejoin, _rejoinOldId, MyName, Protocol, GameVersion());
+			_rejoinOldId = 0;
+		}
+		else RpcId(1, MethodName.RpcHello, MyName, Protocol, GameVersion());
 	}
 
 	private void OnConnectionFailed()
 	{
-		Notify.Post(Relay?.CloseReason ?? "Couldn't connect to that room.", Type: NotificationIcons.NotificationType.Warning);
+		Post(Relay?.CloseReason ?? "Couldn't connect to that room.", Type: NotificationIcons.NotificationType.Warning);
 		Multiplayer.MultiplayerPeer = new OfflineMultiplayerPeer();
 		ResetSession();
 	}
 
 	private void OnServerDisconnected()
 	{
-		bool wasInRoom = State != null;
+		var last = State;
+		long myOldId = _lastLocalId;
 		var reason = Relay?.CloseReason;
 		Multiplayer.MultiplayerPeer = new OfflineMultiplayerPeer();
+		// Online, the relay server moves rooms itself ("promoted" / "host_moved"); losing it means we're out.
+		if (!IsOnline && !_kicked && last != null && TryLanMigration(last, myOldId)) return;
+		RoomGone(last != null, reason ?? "The host closed the room.");
+	}
+
+	/// <summary>We're out of the room for good: tell the player and leave the lobby.</summary>
+	private void RoomGone(bool wasInRoom, string reason)
+	{
 		ResetSession();
 		if (!wasInRoom) return;
-		Notify.Post(reason ?? "The host closed the room.", Type: NotificationIcons.NotificationType.Warning);
+		Post(reason, Type: NotificationIcons.NotificationType.Warning);
 		// If we're mid-song, let the player finish; the end screen sends them back to the lounge.
-		if (!SettingsOperator.inGameplay && GetTree().CurrentScene?.SceneFilePath == LobbyScene)
+		if (!IsBot && !SettingsOperator.inGameplay && GetTree().CurrentScene?.SceneFilePath == LobbyScene)
 			GetNode<SceneTransition>("/root/Transition").Switch(LoungeScene);
+	}
+
+	// =====================================================================
+	// Migration (the server left; the room moves to another player's game)
+	// =====================================================================
+
+	/// <summary>Who takes the room over if the server (peer 1) goes: the host if that's someone else,
+	/// otherwise the longest-standing player. Everyone works this out from the same state, so they agree.</summary>
+	public static long PickSuccessor(LanRoomState s, ICollection<long> skip = null)
+	{
+		bool Eligible(LanPlayer p) => p.Id != 1 && (skip == null || !skip.Contains(p.Id));
+		var host = s.Players.FirstOrDefault(p => p.Id == s.HostId && Eligible(p));
+		return (host ?? s.Players.FirstOrDefault(Eligible))?.Id ?? 0;
+	}
+
+	/// <summary>LAN: our server went away. Take the room over if we're next, otherwise go look for whoever is.</summary>
+	private bool TryLanMigration(LanRoomState last, long myOldId)
+	{
+		long next = PickSuccessor(last);
+		var successor = last.Players.FirstOrDefault(p => p.Id == next);
+		if (successor == null || myOldId == 0 || string.IsNullOrEmpty(last.RoomToken)) return false;
+		var oldServer = last.Players.FirstOrDefault(p => p.Id == 1)?.Name ?? "The host";
+		// Everyone (us too, if we're next) first listens for the room's beacon: if only *our* connection blipped,
+		// the server is still there and we just reconnect. The successor takes over if it hears nothing for a moment.
+		_takeOverIn = next == myOldId ? SuccessorGraceSeconds : -1;
+		ClearTransfers();
+		IsServer = false;
+		_rejoinOldId = myOldId;
+		_reconnectLeft = RejoinSeconds;
+		_reconnectSinceMs = Time.GetTicksMsec();
+		_reconnectOwnsDiscovery = _discoveryRx == null;
+		StartDiscovery();
+		AddChatLine(null, $"{oldServer} left. Moving the room to {successor.Name}'s game...");
+		StateVersion++;
+		GD.Print($"[LAN] Server left; looking for {successor.Name}'s game (room {last.RoomToken})");
+		return true;
+	}
+
+	/// <summary>How long the successor listens for the old server before taking the room over.</summary>
+	private const double SuccessorGraceSeconds = 3;
+	private double _takeOverIn = -1;
+
+	/// <summary>LAN client: wait for the (new) server's beacon, then connect to it. If we're the successor and nobody
+	/// is running the room after a moment, take it over.</summary>
+	private void PollReconnect(double delta)
+	{
+		if (_reconnectLeft <= 0) return;
+		_reconnectLeft -= delta;
+		if (_takeOverIn >= 0 && (_takeOverIn -= delta) < 0 && State != null)
+		{
+			long myOldId = _rejoinOldId;
+			EndReconnectSearch();
+			if (OpenLanServer())
+			{
+				TakeOverRoom(State, myOldId);
+				GD.Print($"[LAN] Took over \"{State?.Name}\" on port {GamePort}");
+			}
+			else RoomGone(true, "The host left and the room couldn't move to your game.");
+			return;
+		}
+		var room = Rooms.Values.FirstOrDefault(r => r.Beacon.room == State?.RoomToken && r.LastSeenMs > _reconnectSinceMs);
+		if (room != null)
+		{
+			EndReconnectSearch();
+			GD.Print($"[LAN] Found the room again at {room.Address}:{room.Port}");
+			if (!ConnectLan(room.Address, room.Port)) RoomGone(true, "Couldn't reconnect to the room.");
+			return;
+		}
+		if (_reconnectLeft <= 0)
+		{
+			EndReconnectSearch();
+			RoomGone(State != null, "The host left and the room couldn't move to anyone else.");
+		}
+	}
+
+	private void EndReconnectSearch()
+	{
+		_reconnectLeft = 0;
+		_takeOverIn = -1;
+		if (_reconnectOwnsDiscovery) StopDiscovery();
+		_reconnectOwnsDiscovery = false;
+	}
+
+	/// <summary>Online: the relay server moved our room. Swap in the peer it handed us (a clean start for Godot's
+	/// multiplayer, whose caches belong to the old host), then take over or say hello to the new host.</summary>
+	private void OnlineHandover(RelayMultiplayerPeer old, RelayMultiplayerPeer next)
+	{
+		long myOldId = LocalId;
+		var last = State;
+		bool promoted = next._IsServer();
+		var newServer = last?.Players.FirstOrDefault(p => p.Id == old.NewHostOldId)?.Name;
+		Multiplayer.MultiplayerPeer = next;
+		if (last == null)
+		{
+			// Still joining: just say hello to whoever runs it now.
+			if (promoted) { Leave(silent: true); Post("That room's host left.", Type: NotificationIcons.NotificationType.Warning); }
+			return;
+		}
+		if (promoted)
+		{
+			TakeOverRoom(last, myOldId);
+			GD.Print($"[ONLINE] Took over room {next.RoomId}");
+			return;
+		}
+		ClearTransfers();
+		_rejoinOldId = myOldId; // OnConnectedToServer fires once the new peer reports the host
+		AddChatLine(null, $"The host left. The room moves to {newServer ?? "another player"}'s game...");
+		StateVersion++;
+		GD.Print($"[ONLINE] Room {next.RoomId} moved to peer {old.NewHostOldId}");
+	}
+
+	/// <summary>We're the successor: run the room from our last copy of its state. The old server's player leaves,
+	/// we become peer 1, and everyone else gets <see cref="RejoinSeconds"/> to reconnect.</summary>
+	private void TakeOverRoom(LanRoomState s, long myOldId)
+	{
+		State = s;
+		IsServer = true;
+		_rejoinOldId = 0;
+		EndReconnectSearch();
+		ClearTransfers();
+		_awaiting.Clear();
+		foreach (var p in s.Players)
+			if (p.Id != 1 && p.Id != myOldId) _awaiting.Add(p.Id);
+		_awaitingLeft = RejoinSeconds;
+
+		var me = FindPlayer(myOldId);
+		if (FindPlayer(1) is { } gone)
+		{
+			foreach (var p in s.Players.Where(p => p.WatchTarget == 1)) p.WatchTarget = -1;
+			if (s.CurrentOwnerId == 1) s.CurrentOwnerId = 0;
+			if (s.LastPickOwnerId == 1) s.LastPickOwnerId = 0;
+			RemovePlayer(gone, $"{gone.Name} left the room.");
+		}
+		if (me == null)
+		{
+			// Our copy didn't even have us in it: nothing sensible to run.
+			Leave(silent: true);
+			Post("The host left and the room closed.", Type: NotificationIcons.NotificationType.Warning);
+			return;
+		}
+		RemapPlayer(myOldId, 1);
+		if (s.HostId == 1) SetHost(me, $"The room runs on {me.Name}'s game now, and they're the host.");
+		else ServerChat(0, $"The room runs on {me.Name}'s game now.");
+		_beaconTimer = 0;
+		_listingSent = null;
+		ResendFinishIfLost();
+		ServerEndMatchIfDone();
+		MarkDirty();
+	}
+
+	/// <summary>A player's id changed (we took over as peer 1, or a LAN player reconnected with a new id).</summary>
+	private void RemapPlayer(long from, long to)
+	{
+		if (from == to) return;
+		var s = State;
+		foreach (var p in s.Players)
+		{
+			if (p.Id == from) p.Id = to;
+			if (p.WatchTarget == from) p.WatchTarget = to;
+		}
+		foreach (var q in s.Queue.Where(q => q.OwnerId == from)) q.OwnerId = to;
+		if (s.HostId == from) s.HostId = to;
+		if (s.CurrentOwnerId == from) s.CurrentOwnerId = to;
+		if (s.LastPickOwnerId == from) s.LastPickOwnerId = to;
+		if (_specCharts.Remove(from, out var chart)) _specCharts[to] = chart;
+	}
+
+	private void ClearTransfers()
+	{
+		_outgoing.Clear();
+		_incoming = null;
+		TransferProgress = -1;
+		Feeds.Clear();
+		_specCharts.Clear();
 	}
 
 	private void ResetSession()
@@ -1455,11 +2026,17 @@ public partial class LanNetwork : Node
 		LocalInMatch = false;
 		_joining = false;
 		_dirty = false;
-		_outgoing.Clear();
-		_incoming = null;
-		TransferProgress = -1;
-		Feeds.Clear();
-		_specCharts.Clear();
+		_awaiting.Clear();
+		_sentRoom = null;
+		_sentPlayers.Clear();
+		_rejoinOldId = 0;
+		_kicked = false;
+		_lastFinish = null;
+		EndReconnectSearch();
+		EndQluteDownload();
+		_serverTried = null;
+		_autoFetched = null;
+		ClearTransfers();
 		_specOut.Clear();
 		if (_matchEntries.Count > 0) ApiOperator.LeaderboardList.Clear();
 		_matchEntries.Clear();
@@ -1491,8 +2068,30 @@ public partial class LanNetwork : Node
 
 		State.Players.Add(new LanPlayer { Id = id, Name = unique });
 		ServerChat(0, $"{unique} joined the room.");
+		MarkDirty();      // everyone else hears about them in the next (batched) update
+		SendStateTo(id);  // the newcomer gets the room right away
+	}
+
+	/// <summary>A player from before a migration reconnected. They keep their place (ready, picks, match progress);
+	/// on the LAN they come back with a new peer id. Anyone we're not waiting for is treated as a normal hello.</summary>
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void RpcRejoin(long oldId, string name, int protocol, string version)
+	{
+		if (!IsServer || State == null) return;
+		long id = Multiplayer.GetRemoteSenderId();
+		// Online, peer ids survive the move and the server vouches for them, so only the same id may reclaim a slot.
+		bool known = protocol == Protocol && _awaiting.Contains(oldId) && (!IsOnline || oldId == id) && (id == oldId || FindPlayer(id) == null);
+		// LAN: their connection dropped but ours didn't notice yet. Same player coming back: give them their
+		// slot back (and drop the dead connection) instead of a second copy of them.
+		bool reclaim = !known && !IsOnline && protocol == Protocol && oldId != 1 && oldId != id
+			&& FindPlayer(oldId) is { } old && FindPlayer(id) == null && SameName(old.Name, name);
+		if (!known && !reclaim) { RpcHello(name, protocol, version); return; }
+		_awaiting.Remove(oldId);
+		RemapPlayer(oldId, id);
+		if (reclaim) Multiplayer.MultiplayerPeer?.DisconnectPeer((int)oldId); // its record moved, so this is quiet
+		GD.Print($"[LAN] {FindPlayer(id)?.Name} reconnected (id {oldId} -> {id})");
 		MarkDirty();
-		BroadcastState(); // send the newcomer the room right away
+		SendStateTo(id);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
@@ -1640,17 +2239,56 @@ public partial class LanNetwork : Node
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
-	private void RpcState(string json)
+	private void RpcStateZ(byte[] data)
 	{
 		try
 		{
-			var s = JsonSerializer.Deserialize<LanRoomState>(json);
+			var s = Unpack<LanRoomState>(data);
 			if (s != null) ApplyState(s);
 		}
 		catch (Exception e)
 		{
 			GD.PrintErr($"[LAN] Bad room state from host: {e.Message}");
 		}
+	}
+
+	/// <summary>Some players changed (see <see cref="BroadcastState"/>): swap in their new records, keep the server's order.</summary>
+	[Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
+	private void RpcPlayersZ(byte[] data)
+	{
+		if (State == null || _joining) return;
+		LanPlayersPatch patch;
+		try { patch = Unpack<LanPlayersPatch>(data); }
+		catch (Exception e) { GD.PrintErr($"[LAN] Bad player update from host: {e.Message}"); return; }
+		if (patch == null) return;
+		var oldChart = LocalChart?.Checksum;
+		var byId = State.Players.ToDictionary(p => p.Id);
+		foreach (var p in patch.Changed) byId[p.Id] = p;
+		State.Players = patch.Order.Select(id => byId.GetValueOrDefault(id)).Where(p => p != null).ToList();
+		State.TimeLeft = TimeLeftNow = patch.TimeLeft;
+		StateVersion++;
+		_lastLocalId = LocalId;
+		if (oldChart != LocalChart?.Checksum) RecheckLocalMap(force: true);
+		ResendFinishIfLost();
+		UpdateMatchLeaderboard();
+	}
+
+	/// <summary>Live scores (see <see cref="BroadcastScores"/>). Unreliable: a lost one is replaced 0.25 s later.</summary>
+	[Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.UnreliableOrdered, TransferChannel = 2)]
+	private void RpcScores(byte[] data)
+	{
+		if (State == null || data == null) return;
+		for (int o = 0; o + 20 <= data.Length; o += 20)
+		{
+			var p = FindPlayer(BitConverter.ToInt32(data, o));
+			if (p == null) continue;
+			p.Score = BitConverter.ToInt32(data, o + 4);
+			p.Combo = BitConverter.ToInt32(data, o + 8);
+			p.MaxCombo = BitConverter.ToInt32(data, o + 12);
+			p.Accuracy = BitConverter.ToSingle(data, o + 16);
+		}
+		StateVersion++;
+		UpdateMatchLeaderboard();
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
@@ -1662,13 +2300,14 @@ public partial class LanNetwork : Node
 	[Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	private void RpcKicked(string reason)
 	{
-		Notify.Post(reason, Type: NotificationIcons.NotificationType.Warning);
+		_kicked = true; // the disconnect that follows isn't the server leaving
+		Post(reason, Type: NotificationIcons.NotificationType.Warning);
 	}
 
 	// Beatmaps can come from the server or (relayed through it) from another player, so these are AnyPeer;
 	// we only accept them while we're waiting for a transfer, and only from someone in the room.
 	private bool AcceptTransferFrom(long sender) =>
-		TransferProgress >= 0 && State != null && (sender == 1 || FindPlayer(sender) != null);
+		TransferProgress >= 0 && !DownloadingFromQlute && State != null && (sender == 1 || FindPlayer(sender) != null);
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	private void RpcBeatmapUnavailable(string reason)
@@ -1700,13 +2339,13 @@ public partial class LanNetwork : Node
 			File.WriteAllBytes(tmp, bytes);
 			File.Move(tmp, Path.Combine(target, safeName), overwrite: true);
 			GD.Print($"[LAN] Received {safeName} ({bytes.Length / 1024} KB)");
-			Notify.Post("Got the beatmap, importing...");
+			Post("Got the beatmap, importing...");
 			// BeatmapListener imports *.osz from the downloads folder; RecheckLocalMap runs once it shows up.
 		}
 		catch (Exception e)
 		{
 			GD.PrintErr($"[LAN] Couldn't save beatmap: {e.Message}");
-			Notify.Post("Couldn't save the beatmap from the host.", Type: NotificationIcons.NotificationType.Warning);
+			Post("Couldn't save the beatmap from the host.", Type: NotificationIcons.NotificationType.Warning);
 		}
 	}
 
@@ -1902,20 +2541,21 @@ public partial class LanNetwork : Node
 		var relay = Relay;
 		if (relay == null || relay.RoomId == 0) return;
 		var map = State.Beatmap?.Display ?? "";
-		var key = $"{State.Name}|{State.Players.Count}|{(int)State.Phase}|{map}";
+		long successor = PickSuccessor(State, _awaiting);
+		var key = $"{State.Name}|{State.Players.Count}|{(int)State.Phase}|{map}|{successor}";
 		_listingTimer -= delta;
 		if (key == _listingSent && _listingTimer > 0) return;
 		_listingSent = key;
 		_listingTimer = 10;
-		relay.UpdateListing(State.Name, State.Players.Count, (int)State.Phase, map);
+		relay.UpdateListing(State.Name, State.Players.Count, (int)State.Phase, map, successor);
 	}
 
-	/// <summary>Our online room lost the server: it's gone for everyone, so tell the player and go back.</summary>
+	/// <summary>We lost the server while running an online room. The server hands the room to another player, so it's only gone for us.</summary>
 	private void LostOnlineHost(string reason)
 	{
 		Leave(silent: true);
-		Notify.Post($"Your online room closed: {reason}", Type: NotificationIcons.NotificationType.Warning);
-		if (!SettingsOperator.inGameplay && GetTree().CurrentScene?.SceneFilePath == LobbyScene)
+		Post($"You left the online room: {reason}", Type: NotificationIcons.NotificationType.Warning);
+		if (!IsBot && !SettingsOperator.inGameplay && GetTree().CurrentScene?.SceneFilePath == LobbyScene)
 			GetNode<SceneTransition>("/root/Transition").Switch(LoungeScene);
 	}
 
@@ -1939,6 +2579,7 @@ public partial class LanNetwork : Node
 			players = State.Players.Count,
 			phase = (int)State.Phase,
 			map = State.Beatmap?.Display,
+			room = State.RoomToken,
 		};
 		var bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(beacon));
 		try
@@ -2040,7 +2681,7 @@ public partial class LanNetwork : Node
 		if (index < 0 || index >= SettingsOperator.Beatmaps.Count) return null;
 		var b = SettingsOperator.Beatmaps[index];
 		var checksum = Checksum(b.Rawurl);
-		if (checksum == null) { Notify.Post("Couldn't read that beatmap file.", Type: NotificationIcons.NotificationType.Warning); return null; }
+		if (checksum == null) { Post("Couldn't read that beatmap file.", Type: NotificationIcons.NotificationType.Warning); return null; }
 		return new LanBeatmapRef
 		{
 			BeatmapID = b.BeatmapID,

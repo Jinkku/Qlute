@@ -2,11 +2,13 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 /// <summary>
 /// The chat overlay opened from the top panel. Shows both chats side by side:
-/// online (<see cref="OnlineChat"/>: server channels + private rooms, needs a login) and LAN (<see cref="LanChat"/>).
-/// Rooms + invites on the left, the selected room in the middle, people on the right.
+/// online (<see cref="OnlineChat"/>: server channels, private rooms and direct messages, needs a login) and LAN
+/// (<see cref="LanChat"/>). Rooms + invites on the left, the selected room in the middle, people on the right.
+/// "@name" pings someone: it's highlighted, and lines that ping you stand out. Tab completes a name after "@".
 /// </summary>
 public partial class ChatOverlay : PanelContainer
 {
@@ -65,6 +67,7 @@ public partial class ChatOverlay : PanelContainer
 		NameEdit.Text = LanChat.Nickname;
 		NameEdit.TextSubmitted += text => { SaveName(text); NameEdit.ReleaseFocus(); };
 		NameEdit.FocusExited += () => SaveName(NameEdit.Text);
+		Input.GuiInput += OnInputKey;
 		Input.TextSubmitted += text =>
 		{
 			Input.Clear();
@@ -75,8 +78,12 @@ public partial class ChatOverlay : PanelContainer
 		Refresh();
 	}
 
+	public override void _ExitTree() => OnlineChat.VisibleRoom = null;
+
 	public override void _Process(double delta)
 	{
+		// What the player is looking at right now (no ping / DM notifications for it).
+		OnlineChat.VisibleRoom = SettingsOperator.SessionConfig.ChatBoxVisible && IsOnlineKey(_selected) ? RoomId(_selected) : null;
 		if (Online?.JustCreated is { } created)
 		{
 			Online.JustCreated = null;
@@ -138,10 +145,14 @@ public partial class ChatOverlay : PanelContainer
 			return;
 		}
 		var me = IsOnlineKey(_selected) ? Online.Username : LanChat.LocalName();
-		Input.PlaceholderText = $"Chatting as {me} in {room.Title}" + (IsOnlineKey(_selected) && room.IsPublic ? " (everyone online can read this)" : "");
+		Input.PlaceholderText = room.IsDm
+			? $"Message {room.With} (only the two of you can read this)"
+			: $"Chatting as {me} in {room.Title}" + (IsOnlineKey(_selected) && room.IsPublic ? " (everyone online can read this)" : "") + "  ·  @name to ping";
 		if (IsOnlineKey(_selected) && !Online.Connected) Input.PlaceholderText = Online.StatusText;
 		Input.Editable = !IsOnlineKey(_selected) || Online.Connected;
 		LeaveButton.Visible = !room.IsPublic;
+		LeaveButton.Text = room.IsDm ? "Close" : "Leave";
+		LeaveButton.TooltipText = room.IsDm ? "Hide this conversation (it comes back when either of you writes)" : "Leave this room";
 		Log.Clear();
 		Log.AppendText(string.Join("\n", room.Lines.Select(l => Format(l, IsOnlineKey(_selected)))));
 	}
@@ -156,6 +167,7 @@ public partial class ChatOverlay : PanelContainer
 			_ when o.Reconnecting => "reconnecting...",
 			OnlineChat.ConnState.Connecting => "connecting...",
 			OnlineChat.ConnState.Off => "off",
+			OnlineChat.ConnState.Restricted => "restricted",
 			OnlineChat.ConnState.LoggedOut => "log in to chat",
 			_ => "offline",
 		};
@@ -236,8 +248,11 @@ public partial class ChatOverlay : PanelContainer
 		if (online.Count == 0) RoomList.AddChild(Hint(Online?.StatusText is { Length: > 0 } t ? t : "Not connected."));
 		else if (Online?.Reconnecting == true) RoomList.AddChild(Hint("Reconnecting..."));
 		foreach (var (key, r) in online.Where(x => x.room.IsPublic)) RoomList.AddChild(RoomButton(key, r));
-		if (online.Any(x => !x.room.IsPublic)) RoomList.AddChild(Header("Online · private"));
-		foreach (var (key, r) in online.Where(x => !x.room.IsPublic)) RoomList.AddChild(RoomButton(key, r));
+		if (online.Any(x => x.room.IsDm)) RoomList.AddChild(Header("Messages"));
+		foreach (var (key, r) in online.Where(x => x.room.IsDm).OrderByDescending(x => x.room.Lines.LastOrDefault()?.Time ?? 0))
+			RoomList.AddChild(RoomButton(key, r));
+		if (online.Any(x => !x.room.IsPublic && !x.room.IsDm)) RoomList.AddChild(Header("Online · private"));
+		foreach (var (key, r) in online.Where(x => !x.room.IsPublic && !x.room.IsDm)) RoomList.AddChild(RoomButton(key, r));
 
 		RoomList.AddChild(Header("LAN"));
 		if (lan.Count == 0) RoomList.AddChild(Hint(Lan?.Running == true ? "Nobody else on this network." : LanChat.Enabled ? "Unavailable." : "Off (invisible)."));
@@ -276,10 +291,11 @@ public partial class ChatOverlay : PanelContainer
 
 	private Button RoomButton(string key, LanChat.Room r)
 	{
-		var title = r.Title;
+		var title = r.IsDm ? (Online?.IsUserOnline(r.With) == true ? "● " : "○ ") + r.Title : r.Title;
+		var badge = key == _selected ? "" : r.Mentioned ? $"  (@{(r.Unread > 0 ? " " + r.Unread : "")})" : r.Unread > 0 ? $"  ({r.Unread})" : "";
 		var b = new Button
 		{
-			Text = r.Unread > 0 && key != _selected ? $"{title}  ({r.Unread})" : title,
+			Text = title + badge,
 			Alignment = HorizontalAlignment.Left,
 			ToggleMode = true,
 			ButtonPressed = key == _selected,
@@ -305,6 +321,18 @@ public partial class ChatOverlay : PanelContainer
 	private void BuildOnlinePeople(LanChat.Room room)
 	{
 		var o = Online;
+		if (room.IsDm)
+		{
+			PeopleTitle.Text = room.With;
+			PeopleList.AddChild(PersonLabel(o.IsUserOnline(room.With) ? "• online now" : "• offline (they'll see it later)"));
+			if (PlayerApi.Friends.TryGetValue(room.With, out var mutual))
+				PeopleList.AddChild(Hint(mutual ? "You're friends." : "On your friends list."));
+			var profile = new Button { Text = "View profile", ThemeTypeVariation = ButtonVariation };
+			var with = room.With;
+			profile.Pressed += () => PlayerOverlays.OpenProfile(with);
+			PeopleList.AddChild(profile);
+			return;
+		}
 		if (room.IsPublic)
 		{
 			PeopleTitle.Text = $"Online now ({o.OnlineUsers.Count})";
@@ -411,13 +439,53 @@ public partial class ChatOverlay : PanelContainer
 		return l;
 	}
 
+	private static readonly Regex MentionPattern = new(@"(?<![\w@])@[\w.\-]+", RegexOptions.Compiled);
+
 	private static string Format(LanChat.Line l, bool online)
 	{
 		var time = DateTimeOffset.FromUnixTimeMilliseconds(l.Time).ToLocalTime().ToString("HH:mm");
 		var text = Escape(l.Text);
 		if (l.FromId == null) return $"[color=#ffffff80]{time}[/color] [color=#7fc8ff]* {text}[/color]";
 		bool me = online ? l.FromId == Online?.Username : l.FromId == Lan?.LocalId;
-		return $"[color=#ffffff80]{time}[/color] [color={(me ? "#9dff9d" : "#ffda75")}]{Escape(l.Name)}[/color]: {text}";
+		var myName = online ? Online?.Username : LanChat.LocalName();
+		// @names stand out; a line that pings us gets a highlight behind it.
+		text = MentionPattern.Replace(text, m => $"[color=#f3baff]{m.Value}[/color]");
+		var line = $"[color=#ffffff80]{time}[/color] [color={(me ? "#9dff9d" : "#ffda75")}]{Escape(l.Name)}[/color]: {text}";
+		return !me && OnlineChat.Mentions(l.Text, myName) ? $"[bgcolor=#f3baff30]{line}[/bgcolor]" : line;
+	}
+
+	// =====================================================================
+	// Tab completes "@na" -> "@name " from the room's people (and everyone online, for public rooms)
+	// =====================================================================
+
+	private void OnInputKey(InputEvent e)
+	{
+		if (e is not InputEventKey { Pressed: true, Keycode: Key.Tab } || _selected == null) return;
+		var text = Input.Text[..Input.CaretColumn];
+		var m = Regex.Match(text, @"(?<![\w@])@([\w.\-]*)$");
+		if (!m.Success) return;
+		var prefix = m.Groups[1].Value;
+		var match = Candidates().Where(n => n.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+			.OrderBy(n => n.Length).FirstOrDefault();
+		Input.AcceptEvent();
+		if (match == null) return;
+		var rest = Input.Text[Input.CaretColumn..];
+		Input.Text = text[..m.Groups[1].Index] + match + " " + rest.TrimStart();
+		Input.CaretColumn = m.Groups[1].Index + match.Length + 1;
+	}
+
+	private IEnumerable<string> Candidates()
+	{
+		var room = Find(_selected);
+		if (room == null) return Enumerable.Empty<string>();
+		var me = IsOnlineKey(_selected) ? Online?.Username : LanChat.LocalName();
+		IEnumerable<string> names = room.Members.Values;
+		if (room.IsDm) names = new[] { room.With };
+		else if (IsOnlineKey(_selected) && room.IsPublic) names = Online.OnlineUsers.Concat(PlayerApi.Friends.Keys);
+		else if (!IsOnlineKey(_selected) && room.IsPublic) names = Lan.Peers.Values.Select(p => p.Name);
+		// People who spoke recently first-class too.
+		names = names.Concat(room.Lines.Where(l => l.FromId != null).Select(l => l.Name).Reverse().Take(50));
+		return names.Where(n => !string.IsNullOrEmpty(n) && n != me).Distinct(StringComparer.OrdinalIgnoreCase);
 	}
 
 	private static string Escape(string s) => (s ?? "").Replace("[", "[lb]");

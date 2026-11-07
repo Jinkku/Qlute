@@ -137,12 +137,13 @@ theme_override_constants/separation = 10
 [node name="Label" type="Label" parent="V/MissingRow" unique_id=793972411]
 layout_mode = 2
 theme_type_variation = &"LobbyWarning"
-text = "You don't have this beatmap."
+text = "Downloading this beatmap..."
 
 [node name="Download" type="Button" parent="V/MissingRow" unique_id=959958208]
 layout_mode = 2
 theme_type_variation = &"LobbyGhostButton"
-text = "Get it from the room"
+tooltip_text = "Try downloading it again (Qlute first, then the room)"
+text = "Retry download"
 
 [node name="TransferBar" type="ProgressBar" parent="V/MissingRow" unique_id=208285623]
 custom_minimum_size = Vector2(160, 10)

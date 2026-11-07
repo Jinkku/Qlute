@@ -49,6 +49,14 @@ public partial class PlayerProfilePanel : Control
 		}
 		if (SettingsOperator.SessionConfig.Loggedin && !self)
 		{
+			_friend = PlayerOverlays.FlatButton("add friend");
+			_friend.Visible = false; // shown once the profile loads (not for restricted players)
+			_friend.Pressed += ToggleFriend;
+			bar.AddChild(_friend);
+			_message = PlayerOverlays.FlatButton("message", $"Send {_username} a direct message");
+			_message.Visible = false;
+			_message.Pressed += () => { Close(); OnlineChat.Instance?.OpenDm(_username); };
+			bar.AddChild(_message);
 			var report = PlayerOverlays.FlatButton("report", "Report this player to the Qlute team");
 			report.Pressed += () => PlayerOverlays.OpenReport(_username);
 			bar.AddChild(report);
@@ -86,6 +94,32 @@ public partial class PlayerProfilePanel : Control
 		if (e.IsActionPressed("ui_cancel")) { Close(); GetViewport().SetInputAsHandled(); }
 	}
 
+	private Button _friend, _message;
+	private int _shownFriends = -1;
+
+	public override void _Process(double delta)
+	{
+		if (_friend != null && _shownFriends != PlayerApi.FriendsVersion) ShowFriendButton();
+	}
+
+	private void ShowFriendButton()
+	{
+		_shownFriends = PlayerApi.FriendsVersion;
+		bool added = PlayerApi.Friends.TryGetValue(_username, out var mutual);
+		_friend.Text = added ? (mutual ? "mutual friends ✓" : "friend ✓") : "add friend";
+		_friend.TooltipText = added ? "Remove from your friends" : $"Add {_username} to your friends list";
+	}
+
+	private async void ToggleFriend()
+	{
+		_friend.Disabled = true;
+		var error = await PlayerApi.SetFriend(_username, !PlayerApi.IsFriend(_username));
+		if (!IsInstanceValid(this)) return;
+		_friend.Disabled = false;
+		if (error != null) Notify.Post(error, Type: NotificationIcons.NotificationType.Warning);
+		ShowFriendButton();
+	}
+
 	private bool _closing;
 	private void Close()
 	{
@@ -108,6 +142,12 @@ public partial class PlayerProfilePanel : Control
 			return;
 		}
 		NameCard(p);
+		if (_friend != null)
+		{
+			_friend.Visible = _message.Visible = !p.Restricted;
+			if (PlayerApi.FriendsVersion == 0) PlayerApi.RefreshFriends(); // online chat (which loads it) may be off
+			ShowFriendButton();
+		}
 		if (p.Restricted)
 		{
 			var box = Section(_page, 40);

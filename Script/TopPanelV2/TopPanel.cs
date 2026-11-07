@@ -19,6 +19,15 @@ public partial class TopPanel : ColorRect
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SettingsOperator.toppaneltoggle(false,true);
 		AddAdminButton();
+		OnlineChat.OpenRequested += OpenChat;
+	}
+
+	public override void _ExitTree() => OnlineChat.OpenRequested -= OpenChat;
+
+	/// <summary>Opens the chat overlay if it isn't open (e.g. "message" on a player's profile).</summary>
+	private void OpenChat()
+	{
+		if (IsInsideTree() && IsVisibleInTree() && !SettingsOperator.SessionConfig.ChatBoxVisible) _ChatRoom();
 	}
 
 	/// <summary>Admin panel button: a copy of the "players online" button, only shown to the Qlute team.</summary>

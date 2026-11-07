@@ -3,10 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 
 /// <summary>
-/// Online chat (autoload "OnlineChat"): the server's public channels (#general...) and private rooms you're
-/// invited to by username. Needs a logged-in account; connects by itself and reconnects if the line drops.
+/// Online chat (autoload "OnlineChat"): the server's public channels (#general...), private rooms you're
+/// invited to by username, and direct messages. Needs a logged-in account; connects by itself and reconnects if
+/// the line drops. It's also how the game hears about a ban (and its end) the moment it happens, and about
+/// players adding us as a friend.
 /// Protocol: Chikara/online/PROTOCOL.md. Rooms / lines / invites reuse LanChat's types so the overlay shows both alike.
 /// </summary>
 public partial class OnlineChat : Node
@@ -14,8 +17,10 @@ public partial class OnlineChat : Node
 	public const string EnabledSetting = "onlinechat";
 	private const double PingInterval = 20;
 	private const int MaxLines = 300;
+	/// <summary>What we tell the server we understand (see Chikara/online/PROTOCOL.md).</summary>
+	private const string Features = "ban,dm,friends";
 
-	public enum ConnState { Off, LoggedOut, Connecting, Online, Failed }
+	public enum ConnState { Off, LoggedOut, Connecting, Online, Failed, Restricted }
 
 	public static OnlineChat Instance { get; private set; }
 
@@ -29,8 +34,14 @@ public partial class OnlineChat : Node
 	public readonly List<LanChat.Invite> Invites = new();
 	public readonly SortedSet<string> OnlineUsers = new(StringComparer.OrdinalIgnoreCase);
 	public int Version { get; private set; }
-	/// <summary>Set when a private room we just made arrives, so the overlay can open it.</summary>
+	/// <summary>Set when a private room we just made (or a DM we opened) arrives, so the overlay can open it.</summary>
 	public string JustCreated { get; set; }
+	/// <summary>The account is restricted; <see cref="StatusText"/> says why and until when.</summary>
+	public bool Restricted => State == ConnState.Restricted;
+	/// <summary>Raised when something wants the chat overlay opened (e.g. "message" on a profile).</summary>
+	public static event Action OpenRequested;
+	/// <summary>Online room id the chat overlay is showing right now (null when it's closed), so we don't notify about it.</summary>
+	public static string VisibleRoom { get; set; }
 
 	private WebSocketPeer _ws;
 	private double _retry, _ping;
@@ -38,6 +49,10 @@ public partial class OnlineChat : Node
 	private string _authKey;    // username + hash we last tried, so a refused login isn't retried until it changes
 	private bool _authRefused;
 	private bool _creating;
+	/// <summary>We've seen this login unrestricted (a welcome), so a "restricted" now is a fresh ban.</summary>
+	private bool _sawUnrestricted;
+	private bool _sawRestricted;
+	private string _pendingDm;
 
 	public static bool Enabled
 	{
@@ -60,6 +75,7 @@ public partial class OnlineChat : Node
 			ApiOperator.Username = user;
 			ApiOperator.PasswordHash = args.FirstOrDefault(a => a.StartsWith("--online-test-pass="))?["--online-test-pass=".Length..];
 			SettingsOperator.SessionConfig.Loggedin = true;
+			if (args.Any(a => a.StartsWith("--mod-test="))) AddChild(new ModerationSelfTest());
 		}
 	}
 
@@ -119,6 +135,7 @@ public partial class OnlineChat : Node
 		SendOp(new JsonObject { ["op"] = "decline", ["room"] = inv.RoomId });
 	}
 
+	/// <summary>Leave a private room, or close a DM (it comes back with the next message).</summary>
 	public void LeaveRoom(string roomId)
 	{
 		if (!Rooms.TryGetValue(roomId, out var room) || room.IsPublic) return;
@@ -127,10 +144,32 @@ public partial class OnlineChat : Node
 
 	public void MarkRead(string roomId)
 	{
-		if (Rooms.TryGetValue(roomId, out var r) && r.Unread != 0) { r.Unread = 0; Version++; }
+		if (Rooms.TryGetValue(roomId, out var r) && (r.Unread != 0 || r.Mentioned)) { r.Unread = 0; r.Mentioned = false; Version++; }
 	}
 
 	public bool IsUserOnline(string name) => name == Username || OnlineUsers.Contains(name);
+
+	/// <summary>Opens (or starts) a DM with that player and shows it in the chat overlay.</summary>
+	public void OpenDm(string user)
+	{
+		user = LanChat.Clean(user, 256, null);
+		if (user == null || user == Username) return;
+		OpenRequested?.Invoke();
+		var existing = Rooms.Values.FirstOrDefault(r => r.IsDm && string.Equals(r.With, user, StringComparison.OrdinalIgnoreCase));
+		if (existing != null) { JustCreated = existing.Id; Version++; return; }
+		if (!Connected)
+		{
+			_pendingDm = user; // sent once we're connected
+			if (!OnlineApi.Available) Notify.Post("Log in to send messages.", Type: NotificationIcons.NotificationType.Warning);
+			return;
+		}
+		SendOp(new JsonObject { ["op"] = "dm_open", ["user"] = user });
+	}
+
+	/// <summary>True when the text @mentions that name ("@Name", any case, not part of a longer word).</summary>
+	public static bool Mentions(string text, string name) =>
+		!string.IsNullOrEmpty(text) && !string.IsNullOrEmpty(name)
+		&& Regex.IsMatch(text, $@"(?<![\w@])@{Regex.Escape(name)}(?![\w])", RegexOptions.IgnoreCase);
 
 	// =====================================================================
 	// Connection
@@ -145,7 +184,7 @@ public partial class OnlineChat : Node
 			return;
 		}
 		var key = ApiOperator.Username + "|" + ApiOperator.PasswordHash;
-		if (key != _authKey) { _authKey = key; _authRefused = false; if (_ws != null) Disconnect(); _retry = 0; }
+		if (key != _authKey) { _authKey = key; _authRefused = false; ResetAccountState(); if (_ws != null) Disconnect(); _retry = 0; }
 
 		if (_ws == null)
 		{
@@ -160,6 +199,15 @@ public partial class OnlineChat : Node
 		var state = _ws.GetReadyState();
 		if (state == WebSocketPeer.State.Closed)
 		{
+			if (_ws.GetCloseCode() == OnlineApi.ReconnectCode)
+			{
+				// Banned or unbanned just now: connect again right away to get the new state.
+				_ws = null;
+				ClearSession();
+				_retry = 0.3;
+				SetState(ConnState.Connecting, StatusText);
+				return;
+			}
 			bool refused = _ws.GetCloseCode() == OnlineApi.AuthFailedCode || _authRefused;
 			var reason = refused ? StatusText : OnlineApi.CloseReason(_ws, "Can't reach the online chat right now.");
 			bool wasOnline = State == ConnState.Online;
@@ -192,7 +240,7 @@ public partial class OnlineChat : Node
 
 	private void Open()
 	{
-		_ws = OnlineApi.Connect("chat", out var err);
+		_ws = OnlineApi.Connect("chat", out var err, Features);
 		if (err != Error.Ok)
 		{
 			_ws = null;
@@ -221,6 +269,9 @@ public partial class OnlineChat : Node
 		Version++;
 	}
 
+	/// <summary>A new login starts fresh: the first "restricted" we hear for it isn't news.</summary>
+	private void ResetAccountState() { _sawUnrestricted = false; _sawRestricted = false; }
+
 	private void SetState(ConnState s, string text)
 	{
 		if (State == s && StatusText == text) return;
@@ -245,14 +296,25 @@ public partial class OnlineChat : Node
 			{
 				if (!Rooms.TryGetValue(OnlineApi.Str(m, "channel") ?? "", out var room)) break;
 				var author = OnlineApi.Str(m, "author") ?? "?";
-				AddLine(room, author, author, OnlineApi.Str(m, "text"), OnlineApi.Long(m, "ts"), markUnread: author != Username);
+				var text = OnlineApi.Str(m, "text");
+				AddLine(room, author, author, text, OnlineApi.Long(m, "ts"), markUnread: author != Username);
+				if (author != Username) Alert(room, author, text);
 				break;
 			}
 			case "notice":
 				if (Rooms.TryGetValue(OnlineApi.Str(m, "channel") ?? "", out var nroom))
 					AddLine(nroom, null, null, OnlineApi.Str(m, "text"), 0, markUnread: false);
 				break;
-			case "room": if (m["room"] is JsonObject r) UpsertRoom(r); break;
+			case "room":
+				if (m["room"] is JsonObject r)
+				{
+					bool known = Rooms.ContainsKey(OnlineApi.Str(r, "id") ?? "");
+					UpsertRoom(r);
+					if (OnlineApi.Bool(m, "focus")) JustCreated = OnlineApi.Str(r, "id");
+					// Someone started a DM with us: say so (its first message comes in the history right after).
+					else if (!known && OnlineApi.Bool(r, "dm") && Rooms.TryGetValue(OnlineApi.Str(r, "id"), out var dm)) _announceDm = dm;
+				}
+				break;
 			case "left":
 				if (Rooms.Remove(OnlineApi.Str(m, "room") ?? "")) Version++;
 				break;
@@ -279,6 +341,22 @@ public partial class OnlineChat : Node
 				break;
 			}
 			case "online_list": ReadOnline(m); break;
+			case "restricted": OnRestricted(OnlineApi.Str(m, "text"), OnlineApi.Long(m, "expires")); break;
+			case "unrestricted":
+				_sawRestricted = false;
+				_sawUnrestricted = true;
+				SetState(ConnState.Connecting, "Your restriction was lifted. Reconnecting...");
+				PlayerOverlays.ShowMessage("Restriction lifted", OnlineApi.Str(m, "text") ?? "Your restriction has been lifted.", ModUi.Green);
+				Notify.Post("Your account isn't restricted anymore. Welcome back!");
+				break;
+			case "friend":
+			{
+				var who = OnlineApi.Str(m, "user");
+				if (who == null || !OnlineApi.Bool(m, "added")) break;
+				Notify.Post(OnlineApi.Bool(m, "mutual") ? $"{who} added you back. You're friends now!" : $"{who} added you as a friend.");
+				PlayerApi.RefreshFriends();
+				break;
+			}
 			case "error":
 				if (OnlineApi.Bool(m, "fatal"))
 				{
@@ -290,8 +368,41 @@ public partial class OnlineChat : Node
 		}
 	}
 
+	/// <summary>The account is restricted. A fresh ban (we were fine a moment ago) gets a pop-up; at startup the
+	/// login already told the player, so it's just the chat status.</summary>
+	private void OnRestricted(string text, long expires)
+	{
+		text ??= "Your account is restricted.";
+		if (expires > 0) text = text.TrimEnd();
+		ClearSession();
+		bool fresh = _sawUnrestricted && !_sawRestricted;
+		_sawRestricted = true;
+		_sawUnrestricted = false;
+		SetState(ConnState.Restricted, text);
+		if (fresh)
+		{
+			PlayerOverlays.ShowMessage("Account restricted", text, ModUi.Red);
+			Notify.Post("Your account was just restricted.", Type: NotificationIcons.NotificationType.Warning);
+		}
+	}
+
+	private LanChat.Room _announceDm;
+
+	/// <summary>Pings (@us) and DMs get a notification, unless the overlay is already showing that room.</summary>
+	private void Alert(LanChat.Room room, string author, string text)
+	{
+		bool mentioned = Mentions(text, Username);
+		if (mentioned) room.Mentioned = true;
+		if (VisibleRoom == room.Id) return;
+		var preview = text.Length > 80 ? text[..80] + "..." : text;
+		if (room.IsDm) Notify.Post($"{author} (message): {preview}");
+		else if (mentioned) Notify.Post($"{author} mentioned you in {room.Title}: {preview}");
+	}
+
 	private void OnWelcome(JsonObject m)
 	{
+		_sawUnrestricted = true;
+		_sawRestricted = false;
 		ClearSession();
 		Username = OnlineApi.Str(m, "user") ?? ApiOperator.Username;
 		if (m["channels"] is JsonArray chans)
@@ -309,6 +420,8 @@ public partial class OnlineChat : Node
 		_backoff = 5;
 		SetState(ConnState.Online, "");
 		Version++;
+		PlayerApi.RefreshFriends(); // (re)connected = logged in: get the friends list
+		if (_pendingDm != null) { var who = _pendingDm; _pendingDm = null; SendOp(new JsonObject { ["op"] = "dm_open", ["user"] = who }); }
 	}
 
 	private void ReadOnline(JsonObject m)
@@ -330,6 +443,15 @@ public partial class OnlineChat : Node
 		}
 		if (room.Lines.Count == 0 && room.IsPublic)
 			room.Lines.Add(new LanChat.Line { Text = $"Welcome to {room.Title}! Everyone logged in to Qlute can read this channel.", Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() });
+		if (room.Lines.Count == 0 && room.IsDm)
+			room.Lines.Add(new LanChat.Line { Text = $"This is the start of your messages with {room.With}. Only the two of you can read them.", Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() });
+		if (_announceDm == room)
+		{
+			// A new conversation someone else started: its newest line is what they just sent.
+			_announceDm = null;
+			var last = room.Lines.LastOrDefault(l => l.FromId != null && l.FromId != Username);
+			if (last != null) { room.Unread++; Alert(room, last.Name, last.Text); }
+		}
 		Version++;
 	}
 
@@ -340,6 +462,8 @@ public partial class OnlineChat : Node
 		bool isNew = !Rooms.TryGetValue(id, out var room);
 		if (isNew) { room = new LanChat.Room { Id = id }; Rooms[id] = room; }
 		room.Title = OnlineApi.Str(r, "title") ?? "Room";
+		room.IsDm = OnlineApi.Bool(r, "dm");
+		room.With = OnlineApi.Str(r, "with");
 		room.Members.Clear();
 		if (r["members"] is JsonArray members)
 			foreach (var mm in members) if (mm is JsonValue v && v.TryGetValue<string>(out var name)) { room.Members[name] = name; room.Invited.Remove(name); }

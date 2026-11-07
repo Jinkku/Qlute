@@ -22,6 +22,8 @@ public static class PlayerApi
 		public long Rank;
 		public long Points;
 		public string Pfp;
+		/// <summary>Friends list only: they added us back.</summary>
+		public bool Mutual;
 	}
 
 	public class Play
@@ -82,6 +84,68 @@ public static class PlayerApi
 		{
 			GD.Print($"Couldn't load the online player list: {e.Message}");
 			return null;
+		}
+	}
+
+	// ---- Friends (apiv2/friends, one-way like osu!: both ways = mutual) ----
+
+	/// <summary>Our friends by name (value: mutual), as of the last <see cref="FetchFriends"/>.</summary>
+	public static readonly Dictionary<string, bool> Friends = new(StringComparer.OrdinalIgnoreCase);
+	/// <summary>Bumped whenever <see cref="Friends"/> changes, so open panels can redraw.</summary>
+	public static int FriendsVersion { get; private set; }
+
+	public static bool IsFriend(string name) => name != null && Friends.ContainsKey(name);
+
+	private static System.Net.Http.HttpRequestMessage Authed(System.Net.Http.HttpMethod method, string path)
+	{
+		var req = new System.Net.Http.HttpRequestMessage(method, Base + path);
+		req.Headers.TryAddWithoutValidation("Username", ApiOperator.Username ?? "");
+		req.Headers.TryAddWithoutValidation("Password", ApiOperator.PasswordHash ?? "");
+		req.Headers.TryAddWithoutValidation("User-Agent", ApiOperator.AgentString ?? "Qlute");
+		return req;
+	}
+
+	/// <summary>Our friends, online first (null + reason if it failed). Also refreshes <see cref="Friends"/>.</summary>
+	public static async Task<(List<Player> friends, string error)> FetchFriends()
+	{
+		if (!OnlineApi.Available) return (null, "Log in to see your friends.");
+		try
+		{
+			var res = await Http.SendAsync(Authed(System.Net.Http.HttpMethod.Get, "apiv2/friends"));
+			var json = JsonNode.Parse(await res.Content.ReadAsStringAsync()) as JsonObject;
+			if (!res.IsSuccessStatusCode || json == null)
+				return (null, OnlineApi.Str(json, "reason") ?? $"The server said {(int)res.StatusCode}.");
+			var list = (json["friends"] as JsonArray)?.OfType<JsonObject>().Select(p => ReadPlayer(p, new Player())).ToList() ?? new();
+			Friends.Clear();
+			foreach (var f in list) Friends[f.Username] = f.Mutual;
+			FriendsVersion++;
+			return (list, null);
+		}
+		catch (Exception e)
+		{
+			return (null, $"Couldn't reach the server ({e.Message}).");
+		}
+	}
+
+	public static async void RefreshFriends() => await FetchFriends();
+
+	/// <summary>Adds or removes a friend. Returns an error to show, or null.</summary>
+	public static async Task<string> SetFriend(string name, bool add)
+	{
+		if (!OnlineApi.Available) return "Log in to add friends.";
+		try
+		{
+			var res = await Http.SendAsync(Authed(System.Net.Http.HttpMethod.Post, $"apiv2/friends/{(add ? "add" : "remove")}/{Uri.EscapeDataString(name)}"));
+			var json = JsonNode.Parse(await res.Content.ReadAsStringAsync()) as JsonObject;
+			if (!res.IsSuccessStatusCode) return OnlineApi.Str(json, "reason") ?? $"The server said {(int)res.StatusCode}.";
+			if (add) Friends[name] = OnlineApi.Bool(json, "mutual");
+			else Friends.Remove(name);
+			FriendsVersion++;
+			return null;
+		}
+		catch (Exception e)
+		{
+			return $"Couldn't reach the server ({e.Message}).";
 		}
 	}
 
@@ -214,6 +278,7 @@ public static class PlayerApi
 		p.Rank = OnlineApi.Long(o, "rank");
 		p.Points = OnlineApi.Long(o, "points");
 		p.Pfp = OnlineApi.Str(o, "pfp");
+		p.Mutual = OnlineApi.Bool(o, "mutual");
 		return p;
 	}
 

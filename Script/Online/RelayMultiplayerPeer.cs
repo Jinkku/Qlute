@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Nodes;
 
 /// <summary>
@@ -9,6 +10,10 @@ using System.Text.Json.Nodes;
 ///
 /// The host is peer 1 and runs the room; players only ever talk to the host (Godot's server relay handles
 /// the rest). Everything goes over one websocket, so every transfer mode ends up reliable + ordered.
+///
+/// Host migration: when the host leaves, the server moves the room to a player ("promoted" / "host_moved").
+/// This peer then hands its socket to a new peer object (<see cref="Handover"/>) that LanNetwork swaps in, so
+/// Godot's multiplayer starts clean (its per-peer caches belong to the old host).
 /// </summary>
 public partial class RelayMultiplayerPeer : MultiplayerPeerExtension
 {
@@ -35,8 +40,19 @@ public partial class RelayMultiplayerPeer : MultiplayerPeerExtension
 	public long RoomId { get; private set; }
 	/// <summary>Why the connection ended, for the player (null while it's fine).</summary>
 	public string CloseReason { get; private set; }
+	/// <summary>Bytes waiting to go out on the socket (big beatmap transfers hold back while this is high).</summary>
+	/// <summary>Bytes of game packets sent so far (benchmarking).</summary>
+	public long BytesSent { get; private set; }
+	public long FramesSent { get; private set; }
+	public long FramesReceived { get; private set; }
+	public readonly Dictionary<string, long> SentByTarget = new();
+	public int OutboundBuffered => _ws?.GetCurrentOutboundBufferedAmount() ?? 0;
 	/// <summary>Host: the server-verified account name of each player, by peer id.</summary>
 	public readonly Dictionary<int, string> PeerUsers = new();
+	/// <summary>Set when the room moved to another host: swap this in as the MultiplayerPeer (this one is done).</summary>
+	public RelayMultiplayerPeer Handover { get; private set; }
+	/// <summary>With <see cref="Handover"/>: the peer id that became the new host (1). It's ours if we were promoted.</summary>
+	public int NewHostOldId { get; private set; }
 
 	/// <summary>Sockets that are closing; <see cref="PollLingering"/> keeps them going until they're done.</summary>
 	private static readonly List<WebSocketPeer> Lingering = new();
@@ -56,7 +72,7 @@ public partial class RelayMultiplayerPeer : MultiplayerPeerExtension
 	{
 		_isHost = true;
 		_uniqueId = 1;
-		_hostRequest = new JsonObject { ["op"] = "host", ["name"] = roomName, ["proto"] = lanProtocol, ["ver"] = gameVersion };
+		_hostRequest = new JsonObject { ["op"] = "host", ["name"] = roomName, ["proto"] = lanProtocol, ["ver"] = gameVersion, ["migrate"] = true };
 		// Like an ENet server: usable right away (nobody can join until the server confirms the room anyway).
 		return Open(ConnectionStatus.Connected);
 	}
@@ -77,11 +93,29 @@ public partial class RelayMultiplayerPeer : MultiplayerPeerExtension
 		return Error.Ok;
 	}
 
-	/// <summary>Host: refresh the room's listing (also keeps it alive on the server).</summary>
-	public void UpdateListing(string name, int players, int phase, string map)
+	/// <summary>A peer that takes over this connection after the room moved (see <see cref="Handover"/>).</summary>
+	private static RelayMultiplayerPeer Adopt(WebSocketPeer ws, long roomId, bool host, int id, IEnumerable<(int peer, string user)> peers)
 	{
-		if (!_isHost || RoomId == 0) return;
-		OnlineApi.SendJson(_ws, new JsonObject { ["op"] = "update", ["name"] = name, ["players"] = players, ["phase"] = phase, ["map"] = map ?? "" });
+		var p = new RelayMultiplayerPeer
+		{
+			_ws = ws, _isHost = host, _uniqueId = id, _opened = true, RoomId = roomId,
+			_status = ConnectionStatus.Connected, _lastPingMs = Time.GetTicksMsec(),
+		};
+		foreach (var (peer, user) in peers)
+		{
+			p._peers.Add(peer);
+			if (host) p.PeerUsers[peer] = user;
+			p._pendingSignals.Enqueue((true, peer)); // Godot learns who's there on the first poll
+		}
+		return p;
+	}
+
+	/// <summary>Host: refresh the room's listing (also keeps it alive on the server).
+	/// <paramref name="successor"/> is who should take the room over if we leave.</summary>
+	public void UpdateListing(string name, int players, int phase, string map, long successor)
+	{
+		if (!_isHost || RoomId == 0 || _ws == null) return;
+		OnlineApi.SendJson(_ws, new JsonObject { ["op"] = "update", ["name"] = name, ["players"] = players, ["phase"] = phase, ["map"] = map ?? "", ["next"] = successor });
 		_lastPingMs = Time.GetTicksMsec();
 	}
 
@@ -94,6 +128,7 @@ public partial class RelayMultiplayerPeer : MultiplayerPeerExtension
 			var (connected, peer) = _pendingSignals.Dequeue();
 			EmitSignal(connected ? MultiplayerPeer.SignalName.PeerConnected : MultiplayerPeer.SignalName.PeerDisconnected, (long)peer);
 		}
+		FlushBatch(); // what Godot sent since the last poll (at most a frame old)
 		if (_ws == null) return;
 
 		_ws.Poll();
@@ -156,6 +191,24 @@ public partial class RelayMultiplayerPeer : MultiplayerPeerExtension
 				PeerUsers.Remove(peer);
 				break;
 			}
+			case "promoted":
+			{
+				if (_isHost) break;
+				var peers = new List<(int, string)>();
+				if (msg["peers"] is JsonArray arr)
+					foreach (var e in arr.OfType<JsonObject>())
+						if ((int)OnlineApi.Long(e, "peer") is > 1 and var pid && pid != _uniqueId) peers.Add((pid, OnlineApi.Str(e, "user") ?? "Guest"));
+				NewHostOldId = _uniqueId;
+				Handover = Adopt(_ws, RoomId, host: true, 1, peers);
+				_ws = null; // the socket is the new peer's now; keep our status so Godot doesn't see a disconnect
+				break;
+			}
+			case "host_moved":
+				if (_isHost) break;
+				NewHostOldId = (int)OnlineApi.Long(msg, "old_peer");
+				Handover = Adopt(_ws, RoomId, host: false, _uniqueId, new[] { (1, "") });
+				_ws = null;
+				break;
 			case "join_failed":
 			case "closed":
 				CloseReason = OnlineApi.Str(msg, "text") ?? OnlineApi.Str(msg, "reason") ?? "The room closed.";
@@ -178,6 +231,7 @@ public partial class RelayMultiplayerPeer : MultiplayerPeerExtension
 	private void HandleBinary(byte[] data)
 	{
 		if (_status != ConnectionStatus.Connected || data.Length < HeaderSize) return;
+		FramesReceived++;
 		int from = BitConverter.ToInt32(data, 0);
 		if (_isHost ? !_peers.Contains(from) : from != 1) return;
 		var payload = new byte[data.Length - HeaderSize];
@@ -199,14 +253,59 @@ public partial class RelayMultiplayerPeer : MultiplayerPeerExtension
 
 	// ---- MultiplayerPeer ----
 
+	// ---- Host: merge broadcasts ----
+	// Godot's multiplayer sends a broadcast as one copy per player (it loops over its peers itself). Online that's N
+	// frames through the server for every room update, which swamps the relay past ~50 players. Consecutive copies of
+	// the same packet are held for a moment and go out as one frame "to everyone" (or "everyone but X") instead.
+	private byte[] _batch;
+	private int _batchChannel;
+	private TransferModeEnum _batchMode;
+	private readonly HashSet<int> _batchTargets = new();
+
 	public override Error _PutPacketScript(byte[] buffer)
 	{
 		if (_ws == null || _status != ConnectionStatus.Connected) return Error.Unconfigured;
+		if (_isHost && _target > 0)
+		{
+			if (_batch != null && (_batchChannel != _channel || _batchMode != _mode || _batchTargets.Contains(_target)
+				|| !_batch.AsSpan().SequenceEqual(buffer)))
+				FlushBatch();
+			if (_batch == null) { _batch = buffer; _batchChannel = _channel; _batchMode = _mode; }
+			_batchTargets.Add(_target);
+			return Error.Ok;
+		}
+		FlushBatch(); // keep the order
+		return SendFrame(_isHost ? _target : 1, buffer, _channel, _mode);
+	}
+
+	/// <summary>Sends what's held back: one frame if it's for every player (or all but one), else one per player.</summary>
+	private void FlushBatch()
+	{
+		if (_batch == null) return;
+		var data = _batch;
+		_batch = null;
+		var targets = _batchTargets.ToList();
+		_batchTargets.Clear();
+		if (_ws == null) return;
+		if (targets.Count > 1 && _batchTargets.Count == 0 && targets.Count == _peers.Count && _peers.All(targets.Contains))
+			SendFrame(0, data, _batchChannel, _batchMode);
+		else if (targets.Count > 1 && targets.Count == _peers.Count - 1 && targets.All(_peers.Contains))
+			SendFrame(-_peers.First(p => !targets.Contains(p)), data, _batchChannel, _batchMode);
+		else
+			foreach (var t in targets) SendFrame(t, data, _batchChannel, _batchMode);
+	}
+
+	private Error SendFrame(int target, byte[] buffer, int channel, TransferModeEnum mode)
+	{
 		var frame = new byte[HeaderSize + buffer.Length];
-		BitConverter.TryWriteBytes(frame.AsSpan(0, 4), _isHost ? _target : 1);
-		frame[4] = (byte)_channel;
-		frame[5] = (byte)_mode;
+		BitConverter.TryWriteBytes(frame.AsSpan(0, 4), target);
+		frame[4] = (byte)channel;
+		frame[5] = (byte)mode;
 		Buffer.BlockCopy(buffer, 0, frame, HeaderSize, buffer.Length);
+		BytesSent += frame.Length;
+		FramesSent++;
+		var key = !_isHost ? "to-host" : target == 0 ? "all" : target < 0 ? "all-but" : "one";
+		SentByTarget[key] = SentByTarget.GetValueOrDefault(key) + 1;
 		return _ws.Send(frame, WebSocketPeer.WriteMode.Binary);
 	}
 
@@ -240,6 +339,7 @@ public partial class RelayMultiplayerPeer : MultiplayerPeerExtension
 
 	public override void _Close()
 	{
+		FlushBatch();
 		if (_ws != null)
 		{
 			OnlineApi.SendJson(_ws, new JsonObject { ["op"] = "leave" });
