@@ -18,6 +18,22 @@ public partial class TopPanel : ColorRect
 		Loadinganimation.Play("loading");
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SettingsOperator.toppaneltoggle(false,true);
+		AddAdminButton();
+	}
+
+	/// <summary>Admin panel button: a copy of the "players online" button, only shown to the Qlute team.</summary>
+	private Button AdminButton { get; set; }
+	private void AddAdminButton()
+	{
+		var userList = GetNode<Button>("Widgets/UserList");
+		AdminButton = (Button)userList.Duplicate(0); // looks only: no signals, groups or scripts
+		AdminButton.Name = "AdminPanel";
+		AdminButton.TooltipText = "Admin panel";
+		AdminButton.Icon = GD.Load<Texture2D>("res://Resources/NotificationIcons/Report.png");
+		AdminButton.Visible = false;
+		AdminButton.Pressed += () => PlayerOverlays.ToggleAdmin();
+		userList.AddSibling(AdminButton);
+		userList.GetParent().MoveChild(AdminButton, userList.GetIndex());
 	}
 	private void _Slidepanelstart(string ani){
 		SettingsOperator.SessionConfig.TopPanelSlideip = true;
@@ -53,7 +69,7 @@ public partial class TopPanel : ColorRect
 			GetTree().CurrentScene.AddChild(ChangeLog);
 		}
 	}
-	public void toggledashboard(){}
+	public void toggledashboard() => PlayerOverlays.ToggleList();
 	public void _hovered()
 	{
 		ShadowAni(1);
@@ -120,6 +136,7 @@ public partial class TopPanel : ColorRect
 	public override void _Process(double _delta)
 	{
 		Loadingicon.Visible = (bool)SettingsOperator.SessionConfig.Loggingin;
+		AdminButton.Visible = ModerationApi.IsStaff;
 
 		if (Input.IsActionJustPressed("Special") && !Global.VolumeControlActive)
 		{

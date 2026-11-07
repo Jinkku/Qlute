@@ -15,19 +15,6 @@ public partial class UserCard : PanelContainer
         Username = GetNode<Label>("SplitV/TopPart/Sections/Username");
         Rank = GetNode<Label>("SplitV/BottomPart/Sections/Rank/Value");
         Performance = GetNode<Label>("SplitV/BottomPart/Sections/Performance/Value");
-        // Clicking your own card opens your profile.
-        MouseFilter = MouseFilterEnum.Stop;
-        MouseDefaultCursorShape = CursorShape.PointingHand;
-        TooltipText = "Open your profile";
-    }
-
-    public override void _GuiInput(InputEvent e)
-    {
-        if (e is InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: false } && SettingsOperator.SessionConfig.Loggedin)
-        {
-            PlayerOverlays.OpenProfile(ApiOperator.Username);
-            AcceptEvent();
-        }
     }
 
     public override void _Process(double delta)

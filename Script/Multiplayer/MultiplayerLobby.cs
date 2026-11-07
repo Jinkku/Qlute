@@ -111,7 +111,7 @@ public partial class MultiplayerLobby : Control
 		_pendingHostTarget = playerId;
 		if (TransferHostDialog == null) { OnTransferHostConfirmed(); return; }
 		TransferHostDialog.DialogText = Net.IsServer
-			? $"Make {target.Name} the host?\n\nThey'll run the timer and can remove anyone's queue picks. If you leave, the room moves to their game."
+			? $"Make {target.Name} the host?\n\nThey'll run the timer and can remove anyone's queue picks. The room still runs on your game, so it closes if you leave."
 			: $"Make {target.Name} the host?\n\nYou won't be able to take it back unless they hand it to you.";
 		TransferHostDialog.PopupCentered();
 	}

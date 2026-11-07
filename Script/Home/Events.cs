@@ -47,19 +47,20 @@ public partial class Events : TextureButton
 	async private void NextEvent()
 	{
 		if (ApiOperator.EventData.Count == 0) return;
-		EventLegend Event = ApiOperator.EventData[ID];
+		Event = ApiOperator.EventData[ID];
+		var current = Event;
 		if (Event.DownloadedData == null)
 		{
 			await ApiOperator.DownloadImage(Event.url, (ImageTexture texture) =>
 			{
 				GD.Print("Loading downloaded image...");
-				Event.DownloadedData = texture;
+				current.DownloadedData = texture;
 				TransitionImage(texture);
 			});
 		}
 		else
 		{
-			TransitionImage(Event.DownloadedData);
+			TransitionImage(current.DownloadedData);
 			GD.Print("Loading preloaded image...");
 		}
 
@@ -70,10 +71,9 @@ public partial class Events : TextureButton
 
 	private void Pressed()
 	{
-		if (Event.redirect != null | Event.redirect != "")
-		{
+		// Links are set per notice in the admin panel.
+		if (!string.IsNullOrWhiteSpace(Event?.redirect))
 			OS.ShellOpen(Event.redirect);
-		}
 	}
 
 	private void Hover()

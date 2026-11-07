@@ -29,6 +29,7 @@ public partial class MultiplayerList : PanelContainer
 	{
 		_list = GetNode<VBoxContainer>("VBoxContainer/ScrollContainer/VBoxContainer");
 		_lanLabel = _list.GetNode<Label>("LAN");
+		_searching = _list.GetNode<Label>("Searching");
 		_onlineLabel = _list.GetNode<Label>("Online");
 		_onlineStatus = new Label { HorizontalAlignment = HorizontalAlignment.Center, Modulate = new Color(1, 1, 1, 0.6f) };
 		_list.AddChild(_onlineStatus);
@@ -110,6 +111,7 @@ public partial class MultiplayerList : PanelContainer
 		_onlineLabel.Text = $"({online.Count}) Online Rooms";
 		_onlineStatus.Text = Net.OnlineStatus;
 		_onlineStatus.Visible = online.Count == 0 && Net.OnlineStatus.Length > 0;
+		_searching.Visible = rooms.Count == 0 && online.Count == 0;
 
 		int insertAt = _lanLabel.GetIndex() + 1;
 		foreach (var room in rooms)
@@ -137,19 +139,15 @@ public partial class MultiplayerList : PanelContainer
 		bool compatible = r.Proto == LanNetwork.Protocol;
 		bool playing = r.Phase == (int)LanPhase.Playing;
 		var status = !compatible ? $"Incompatible (v{r.Version})" : playing ? "In progress" : "Open";
-		SetupRoomCard(button, r.Name, $"{status}  -  host: {r.Host}  -  {(string.IsNullOrEmpty(r.Map) ? "no beatmap yet" : r.Map)}", r.Players, r.Host);
+		SetupRoomCard(button, r.Name, $"{status}  -  host: {r.Host}  -  {(string.IsNullOrEmpty(r.Map) ? "no beatmap yet" : r.Map)}", r.Players);
 		button.TooltipText = $"Online room #{r.Id}";
 		button.Disabled = !compatible;
 		long id = r.Id;
 		button.Pressed += () => Net.JoinOnline(id);
 	}
 
-	/// <summary>
-	/// Fills a room card: title + info line, player avatars (up to 6 slots) and the exact count.
-	/// <paramref name="host"/> is set only for online rooms (server-verified account name): the first slot shows their picture.
-	/// LAN host names are self-reported, so those cards keep the guest picture.
-	/// </summary>
-	private static void SetupRoomCard(Button button, string name, string info, int playerCount, string host = null)
+	/// <summary>Fills a room card: title + info line, player avatars (up to 6 slots) and the exact count.</summary>
+	private static void SetupRoomCard(Button button, string name, string info, int playerCount)
 	{
 		var title = button.GetNode<Label>("MarginContainer/Columns/Title");
 		title.Text = $"{name}\n{info}";
@@ -162,11 +160,7 @@ public partial class MultiplayerList : PanelContainer
 		int slot = 0;
 		foreach (var child in players.GetChildren())
 		{
-			if (child is not TextureRect avatar) continue;
-			avatar.Visible = slot < playerCount;
-			// The slot itself is the circle mask; the picture is its "Icon" child.
-			if (slot++ == 0 && !string.IsNullOrEmpty(host) && avatar.GetNodeOrNull<TextureRect>("Icon") is { } icon)
-				PlayerApi.PictureFor(host, tex => { if (IsInstanceValid(icon)) icon.Texture = tex; });
+			if (child is TextureRect avatar) avatar.Visible = slot++ < playerCount;
 		}
 		var count = players.GetNode<Label>("PlayerCount");
 		count.Visible = true;

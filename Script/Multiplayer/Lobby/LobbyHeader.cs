@@ -88,10 +88,9 @@ public partial class LobbyHeader : PanelContainer
 			: me != null && !me.HasMap ? "Need beatmap"
 			: me?.Ready == true ? "Ready!" : "Ready up";
 
-		bool alone = s.Players.Count <= 1;
-		LeaveButton.Text = net.IsServer && alone ? "Close room" : "Leave";
-		LeaveButton.TooltipText = net.IsServer && !alone
-			? "The room carries on without you: it moves to another player's game."
+		LeaveButton.Text = net.IsServer ? "Close room" : "Leave";
+		LeaveButton.TooltipText = net.IsServer
+			? "The room runs on your game, so leaving closes it for everyone."
 			: "Go back to the room list.";
 	}
 

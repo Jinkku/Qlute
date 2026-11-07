@@ -32,9 +32,14 @@ public partial class LobbyPlayerRow : PanelContainer
 	public long PlayerId { get; private set; }
 
 	private StyleBoxFlat _pillBox;
+	private TextureRect _avatar;
+	private Texture2D _guest;
+	private string _avatarFor; // whose picture the avatar shows ("" = guest)
 
 	public override void _Ready()
 	{
+		_avatar = GetNodeOrNull<TextureRect>("H/Avatar/Icon");
+		_guest = _avatar?.Texture;
 		// Own copy of the pill style so each row can tint it with its status colour.
 		if (StatusPill.GetThemeStylebox("normal")?.Duplicate() is StyleBoxFlat box)
 		{
@@ -61,10 +66,43 @@ public partial class LobbyPlayerRow : PanelContainer
 		DetailLabel.Visible = playing || loadout.Length > 0;
 		DetailLabel.Text = playing ? $"{p.Score:N0}   {p.Accuracy:P2}   {p.Combo}x" : loadout.Trim();
 
+		ShowAvatar(p, isLocal);
+
 		var (status, color) = Status(p, s);
 		StatusPill.Text = status;
 		StatusPill.AddThemeColorOverride("font_color", color);
 		if (_pillBox != null) _pillBox.BgColor = new Color(color, PillTint);
+	}
+
+	public override void _Process(double delta)
+	{
+		// Your own picture can finish downloading after the row was drawn.
+		if (_avatarFor == "@me" && ApiOperator.PictureData != null && _avatar.Texture != ApiOperator.PictureData)
+			_avatar.Texture = ApiOperator.PictureData;
+	}
+
+	/// <summary>
+	/// Your own picture always; other players' only in online rooms, where the server verified their account name.
+	/// LAN names are just what each game says, so those stay the guest picture.
+	/// </summary>
+	private void ShowAvatar(LanPlayer p, bool isLocal)
+	{
+		if (_avatar == null) return;
+		if (isLocal)
+		{
+			_avatarFor = "@me";
+			_avatar.Texture = ApiOperator.PictureData ?? _guest; // may arrive after the row; Setup runs again on every change
+			return;
+		}
+		var name = LanNetwork.Instance?.IsOnline == true ? p.Name : "";
+		if (name == _avatarFor) return;
+		_avatarFor = name;
+		_avatar.Texture = _guest;
+		if (name == "") return;
+		PlayerApi.PictureFor(name, tex =>
+		{
+			if (IsInstanceValid(this) && _avatarFor == name) _avatar.Texture = tex;
+		});
 	}
 
 	private (string, Color) Status(LanPlayer p, LanRoomState s)

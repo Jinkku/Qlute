@@ -496,7 +496,6 @@ public partial class ApiOperator : Node
 					SettingsOperator.SetSetting("password", "");
 				SettingsOperator.SessionConfig.Loggedin = true;
 				NoticeText = "";
-				ModerationApi.RefreshMe(); // team members get the admin panel button
 			}
 			else if (Username != "Guest" && PasswordHash != null && responseCode != 200)
 			{
@@ -567,8 +566,8 @@ public partial class ApiOperator : Node
 		}
 		string[] Headers = new string[] {
 		$"NOWPLAYING: {Status}",
-		$"USERNAME: {Username}",
-		$"PASSWORD: {PasswordHash}",
+		$"USERNAME: {SettingsOperator.GetSetting("username")}",
+		$"PASSWORD: {SettingsOperator.GetSetting("password")}",
 		$"User-Agent: {AgentString}"
 		};
 		StatusChecker.Request(SettingsOperator.GetSetting("api") + "apiv2/setstatus", Headers);
