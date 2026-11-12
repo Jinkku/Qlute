@@ -29,6 +29,10 @@ public partial class Global : Node
 	public override void _Process(double delta)
 	{
 		_CurrentScene = GetTree().CurrentScene;
+		if (SkinLayout.GameplayRoot(GetTree()) is Control gameplay && gameplay.GetNodeOrNull("SkinLayoutApplier") == null)
+		{
+			gameplay.AddChild(new SkinLayoutApplier { Name = "SkinLayoutApplier" });
+		}
 		if (_SkinStart)
 		{
 			_skineditorEnabled = !_skineditorEnabled;

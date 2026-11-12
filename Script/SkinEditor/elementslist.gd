@@ -9,7 +9,8 @@ func _process(delta: float) -> void:
 		var dir := DirAccess.open(path)
 		if dir == null: printerr("Could not open folder"); return
 		dir.list_dir_begin()
-		for file: String in dir.get_files():
+		for raw: String in dir.get_files():
+			var file := raw.trim_suffix(".remap")
 			if file.ends_with(".tscn") and not file.begins_with("Playfield"):
 				var node = load("res://Panels/SkinEditorElements/SkinElementDemo.tscn").instantiate().get_node(".")
 				node.set_meta("ScenePath", path + file)

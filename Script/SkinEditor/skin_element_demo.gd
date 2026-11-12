@@ -8,3 +8,14 @@ func _ready() -> void:
 		$SubViewport.add_child(Scene)
 		$SubViewport.size = Scene.size
 		$SkinText.text = Scene.name
+
+
+func _pressed() -> void:
+	var path = get_meta("ScenePath", "")
+	if path == "":
+		return
+	var node = get_parent()
+	while node != null and not node.has_method("AddComponent"):
+		node = node.get_parent()
+	if node != null:
+		node.AddComponent(path)

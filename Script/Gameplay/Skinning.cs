@@ -99,6 +99,8 @@ public class SkinningLegend
         new Color("8f00ff"),
     };
     public Texture2D Cursor { get; set; } = GD.Load<Texture2D>("res://SelectableSkins/Slia/System/cursor.png");
+    /// <summary>Gameplay HUD placement, keyed by component name (see SkinLayout).</summary>
+    public Dictionary<string, SkinLayoutEntry> Layout { get; set; } = new();
 }
 public class Skin
 {
@@ -146,6 +148,10 @@ public class Skin
             var prejson = saveFile.GetAsText();
             var json = JsonSerializer.Deserialize<Dictionary<string, object>>(prejson);
             PreElement.Name = json["Name"].ToString();
+            if (json.TryGetValue("Layout", out var layout) && layout is JsonElement layoutJson && layoutJson.ValueKind == JsonValueKind.Object)
+            {
+                PreElement.Layout = SkinLayout.Deserialize(layoutJson.GetRawText());
+            }
             foreach (int i in Enumerable.Range(0, 4))
             {
                 try

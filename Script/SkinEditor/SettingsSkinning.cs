@@ -26,21 +26,29 @@ public partial class SettingsSkinning : PanelContainer
 	private void NoteLane1Color(Color Color)
 	{
 		Skin.Element.LaneNotes[0] = Color;
+		Changed();
 	}
 	private void NoteLane2Color(Color Color)
 	{
 		Skin.Element.LaneNotes[1] = Color;
+		Changed();
 	}
 	private void NoteLane3Color(Color Color)
 	{
 		Skin.Element.LaneNotes[2] = Color;
+		Changed();
 	}
 	private void NoteLane4Color(Color Color)
 	{
 		Skin.Element.LaneNotes[3] = Color;
+		Changed();
 	}
 	private void NameChange(string text)
 	{
 		Skin.Element.Name = text;
+		// Renaming the default skin alone shouldn't fork it on every keystroke; it's picked up by the next save.
+		if (!(Skin.Element.SkinPath?.StartsWith("res://") ?? true)) Changed();
 	}
+	/// <summary>Lets the skin editor auto-save (forks the default skin into a new one on its first change).</summary>
+	private void Changed() => GetParentOrNull<SkinEditor>()?.QueueAutoSave();
 }
