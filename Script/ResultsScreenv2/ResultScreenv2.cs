@@ -328,8 +328,8 @@ public partial class ResultScreenv2 : Control
 		Additional2 = GetNode<HBoxContainer>("MainScreen/Additional2");
 		RankEmblem = GetNode<PanelContainer>("MainScreen/Rank");
 
-		// Checks if the replay file is in replay folder (temp until have backend support replay downloading :p)
-		if (System.IO.File.Exists(Replay.FilePath) && Replay.FilePath != "")
+		// Local replay file, or an online score whose replay can be downloaded.
+		if ((!string.IsNullOrEmpty(Replay.FilePath) && System.IO.File.Exists(Replay.FilePath)) || Replay.OnlineEntry != null)
 		{
 			WatchReplayButton.Disabled = false;
 		}
@@ -434,6 +434,7 @@ public partial class ResultScreenv2 : Control
 			if (!AudioPlayer.Instance.IsPlaying())
 				AudioPlayer.Instance.Play();
 			Replay.FilePath = "";
+			Replay.OnlineEntry = null;
 		}
 	}
 
@@ -456,8 +457,27 @@ public partial class ResultScreenv2 : Control
 		Notify.Post($"saved as screenshot_{(int)Directory.GetFiles(SettingsOperator.screenshotdir).Length + 1}", SettingsOperator.screenshotdir);
 		GD.Print(filename);
 	}
-	private void WatchReplay()
+	private bool _downloadingReplay;
+	private async void WatchReplay()
 	{
+		if (_downloadingReplay) return;
+		if (Replay.OnlineEntry != null && (string.IsNullOrEmpty(Replay.FilePath) || !System.IO.File.Exists(Replay.FilePath)))
+		{
+			_downloadingReplay = true;
+			WatchReplayButton.Disabled = true;
+			Notify.Post("Downloading replay...");
+			string path = await ApiOperator.DownloadReplay(Replay.OnlineEntry);
+			_downloadingReplay = false;
+			if (!IsInstanceValid(this) || !IsInsideTree()) return;
+			if (path == null)
+			{
+				Notify.Post("Couldn't download this replay.", Type: NotificationIcons.NotificationType.Warning);
+				WatchReplayButton.Disabled = false;
+				return;
+			}
+			Replay.FilePath = path;
+		}
+		Replay.OnlineEntry = null;
 		Replay.ReloadReplay(Replay.FilePath);
 		Retry();
 	}

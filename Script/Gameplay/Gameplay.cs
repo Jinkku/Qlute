@@ -56,7 +56,7 @@ public partial class Gameplay : Control
 	public static List<NotesEn> Notes = new List<NotesEn>();
 	public TextureRect Beatmap_Background { get; set; }
 	private Node PauseMenu { get; set; }
-	private bool Finished { get; set; }
+	public bool Finished { get; private set; }
 	public static int score { get; set; }
 	public static List<DanceCounter> dance { get; set; }
 	private int DanceIndex { get; set; }
@@ -76,9 +76,26 @@ public partial class Gameplay : Control
 	[Export] private PackedScene EffectTemplate;
 	private Effect EffectNode { get; set; }
 
+	// ── Judgement rules ──────────────────────────────────────────────────────
+	// The server re-plays every submitted replay to compute pp
+	// (Chikara/Chikara/ppv2calc.py). Everything that decides a judgement lives
+	// in ProcessInputFrame/MissPass/JudgeDiff below and is mirrored 1:1 there,
+	// so the server lands on the exact same counts and pp. Change both together.
+	//
+	// All times are whole song-milliseconds (floor of gametime). A replay line
+	// "t,col" means: the press of column `col` was processed on the frame at t.
+	// diff = t - noteTime (negative = early).
+
 	// Spam protection: minimum ms between accepted key presses per column
-	private const float SPAM_COOLDOWN_MS = 80f; // 80ms-matches osu!mania's input buffer
-	private float[] LastKeyPressTime = new float[4] { float.MinValue, float.MinValue, float.MinValue, float.MinValue };
+	public const int SPAM_COOLDOWN_MS = 80; // 80ms-matches osu!mania's input buffer
+	// An unhit note counts as a miss once it is this many ms late
+	// (= where the old on-screen check fired with the default playfield layout).
+	public const int MISS_LATE_MS = 206;
+	private long[] LastKeyPressTime = new long[4] { long.MinValue, long.MinValue, long.MinValue, long.MinValue };
+	// Presses that arrived in _Input since the last game tick, in order.
+	private readonly List<int> QueuedPresses = new List<int>();
+	// Time of the last hit object (the song ends here); no note becomes a miss after it.
+	private int SongEndMs = int.MaxValue;
 
 	// Unstable Rate: stores raw hit offsets (ms) to compute std-dev * 10
 	private List<float> HitOffsets = new List<float>();
@@ -126,6 +143,7 @@ public partial class Gameplay : Control
 		int index = 0;
 		BeatmapLegend beatmap = SettingsOperator.Beatmaps[SettingsOperator.SessionConfig.SongID];
 		dance = beatmap.Dance;
+		SongEndMs = (int)beatmap.Timetotal;
 
 		var seen = new HashSet<(int timing, int section)>();
 
@@ -183,6 +201,7 @@ public partial class Gameplay : Control
 	public override void _Ready()
 	{
 		
+		Instance = this;
 		GD.Print("Setting up stuff...");
 		speedold = AudioPlayer.Instance.PitchScale;
 		seed = new Random().Next(1,214562543);
@@ -251,7 +270,8 @@ public partial class Gameplay : Control
 		maxrndvalue = (int)(1000000 * ModsOperator.ProcessMultiplierByModList(ModsOperator.Mods));
 	
 		HitOffsets.Clear();
-		Array.Fill(LastKeyPressTime, float.MinValue);
+		Array.Fill(LastKeyPressTime, long.MinValue);
+		QueuedPresses.Clear();
 		GD.Print("Loading beatmap...");
 		if (SettingsOperator.SessionConfig.BeatmapURL != null) ReloadBeatmap(SettingsOperator.SessionConfig.BeatmapURL.ToString());
 		// If auto is enabled, it will make a Replay file with Auto being the player playing the beatmap. Before this it didn't make the replay file, it just plays.
@@ -304,7 +324,6 @@ public partial class Gameplay : Control
 		if (hit)
 		{
 			Sample.PlaySample(HitSoundPath);
-			if (!SettingsOperator.SpectatorMode) Replay.AddReplay(est, Keyx);
 			key.Node.SelfModulate = Skin.Element.LaneNotes[Keyx];
 			key.Ani?.Kill(); // Abort the previous animation
 			key.Ani = Keys[Keyx].Node.CreateTween();
@@ -354,24 +373,25 @@ public partial class Gameplay : Control
     /// </summary>
 	private void CheckReplayKey(int est)
 	{
-		// Replay part (if enabled)
-		if (SettingsOperator.SpectatorMode && Replay.ReplayCache.Count > 0)
+		if (!SettingsOperator.SpectatorMode || Replay.ReplayCache.Count == 0) return;
+		// Release the keys pressed on the previous replay frame (visual only).
+		for (int c = 0; c < Keys.Count; c++)
+			if (Keys[c].hit) hitnote(c, false, est);
+		// Every recorded press that is due is processed on its own recorded frame time,
+		// so playback judges exactly like the original run (and like the server).
+		var group = new List<int>();
+		while (ReplayINT < Replay.ReplayCache.Count && Replay.ReplayCache[ReplayINT].Time <= est)
 		{
-			Replayindex = Replay.ReplayCache[Math.Min(ReplayINT, Replay.ReplayCache.Count - 1)];
-			if (est > Replayindex.Time)
+			int t = Replay.ReplayCache[ReplayINT].Time;
+			group.Clear();
+			while (ReplayINT < Replay.ReplayCache.Count && Replay.ReplayCache[ReplayINT].Time == t)
 			{
-				if (ReplayINT < Replay.ReplayCache.Count())
-				{
-					hitnote(Replayindex.NoteTap, true, est);
-					ReplayINT++;
-				}
-				else if (ReplayINT > 0 && Keys[Replay.ReplayCache[ReplayINT - 1].NoteTap].hit)
-				{
-					hitnote(Replay.ReplayCache[ReplayINT - 1].NoteTap, false, est);
-				}
+				int col = Replay.ReplayCache[ReplayINT].NoteTap;
+				if ((uint)col < 4u) { group.Add(col); hitnote(col, true, t); }
+				ReplayINT++;
 			}
+			ProcessInputFrame(t, group);
 		}
-		else return;
 	}
     /// <summary>
     /// This is the one that controls the Player input.
@@ -388,20 +408,8 @@ public partial class Gameplay : Control
 		    {
 			    bool pressed = @event.IsPressed();
 
-			    // Spam guard: if a key-down comes in too soon after the last one,
-			    // force a miss and ignore the input so it can't farm pp.
-			    if (pressed)
-			    {
-				    float nowMs = gametime; // est is already in ms
-				    float elapsed = nowMs - LastKeyPressTime[i];
-				    if (elapsed < SPAM_COOLDOWN_MS && elapsed >= 0f)
-				    {
-					    // Register forced miss for the nearest unhit note in this column
-					    TriggerSpamMiss(i);
-					    return;
-				    }
-				    LastKeyPressTime[i] = nowMs;
-			    }
+			    // Presses are judged (and spam-checked) on the next game tick, in order.
+			    if (pressed && !Finished) QueuedPresses.Add(i);
 
 			    hitnote(i, pressed, (int)gametime);
 		    }
@@ -409,33 +417,95 @@ public partial class Gameplay : Control
     }
 
     /// <summary>
-    /// Called when a key is spammed. Finds the nearest note in the column and registers a miss.
+    /// Registers a miss on note <paramref name="i"/> (pp / combo / health penalty).
+    /// </summary>
+    private void RegisterMiss(int i)
+    {
+	    var Note = Notes[i];
+	    Hittext(Skin.Element.JudgeMiss);
+	    SettingsOperator.Gameplaycfg.Bad++;
+	    if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
+	    SettingsOperator.Gameplaycfg.Combo = 0;
+	    SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp / ppmisspower);
+	    BadCombo++;
+	    ComboAnimation();
+	    HealthBar.Damage(5 * BadCombo);
+	    if (HurtAnimation != null && HurtAnimation.IsRunning()) HurtAnimation.Stop();
+	    if (GetTree().CurrentScene is CanvasItem canvasScene) canvasScene.Modulate = new Color(1f, 0.5f, 0.5f, 1f);
+	    HurtAnimation = CreateTween();
+	    HurtAnimation.TweenProperty(GetTree().CurrentScene, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f)
+		    .SetTrans(Tween.TransitionType.Cubic)
+		    .SetEase(Tween.EaseType.Out);
+	    Note.hit = true;
+	    if (LanNetwork.InMatch) LanNetwork.Instance.SpecJudge(i, 3, gametime);
+    }
+
+    /// <summary>
+    /// Called when a key is spammed. Registers a miss on the first unhit note in the column.
     /// </summary>
     private void TriggerSpamMiss(int column)
     {
 	    for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
 	    {
-		    var Note = Notes[i];
-		    if (Note.NotePart == column && !Note.hit)
+		    if (Notes[i].NotePart == column && !Notes[i].hit)
 		    {
-			    // Register miss
-			    Hittext(Skin.Element.JudgeMiss);
-			    SettingsOperator.Gameplaycfg.Bad++;
-			    if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
-			    SettingsOperator.Gameplaycfg.Combo = 0;
-			    SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp / ppmisspower);
-			    BadCombo++;
-			    ComboAnimation();
-			    HealthBar.Damage(5 * BadCombo);
-			    if (HurtAnimation != null && HurtAnimation.IsRunning()) HurtAnimation.Stop();
-			    if (GetTree().CurrentScene is CanvasItem canvasScene) canvasScene.Modulate = new Color(1f, 0.5f, 0.5f, 1f);
-			    HurtAnimation = CreateTween();
-			    HurtAnimation.TweenProperty(GetTree().CurrentScene, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f)
-				    .SetTrans(Tween.TransitionType.Cubic)
-				    .SetEase(Tween.EaseType.Out);
-			    Note.hit = true;
-			    if (LanNetwork.InMatch) LanNetwork.Instance.SpecJudge(i, 3, gametime);
+			    RegisterMiss(i);
 			    break;
+		    }
+	    }
+    }
+
+    /// <summary>
+    /// Misses every unhit note that is more than MISS_LATE_MS late at time <paramref name="t"/>.
+    /// </summary>
+    private void MissPass(int t)
+    {
+	    for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
+	    {
+		    var Note = Notes[i];
+		    // Note.timing is -noteTime.
+		    if (!Note.hit && Math.Min(t, SongEndMs) + Note.timing > MISS_LATE_MS) RegisterMiss(i);
+	    }
+    }
+
+    /// <summary>
+    /// One judgement frame at song time <paramref name="t"/> (ms) with the presses that
+    /// arrived for it, in order. Order: late misses, then each press (spam check / record),
+    /// then each accepted press hits the first unhit note in its column (note order).
+    /// Mirrored exactly by the server's ppv2calc.py.
+    /// </summary>
+    private void ProcessInputFrame(int t, List<int> presses)
+    {
+	    MissPass(t);
+	    if (presses.Count == 0) return;
+	    Span<bool> accepted = stackalloc bool[4];
+	    foreach (int col in presses)
+	    {
+		    if (!SettingsOperator.SpectatorMode) Replay.AddReplay(t, col);
+		    long elapsed = (long)t - LastKeyPressTime[col];
+		    if (elapsed >= 0 && elapsed < SPAM_COOLDOWN_MS)
+		    {
+			    // Too soon after the last accepted press: forced miss, press ignored.
+			    TriggerSpamMiss(col);
+			    continue;
+		    }
+		    LastKeyPressTime[col] = t;
+		    accepted[col] = true;
+	    }
+	    for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
+	    {
+		    var Note = Notes[i];
+		    int col = Note.NotePart;
+		    if (Note.hit || (uint)col >= 4u || !accepted[col]) continue;
+		    accepted[col] = false; // the first unhit note in the column takes the press
+		    int diff = t + Note.timing;
+		    JudgeResult = JudgeDiff(diff, Note);
+		    if (JudgeResult < 3)
+		    {
+			    SettingsOperator.Addms(diff + 50);
+			    SettingsOperator.Gameplaycfg.ms = ComputeUnstableRate();
+			    if (LanNetwork.InMatch) LanNetwork.Instance.SpecJudge(i, JudgeResult, gametime);
+			    Note.hit = true;
 		    }
 	    }
     }
@@ -444,6 +514,7 @@ public partial class Gameplay : Control
     {
 	    // Only added to the tree when spectating; otherwise it was an orphan that leaked every play.
 	    if (IsInstanceValid(SpectatorPanel) && !SpectatorPanel.IsInsideTree()) SpectatorPanel.Free();
+	    if (Instance == this) Instance = null;
 	    SettingsOperator.inGameplay = false;
 	    DisplayServer.WindowSetTitle(oldtitle);
 	    HurtAnimation?.Kill();
@@ -507,7 +578,6 @@ private void _GameNoteTick(double delta)
 
 		//var scrollspeed = ComputeScrollTime(int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString())); // Scroll speed for the notes
 		var scrollspeed = 1;
-		int Ttick = 0;
 		// Gamenotes
 
 		var viewportSize = 0f;
@@ -517,7 +587,6 @@ private void _GameNoteTick(double delta)
 		}
 		_viewportHeight = viewportSize;
 
-		var NoteCount = 0;
 		
 		if (!BreakTime && songstarted && Notes[Math.Min(Notes.Count - 1, NoteTick)].timing  + gametime + HitPoint <= -4500)
 		{
@@ -525,40 +594,19 @@ private void _GameNoteTick(double delta)
 			BreakNow();
 		}
 		
+		notex = gametime + HitPoint;
+		// Judge this frame: queued key presses + late misses, all at one whole-ms time.
+		int now = (int)Math.Floor(gametime);
+		if (!Finished)
+		{
+			ProcessInputFrame(now, QueuedPresses);
+			QueuedPresses.Clear();
+		}
+
 		for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
 		{
 			var Note = Notes[i];
-			notex = gametime + HitPoint;
-			if (Note.timing + notex > -150 && Note.timing + notex < viewportSize + 150 && !Note.hit)
-			{
-				NoteCount++; 
-				Ttick++;
-				JudgeResult = checkjudge((int)(Note.timing + notex), Keys[Note.NotePart].hit, Note);
-				if (JudgeResult < 3) // Only count actual hits (perfect/great/meh), not misses
-				{
-					// True hit offset in ms: how far the note was from the hit line when struck.
-					// Negative = early, Positive = late
-//					Effect copy = (Effect)EffectNode.Duplicate();
-//					copy.Template = false;
-//					Effect CopyTemplate = EffectTemplate.Instantiate<Effect>();
-//					CopyTemplate.Template = false;
-//					PlayfieldNode.AddChild(CopyTemplate);
-//					CopyTemplate.Position = new Vector2(105 * Note.NotePart, (int)(Note.timing + notex));
-					float hitOffsetMs = Note.timing + notex - HitPoint;
-					SettingsOperator.Addms(hitOffsetMs + 50); 
-					SettingsOperator.Gameplaycfg.ms = ComputeUnstableRate();
-
-				}
-				if (JudgeResult < 4)
-				{
-					if (LanNetwork.InMatch) LanNetwork.Instance.SpecJudge(i, JudgeResult, gametime);
-					Keys[Note.NotePart].hit = false; 
-					Note.hit = true;
-				}
-				else { Keys[Note.NotePart].hit = false; }
-
-			}
-			else if (Note.timing + notex > viewportSize + 150)
+			if (Note.timing + notex > viewportSize + 150)
 			{
 				NoteTick++;
 			}
@@ -622,6 +670,7 @@ private void _GameNoteTick(double delta)
 			if (SettingsOperator.Gameplaycfg.TimeTotalGame - SettingsOperator.Gameplaycfg.Time < 0 && !Finished)
 			{
 				Finished = true;
+				MissPass(SongEndMs); // final misses, before the result is saved / submitted
 				Replay.SaveReplay();
 				ApiOperator.SS();
 				if (!SettingsOperator.Marathon)
@@ -701,7 +750,7 @@ private void _GameNoteTick(double delta)
 				IncreaseDanceIndex();
 			}
 
-			CheckReplayKey((int)gametime);
+			if (!Finished) CheckReplayKey((int)Math.Floor(gametime));
 			_GameNoteTick(delta);
 			if (LanNetwork.InMatch) LanNetwork.Instance.SpecTime(gametime); // spectators follow this clock
 		}
@@ -783,9 +832,15 @@ private void _GameNoteTick(double delta)
 		}
 	}
 	private float _viewportHeight;
-	public int checkjudge(int timing, bool keyvalue, NotesEn Note)
+	/// <summary>
+	/// Hit judgement for a press <paramref name="diff"/> ms from the note (negative = early).
+	/// Returns 0 perfect, 1 great, 2 meh, 4 nothing (outside every window; the press is used up).
+	/// The windows are shifted by nodeSize, as they always were. Mirrored in ppv2calc.py.
+	/// </summary>
+	public int JudgeDiff(int diff, NotesEn Note)
 	{
-		if (timing + nodeSize > HitPoint - SettingsOperator.PerfectJudge - 5 && timing + nodeSize < HitPoint + SettingsOperator.PerfectJudge + 15  && keyvalue && !Note.hit)
+		int x = diff + nodeSize;
+		if (x > -SettingsOperator.PerfectJudge - 5 && x < SettingsOperator.PerfectJudge + 15)
 		{
 			SettingsOperator.Gameplaycfg.Max++;
 			SettingsOperator.Gameplaycfg.Combo++;
@@ -796,7 +851,7 @@ private void _GameNoteTick(double delta)
 			HealthBar.Heal((5 * (SettingsOperator.Gameplaycfg.Combo / 100)) + 1);
 			return 0;
 		}
-		else if (timing + nodeSize > HitPoint - (SettingsOperator.GreatJudge / 2) - 5 && timing + nodeSize < HitPoint + (SettingsOperator.GreatJudge / 2) + 15 && keyvalue && !Note.hit)
+		if (x > -(SettingsOperator.GreatJudge / 2) - 5 && x < (SettingsOperator.GreatJudge / 2) + 15)
 		{
 			SettingsOperator.Gameplaycfg.Great++;
 			SettingsOperator.Gameplaycfg.Combo++;
@@ -807,7 +862,7 @@ private void _GameNoteTick(double delta)
 			HealthBar.Heal((3 * (SettingsOperator.Gameplaycfg.Combo / 300)) + 1);
 			return 1;
 		}
-		else if (timing + nodeSize > HitPoint - (SettingsOperator.MehJudge / 2) - 15 && timing + nodeSize < HitPoint + (SettingsOperator.MehJudge / 2) + 15 && keyvalue)
+		if (x > -(SettingsOperator.MehJudge / 2) - 15 && x < (SettingsOperator.MehJudge / 2) + 15)
 		{
 			Hittext(Skin.Element.JudgeMeh);
 			SettingsOperator.Gameplaycfg.Meh++;
@@ -818,30 +873,6 @@ private void _GameNoteTick(double delta)
 			HealthBar.Heal((1 * (SettingsOperator.Gameplaycfg.Combo / 500)) + 1);
 			return 2;
 		}
-		else if (timing + nodeSize > _viewportHeight + 60 && !Note.hit)
-		{
-			Hittext(Skin.Element.JudgeMiss);
-			SettingsOperator.Gameplaycfg.Bad++;
-			if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
-			SettingsOperator.Gameplaycfg.Combo = 0;
-			SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp / ppmisspower);
-			BadCombo++;
-			ComboAnimation();
-			HealthBar.Damage(5 * BadCombo);
-			if (HurtAnimation != null && HurtAnimation.IsRunning())
-			{
-				HurtAnimation.Stop();
-			}
-			if (GetTree().CurrentScene is CanvasItem canvasScene) canvasScene.Modulate = new Color(1f, 0.5f, 0.5f, 1f);
-			HurtAnimation = CreateTween();
-			HurtAnimation.TweenProperty(GetTree().CurrentScene, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f)
-				.SetTrans(Tween.TransitionType.Cubic)
-				.SetEase(Tween.EaseType.Out);
-			return 3;
-		}
-		else
-		{
-			return 4;
-		}
+		return 4;
 	}
 }

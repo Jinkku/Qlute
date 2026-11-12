@@ -32,6 +32,10 @@ public class LeaderboardEntry
 	public long time { get; set; }
 	public float speed_multi { get; set; } = 1;
 	public string FilePath { get; set; }
+	/// <summary>Online score id (0 for local replays).</summary>
+	public int id { get; set; }
+	/// <summary>True if the server has this score's replay (apiv2/getreplay/{id}).</summary>
+	public bool replay { get; set; }
 	public bool Active { get; set; }
 	public Texture2D ProfilePicture { get; set; }
 }
@@ -625,6 +629,36 @@ public partial class ApiOperator : Node
 	/// </summary>
 	/// <param name="url"></param>
 	/// <returns></returns>
+	/// <summary>
+	/// Downloads an online score's replay into the replays folder (so it also shows up in the
+	/// local leaderboard). Returns the file path, or null on failure. Reuses an earlier download.
+	/// </summary>
+	public static async Task<string> DownloadReplay(LeaderboardEntry entry)
+	{
+		if (entry == null || entry.id <= 0 || !entry.replay) return null;
+		static string Clean(string s) => string.Concat((s ?? "").Split(System.IO.Path.GetInvalidFileNameChars()));
+		string path = $"{SettingsOperator.replaydir}/[{Clean(entry.username)}] [{Clean(SettingsOperator.SessionConfig.BeatmapMapper)}] {Clean(SettingsOperator.SessionConfig.BeatmapArtist)} - {Clean(SettingsOperator.SessionConfig.BeatmapTitle)} [{Clean(SettingsOperator.SessionConfig.BeatmapDifficultyName)}]-{entry.time}.qrf";
+		if (System.IO.File.Exists(path)) return path;
+		try
+		{
+			using var client = new System.Net.Http.HttpClient { Timeout = TimeSpan.FromSeconds(15) };
+			client.DefaultRequestHeaders.Add("User-Agent", AgentString);
+			var response = await client.GetAsync(SettingsOperator.GetSetting("api") + $"apiv2/getreplay/{entry.id}");
+			if (!response.IsSuccessStatusCode) return null;
+			string data = await response.Content.ReadAsStringAsync();
+			if (!data.Contains("#BeatmapID: ")) return null; // not a replay
+			System.IO.Directory.CreateDirectory(SettingsOperator.replaydir);
+			await System.IO.File.WriteAllTextAsync(path, data);
+			Replay.Parse(path);
+			return path;
+		}
+		catch (Exception e)
+		{
+			GD.PrintErr($"[Qlute] Replay download failed: {e.Message}");
+			return null;
+		}
+	}
+
 	public static async Task<string> FetchData(string url)
 	{
 		using var client = new System.Net.Http.HttpClient();

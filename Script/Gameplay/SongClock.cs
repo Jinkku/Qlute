@@ -32,7 +32,13 @@ public sealed class SongClock
 	/// <summary>Advance the clock. Pass delta = 0 to read the current value without advancing.</summary>
 	public double Update(AudioStreamPlayer player, double delta)
 	{
-		if (player == null || !player.Playing) return _time;
+		if (player == null || !player.Playing)
+		{
+			// Headless replay self-test has no audio: run the clock on frame time instead.
+			if (ReplaySelfTest.Enabled && Gameplay.Instance is { songstarted: true } && delta > 0)
+				_time += delta * (player?.PitchScale ?? 1f);
+			return _time;
+		}
 
 		double pitch = player.PitchScale;
 		double audioPos = player.GetPlaybackPosition() + AudioServer.GetTimeSinceLastMix() * pitch;

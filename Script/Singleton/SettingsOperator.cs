@@ -403,24 +403,77 @@ public partial class SettingsOperator : Node
     public static float MaxPPCap = 4000f; // don't make this static and PLEASE FIX THIS AFTERWARDS
     public static string Parse_Beatmapfile(string filename, int SetID = 0)
     {
-        var legend = new BeatmapLegend {ID = Beatmaps.Count , SetID = SetID };
-        using var file = FileAccess.Open(filename, FileAccess.ModeFlags.Read);
-        var lines = file.GetAsText().Split("\n");
+        var legend = ParseBeatmapLegend(filename);
+        legend.ID = Beatmaps.Count;
+        legend.SetID = SetID;
+        Beatmaps.Add(legend);
+        return $"{legend.Artist} - {legend.Title} from {legend.Mapper}";
+    }
+
+    /// <summary>
+    /// Parses one .osu file into a BeatmapLegend without touching any shared state, so it is safe to
+    /// call from worker threads. The ppv2 values must stay identical to the server (ppv2calc.py).
+    /// </summary>
+    /// <param name="details">false = skip the per-note lists (ppv2sets, Dance); they load lazily on first use.</param>
+    public static BeatmapLegend ParseBeatmapLegend(string filename, bool details = true)
+    {
+        var ppv2sets = details ? new List<float>() : null;
+        var dance = details ? new List<DanceCounter>() : null;
+        var legend = new BeatmapLegend { ppv2sets = ppv2sets, Dance = dance };
+        string text = System.IO.File.ReadAllText(filename);
         bool inHitObjects = false;
         bool inTimingPoints = false;
         int hitCount = 0;
         float lastNoteTime = 0;
         int ppv2multi = 1;
         int ppv2time = -1;
-        foreach (var lineRaw in lines)
+
+        void AddNote(int noteTime)
         {
-            var line = lineRaw.Trim();
-            if (string.IsNullOrWhiteSpace(line)) continue;
+            if (noteTime < ppv2time + (60000 / legend.Bpm))
+            {
+                ppv2multi++;
+            }
+            else
+            {
+                ppv2time = noteTime;
+                ppv2multi = 1;
+            }
+            var ppv2value = SettingsOperator.ppv2base * ppv2multi;
+            ppv2sets?.Add(ppv2value);
+            legend.pp += ppv2value;
+            lastNoteTime = noteTime;
+            hitCount++;
+        }
+
+        // Lines are split on '\n' and trimmed (same as the server's parser).
+        for (int pos = 0; pos <= text.Length;)
+        {
+            int nl = text.IndexOf('\n', pos);
+            if (nl < 0) nl = text.Length;
+            var span = text.AsSpan(pos, nl - pos).Trim();
+            pos = nl + 1;
+            if (span.IsEmpty) continue;
+
+            // Fast path for hit objects (most of the file): only the 3rd field (time) is needed.
+            if (inHitObjects && span[0] != '[' && !span.StartsWith("0,0,\"", StringComparison.Ordinal))
+            {
+                int a = span.IndexOfAny(',', ':');
+                if (a < 0) continue;
+                int b = span[(a + 1)..].IndexOfAny(',', ':');
+                if (b < 0) continue; // fewer than 3 fields
+                var rest = span[(a + b + 2)..];
+                int c = rest.IndexOfAny(',', ':');
+                if (int.TryParse(c < 0 ? rest : rest[..c], out var fastTime)) AddNote(fastTime);
+                continue;
+            }
+
+            var line = span.ToString();
 
             // Handle section switches
             if (line == "[TimingPoints]") { inTimingPoints = true; continue; }
             if (line == "[HitObjects]") { inTimingPoints = false; inHitObjects = true; continue; }
-            if (line.StartsWith("[")) { inTimingPoints = false; inHitObjects = false; continue; }
+            if (line.StartsWith('[')) { inTimingPoints = false; inHitObjects = false; continue; }
 
             // --- key: value pairs ---
             if (!inTimingPoints && !inHitObjects && line.Contains(":"))
@@ -449,7 +502,7 @@ public partial class SettingsOperator : Node
             }
 
             // --- background ---
-            if (line.StartsWith("0,0,\"") && line.Contains("\""))
+            if (line.StartsWith("0,0,\"", StringComparison.Ordinal) && line.Contains('"'))
             {
                 var parts = line.Split("\"");
                 if (parts.Length > 1) legend.Background = parts[1].Trim();
@@ -465,7 +518,7 @@ public partial class SettingsOperator : Node
                     legend.Bpm = 60000f / mpb;
 
                 if (int.TryParse(parts[0], out var time) && int.TryParse(parts.Last(), out var flash))
-                    legend.Dance.Add(new DanceCounter { time = time, flash = flash == 1 });
+                    dance?.Add(new DanceCounter { time = time, flash = flash == 1 });
             }
 
             // --- hitobjects ---
@@ -474,23 +527,7 @@ public partial class SettingsOperator : Node
                 var parts = line.Split(new[] { ',', ':' });
                 if (parts.Length < 3) continue;
 
-                if (int.TryParse(parts[2], out var noteTime))
-                {
-                    if (noteTime < ppv2time + (60000 / legend.Bpm))
-                    {
-                        ppv2multi++;
-                    }
-                    else
-                    {
-                        ppv2time = noteTime;
-                        ppv2multi = 1;
-                    }
-                    var ppv2value = SettingsOperator.ppv2base * ppv2multi;
-                    legend.ppv2sets.Add(ppv2value);
-                    legend.pp += ppv2value;
-                    lastNoteTime = noteTime;
-                    hitCount++;
-                }
+                if (int.TryParse(parts[2], out var noteTime)) AddNote(noteTime);
             }
         }
         if (!SampleSet.Type.Contains(legend.SampleSet))
@@ -503,10 +540,7 @@ public partial class SettingsOperator : Node
         legend.Path = filename.Replace(filename.Split("/").Last(), "");
         legend.Rawurl = filename;
         legend.NoteCount = hitCount;
-        
-        Beatmaps.Add(legend);
-        
-        return $"{legend.Artist} - {legend.Title} from {legend.Mapper}";
+        return legend;
     }
 
     /// <summary>
@@ -812,6 +846,7 @@ public partial class SettingsOperator : Node
     {
         args = OS.GetCmdlineArgs();
         if (Bench) GetTree().Root.CallDeferred(Node.MethodName.AddChild, new Benchmark());
+        if (ReplaySelfTest.Enabled) GetTree().Root.CallDeferred(Node.MethodName.AddChild, new ReplaySelfTest());
         Configurationbk = new Dictionary<string, object>(Configuration);
         ParseBackgroundDefault();
         GD.Print("Please wait...");

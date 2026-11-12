@@ -41,6 +41,8 @@ public class ReplayLegend
 public static class Replay
 {
     public static string FilePath { get; set; }
+    /// <summary>Online leaderboard score being viewed; its replay is downloaded on "Watch Replay".</summary>
+    public static LeaderboardEntry OnlineEntry { get; set; }
     public static string FileCache { get; set; }
     public static List<ReplayLegend> ReplayCache = new List<ReplayLegend>();
     public static List<ReplayInfo> Replays { get; set; } = new List<ReplayInfo>();

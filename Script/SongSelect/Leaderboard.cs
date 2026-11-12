@@ -67,10 +67,12 @@ public partial class Leaderboard : Button
 			SettingsOperator.Gameplaycfg.Rank = 1;
 		}
 		SettingsOperator.Gameplaycfg.Accuracy = Gameplay.ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
-		if (Info.FilePath != "")
+		if (!string.IsNullOrEmpty(Info.FilePath))
 		{
 			Replay.FilePath = Info.FilePath;
 		}
+		// Online score: its replay can be downloaded from the results screen.
+		Replay.OnlineEntry = string.IsNullOrEmpty(Info.FilePath) && Info.replay && Info.id > 0 ? Info : null;
 		ModsOperator.SetMods(Info.mods);
 		AudioPlayer.Instance.PitchScale = Info.speed_multi;
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultScreenv2.tscn");
