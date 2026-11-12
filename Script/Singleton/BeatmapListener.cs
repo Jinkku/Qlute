@@ -56,9 +56,25 @@ public class BeatmapLegend
 	/// </summary>
 	public float pp { get; set; } = 0.0f;
 	/// <summary>
-	/// ppv2 set for caching the points.
+	/// ppv2 value of every hit object. Loaded from the .osu on first use (gameplay), because the
+	/// startup cache only keeps the song-select metadata.
 	/// </summary>
-	public List<float> ppv2sets { get; set; } = new List<float>();
+	public List<float> ppv2sets { get { EnsureDetails(); return _ppv2sets; } set => _ppv2sets = value; }
+	private List<float> _ppv2sets;
+	private List<DanceCounter> _dance;
+	private void EnsureDetails()
+	{
+		if (_ppv2sets != null && _dance != null) return;
+		if (string.IsNullOrEmpty(Rawurl) || !System.IO.File.Exists(Rawurl))
+		{
+			_ppv2sets ??= new List<float>();
+			_dance ??= new List<DanceCounter>();
+			return;
+		}
+		var full = SettingsOperator.ParseBeatmapLegend(Rawurl);
+		_ppv2sets = full._ppv2sets;
+		_dance = full._dance;
+	}
 	/// <summary>
 	/// Beatmap ID for the dedicated server
 	/// </summary>
@@ -74,7 +90,7 @@ public class BeatmapLegend
 	/// <summary>
 	/// Dance mode time sets.
 	/// </summary>
-	public List<DanceCounter> Dance { get; set; } = new List<DanceCounter>();
+	public List<DanceCounter> Dance { get { EnsureDetails(); return _dance; } set => _dance = value; }
 	/// <summary>
 	/// Preview audio segment for the beatmap
 	/// </summary>
@@ -226,6 +242,57 @@ public partial class BeatmapListener : Node
 		}
 	}
 	
+	/// <summary>
+	/// Startup scan: every set folder (oldest first), each folder's .osu files (smallest first),
+	/// same order and IDs as before. Unchanged files come from BeatmapCache; the rest are parsed
+	/// in parallel and the cache is rewritten.
+	/// </summary>
+	private void LoadAllBeatmaps()
+	{
+		var watch = System.Diagnostics.Stopwatch.StartNew();
+		var cache = BeatmapCache.Load();
+
+		var sets = new DirectoryInfo(SettingsOperator.beatmapsdir).GetDirectories()
+			.OrderBy(d => d.CreationTime)
+			.Select(d => d.GetFiles("*.osu").OrderBy(f => f.Length)
+				.Select(f => (path: f.FullName.Replace("\\", "/"), stamp: BeatmapCache.StampOf(f))).ToArray())
+			.ToArray();
+		var all = sets.SelectMany(x => x).ToArray();
+
+		var legends = new BeatmapLegend[all.Length];
+		var misses = new List<int>();
+		for (int i = 0; i < all.Length; i++)
+		{
+			if (cache.TryGetValue(all[i].path, out var hit) && hit.stamp == all[i].stamp) legends[i] = hit.legend;
+			else misses.Add(i);
+		}
+		System.Threading.Tasks.Parallel.ForEach(misses, i =>
+		{
+			try { legends[i] = SettingsOperator.ParseBeatmapLegend(all[i].path, details: false); }
+			catch (Exception e) { GD.PrintErr($"[Qlute] Couldn't read {all[i].path}: {e.Message}"); }
+		});
+
+		int k = 0;
+		foreach (var set in sets)
+		{
+			foreach (var _ in set)
+			{
+				var legend = legends[k++];
+				if (legend == null) continue;
+				legend.ID = SettingsOperator.Beatmaps.Count;
+				legend.SetID = SetID;
+				SettingsOperator.Beatmaps.Add(legend);
+			}
+			SetID++;
+		}
+		if (all.Length > 0) SettingsOperator.SessionConfig.ReloadDB = true;
+
+		if (misses.Count > 0 || cache.Count != all.Length)
+			BeatmapCache.Save(Enumerable.Range(0, all.Length).Where(i => legends[i] != null)
+				.Select(i => (all[i].path, all[i].stamp, legends[i])).ToList());
+		GD.Print($"[Qlute] Loaded {SettingsOperator.Beatmaps.Count} beatmaps in {watch.ElapsedMilliseconds} ms ({all.Length - misses.Count} cached, {misses.Count} parsed)");
+	}
+
 	public override void _Ready()
 	{
 		GetWindow().FilesDropped += ParseFileDrop;
@@ -238,18 +305,7 @@ public partial class BeatmapListener : Node
 			{
 				if (tmp == SettingsOperator.beatmapsdir)
 				{
-					GD.Print("Checking for beatmaps...");
-					string[] dirs = Directory.GetDirectories(SettingsOperator.beatmapsdir)
-					.Select(d => new DirectoryInfo(d))      // convert to DirectoryInfo
-					.OrderBy(d => d.CreationTime)          // sort oldest → newest
-					.Select(d => d.FullName)               // convert back to string paths
-					.ToArray();                            // get string array
-					foreach (string Dir in dirs)
-					{
-						var newDir = Dir.Replace("\\", "/");
-						GD.Print(newDir);
-						Parse_BeatmapDir(newDir);
-					}
+					LoadAllBeatmaps();
 				}
 				GD.Print("Found " + tmp);
 			}
