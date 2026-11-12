@@ -76,6 +76,7 @@ public partial class OnlineChat : Node
 			ApiOperator.PasswordHash = args.FirstOrDefault(a => a.StartsWith("--online-test-pass="))?["--online-test-pass=".Length..];
 			SettingsOperator.SessionConfig.Loggedin = true;
 			if (args.Any(a => a.StartsWith("--mod-test="))) AddChild(new ModerationSelfTest());
+			if (args.Any(a => a.StartsWith("--submit-test="))) AddChild(new SubmitSelfTest());
 		}
 	}
 
