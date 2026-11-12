@@ -27,6 +27,21 @@ public partial class BeatmapContextMenu : PanelContainer
 		}
 	}
 
+	/// <summary>Uploads the whole set this difficulty belongs to (Script/Submission/BeatmapSubmit.cs).</summary>
+	private void _submit()
+	{
+		if (SongID < 0 || SongID >= SettingsOperator.Beatmaps.Count)
+		{
+			Notify.Post("Pick a beatmap to submit first.", Type: NotificationIcons.NotificationType.Warning);
+			return;
+		}
+		var beatmap = SettingsOperator.Beatmaps[SongID];
+		var folder = !string.IsNullOrEmpty(beatmap.Path) && Directory.Exists(beatmap.Path)
+			? beatmap.Path
+			: System.IO.Path.GetDirectoryName(beatmap.Rawurl ?? "");
+		_ = BeatmapSubmit.SubmitWithNotifications(folder, $"{beatmap.Artist} - {beatmap.Title}");
+	}
+
 	private void _deletebeatmap(){
 		if (SongID != -1)
 		{

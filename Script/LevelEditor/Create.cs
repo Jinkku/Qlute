@@ -163,7 +163,7 @@ public partial class Create : Control
 		BindText(TitleEdit, v => Map.Title = v);
 		BindText(ArtistEdit, v => Map.Artist = v);
 		BindText(DifficultyEdit, v => Map.Version = v);
-		BindText(MapperEdit, v => Map.Creator = v);
+		// Mapper is read-only: it comes from the logged-in account (see NewMap).
 		BindText(SourceEdit, v => Map.Source = v);
 		BindText(TagsEdit, v => Map.Tags = v);
 		BindSlider(OdSlider, OdEdit, v => Map.OverallDifficulty = v);
@@ -1144,6 +1144,26 @@ public partial class Create : Control
 		}
 	}
 
+	/// <summary>File > Submit to Qlute: saves, then uploads the whole set (every difficulty in its folder).</summary>
+	private async void Submit()
+	{
+		var errors = CollectIssues().Where(i => i.sev == Severity.Error).ToList();
+		if (errors.Count > 0)
+		{
+			Notify.Post($"Fix {errors.Count} error(s) before submitting:\n{errors[0].text}", Type: NotificationIcons.NotificationType.Warning);
+			Menu(3);
+			return;
+		}
+		if ((Dirty || FilePath == null) && !Save(quiet: true)) return;
+		var path = FilePath;
+		var result = await BeatmapSubmit.SubmitWithNotifications(SetFolder, $"{Map.Artist} - {Map.Title}");
+		if (result == null || path != FilePath) return;
+		// The ids went into the .osu files; keep them in the open map so the next save doesn't drop them.
+		var mine = result.Beatmaps.FirstOrDefault(b => SamePath(IOPath.Combine(SetFolder, b.File), FilePath));
+		if (mine != null) Map.BeatmapID = mine.BeatmapId;
+		Map.BeatmapSetID = result.SetId;
+	}
+
 	private void TestPlay()
 	{
 		var errors = CollectIssues().Where(i => i.sev == Severity.Error).ToList();
@@ -1187,7 +1207,8 @@ public partial class Create : Control
 			case 2: SaveAsNewDifficulty(); break;
 			case 3: Save(); break;
 			case 4: Export(); break;
-			case 5: _on_back(); break;
+			case 5: Submit(); break;
+			case 6: _on_back(); break;
 		}
 	}
 

@@ -214,6 +214,8 @@ text = "Mapper"
 custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
 text = ""
+editable = false
+tooltip_text = "Set automatically from your Qlute account"
 
 [node name="Source" type="VBoxContainer" parent="Info/Panel/Scroll/GridContainer"]
 layout_mode = 2
@@ -799,7 +801,7 @@ FocusColour = Color(0.4197235, 0.67578125, 0.4197235, 1)
 HighlightColour = Color(0.4296875, 0.6875, 0.4296875, 1)
 IdleColour = Color(0.21057129, 0.359375, 0.21057129, 1)
 StringText = "File"
-Items = Array[String](["New", "Open", "Save as different difficulty", "Save", "Export", "Quit"])
+Items = Array[String](["New", "Open", "Save as different difficulty", "Save", "Export", "Submit to Qlute", "Quit"])
 metadata/_custom_type_script = "uid://dsfp3h2v5vijn"
 
 [node name="DropDownMenu2" type="Button" parent="ToolBar/HBoxContainer" unique_id=1861163358]

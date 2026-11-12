@@ -64,6 +64,18 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
 text = "Edit"
 alignment = 0
 
+[node name="Submit" type="Button" parent="ContextSections" unique_id=1873204615]
+visible = false
+layout_mode = 2
+tooltip_text = "Upload this beatmap set to Qlute (or update it if you submitted it before)"
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxEmpty_elvf5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_aw2xo")
+theme_override_styles/hover = SubResource("StyleBoxFlat_m6md1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjdex")
+text = "Submit to Qlute"
+alignment = 0
+
 [node name="Delete" type="Button" parent="ContextSections" unique_id=1587858423]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.976562, 0.473022, 0.473022, 1)
@@ -95,5 +107,6 @@ text = "Delete Beatmapset"
 alignment = 0
 
 [connection signal="pressed" from="ContextSections/Edit" to="." method="_edit"]
+[connection signal="pressed" from="ContextSections/Submit" to="." method="_submit"]
 [connection signal="pressed" from="ContextSections/Delete" to="." method="_delete"]
 [connection signal="pressed" from="ContextSections/DeleteBeatmap" to="." method="_deletebeatmap"]
