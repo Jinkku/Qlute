@@ -83,7 +83,17 @@ public partial class TaikoGameCore : Control
 	public static int seed = 0;
 	private Control HUD { get; set; }
 	private float speedold = 1f;
-	private double ppmisspower = 1.2;
+	// pp v3 / competitive score state (see Game.PerformanceCalculator).
+	private long comboPortion;
+	private double scoreMult = 1.0;
+	private double maxPpMods;
+	private void AddComboWeight(int judgementWeight) =>
+		comboPortion += Game.PerformanceCalculator.ComboWeight(judgementWeight, SettingsOperator.Gameplaycfg.Combo);
+	private double CurrentPerformance(bool final) => final
+		? Game.PerformanceCalculator.Performance(maxPpMods, SettingsOperator.Gameplaycfg.NoteCount,
+			SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad)
+		: Game.PerformanceCalculator.LivePerformance(maxPpMods, SettingsOperator.Gameplaycfg.NoteCount,
+			SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 	private float audioOffset { get; set; } = 0;
 	private Control TaikoTable { get; set; }
 	private Sprite2D HitBoxNode { get; set; }
@@ -194,7 +204,6 @@ public partial class TaikoGameCore : Control
 			if (seen.Contains(key)) { index++; continue; }
 			seen.Add(key);
 			PreLegend.timing = timen; 
-			PreLegend.ppv2xp = beatmap.ppv2sets[index] * ModsOperator.ProcessMultiplierByModList(ModsOperator.Mods);
 			Notes.Add(PreLegend);
 			
 			index++;
@@ -261,6 +270,10 @@ public partial class TaikoGameCore : Control
 		Keys.Add(new DKeyL { Node = (Sprite2D)TaikoDrums[1], hit = false , KeyCode = SettingsOperator.GetSetting($"Key3").ToString(), DrumType = DrumTypeGroup.Outside});
 
 		maxrndvalue = (int)(1000000 * ModsOperator.ProcessMultiplierByModList(ModsOperator.Mods));
+		comboPortion = 0;
+		scoreMult = ModsOperator.ScoreMultiplierExact(ModsOperator.Mods);
+		// No mode-specific star rating yet: the map's NoMod max pp with the pp mod factors.
+		maxPpMods = SettingsOperator.Gameplaycfg.maxpp * Game.PerformanceCalculator.PpMultiplier(ModsOperator.AliasOf(ModsOperator.Mods));
 
 		HitOffsets.Clear();
 		Array.Fill(LastKeyPressTime, float.MinValue);
@@ -480,7 +493,6 @@ private void TriggerSpamMiss(DrumTypeGroup column)
             }
             
             SettingsOperator.Gameplaycfg.Combo = 0;
-            SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp / ppmisspower);
             BadCombo++;
             ComboAnimation();
             
@@ -738,9 +750,13 @@ private void _GameNoteTick(double delta)
 	public override void _Process(double delta)
 	{
 		dim = 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f));
-		score = ScoreCalc.ProcessScore(SettingsOperator.Gameplaycfg.Max,
-			SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh,
-			SettingsOperator.Gameplaycfg.NoteCount, ModsOperator.ProcessMultiplierByModList(ModsOperator.Mods));
+		// While playing: projected score (drops on misses). Once finished: the exact final score.
+		score = Finished
+			? ScoreCalc.ProcessScore(SettingsOperator.Gameplaycfg.NoteCount, SettingsOperator.Gameplaycfg.Max,
+				SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, comboPortion, scoreMult)
+			: Game.PerformanceCalculator.LiveScore(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great,
+				SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, comboPortion, scoreMult);
+		if (!Finished) SettingsOperator.Gameplaycfg.pp = CurrentPerformance(false);
 		if ( (scoretween == null || !scoretween.IsRunning()) & scoreint != score)
 		{
 			scoretween?.Kill();
@@ -759,6 +775,9 @@ private void _GameNoteTick(double delta)
 			if (SettingsOperator.Gameplaycfg.TimeTotalGame - SettingsOperator.Gameplaycfg.Time <= 0 && !Finished && (HealthBar.Health >= HealthBar.MaxHealth / 2 || ModsOperator.Mods["no-fail"] || LanNetwork.InMatch)) // LAN matches are no-fail
 			{
 				Finished = true;
+				SettingsOperator.Gameplaycfg.pp = CurrentPerformance(true);
+				score = ScoreCalc.ProcessScore(SettingsOperator.Gameplaycfg.NoteCount, SettingsOperator.Gameplaycfg.Max,
+					SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, comboPortion, scoreMult);
 				Replay.SaveReplay();
 				ApiOperator.SS();
 				if (!SettingsOperator.Marathon)
@@ -931,7 +950,7 @@ private void _GameNoteTick(double delta)
 		{
 			SettingsOperator.Gameplaycfg.Max++;
 			SettingsOperator.Gameplaycfg.Combo++;
-			SettingsOperator.Gameplaycfg.pp += Note.ppv2xp;
+			AddComboWeight(Game.PerformanceCalculator.WPerfect);
 			BadCombo = 0;
 			Hittext(Skin.Element.JudgePerfect);
 			ComboAnimation();
@@ -942,7 +961,7 @@ private void _GameNoteTick(double delta)
 		{
 			SettingsOperator.Gameplaycfg.Great++;
 			SettingsOperator.Gameplaycfg.Combo++;
-			SettingsOperator.Gameplaycfg.pp += Note.ppv2xp * 0.6;
+			AddComboWeight(Game.PerformanceCalculator.WGreat);
 			BadCombo = 0;
 			Hittext(Skin.Element.JudgeGreat);
 			ComboAnimation();
@@ -954,7 +973,7 @@ private void _GameNoteTick(double delta)
 			Hittext(Skin.Element.JudgeMeh);
 			SettingsOperator.Gameplaycfg.Meh++;
 			SettingsOperator.Gameplaycfg.Combo++;
-			SettingsOperator.Gameplaycfg.pp += Note.ppv2xp * 0.3;
+			AddComboWeight(Game.PerformanceCalculator.WMeh);
 			BadCombo = 0;
 			ComboAnimation();
 			HealthBar.Heal((1 * (SettingsOperator.Gameplaycfg.Combo / 500)) + 1);
@@ -966,7 +985,6 @@ private void _GameNoteTick(double delta)
 			SettingsOperator.Gameplaycfg.Bad++;
 			if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
 			SettingsOperator.Gameplaycfg.Combo = 0;
-			SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp / ppmisspower);
 			BadCombo++;
 			ComboAnimation();
 			HealthBar.Damage(5 * BadCombo);

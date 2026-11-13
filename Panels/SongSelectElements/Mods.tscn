@@ -15,13 +15,13 @@ content_margin_left = 25.0
 content_margin_top = 25.0
 content_margin_right = 25.0
 content_margin_bottom = 25.0
-bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+bg_color = Color(0.117647, 0.0980392, 0.137255, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u70wj"]
 content_margin_left = 15.0
 content_margin_top = 15.0
 content_margin_right = 15.0
-bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+bg_color = Color(0.117647, 0.0980392, 0.137255, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u70wj"]
 content_margin_left = 25.0
@@ -139,7 +139,7 @@ text = "Lv. ??"
 script = ExtResource("5_vbcbr")
 
 [node name="Reset" type="Button" parent="Title/Info" unique_id=432727906]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(150, 40)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -149,7 +149,7 @@ StringText = "Reset"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Customize" type="Button" parent="Title/Info" unique_id=999691596]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(150, 40)
 layout_mode = 2
 size_flags_horizontal = 8

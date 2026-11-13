@@ -62,18 +62,26 @@ public class BeatmapLegend
 	public List<float> ppv2sets { get { EnsureDetails(); return _ppv2sets; } set => _ppv2sets = value; }
 	private List<float> _ppv2sets;
 	private List<DanceCounter> _dance;
+	/// <summary>
+	/// The map's notes as the server rates them (time, real column; duplicates removed), for the
+	/// exact pp with mods. Loaded lazily like ppv2sets.
+	/// </summary>
+	public List<(int time, int col)> RatedNotes { get { EnsureDetails(); return _ratedNotes; } set => _ratedNotes = value; }
+	private List<(int time, int col)> _ratedNotes;
 	private void EnsureDetails()
 	{
-		if (_ppv2sets != null && _dance != null) return;
+		if (_ppv2sets != null && _dance != null && _ratedNotes != null) return;
 		if (string.IsNullOrEmpty(Rawurl) || !System.IO.File.Exists(Rawurl))
 		{
 			_ppv2sets ??= new List<float>();
 			_dance ??= new List<DanceCounter>();
+			_ratedNotes ??= new List<(int, int)>();
 			return;
 		}
 		var full = SettingsOperator.ParseBeatmapLegend(Rawurl);
 		_ppv2sets = full._ppv2sets;
 		_dance = full._dance;
+		_ratedNotes = full._ratedNotes;
 	}
 	/// <summary>
 	/// Beatmap ID for the dedicated server
@@ -282,6 +290,7 @@ public partial class BeatmapListener : Node
 				legend.ID = SettingsOperator.Beatmaps.Count;
 				legend.SetID = SetID;
 				SettingsOperator.Beatmaps.Add(legend);
+				RankStatusStore.Attach(legend); // saved rank status, or queue a lookup
 			}
 			SetID++;
 		}

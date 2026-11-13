@@ -128,7 +128,17 @@ public partial class TapGameCore : Control
 	private int FirstActive { get; set; }
 	private int LastEndTime { get; set; }
 	private float speedold = 1f;
-	private double ppmisspower = 1.2;
+	// pp v3 / competitive score state (see Game.PerformanceCalculator).
+	private long comboPortion;
+	private double scoreMult = 1.0;
+	private double maxPpMods;
+	private void AddComboWeight(int judgementWeight) =>
+		comboPortion += Game.PerformanceCalculator.ComboWeight(judgementWeight, SettingsOperator.Gameplaycfg.Combo);
+	private double CurrentPerformance(bool final) => final
+		? Game.PerformanceCalculator.Performance(maxPpMods, SettingsOperator.Gameplaycfg.NoteCount,
+			SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad)
+		: Game.PerformanceCalculator.LivePerformance(maxPpMods, SettingsOperator.Gameplaycfg.NoteCount,
+			SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 	private float audioOffset { get; set; } = 0;
 	private float gametime { get; set; }
 	private readonly SongClock Clock = new SongClock();
@@ -331,13 +341,16 @@ public partial class TapGameCore : Control
 			obj.ComboNumber = comboNumber;
 			obj.ComboColour = Math.Max(0, comboColour);
 
-			obj.ppv2xp = (index < beatmap.ppv2sets.Count ? beatmap.ppv2sets[index] : SettingsOperator.ppv2base) * multiplier;
 			Objects.Add(obj);
 			index++;
 		}
 
 		LastEndTime = Objects.Count > 0 ? Objects.Max(o => o.EndTime) : 0;
 		SettingsOperator.Gameplaycfg.NoteCount = Objects.Count;
+		comboPortion = 0;
+		scoreMult = ModsOperator.ScoreMultiplierExact(ModsOperator.Mods);
+		// No mode-specific star rating yet: the map's NoMod max pp with the pp mod factors.
+		maxPpMods = SettingsOperator.Gameplaycfg.maxpp * Game.PerformanceCalculator.PpMultiplier(ModsOperator.AliasOf(ModsOperator.Mods));
 		GD.Print($"[Tap!] Loaded {Objects.Count} objects (CS {CS}, AR {AR}, OD {OD})");
 	}
 
@@ -693,27 +706,26 @@ public partial class TapGameCore : Control
 			case 0:
 				SettingsOperator.Gameplaycfg.Max++;
 				SettingsOperator.Gameplaycfg.Combo++;
-				SettingsOperator.Gameplaycfg.pp += o.ppv2xp;
+				AddComboWeight(Game.PerformanceCalculator.WPerfect);
 				HealthBar.Heal((5 * (SettingsOperator.Gameplaycfg.Combo / 100)) + 1);
 				Popups.Add((popupPos, Skin.Element.JudgePerfect, now));
 				break;
 			case 1:
 				SettingsOperator.Gameplaycfg.Great++;
 				SettingsOperator.Gameplaycfg.Combo++;
-				SettingsOperator.Gameplaycfg.pp += o.ppv2xp * 0.6;
+				AddComboWeight(Game.PerformanceCalculator.WGreat);
 				HealthBar.Heal((3 * (SettingsOperator.Gameplaycfg.Combo / 300)) + 1);
 				Popups.Add((popupPos, Skin.Element.JudgeGreat, now));
 				break;
 			case 2:
 				SettingsOperator.Gameplaycfg.Meh++;
 				SettingsOperator.Gameplaycfg.Combo++;
-				SettingsOperator.Gameplaycfg.pp += o.ppv2xp * 0.3;
+				AddComboWeight(Game.PerformanceCalculator.WMeh);
 				HealthBar.Heal((1 * (SettingsOperator.Gameplaycfg.Combo / 500)) + 1);
 				Popups.Add((popupPos, Skin.Element.JudgeMeh, now));
 				break;
 			default:
 				SettingsOperator.Gameplaycfg.Bad++;
-				SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp / ppmisspower);
 				BadCombo++;
 				HealthBar.Damage(5 * BadCombo);
 				Popups.Add((popupPos, Skin.Element.JudgeMiss, now));
@@ -890,9 +902,13 @@ public partial class TapGameCore : Control
 	public override void _Process(double delta)
 	{
 		dim = 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f));
-		score = ScoreCalc.ProcessScore(SettingsOperator.Gameplaycfg.Max,
-			SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh,
-			SettingsOperator.Gameplaycfg.NoteCount, ModsOperator.ProcessMultiplierByModList(ModsOperator.Mods));
+		// While playing: projected score (drops on misses). Once finished: the exact final score.
+		score = Finished
+			? ScoreCalc.ProcessScore(SettingsOperator.Gameplaycfg.NoteCount, SettingsOperator.Gameplaycfg.Max,
+				SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, comboPortion, scoreMult)
+			: Game.PerformanceCalculator.LiveScore(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great,
+				SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, comboPortion, scoreMult);
+		if (!Finished) SettingsOperator.Gameplaycfg.pp = CurrentPerformance(false);
 		Gameplay.score = score;
 		if ((scoretween == null || !scoretween.IsRunning()) & scoreint != score)
 		{
@@ -918,6 +934,9 @@ public partial class TapGameCore : Control
 			if (songstarted && !Finished && !Dead && gametime > LastEndTime + 1000 && Objects.All(o => o.Judged))
 			{
 				Finished = true;
+				SettingsOperator.Gameplaycfg.pp = CurrentPerformance(true);
+				score = ScoreCalc.ProcessScore(SettingsOperator.Gameplaycfg.NoteCount, SettingsOperator.Gameplaycfg.Max,
+					SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, comboPortion, scoreMult);
 				Replay.SaveReplay();
 				ApiOperator.SS();
 				if (!SettingsOperator.Marathon)

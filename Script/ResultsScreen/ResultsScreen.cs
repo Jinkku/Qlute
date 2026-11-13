@@ -72,7 +72,7 @@ public partial class ResultsScreen : Control
 		Great.Text = SettingsOperator.Gameplaycfg.Great.ToString("N0");
 		Meh.Text = SettingsOperator.Gameplaycfg.Meh.ToString("N0");
 		Bad.Text = SettingsOperator.Gameplaycfg.Bad.ToString("N0");
-		pp.Text = SettingsOperator.Gameplaycfg.pp.ToString("N0") + "/" + (SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier).ToString("N0");
+		pp.Text = SettingsOperator.Gameplaycfg.pp.ToString("N0") + "/" + SettingsOperator.Gameplaycfg.maxpp.ToString("N0");
 		Combo.Text = ((double)SettingsOperator.Gameplaycfg.MaxCombo).ToString("N0");
 		Avgms.Text = ((double)SettingsOperator.Gameplaycfg.ms).ToString("N0") + "ms";
 		var Acc = SettingsOperator.Gameplaycfg.Accuracy;

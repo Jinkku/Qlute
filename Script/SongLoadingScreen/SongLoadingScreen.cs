@@ -48,7 +48,7 @@ public partial class SongLoadingScreen : Control
 		SongArtist.Text = SettingsOperator.SessionConfig.BeatmapArtist?.ToString() ?? "Please select a Beatmap!";
 		SongMapper.Text = "Creator: " + SettingsOperator.SessionConfig.BeatmapMapper?.ToString();
 		SongDiff.Text = SettingsOperator.SessionConfig.BeatmapDifficultyName?.ToString();
-		SongRating.Text = "Lv. " + (SettingsOperator.SessionConfig.LevelRating * ModsMulti.multiplier).ToString("N0");
+		SongRating.Text = "Lv. " + SettingsOperator.GetLevelWithMods();
 		if (AudioPlayer.isMasterMuted()) Notify.Post("Your music is muted. Please unmute pls :<", Type: NotificationIcons.NotificationType.Warning);
 	}
 	private void _Animationf(){

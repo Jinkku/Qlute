@@ -65,7 +65,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="Updates" type="Button" parent="Panels/Catagories/Cata" unique_id=113264100]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
@@ -78,7 +78,7 @@ StringText = "Updates"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Display" type="Button" parent="Panels/Catagories/Cata" unique_id=346485907]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
@@ -91,7 +91,7 @@ StringText = "Display"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Audio" type="Button" parent="Panels/Catagories/Cata" unique_id=102082461]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
@@ -104,7 +104,7 @@ StringText = "Audio"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Skinning" type="Button" parent="Panels/Catagories/Cata" unique_id=1722935615]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
@@ -117,7 +117,7 @@ StringText = "Skinning"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Input" type="Button" parent="Panels/Catagories/Cata" unique_id=958047629]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
@@ -130,7 +130,7 @@ StringText = "Input"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Debug" type="Button" parent="Panels/Catagories/Cata" unique_id=1165767190]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")

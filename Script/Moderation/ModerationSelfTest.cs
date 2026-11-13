@@ -38,6 +38,8 @@ public partial class ModerationSelfTest : Node
 				case "list": PlayerOverlays.ToggleList(); break;
 				case "tab": PlayerOverlays.OpenAdminTab(arg); break;
 				case "content": await Content(arg); continue;
+				case "beatmap": await OpenBeatmap(arg); break;
+				case "beatmapscroll": ScrollOverlay(int.Parse(arg)); break;
 				default: Log("unknown step " + step); continue;
 			}
 			await Wait(3);
@@ -50,6 +52,25 @@ public partial class ModerationSelfTest : Node
 		}
 		Log("done");
 		GetTree().Quit();
+	}
+
+	/// <summary>beatmap=SETID: the set's info overlay (looked up with apiv2/search).</summary>
+	private static async Task OpenBeatmap(string setId)
+	{
+		using var http = new System.Net.Http.HttpClient();
+		var json = await http.GetStringAsync($"{PlayerApi.Base}apiv2/search?query={setId}&status=1");
+		var set = System.Text.Json.JsonSerializer.Deserialize<System.Collections.Generic.List<BrowseCatalogLegend>>(json)?.FirstOrDefault();
+		Log($"beatmap {setId} -> {set?.title ?? "not found"}");
+		PlayerOverlays.OpenBeatmap(set);
+	}
+
+	/// <summary>beatmapscroll=PX: scrolls the topmost overlay page.</summary>
+	private void ScrollOverlay(int px)
+	{
+		var layer = GetTree().Root.GetNodeOrNull("PlayerOverlays");
+		var top = layer?.GetChild(layer.GetChildCount() - 1);
+		var scroll = top?.FindChildren("*", "ScrollContainer", true, false).OfType<ScrollContainer>().FirstOrDefault();
+		if (scroll != null) scroll.ScrollVertical = px;
 	}
 
 	private async Task Wait(double s) => await ToSignal(GetTree().CreateTimer(s), SceneTreeTimer.SignalName.Timeout);

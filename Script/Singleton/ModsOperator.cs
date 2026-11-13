@@ -34,72 +34,41 @@ public partial class ModsOperator : Node
 	}
 
 	/// <summary>
-	/// Simulate the multiplier
+	/// Score multiplier of a mod alias string (e.g. "NFDT"). Uses the current playback speed;
+	/// pass <paramref name="speed"/> for a score played at another speed.
+	/// Same as the server (Game.PerformanceCalculator / ppv2calc.py).
 	/// </summary>
-	public static float ProcessMultiplierByMod(string Mods)
+	public static float ProcessMultiplierByMod(string Mods, float? speed = null)
 	{
-		var multiplier= 1.0f;
-		if (Mods.Contains("DT"))
-		{
-			multiplier *= 1.15f * (AudioPlayer.Instance.PitchScale / DTSpeedMultiplier);
-		}
-		else if (Mods.Contains("HT"))
-		{
-			multiplier *= 0.3f * (AudioPlayer.Instance.PitchScale / HTSpeedMultiplier);
-		}
-		else if (Mods.Contains("SL"))
-		{
-			multiplier *= 1.05f;
-		}
-		else if (Mods.Contains("BT"))
-		{
-			multiplier *= 1.15f;
-		}
-		else if (Mods.Contains("NF"))
-		{
-			multiplier *= 0.5f;
-		}
-		else if (Mods.Contains("AM"))
-		{
-			multiplier *= 0.5f;
-		}
-		return multiplier;
+		return (float)Game.PerformanceCalculator.ScoreMultiplier(Mods ?? "", speed ?? AudioPlayer.Instance.PitchScale);
 	}
 	/// <summary>
-	/// Simulate the multiplier
+	/// Score multiplier of the selected mods at the current playback speed.
 	/// </summary>
 	public static float ProcessMultiplierByModList(Dictionary<string, bool> Mods)
 	{
-		var multiplier= 1.0f;
+		return (float)ScoreMultiplierExact(Mods);
+	}
+	/// <summary>Unrounded (double) score multiplier, used for the score itself.</summary>
+	public static double ScoreMultiplierExact(Dictionary<string, bool> Mods)
+	{
+		return Game.PerformanceCalculator.ScoreMultiplier(AliasOf(Mods), AudioPlayer.Instance.PitchScale);
+	}
+
+	/// <summary>Mod alias string ("NFDT"...) of a mod list, without touching ModsEnabled.</summary>
+	public static string AliasOf(Dictionary<string, bool> Mods)
+	{
+		var alias = "";
 		foreach (var mod in Mods)
 		{
-			if (mod.Value && mod.Key == "dt")
+			if (!mod.Value) continue;
+			alias += mod.Key switch
 			{
-				multiplier *= 1.15f * (AudioPlayer.Instance.PitchScale / DTSpeedMultiplier);
-			}
-			else if (mod.Value && mod.Key == "ht")
-			{
-				multiplier *= 0.3f * (AudioPlayer.Instance.PitchScale / HTSpeedMultiplier);
-			}
-			else if (mod.Value && mod.Key == "no-fail")
-			{
-				multiplier *= 0.5f;
-			}
-			else if (mod.Value && mod.Key == "am")
-			{
-				multiplier *= 0.5f;
-			}
-			else if (mod.Value && mod.Key == "black-out")
-			{
-				multiplier *= 1.15f;
-			}
-			else if (mod.Value && mod.Key != "auto" && mod.Key != "random")
-			{
-				multiplier *= 1.05f;
-			} 
+				"auto" => "AT", "dt" => "DT", "ht" => "HT", "random" => "RND",
+				"slice" => "SL", "black-out" => "BT", "no-fail" => "NF", "am" => "AM", _ => "",
+			};
 		}
-
-		return multiplier;
+		return alias;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

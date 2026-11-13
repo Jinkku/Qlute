@@ -10,7 +10,6 @@ public class NotesEn {
 	public bool hit {get;set;}
 	public bool exist {get;set;}
 	public string Sample => SampleSet.Normal.First();
-	public double ppv2xp { get; set; }
 }
 public class KeyL
 {
@@ -71,7 +70,16 @@ public partial class Gameplay : Control
 	public static int seed = 0;
 	private Control HUD { get; set; }
 	private float speedold = 1f;
-	private double ppmisspower = 1.2;
+	// pp v3 / competitive score state for this play (see Game.PerformanceCalculator).
+	/// <summary>Note count the server rates the map with (real columns, duplicates removed).</summary>
+	public static int PerfNoteCount { get; private set; }
+	/// <summary>pp of an SS with the selected mods.</summary>
+	public static double MaxPp { get; private set; }
+	public static double StarRating { get; private set; }
+	/// <summary>Score multiplier, fixed when the map loads (the fail animation bends the pitch).</summary>
+	public static double ScoreMult { get; private set; } = 1.0;
+	/// <summary>Sum of PerformanceCalculator.ComboWeight over every hit so far.</summary>
+	public static long ComboPortion { get; private set; }
 	private float audioOffset { get; set; } = 0;
 	[Export] private PackedScene EffectTemplate;
 	private Effect EffectNode { get; set; }
@@ -146,6 +154,9 @@ public partial class Gameplay : Control
 		SongEndMs = (int)beatmap.Timetotal;
 
 		var seen = new HashSet<(int timing, int section)>();
+		// The map as the server rates it: real columns (never Random's), duplicates removed.
+		var ratedNotes = new List<(int time, int col)>();
+		var ratedSeen = new HashSet<(int, int)>();
 
 		foreach (string line in lines)
 		{
@@ -156,13 +167,12 @@ public partial class Gameplay : Control
 			string[] section = line.Split(':', ',');
 			timing = Convert.ToInt32(section[2]);
 
+			int realPart = Math.Clamp((int)Math.Floor(Convert.ToInt32(section[0]) * 4 / 512.0), 0, 3);
+			if (ratedSeen.Add((timing, realPart))) ratedNotes.Add((timing, realPart));
 			if (ModsOperator.Mods["random"])
 				part = BaseRnd.Next(0, 4);
 			else
-			{
-				part = Convert.ToInt32(section[0]);
-				part = Math.Clamp((int)Math.Floor(part * 4 / 512.0), 0, 3);
-			}
+				part = realPart;
 
 			timen = -timing;
 			var key = (timen, part);
@@ -175,13 +185,31 @@ public partial class Gameplay : Control
 			{
 				timing = timen,
 				NotePart = part,
-				ppv2xp = beatmap.ppv2sets[index] * ModsOperator.ProcessMultiplierByModList(ModsOperator.Mods)
 			});
 			index++;
 		}
 
 		MaxNotes = Notes.Count;
+
+		string alias = ModsOperator.AliasOf(ModsOperator.Mods);
+		double speed = AudioPlayer.Instance.PitchScale;
+		PerfNoteCount = ratedNotes.Count;
+		StarRating = PerformanceCalculator.StarRating(ratedNotes, PerformanceCalculator.GetRate(alias, speed));
+		MaxPp = PerformanceCalculator.MaxPerformance(StarRating, PerfNoteCount, alias);
+		ScoreMult = PerformanceCalculator.ScoreMultiplier(alias, speed);
+		ComboPortion = 0;
+		SettingsOperator.Gameplaycfg.maxpp = MaxPp;
 	}
+
+	/// <summary>Adds a hit's combo weight (call after Combo++).</summary>
+	private static void AddComboWeight(int judgementWeight)
+	{
+		ComboPortion += PerformanceCalculator.ComboWeight(judgementWeight, SettingsOperator.Gameplaycfg.Combo);
+	}
+
+	/// <summary>Final pp of the play, exactly what the server computes from the replay.</summary>
+	public static double FinalPerformance() => PerformanceCalculator.Performance(MaxPp, PerfNoteCount,
+		SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 
 	public override void _EnterTree()
 	{
@@ -426,7 +454,6 @@ public partial class Gameplay : Control
 	    SettingsOperator.Gameplaycfg.Bad++;
 	    if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
 	    SettingsOperator.Gameplaycfg.Combo = 0;
-	    SettingsOperator.Gameplaycfg.pp = Math.Max(0, SettingsOperator.Gameplaycfg.pp / ppmisspower);
 	    BadCombo++;
 	    ComboAnimation();
 	    HealthBar.Damage(5 * BadCombo);
@@ -642,9 +669,15 @@ private void _GameNoteTick(double delta)
 		DisableDarkeningSetting = Check.CheckBoolValue(SettingsOperator.GetSetting("ddarkening").ToString());
 		DisableFadeSetting = Check.CheckBoolValue(SettingsOperator.GetSetting("dfadeout").ToString());
 		dim = 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f));
-		score = ScoreCalc.ProcessScore(SettingsOperator.Gameplaycfg.Max,
-			SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh,
-			SettingsOperator.Gameplaycfg.NoteCount, ModsOperator.ProcessMultiplierByModList(ModsOperator.Mods));
+		// While playing: projected score (drops on misses). Once finished: the exact final score the server saves.
+		score = Finished
+			? ScoreCalc.ProcessScore(PerfNoteCount, SettingsOperator.Gameplaycfg.Max,
+				SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, ComboPortion, ScoreMult)
+			: PerformanceCalculator.LiveScore(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great,
+				SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, ComboPortion, ScoreMult);
+		if (!Finished)
+			SettingsOperator.Gameplaycfg.pp = PerformanceCalculator.LivePerformance(MaxPp, PerfNoteCount,
+				SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
 		if ( (scoretween == null || !scoretween.IsRunning()) & scoreint != score)
 		{
 			scoretween?.Kill();
@@ -671,6 +704,9 @@ private void _GameNoteTick(double delta)
 			{
 				Finished = true;
 				MissPass(SongEndMs); // final misses, before the result is saved / submitted
+				SettingsOperator.Gameplaycfg.pp = FinalPerformance();
+				score = ScoreCalc.ProcessScore(PerfNoteCount, SettingsOperator.Gameplaycfg.Max,
+					SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, ComboPortion, ScoreMult);
 				Replay.SaveReplay();
 				ApiOperator.SS();
 				if (!SettingsOperator.Marathon)
@@ -844,7 +880,7 @@ private void _GameNoteTick(double delta)
 		{
 			SettingsOperator.Gameplaycfg.Max++;
 			SettingsOperator.Gameplaycfg.Combo++;
-			SettingsOperator.Gameplaycfg.pp += Note.ppv2xp;
+			AddComboWeight(PerformanceCalculator.WPerfect);
 			BadCombo = 0;
 			Hittext(Skin.Element.JudgePerfect);
 			ComboAnimation();
@@ -855,7 +891,7 @@ private void _GameNoteTick(double delta)
 		{
 			SettingsOperator.Gameplaycfg.Great++;
 			SettingsOperator.Gameplaycfg.Combo++;
-			SettingsOperator.Gameplaycfg.pp += Note.ppv2xp * 0.6;
+			AddComboWeight(PerformanceCalculator.WGreat);
 			BadCombo = 0;
 			Hittext(Skin.Element.JudgeGreat);
 			ComboAnimation();
@@ -867,7 +903,7 @@ private void _GameNoteTick(double delta)
 			Hittext(Skin.Element.JudgeMeh);
 			SettingsOperator.Gameplaycfg.Meh++;
 			SettingsOperator.Gameplaycfg.Combo++;
-			SettingsOperator.Gameplaycfg.pp += Note.ppv2xp * 0.3;
+			AddComboWeight(PerformanceCalculator.WMeh);
 			BadCombo = 0;
 			ComboAnimation();
 			HealthBar.Heal((1 * (SettingsOperator.Gameplaycfg.Combo / 500)) + 1);

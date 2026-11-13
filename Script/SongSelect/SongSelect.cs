@@ -507,12 +507,11 @@ public partial class SongSelect : Control
 			ExSongInfo.Text =
 				$"by {SettingsOperator.SessionConfig.BeatmapArtist}\nmapped by {SettingsOperator.SessionConfig.BeatmapMapper}\nDifficulty: {SettingsOperator.SessionConfig.BeatmapDifficultyName}";
 			InfoBox.Text(Songpp,
-				"+" + (SettingsOperator.Gameplaycfg.maxpp * ModsMulti.multiplier).ToString("N0") + "pp");
+				"+" + SettingsOperator.GetMaxPpWithMods().ToString("N0") + "pp"); // same as the server (pp v3)
 			InfoBox.Text(LevelRating,
-				"Lv. " + (SettingsOperator.SessionConfig.LevelRating * ModsMulti.multiplier).ToString("N0") ?? "Lv. 0");
+				"Lv. " + SettingsOperator.GetLevelWithMods() ?? "Lv. 0");
 			LevelRating.SelfModulate =
-				SettingsOperator.ReturnLevelColour((int)(SettingsOperator.SessionConfig.LevelRating *
-				                                         ModsMulti.multiplier));
+				SettingsOperator.ReturnLevelColour(SettingsOperator.GetLevelWithMods());
 			InfoBox.Text(SongBPM,
 				(SettingsOperator.SessionConfig.bpm * AudioPlayer.Instance.PitchScale).ToString("N0") ?? "???");
 			InfoBox.Text(SongLen,

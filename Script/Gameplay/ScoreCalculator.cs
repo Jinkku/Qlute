@@ -4,20 +4,12 @@ namespace Game;
 
 public class ScoreCalculator
 {
-    
     /// <summary>
-    /// Gets the Score calculated
+    /// Competitive score: 0..1,000,000 on NoMod (900k accuracy + 100k combo), times the mod multiplier.
+    /// <paramref name="comboPortion"/> is the sum of PerformanceCalculator.ComboWeight over every hit.
     /// </summary>
-    public int ProcessScore(int Max, int Great, int Meh, int Notecount, float Multiplier)
+    public int ProcessScore(int noteCount, int perfect, int great, int meh, long comboPortion, double multiplier)
     {
-        var ratio = Max;
-        ratio += Great / 2;
-        ratio += Meh / 3;
-		
-        double noteCount = Math.Max(Notecount, 1);
-        double accuracy = ratio / noteCount;
-        double scorelocal = accuracy * 1_000_000 * Multiplier;
-
-        return (int)Math.Round(Math.Max(0, scorelocal));
+        return PerformanceCalculator.ComputeScore(Math.Max(noteCount, 1), perfect, great, meh, comboPortion, multiplier);
     }
 }

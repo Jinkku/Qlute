@@ -373,7 +373,35 @@ public partial class SettingsOperator : Node
     
     public static float TimeCap = 120;
 
-    public static float GetLevelRating(float pp) => Mathf.Pow(pp / MaxPPCap, 0.7f) * 100f;
+    /// <summary>Level 1..100 from the map's NoMod SS pp (Lv 1 &lt;= 5pp, Lv 100 &gt;= 1500pp).</summary>
+    public static float GetLevelRating(float pp) => Game.PerformanceCalculator.LevelFromPp(pp);
+    /// <summary>
+    /// Level of the selected map with the selected mods (still 1..100). Mod pp factors are exact;
+    /// the rate (DT/HT) is estimated as pp x rate^2.8 here, the exact value is computed in gameplay.
+    /// </summary>
+    public static int GetLevelWithMods() => Game.PerformanceCalculator.LevelFromPp(GetMaxPpWithMods());
+
+    private static (int song, string alias, double rate) _maxPpKey = (-1, null, 0);
+    private static double _maxPpValue;
+    /// <summary>
+    /// Exact pp of an SS on the selected map with the selected mods and speed: the same number
+    /// the server computes (stars recomputed at the rate, pp mod factors). Cached per map/mods/speed.
+    /// </summary>
+    public static double GetMaxPpWithMods()
+    {
+        if (SessionConfig.SongID < 0 || SessionConfig.SongID >= Beatmaps.Count) return 0;
+        string alias = ModsOperator.AliasOf(ModsOperator.Mods);
+        double rate = Game.PerformanceCalculator.GetRate(alias, AudioPlayer.Instance.PitchScale);
+        var key = (SessionConfig.SongID, alias, rate);
+        if (key == _maxPpKey) return _maxPpValue;
+        var beatmap = Beatmaps[SessionConfig.SongID];
+        var notes = beatmap.RatedNotes;
+        _maxPpValue = notes.Count > 0
+            ? Game.PerformanceCalculator.MaxPerformance(Game.PerformanceCalculator.StarRating(notes, rate), notes.Count, alias)
+            : beatmap.pp * Game.PerformanceCalculator.PpMultiplier(alias);
+        _maxPpKey = key;
+        return _maxPpValue;
+    }
     public static double Get_ppvalue(int max, int great, int meh, int bad, float multiplier = 1, int combo = 0, double TimeTotal = 0)
     {
         //bad = Math.Max(1,bad);
@@ -407,6 +435,7 @@ public partial class SettingsOperator : Node
         legend.ID = Beatmaps.Count;
         legend.SetID = SetID;
         Beatmaps.Add(legend);
+        RankStatusStore.Attach(legend); // imported/created map: saved rank status, or look it up
         return $"{legend.Artist} - {legend.Title} from {legend.Mapper}";
     }
 
@@ -427,9 +456,18 @@ public partial class SettingsOperator : Node
         float lastNoteTime = 0;
         int ppv2multi = 1;
         int ppv2time = -1;
+        // pp v3: the map as the server rates it (real columns, duplicates removed).
+        var ratedNotes = new List<(int time, int col)>();
+        var ratedSeen = new HashSet<(int, int)>();
+        bool ratedEnded = false; // the server (and gameplay) stop reading notes at the first blank line
 
-        void AddNote(int noteTime)
+        void AddNote(int noteTime, ReadOnlySpan<char> xField)
         {
+            if (!ratedEnded && int.TryParse(xField.Trim(), out var x))
+            {
+                int col = Math.Clamp((int)Math.Floor(x * 4 / 512.0), 0, 3);
+                if (ratedSeen.Add((noteTime, col))) ratedNotes.Add((noteTime, col));
+            }
             if (noteTime < ppv2time + (60000 / legend.Bpm))
             {
                 ppv2multi++;
@@ -440,8 +478,7 @@ public partial class SettingsOperator : Node
                 ppv2multi = 1;
             }
             var ppv2value = SettingsOperator.ppv2base * ppv2multi;
-            ppv2sets?.Add(ppv2value);
-            legend.pp += ppv2value;
+            ppv2sets?.Add(ppv2value); // legacy ppv2 per-note values (no longer used for pp)
             lastNoteTime = noteTime;
             hitCount++;
         }
@@ -453,7 +490,7 @@ public partial class SettingsOperator : Node
             if (nl < 0) nl = text.Length;
             var span = text.AsSpan(pos, nl - pos).Trim();
             pos = nl + 1;
-            if (span.IsEmpty) continue;
+            if (span.IsEmpty) { if (inHitObjects) ratedEnded = true; continue; }
 
             // Fast path for hit objects (most of the file): only the 3rd field (time) is needed.
             if (inHitObjects && span[0] != '[' && !span.StartsWith("0,0,\"", StringComparison.Ordinal))
@@ -464,7 +501,7 @@ public partial class SettingsOperator : Node
                 if (b < 0) continue; // fewer than 3 fields
                 var rest = span[(a + b + 2)..];
                 int c = rest.IndexOfAny(',', ':');
-                if (int.TryParse(c < 0 ? rest : rest[..c], out var fastTime)) AddNote(fastTime);
+                if (int.TryParse(c < 0 ? rest : rest[..c], out var fastTime)) AddNote(fastTime, span[..a]);
                 continue;
             }
 
@@ -527,7 +564,7 @@ public partial class SettingsOperator : Node
                 var parts = line.Split(new[] { ',', ':' });
                 if (parts.Length < 3) continue;
 
-                if (int.TryParse(parts[2], out var noteTime)) AddNote(noteTime);
+                if (int.TryParse(parts[2], out var noteTime)) AddNote(noteTime, parts[0]);
             }
         }
         if (!SampleSet.Type.Contains(legend.SampleSet))
@@ -536,6 +573,10 @@ public partial class SettingsOperator : Node
         }
 
         legend.Timetotal = lastNoteTime;
+        // NoMod pp of an SS (pp v3, same as the server's beatmaps.pp).
+        legend.pp = (float)Game.PerformanceCalculator.MaxPerformance(
+            Game.PerformanceCalculator.StarRating(ratedNotes, 1.0), ratedNotes.Count, "");
+        if (details) legend.RatedNotes = ratedNotes;
         legend.Levelrating = GetLevelRating(legend.pp);
         legend.Path = filename.Replace(filename.Split("/").Last(), "");
         legend.Rawurl = filename;

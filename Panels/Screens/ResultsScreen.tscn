@@ -393,7 +393,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="Replay" type="Button" parent="PlayerButtons/Options"]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(180, 40)
 layout_mode = 2
 script = ExtResource("6_4q8ht")
@@ -401,7 +401,7 @@ StringText = "Watch Replay"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Retry" type="Button" parent="PlayerButtons/Options"]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(180, 40)
 layout_mode = 2
 script = ExtResource("6_4q8ht")
@@ -409,7 +409,7 @@ StringText = "Retry"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Continue" type="Button" parent="PlayerButtons/Options"]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(180, 40)
 layout_mode = 2
 script = ExtResource("6_4q8ht")

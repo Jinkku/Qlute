@@ -1066,7 +1066,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_476ju")
 layout_mode = 2
 
 [node name="Back" type="Button" parent="BottomBar/HBoxContainer" unique_id=1272468725]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(148, 0)
 layout_mode = 2
 script = ExtResource("8_p8vf7")
@@ -1076,7 +1076,7 @@ StringText = "Back"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="WatchReplay" type="Button" parent="BottomBar/HBoxContainer" unique_id=1879247638]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(148, 0)
 layout_mode = 2
 script = ExtResource("8_p8vf7")
@@ -1086,7 +1086,7 @@ StringText = "Watch Replay"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Screenshot" type="Button" parent="BottomBar/HBoxContainer" unique_id=15500693]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(148, 0)
 layout_mode = 2
 script = ExtResource("8_p8vf7")
@@ -1096,7 +1096,7 @@ StringText = "Screenshot"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Ranking" type="Button" parent="BottomBar/HBoxContainer" unique_id=1437803074]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(148, 0)
 layout_mode = 2
 script = ExtResource("8_p8vf7")
@@ -1106,7 +1106,7 @@ StringText = "Ranking"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="MoreInfo" type="Button" parent="BottomBar/HBoxContainer" unique_id=428968984]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(148, 0)
 layout_mode = 2
 script = ExtResource("8_p8vf7")
@@ -1114,7 +1114,7 @@ StringText = "More Info"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="PlayAgain" type="Button" parent="BottomBar/HBoxContainer" unique_id=459395514]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(148, 0)
 layout_mode = 2
 size_flags_horizontal = 10
