@@ -24,8 +24,10 @@ public partial class PillBox : StyleBox
 		Bg = bg;
 		Border = border;
 		BorderWidth = borderWidth;
-		ContentMarginLeft = ContentMarginRight = padX + borderWidth;
-		ContentMarginTop = ContentMarginBottom = padY + borderWidth;
+		// Same as StyleBoxFlat (padding doesn't include the border), so swapping between the two
+		// (e.g. a chip's pressed state) never changes the button's size or clips its text.
+		ContentMarginLeft = ContentMarginRight = padX;
+		ContentMarginTop = ContentMarginBottom = padY;
 	}
 
 	public override void _Draw(Rid canvasItem, Rect2 rect)

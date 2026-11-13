@@ -168,7 +168,7 @@ public static class PlayerOverlays
 	{
 		var normal = bg ?? (primary ? Accent : Quiet);
 		var over = hover ?? (primary ? AccentHover : QuietHover);
-		StyleBox S(Color c) => border is { } line ? new PillBox(c, line, 15, 7) : Style(c, 99, 16, 8);
+		StyleBox S(Color c) => border is { } line ? new PillBox(c, line, 16, 8) : Style(c, 99, 16, 8);
 		b.AddThemeStyleboxOverride("normal", S(normal));
 		b.AddThemeStyleboxOverride("hover", S(over));
 		b.AddThemeStyleboxOverride("pressed", S(over));

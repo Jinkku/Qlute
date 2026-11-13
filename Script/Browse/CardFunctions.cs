@@ -234,7 +234,7 @@ public partial class CardFunctions : Button
 
 	private static void PaintRound(Button b, Color bg, Color hover, Color border)
 	{
-		StyleBox S(Color c) => new PillBox(c, border, 7, 7); // one smooth ring (a StyleBoxFlat border shows light joins)
+		StyleBox S(Color c) => new PillBox(c, border, 8, 8); // one smooth ring (a StyleBoxFlat border shows light joins)
 		b.AddThemeStyleboxOverride("normal", S(bg));
 		b.AddThemeStyleboxOverride("hover", S(hover));
 		b.AddThemeStyleboxOverride("pressed", S(hover));
@@ -344,7 +344,7 @@ public partial class CardFunctions : Button
 		if (recommended) { bg = new Color("#f3baff38"); border = new Color("#f3baffcc"); text = Colors.White; }
 		var p = new PanelContainer();
 		var style = new PillBox(bg, border, 6, 0);
-		style.ContentMarginLeft = 5 + style.BorderWidth;
+		style.ContentMarginLeft = 5;
 		p.AddThemeStyleboxOverride("panel", style);
 		p.TooltipText = tooltip;
 		p.MouseFilter = string.IsNullOrEmpty(tooltip) ? MouseFilterEnum.Ignore : MouseFilterEnum.Pass;
