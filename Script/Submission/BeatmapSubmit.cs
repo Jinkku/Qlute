@@ -188,7 +188,7 @@ public static class BeatmapSubmit
 			{
 				legend.BeatmapID = d.BeatmapId;
 				legend.BeatmapSetID = result.SetId;
-				if (!result.Updated) legend.RankStatus = RankStatusLegend.Unranked;
+				if (!result.Updated) RankStatusStore.Update(d.BeatmapId, RankStatusLegend.Unranked); // new set: saved as Unranked
 				if (legend.ID == SettingsOperator.SessionConfig.SongID)
 				{
 					SettingsOperator.SessionConfig.BeatmapID = d.BeatmapId;

@@ -13,7 +13,7 @@ using System.IO;
 public static class BeatmapCache
 {
 	private const int Magic = 0x51424331; // "QBC1"
-	private const int Version = 1;
+	private const int Version = 2; // 2: pp v3, 3: steeper pp curve, 4: level = f(pp) 1..100, 5: level curve 0.8, 6: pp scale 1.13
 
 	public static string FilePath => SettingsOperator.homedir + "/beatmapcache.bin";
 

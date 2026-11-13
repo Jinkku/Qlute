@@ -9,7 +9,7 @@ public partial class MusicPreview : TextureButton
 	private readonly Color Focuscolour  = new(1f, 1f, 1f, 0.8f);
 	private readonly Color Highlight    = new(0.6f, 0.6f, 1f, 1f);
 
-	private int PreviewID { get; set; }
+	public int PreviewID { get; set; }
 	private TextureProgressBar MusicProgress { get; set; } = null!;
 
 	public string? audioPath { get; set; }
@@ -20,14 +20,7 @@ public partial class MusicPreview : TextureButton
 
 	public override void _Ready()
 	{
-		var root = GetNode<CardFunctions>("../../");
-		if (root.BeatmapID != -1)
-			PreviewID = root.BeatmapID;
-
 		SelfModulate = Idlecolour;
-
-		if (audioPath == null)
-			SetProcess(false);
 
 		MusicProgress = GetNode<TextureProgressBar>("SongProgress");
 	}

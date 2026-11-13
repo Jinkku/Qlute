@@ -3,79 +3,113 @@
 [ext_resource type="Script" uid="uid://gl6ndgfj1mc8" path="res://Script/Browse/Browse.cs" id="1_gq7gs"]
 [ext_resource type="PackedScene" uid="uid://c2ouvq16jls8u" path="res://Panels/Overlays/BottomPanelButtons.tscn" id="2_287m4"]
 [ext_resource type="Texture2D" uid="uid://cxgktcat5d5n1" path="res://Resources/System/loading.svg" id="3_287m4"]
+[ext_resource type="FontFile" uid="uid://2atq5vkw7df7" path="res://Fonts/font-bold.otf" id="4_bold"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gt3n2"]
-content_margin_left = 25.0
-content_margin_top = 25.0
+[sub_resource type="StyleBoxFlat" id="Panel_box"]
+bg_color = Color(0.113725, 0.0980392, 0.129412, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.0392157)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gt3n2"]
-content_margin_left = 10.0
-content_margin_top = 5.0
-content_margin_right = 10.0
-content_margin_bottom = 5.0
-bg_color = Color(0, 0, 0, 0.196078)
-skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-expand_margin_top = 5.0
-expand_margin_bottom = 5.0
+[sub_resource type="Gradient" id="Shade_gradient"]
+colors = PackedColorArray(0.0705882, 0.0588235, 0.0862745, 0.69, 0.0705882, 0.0588235, 0.0862745, 0.94)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_287m4"]
-content_margin_left = 10.0
-content_margin_top = 5.0
-content_margin_right = 10.0
-content_margin_bottom = 5.0
-bg_color = Color(0.176471, 0.176471, 0.176471, 0.392157)
-skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-expand_margin_top = 5.0
-expand_margin_bottom = 5.0
+[sub_resource type="GradientTexture2D" id="Shade_texture"]
+gradient = SubResource("Shade_gradient")
+width = 8
+fill_to = Vector2(0, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npcsy"]
+[sub_resource type="StyleBoxFlat" id="Search_normal"]
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+bg_color = Color(1, 1, 1, 0.0627451)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.0784314)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="Search_focus"]
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+bg_color = Color(1, 1, 1, 0.0862745)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.952941, 0.729412, 1, 0.6)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="Toggle_normal"]
+content_margin_left = 16.0
+content_margin_right = 16.0
+bg_color = Color(1, 1, 1, 0.0627451)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.0784314)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="Toggle_on"]
+content_margin_left = 16.0
+content_margin_right = 16.0
+bg_color = Color(1, 1, 1, 0.101961)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.0784314)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxEmpty" id="Empty"]
+
+[sub_resource type="StyleBoxFlat" id="Sortbar_box"]
 content_margin_left = 15.0
-content_margin_top = 5.0
+content_margin_top = 10.0
 content_margin_right = 15.0
-content_margin_bottom = 5.0
-bg_color = Color(0, 0, 0, 0.392157)
-skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+content_margin_bottom = 10.0
+draw_center = false
+border_width_top = 1
+border_color = Color(1, 1, 1, 0.0784314)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rkh30"]
-content_margin_left = 15.0
-content_margin_top = 5.0
-content_margin_right = 15.0
-content_margin_bottom = 5.0
-bg_color = Color(0.496094, 0.496094, 0.496094, 0.392157)
-skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vgk5y"]
-content_margin_left = 15.0
-content_margin_top = 5.0
-content_margin_right = 15.0
-content_margin_bottom = 5.0
-bg_color = Color(0.269531, 0.269531, 0.269531, 0.392157)
-skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_287m4"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vgk5y"]
-content_margin_left = 15.0
+[sub_resource type="StyleBoxFlat" id="Sort_track"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0, 0, 0, 0.2)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="Animation" id="Animation_1f010"]
 length = 0.001
@@ -94,8 +128,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_tk3k2"]
 resource_name = "loading"
-length = 0.5
-loop_mode = 2
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -103,10 +136,10 @@ tracks/0/path = NodePath(".:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0166667, 0.0333333, 0.05, 0.0666667, 0.0833333, 0.1, 0.116667, 0.133333, 0.15, 0.166667, 0.183333, 0.2, 0.216667, 0.233333, 0.25, 0.266667, 0.283333, 0.3, 0.316667, 0.333333, 0.35, 0.366667, 0.383333, 0.4, 0.416667, 0.433333, 0.45, 0.466667, 0.483333, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [0.0, 0.607609, 1.17472, 1.70275, 2.19307, 2.64709, 3.0662, 3.4518, 3.80529, 4.12806, 4.4215, 4.68703, 4.92602, 5.13988, 5.33001, 5.49779, 5.64463, 5.77192, 5.88107, 5.97345, 6.05048, 6.11354, 6.16404, 6.20337, 6.23292, 6.2541, 6.2683, 6.27691, 6.28133, 6.28296, 6.28319]
+"values": [0.0, 6.28319]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1f8y5"]
@@ -115,7 +148,7 @@ _data = {
 &"loading": SubResource("Animation_tk3k2")
 }
 
-[node name="BrowseCatalog" type="Control" unique_id=668749115]
+[node name="BrowseCatalog" type="Control" unique_id=1020925358]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -124,202 +157,187 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gq7gs")
 
-[node name="Header" type="ColorRect" parent="." unique_id=834867634]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 210.0
-grow_horizontal = 2
-color = Color(0.261989, 0.2211, 0.273438, 1)
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Header" unique_id=1348819497]
+[node name="Background" type="ColorRect" parent="." unique_id=911030080]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 40.0
-offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0901961, 0.0784314, 0.105882, 1)
 
-[node name="Title" type="Label" parent="Header/VBoxContainer" unique_id=696853505]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxEmpty_gt3n2")
-text = "Browse"
-
-[node name="MarginContainer" type="MarginContainer" parent="Header/VBoxContainer" unique_id=1227685506]
-layout_mode = 2
-theme_override_constants/margin_left = 25
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 25
-theme_override_constants/margin_bottom = 10
-
-[node name="SearchBox" type="LineEdit" parent="Header/VBoxContainer/MarginContainer" unique_id=368686406]
-custom_minimum_size = Vector2(450, 0)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_gt3n2")
-theme_override_styles/focus = SubResource("StyleBoxFlat_287m4")
-placeholder_text = "Search here"
-
-[node name="SearchFilters" type="MarginContainer" parent="Header/VBoxContainer" unique_id=1378923191]
-layout_mode = 2
-theme_override_constants/margin_left = 25
-theme_override_constants/margin_right = 25
-theme_override_constants/margin_bottom = 10
-
-[node name="Tabs" type="HBoxContainer" parent="Header/VBoxContainer/SearchFilters" unique_id=1786720162]
-layout_mode = 2
-
-[node name="RankButton" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs" unique_id=1541781977]
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_npcsy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_rkh30")
-theme_override_styles/hover = SubResource("StyleBoxFlat_vgk5y")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_287m4")
-selected = 0
-item_count = 3
-popup/item_0/text = "Ranked"
-popup/item_0/id = 0
-popup/item_1/text = "Special"
-popup/item_1/id = 1
-popup/item_2/text = "Unranked"
-popup/item_2/id = 2
-
-[node name="Genre" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs" unique_id=1927058839]
-visible = false
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_npcsy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_rkh30")
-theme_override_styles/hover = SubResource("StyleBoxFlat_vgk5y")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_287m4")
-selected = 0
-item_count = 14
-popup/item_0/text = "Any"
-popup/item_0/id = 0
-popup/item_1/text = "Unknown"
-popup/item_1/id = 1
-popup/item_2/text = "Video Game"
-popup/item_2/id = 2
-popup/item_3/text = "Anime"
-popup/item_3/id = 3
-popup/item_4/text = "Rock"
-popup/item_4/id = 4
-popup/item_5/text = "Pop"
-popup/item_5/id = 5
-popup/item_6/text = "Other"
-popup/item_6/id = 6
-popup/item_7/text = "Novelty"
-popup/item_7/id = 7
-popup/item_8/text = "Hip Hop"
-popup/item_8/id = 8
-popup/item_9/text = "Electronic"
-popup/item_9/id = 9
-popup/item_10/text = "Metal"
-popup/item_10/id = 10
-popup/item_11/text = "Classical"
-popup/item_11/id = 11
-popup/item_12/text = "Folk"
-popup/item_12/id = 12
-popup/item_13/text = "Jazz"
-popup/item_13/id = 13
-
-[node name="Language" type="OptionButton" parent="Header/VBoxContainer/SearchFilters/Tabs" unique_id=164751638]
-visible = false
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_npcsy")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_rkh30")
-theme_override_styles/hover = SubResource("StyleBoxFlat_vgk5y")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_287m4")
-selected = 0
-item_count = 14
-popup/item_0/text = "Any"
-popup/item_0/id = 0
-popup/item_1/text = "English"
-popup/item_1/id = 1
-popup/item_2/text = "Chinese"
-popup/item_2/id = 2
-popup/item_3/text = "French"
-popup/item_3/id = 3
-popup/item_4/text = "German"
-popup/item_4/id = 4
-popup/item_5/text = "Italian"
-popup/item_5/id = 5
-popup/item_6/text = "Japanese"
-popup/item_6/id = 6
-popup/item_7/text = "Korean"
-popup/item_7/id = 7
-popup/item_8/text = "Spanish"
-popup/item_8/id = 8
-popup/item_9/text = "Swedish"
-popup/item_9/id = 9
-popup/item_10/text = "Russian"
-popup/item_10/id = 10
-popup/item_11/text = "Polish"
-popup/item_11/id = 11
-popup/item_12/text = "Instrumental"
-popup/item_12/id = 12
-popup/item_13/text = "Unknown"
-popup/item_13/id = 13
-
-[node name="Label" type="Label" parent="Header/VBoxContainer/SearchFilters/Tabs" unique_id=374896084]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.992188, 1, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxEmpty_vgk5y")
-text = "Note: More options are coming soon!"
-
-[node name="BeatmapSec" type="ColorRect" parent="." unique_id=1059331218]
+[node name="BeatmapSec" type="Control" parent="." unique_id=323075179]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 210.0
+offset_top = 50.0
 offset_bottom = -50.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.164532, 0.138306, 0.171875, 1)
+mouse_filter = 2
 
-[node name="Scroll" type="ScrollContainer" parent="BeatmapSec" unique_id=407584585]
+[node name="Scroll" type="ScrollContainer" parent="BeatmapSec" unique_id=1236410578]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+horizontal_scroll_mode = 0
 
-[node name="Center" type="CenterContainer" parent="BeatmapSec/Scroll" unique_id=1047936625]
+[node name="Page" type="MarginContainer" parent="BeatmapSec/Scroll" unique_id=1623184323]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 24
 
-[node name="Spacer" type="MarginContainer" parent="BeatmapSec/Scroll/Center" unique_id=1756389413]
+[node name="Content" type="VBoxContainer" parent="BeatmapSec/Scroll/Page" unique_id=2040329830]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/separation = 14
 
-[node name="Beatmaps" type="GridContainer" parent="BeatmapSec/Scroll/Center/Spacer" unique_id=714980705]
+[node name="Panel" type="PanelContainer" parent="BeatmapSec/Scroll/Page/Content" unique_id=101476422]
+clip_children = 1
 layout_mode = 2
-columns = 3
+theme_override_styles/panel = SubResource("Panel_box")
 
-[node name="ControlPanel" parent="." unique_id=1403099792 instance=ExtResource("2_287m4")]
+[node name="Backdrop" type="TextureRect" parent="BeatmapSec/Scroll/Page/Content/Panel" unique_id=263713375]
+modulate = Color(0.5, 0.5, 0.55, 0.6)
+texture_filter = 2
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Shade" type="TextureRect" parent="BeatmapSec/Scroll/Page/Content/Panel" unique_id=963638869]
+layout_mode = 2
+mouse_filter = 2
+texture = SubResource("Shade_texture")
+expand_mode = 1
+
+[node name="Inner" type="VBoxContainer" parent="BeatmapSec/Scroll/Page/Content/Panel" unique_id=301704147]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Top" type="MarginContainer" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner" unique_id=853901123]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/Top" unique_id=1621517151]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Heading" type="Label" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/Top/VBox" unique_id=314756128]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "beatmap listing"
+
+[node name="SearchRow" type="HBoxContainer" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/Top/VBox" unique_id=1132976983]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SearchBox" type="LineEdit" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/Top/VBox/SearchRow" unique_id=681424566]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_placeholder_color = Color(1, 1, 1, 0.35)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("Search_normal")
+theme_override_styles/focus = SubResource("Search_focus")
+placeholder_text = "Search titles, artists, mappers, tags, sources..."
+clear_button_enabled = true
+
+[node name="FiltersButton" type="Button" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/Top/VBox/SearchRow" unique_id=926223968]
+custom_minimum_size = Vector2(108, 0)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 0.8)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("Toggle_normal")
+theme_override_styles/pressed = SubResource("Toggle_on")
+theme_override_styles/hover = SubResource("Toggle_on")
+theme_override_styles/hover_pressed = SubResource("Toggle_on")
+theme_override_styles/focus = SubResource("Empty")
+toggle_mode = true
+button_pressed = true
+text = "≡  Filters"
+
+[node name="Filters" type="VBoxContainer" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/Top/VBox" unique_id=2123009641]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="SortBar" type="PanelContainer" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner" unique_id=1077315885]
+layout_mode = 2
+theme_override_styles/panel = SubResource("Sortbar_box")
+
+[node name="HBox" type="HBoxContainer" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/SortBar" unique_id=452455988]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Label" type="Label" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/SortBar/HBox" unique_id=1442620953]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.54902, 0.862745, 1, 1)
+theme_override_fonts/font = ExtResource("4_bold")
+theme_override_font_sizes/font_size = 11
+text = "SORT"
+
+[node name="Track" type="PanelContainer" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/SortBar/HBox" unique_id=1713068283]
+layout_mode = 2
+theme_override_styles/panel = SubResource("Sort_track")
+
+[node name="SortOptions" type="HBoxContainer" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/SortBar/HBox/Track" unique_id=1086377272]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Beatmaps" type="GridContainer" parent="BeatmapSec/Scroll/Page/Content" unique_id=629038110]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 4
+
+[node name="Hint" type="Label" parent="BeatmapSec/Scroll/Page/Content" unique_id=1406382475]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.666667)
+text = "Loading beatmaps..."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ClearFilters" type="Button" parent="BeatmapSec/Scroll/Page/Content" unique_id=1769194197]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_colors/font_color = Color(0.952941, 0.729412, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "Clear filters"
+flat = true
+
+[node name="ControlPanel" parent="." unique_id=1035389225 instance=ExtResource("2_287m4")]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 1
 
-[node name="Loadingicon" type="Sprite2D" parent="." unique_id=458699594]
+[node name="Loadingicon" type="Sprite2D" parent="." unique_id=440900807]
+visible = false
 z_index = 5
-texture_filter = 1
+texture_filter = 2
 position = Vector2(175, 25)
 texture = ExtResource("3_287m4")
 
-[node name="Loadinganimation" type="AnimationPlayer" parent="Loadingicon" unique_id=1644702058]
+[node name="Loadinganimation" type="AnimationPlayer" parent="Loadingicon" unique_id=783617607]
 libraries/ = SubResource("AnimationLibrary_1f8y5")
 
-[connection signal="text_changed" from="Header/VBoxContainer/MarginContainer/SearchBox" to="." method="_textchanged"]
-[connection signal="text_submitted" from="Header/VBoxContainer/MarginContainer/SearchBox" to="." method="_submit"]
-[connection signal="item_selected" from="Header/VBoxContainer/SearchFilters/Tabs/RankButton" to="." method="_rankchanged"]
-[connection signal="scroll_started" from="BeatmapSec/Scroll" to="." method="_scroll"]
+[connection signal="text_changed" from="BeatmapSec/Scroll/Page/Content/Panel/Inner/Top/VBox/SearchRow/SearchBox" to="." method="_textchanged"]
+[connection signal="text_submitted" from="BeatmapSec/Scroll/Page/Content/Panel/Inner/Top/VBox/SearchRow/SearchBox" to="." method="_submit"]
+[connection signal="toggled" from="BeatmapSec/Scroll/Page/Content/Panel/Inner/Top/VBox/SearchRow/FiltersButton" to="." method="_filterstoggled"]
+[connection signal="pressed" from="BeatmapSec/Scroll/Page/Content/ClearFilters" to="." method="_clearfilters"]
 [connection signal="pressed" from="ControlPanel/Box/BackButton" to="." method="_on_back"]
 
 [editable path="ControlPanel"]

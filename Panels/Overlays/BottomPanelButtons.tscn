@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://ctnqrw3he2egt" path="res://Resources/System/backicon.svg" id="2_eljtg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_amdr4"]
-bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+bg_color = Color(0.117647, 0.0980392, 0.137255, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qtebl"]
 

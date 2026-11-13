@@ -49,7 +49,7 @@ text = "Notifications"
 horizontal_alignment = 2
 
 [node name="ClearAll Button" type="Button" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=1855279780]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 size_flags_horizontal = 8

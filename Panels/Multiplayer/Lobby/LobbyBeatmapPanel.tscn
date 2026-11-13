@@ -41,7 +41,7 @@ theme_type_variation = &"LobbyHeading"
 text = "Beatmap"
 
 [node name="ButtonFade" type="Button" parent="V" unique_id=1938684832]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 script = ExtResource("3_1iqwh")
