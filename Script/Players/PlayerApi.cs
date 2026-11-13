@@ -35,7 +35,7 @@ public static class PlayerApi
 
 	public class Medal
 	{
-		public string Title = "", Desc = "";
+		public string Title = "", Desc = "", Hint = "";
 		public bool Achieved;
 	}
 
@@ -44,9 +44,16 @@ public static class PlayerApi
 		public bool Restricted;
 		/// <summary>"mod" / "admin" for the Qlute team, else empty.</summary>
 		public string TeamRole = "";
-		public long Score, Level, MaxCombo, Joined;
+		public long Score, Level, LevelPct, MaxCombo, Joined;
+		/// <summary>Profile banner (users.bannerpath), empty when none.</summary>
+		public string Banner = "";
+		/// <summary>Uploaded / claimed sets per status tab: "1" ranked, "4" special, "0" unranked.</summary>
+		public Dictionary<string, long> BeatmapCounts = new();
+		public bool CountsFromServer;
 		public double Accuracy;
 		public string PlaytimeText = "";
+		/// <summary>"About me", set on the website's settings page (empty when none).</summary>
+		public string Bio = "";
 		public long JMax, JGreat, JMeh, JBad;
 		public List<Medal> Medals = new();
 		public List<Play> Best = new();
@@ -96,7 +103,7 @@ public static class PlayerApi
 
 	public static bool IsFriend(string name) => name != null && Friends.ContainsKey(name);
 
-	private static System.Net.Http.HttpRequestMessage Authed(System.Net.Http.HttpMethod method, string path)
+	public static System.Net.Http.HttpRequestMessage Authed(System.Net.Http.HttpMethod method, string path)
 	{
 		var req = new System.Net.Http.HttpRequestMessage(method, Base + path);
 		req.Headers.TryAddWithoutValidation("Username", ApiOperator.Username ?? "");
@@ -163,10 +170,17 @@ public static class PlayerApi
 			p.TeamRole = OnlineApi.Str(json, "team_role") ?? "";
 			p.Score = OnlineApi.Long(json, "score");
 			p.Level = OnlineApi.Long(json, "level", 1);
+			// Older servers don't send level_pct: same formula as the website (views.py leveltemp).
+			p.LevelPct = json["level_pct"] != null ? OnlineApi.Long(json, "level_pct") : LevelPercent(p.Score);
+			p.Banner = OnlineApi.Str(json, "banner") ?? "";
+			p.CountsFromServer = json["beatmap_counts"] is JsonObject;
+			if (json["beatmap_counts"] is JsonObject counts)
+				foreach (var (k, _) in counts) p.BeatmapCounts[k] = OnlineApi.Long(counts, k);
 			p.MaxCombo = OnlineApi.Long(json, "max_combo");
 			p.Joined = OnlineApi.Long(json, "joined");
 			p.Accuracy = Double(json, "accuracy");
 			p.PlaytimeText = OnlineApi.Str(json, "playtime_text") ?? "";
+			p.Bio = OnlineApi.Str(json, "bio") ?? "";
 			if (json["judgements"] is JsonObject j)
 			{
 				p.JMax = OnlineApi.Long(j, "max"); p.JGreat = OnlineApi.Long(j, "great");
@@ -175,7 +189,7 @@ public static class PlayerApi
 			if (json["medals"] is JsonArray medals)
 				p.Medals = medals.OfType<JsonObject>().Select(m => new Medal
 				{
-					Title = OnlineApi.Str(m, "title") ?? "", Desc = OnlineApi.Str(m, "desc") ?? "", Achieved = OnlineApi.Bool(m, "achieved"),
+					Title = OnlineApi.Str(m, "title") ?? "", Desc = OnlineApi.Str(m, "desc") ?? "", Hint = OnlineApi.Str(m, "hint") ?? "", Achieved = OnlineApi.Bool(m, "achieved"),
 				}).ToList();
 			p.Best = ReadPlays(json["best"]);
 			p.Recent = ReadPlays(json["recent"]);
@@ -241,6 +255,19 @@ public static class PlayerApi
 			try { cb(tex); } catch (ObjectDisposedException) { } // the card asking for it was closed
 		}
 	}
+
+	/// <summary>views.py leveltemp: level = ranked score * this.</summary>
+	public const double LevelMultiplier = 0.0000005;
+
+	/// <summary>Progress to the next level, 0-99 (views.py user()).</summary>
+	public static long LevelPercent(long score)
+	{
+		var raw = score * LevelMultiplier;
+		return raw >= 1 ? (long)((raw - Math.Floor(raw)) * 100) : (long)(raw * 100);
+	}
+
+	/// <summary>True when the server sent beatmap_counts (newer servers); otherwise the client counts them itself.</summary>
+	public static bool HasCounts(Profile p) => p.CountsFromServer;
 
 	/// <summary>"3 Months Ago", like the website's timeform().</summary>
 	public static string Ago(long unixSeconds)
