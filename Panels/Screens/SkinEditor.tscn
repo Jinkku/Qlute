@@ -47,7 +47,7 @@ corner_radius_bottom_left = 15
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yvt2e"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xm3b"]
-bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+bg_color = Color(0.117647, 0.0980392, 0.137255, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_724hy"]
 content_margin_left = 10.0

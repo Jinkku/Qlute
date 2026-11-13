@@ -14,7 +14,7 @@ bg_color = Color(0.231373, 0.231373, 0.231373, 1)
 bg_color = Color(0.369792, 0.369792, 0.369792, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pg4ve"]
-bg_color = Color(0.25, 0.25, 0.25, 1)
+bg_color = Color(0.278431, 0.239216, 0.309804, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yewru"]
 

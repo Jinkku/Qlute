@@ -25,7 +25,7 @@ theme_override_constants/separation = 10
 [node name="Section" type="Label" parent="Rows" unique_id=118251586]
 layout_mode = 2
 mouse_filter = 0
-theme_override_colors/font_color = Color(0.469116, 0.748934, 0.953125, 1)
+theme_override_colors/font_color = Color(0.952941, 0.729412, 1, 1)
 theme_override_fonts/font = SubResource("FontVariation_q0wcy")
 text = "Updates"
 
@@ -60,7 +60,7 @@ Only go on this branch if u don't care about bugs and want new stuff"
 autowrap_mode = 2
 
 [node name="Check for Updates" type="Button" parent="Rows" unique_id=855584170]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 script = ExtResource("2_x21se")

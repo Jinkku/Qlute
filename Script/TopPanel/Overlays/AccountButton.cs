@@ -101,7 +101,6 @@ public partial class AccountButton : Button
 	}
 	private void _unhover()
 	{
-		BeatmapInfo.BeatmapIndexH = -1;
 		AnimationButton(Idlecolour);
 	}
 	private Control TopPanel { get; set; }

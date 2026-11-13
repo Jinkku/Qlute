@@ -162,7 +162,7 @@ public partial class ApiOperator : Node
 				{
 					leaderboardEntry.ProfilePicture = texture;
 				});
-				leaderboardEntry.score = new ScoreCalculator().ProcessScore(leaderboardEntry.MAX, leaderboardEntry.GOOD, leaderboardEntry.MEH, leaderboardEntry.MAX + leaderboardEntry.GOOD + leaderboardEntry.MEH + leaderboardEntry.BAD, ModsOperator.ProcessMultiplierByMod(leaderboardEntry.mods));
+				// `score` comes from the server (computed from the replay, pp v3 / competitive score).
 			}
 			GD.Print("Leaderboard loaded successfully.");
 		}
@@ -360,64 +360,59 @@ public partial class ApiOperator : Node
 
 	public static HttpRequest RankApi { get; set; }
 
+	/// <summary>Online beatmap ID the pending RankApi request is for.</summary>
+	private static int _rankRequestBeatmapId;
+
+	/// <summary>
+	/// Called when a map is selected: shows its saved rank status straight away, then asks the
+	/// server. RankOutput only saves/updates if the server's answer is different.
+	/// </summary>
 	public static void CheckBeatmapRankStatus()
 	{
 		RankApi?.CancelRequest();
-		if (SettingsOperator.SessionConfig.SongID != -1 && !SettingsOperator.NoConnectionToGameServer)
+		int song = SettingsOperator.SessionConfig.SongID;
+		if (song < 0 || song >= SettingsOperator.Beatmaps.Count) return;
+		var legend = SettingsOperator.Beatmaps[song];
+		RankedStatus = legend.RankStatus;
+		_rankRequestBeatmapId = legend.BeatmapID;
+		if (legend.BeatmapID > 0 && !SettingsOperator.NoConnectionToGameServer)
 		{
-			RankApi.Request($"{SettingsOperator.GetSetting("api")}apiv2/s/{SettingsOperator.SessionConfig.BeatmapID}",customHeaders: AgentHeaders);
+			RankApi.Request($"{SettingsOperator.GetSetting("api")}apiv2/s/{legend.BeatmapID}",customHeaders: AgentHeaders);
 		}
 	}
 	/// <summary>
-	/// Produces an output of the RankedStatus (ex. 1 == Ranked, etc.)
+	/// Server answer for the selected map. Saved (and shown) only if it differs from the saved
+	/// status; a failed request keeps the saved status.
 	/// </summary>
-	/// <param name="result"></param>
-	/// <param name="responseCode"></param>
-	/// <param name="headers"></param>
-	/// <param name="body"></param>
 	public void RankOutput(long result, long responseCode, string[] headers, byte[] body)
 	{
-		if (responseCode == 200)
+		if (result != (long)HttpRequest.Result.Success || responseCode != 200) return;
+		try
 		{
-			// Convert byte[] → string
-			string jsonString = Encoding.UTF8.GetString(body);
-			GD.PrintErr(jsonString);
-
-			// Parse the JSON (returns Variant)
-			Variant parsed = Json.ParseString(jsonString);
-
-			// Cast Variant to Dictionary
+			var parsed = Json.ParseString(Encoding.UTF8.GetString(body));
+			if (parsed.VariantType != Variant.Type.Dictionary) return;
 			var dict = (Godot.Collections.Dictionary)parsed;
-
-			// Get RankedStatus (Variant → long → int)
-			RankedStatus = (int)(long)dict["RankedStatus"];
-			if (RankedStatus == RankStatusLegend.Ranked)
-			{
-				RankedStatus = RankStatusLegend.Ranked;	
-			}
-			else if (RankedStatus == 0)
-			{
-				RankedStatus = RankStatusLegend.Unranked;
-			}
-			else if (RankedStatus == -1)
-			{
-				RankedStatus = RankStatusLegend.Unknown;
-			}
-			else if (RankedStatus != 1)
-			{
-				RankedStatus = RankStatusLegend.Special;
-			}
+			if (!dict.TryGetValue("RankedStatus", out var value)) return;
+			int status = RankStatusStore.Normalize((int)(long)value);
+			RankStatusStore.Update(_rankRequestBeatmapId, status); // no-op if unchanged
 		}
-		else
+		catch (Exception e)
 		{
-			RankedStatus = RankStatusLegend.Unknown;
+			GD.PrintErr($"[RankStatus] Bad answer from the server: {e.Message}");
 		}
-		SettingsOperator.Beatmaps[SettingsOperator.SessionConfig.SongID].RankStatus = RankedStatus;
 	}
 
-	public static void DownloadBeatmap(int id, int index)
+	public static void DownloadBeatmap(int id, int index) => DownloadBeatmap(Browse.BrowseCatalog[index]);
+
+	/// <summary>Queues a set from apiv2/search (or apiv2/favorites) for download.</summary>
+	public static void DownloadBeatmap(BrowseCatalogLegend BeatmapInfo)
 	{
-		BrowseCatalogLegend BeatmapInfo = Browse.BrowseCatalog[index];
+		var id = BeatmapInfo.id;
+		if (string.IsNullOrEmpty(BeatmapInfo.download_url))
+		{
+			Notify.Post("This beatmap can't be downloaded right now.");
+			return;
+		}
 		var Artist = BeatmapInfo.artist;
 		var Title = BeatmapInfo.title;
 		var Creator = BeatmapInfo.creator;

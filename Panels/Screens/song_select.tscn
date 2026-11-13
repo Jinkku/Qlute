@@ -601,8 +601,8 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_xmk5a")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5rktx")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_p2axe")
 script = ExtResource("8_5rktx")
-metadata/unfocus = Color(0.0784314, 0.0784314, 0.0784314, 1)
-metadata/focus = Color(0.21875, 0.21875, 0.21875, 1)
+metadata/unfocus = Color(0.117647, 0.0980392, 0.137255, 1)
+metadata/focus = Color(0.227451, 0.2, 0.258824, 1)
 metadata/highlight = Color(0.23275124, 0.19215687, 0.4, 1)
 
 [node name="Label" type="Label" parent="BottomBar/ControlPanel/Box/Mode" unique_id=1537313072]
@@ -625,8 +625,8 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_xmk5a")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5rktx")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_p2axe")
 script = ExtResource("8_5rktx")
-metadata/unfocus = Color(0.0784314, 0.0784314, 0.0784314, 1)
-metadata/focus = Color(0.21875, 0.21875, 0.21875, 1)
+metadata/unfocus = Color(0.117647, 0.0980392, 0.137255, 1)
+metadata/focus = Color(0.227451, 0.2, 0.258824, 1)
 metadata/highlight = Color(0.398438, 0.279665, 0.192993, 1)
 
 [node name="Label" type="Label" parent="BottomBar/ControlPanel/Box/Mod" unique_id=501686639]
@@ -649,8 +649,8 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_xmk5a")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5rktx")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_p2axe")
 script = ExtResource("8_5rktx")
-metadata/unfocus = Color(0.0784314, 0.0784314, 0.0784314, 1)
-metadata/focus = Color(0.21875, 0.21875, 0.21875, 1)
+metadata/unfocus = Color(0.117647, 0.0980392, 0.137255, 1)
+metadata/focus = Color(0.227451, 0.2, 0.258824, 1)
 metadata/highlight = Color(0.228304, 0.398438, 0.192993, 1)
 
 [node name="Label" type="Label" parent="BottomBar/ControlPanel/Box/Random" unique_id=183803153]
@@ -674,8 +674,8 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_xmk5a")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5rktx")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_p2axe")
 script = ExtResource("8_5rktx")
-metadata/unfocus = Color(0.0784314, 0.0784314, 0.0784314, 1)
-metadata/focus = Color(0.21875, 0.21875, 0.21875, 1)
+metadata/unfocus = Color(0.117647, 0.0980392, 0.137255, 1)
+metadata/focus = Color(0.227451, 0.2, 0.258824, 1)
 metadata/highlight = Color(0.192993, 0.205833, 0.398438, 1)
 
 [node name="Start" type="TextureButton" parent="BottomBar" unique_id=1106559813]

@@ -312,7 +312,7 @@ text = "No background picked"
 text_overrun_behavior = 3
 
 [node name="Pick" type="Button" parent="Info/Panel/Scroll/GridContainer/Background"]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
@@ -333,7 +333,7 @@ text = "No audio picked"
 text_overrun_behavior = 3
 
 [node name="Pick" type="Button" parent="Info/Panel/Scroll/GridContainer/Audio"]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
@@ -356,7 +356,7 @@ text = "Not set"
 layout_mode = 2
 
 [node name="SetCurrent" type="Button" parent="Info/Panel/Scroll/GridContainer/Preview/Box"]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -365,7 +365,7 @@ StringText = "Set to current time"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Clear" type="Button" parent="Info/Panel/Scroll/GridContainer/Preview/Box"]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
@@ -402,7 +402,7 @@ size_flags_horizontal = 3
 
 [node name="Title" type="Label" parent="Timing/Panel/Box/ListBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.566406, 0.766266, 1, 1)
+theme_override_colors/font_color = Color(0.952941, 0.729412, 1, 1)
 text = "Timing Points (BPM sections)"
 
 [node name="Points" type="ItemList" parent="Timing/Panel/Box/ListBox"]
@@ -413,7 +413,7 @@ size_flags_vertical = 3
 layout_mode = 2
 
 [node name="Add" type="Button" parent="Timing/Panel/Box/ListBox/Buttons"]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -422,7 +422,7 @@ StringText = "Add at current time"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Remove" type="Button" parent="Timing/Panel/Box/ListBox/Buttons"]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -437,7 +437,7 @@ theme_override_constants/separation = 6
 
 [node name="Title" type="Label" parent="Timing/Panel/Box/Edit"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.566406, 0.766266, 1, 1)
+theme_override_colors/font_color = Color(0.952941, 0.729412, 1, 1)
 text = "Selected Timing Point"
 
 [node name="OffsetLabel" type="Label" parent="Timing/Panel/Box/Edit"]
@@ -455,7 +455,7 @@ allow_greater = true
 suffix = "ms"
 
 [node name="UseCurrent" type="Button" parent="Timing/Panel/Box/Edit"]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
@@ -499,11 +499,11 @@ layout_mode = 2
 
 [node name="TapTitle" type="Label" parent="Timing/Panel/Box/Edit"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.566406, 0.766266, 1, 1)
+theme_override_colors/font_color = Color(0.952941, 0.729412, 1, 1)
 text = "Tap Tempo (play the song and tap along)"
 
 [node name="Tap" type="Button" parent="Timing/Panel/Box/Edit"]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
@@ -515,7 +515,7 @@ layout_mode = 2
 text = "Tap at least 4 times"
 
 [node name="ApplyTap" type="Button" parent="Timing/Panel/Box/Edit"]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
@@ -556,7 +556,7 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="Verify/Panel/Box"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.566406, 0.766266, 1, 1)
+theme_override_colors/font_color = Color(0.952941, 0.729412, 1, 1)
 text = "Beatmap Checks (double-click a timed issue to jump to it)"
 
 [node name="Summary" type="Label" parent="Verify/Panel/Box"]
@@ -568,7 +568,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Run" type="Button" parent="Verify/Panel/Box"]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
@@ -614,7 +614,7 @@ theme_override_constants/separation = 5
 
 [node name="Title" type="Label" parent="Compose/Info/ContextSections"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.566406, 0.766266, 1, 1)
+theme_override_colors/font_color = Color(0.952941, 0.729412, 1, 1)
 text = "- Cursor"
 
 [node name="SelectedPos" type="Label" parent="Compose/Info/ContextSections"]
@@ -623,7 +623,7 @@ text = "-"
 
 [node name="Title2" type="Label" parent="Compose/Info/ContextSections"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.566406, 0.766266, 1, 1)
+theme_override_colors/font_color = Color(0.952941, 0.729412, 1, 1)
 text = "- Notes"
 
 [node name="NoteCount" type="Label" parent="Compose/Info/ContextSections"]
@@ -636,7 +636,7 @@ text = "0 selected"
 
 [node name="Title3" type="Label" parent="Compose/Info/ContextSections"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.566406, 0.766266, 1, 1)
+theme_override_colors/font_color = Color(0.952941, 0.729412, 1, 1)
 text = "- Beat Snap"
 
 [node name="Divisor" type="OptionButton" parent="Compose/Info/ContextSections"]
@@ -664,7 +664,7 @@ popup/item_7/id = 7
 
 [node name="Title4" type="Label" parent="Compose/Info/ContextSections"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.566406, 0.766266, 1, 1)
+theme_override_colors/font_color = Color(0.952941, 0.729412, 1, 1)
 text = "- Playback Speed"
 
 [node name="Rate" type="OptionButton" parent="Compose/Info/ContextSections"]
@@ -684,7 +684,7 @@ popup/item_3/id = 3
 
 [node name="Title5" type="Label" parent="Compose/Info/ContextSections"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.566406, 0.766266, 1, 1)
+theme_override_colors/font_color = Color(0.952941, 0.729412, 1, 1)
 text = "- Zoom"
 
 [node name="Zoom" type="Label" parent="Compose/Info/ContextSections"]
@@ -928,7 +928,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_8ecv8")
 layout_mode = 2
 
 [node name="SkipBack" type="Button" parent="ControlPanel/Box/Player/Columns" unique_id=475583245]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(39, 39)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
@@ -936,7 +936,7 @@ StringText = "X"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="PlayPause" type="Button" parent="ControlPanel/Box/Player/Columns" unique_id=862566763]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(39, 39)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
@@ -944,7 +944,7 @@ StringText = "X"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="SkipForward" type="Button" parent="ControlPanel/Box/Player/Columns" unique_id=752541916]
-self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+self_modulate = Color(0.227451, 0.2, 0.258824, 1)
 custom_minimum_size = Vector2(39, 39)
 layout_mode = 2
 script = ExtResource("6_fn0xp")

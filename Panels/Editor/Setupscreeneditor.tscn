@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://blbe3d2880su3" path="res://Script/Effects/ScreenElementButton.cs" id="3_6ukjg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6ukjg"]
-bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
+bg_color = Color(0.117647, 0.0980392, 0.137255, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_napsa"]
 
