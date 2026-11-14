@@ -14,6 +14,9 @@ public partial class Signup : ColorRect
 	private string username;
 	private string password;
 	private Tween tween;
+	// Same limits as the server's change-password check (Chikara usersettings.PASSWORD_MIN / PASSWORD_MAX).
+	private const int PasswordMin = 8;
+	private const int PasswordMax = 256;
 	private SettingsOperator SettingsOperator { get; set; }
 	private void _back()
 	{
@@ -77,6 +80,7 @@ public partial class Signup : ColorRect
 		SignupButton = GetNode<Button>("PanelContainer/VBoxContainer/HBoxContainer/SignupButton");
 		UserLine = GetNode<LineEdit>("PanelContainer/VBoxContainer/Username");
 		PassLine = GetNode<LineEdit>("PanelContainer/VBoxContainer/Password");
+		PassLine.MaxLength = PasswordMax;
 		SignupHTTP = GetNode<HttpRequest>("PanelContainer/Signup");
 		Modulate = new Color(1f, 1f, 1f, 0f);
 		animation(1);
@@ -85,7 +89,7 @@ public partial class Signup : ColorRect
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (UserLine.Text.Length > 0 && PassLine.Text.Length > 7)
+		if (UserLine.Text.Length > 0 && PassLine.Text.Length >= PasswordMin)
 			SignupButton.Disabled = false;
 		else
 			SignupButton.Disabled = true;
@@ -97,10 +101,10 @@ public partial class Signup : ColorRect
 		}else Warning.Hide();
 
 
-		if (PassLine.Text.Length < 8)
+		if (PassLine.Text.Length < PasswordMin)
 		{
 			Warning2.Visible = true;
-			Warning2.Text = "Password needs at least 8 characters";
+			Warning2.Text = $"Password needs at least {PasswordMin} characters";
 		}
 		else Warning2.Hide();
 	}

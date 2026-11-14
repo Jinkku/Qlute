@@ -496,6 +496,11 @@ public partial class ApiOperator : Node
 				SettingsOperator.SessionConfig.Loggedin = true;
 				NoticeText = "";
 				ModerationApi.RefreshMe(); // team members get the admin panel button
+				// The server now stores passwords salted; accounts still on the old unsalted hash are asked to pick a new one.
+				// Logging in on the website sends them straight to the change-password page.
+				if (json.ContainsKey("change_password") && (bool)json["change_password"])
+					Notify.Post("We've upgraded how passwords are stored. Click here to change your password on the website.",
+						uri: SettingsOperator.GetSetting("api") + "changepassword", Type: NotificationIcons.NotificationType.Warning);
 			}
 			else if (Username != "Guest" && PasswordHash != null && responseCode != 200)
 			{

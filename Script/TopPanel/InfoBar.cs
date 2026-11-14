@@ -163,8 +163,8 @@ public partial class InfoBar : ColorRect
 			{
 				Sample.PlaySample("res://SelectableSkins/Slia/Sounds/notification.wav");
 				var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/Notification.tscn").Instantiate().GetNode<Button>(".");
+				NotiCard.Position = new Vector2(GetViewportRect().Size.X, NotificationApplet.NextStackY());
 				NotificationListener.NotificationCards.Add(NotiCard);
-				NotiCard.Position = new Vector2(GetViewportRect().Size.X, 60 + ((NotiCard.Size.Y + 10) * NotificationListener.Count));
 				NotiCard.Text = NotiInfo.Title;
 				NotiCard.SetMeta("id", NotificationListener.Count);
 				NotiCard.SetMeta("listid", NotificationListener.NotificationList.Count - 1);

@@ -102,20 +102,34 @@ public partial class NotificationApplet : Button
 		_remove();
 		CloseOut();
 	}
+	public const float StackTop = 60;
+	public const float StackGap = 10;
+
+	/// <summary>Height a card takes in the popup stack (its wrapped text can make it taller than the scene's 80px).</summary>
+	public static float CardHeight(Control card) => Mathf.Max(card.Size.Y, card.GetCombinedMinimumSize().Y);
+
+	/// <summary>Y just below every card already in the popup stack, where a new card goes.</summary>
+	public static float NextStackY()
+	{
+		float y = StackTop;
+		foreach (var card in NotificationListener.NotificationCards)
+			if (IsInstanceValid(card)) y += CardHeight(card) + StackGap;
+		return y;
+	}
 	private bool Finished { get; set; }
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		for (int i = 0; i < NotificationListener.NotificationCards.Count; i++)
+		// Stack cards under each other using each card's own height: long messages wrap onto more lines
+		// and make their card taller, so a fixed slot height made the next card overlap them.
+		float targetY = StackTop;
+		foreach (var tempcard in NotificationListener.NotificationCards)
 		{
-			var tempcard = NotificationListener.NotificationCards[i];
-			float targetY = 60 + ((Size.Y + 10) * i);
-
+			if (!IsInstanceValid(tempcard)) continue;
 			// Smoothly interpolate Y position if card is moving
-			float currentY = tempcard.Position.Y;
-			float newY = Mathf.Lerp(currentY, targetY, 0.15f); // Adjust the lerp factor for smoothness
-
+			float newY = Mathf.Lerp(tempcard.Position.Y, targetY, 0.15f); // Adjust the lerp factor for smoothness
 			tempcard.Position = new Vector2(tempcard.Position.X, newY);
+			targetY += CardHeight(tempcard) + StackGap;
 		}
 
 		if (!isinit && HasMeta("is_popup") && (bool)GetMeta("is_popup") && DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - (long)GetMeta("time") > 4000 && !ProgressShow)
