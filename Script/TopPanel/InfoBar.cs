@@ -167,7 +167,7 @@ public partial class InfoBar : ColorRect
 				NotificationListener.NotificationCards.Add(NotiCard);
 				NotiCard.Text = NotiInfo.Title;
 				NotiCard.SetMeta("id", NotificationListener.Count);
-				NotiCard.SetMeta("listid", NotificationListener.NotificationList.Count - 1);
+				NotiCard.SetMeta("listid", NotificationListener.NotificationList.IndexOf(NotiInfo)); // this card's own notification, not the newest one
 				NotiCard.SetMeta("time", NotiInfo.Time);
 				AddChild(NotiCard);
 				var tween = NotiCard.CreateTween();
