@@ -34,8 +34,8 @@ public partial class LanSettings : PanelContainer
 	{
 		_enabled.SetPressedNoSignal(LanChat.Enabled);
 		_online.SetPressedNoSignal(OnlineChat.Enabled);
-		_nickname.Editable = LanChat.CanUseNickname;
-		_nickname.TooltipText = LanChat.CanUseNickname ? "" : "You're logged in, so your account name is used.";
+		_nickname.Editable = true;
+		_nickname.TooltipText = "Leave empty to use your account name (or Guest).";
 	}
 
 	private void Save(string text)

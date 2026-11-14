@@ -195,13 +195,10 @@ public partial class ChatOverlay : PanelContainer
 
 	private void RefreshName()
 	{
-		bool offline = LanChat.CanUseNickname;
-		NameEdit.Editable = offline;
-		NameEdit.TooltipText = offline
-			? "Your name in LAN chat and LAN rooms while you aren't logged in."
-			: "You're logged in, so your account name is used.";
-		if (!NameEdit.HasFocus()) NameEdit.Text = offline ? LanChat.Nickname : "";
-		NameEdit.PlaceholderText = offline ? $"Name when offline ({LanChat.LocalName()})" : LanChat.LocalName();
+		NameEdit.Editable = true;
+		NameEdit.TooltipText = "Your name in LAN chat and LAN rooms. Leave it empty to use your account name (or Guest).";
+		if (!NameEdit.HasFocus()) NameEdit.Text = LanChat.Nickname;
+		NameEdit.PlaceholderText = $"LAN name ({LanChat.LocalName()})";
 	}
 
 	private void SaveName(string text)

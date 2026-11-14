@@ -137,7 +137,7 @@ public partial class LanChat : Node
 		get
 		{
 			var v = SettingsOperator.GetSetting(EnabledSetting)?.ToString();
-			return v == null || Check.CheckBoolValue(v);
+			return v != null && Check.CheckBoolValue(v);
 		}
 	}
 
@@ -149,11 +149,12 @@ public partial class LanChat : Node
 		Version++;
 	}
 
-	/// <summary>The name used when not logged in (empty = the saved account name, or "Guest").</summary>
+	/// <summary>The name shown on the LAN (empty = the account name when logged in, or "Guest").</summary>
 	public static string Nickname => Clean(SettingsOperator.GetSetting(NicknameSetting)?.ToString(), MaxNameLength, "");
 
-	/// <summary>Logged-in players always use their account name, so you can't pose as someone's account.</summary>
-	public static bool CanUseNickname => !SettingsOperator.SessionConfig.Loggedin;
+	/// <summary>Everyone can pick a LAN name, logged in or not, so the account name doesn't have to go out on the network.
+	/// (LAN names were never verified anyway: anyone can type any name while logged out.)</summary>
+	public static bool CanUseNickname => true;
 
 	public void SetNickname(string name)
 	{
@@ -334,6 +335,21 @@ public partial class LanChat : Node
 	// Frame update
 	// =====================================================================
 
+	/// <summary>We only announce ourselves on the network while the player is actually using LAN features:
+	/// the chat overlay or a multiplayer screen is open, or they're in a private LAN room. The rest of the time
+	/// we only listen, so others can't see who's playing on the network.</summary>
+	public bool Announcing
+	{
+		get
+		{
+			if (TestMode || SettingsOperator.SessionConfig.ChatBoxVisible) return true;
+			var scene = GetTree()?.CurrentScene?.SceneFilePath ?? "";
+			if (scene.Contains("/Multiplayer", StringComparison.Ordinal)) return true;
+			return Rooms.Values.Any(r => !r.IsPublic && !r.IsDm && r.Members.Keys.Any(id => id != LocalId));
+		}
+	}
+	private bool _wasAnnouncing;
+
 	public override void _Process(double delta)
 	{
 		if (!Running) return;
@@ -341,8 +357,20 @@ public partial class LanChat : Node
 		var name = LocalName();
 		if (name != _lastName) { _lastName = name; AnnounceName(); }
 
+		bool announcing = Announcing;
+		if (announcing != _wasAnnouncing)
+		{
+			_wasAnnouncing = announcing;
+			if (announcing) _helloTimer = 0;
+			else
+			{
+				// Gone quiet: tell peers right away instead of letting them time us out.
+				var bye = Encode(Packet("bye"));
+				foreach (var p in Peers.Values) SendRaw(bye, p.EndPoint);
+			}
+		}
 		_helloTimer -= delta;
-		if (_helloTimer <= 0)
+		if (announcing && _helloTimer <= 0)
 		{
 			_helloTimer = HelloInterval;
 			SendHello();
@@ -470,7 +498,7 @@ public partial class LanChat : Node
 			TestLog($"peer {name} ({id}) at {ep}");
 			if (Peers.Count == 1) AddSystem(Rooms[PublicRoomId], "Someone else is playing on this network. Say hi!");
 			AddSystem(Rooms[PublicRoomId], $"{name} is online.", markUnread: false);
-			SendHello(); // answer right away so they see us without waiting a full interval
+			if (Announcing) SendHello(); // answer right away so they see us without waiting a full interval
 		}
 		if (changed) Version++;
 	}
