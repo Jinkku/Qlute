@@ -449,11 +449,10 @@ public partial class TaikoGameCore : Control
 				    float nowMs = gametime; // est is already in ms
 				    float elapsed = nowMs - LastKeyPressTime[i];
                 
-				    if (elapsed < SPAM_COOLDOWN_MS && elapsed >= 0f)
+				    DrumTypeGroup drumSide = (DrumTypeGroup)Keys[i].DrumType;
+				    // Only spam when there's nothing of this colour to hit: fast real streams stay fine.
+				    if (elapsed < SPAM_COOLDOWN_MS && elapsed >= 0f && !NoteInWindow(drumSide, nowMs))
 				    {
-					    // 4. Fixed: Safely cast or map your key index/bind to the DrumTypeGroup enum
-					    DrumTypeGroup drumSide = (DrumTypeGroup)Keys[i].DrumType;
-                    
 					    TriggerSpamMiss(drumSide);
 					    return;
 				    }
@@ -465,6 +464,19 @@ public partial class TaikoGameCore : Control
 			    break;
 		    }
 	    }
+    }
+
+    /// <summary>True when an unhit note of this colour is inside the widest (meh) hit window (same bounds as checkjudge).</summary>
+    private bool NoteInWindow(DrumTypeGroup column, float nowMs)
+    {
+	    for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
+	    {
+		    var Note = Notes[i];
+		    if (Note.DrumType != column || Note.hit || Note.Node == null || !Note.Node.Visible) continue;
+		    float diff = Note.timing + nowMs; // notex - HitPoint
+		    if (diff > -(SettingsOperator.MehJudge / 2) - 15 && diff < (SettingsOperator.MehJudge / 2) + 15) return true;
+	    }
+	    return false;
     }
 
     /// <summary>
