@@ -45,7 +45,8 @@ public partial class VisualsSelfTest : Node
 				_step = 1;
 				ParseAll();
 				if (Args.Contains("--visuals-test-graph")) WriteGraph();
-				if (Args.Contains("--visuals-test-editor")) StartEditor();
+				if (Args.Contains("--visuals-test-menu")) StartMenu();
+				else if (Args.Contains("--visuals-test-editor")) StartEditor();
 				else StartPlay();
 				break;
 			case 10: // playing: capture at each time
@@ -59,13 +60,14 @@ public partial class VisualsSelfTest : Node
 				{
 					var sb = GetTree().CurrentScene?.FindChildren("*", "", true, false).OfType<StoryboardPlayer>().FirstOrDefault();
 					var sh = GetTree().CurrentScene?.FindChildren("*", "", true, false).OfType<BeatmapShaderLayer>().FirstOrDefault();
-					Log($"t={now:0} scene={GetTree().CurrentScene?.Name} storyboard={(sb == null ? "none" : $"ready={sb.Ready} replacesBg={sb.ReplacesBackground}")} shader={(sh == null ? "none" : $"visible={sh.Visible}")}");
+					Log($"t={now:0} score={Gameplay.score} scene={GetTree().CurrentScene?.Name} storyboard={(sb == null ? "none" : $"ready={sb.Ready} replacesBg={sb.ReplacesBackground}")} shader={(sh == null ? "none" : $"visible={sh.Visible}")}");
 					Shot($"play_{_times[_shot]}");
 					_shot++;
 					if (_shot >= _times.Length) { Log("done"); GetTree().Quit(); }
 				}
 				break;
 			case 20 when _t > _stepAt + 3: EditorSteps(); break;
+			case 30 when _t > _stepAt + 6: MenuSteps(); break;
 		}
 	}
 
@@ -216,6 +218,39 @@ public partial class VisualsSelfTest : Node
 		Log("playing " + SettingsOperator.Beatmaps[index].Title);
 		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
 		_step = 10;
+	}
+
+	private int _menuPhase;
+
+	/// <summary>Song select, then the home screen, with the map selected (its storyboard behind the menus).</summary>
+	private void StartMenu()
+	{
+		int index = FindMap();
+		if (index < 0) { Log("map not found " + OsuPath); GetTree().Quit(1); return; }
+		GetNode<SettingsOperator>("/root/SettingsOperator").SelectSongID(index);
+		GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
+		_step = 30;
+		_stepAt = _t;
+	}
+
+	private void MenuSteps()
+	{
+		_stepAt = _t;
+		var menu = GetTree().CurrentScene?.FindChildren("*", "", true, false).OfType<MenuStoryboard>().FirstOrDefault();
+		var player = menu?.FindChildren("*", "", true, false).OfType<StoryboardPlayer>().FirstOrDefault();
+		Log($"menu {GetTree().CurrentScene?.Name}: storyboard={(player == null ? "none" : $"ready={player.Ready} objects={player.Doc?.Objects.Count} active={player.ActiveCount}")} music={AudioPlayer.Instance.GetPlaybackPosition():0.0}s playing={AudioPlayer.Instance.Playing}");
+		switch (_menuPhase++)
+		{
+			case 0:
+				Shot("menu_song_select");
+				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/home_screen.tscn");
+				break;
+			default:
+				Shot("menu_home");
+				Log("done");
+				GetTree().Quit();
+				break;
+		}
 	}
 
 	private void StartEditor()

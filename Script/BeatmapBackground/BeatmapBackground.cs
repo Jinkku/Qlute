@@ -9,6 +9,8 @@ public partial class BeatmapBackground : TextureRect
 	TextureRect Flash {get;set;}
 	public Tween _tween {get;set;}
 	public static bool FlashEnable {get;set;}
+	/// <summary>Show the selected map's storyboard above this background (home screen, song select).</summary>
+	[Export] public bool ShowStoryboard { get; set; }
 	private bool flip { get; set; }
 	private TextureRect TempImage { get; set; }
 	private Texture2D DefaultImage { get; set; }
@@ -25,6 +27,17 @@ public partial class BeatmapBackground : TextureRect
 		SettingsOperator.BackgroundChanged += OnBackgroundChanged;
 
 		resettime();
+		if (ShowStoryboard) Callable.From(AddStoryboard).CallDeferred();
+	}
+
+	private void AddStoryboard()
+	{
+		var parent = GetParent();
+		if (parent == null) return;
+		var sb = new MenuStoryboard { Background = this, ZIndex = ZIndex, Name = "MenuStoryboard" };
+		parent.AddChild(sb);
+		parent.MoveChild(sb, GetIndex() + 1);
+		sb.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
 	}
 	public void _flashstart()
 	{

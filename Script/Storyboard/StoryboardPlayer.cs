@@ -154,6 +154,7 @@ public partial class StoryboardPlayer : Control
 	/// <summary>Show <paramref name="doc"/> (already compiled). Images load in the background when <paramref name="async"/>.</summary>
 	public void Load(StoryboardDoc doc, string folder, bool async)
 	{
+		if (doc != Doc) Unload(); // a different storyboard (menus switch maps): drop the old one first
 		Doc = doc;
 		if (Folder != folder)
 		{
@@ -242,6 +243,23 @@ public partial class StoryboardPlayer : Control
 	}
 
 	private static Texture2D ToTexture(Image img) => img == null ? null : ImageTexture.CreateFromImage(img);
+
+	/// <summary>Stop showing the current storyboard and give the background back.</summary>
+	public void Unload()
+	{
+		FreeItems();
+		_layout = null;
+		_loading = null;
+		_uploads.Clear();
+		_uploading = false;
+		if (_video != null) { _video.QueueFree(); _video = null; }
+		if (ReplacesBackground && BackgroundToFollow != null && IsInstanceValid(BackgroundToFollow))
+			BackgroundToFollow.Visible = true;
+		ReplacesBackground = false;
+		Ready = false;
+		Doc = null;
+		QueueRedraw();
+	}
 
 	private void FreeItems()
 	{

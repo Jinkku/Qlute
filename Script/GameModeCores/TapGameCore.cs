@@ -897,11 +897,11 @@ public partial class TapGameCore : Control
 	public override void _Process(double delta)
 	{
 		dim = 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f));
-		// While playing: projected score (drops on misses). Once finished: the exact final score.
+		// While playing: counts up from 0 to the final score. Once finished: the exact final score.
 		score = Finished
 			? ScoreCalc.ProcessScore(SettingsOperator.Gameplaycfg.NoteCount, SettingsOperator.Gameplaycfg.Max,
 				SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, comboPortion, scoreMult)
-			: Game.PerformanceCalculator.LiveScore(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great,
+			: Game.PerformanceCalculator.LiveScore(SettingsOperator.Gameplaycfg.NoteCount, SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great,
 				SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, comboPortion, scoreMult);
 		if (!Finished) SettingsOperator.Gameplaycfg.pp = CurrentPerformance(false);
 		Gameplay.score = score;

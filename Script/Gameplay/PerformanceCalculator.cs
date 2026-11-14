@@ -205,14 +205,14 @@ public static class PerformanceCalculator
 	}
 
 	/// <summary>
-	/// Live score for the HUD: the score the play so far is on track for (accuracy and combo
-	/// measured over the notes judged so far). Starts at the SS value on the first perfect, drops on
-	/// every miss/great/meh, and equals <see cref="ComputeScore"/> once every note is judged.
+	/// Live score for the HUD: counts up from 0 as notes are hit, measured against every note in the map,
+	/// so it reaches the final score (1,000,000 for an SS on NoMod) on the last note and equals
+	/// <see cref="ComputeScore"/> for the finished play.
 	/// </summary>
-	public static int LiveScore(int perfect, int great, int meh, int bad, long comboPortion, double multiplier)
+	public static int LiveScore(int noteCount, int perfect, int great, int meh, int bad, long comboPortion, double multiplier)
 	{
 		int judged = perfect + great + meh + bad;
-		return judged <= 0 ? 0 : ComputeScore(judged, perfect, great, meh, comboPortion, multiplier);
+		return judged <= 0 ? 0 : ComputeScore(Math.Max(noteCount, judged), perfect, great, meh, comboPortion, multiplier);
 	}
 
 	/// <summary>0..1,000,000 on NoMod (SS = exactly 1,000,000), times the score multiplier.</summary>

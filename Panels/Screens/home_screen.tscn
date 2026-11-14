@@ -85,6 +85,7 @@ grow_vertical = 2
 script = ExtResource("1_vj7aj")
 
 [node name="BeatmapBackground" parent="." unique_id=560686729 instance=ExtResource("2_ouv1d")]
+ShowStoryboard = true
 layout_mode = 1
 
 [node name="MusicVisualizer" parent="." unique_id=1490893864 instance=ExtResource("16_1l3bn")]

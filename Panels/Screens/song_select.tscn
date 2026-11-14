@@ -201,6 +201,7 @@ grow_vertical = 2
 script = ExtResource("1_fin0e")
 
 [node name="BeatmapBackground" parent="." unique_id=235856276 instance=ExtResource("2_wg4n2")]
+ShowStoryboard = true
 self_modulate = Color(0.9063318, 0.9063318, 0.9063318, 1)
 z_index = -5
 layout_mode = 1

@@ -724,11 +724,11 @@ private void _GameNoteTick(double delta)
 			DisableFadeSetting = Check.CheckBoolValue(SettingsOperator.GetSetting("dfadeout").ToString());
 		}
 		dim = 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f));
-		// While playing: projected score (drops on misses). Once finished: the exact final score the server saves.
+		// While playing: counts up from 0 to the final score. Once finished: the exact final score the server saves.
 		score = Finished
 			? ScoreCalc.ProcessScore(PerfNoteCount, SettingsOperator.Gameplaycfg.Max,
 				SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, ComboPortion, ScoreMult)
-			: PerformanceCalculator.LiveScore(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great,
+			: PerformanceCalculator.LiveScore(PerfNoteCount, SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great,
 				SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, ComboPortion, ScoreMult);
 		if (!Finished)
 			SettingsOperator.Gameplaycfg.pp = PerformanceCalculator.LivePerformance(MaxPp, PerfNoteCount,
