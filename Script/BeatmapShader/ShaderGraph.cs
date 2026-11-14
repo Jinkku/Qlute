@@ -83,7 +83,8 @@ public class ShaderGraph
 	// Node catalogue
 	// =====================================================================
 
-	private const string Screen = "texture(screen_tex, uv)";
+	/// <summary>The screen at the pixel's own UV, read once at the top of fragment().</summary>
+	private const string Screen = "screen_col";
 	public static readonly Dictionary<string, NodeDef> Defs = BuildDefs().ToDictionary(d => d.Type);
 
 	private static IEnumerable<NodeDef> BuildDefs()
@@ -107,7 +108,7 @@ public class ShaderGraph
 		{
 			Type = "screen", Title = "Screen", Category = "Input", Help = "The picture under the shader at a UV.",
 			Inputs = new[] { Uv() }, Outputs = new[] { ("Colour", PortKind.Color) },
-			Gen = (i, _) => new[] { $"texture(screen_tex, {i[0]})" },
+			Gen = (i, _) => new[] { i[0] == "uv" ? "screen_col" : $"texture(screen_tex, {i[0]})" },
 		};
 		yield return new NodeDef
 		{
@@ -466,11 +467,10 @@ vec4 blur9(vec2 p, float r) {
 		}
 
 		var sb = new StringBuilder(Header);
-		sb.Append("\nvoid fragment() {\n\tvec2 uv = SCREEN_UV;\n");
+		sb.Append("\nvoid fragment() {\n\tvec2 uv = SCREEN_UV;\n\tvec4 screen_col = texture(screen_tex, uv);\n");
 		sb.Append(body);
-		sb.Append($"\tvec4 base_col = {Screen};\n");
 		sb.Append($"\tvec4 graph_col = {colour};\n");
-		sb.Append($"\tCOLOR = vec4(mix(base_col.rgb, graph_col.rgb, clamp({mix}, 0.0, 1.0)), 1.0);\n");
+		sb.Append($"\tCOLOR = vec4(mix(screen_col.rgb, graph_col.rgb, clamp({mix}, 0.0, 1.0)), 1.0);\n");
 		sb.Append("}\n");
 		return sb.ToString();
 	}

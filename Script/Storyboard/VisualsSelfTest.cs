@@ -50,6 +50,11 @@ public partial class VisualsSelfTest : Node
 				break;
 			case 10: // playing: capture at each time
 				double now = SettingsOperator.Gameplaycfg.Time * 1000;
+				if (Value("--visuals-test-bench=") is { } benchSecs && GetTree().CurrentScene is Gameplay { songstarted: true } && now >= _times[0])
+				{
+					Bench(delta, double.Parse(benchSecs));
+					break;
+				}
 				if (GetTree().CurrentScene is Gameplay { songstarted: true } && _shot < _times.Length && now >= _times[_shot])
 				{
 					var sb = GetTree().CurrentScene?.FindChildren("*", "", true, false).OfType<StoryboardPlayer>().FirstOrDefault();
@@ -65,6 +70,33 @@ public partial class VisualsSelfTest : Node
 	}
 
 	private double _stepAt;
+	private double _benchTime, _cpu, _gpu;
+	private int _benchFrames;
+	private long _benchStartTicks;
+	private readonly System.Collections.Generic.List<double> _frameMs = new();
+
+	/// <summary>Uncapped frame stats for a few seconds of gameplay (run with --uncapped).</summary>
+	private void Bench(double delta, double seconds)
+	{
+		if (_benchFrames == 0)
+		{
+			_benchStartTicks = StoryboardPlayer.UpdateTicks;
+			RenderingServer.ViewportSetMeasureRenderTime(GetViewport().GetViewportRid(), true);
+		}
+		_benchFrames++;
+		_benchTime += delta;
+		_frameMs.Add(delta * 1000);
+		_cpu += Performance.GetMonitor(Performance.Monitor.TimeProcess) * 1000;
+		_gpu += RenderingServer.ViewportGetMeasuredRenderTimeGpu(GetViewport().GetViewportRid());
+		if (_benchTime < seconds) return;
+		_frameMs.Sort();
+		double sbMs = (StoryboardPlayer.UpdateTicks - _benchStartTicks) * 1000.0 / Stopwatch.Frequency / _benchFrames;
+		Log(string.Create(System.Globalization.CultureInfo.InvariantCulture,
+			$"bench storyboard={SettingsOperator.GetSetting("storyboard")} shader={SettingsOperator.GetSetting("beatmapshader")}: {_benchFrames / _benchTime:0} fps avg, " +
+			$"p99 frame {_frameMs[(int)(_frameMs.Count * 0.99)]:0.00} ms, process {_cpu / _benchFrames:0.00} ms, gpu {_gpu / _benchFrames:0.00} ms, storyboard update {sbMs:0.000} ms, " +
+			$"active objects {StoryboardPlayer.LastActive}, draw calls {Performance.GetMonitor(Performance.Monitor.RenderTotalDrawCallsInFrame)}, nodes {Performance.GetMonitor(Performance.Monitor.ObjectNodeCount)}"));
+		GetTree().Quit();
+	}
 
 	private void Shot(string name)
 	{

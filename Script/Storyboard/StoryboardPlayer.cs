@@ -18,6 +18,8 @@ using QluteStoryboard;
 public partial class StoryboardPlayer : Control
 {
 	public const string SettingKey = "storyboard";
+	/// <summary>Stopwatch ticks spent in UpdateFrame (all players), for the self-test benchmark.</summary>
+	public static long UpdateTicks;
 
 	/// <summary>Current song time in ms.</summary>
 	public Func<double> TimeSource { get; set; } = () => 0;
@@ -40,13 +42,38 @@ public partial class StoryboardPlayer : Control
 
 	private Control _frame, _overlayFrame;
 	private Node2D _root, _overlayRoot;
-	private readonly List<Sprite2D> _sprites = new();
-	private readonly Dictionary<SbObject, Sprite2D> _spriteOf = new();
+	/// <summary>Render state of one object, drawn straight through the RenderingServer (no node per sprite).</summary>
+	private struct Slot
+	{
+		public Rid Item;
+		public Texture2D[] Frames;
+		public Texture2D Tex;
+		public bool Shown, FlipH, FlipV, Additive;
+		public Transform2D Xf;
+		public Color Mod;
+		public Rect2 Rect;
+		/// <summary>State is unchanged for StableFrom &lt;= t &lt; StableUntil (with the same pass/fail state).</summary>
+		public double StableFrom, StableUntil;
+		public bool StablePassing;
+	}
+
+	private Slot[] _slots = Array.Empty<Slot>();
+	private readonly Dictionary<SbObject, int> _slotOf = new();
+	// objects by start time, and the ones currently inside their lifetime
+	private int[] _byStart = Array.Empty<int>();
+	private int _cursor;
+	private readonly List<int> _active = new();
+	private double _scanTime = double.NegativeInfinity;
+	private SbSample[] _samplesByTime = Array.Empty<SbSample>();
+	private int _sampleCursor = -1;
+	private Vector2 _laidOutSize = new(-1, -1);
 	private VideoStreamPlayer _video;
 	private readonly List<AudioStreamPlayer> _samplePlayers = new();
 	private int _nextSamplePlayer;
 	private double _lastTime = double.NaN;
 	private Task<Dictionary<string, Image>> _loading;
+	private readonly Queue<KeyValuePair<string, Image>> _uploads = new();
+	private bool _uploading;
 	private bool _errored;
 
 	private static CanvasItemMaterial _additive;
@@ -75,6 +102,7 @@ public partial class StoryboardPlayer : Control
 
 	public override void _ExitTree()
 	{
+		FreeItems();
 		if (BackgroundToFollow != null && IsInstanceValid(BackgroundToFollow) && ReplacesBackground)
 			BackgroundToFollow.Visible = true;
 		if (OverlayHost != null && IsInstanceValid(OverlayHost) && OverlayHost.GetParent() == null)
@@ -154,9 +182,10 @@ public partial class StoryboardPlayer : Control
 				_textures[key] = _fileIndex.TryGetValue(key, out var full) ? ToTexture(DecodeImage(full)) : null;
 			// The editor reloads after every edit: keep the sprite nodes when only commands/positions changed.
 			var layout = doc.Objects.Select(o => (o, o.Layer)).ToList();
-			if (_layout != null && _layout.SequenceEqual(layout) && _sprites.Count == layout.Count)
+			if (_layout != null && _layout.SequenceEqual(layout) && _slots.Length == layout.Count)
 			{
 				UpdateReplacesBackground();
+				PrepareTimeline();
 				Ready = true;
 				return;
 			}
@@ -214,32 +243,70 @@ public partial class StoryboardPlayer : Control
 
 	private static Texture2D ToTexture(Image img) => img == null ? null : ImageTexture.CreateFromImage(img);
 
+	private void FreeItems()
+	{
+		foreach (var sl in _slots)
+			if (sl.Item.IsValid) RenderingServer.FreeRid(sl.Item);
+		_slots = Array.Empty<Slot>();
+		_active.Clear();
+	}
+
 	private void BuildNodes()
 	{
-		foreach (var s in _sprites) s.QueueFree();
-		_sprites.Clear();
+		FreeItems();
 		if (_video != null) { _video.QueueFree(); _video = null; }
 		_layout ??= Doc.Objects.Select(o => (o, o.Layer)).ToList();
 
-		// draw order: Background, Fail, Pass, Foreground; Overlay on its own host
-		var order = new[] { SbLayer.Background, SbLayer.Fail, SbLayer.Pass, SbLayer.Foreground, SbLayer.Overlay };
-		var byObject = new Dictionary<SbObject, Sprite2D>();
-		foreach (var layer in order)
-			foreach (var o in Doc.Objects.Where(o => o.Layer == layer))
+		// One canvas item per object, created in draw order (Background, Fail, Pass, Foreground; Overlay on its own host).
+		_slots = new Slot[Doc.Objects.Count];
+		_slotOf.Clear();
+		for (int i = 0; i < Doc.Objects.Count; i++) _slotOf[Doc.Objects[i]] = i;
+		var parent = _root.GetCanvasItem();
+		var overlayParent = _overlayRoot.GetCanvasItem();
+		foreach (var layer in new[] { SbLayer.Background, SbLayer.Fail, SbLayer.Pass, SbLayer.Foreground, SbLayer.Overlay })
+			for (int i = 0; i < Doc.Objects.Count; i++)
 			{
-				var s = new Sprite2D { Centered = false, Visible = false, TextureFilter = TextureFilterEnum.Linear };
-				(layer == SbLayer.Overlay ? _overlayRoot : _root).AddChild(s);
-				byObject[o] = s;
+				if (Doc.Objects[i].Layer != layer) continue;
+				var item = RenderingServer.CanvasItemCreate();
+				RenderingServer.CanvasItemSetParent(item, layer == SbLayer.Overlay ? overlayParent : parent);
+				RenderingServer.CanvasItemSetVisible(item, false);
+				RenderingServer.CanvasItemSetDefaultTextureFilter(item, RenderingServer.CanvasItemTextureFilter.Linear);
+				_slots[i].Item = item;
 			}
-		foreach (var o in Doc.Objects) _sprites.Add(byObject[o]);
-		_spriteOf.Clear();
-		foreach (var (o, spr) in byObject) _spriteOf[o] = spr;
+		PrepareTimeline();
 
 		SetupVideo();
 
 		UpdateReplacesBackground();
 		Ready = true;
 		QueueRedraw();
+	}
+
+	/// <summary>Resolve every object's textures and sort objects by start time (after load and after edits).</summary>
+	private void PrepareTimeline()
+	{
+		for (int i = 0; i < _slots.Length && i < Doc.Objects.Count; i++)
+		{
+			var o = Doc.Objects[i];
+			int frames = o.IsAnimation ? Math.Clamp(o.FrameCount, 1, 1000) : 1;
+			var tex = new Texture2D[frames];
+			for (int f = 0; f < frames; f++) _textures.TryGetValue(Key(o.FramePath(f)), out tex[f]);
+			_slots[i].Frames = tex;
+		}
+		_byStart = Enumerable.Range(0, _slots.Length).Where(i => Doc.Objects[i].HasCommands)
+			.OrderBy(i => Doc.Objects[i].StartTime).ToArray();
+		_samplesByTime = Doc.Samples.OrderBy(x => x.Time).ToArray();
+		ResetScan();
+	}
+
+	/// <summary>Hide everything and scan from the start again (time went backwards, or the objects changed).</summary>
+	private void ResetScan()
+	{
+		foreach (int i in _active) Hide(ref _slots[i]);
+		_active.Clear();
+		_cursor = 0;
+		_scanTime = double.NegativeInfinity;
+		_sampleCursor = -1;
 	}
 
 	private void SetupVideo()
@@ -299,12 +366,28 @@ public partial class StoryboardPlayer : Control
 			if (!Ready && _loading != null && _loading.IsCompleted)
 			{
 				if (_loading.Status == TaskStatus.RanToCompletion)
-					foreach (var (k, img) in _loading.Result) _textures[k] = ToTexture(img);
+					foreach (var kv in _loading.Result) _uploads.Enqueue(kv);
 				_loading = null;
+				_uploading = true;
+			}
+			if (_uploading)
+			{
+				// Upload decoded images a few ms per frame so a big storyboard doesn't freeze a frame.
+				long start = System.Diagnostics.Stopwatch.GetTimestamp();
+				long budget = System.Diagnostics.Stopwatch.Frequency * 3 / 1000;
+				while (_uploads.Count > 0 && System.Diagnostics.Stopwatch.GetTimestamp() - start < budget)
+				{
+					var (k, img) = _uploads.Dequeue();
+					_textures[k] = ToTexture(img);
+				}
+				if (_uploads.Count > 0) return;
+				_uploading = false;
 				BuildNodes();
 			}
 			if (!Ready) return;
+			long t0 = System.Diagnostics.Stopwatch.GetTimestamp();
 			UpdateFrame();
+			UpdateTicks += System.Diagnostics.Stopwatch.GetTimestamp() - t0;
 		}
 		catch (Exception e)
 		{
@@ -323,65 +406,120 @@ public partial class StoryboardPlayer : Control
 			if (ReplacesBackground && BackgroundToFollow.Visible) BackgroundToFollow.Visible = false;
 		}
 
-		float s = PixelScale;
-		var frameRect = new Rect2((Size.X - FrameWidth) / 2f, 0, FrameWidth, Size.Y);
-		foreach (var f in new[] { _frame, _overlayFrame })
+		if (Size != _laidOutSize)
 		{
-			f.Position = frameRect.Position;
-			f.Size = frameRect.Size;
+			_laidOutSize = Size;
+			float s = PixelScale;
+			var frameRect = new Rect2((Size.X - FrameWidth) / 2f, 0, FrameWidth, Size.Y);
+			foreach (var f in new[] { _frame, _overlayFrame })
+			{
+				f.Position = frameRect.Position;
+				f.Size = frameRect.Size;
+			}
+			var rootPos = new Vector2(Doc.Widescreen ? 107f * s : 0f, 0);
+			_root.Position = rootPos;
+			_root.Scale = new Vector2(s, s);
+			_overlayRoot.Position = rootPos;
+			_overlayRoot.Scale = new Vector2(s, s);
+			QueueRedraw();
 		}
-		var rootPos = new Vector2(Doc.Widescreen ? 107f * s : 0f, 0);
-		_root.Position = rootPos;
-		_root.Scale = new Vector2(s, s);
-		_overlayRoot.Position = rootPos;
-		_overlayRoot.Scale = new Vector2(s, s);
 
 		double t = TimeSource();
 		bool passing = Passing();
-		for (int i = 0; i < Doc.Objects.Count && i < _sprites.Count; i++)
-			UpdateSprite(Doc.Objects[i], _sprites[i], t, passing);
+
+		// Only objects whose lifetime has started are looked at; the rest cost nothing.
+		if (t < _scanTime) ResetScan();
+		_scanTime = t;
+		var objects = Doc.Objects;
+		while (_cursor < _byStart.Length && objects[_byStart[_cursor]].StartTime <= t)
+		{
+			int i = _byStart[_cursor++];
+			if (objects[i].EndTime < t) continue; // already over (after a seek)
+			_slots[i].StableUntil = double.NegativeInfinity;
+			_active.Add(i);
+		}
+		for (int k = _active.Count - 1; k >= 0; k--)
+		{
+			int i = _active[k];
+			if (t > objects[i].EndTime)
+			{
+				Hide(ref _slots[i]);
+				_active[k] = _active[^1];
+				_active.RemoveAt(_active.Count - 1);
+				continue;
+			}
+			UpdateSlot(objects[i], ref _slots[i], t, passing);
+		}
+		ActiveCount = _active.Count;
+		LastActive = _active.Count;
 
 		UpdateVideo(t);
 		UpdateSamples(t, passing);
 		_lastTime = t;
 	}
 
-	private void UpdateSprite(SbObject o, Sprite2D spr, double t, bool passing)
-	{
-		bool layerOn = o.Layer switch { SbLayer.Fail => !passing, SbLayer.Pass => passing, _ => true };
-		if (!layerOn || !o.HasCommands || t < o.StartTime || t > o.EndTime)
-		{
-			if (spr.Visible) spr.Visible = false;
-			return;
-		}
-		var st = o.StateAt(t);
-		if (st.Alpha <= 0.002f || st.ScaleX == 0 || st.ScaleY == 0)
-		{
-			if (spr.Visible) spr.Visible = false;
-			return;
-		}
-		_textures.TryGetValue(Key(o.FramePath(o.FrameAt(t))), out var tex);
-		if (tex == null)
-		{
-			if (spr.Visible) spr.Visible = false;
-			return;
-		}
+	/// <summary>Objects inside their lifetime last frame (for the self-test benchmark).</summary>
+	public int ActiveCount { get; private set; }
+	public static int LastActive;
 
-		spr.Texture = tex;
-		var size = tex.GetSize();
-		var (fx, fy) = SbObject.OriginFraction(o.Origin);
-		if (st.FlipH) fx = 1 - fx;
-		if (st.FlipV) fy = 1 - fy;
-		spr.FlipH = st.FlipH;
-		spr.FlipV = st.FlipV;
-		spr.Offset = new Vector2(-fx * size.X, -fy * size.Y);
-		spr.Position = new Vector2(st.X, st.Y);
-		spr.Rotation = st.Rotation;
-		spr.Scale = new Vector2(st.ScaleX, st.ScaleY);
-		spr.SelfModulate = new Color(st.R, st.G, st.B, Mathf.Clamp(st.Alpha, 0, 1));
-		var mat = st.Additive ? Additive : null;
-		if (spr.Material != mat) spr.Material = mat;
-		if (!spr.Visible) spr.Visible = true;
+	private static void Hide(ref Slot slot)
+	{
+		if (!slot.Shown) return;
+		slot.Shown = false;
+		RenderingServer.CanvasItemSetVisible(slot.Item, false);
+	}
+
+	/// <summary>Push the object's state at <paramref name="t"/> to its canvas item, touching only what changed.</summary>
+	private static void UpdateSlot(SbObject o, ref Slot slot, double t, bool passing)
+	{
+		if (t >= slot.StableFrom && t < slot.StableUntil && passing == slot.StablePassing) return; // nothing can have changed
+		slot.StableFrom = t;
+		slot.StableUntil = o.StableUntil(t);
+		slot.StablePassing = passing;
+		bool layerOn = o.Layer switch { SbLayer.Fail => !passing, SbLayer.Pass => passing, _ => true };
+		if (!layerOn) { Hide(ref slot); return; }
+		var st = o.StateAt(t);
+		var frames = slot.Frames;
+		var tex = frames is { Length: > 0 } ? frames[Math.Min(o.FrameAt(t), frames.Length - 1)] : null;
+		if (tex == null || st.Alpha <= 0.002f || st.ScaleX == 0 || st.ScaleY == 0) { Hide(ref slot); return; }
+
+		var item = slot.Item;
+		if (tex != slot.Tex || st.FlipH != slot.FlipH || st.FlipV != slot.FlipV)
+		{
+			slot.Tex = tex;
+			slot.FlipH = st.FlipH;
+			slot.FlipV = st.FlipV;
+			var size = tex.GetSize();
+			var (fx, fy) = SbObject.OriginFraction(o.Origin);
+			// a negative size flips the texture; the sprite mirrors around its origin like in osu!
+			slot.Rect = new Rect2(
+				st.FlipH ? fx * size.X : -fx * size.X, st.FlipV ? fy * size.Y : -fy * size.Y,
+				st.FlipH ? -size.X : size.X, st.FlipV ? -size.Y : size.Y);
+			RenderingServer.CanvasItemClear(item);
+			RenderingServer.CanvasItemAddTextureRect(item, slot.Rect, tex.GetRid());
+		}
+		var xf = new Transform2D(st.Rotation, new Vector2(st.ScaleX, st.ScaleY), 0, new Vector2(st.X, st.Y));
+		if (xf != slot.Xf)
+		{
+			slot.Xf = xf;
+			RenderingServer.CanvasItemSetTransform(item, xf);
+		}
+		var mod = new Color(st.R, st.G, st.B, Math.Clamp(st.Alpha, 0, 1));
+		if (mod != slot.Mod)
+		{
+			slot.Mod = mod;
+			RenderingServer.CanvasItemSetModulate(item, mod);
+		}
+		if (st.Additive != slot.Additive)
+		{
+			slot.Additive = st.Additive;
+			RenderingServer.CanvasItemSetMaterial(item, st.Additive ? Additive.GetRid() : new Rid());
+		}
+		if (!slot.Shown)
+		{
+			slot.Shown = true;
+			RenderingServer.CanvasItemSetVisible(item, true);
+		}
 	}
 
 	private void UpdateVideo(double t)
@@ -409,12 +547,18 @@ public partial class StoryboardPlayer : Control
 
 	private void UpdateSamples(double t, bool passing)
 	{
-		if (!PlaySamples || Doc.Samples.Count == 0 || double.IsNaN(_lastTime)) return;
-		// only while time moves forward normally (not on seeks)
-		if (t <= _lastTime || t - _lastTime > 500) return;
-		foreach (var smp in Doc.Samples)
+		if (_samplesByTime.Length == 0) return;
+		if (_sampleCursor < 0 || double.IsNaN(_lastTime) || t < _lastTime || t - _lastTime > 500)
 		{
-			if (smp.Time <= _lastTime || smp.Time > t) continue;
+			// first frame or a seek: skip to now without playing what was jumped over
+			_sampleCursor = 0;
+			while (_sampleCursor < _samplesByTime.Length && _samplesByTime[_sampleCursor].Time <= t) _sampleCursor++;
+			return;
+		}
+		while (_sampleCursor < _samplesByTime.Length && _samplesByTime[_sampleCursor].Time <= t)
+		{
+			var smp = _samplesByTime[_sampleCursor++];
+			if (!PlaySamples) continue;
 			if (smp.Layer == SbLayer.Fail && passing || smp.Layer == SbLayer.Pass && !passing) continue;
 			PlaySample(smp);
 		}
@@ -448,20 +592,15 @@ public partial class StoryboardPlayer : Control
 		player.Play();
 	}
 
-	/// <summary>The sprite drawing <paramref name="o"/> (null if it isn't built yet).</summary>
-	public Sprite2D SpriteOf(SbObject o)
-	{
-		if (Doc == null || !Ready || o == null) return null;
-		return _spriteOf.TryGetValue(o, out var spr) && IsInstanceValid(spr) ? spr : null;
-	}
-
 	/// <summary>Corners of <paramref name="o"/> in this control's coordinates (null when not drawn right now).</summary>
 	public Vector2[] CornersOf(SbObject o)
 	{
-		var spr = SpriteOf(o);
-		if (spr == null || !spr.Visible || spr.Texture == null) return null;
-		var r = spr.GetRect();
-		var xf = GetGlobalTransformWithCanvas().AffineInverse() * spr.GetGlobalTransformWithCanvas();
+		if (Doc == null || !Ready || o == null || !_slotOf.TryGetValue(o, out var i) || i >= _slots.Length) return null;
+		var slot = _slots[i];
+		if (!slot.Shown || slot.Tex == null) return null;
+		var root = o.Layer == SbLayer.Overlay ? _overlayRoot : _root;
+		var xf = GetGlobalTransformWithCanvas().AffineInverse() * root.GetGlobalTransformWithCanvas() * slot.Xf;
+		var r = slot.Rect.Abs();
 		return new[] { xf * r.Position, xf * new Vector2(r.End.X, r.Position.Y), xf * r.End, xf * new Vector2(r.Position.X, r.End.Y) };
 	}
 }

@@ -130,10 +130,39 @@ public class SbObject
 		Additive = SbFlagTimeline.From(all, 'A');
 
 		HasCommands = all.Count > 0;
+		// Command times, for StableUntil: merged running spans, plus every start (instant changes included).
+		var spans = all.Where(c => c.EndTime > c.StartTime).Select(c => (s: (double)c.StartTime, e: (double)c.EndTime)).OrderBy(x => x.s).ToList();
+		var merged = new List<(double s, double e)>();
+		foreach (var sp in spans)
+		{
+			if (merged.Count > 0 && sp.s <= merged[^1].e) merged[^1] = (merged[^1].s, Math.Max(merged[^1].e, sp.e));
+			else merged.Add(sp);
+		}
+		_runStart = merged.Select(m => m.s).ToArray();
+		_runEnd = merged.Select(m => m.e).ToArray();
+		_starts = all.Select(c => (double)c.StartTime).Distinct().OrderBy(x => x).ToArray();
 		StartTime = HasCommands ? all.Min(c => c.StartTime) : 0;
 		EndTime = HasCommands ? all.Max(c => c.EndTime) : 0;
 		// A sprite whose first fade starts at 0 alpha is invisible until then anyway; osu! starts the
 		// lifetime at the earliest command, so do the same.
+	}
+
+	private double[] _runStart = Array.Empty<double>(), _runEnd = Array.Empty<double>(), _starts = Array.Empty<double>();
+
+	/// <summary>
+	/// Until when the object's state stays exactly what it is at <paramref name="t"/>: t itself while a command
+	/// is running (or an animation plays), else the next command start. Lets the player skip idle sprites.
+	/// </summary>
+	public double StableUntil(double t)
+	{
+		if (IsAnimation && FrameCount > 1) return t;
+		// running span containing t?
+		int i = Array.BinarySearch(_runStart, t);
+		if (i < 0) i = ~i - 1;
+		if (i >= 0 && t < _runEnd[i]) return t;
+		int j = Array.BinarySearch(_starts, t);
+		j = j < 0 ? ~j : j + 1; // first start strictly after t
+		return j < _starts.Length ? _starts[j] : double.PositiveInfinity;
 	}
 
 	/// <summary>Everything needed to draw the object at <paramref name="t"/> (ms).</summary>
