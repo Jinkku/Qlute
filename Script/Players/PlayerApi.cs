@@ -64,13 +64,15 @@ public static class PlayerApi
 	private static readonly Dictionary<string, ImageTexture> Pictures = new();
 	private static readonly Dictionary<string, List<Action<ImageTexture>>> PicturesLoading = new();
 
-	/// <summary>The "api" setting; QLUTE_API_BASE overrides it (local testing, like QLUTE_WS_BASE).</summary>
+	/// <summary>The "api" setting; in debug builds QLUTE_API_BASE overrides it (local testing, like QLUTE_WS_BASE).</summary>
 	public static string Base
 	{
 		get
 		{
+#if DEBUG
 			var env = System.Environment.GetEnvironmentVariable("QLUTE_API_BASE");
 			if (!string.IsNullOrEmpty(env)) return env.TrimEnd('/') + "/";
+#endif
 			return SettingsOperator.GetSetting("api")?.ToString() ?? "https://qlute.jinkku.moe/";
 		}
 	}

@@ -16,10 +16,14 @@ public static class OnlineApi
 	public static bool Available =>
 		SettingsOperator.SessionConfig.Loggedin && !string.IsNullOrEmpty(ApiOperator.PasswordHash) && !string.IsNullOrEmpty(ApiOperator.Username);
 
-	/// <summary>ws(s)://server/ws/v1/{path}/ from the "api" setting. QLUTE_WS_BASE overrides it (local testing).</summary>
+	/// <summary>ws(s)://server/ws/v1/{path}/ from the "api" setting. In debug builds QLUTE_WS_BASE overrides it
+	/// (local testing); release builds ignore it so the login headers can't be redirected.</summary>
 	public static string Url(string path)
 	{
-		var b = System.Environment.GetEnvironmentVariable("QLUTE_WS_BASE");
+		string b = null;
+#if DEBUG
+		b = System.Environment.GetEnvironmentVariable("QLUTE_WS_BASE");
+#endif
 		if (string.IsNullOrEmpty(b))
 		{
 			b = SettingsOperator.GetSetting("api")?.ToString() ?? "https://qlute.jinkku.moe/";
