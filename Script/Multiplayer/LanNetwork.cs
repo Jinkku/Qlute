@@ -33,7 +33,7 @@ using System.Threading.Tasks;
 public partial class LanNetwork : Node
 {
 	public const string BeaconTag = "qlute-lan";
-	public const int Protocol = 5; // 3: queue items carry a game mode, spectator charts carry mode + positions; 4: host migration; 5: compressed state + packed live scores
+	public const int Protocol = 6; // 3: queue items carry a game mode, spectator charts carry mode + positions; 4: host migration; 5: compressed state + packed live scores; 6: server names the beatmap sender (RpcBeatmapSource)
 	public const int MaxRoomNameLength = 40;
 	public const int DiscoveryPort = 8911;
 	public const int DefaultGamePort = 8912;
@@ -164,7 +164,11 @@ public partial class LanNetwork : Node
 	private class OutgoingTransfer { public long Peer; public string FileName; public byte[] Data; public int Next; public int Total; }
 	private readonly List<OutgoingTransfer> _outgoing = new();
 	private MemoryStream _incoming;
-	private long _incomingFrom;
+	private int _incomingNext;
+	/// <summary>The peer the server routed our beatmap request to; chunks from anyone else are ignored. 0 = not known yet.</summary>
+	private long _expectedSource;
+	/// <summary>Checksum of the .osu we asked for; the received set must contain it.</summary>
+	private string _expectedChecksum;
 
 	public override void _Ready()
 	{
@@ -691,6 +695,9 @@ public partial class LanNetwork : Node
 	private void RequestFromRoom()
 	{
 		TransferProgress = 0;
+		_incoming = null;
+		_expectedSource = 0;
+		_expectedChecksum = State?.Beatmap?.Checksum;
 		if (IsServer) ServerRouteBeatmapRequest(1);
 		else RpcId(1, MethodName.RpcRequestBeatmap);
 	}
@@ -1369,15 +1376,26 @@ public partial class LanNetwork : Node
 	private void ServerRouteBeatmapRequest(long requester)
 	{
 		if (State.Beatmap == null) { SendUnavailable(requester, "No beatmap is selected yet."); return; }
-		if (requester != 1 && FindLocalBeatmap(State.Beatmap) >= 0) { SendBeatmapTo(requester); return; }
+		if (requester != 1 && FindLocalBeatmap(State.Beatmap) >= 0) { TellSource(requester, 1); SendBeatmapTo(requester); return; }
 
 		// The server doesn't have it: ask the host first, then anyone else who does.
 		var source = State.Players
 			.Where(p => p.Id != requester && p.Id != 1 && p.HasMap)
 			.OrderByDescending(p => p.Id == State.HostId)
 			.FirstOrDefault();
-		if (source != null) RpcId(source.Id, MethodName.RpcSendBeatmapTo, requester);
+		if (source != null)
+		{
+			TellSource(requester, source.Id);
+			RpcId(source.Id, MethodName.RpcSendBeatmapTo, requester);
+		}
 		else SendUnavailable(requester, "Nobody in the room can share this beatmap right now.");
+	}
+
+	/// <summary>Tells <paramref name="requester"/> who will send the beatmap, so it ignores chunks from anyone else.</summary>
+	private void TellSource(long requester, long source)
+	{
+		if (requester == LocalId) _expectedSource = source;
+		else RpcId(requester, MethodName.RpcBeatmapSource, source);
 	}
 
 	private void SendUnavailable(long peer, string reason)
@@ -1390,6 +1408,7 @@ public partial class LanNetwork : Node
 	{
 		TransferProgress = -1;
 		_incoming = null;
+		_expectedSource = 0;
 		Post(reason, Type: NotificationIcons.NotificationType.Warning);
 	}
 
@@ -2012,6 +2031,7 @@ public partial class LanNetwork : Node
 	{
 		_outgoing.Clear();
 		_incoming = null;
+		_expectedSource = 0;
 		TransferProgress = -1;
 		Feeds.Clear();
 		_specCharts.Clear();
@@ -2304,15 +2324,36 @@ public partial class LanNetwork : Node
 		Post(reason, Type: NotificationIcons.NotificationType.Warning);
 	}
 
-	// Beatmaps can come from the server or (relayed through it) from another player, so these are AnyPeer;
-	// we only accept them while we're waiting for a transfer, and only from someone in the room.
+	private bool WaitingForRoomTransfer => TransferProgress >= 0 && !DownloadingFromQlute && State != null;
+
+	// Beatmaps can come from the server or (relayed through it) from another player, so these are AnyPeer.
+	// We only accept them while we're waiting for a transfer, and only from the peer the server routed us to.
 	private bool AcceptTransferFrom(long sender) =>
-		TransferProgress >= 0 && !DownloadingFromQlute && State != null && (sender == 1 || FindPlayer(sender) != null);
+		WaitingForRoomTransfer && _expectedSource != 0 && sender == _expectedSource;
+
+	/// <summary>The server tells us who it asked to send our beatmap. Same channel as the chunks, so it arrives first.</summary>
+	[Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 1)]
+	private void RpcBeatmapSource(long source)
+	{
+		if (!WaitingForRoomTransfer) return;
+		_expectedSource = source;
+		_incoming = null;
+	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable)]
 	private void RpcBeatmapUnavailable(string reason)
 	{
-		if (AcceptTransferFrom(Multiplayer.GetRemoteSenderId())) OnBeatmapUnavailable(reason);
+		long sender = Multiplayer.GetRemoteSenderId();
+		// The server (routing failed) or the sender we were routed to (couldn't package it).
+		if (WaitingForRoomTransfer && (sender == 1 || sender == _expectedSource)) OnBeatmapUnavailable(reason);
+	}
+
+	private long MaxReceiveBytes => IsOnline ? MaxOnlineShareBytes : MaxShareBytes;
+
+	private void DropTransfer(string why)
+	{
+		GD.PrintErr($"[LAN] Dropped beatmap transfer: {why}");
+		OnBeatmapUnavailable("The beatmap transfer was rejected (" + why + ").");
 	}
 
 	// Separate channel so a big transfer doesn't hold up chat/state updates.
@@ -2320,18 +2361,33 @@ public partial class LanNetwork : Node
 	private void RpcBeatmapChunk(string fileName, int index, int total, byte[] data)
 	{
 		long sender = Multiplayer.GetRemoteSenderId();
-		if (!AcceptTransferFrom(sender)) return;
-		if (index == 0) { _incoming = new MemoryStream(); _incomingFrom = sender; }
-		if (_incoming == null || sender != _incomingFrom) return;
+		if (!AcceptTransferFrom(sender) || data == null) return;
+		if (index == 0)
+		{
+			if (total <= 0 || (long)total * ChunkSize > MaxReceiveBytes + ChunkSize) { DropTransfer("too big"); return; }
+			_incoming = new MemoryStream();
+			_incomingNext = 0;
+		}
+		if (_incoming == null) return;
+		if (index != _incomingNext) { DropTransfer("chunks out of order"); return; }
+		if (_incoming.Length + data.Length > MaxReceiveBytes) { DropTransfer("too big"); return; }
 		_incoming.Write(data, 0, data.Length);
+		_incomingNext++;
 		TransferProgress = (index + 1) / (float)total;
 		if (index < total - 1) return;
 
 		var bytes = _incoming.ToArray();
 		_incoming = null;
+		_expectedSource = 0;
 		TransferProgress = -1;
 		var safeName = Path.GetFileName(fileName);
 		if (!safeName.EndsWith(".osz")) return;
+		if (!ContainsChart(bytes, _expectedChecksum))
+		{
+			GD.PrintErr($"[LAN] {safeName} doesn't contain the requested beatmap ({_expectedChecksum}), discarding it.");
+			Post("The beatmap that was sent doesn't match the selected one, so it wasn't imported.", Type: NotificationIcons.NotificationType.Warning);
+			return;
+		}
 		try
 		{
 			var target = LanSelfTest.TransferOutputDir ?? SettingsOperator.downloadsdir;
@@ -2347,6 +2403,28 @@ public partial class LanNetwork : Node
 			GD.PrintErr($"[LAN] Couldn't save beatmap: {e.Message}");
 			Post("Couldn't save the beatmap from the host.", Type: NotificationIcons.NotificationType.Warning);
 		}
+	}
+
+	/// <summary>True if the .osz holds a .osu file whose SHA-256 is <paramref name="checksum"/> (the room's Beatmap.Checksum).</summary>
+	private static bool ContainsChart(byte[] osz, string checksum)
+	{
+		if (string.IsNullOrEmpty(checksum)) return false;
+		try
+		{
+			using var zip = new System.IO.Compression.ZipArchive(new MemoryStream(osz), System.IO.Compression.ZipArchiveMode.Read);
+			foreach (var entry in zip.Entries)
+			{
+				if (!entry.FullName.EndsWith(".osu", StringComparison.OrdinalIgnoreCase) || entry.Length > 16 * 1024 * 1024) continue;
+				using var stream = entry.Open();
+				var hash = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(stream));
+				if (string.Equals(hash, checksum, StringComparison.OrdinalIgnoreCase)) return true;
+			}
+		}
+		catch (Exception e)
+		{
+			GD.PrintErr($"[LAN] Received beatmap isn't a valid .osz: {e.Message}");
+		}
+		return false;
 	}
 
 	// =====================================================================
