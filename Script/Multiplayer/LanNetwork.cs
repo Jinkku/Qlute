@@ -129,6 +129,8 @@ public partial class LanNetwork : Node
 
 	// ---- Discovery ----
 	public readonly Dictionary<string, LanRoomInfo> Rooms = new();
+	/// <summary>Beacons are unauthenticated UDP, so fake ones can't grow the room list without limit.</summary>
+	private const int MaxLanRooms = 256;
 	public int RoomsVersion { get; private set; }
 
 	private UdpClient _discoveryRx;
@@ -2723,6 +2725,7 @@ public partial class LanNetwork : Node
 				if (beacon?.q != BeaconTag || beacon.port <= 0) continue;
 
 				var key = $"{from.Address}:{beacon.port}";
+				if (!Rooms.ContainsKey(key) && Rooms.Count >= MaxLanRooms) continue;
 				bool changed = !Rooms.TryGetValue(key, out var old)
 					|| JsonSerializer.Serialize(old.Beacon) != JsonSerializer.Serialize(beacon);
 				Rooms[key] = new LanRoomInfo { Address = from.Address.ToString(), Port = beacon.port, Beacon = beacon, LastSeenMs = now };

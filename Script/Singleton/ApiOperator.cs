@@ -320,9 +320,23 @@ public partial class ApiOperator : Node
 	}
 	private void _Submitrequest(long result, long responseCode, string[] headers, byte[] body)
 	{
-		Godot.Collections.Dictionary json = Json.ParseString(Encoding.UTF8.GetString(body)).AsGodotDictionary();
-		GD.Print(Encoding.UTF8.GetString(body));
-		if ((int)json["rankedmap"] > 0 && (int)json["error"] == 0)
+		if (result != (long)HttpRequest.Result.Success || responseCode != 200)
+		{
+			GD.PrintErr($"Score submission failed (result {result}, HTTP {responseCode})");
+			Notify.Post("Couldn't submit your score. The server didn't answer properly.", Type: NotificationIcons.NotificationType.Warning);
+			return;
+		}
+		var text = Encoding.UTF8.GetString(body);
+		var parser = new Json();
+		if (parser.Parse(text) != Error.Ok || parser.Data.VariantType != Variant.Type.Dictionary)
+		{
+			GD.PrintErr("Score submission returned invalid JSON: " + parser.GetErrorMessage());
+			Notify.Post("Couldn't submit your score. The server sent an unexpected answer.", Type: NotificationIcons.NotificationType.Warning);
+			return;
+		}
+		Godot.Collections.Dictionary json = parser.Data.AsGodotDictionary();
+		GD.Print(text);
+		if (json.ContainsKey("rankedmap") && json.ContainsKey("error") && (int)json["rankedmap"] > 0 && (int)json["error"] == 0)
 		{
 			Submitted = true;
 			RankUpdate.Update((int)json["rank"], (int)json["points"]);
@@ -337,7 +351,7 @@ public partial class ApiOperator : Node
 			if (SettingsOperator.LeaderboardType == 1)
 				ReloadLeaderboard(SettingsOperator.SessionConfig.BeatmapID);
 		}
-		if (json["msg"].ToString() != "")
+		if (json.ContainsKey("msg") && json["msg"].ToString() != "")
 		{
 			Notify.Post(json["msg"].ToString(), Type: NotificationIcons.NotificationType.Warning);
 		}

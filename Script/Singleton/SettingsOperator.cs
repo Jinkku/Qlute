@@ -951,7 +951,7 @@ public partial class SettingsOperator : Node
         {
             SetSetting("gamepath", folderPath);
         }
-        if (LeaderboardType < 0 && LeaderboardType > 2) LeaderboardType = 1;
+        if (LeaderboardType < 0 || LeaderboardType > 2) LeaderboardType = 1;
         CheckOldSiteUrl();
         GameChecksum = ChecksumUtil.GetGameChecksum();
         CrashReports.Start();

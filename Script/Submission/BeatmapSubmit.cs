@@ -90,11 +90,15 @@ public static class BeatmapSubmit
 			{
 				osz = await Task.Run(() => Pack(folder));
 			}
+			catch (TooBigException)
+			{
+				return (null, TooBigMessage(null));
+			}
 			catch (Exception e)
 			{
 				return (null, $"Couldn't pack the beatmap ({e.Message}).");
 			}
-			if (osz.Length > MaxBytes) return (null, $"The beatmap is too big ({osz.Length / (1024 * 1024)} MB, {MaxBytes / (1024 * 1024)} MB max). Remove videos or large files from its folder.");
+			if (osz.Length > MaxBytes) return (null, TooBigMessage(osz.Length));
 			Total = osz.Length;
 
 			var (start, error) = await Send("start", new StringContent(new JsonObject { ["size"] = osz.Length, ["name"] = Path.GetFileName(folder) + ".osz" }.ToJsonString(), Encoding.UTF8, "application/json"));
@@ -161,11 +165,18 @@ public static class BeatmapSubmit
 				// Audio and pictures are already compressed.
 				var level = ext is ".osu" or ".wav" or ".txt" or ".osb" ? CompressionLevel.Optimal : CompressionLevel.NoCompression;
 				zip.CreateEntryFromFile(file, rel, level);
-				if (ms.Length > MaxBytes) break; // too big anyway; Submit says so
+				// Stop with an error instead of handing back a set with files missing.
+				if (ms.Length > MaxBytes) throw new TooBigException();
 			}
 		}
+		if (ms.Length > MaxBytes) throw new TooBigException(); // the zip's directory pushed it over
 		return ms.ToArray();
 	}
+
+	private sealed class TooBigException : Exception { }
+
+	private static string TooBigMessage(long? size) =>
+		$"The beatmap is too big ({(size is long n ? $"{n / (1024 * 1024)} MB, " : "over ")}{MaxBytes / (1024 * 1024)} MB max). Remove videos or large files from its folder.";
 
 	/// <summary>Writes the server's ids into the local .osu files and the song list.</summary>
 	private static void ApplyIds(string folder, Result result)

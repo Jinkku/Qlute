@@ -15,7 +15,7 @@ public partial class DebugSettings : PanelContainer
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		ApiOperator = new ApiOperator();
+		ApiOperator = GetNode<ApiOperator>("/root/ApiOperator");
 		NetVersion = GetNode<Label>("Rows/NETVersion");
 		DiscordRPC = GetNode<CheckButton>("Rows/DiscordRPC");
 		DevHide = GetNode<CheckButton>("Rows/HideDevDisclaimer");

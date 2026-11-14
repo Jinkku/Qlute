@@ -90,6 +90,8 @@ public partial class LanChat : Node
 	/// <summary>Random id for this run of the game. Peers know us by it.</summary>
 	public readonly string LocalId = Guid.NewGuid().ToString("N")[..16];
 	public readonly Dictionary<string, Peer> Peers = new();
+	/// <summary>Hellos are unauthenticated UDP, so fake ones can't grow these without limit.</summary>
+	private const int MaxPeers = 256, MaxInvites = 32;
 	public readonly Dictionary<string, Room> Rooms = new();
 	public readonly List<Invite> Invites = new();
 	/// <summary>Bumped whenever anything the chat UI shows changes.</summary>
@@ -479,6 +481,7 @@ public partial class LanChat : Node
 		var name = Clean(Str(pkt, "name"), MaxNameLength, "Guest");
 		var ep = new IPEndPoint(from.Address, port);
 		bool isNew = !Peers.TryGetValue(id, out var peer);
+		if (isNew && Peers.Count >= MaxPeers) return;
 		if (isNew)
 		{
 			peer = new Peer { Id = id };
@@ -534,6 +537,7 @@ public partial class LanChat : Node
 				if (!string.IsNullOrEmpty(mid) && mid.Length <= 64 && mid != LocalId) inv.Members[mid] = Clean(Str(m, "name"), MaxNameLength, "Guest");
 			}
 		}
+		if (Invites.Count >= MaxInvites) Invites.RemoveAt(0); // oldest goes
 		Invites.Add(inv);
 		Version++;
 		TestLog($"invite to {inv.Title} from {inv.FromName}");
