@@ -182,25 +182,40 @@ public partial class BeatmapListener : Node
 		return Name;
 	}
 
-	private void ImportBeatmap(string file, bool dd = false)
+	/// <summary>Imports a beatmap the player dropped on the window. The original file is theirs, so it's left alone;
+	/// unzipping runs in the background like <see cref="CheckAndExtractOszFiles"/>.</summary>
+	private void ImportBeatmap(string file)
 	{
 		string beatmapDir = Path.Combine(SettingsOperator.beatmapsdir, Path.GetFileNameWithoutExtension(file));
-		if (!Directory.Exists(beatmapDir))
+		if (Directory.Exists(beatmapDir))
 		{
-			Directory.CreateDirectory(beatmapDir);
+			GD.Print("Beatmap already exists for " + file + ", skipping it.");
+			Notify.Post("Already imported\n" + Path.GetFileNameWithoutExtension(file));
+			return;
 		}
-		else
+		if (!_extracting.Add(file)) return;
+		System.Threading.Tasks.Task.Run(() =>
 		{
-			GD.Print("Beatmap already exists for " + file + ", cancelling extraction and removing file.");
-			if (!dd) File.Delete(file);
-		}
-		System.IO.Compression.ZipFile.ExtractToDirectory(file, beatmapDir);
-		File.Delete(file);
-		GD.Print("Extracted and moved " + file + " to " + beatmapDir);
-		GD.Print("Parsing " + beatmapDir);
-		var Name = Parse_BeatmapDir(beatmapDir);
-		GD.Print("Parsed...");
-		Notify.Post("Imported\n" + Name);
+			try
+			{
+				Directory.CreateDirectory(beatmapDir);
+				System.IO.Compression.ZipFile.ExtractToDirectory(file, beatmapDir, overwriteFiles: true);
+				return true;
+			}
+			catch (Exception e)
+			{
+				GD.PrintErr($"Couldn't extract {file}: {e.Message}");
+				try { Directory.Delete(beatmapDir, true); } catch { /* leave it */ } // don't keep a half-extracted set
+				return false;
+			}
+		}).ContinueWith(t => Callable.From(() =>
+		{
+			_extracting.Remove(file);
+			if (!t.Result) { Notify.Post("Couldn't import " + Path.GetFileName(file), Type: NotificationIcons.NotificationType.Warning); return; }
+			GD.Print("Extracted " + file + " to " + beatmapDir);
+			var name = Parse_BeatmapDir(beatmapDir.Replace("\\", "/"));
+			Notify.Post("Imported\n" + name);
+		}).CallDeferred());
 	}
 	/// <summary>Downloads being unzipped in the background right now.</summary>
 	private readonly HashSet<string> _extracting = new();
