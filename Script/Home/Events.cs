@@ -72,7 +72,7 @@ public partial class Events : TextureButton
 	private void Pressed()
 	{
 		// Links are set per notice in the admin panel.
-		if (!string.IsNullOrWhiteSpace(Event?.redirect))
+		if (SafeLink.IsHttps(Event?.redirect))
 			OS.ShellOpen(Event.redirect);
 	}
 

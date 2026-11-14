@@ -90,7 +90,7 @@ public partial class NotificationApplet : Button
 		var uri = Notification?.uri;
 		if (!string.IsNullOrEmpty(uri))
 		{
-			if (uri.StartsWith("http"))
+			if (SafeLink.IsHttps(uri))
 			{
 				OS.ShellOpen(uri);
 			} else if (uri.StartsWith("updatefile://"))
