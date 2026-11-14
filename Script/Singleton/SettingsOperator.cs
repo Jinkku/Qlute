@@ -288,6 +288,35 @@ public partial class SettingsOperator : Node
     /// </summary>
     private long SongPauser { get; set; } = 0;
 
+    private int _bgLoadGen;
+
+    // Decode the background off the main thread (like MusicCard), then swap it in on the main thread
+    private async void LoadBackgroundAsync(string path, int gen)
+    {
+        Image data = null;
+        try { data = await Task.Run(() => Image.LoadFromFile(path)); }
+        catch (Exception e) { GD.PrintErr($"[Qlute] Couldn't load background {path}: {e.Message}"); }
+        CallDeferred(MethodName.ApplyLoadedBackground, data, gen);
+    }
+
+    private void ApplyLoadedBackground(Image data, int gen)
+    {
+        if (gen != _bgLoadGen) { data?.Dispose(); return; } // the player already picked another song
+        if (data == null || data.IsEmpty())
+        {
+            data?.Dispose();
+            Notify.Post("Failed to load image!", Type: NotificationIcons.NotificationType.Warning);
+            SessionConfig.Background = GetNullImage();
+            SessionConfig.BackgroundChecksum = null;
+        }
+        else
+        {
+            SessionConfig.Background = ImageTexture.CreateFromImage(data);
+            data.Dispose();
+        }
+        EmitSignal(SignalName.BackgroundChanged);
+    }
+
     public void SelectSongID(int id, float seek = -1, bool ishome = false)
     {
         if (ishome && DateTimeOffset.UtcNow.ToUnixTimeSeconds() > SongPauser)
@@ -327,20 +356,27 @@ public partial class SettingsOperator : Node
             SessionConfig.GameMode = GetSelectedGameMode(); // Mode picked in song select (0 Mania, 1 Taiko, 3 Tap!)
             SessionConfig.SongID = id;
             string bgpath = beatmap.Path.PathJoin(beatmap.Background ?? "");
-            string checksumbg = null;
+            // Identify the background by path + last write time instead of hashing the file
+            string bgKey = null;
             if (!string.IsNullOrEmpty(beatmap.Background) && System.IO.File.Exists(bgpath))
-                checksumbg = ChecksumUtil.GetSha256(bgpath);
-            
-            if (System.IO.File.Exists(bgpath) && SessionConfig.BackgroundChecksum != checksumbg)
-            {
-                SessionConfig.Background = LoadImage(bgpath);
-            }
-            else if (checksumbg == null)
+                bgKey = bgpath + "|" + System.IO.File.GetLastWriteTimeUtc(bgpath).Ticks;
+
+            int bgGen = ++_bgLoadGen; // a newer selection makes older loads stale
+            if (bgKey == null)
             {
                 SessionConfig.Background = SettingsOperator.GetNullImage();
+                SessionConfig.BackgroundChecksum = null;
+                EmitSignal(SignalName.BackgroundChanged);
             }
-            SessionConfig.BackgroundChecksum = checksumbg;   
-            EmitSignal(SignalName.BackgroundChanged);
+            else if (SessionConfig.BackgroundChecksum != bgKey)
+            {
+                SessionConfig.BackgroundChecksum = bgKey;
+                LoadBackgroundAsync(bgpath, bgGen);
+            }
+            else
+            {
+                EmitSignal(SignalName.BackgroundChanged);
+            }
             if (seek == -1)
             {
                 seek = beatmap.PreviewTime;
@@ -859,6 +895,7 @@ public partial class SettingsOperator : Node
     public static Vector2 MouseMovement { get; set; }
     public override void _Process(double _delta)
     {
+        if (_settingsDirty && Time.GetTicksMsec() >= _settingsSaveDueMsec) SaveSettings();
         MouseMovement = GetViewport().GetMousePosition(); 
         var aud = GetSetting("audiooffset")?.ToString();
         if (aud != _lastAudioOffsetRaw) // AudioOffset Subsystem (only re-parse when the setting changes)
@@ -953,15 +990,21 @@ public partial class SettingsOperator : Node
         }
         if (LeaderboardType < 0 || LeaderboardType > 2) LeaderboardType = 1;
         CheckOldSiteUrl();
-        GameChecksum = ChecksumUtil.GetGameChecksum();
+        ChecksumUtil.StartGameChecksum();
         CrashReports.Start();
         PrivacyPrompt.ShowIfNeeded(GetTree());
     }
+
+    public override void _ExitTree() => FlushSettings();
 
     public override void _Notification(int what)
     {
         switch (what)
         {
+            case (int)NotificationWMCloseRequest:
+                FlushSettings();
+                break;
+
             case (int)NotificationApplicationFocusIn:
                 GD.Print($"Detected focused going back to normal fps :D");
                 Unfocused = false;
@@ -994,20 +1037,42 @@ public partial class SettingsOperator : Node
         SetSetting("windowmode", index);
     }
     // Set a setting
+    // Writes are debounced: sliders call this every tick, so we only touch the disk once things settle.
     public static void SetSetting(string key, object value)
     {
         if (Configuration.ContainsKey(key))
             Configuration[key] = value;
-            SaveSettings();
+        SettingsVersion++;
+        _settingsDirty = true;
+        _settingsSaveDueMsec = Time.GetTicksMsec() + SettingsSaveDelayMsec;
     }
 
-    // Save settings to file
+    /// <summary>Bumped on every SetSetting so per-frame code can cache values and re-read only on change.</summary>
+    public static int SettingsVersion { get; private set; }
+    private const ulong SettingsSaveDelayMsec = 500;
+    private static bool _settingsDirty;
+    private static ulong _settingsSaveDueMsec;
+
+    /// <summary>Writes settings.cfg now if there are unsaved changes.</summary>
+    public static void FlushSettings()
+    {
+        if (_settingsDirty) SaveSettings();
+    }
+
+    // Save settings to file (temp file + rename so a crash mid-write can't leave a broken config)
     public static void SaveSettings()
     {
-        using var saveFile = FileAccess.Open(settingsfile, FileAccess.ModeFlags.Write);
-        var json = JsonSerializer.Serialize(Configuration);
-        saveFile.StoreString(json);
-        saveFile.Close();
+        _settingsDirty = false;
+        string tmp = settingsfile + ".tmp";
+        try
+        {
+            System.IO.File.WriteAllText(tmp, JsonSerializer.Serialize(Configuration));
+            System.IO.File.Move(tmp, settingsfile, overwrite: true);
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr($"[Qlute] Couldn't save settings: {e.Message}");
+        }
     }
 
     private Variant ConvertJsonElement(JsonElement element)

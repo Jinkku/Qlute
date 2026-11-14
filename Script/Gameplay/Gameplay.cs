@@ -100,21 +100,21 @@ public partial class Gameplay : Control
 	// (= where the old on-screen check fired with the default playfield layout).
 	public const int MISS_LATE_MS = 206;
 	private long[] LastKeyPressTime = new long[4] { long.MinValue, long.MinValue, long.MinValue, long.MinValue };
-	// Presses that arrived in _Input since the last game tick, in order.
-	private readonly List<int> QueuedPresses = new List<int>();
+	// Presses that arrived in _Input since the last game tick, in order, with the song time (ms)
+	// at which each one arrived. They're judged at that time instead of the next frame's time.
+	private readonly List<(int col, int t)> QueuedPresses = new List<(int col, int t)>();
+	private readonly List<int> _pressGroup = new List<int>();
+	// Real time (usec) when gametime was last computed, to place key events between frames.
+	private ulong _gametimeUsec;
+	// Last time a judgement frame ran; queued presses are never judged earlier than this.
+	private int _lastJudgedMs = int.MinValue;
 	// Time of the last hit object (the song ends here); no note becomes a miss after it.
 	private int SongEndMs = int.MaxValue;
 
 	// Unstable Rate: stores raw hit offsets (ms) to compute std-dev * 10
-	private List<float> HitOffsets = new List<float>();
+	private RunningUnstableRate HitOffsets;
 	private static readonly Game.ScoreCalculator ScoreCalc = new Game.ScoreCalculator();
-	private float ComputeUnstableRate()
-	{
-		if (HitOffsets.Count < 2) return 0f;
-		float mean = HitOffsets.Average();
-		float variance = HitOffsets.Select(x => (x - mean) * (x - mean)).Average();
-		return (float)Math.Sqrt(variance) * 10f;
-	}
+	private float ComputeUnstableRate() => HitOffsets.Value;
 	private void ShowPauseMenu()
 	{
 		Cursor.CursorVisible = true;
@@ -297,9 +297,10 @@ public partial class Gameplay : Control
 		PlayFieldPOS =GetNode<HBoxContainer>($"Playfield/ChartSections").Position;
 		maxrndvalue = (int)(1000000 * ModsOperator.ProcessMultiplierByModList(ModsOperator.Mods));
 	
-		HitOffsets.Clear();
+		HitOffsets.Reset();
 		Array.Fill(LastKeyPressTime, long.MinValue);
 		QueuedPresses.Clear();
+		_lastJudgedMs = int.MinValue;
 		GD.Print("Loading beatmap...");
 		if (SettingsOperator.SessionConfig.BeatmapURL != null) ReloadBeatmap(SettingsOperator.SessionConfig.BeatmapURL.ToString());
 		// If auto is enabled, it will make a Replay file with Auto being the player playing the beatmap. Before this it didn't make the replay file, it just plays.
@@ -436,12 +437,23 @@ public partial class Gameplay : Control
 		    {
 			    bool pressed = @event.IsPressed();
 
-			    // Presses are judged (and spam-checked) on the next game tick, in order.
-			    if (pressed && !Finished) QueuedPresses.Add(i);
+			    // Presses are judged (and spam-checked) on the next game tick, in order, at the time they arrived.
+			    if (pressed && !Finished) QueuedPresses.Add((i, EventSongMs()));
 
 			    hitnote(i, pressed, (int)gametime);
 		    }
 	    }
+    }
+
+    /// <summary>
+    /// Song time (whole ms) right now, between frames: the last computed gametime plus the real time
+    /// since then (scaled by the song speed once the music is playing).
+    /// </summary>
+    private int EventSongMs()
+    {
+	    double rate = songstarted && AudioPlayer.Instance.Playing ? AudioPlayer.Instance.PitchScale : 1.0;
+	    double sinceMs = (Time.GetTicksUsec() - _gametimeUsec) / 1000.0;
+	    return (int)Math.Floor(gametime + sinceMs * rate);
     }
 
     /// <summary>
@@ -546,6 +558,7 @@ public partial class Gameplay : Control
 		    if (JudgeResult < 3)
 		    {
 			    SettingsOperator.Addms(diff + 50);
+			    HitOffsets.Add(diff);
 			    SettingsOperator.Gameplaycfg.ms = ComputeUnstableRate();
 			    if (LanNetwork.InMatch) LanNetwork.Instance.SpecJudge(i, JudgeResult, gametime);
 			    Note.hit = true;
@@ -618,6 +631,7 @@ public partial class Gameplay : Control
 private void _GameNoteTick(double delta)
 	{
 		gametime = GetRemainingTime(delta: (float)delta) / 0.001f;
+		_gametimeUsec = Time.GetTicksUsec();
 
 		//var scrollspeed = ComputeScrollTime(int.Parse(SettingsOperator.GetSetting("scrollspeed").ToString())); // Scroll speed for the notes
 		var scrollspeed = 1;
@@ -642,8 +656,27 @@ private void _GameNoteTick(double delta)
 		int now = (int)Math.Floor(gametime);
 		if (!Finished)
 		{
-			ProcessInputFrame(now, QueuedPresses);
+			// Each press is judged at its arrival time, clamped between the last judged frame and now so
+			// times only move forward (the replay / server re-play judge them in that same order).
+			int start = 0;
+			while (start < QueuedPresses.Count)
+			{
+				int t = Math.Clamp(QueuedPresses[start].t, Math.Min(_lastJudgedMs, now), now);
+				_pressGroup.Clear();
+				int end = start;
+				while (end < QueuedPresses.Count && Math.Clamp(QueuedPresses[end].t, Math.Min(_lastJudgedMs, now), now) == t)
+				{
+					_pressGroup.Add(QueuedPresses[end].col);
+					end++;
+				}
+				ProcessInputFrame(t, _pressGroup);
+				_lastJudgedMs = Math.Max(_lastJudgedMs, t);
+				start = end;
+			}
 			QueuedPresses.Clear();
+			_pressGroup.Clear();
+			ProcessInputFrame(now, _pressGroup);
+			_lastJudgedMs = Math.Max(_lastJudgedMs, now);
 		}
 
 		for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
@@ -679,11 +712,16 @@ private void _GameNoteTick(double delta)
 	private float dim { get; set; }
 	private bool DisableDarkeningSetting { get; set; }
 	private bool DisableFadeSetting { get; set; }
+	private int _settingsVersion = -1;
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		DisableDarkeningSetting = Check.CheckBoolValue(SettingsOperator.GetSetting("ddarkening").ToString());
-		DisableFadeSetting = Check.CheckBoolValue(SettingsOperator.GetSetting("dfadeout").ToString());
+		if (_settingsVersion != SettingsOperator.SettingsVersion) // re-read only when a setting changed, not every frame
+		{
+			_settingsVersion = SettingsOperator.SettingsVersion;
+			DisableDarkeningSetting = Check.CheckBoolValue(SettingsOperator.GetSetting("ddarkening").ToString());
+			DisableFadeSetting = Check.CheckBoolValue(SettingsOperator.GetSetting("dfadeout").ToString());
+		}
 		dim = 1f - (1f * (SettingsOperator.SessionConfig.Backgrounddim * 0.01f));
 		// While playing: projected score (drops on misses). Once finished: the exact final score the server saves.
 		score = Finished

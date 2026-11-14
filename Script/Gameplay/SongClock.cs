@@ -10,6 +10,9 @@ using System;
 /// and then forward again. This clock still advances by frame delta, but pulls itself toward the
 /// audio position a little every frame, so it never visibly jumps or runs backwards. It only snaps
 /// on a real discontinuity (seek, restart, long hitch).
+///
+/// The audio position is shifted back by the output latency, so the clock follows what the player
+/// hears instead of what was just handed to the sound driver.
 /// </summary>
 public sealed class SongClock
 {
@@ -20,6 +23,8 @@ public sealed class SongClock
 
 	private double _time;
 	private bool _synced;
+	// Output latency (seconds), read once when the clock syncs; it doesn't change during a song.
+	private double _latency;
 
 	public double Time => _time;
 
@@ -27,6 +32,7 @@ public sealed class SongClock
 	{
 		_time = 0;
 		_synced = false;
+		_latency = 0;
 	}
 
 	/// <summary>Advance the clock. Pass delta = 0 to read the current value without advancing.</summary>
@@ -41,7 +47,8 @@ public sealed class SongClock
 		}
 
 		double pitch = player.PitchScale;
-		double audioPos = player.GetPlaybackPosition() + AudioServer.GetTimeSinceLastMix() * pitch;
+		if (!_synced) _latency = Math.Max(0.0, AudioServer.GetOutputLatency());
+		double audioPos = player.GetPlaybackPosition() + (AudioServer.GetTimeSinceLastMix() - _latency) * pitch;
 
 		if (!_synced)
 		{
