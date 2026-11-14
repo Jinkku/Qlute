@@ -92,7 +92,7 @@ public partial class ApiOperator : Node
 				$"COMBO: {COMBO}",
 				$"Version: {ProjectSettings.GetSetting("application/config/version")}",
 				$"Branch: {ProjectSettings.GetSetting("application/config/branch")}",
-				$"MULTIPLIER: {AudioPlayer.Instance.PitchScale}",
+				$"MULTIPLIER: {Num.Str(AudioPlayer.Instance.PitchScale)}",
 				$"Mods: {ModsOperator.GetModAlias()}",
 				$"User-Agent: {AgentString}"
 			};

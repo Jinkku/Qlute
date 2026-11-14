@@ -13,7 +13,7 @@ using System.IO;
 public static class BeatmapCache
 {
 	private const int Magic = 0x51424331; // "QBC1"
-	private const int Version = 2; // 2: pp v3, 3: steeper pp curve, 4: level = f(pp) 1..100, 5: level curve 0.8, 6: pp scale 1.13
+	private const int Version = 7; // 2: pp v3, 3: steeper pp curve, 4: level = f(pp) 1..100, 5: level curve 0.8, 6: pp scale 1.13, 7: re-parse maps cached under a comma-decimal culture
 
 	public static string FilePath => SettingsOperator.homedir + "/beatmapcache.bin";
 

@@ -16,7 +16,7 @@ public partial class AudioSettings : PanelContainer
 		OffsetSlider = GetNode<HSlider>("Rows/AudioOffset");
 		OffsetTicker = GetNode<Label>("Rows/AudioTicker");
 		AoaTicker = GetNode<Label>("Rows/AoaTicker");
-		var offset = float.Parse(SettingsOperator.GetSetting("audiooffset").ToString());
+		var offset = Num.Float(SettingsOperator.GetSetting("audiooffset")?.ToString(), 0, commaFallback: true);
 		if (offset != 0)
 		{
 			offset = SettingsOperator.GetSetting("audiooffset") != null ? offset : 0;

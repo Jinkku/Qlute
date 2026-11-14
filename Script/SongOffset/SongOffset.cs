@@ -20,7 +20,7 @@ public partial class SongOffset : Control
 		Speed = GetNode<Label>("ModsScreen/MarginContainer/VBoxContainer/Speedid");
 		Audio = GetNode<AudioStreamPlayer>("OffsetSound");
 		Timer = GetNode<Timer>("Timer");
-		var offset = SettingsOperator.GetSetting("audiooffset") != null ? float.Parse(SettingsOperator.GetSetting("audiooffset").ToString()) : 0;
+		var offset = Num.Float(SettingsOperator.GetSetting("audiooffset")?.ToString(), 0, commaFallback: true);
 		OffsetSlider.Value = 200-offset;
 		AudioPlayer.Instance.Stop();
 	}

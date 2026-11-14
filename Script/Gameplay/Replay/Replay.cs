@@ -141,7 +141,7 @@ public static class Replay
                         }
                         else if (data.StartsWith("#Accuracy: "))
                         {
-                            Replayman.Accuracy = float.Parse(data.Replace("#Accuracy: ", ""));
+                            Replayman.Accuracy = Num.Float(data.Replace("#Accuracy: ", ""), commaFallback: true);
                         }
                         else if (data.StartsWith("#Max Combo: "))
                         {
@@ -149,7 +149,7 @@ public static class Replay
                         }
                         else if (data.StartsWith("#Average ms: "))
                         {
-                            Replayman.Avgms = float.Parse(data.Replace("#Average ms: ", ""));
+                            Replayman.Avgms = Num.Float(data.Replace("#Average ms: ", ""), commaFallback: true);
                         }
                         else if (data.StartsWith("#Mods: "))
                         {
@@ -157,11 +157,11 @@ public static class Replay
                         }
                         else if (data.StartsWith("#Points: "))
                         {
-                            Replayman.Points = double.Parse(data.Replace("#Points: ", ""));
+                            Replayman.Points = Num.Double(data.Replace("#Points: ", ""), commaFallback: true);
                         }
                         else if (data.StartsWith("#Multiplier: "))
                         {
-                            Replayman.Multiplier = float.Parse(data.Replace("#Multiplier: ", ""));
+                            Replayman.Multiplier = Num.Float(data.Replace("#Multiplier: ", ""), 1, commaFallback: true); // replays from comma-decimal PCs say "1,5"
                         }
                     }
                     else
@@ -224,13 +224,13 @@ public static class Replay
                 FileCache += $"#Great: {SettingsOperator.Gameplaycfg.Great}\n";
                 FileCache += $"#Meh: {SettingsOperator.Gameplaycfg.Meh}\n";
                 FileCache += $"#Bad: {SettingsOperator.Gameplaycfg.Bad}\n";
-                FileCache += $"#Accuracy: {SettingsOperator.Gameplaycfg.Accuracy}\n";
+                FileCache += $"#Accuracy: {Num.Str(SettingsOperator.Gameplaycfg.Accuracy)}\n";
                 FileCache += $"#Max Combo: {SettingsOperator.Gameplaycfg.MaxCombo}\n";
-                FileCache += $"#Average ms: {SettingsOperator.Gameplaycfg.ms}\n";
+                FileCache += $"#Average ms: {Num.Str(SettingsOperator.Gameplaycfg.ms)}\n";
                 FileCache += $"#Mods: {ModsOperator.GetModAlias()}\n";
-                FileCache += $"#Points: {SettingsOperator.Gameplaycfg.pp}\n";
+                FileCache += $"#Points: {Num.Str(SettingsOperator.Gameplaycfg.pp)}\n";
                 FileCache += $"#Seed: {Gameplay.seed}\n";
-                FileCache += $"#Multiplier: {AudioPlayer.Instance.PitchScale}\n";
+                FileCache += $"#Multiplier: {Num.Str(AudioPlayer.Instance.PitchScale)}\n";
                 foreach (ReplayLegend entry in ReplayCache)
                 {
                     FileCache += $"{entry.Time},{entry.NoteTap}\n";

@@ -530,12 +530,12 @@ public partial class SettingsOperator : Node
                     case "SampleSet": legend.SampleSet = value; break;
                     case "Creator": legend.Mapper = value; break;
                     case "Version": legend.Version = value; break;
-                    case "CircleSize": legend.KeyCount = (int)(float.TryParse(value, out var cs) ? cs : 4); break;
-                    case "OverallDifficulty": legend.Accuracy = float.TryParse(value, out var od) ? od : 0; break;
+                    case "CircleSize": legend.KeyCount = (int)Num.Float(value, 4); break;
+                    case "OverallDifficulty": legend.Accuracy = Num.Float(value, 0); break;
                     case "AudioFilename": legend.Audio = value; break;
                     case "BeatmapID": legend.BeatmapID = int.TryParse(value, out var bid) ? bid : -1; break;
                     case "BeatmapSetID": legend.BeatmapSetID = int.TryParse(value, out var bset) ? bset : -1; break;
-                    case "PreviewTime": legend.PreviewTime = (float.TryParse(value, out var pt) ? pt : 0) * 0.001f; break;
+                    case "PreviewTime": legend.PreviewTime = Num.Float(value, 0) * 0.001f; break;
                     case "Mode": legend.GameModeID = ConvertModeIDFromOsu(int.TryParse(value, out var bgid) ? bgid : -1); break;
                 }
             }
@@ -553,8 +553,8 @@ public partial class SettingsOperator : Node
                 var parts = line.Split(",");
                 if (parts.Length < 2) continue;
 
-                if (float.TryParse(parts[1], out var mpb) && legend.Bpm == 0) // first BPM
-                    legend.Bpm = 60000f / mpb;
+                if (Num.TryDouble(parts[1], out var mpb) && mpb > 0 && legend.Bpm == 0) // first BPM
+                    legend.Bpm = 60000f / (float)mpb;
 
                 if (int.TryParse(parts[0], out var time) && int.TryParse(parts.Last(), out var flash))
                     dance?.Add(new DanceCounter { time = time, flash = flash == 1 });
@@ -864,7 +864,7 @@ public partial class SettingsOperator : Node
         if (aud != _lastAudioOffsetRaw) // AudioOffset Subsystem (only re-parse when the setting changes)
         {
             _lastAudioOffsetRaw = aud;
-            AudioOffset = aud == null ? 0 : float.Parse(aud);
+            AudioOffset = Num.Float(aud, 0, commaFallback: true);
         }
 
         if (!IsInstanceValid(_infoBar)) _infoBar = GetTree().Root.GetNodeOrNull<ColorRect>("TopPanelOnTop/InfoBar");
