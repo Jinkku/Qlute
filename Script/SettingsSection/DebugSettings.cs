@@ -6,6 +6,7 @@ public partial class DebugSettings : PanelContainer
 {
 	private CheckButton DevHide { get; set; }
 	private CheckButton DiscordRPC { get; set; }
+	private CheckButton CrashReportsToggle { get; set; }
 	private Label NetVersion { get; set; }
 	private Signal Discord { get; set; }
 	private ApiOperator ApiOperator { get; set; }
@@ -20,6 +21,8 @@ public partial class DebugSettings : PanelContainer
 		DevHide = GetNode<CheckButton>("Rows/HideDevDisclaimer");
 		DevHide.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("hidedevintro").ToString());
 		DiscordRPC.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("discord-rpc").ToString());
+		CrashReportsToggle = GetNode<CheckButton>("Rows/CrashReports");
+		CrashReportsToggle.ButtonPressed = CrashReports.Enabled;
 		GetNode<Label>("Rows/GodotEngineVersion").Text = $"Godot Version {Engine.GetVersionInfo()["major"]}.{Engine.GetVersionInfo()["minor"]}";
 		NetVersion.Text = $"Using .NET {Environment.Version}";
 	}
@@ -28,6 +31,8 @@ public partial class DebugSettings : PanelContainer
 	{
 		SettingsOperator.SetSetting("hidedevintro", DevHide.ButtonPressed);
 	}
+	private void _crashreports() => CrashReports.SetEnabled(CrashReportsToggle.ButtonPressed);
+
 	private void _discordrpc()
 	{
 		

@@ -124,7 +124,7 @@ public partial class SettingsOperator : Node
         { "showunicode", false },
         { "hidehud", false },
         { "hidedevintro", false },
-        { "discord-rpc", true },
+        { "discord-rpc", false },  // off until the player turns it on (first-launch privacy prompt)
         { "gamepath", "" },
         { "leaderboardtype", 1 },
         { "dflashing", 0 },
@@ -138,9 +138,11 @@ public partial class SettingsOperator : Node
         { "TapKey0", "Z" },
         { "TapKey1", "X" },
         { "gamemode", 0 },
-        { "lanchat", true },      // show up in the LAN chat (off = invisible on the network)
+        { "lanchat", false },     // show up in the LAN chat (off = invisible on the network); asked on first launch
         { "lannickname", "" },    // name used on LAN when not logged in
         { "onlinechat", true },   // connect to the server's chat while logged in
+        { "crashreports", false }, // send crash reports to Sentry; off until the player agrees
+        { "privacyprompted", false }, // the first-launch privacy prompt was answered
     };
     public Dictionary<string, object> Configurationbk { get; set; }
 
@@ -952,6 +954,8 @@ public partial class SettingsOperator : Node
         if (LeaderboardType < 0 && LeaderboardType > 2) LeaderboardType = 1;
         CheckOldSiteUrl();
         GameChecksum = ChecksumUtil.GetGameChecksum();
+        CrashReports.Start();
+        PrivacyPrompt.ShowIfNeeded(GetTree());
     }
 
     public override void _Notification(int what)

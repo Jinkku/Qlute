@@ -31,6 +31,11 @@ layout_mode = 2
 tooltip_text = "Need to restart the game to finish the changes."
 text = "Discord RPC *"
 
+[node name="CrashReports" type="CheckButton" parent="Rows" unique_id=1730582941]
+layout_mode = 2
+tooltip_text = "Send a report when the game crashes or hits an error, so it can be fixed. Folder and account names are removed first."
+text = "Send Crash Reports"
+
 [node name="HideDevDisclaimer" type="CheckButton" parent="Rows" unique_id=994766516]
 layout_mode = 2
 text = "Hide Experimental Disclaimer"
@@ -59,3 +64,4 @@ script = ExtResource("2_ubnii")
 
 [connection signal="pressed" from="Rows/DiscordRPC" to="." method="_discordrpc"]
 [connection signal="pressed" from="Rows/HideDevDisclaimer" to="." method="_devsel"]
+[connection signal="pressed" from="Rows/CrashReports" to="." method="_crashreports"]
