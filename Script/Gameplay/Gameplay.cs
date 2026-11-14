@@ -238,6 +238,7 @@ public partial class Gameplay : Control
 		SpectatorPanel = GD.Load<PackedScene>("res://Panels/Overlays/SpectatorSettings.tscn").Instantiate().GetNode<Control>(".");
 		ApiOperator = GetNode<ApiOperator>("/root/ApiOperator");
 		Beatmap_Background = GetNode<TextureRect>("./Beatmap_Background");
+		BeatmapVisuals.Attach(this, Beatmap_Background);
 		WaitClock = GetNode<Timer>("Wait");
 		EffectNode = EffectTemplate.Instantiate<Effect>();
 		EffectNode.Template = true;

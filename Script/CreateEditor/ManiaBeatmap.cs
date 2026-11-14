@@ -73,6 +73,8 @@ public class ManiaBeatmap
 	public List<string> InheritedTimingLines = new();
 	/// <summary>[Events] lines other than the background (videos, breaks, storyboard) kept verbatim.</summary>
 	public List<string> ExtraEventLines = new();
+	/// <summary>[Variables] lines ($name=value) used by storyboard commands, kept so they survive a save.</summary>
+	public List<string> VariableLines = new();
 
 	private static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
 
@@ -123,6 +125,9 @@ public class ManiaBeatmap
 				case "[Difficulty]":
 					ParseKeyValue(map, line);
 					break;
+				case "[Variables]":
+					if (line.StartsWith("$") && line.Contains('=')) map.VariableLines.Add(line);
+					break;
 				case "[Events]":
 					if (line.StartsWith("0,0,\""))
 					{
@@ -133,7 +138,8 @@ public class ManiaBeatmap
 							break;
 						}
 					}
-					map.ExtraEventLines.Add(line);
+					// untrimmed: storyboard commands are nested by their leading spaces / underscores
+					map.ExtraEventLines.Add(raw.TrimEnd());
 					break;
 				case "[TimingPoints]":
 				{
@@ -241,6 +247,13 @@ public class ManiaBeatmap
 		sb.Append("ApproachRate:5\n");
 		sb.Append("SliderMultiplier:1.4\n");
 		sb.Append("SliderTickRate:1\n\n");
+
+		if (VariableLines.Count > 0)
+		{
+			sb.Append("[Variables]\n");
+			foreach (var l in VariableLines) sb.Append(l).Append('\n');
+			sb.Append('\n');
+		}
 
 		sb.Append("[Events]\n");
 		sb.Append("//Background and Video events\n");

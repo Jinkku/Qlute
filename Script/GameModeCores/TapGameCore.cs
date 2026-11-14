@@ -519,6 +519,7 @@ public partial class TapGameCore : Control
 		Field = new TapPlayfield { Core = this, Name = "TapPlayfield" };
 		AddChild(Field);
 		MoveChild(Field, Beatmap_Background.GetIndex() + 1);
+		BeatmapVisuals.Attach(this, Beatmap_Background);
 
 		KeyCodes[0] = SettingsOperator.GetSetting("TapKey0")?.ToString() ?? "Z";
 		KeyCodes[1] = SettingsOperator.GetSetting("TapKey1")?.ToString() ?? "X";

@@ -10,6 +10,8 @@ public enum EditorTool
 	Select = 0,
 	Place = 1,
 	Remove = 2,
+	/// <summary>Press on a lane and drag up to set the hold's end.</summary>
+	Hold = 3,
 }
 
 /// <summary>
@@ -34,6 +36,10 @@ public partial class ManiaEditorField : Control
 	private int _moveDt;
 	private int _moveDl;
 	private bool _boxAdditive;
+	private bool _holding;
+	private int _holdLane;
+	private int _holdStart;
+	private int _holdEnd;
 
 	private static readonly Color MeasureColor = new(1f, 1f, 1f, 0.85f);
 	private static readonly Color BeatColor = new(1f, 1f, 1f, 0.45f);
@@ -175,9 +181,11 @@ public partial class ManiaEditorField : Control
 		if (_moving)
 			foreach (var n in sel)
 				DrawNote(n, _moveDt, _moveDl, 0.85f, true);
+		if (_holding)
+			DrawNote(new EditorNote { Lane = _holdLane, Time = _holdStart, EndTime = _holdEnd > _holdStart ? _holdEnd : -1 }, 0, 0, 0.6f, false);
 
 		// placement ghost
-		if (_mouseInside && Editor.Tool == EditorTool.Place && !_moving && !_boxSelecting)
+		if (_mouseInside && Editor.Tool is EditorTool.Place or EditorTool.Hold && !_moving && !_boxSelecting && !_holding)
 		{
 			var lane = LaneAt(_mouse.X);
 			if (lane >= 0)
@@ -224,6 +232,15 @@ public partial class ManiaEditorField : Control
 
 		if (selected)
 			DrawRect(r.Grow(2), new Color(1f, 0.85f, 0.2f, 1f), false, 2.5f);
+
+		// hitsound additions: W(histle) F(inish) C(lap)
+		if (n.HitSound != 0 && alpha > 0.5f)
+		{
+			var tag = ((n.HitSound & 2) != 0 ? "W" : "") + ((n.HitSound & 4) != 0 ? "F" : "") + ((n.HitSound & 8) != 0 ? "C" : "");
+			if (tag.Length > 0)
+				DrawString(GetThemeDefaultFont(), new Vector2(r.End.X - 4 - tag.Length * 8, r.Position.Y + r.Size.Y - 3), tag,
+					HorizontalAlignment.Left, -1, 11, new Color(0, 0, 0, 0.85f));
+		}
 	}
 
 	private void DrawBeatGrid(ManiaBeatmap map, double tTop, double tBottom, float left, float width, Font font)
@@ -296,6 +313,7 @@ public partial class ManiaEditorField : Control
 		{
 			_mouse = mm.Position;
 			if (_moving) UpdateMove();
+			if (_holding) _holdEnd = Math.Max(_holdStart, Editor.SnapTime(YToTime(_mouse.Y)));
 			var lane = LaneAt(_mouse.X);
 			Editor.OnFieldHover(lane >= 0 ? Editor.SnapTime(YToTime(_mouse.Y)) : -1, lane);
 			return;
@@ -332,10 +350,12 @@ public partial class ManiaEditorField : Control
 				case EditorTool.Place: PlaceAt(mb.Position); break;
 				case EditorTool.Remove: RemoveAt(mb.Position); break;
 				case EditorTool.Select: BeginSelect(mb.Position, mb.CtrlPressed || mb.ShiftPressed); break;
+				case EditorTool.Hold: BeginHold(mb.Position); break;
 			}
 		}
 		else
 		{
+			if (_holding) EndHold();
 			if (_moving) EndMove();
 			if (_boxSelecting) EndBox();
 		}
@@ -358,6 +378,40 @@ public partial class ManiaEditorField : Control
 		if (Editor.Map.Notes.Any(n => n.Lane == lane && n.Time == time)) return;
 		Editor.PushUndo();
 		var note = new EditorNote { Time = time, Lane = lane };
+		Editor.Map.Notes.Add(note);
+		Editor.Map.SortAll();
+		Editor.Selection.Clear();
+		Editor.MarkDirty();
+		Editor.PlayHitsound();
+	}
+
+	private void BeginHold(Vector2 pos)
+	{
+		var lane = LaneAt(pos.X);
+		if (lane < 0) return;
+		var existing = NoteAt(pos);
+		if (existing != null)
+		{
+			Editor.Selection.Clear();
+			Editor.Selection.Add(existing);
+			return;
+		}
+		var time = Editor.SnapTime(YToTime(pos.Y));
+		if (time < 0) return;
+		_holding = true;
+		_holdLane = lane;
+		_holdStart = time;
+		_holdEnd = time;
+	}
+
+	private void EndHold()
+	{
+		_holding = false;
+		if (Editor.Map.Notes.Any(n => n.Lane == _holdLane && n.Time == _holdStart)) return;
+		Editor.PushUndo();
+		var note = new EditorNote { Time = _holdStart, Lane = _holdLane, EndTime = _holdEnd > _holdStart ? _holdEnd : -1 };
+		// a hold swallows the taps it covers in its lane
+		if (note.IsHold) Editor.Map.Notes.RemoveAll(n => n.Lane == note.Lane && n.Time > note.Time && n.Time <= note.EndTime);
 		Editor.Map.Notes.Add(note);
 		Editor.Map.SortAll();
 		Editor.Selection.Clear();

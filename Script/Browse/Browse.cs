@@ -104,8 +104,12 @@ public partial class Browse : Control
 	private const int CardWidth = 340; // catalog.css: minmax(340px, 1fr)
 	private const int Gap = 10;
 	private const string Mine = "mine";
-	/// <summary>Video / storyboard filters and badges (Browse, cards, beatmap info). Off until they're supported in game.</summary>
-	public static readonly bool ShowVideoStoryboard = false;
+	/// <summary>Storyboard filter and badges (Browse, cards, beatmap info). Storyboards play in game.</summary>
+	public static readonly bool ShowStoryboard = true;
+	/// <summary>Video filter and badges. Off: only .ogv (Theora) videos can play, and submitted sets leave videos out.</summary>
+	public static readonly bool ShowVideo = false;
+	private static IEnumerable<string> ShownExtras(IEnumerable<string> extras) =>
+		extras.Where(e => e == "video" ? ShowVideo : e != "storyboard" || ShowStoryboard);
 	private const string Rec = "rec";       // "Recommended Difficulty": apiv2/search?recommended=1
 	private static readonly Opt MatchSort = new("match", "Best match", false);
 	private static RecommendationLegend? RecProfile;
@@ -376,7 +380,8 @@ public partial class Browse : Control
 		AddRow("Genre", Radio(Genres.Prepend(any), State.Genre, v => State.Genre = v));
 		AddRow("Language", Radio(Languages.Prepend(any), State.Language, v => State.Language = v));
 		AddRow("Explicit", Radio(new[] { new Opt("show", "Show"), new Opt("hide", "Hide") }, State.Explicit, v => State.Explicit = v));
-		if (ShowVideoStoryboard) AddRow("Extra", new[] { new Opt("video", "Has video"), new Opt("storyboard", "Has storyboard") }.Select(o =>
+		var extras = new[] { new Opt("video", "Has video"), new Opt("storyboard", "Has storyboard") }.Where(o => ShownExtras(new[] { o.Id }).Any()).ToList();
+		if (extras.Count > 0) AddRow("Extra", extras.Select(o =>
 			Chip(o.Name, State.Extra.Contains(o.Id), AccentColour, () =>
 			{
 				if (!State.Extra.Remove(o.Id)) State.Extra.Add(o.Id);
@@ -393,7 +398,7 @@ public partial class Browse : Control
 
 	private static int FilterCount() =>
 		new[] { State.Genre, State.Language, State.Played }.Count(s => s != "")
-		+ (ShowVideoStoryboard && State.Extra.Count > 0 ? 1 : 0)
+		+ (ShownExtras(State.Extra).Any() ? 1 : 0)
 		+ (State.Explicit == "hide" ? 1 : 0);
 
 	private IEnumerable<Opt> ShownSorts => State.Status == Rec ? Sorts.Prepend(MatchSort) : Sorts;
@@ -557,7 +562,7 @@ public partial class Browse : Control
 		else p.Add($"status={State.Status}");
 		if (State.Genre != "") p.Add($"genre={State.Genre}");
 		if (State.Language != "") p.Add($"language={State.Language}");
-		if (ShowVideoStoryboard && State.Extra.Count > 0) p.Add($"extra={string.Join(",", State.Extra.OrderBy(e => e))}");
+		if (ShownExtras(State.Extra).Any()) p.Add($"extra={string.Join(",", ShownExtras(State.Extra).OrderBy(e => e))}");
 		if (State.Played != "" && State.Status != Rec) p.Add($"played={State.Played}");
 		if (State.Explicit == "hide") p.Add("explicit=hide");
 		p.Add($"sort={State.Sort}");

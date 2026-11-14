@@ -4,13 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CreateEditor;
+using QluteShader;
+using QluteStoryboard;
 using IOPath = System.IO.Path;
 using IOFile = System.IO.File;
 using IODirectory = System.IO.Directory;
 
 /// <summary>
 /// Mania (4K) beatmap editor. Tabs: Info (metadata, background, audio), Compose (notes),
-/// Timing (BPM sections) and Verify (checks). Saves to the game's .osu format in the beatmaps folder.
+/// Timing (BPM sections), Verify (checks), Storyboard (sprites + commands, saved in the .osu's [Events])
+/// and Shader (node graph, saved as qlute-shader.json in the set). Saves to the game's .osu format in the beatmaps folder.
 /// </summary>
 public partial class Create : Control
 {
@@ -22,6 +25,12 @@ public partial class Create : Control
 
 	// ---------- state ----------
 	public ManiaBeatmap Map { get; private set; }
+	/// <summary>The difficulty's storyboard (own objects, editable) plus the set's .osb objects (read-only).</summary>
+	public StoryboardDoc Storyboard { get; private set; }
+	/// <summary>The set's shader graph (a do-nothing graph when the set has none).</summary>
+	public ShaderGraph ShaderGraph { get; set; }
+	public string SetFolderPath => SetFolder;
+	public Texture2D BackgroundTexture => EditorBackground?.Texture;
 	public HashSet<EditorNote> Selection { get; } = new();
 	public EditorTool Tool { get; private set; } = EditorTool.Place;
 	public int Divisor => Divisors[_divisorIndex];
@@ -60,6 +69,8 @@ public partial class Create : Control
 		public List<EditorNote> Notes;
 		public List<EditorTimingPoint> Timing;
 		public int PreviewTime;
+		public List<string> StoryboardLines;
+		public string ShaderJson;
 	}
 
 	// ---------- nodes ----------
@@ -67,12 +78,16 @@ public partial class Create : Control
 	private TextureRect EditorBackground;
 	private HSlider Seeker;
 	private Label TimeLabel;
-	private Control InfoN, ComposeN, TimingN, VerifyN;
+	private Control InfoN, ComposeN, TimingN, VerifyN, StoryboardN, ShaderN;
+	private StoryboardEditor SbEditor;
+	private ShaderEditor ShEditor;
 	private ManiaEditorField Field;
 	private Label SelectedPos, NoteCount, SelectionCount, ZoomLabel;
 	private OptionButton DivisorOption, RateOption;
 	private CheckBox HitsoundsToggle;
-	private Button SelectBtn, PlaceBtn, RemoveBtn;
+	private Button SelectBtn, PlaceBtn, RemoveBtn, HoldBtn;
+	/// <summary>Live mapping: the note each gameplay key started (to stretch into a hold on release).</summary>
+	private readonly EditorNote[] _liveNotes = new EditorNote[ManiaBeatmap.KeyCount];
 	private ButtonFade PlayPauseBtn;
 
 	private LineEdit TitleEdit, ArtistEdit, DifficultyEdit, MapperEdit, SourceEdit, TagsEdit;
@@ -108,6 +123,10 @@ public partial class Create : Control
 		ComposeN = GetNode<Control>("Compose");
 		TimingN = GetNode<Control>("Timing");
 		VerifyN = GetNode<Control>("Verify");
+		StoryboardN = AddTab("Storyboard", 4);
+		ShaderN = AddTab("Shader", 5);
+		SbEditor = new StoryboardEditor { Editor = this };
+		ShEditor = new ShaderEditor { Editor = this };
 
 		// Compose
 		Field = new ManiaEditorField { Editor = this };
@@ -131,6 +150,7 @@ public partial class Create : Control
 		SelectBtn.Pressed += () => SetTool(EditorTool.Select);
 		PlaceBtn.Pressed += () => SetTool(EditorTool.Place);
 		RemoveBtn.Pressed += () => SetTool(EditorTool.Remove);
+		BuildNoteTools(GetNode<VBoxContainer>(tools.TrimEnd('/')));
 
 		// Transport
 		PlayPauseBtn = GetNode<ButtonFade>("ControlPanel/Box/Player/Columns/PlayPause");
@@ -218,6 +238,12 @@ public partial class Create : Control
 		GetNode<Button>("Verify/Panel/Box/Run").Pressed += RunChecks;
 
 		GetWindow().FilesDropped += OnFilesDropped;
+		// built after the map so their first Refresh has something to show
+		void Mount(Control tab, Control editor)
+		{
+			tab.AddChild(editor);
+			editor.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
+		}
 
 		if (EditorSongInfo.FilePath != null && IOFile.Exists(EditorSongInfo.FilePath))
 			LoadFile(EditorSongInfo.FilePath);
@@ -228,9 +254,34 @@ public partial class Create : Control
 			Seek(EditorSongInfo.ResumeTimeMs);
 		EditorSongInfo.ResumeTimeMs = 0;
 
+		Mount(StoryboardN, SbEditor);
+		Mount(ShaderN, ShEditor);
+
 		SetTool(EditorTool.Place);
 		SetRate(1f);
 		Menu(Map.TimingPoints.Count == 0 || EditorPlayer.Stream == null ? 0 : 1, instant: true);
+	}
+
+	/// <summary>A tab panel laid out like Verify, plus its toolbar button (a copy of the Verify button).</summary>
+	private Control AddTab(string title, int mode)
+	{
+		var panel = new Control { Name = title, Visible = false, MouseFilter = MouseFilterEnum.Ignore };
+		AddChild(panel);
+		MoveChild(panel, VerifyN.GetIndex() + 1);
+		panel.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
+		panel.OffsetTop = VerifyN.OffsetTop;
+		panel.OffsetBottom = VerifyN.OffsetBottom;
+
+		var verifyBtn = GetNode<ButtonFade>("ToolBar/HBoxContainer/Menus/Verify");
+		var btn = (ButtonFade)verifyBtn.Duplicate((int)(DuplicateFlags.Groups | DuplicateFlags.Scripts | DuplicateFlags.UseInstantiation));
+		btn.Name = title;
+		// ButtonFade makes its label at runtime; the copy would show the Verify label on top of its own
+		foreach (var child in btn.GetChildren()) { btn.RemoveChild(child); child.Free(); }
+		btn.StringText = title;
+		btn.CustomMinimumSize = new Vector2(Math.Max(100, title.Length * 11), 0);
+		verifyBtn.GetParent().AddChild(btn);
+		btn.Pressed += () => Menu(mode);
+		return panel;
 	}
 
 	public override void _ExitTree()
@@ -259,6 +310,8 @@ public partial class Create : Control
 		EditorPlayer.Stop();
 		EditorPlayer.Stream = null;
 		SetBackground(null);
+		BuildStoryboard();
+		ShaderGraph = ShaderGraph.CreateDefault();
 		AfterMapChanged();
 		Dirty = false;
 	}
@@ -286,6 +339,8 @@ public partial class Create : Control
 		EditorPlayer.Stream = !string.IsNullOrEmpty(Map.AudioFilename) && IOFile.Exists(audioPath) ? AudioPlayer.AutoDetectFormat(audioPath) : null;
 		var bgPath = IOPath.Combine(SetFolder ?? "", Map.BackgroundFilename);
 		SetBackground(!string.IsNullOrEmpty(Map.BackgroundFilename) && IOFile.Exists(bgPath) ? SettingsOperator.LoadImage(bgPath) : null);
+		BuildStoryboard();
+		ShaderGraph = ShaderGraph.LoadFromFolder(SetFolder) ?? ShaderGraph.CreateDefault();
 		AfterMapChanged();
 		Dirty = false;
 	}
@@ -302,6 +357,32 @@ public partial class Create : Control
 		RefreshTimingList(0);
 		UpdateSeekerRange();
 		Seek(0);
+		SbEditor?.Refresh();
+		ShEditor?.Refresh();
+	}
+
+	/// <summary>Parse the difficulty's [Events] (and the set's .osb) into <see cref="Storyboard"/>.</summary>
+	private void BuildStoryboard()
+	{
+		var doc = new StoryboardDoc();
+		var lines = new List<string>();
+		if (Map.VariableLines.Count > 0)
+		{
+			lines.Add("[Variables]");
+			lines.AddRange(Map.VariableLines);
+		}
+		lines.Add("[Events]");
+		lines.AddRange(Map.ExtraEventLines);
+		doc.ParseFile(lines, fromOsb: false);
+		var osb = FilePath != null ? StoryboardDoc.FindOsb(FilePath) : null;
+		if (osb != null)
+		{
+			try { doc.ParseFile(IOFile.ReadAllLines(osb), fromOsb: true); }
+			catch (Exception e) { GD.PrintErr(e.Message); }
+		}
+		doc.BackgroundPath = Map.BackgroundFilename;
+		doc.CompileAll();
+		Storyboard = doc;
 	}
 
 	private void UpdateSeekerRange()
@@ -394,6 +475,8 @@ public partial class Create : Control
 	private void PickAudio() =>
 		OpenFileDialog("Pick the song audio", new[] { "*.mp3, *.ogg, *.wav ; Audio" }, ApplyAudioFile);
 
+	public void OpenFileDialogPublic(string title, string[] filters, Action<string> onPicked) => OpenFileDialog(title, filters, onPicked);
+
 	private void OpenFileDialog(string title, string[] filters, Action<string> onPicked)
 	{
 		var dlg = new FileDialog
@@ -416,7 +499,8 @@ public partial class Create : Control
 		foreach (var f in files)
 		{
 			var ext = IOPath.GetExtension(f).ToLowerInvariant();
-			if (ImageExtensions.Contains(ext)) ApplyBackgroundFile(f);
+			if (ImageExtensions.Contains(ext) && _tab == 4) SbEditor.ImportImage(f);
+			else if (ImageExtensions.Contains(ext)) ApplyBackgroundFile(f);
 			else if (AudioExtensions.Contains(ext)) ApplyAudioFile(f);
 		}
 	}
@@ -461,11 +545,11 @@ public partial class Create : Control
 
 	private Tween MenuTween { get; set; }
 
-	/// <summary>0 = Info, 1 = Compose, 2 = Timing, 3 = Verify</summary>
+	/// <summary>0 = Info, 1 = Compose, 2 = Timing, 3 = Verify, 4 = Storyboard, 5 = Shader</summary>
 	private void Menu(int mode, bool instant = false)
 	{
 		_tab = mode;
-		var panels = new[] { InfoN, ComposeN, TimingN, VerifyN };
+		var panels = new[] { InfoN, ComposeN, TimingN, VerifyN, StoryboardN, ShaderN };
 		MenuTween?.Kill();
 		for (int i = 0; i < panels.Length; i++)
 		{
@@ -484,6 +568,8 @@ public partial class Create : Control
 			case 0: RefreshInfo(); break;
 			case 2: RefreshTimingList(TimingList.IsAnythingSelected() ? TimingList.GetSelectedItems()[0] : IndexOfTimingAt(CurrentMs)); break;
 			case 3: RunChecks(); break;
+			case 4: SbEditor?.Refresh(); break;
+			case 5: ShEditor?.RefreshPreviewSources(); break;
 		}
 	}
 
@@ -646,6 +732,128 @@ public partial class Create : Control
 		SelectBtn.ButtonPressed = tool == EditorTool.Select;
 		PlaceBtn.ButtonPressed = tool == EditorTool.Place;
 		RemoveBtn.ButtonPressed = tool == EditorTool.Remove;
+		HoldBtn.ButtonPressed = tool == EditorTool.Hold;
+	}
+
+	/// <summary>Hold tool button plus the selection tools under the Select/Place/Remove buttons.</summary>
+	private void BuildNoteTools(VBoxContainer column)
+	{
+		HoldBtn = (Button)RemoveBtn.Duplicate((int)(DuplicateFlags.Groups | DuplicateFlags.Scripts | DuplicateFlags.UseInstantiation));
+		HoldBtn.Name = "Hold";
+		HoldBtn.Text = "Hold";
+		HoldBtn.TooltipText = "Press on a lane and drag up to draw a hold note (4)";
+		column.AddChild(HoldBtn);
+		HoldBtn.Pressed += () => SetTool(EditorTool.Hold);
+
+		column.AddChild(new HSeparator());
+		void Tool(string text, string tip, Action action)
+		{
+			var b = new Button { Text = text, TooltipText = tip, FocusMode = FocusModeEnum.None, CustomMinimumSize = new Vector2(80, 34) };
+			b.AddThemeFontSizeOverride("font_size", 13);
+			b.Pressed += action;
+			column.AddChild(b);
+		}
+		Tool("Mirror", "Flip the selected notes left-right (Ctrl+H)", MirrorSelection);
+		Tool("Reverse", "Reverse the selected notes in time (Ctrl+J)", ReverseSelection);
+		Tool("Resnap", "Snap the selected notes to the current beat divisor", ResnapSelection);
+		Tool("To taps", "Turn the selected hold notes into taps", () => EditSelection(n => n.EndTime = -1));
+
+		var sounds = new HBoxContainer();
+		sounds.AddThemeConstantOverride("separation", 2);
+		foreach (var (label, flag, tip) in new[] { ("W", 2, "whistle"), ("F", 4, "finish"), ("C", 8, "clap") })
+		{
+			var b = new Button { Text = label, TooltipText = $"Toggle the {tip} hitsound on the selected notes", FocusMode = FocusModeEnum.None, CustomMinimumSize = new Vector2(25, 30) };
+			b.AddThemeFontSizeOverride("font_size", 13);
+			b.Pressed += () => ToggleHitsound(flag);
+			sounds.AddChild(b);
+		}
+		column.AddChild(sounds);
+	}
+
+	/// <summary>Apply <paramref name="edit"/> to every selected note (one undo step), then fix overlaps.</summary>
+	private void EditSelection(Action<EditorNote> edit)
+	{
+		if (Selection.Count == 0) { Notify.Post("Select some notes first (Select tool, or Ctrl+A)."); return; }
+		PushUndo();
+		foreach (var n in Selection) edit(n);
+		FixOverlaps();
+		Map.SortAll();
+		MarkDirty();
+	}
+
+	/// <summary>Selected notes replace unselected ones they now sit on; duplicates inside the selection go.</summary>
+	private void FixOverlaps()
+	{
+		var seen = new HashSet<(int, int)>();
+		foreach (var n in Selection.OrderBy(n => n.Time).ToList())
+		{
+			if (n.IsHold && n.EndTime <= n.Time) n.EndTime = -1;
+			if (!seen.Add((n.Time, n.Lane))) { Map.Notes.Remove(n); Selection.Remove(n); }
+		}
+		Map.Notes.RemoveAll(n => !Selection.Contains(n) && seen.Contains((n.Time, n.Lane)));
+	}
+
+	private void MirrorSelection() => EditSelection(n => n.Lane = ManiaBeatmap.KeyCount - 1 - n.Lane);
+
+	private void ReverseSelection()
+	{
+		if (Selection.Count == 0) { EditSelection(_ => { }); return; }
+		int first = Selection.Min(n => n.Time);
+		int last = Selection.Max(n => n.IsHold ? n.EndTime : n.Time);
+		EditSelection(n =>
+		{
+			if (n.IsHold) (n.Time, n.EndTime) = (first + last - n.EndTime, first + last - n.Time);
+			else n.Time = first + last - n.Time;
+		});
+	}
+
+	private void ResnapSelection() => EditSelection(n =>
+	{
+		n.Time = SnapTime(n.Time);
+		if (n.IsHold) n.EndTime = SnapTime(n.EndTime);
+	});
+
+	private void ToggleHitsound(int flag)
+	{
+		bool allOn = Selection.Count > 0 && Selection.All(n => (n.HitSound & flag) != 0);
+		EditSelection(n => n.HitSound = allOn ? n.HitSound & ~flag : n.HitSound | flag);
+	}
+
+	/// <summary>Gameplay key <paramref name="lane"/> pressed in Compose: put a note there at the current (snapped) time.</summary>
+	private void LiveKeyDown(int lane)
+	{
+		int time = SnapTime(CurrentMs);
+		if (time < 0) return;
+		var existing = Map.Notes.FirstOrDefault(n => n.Lane == lane && n.Time == time);
+		if (existing != null) { _liveNotes[lane] = null; return; }
+		PushUndo();
+		var note = new EditorNote { Time = time, Lane = lane };
+		Map.Notes.Add(note);
+		Map.SortAll();
+		MarkDirty();
+		PlayHitsound();
+		_liveNotes[lane] = note;
+	}
+
+	/// <summary>Key released: if the song moved on at least one snap, the note becomes a hold to here.</summary>
+	private void LiveKeyUp(int lane)
+	{
+		var note = _liveNotes[lane];
+		_liveNotes[lane] = null;
+		if (note == null || !Map.Notes.Contains(note)) return;
+		int end = SnapTime(CurrentMs);
+		if (end <= note.Time) return;
+		note.EndTime = end;
+		Map.Notes.RemoveAll(n => n != note && n.Lane == lane && n.Time > note.Time && n.Time <= end);
+		MarkDirty();
+	}
+
+	private int LaneForKey(InputEventKey key)
+	{
+		var code = key.Keycode.ToString();
+		for (int i = 0; i < ManiaBeatmap.KeyCount; i++)
+			if (SettingsOperator.GetSetting($"Key{i}")?.ToString() == code) return i;
+		return -1;
 	}
 
 	public void MarkDirty() => Dirty = true;
@@ -673,13 +881,33 @@ public partial class Create : Control
 		Notes = Map.Notes.Select(n => n.Clone()).ToList(),
 		Timing = Map.TimingPoints.Select(t => t.Clone()).ToList(),
 		PreviewTime = Map.PreviewTime,
+		StoryboardLines = Storyboard?.ToEventLines(),
+		ShaderJson = ShaderSnapshot(),
 	};
+
+	private string ShaderSnapshot()
+	{
+		ShEditor?.SyncToGraph();
+		return ShaderGraph?.ToJson();
+	}
 
 	private void Restore(Snapshot s)
 	{
 		Map.Notes = s.Notes.Select(n => n.Clone()).ToList();
 		Map.TimingPoints = s.Timing.Select(t => t.Clone()).ToList();
 		Map.PreviewTime = s.PreviewTime;
+		if (s.StoryboardLines != null && s.StoryboardLines.SequenceEqual(Storyboard?.ToEventLines() ?? new List<string>()) == false)
+		{
+			Map.ExtraEventLines = s.StoryboardLines.ToList();
+			BuildStoryboard();
+			SbEditor?.Refresh();
+			ShEditor?.RefreshPreviewSources();
+		}
+		if (s.ShaderJson != null && s.ShaderJson != ShaderSnapshot())
+		{
+			ShaderGraph = ShaderGraph.FromJson(s.ShaderJson);
+			ShEditor?.Refresh();
+		}
 		Selection.Clear();
 		MarkDirty();
 		RefreshTimingList(Math.Min(SelectedTimingIndex(), Map.TimingPoints.Count - 1));
@@ -1034,7 +1262,9 @@ public partial class Create : Control
 				return false;
 			}
 
+			Map.ExtraEventLines = Storyboard.ToEventLines();
 			IOFile.WriteAllText(target, Map.Serialize(), new UTF8Encoding(false));
+			SaveShader(folder);
 			var oldPath = FilePath;
 			if (oldPath != null && oldPath != target && IOFile.Exists(oldPath))
 				IOFile.Delete(oldPath); // difficulty was renamed
@@ -1056,6 +1286,17 @@ public partial class Create : Control
 			Notify.Post("Couldn't save the beatmap:\n" + e.Message, Type: NotificationIcons.NotificationType.Warning);
 			return false;
 		}
+	}
+
+	/// <summary>Write the set's shader graph, or remove the file when the graph doesn't do anything.</summary>
+	private void SaveShader(string folder)
+	{
+		ShEditor?.SyncToGraph();
+		var path = IOPath.Combine(folder, ShaderGraph.FileName);
+		if (ShaderGraph != null && ShaderGraph.DoesSomething())
+			IOFile.WriteAllText(path, ShaderGraph.ToJson(), new UTF8Encoding(false));
+		else if (IOFile.Exists(path))
+			IOFile.Delete(path);
 	}
 
 	private static void CopyInto(string source, string folder, string fileName)
@@ -1274,12 +1515,21 @@ public partial class Create : Control
 
 	public override void _Input(InputEvent @event)
 	{
-		if (@event is not InputEventKey { Pressed: true } key) return;
+		if (@event is not InputEventKey key) return;
 		if (IsTyping()) return;
 		// Don't steal keys from open dialogs.
 		if (GetChildren().OfType<Window>().Any(w => w.Visible)) return;
 
 		bool ctrl = key.CtrlPressed || key.MetaPressed;
+		// live mapping with the gameplay keys
+		if (_tab == 1 && !ctrl && !key.Echo && LaneForKey(key) is var lane and >= 0)
+		{
+			if (key.Pressed) LiveKeyDown(lane);
+			else LiveKeyUp(lane);
+			GetViewport().SetInputAsHandled();
+			return;
+		}
+		if (!key.Pressed) return;
 		bool handled = true;
 		switch (key.Keycode)
 		{
@@ -1293,10 +1543,15 @@ public partial class Create : Control
 			case Key.V when ctrl && _tab == 1: Paste(); break;
 			case Key.A when ctrl && _tab == 1: Selection.Clear(); foreach (var n in Map.Notes) Selection.Add(n); break;
 			case Key.Delete or Key.Backspace when _tab == 1: DeleteSelection(); break;
+			case Key.Delete when _tab == 4: SbEditor.HandleDelete(); break;
+			case Key.Delete when _tab == 5: ShEditor.HandleDelete(); break;
 			case Key.Escape when _tab == 1 && Selection.Count > 0: Selection.Clear(); break;
 			case Key.Key1 when _tab == 1 && !ctrl: SetTool(EditorTool.Select); break;
 			case Key.Key2 when _tab == 1 && !ctrl: SetTool(EditorTool.Place); break;
 			case Key.Key3 when _tab == 1 && !ctrl: SetTool(EditorTool.Remove); break;
+			case Key.Key4 when _tab == 1 && !ctrl: SetTool(EditorTool.Hold); break;
+			case Key.H when ctrl && _tab == 1: MirrorSelection(); break;
+			case Key.J when ctrl && _tab == 1: ReverseSelection(); break;
 			case Key.Up or Key.Right when _tab == 1: StepSnap(key.ShiftPressed ? 4 : 1); break;
 			case Key.Down or Key.Left when _tab == 1: StepSnap(key.ShiftPressed ? -4 : -1); break;
 			case Key.Home: Seek(0); break;

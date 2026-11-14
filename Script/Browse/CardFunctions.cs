@@ -318,8 +318,8 @@ public partial class CardFunctions : Button
 		}
 		if (diffs.Count > 8) _diffRow.AddChild(PlayerOverlays.Text($"+{diffs.Count - 8}", 10, new Color("#ffffff80")));
 		if (set.nsfw) _diffRow.AddChild(Badge("EXPLICIT", true));
-		if (Browse.ShowVideoStoryboard && set.video) _diffRow.AddChild(Badge("VIDEO", false));
-		if (Browse.ShowVideoStoryboard && set.storyboard) _diffRow.AddChild(Badge("STORYBOARD", false));
+		if (Browse.ShowVideo && set.video) _diffRow.AddChild(Badge("VIDEO", false));
+		if (Browse.ShowStoryboard && set.storyboard) _diffRow.AddChild(Badge("STORYBOARD", false));
 
 		_favorited = set.favorited;
 		_favCount = set.favourite_count;

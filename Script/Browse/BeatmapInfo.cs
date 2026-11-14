@@ -557,8 +557,8 @@ public partial class BeatmapInfo : Control
 		rows.Add(("Language", string.IsNullOrEmpty(_set.language_name) ? "Unspecified" : _set.language_name, _set.language > 1 ? Accent : null));
 		var extras = new List<string>();
 		if (_set.nsfw) extras.Add("Explicit");
-		if (Browse.ShowVideoStoryboard && _set.video) extras.Add("Video");
-		if (Browse.ShowVideoStoryboard && _set.storyboard) extras.Add("Storyboard");
+		if (Browse.ShowVideo && _set.video) extras.Add("Video");
+		if (Browse.ShowStoryboard && _set.storyboard) extras.Add("Storyboard");
 		rows.Add(("Content", extras.Count > 0 ? string.Join(", ", extras) : "No extras",
 			extras.Count == 0 ? new Color("#ffffff80") : _set.nsfw ? new Color("#ff9a9a") : null));
 		rows.Add(("Plays", Num(_set.play_count > 0 ? _set.play_count : _diffs.Sum(x => x.playcount)), null));

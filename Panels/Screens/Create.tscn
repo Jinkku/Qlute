@@ -705,7 +705,10 @@ theme_override_font_sizes/font_size = 11
 text = "Wheel: seek  Ctrl+Wheel: zoom
 Alt+Wheel: snap  Space: play
 Right click: delete note
-1/2/3: select/place/remove
+1/2/3/4: select/place/remove/hold
+Your play keys: place notes live
+(hold them while playing = hold note)
+Ctrl+H mirror  Ctrl+J reverse
 Ctrl+Z/Y C/X/V A, Del
 Ctrl+S: save"
 autowrap_mode = 3

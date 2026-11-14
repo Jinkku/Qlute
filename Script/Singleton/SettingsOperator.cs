@@ -143,6 +143,8 @@ public partial class SettingsOperator : Node
         { "onlinechat", true },   // connect to the server's chat while logged in
         { "crashreports", false }, // send crash reports to Sentry; off until the player agrees
         { "privacyprompted", false }, // the first-launch privacy prompt was answered
+        { "storyboard", true },    // play beatmap storyboards (and .ogv videos)
+        { "beatmapshader", true }, // apply the shader a beatmap ships (made in the Create editor)
     };
     public Dictionary<string, object> Configurationbk { get; set; }
 
@@ -933,6 +935,7 @@ public partial class SettingsOperator : Node
         }
         if (Bench) GetTree().Root.CallDeferred(Node.MethodName.AddChild, new Benchmark());
         if (ReplaySelfTest.Enabled) GetTree().Root.CallDeferred(Node.MethodName.AddChild, new ReplaySelfTest());
+        if (VisualsSelfTest.Enabled) GetTree().Root.CallDeferred(Node.MethodName.AddChild, new VisualsSelfTest());
         Configurationbk = new Dictionary<string, object>(Configuration);
         ParseBackgroundDefault();
         GD.Print("Please wait...");

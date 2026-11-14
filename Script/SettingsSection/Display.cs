@@ -26,7 +26,23 @@ public partial class Display : PanelContainer
 		NFadeout.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("dfadeout").ToString());
 		Windowmode.Selected = int.TryParse(SettingsOperator.GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
 		BackgroundDim.Value = SettingsOperator.SessionConfig.Backgrounddim;
+		AddToggle("Show beatmap storyboards", StoryboardPlayer.SettingKey);
+		AddToggle("Show beatmap shaders", BeatmapShaderLayer.SettingKey);
 	}
+
+	/// <summary>A setting switch placed right under the "Fade out when on break" one.</summary>
+	private void AddToggle(string text, string key)
+	{
+		var toggle = new CheckButton
+		{
+			Text = text,
+			ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting(key)?.ToString() ?? "true"),
+		};
+		NFadeout.GetParent().AddChild(toggle);
+		NFadeout.GetParent().MoveChild(toggle, NFadeout.GetIndex() + 1 + _added++);
+		toggle.Toggled += on => SettingsOperator.SetSetting(key, on);
+	}
+	private int _added;
 	
 	private void _backgrounddim_started(float value)
 	{
