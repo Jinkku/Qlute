@@ -632,11 +632,16 @@ public partial class ApiOperator : Node
 		SendLogin(username, password);
 	}
 
-	private static void SendLogin(string username, string password)
+	private static async void SendLogin(string username, string password)
 	{
 		SettingsOperator.SessionConfig.Loggingin = true;
 		Username = username;
 		PasswordHash = password;
+		NoticeText = "Connecting...";
+		// The server checks the exe hash in the User-Agent; on the first launch after an update it's still
+		// being computed in the background, and logging in without it shows "version not supported".
+		if (!ChecksumUtil.GameChecksumReady.IsCompleted)
+			await Task.WhenAny(ChecksumUtil.GameChecksumReady, Task.Delay(TimeSpan.FromSeconds(15)));
 		string[] Headers = new string[] {
 			$"USERNAME: {username}",
 			$"PASSWORD: {password}",

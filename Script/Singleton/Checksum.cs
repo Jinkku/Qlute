@@ -15,6 +15,12 @@ public static class ChecksumUtil
 
     static string ChecksumCacheFile => SettingsOperator.homedir + "/exehash.txt";
 
+    static readonly System.Threading.Tasks.TaskCompletionSource GameChecksumDone =
+        new(System.Threading.Tasks.TaskCreationOptions.RunContinuationsAsynchronously);
+
+    /// <summary>Finishes once the exe hash is known (or failed), so login can wait for the real User-Agent.</summary>
+    public static System.Threading.Tasks.Task GameChecksumReady => GameChecksumDone.Task;
+
     /// <summary>
     /// Hashes the game exe (the server checks it on score submit) without blocking startup.
     /// The result is cached against the exe's path, size and write time, so it's only
@@ -32,6 +38,7 @@ public static class ChecksumUtil
         catch (Exception e)
         {
             GD.PrintErr("Game checksum: couldn't stat exe: " + e.Message);
+            GameChecksumDone.TrySetResult();
             return;
         }
 
@@ -62,6 +69,7 @@ public static class ChecksumUtil
             catch (Exception e)
             {
                 GD.PrintErr("Game checksum failed: " + e.Message);
+                GameChecksumDone.TrySetResult();
             }
         });
     }
@@ -70,6 +78,7 @@ public static class ChecksumUtil
     {
         SettingsOperator.GameChecksum = hash;
         ApiOperator.RefreshAgentString();
+        GameChecksumDone.TrySetResult();
     }
     
     public static string ComputeSHA256(string filePath)
