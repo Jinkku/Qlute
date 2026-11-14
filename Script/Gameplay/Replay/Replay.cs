@@ -97,14 +97,16 @@ public static class Replay
     {
         try
         {
-            if (Godot.FileAccess.FileExists(file))
+            if (File.Exists(file))
             {
                 GD.Print($"[Qlute] Found '{file}' Processing it....");
                 ReplayInfo Replayman = new ReplayInfo {Filepath = file};
-                using var filedata = Godot.FileAccess.Open(file, Godot.FileAccess.ModeFlags.Read);
-                string[] cache = filedata.GetAsText().TrimEnd('\n').Split("\n");
-                foreach (string data in cache)
+                // Only the "#" header is needed here, so stop at the first input line instead of reading the whole file
+                using var reader = new StreamReader(file);
+                string data;
+                while ((data = reader.ReadLine()) != null)
                 {
+                    data = data.TrimEnd('\r');
                     if (data.StartsWith("#"))
                     {
                         if (data.StartsWith("#Username: "))
@@ -217,27 +219,28 @@ public static class Replay
             try
             {
                 GD.Print("[Qlute] Saving Replay...");
-                FileCache =
-                    $"#Qlute Version: {ProjectSettings.GetSetting("application/config/version")}-{ProjectSettings.GetSetting("application/config/branch")}\n";
-                FileCache += $"#Username: {ApiOperator.Username}\n";
-                FileCache += $"#BeatmapID: {SettingsOperator.SessionConfig.BeatmapID}\n";
-                FileCache += $"#BeatmapSetID: {SettingsOperator.SessionConfig.BeatmapSetID}\n";
-                FileCache += $"#Score: {Gameplay.score}\n";
-                FileCache += $"#Max: {SettingsOperator.Gameplaycfg.Max}\n";
-                FileCache += $"#Great: {SettingsOperator.Gameplaycfg.Great}\n";
-                FileCache += $"#Meh: {SettingsOperator.Gameplaycfg.Meh}\n";
-                FileCache += $"#Bad: {SettingsOperator.Gameplaycfg.Bad}\n";
-                FileCache += $"#Accuracy: {Num.Str(SettingsOperator.Gameplaycfg.Accuracy)}\n";
-                FileCache += $"#Max Combo: {SettingsOperator.Gameplaycfg.MaxCombo}\n";
-                FileCache += $"#Average ms: {Num.Str(SettingsOperator.Gameplaycfg.ms)}\n";
-                FileCache += $"#Mods: {ModsOperator.GetModAlias()}\n";
-                FileCache += $"#Points: {Num.Str(SettingsOperator.Gameplaycfg.pp)}\n";
-                FileCache += $"#Seed: {Gameplay.seed}\n";
-                FileCache += $"#Multiplier: {Num.Str(AudioPlayer.Instance.PitchScale)}\n";
+                var sb = new System.Text.StringBuilder(512 + ReplayCache.Count * 12);
+                sb.Append($"#Qlute Version: {ProjectSettings.GetSetting("application/config/version")}-{ProjectSettings.GetSetting("application/config/branch")}\n");
+                sb.Append($"#Username: {ApiOperator.Username}\n");
+                sb.Append($"#BeatmapID: {SettingsOperator.SessionConfig.BeatmapID}\n");
+                sb.Append($"#BeatmapSetID: {SettingsOperator.SessionConfig.BeatmapSetID}\n");
+                sb.Append($"#Score: {Gameplay.score}\n");
+                sb.Append($"#Max: {SettingsOperator.Gameplaycfg.Max}\n");
+                sb.Append($"#Great: {SettingsOperator.Gameplaycfg.Great}\n");
+                sb.Append($"#Meh: {SettingsOperator.Gameplaycfg.Meh}\n");
+                sb.Append($"#Bad: {SettingsOperator.Gameplaycfg.Bad}\n");
+                sb.Append($"#Accuracy: {Num.Str(SettingsOperator.Gameplaycfg.Accuracy)}\n");
+                sb.Append($"#Max Combo: {SettingsOperator.Gameplaycfg.MaxCombo}\n");
+                sb.Append($"#Average ms: {Num.Str(SettingsOperator.Gameplaycfg.ms)}\n");
+                sb.Append($"#Mods: {ModsOperator.GetModAlias()}\n");
+                sb.Append($"#Points: {Num.Str(SettingsOperator.Gameplaycfg.pp)}\n");
+                sb.Append($"#Seed: {Gameplay.seed}\n");
+                sb.Append($"#Multiplier: {Num.Str(AudioPlayer.Instance.PitchScale)}\n");
                 foreach (ReplayLegend entry in ReplayCache)
                 {
-                    FileCache += $"{entry.Time},{entry.NoteTap}\n";
+                    sb.Append(entry.Time).Append(',').Append(entry.NoteTap).Append('\n');
                 }
+                FileCache = sb.ToString();
 
                 using var file = Godot.FileAccess.Open(FilePath, Godot.FileAccess.ModeFlags.Write);
                 file.StoreString(FileCache);
