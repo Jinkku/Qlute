@@ -886,6 +886,12 @@ public partial class SettingsOperator : Node
     public override void _Ready()
     {
         args = OS.GetCmdlineArgs();
+        // Make sure every user folder exists before anything below reads from it (first launch)
+        foreach (var dir in new[] { homedir, tempdir, beatmapsdir, exportdir, downloadsdir, replaydir, screenshotdir, skinsdir })
+        {
+            try { System.IO.Directory.CreateDirectory(dir); }
+            catch (Exception ex) { GD.PrintErr($"[Qlute] Couldn't create {dir}: {ex.Message}"); }
+        }
         if (Bench) GetTree().Root.CallDeferred(Node.MethodName.AddChild, new Benchmark());
         if (ReplaySelfTest.Enabled) GetTree().Root.CallDeferred(Node.MethodName.AddChild, new ReplaySelfTest());
         Configurationbk = new Dictionary<string, object>(Configuration);

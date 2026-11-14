@@ -38,10 +38,14 @@ public partial class Updates : PanelContainer
 // Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (Kiko.VersionCode != Kiko.Version)
-			VersionNode.Text = $"{Kiko.VersionCode} is availiable!";
-		else 
-			VersionNode.Text = $"{Kiko.VersionCode} is the latest version.";
+		if (Kiko.isUpdating && Kiko.VersionCode == null)
+			VersionNode.Text = "Checking for updates...";
+		else if (Kiko.VersionCode == null || Kiko.Version == null)
+			VersionNode.Text = $"Current version: {Kiko.Version?.ToString() ?? "unknown"}";
+		else if (Kiko.VersionCode > Kiko.Version)
+			VersionNode.Text = $"{Kiko.VersionCode} is available!";
+		else
+			VersionNode.Text = $"{Kiko.Version} is the latest version.";
 	}
 
 	private void Update()

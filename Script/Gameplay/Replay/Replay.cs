@@ -53,6 +53,7 @@ public static class Replay
     public static void Init()
     {
         GD.Print("[Qlute] Init replay subsystem...");
+        if (!Directory.Exists(SettingsOperator.replaydir)) return;
         foreach (string replay in Directory.GetFiles(SettingsOperator.replaydir))
         {
             Parse(replay);

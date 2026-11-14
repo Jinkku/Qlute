@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.IO.Compression;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 public partial class Kiko : Node
 {
@@ -17,14 +19,19 @@ public partial class Kiko : Node
     public enum UpdateChannel { Stable, Experimental }
     public static UpdateChannel CurrentUpdateChannel { get; set; } = UpdateChannel.Stable;
     public static bool isUpdating { get; set; }
+    /// <summary>A verified update zip is sitting in <see cref="zipPath"/>.</summary>
+    public static bool UpdateReady { get; private set; }
     public static bool CheckingUpdates = false;
-	public static readonly string extractPath = Path.Combine(Path.GetTempPath(), "QluteUpdateFile");
+    /// <summary>Updater's own temp folder; everything the updater writes lives here.</summary>
+    public static readonly string updateDir = Path.Combine(Path.GetTempPath(), "Qlute");
+	public static readonly string extractPath = Path.Combine(updateDir, "QluteUpdateFile");
     public static readonly string platformZip = OS.GetName() switch
     {
         "Windows" => "Windows.zip",
         "Linux" => "Linux.zip",
         _ => "unknown.zip"
     };
+    public static string zipPath => Path.Combine(updateDir, platformZip);
     public static readonly string executableName = OS.GetName() switch
     {
         "Windows" => "Qlute.exe",
@@ -46,45 +53,77 @@ public partial class Kiko : Node
 			}
 		}
 
+    /// <summary>
+    /// Runs in the freshly extracted build (started with --update): waits for the old game to exit,
+    /// installs the zip over gamepath, launches the installed game and quits. It must never keep
+    /// running as a normal game from the temp folder, so every failure path also quits.
+    /// </summary>
     private void InitUpdateProcess()
     {
-        if (Directory.Exists(extractPath))
+        string gamePath = SettingsOperator.GetSetting("gamepath").ToString();
+        string executablePath = Path.Combine(gamePath, executableName);
+        try
         {
-            GD.Print("Waiting for other process to close");
-            System.Threading.Thread.Sleep(3000);
-            GD.Print("Start.... NOW!");
-            GD.Print("Open file....");
-            var filepath = Path.Combine(Path.GetTempPath(), platformZip);
-            GD.Print("set file end path....");
-            string executablePath = Path.Combine(SettingsOperator.GetSetting("gamepath").ToString(), executableName);
-            GD.Print("extracting....");
-            using (var archive = ZipFile.OpenRead(filepath))
-            {
-                GD.Print($"Extracting from '{extractPath}' to '{SettingsOperator.GetSetting("gamepath").ToString()}'");
-                archive.ExtractToDirectory(SettingsOperator.GetSetting("gamepath").ToString(), true);
-            }
-		    GD.Print($"Extracted to: {SettingsOperator.GetSetting("gamepath").ToString()}");
-            System.Threading.Thread.Sleep(1000);
-            if (File.Exists(executablePath))
+            if (!File.Exists(zipPath))
+                throw new FileNotFoundException($"Update file not found: {zipPath}");
+
+            WaitForOldGame();
+
+            // Files can stay locked for a moment after the old process exits (Windows), so retry.
+            Exception last = null;
+            for (int attempt = 1; attempt <= 10; attempt++)
             {
                 try
                 {
-                    System.Diagnostics.Process.Start(executablePath);
-                    GetTree().Quit();
+                    GD.Print($"[Kiko] Installing to '{gamePath}' (attempt {attempt})");
+                    using (var archive = ZipFile.OpenRead(zipPath))
+                        archive.ExtractToDirectory(gamePath, true);
+                    last = null;
+                    break;
                 }
-                catch (Exception ex)
-                {
-                    GD.PrintErr($"Failed to start the new executable: {ex.Message}");
-                }
+                catch (IOException ex) { last = ex; }
+                catch (UnauthorizedAccessException ex) { last = ex; }
+                System.Threading.Thread.Sleep(1000);
             }
-            else
+            if (last != null) throw last;
+            GD.Print($"[Kiko] Installed to: {gamePath}");
+        }
+        catch (Exception ex)
+        {
+            GD.PrintErr($"[Kiko] Update failed: {ex}");
+            OS.Alert($"The update couldn't be installed:\n{ex.Message}\n\nThe game will start without updating.", "Qlute update failed");
+        }
+
+        // Start whatever is installed now (updated, or the old build if the install failed).
+        try
+        {
+            if (File.Exists(executablePath)) System.Diagnostics.Process.Start(executablePath);
+            else GD.PrintErr($"[Kiko] Executable not found: {executablePath}");
+        }
+        catch (Exception ex)
+        {
+            GD.PrintErr($"[Kiko] Failed to start the game: {ex.Message}");
+        }
+        GetTree().Quit();
+    }
+
+    /// <summary>Waits (up to 30s) for the game that launched us, identified by --pid=N.</summary>
+    private void WaitForOldGame()
+    {
+        string pidArg = args.FirstOrDefault(a => a.StartsWith("--pid="));
+        if (pidArg != null && int.TryParse(pidArg.Substring("--pid=".Length), out int pid))
+        {
+            try
             {
-                GD.PrintErr($"Executable not found: {executablePath}");
+                using var old = System.Diagnostics.Process.GetProcessById(pid);
+                GD.Print($"[Kiko] Waiting for old game (pid {pid}) to close...");
+                if (!old.WaitForExit(30000)) GD.PrintErr("[Kiko] Old game still running after 30s, trying anyway.");
             }
+            catch (ArgumentException) { /* already exited */ }
         }
         else
         {
-            GD.PrintErr("[Kiko] Update failed... I can't find the directory :/");
+            System.Threading.Thread.Sleep(3000);
         }
     }
 
@@ -101,6 +140,7 @@ public partial class Kiko : Node
     public void CheckUpdates(bool isinSettings = false)
     {
         args = OS.GetCmdlineArgs();
+        Version ??= new Version(ProjectSettings.GetSetting("application/config/version").ToString());
         if (args.Contains("--update"))
         {
             GD.Print("Updating...");
@@ -109,19 +149,32 @@ public partial class Kiko : Node
         else if (!args.Contains("--ignore-update"))
         {
 #if !DEBUG
+            if (UpdateReady)
+            {
+                // Already downloaded and verified; don't delete it by checking again.
+                PostReadyNotification();
+                return;
+            }
+            if (isUpdating)
+            {
+                if (isinSettings) Notify.Post("Already checking for updates...");
+                return;
+            }
             if (isinSettings) Notify.Post("Checking for updates...");
             GD.Print("Checking for updates....");
             isUpdating = true;
-            // Remove extractPath directory if it exists
-            if (Directory.Exists(extractPath))
+            // Clear leftovers from a previous update (only ever inside our own temp folder)
+            try
             {
-                Directory.Delete(extractPath, true);
+                if (Directory.Exists(extractPath)) Directory.Delete(extractPath, true);
+                if (File.Exists(zipPath)) File.Delete(zipPath);
             }
-            if (File.Exists(Path.Combine(Path.GetTempPath(), platformZip)))
+            catch (Exception ex)
             {
-                File.Delete(Path.Combine(Path.GetTempPath(), platformZip));
+                GD.PrintErr($"[Kiko] Couldn't clean old update files: {ex.Message}");
             }
-            Version = new Version(ProjectSettings.GetSetting("application/config/version").ToString());
+            VersionCode = null;
+            KikoApi?.QueueFree();
             KikoApi = new HttpRequest();
             AddChild(KikoApi);
             KikoApi.Timeout = 30;
@@ -144,38 +197,29 @@ public partial class Kiko : Node
 
     public void PrepareUpdateProcess()
     {
-        GD.Print("Download completed!");
-        // Extract the downloaded zip file
-        string zipPath = KikoApi.DownloadFile;
-        Directory.CreateDirectory(Kiko.extractPath);
-
-        using (var archive = ZipFile.OpenRead(zipPath))
+        string executablePath = Path.Combine(extractPath, executableName);
+        try
         {
-            archive.ExtractToDirectory(Kiko.extractPath, true);
+            if (Directory.Exists(extractPath)) Directory.Delete(extractPath, true);
+            Directory.CreateDirectory(extractPath);
+            using (var archive = ZipFile.OpenRead(zipPath))
+                archive.ExtractToDirectory(extractPath, true);
+            GD.Print($"[Kiko] Extracted to: {extractPath}");
+
+            if (!File.Exists(executablePath))
+                throw new FileNotFoundException($"Executable not found: {executablePath}");
+            System.Diagnostics.Process.Start(executablePath, new[] { "--update", $"--pid={OS.GetProcessId()}" });
         }
-
-        GD.Print($"Extracted to: {Kiko.extractPath}");
-        string executablePath = Path.Combine(Kiko.extractPath, executableName);
-
-        if (File.Exists(executablePath))
+        catch (Exception ex)
         {
-            try
-            {
-                System.Diagnostics.Process.Start(executablePath, "--update");
-            }
-            catch (Exception ex)
-            {
-                GD.PrintErr($"Failed to start the new executable: {ex.Message}");
-            }
+            // Stay open instead of quitting into nothing.
+            GD.PrintErr($"[Kiko] Couldn't start the update: {ex}");
+            Notify.Post($"Couldn't install the update:\n{ex.Message}");
+            return;
         }
-        else
-        {
-            GD.PrintErr($"Executable not found: {executablePath}");
-        }
-
         GetTree().Quit();
     }
-    
+
     private void _KikoApiDone(long result, long responseCode, string[] headers, byte[] body)
     {
         KikoApi.Disconnect("request_completed", new Callable(this, nameof(_KikoApiDone)));
@@ -226,20 +270,28 @@ public partial class Kiko : Node
         string suffix = tagName.Contains('-') ? tagName.Substring(tagName.IndexOf('-') + 1) : null;
         VersionCode = new Version(versionPart);
 
-        if (VersionCode == Version)
+        if (!(VersionCode > Version))
         {
-            GD.Print("Already up to date.");
+            GD.Print($"Already up to date. (installed {Version}, latest on channel {VersionCode})");
             isUpdating = false;
             return;
         }
 
         string downloadUrl = null;
+        string expectedSha256 = null;
         foreach (var a in chosen["assets"].AsGodotArray())
         {
             var asset = a.AsGodotDictionary();
             if (asset["name"].AsString() == platformZip)
             {
                 downloadUrl = asset["browser_download_url"].AsString();
+                // GitHub reports "sha256:<hex>" per asset
+                if (asset.ContainsKey("digest") && asset["digest"].VariantType == Variant.Type.String)
+                {
+                    string digest = asset["digest"].AsString();
+                    if (digest.StartsWith("sha256:", StringComparison.OrdinalIgnoreCase))
+                        expectedSha256 = digest.Substring("sha256:".Length).Trim().ToLowerInvariant();
+                }
                 break;
             }
         }
@@ -251,21 +303,61 @@ public partial class Kiko : Node
             return;
         }
 
+        if (expectedSha256 == null)
+        {
+            GD.PrintErr($"[Kiko] Release {tagName} has no sha256 digest for '{platformZip}', refusing to download it.");
+            isUpdating = false;
+            return;
+        }
+
+        Directory.CreateDirectory(updateDir);
         KikoApi.Timeout = 0;
-        KikoApi.DownloadFile = Path.Combine(Path.GetTempPath(), platformZip);
+        KikoApi.DownloadFile = zipPath;
         KikoApi.RequestCompleted += (res, code, hdrs, bdy) =>
         {
-            if (code == 200)
+            if (res != (long)HttpRequest.Result.Success || code != 200)
             {
-                Notify.Post("Update is ready to install!\nClick to install the update.",
-                    uri: $"updatefile:/{KikoApi.DownloadFile}",
-                    Type: NotificationIcons.NotificationType.Download);
+                GD.PrintErr($"[Kiko] Update download failed (result {res}, HTTP {code})");
+                isUpdating = false;
+                return;
             }
+            string file = KikoApi.DownloadFile;
+            Task.Run(() => Sha256Of(file)).ContinueWith(t =>
+            {
+                Callable.From(() => OnDownloadHashed(file, t.IsCompletedSuccessfully ? t.Result : null, expectedSha256)).CallDeferred();
+            });
         };
         KikoApi.Request(downloadUrl, new string[] { "User-Agent: Qlute-Updater" });
         Notify.Post("Downloading update...",
             ProgressGetter: () => KikoApi.GetDownloadedBytes(),
             Max: () => KikoApi.GetBodySize(),
+            Type: NotificationIcons.NotificationType.Download);
+    }
+
+    private static string Sha256Of(string file)
+    {
+        using var stream = File.OpenRead(file);
+        return Convert.ToHexString(SHA256.HashData(stream)).ToLowerInvariant();
+    }
+
+    private void OnDownloadHashed(string file, string actual, string expected)
+    {
+        isUpdating = false;
+        if (actual == null || actual != expected)
+        {
+            GD.PrintErr($"[Kiko] Update checksum mismatch (expected {expected}, got {actual ?? "error"}), discarding download.");
+            try { File.Delete(file); } catch { }
+            return;
+        }
+        GD.Print("[Kiko] Update checksum verified.");
+        UpdateReady = true;
+        PostReadyNotification();
+    }
+
+    private static void PostReadyNotification()
+    {
+        Notify.Post("Update is ready to install!\nClick to install the update.",
+            uri: $"updatefile:/{zipPath}",
             Type: NotificationIcons.NotificationType.Download);
     }
 }
