@@ -12,6 +12,65 @@ public static class ChecksumUtil
     {
         return ComputeSHA256(OS.GetExecutablePath());
     }
+
+    static string ChecksumCacheFile => SettingsOperator.homedir + "/exehash.txt";
+
+    /// <summary>
+    /// Hashes the game exe (the server checks it on score submit) without blocking startup.
+    /// The result is cached against the exe's path, size and write time, so it's only
+    /// recomputed after an update. ApiOperator's User-Agent is refreshed when it's ready.
+    /// </summary>
+    public static void StartGameChecksum()
+    {
+        string exe = OS.GetExecutablePath();
+        string stamp;
+        try
+        {
+            var info = new FileInfo(exe);
+            stamp = $"{exe}|{info.Length}|{info.LastWriteTimeUtc.Ticks}";
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr("Game checksum: couldn't stat exe: " + e.Message);
+            return;
+        }
+
+        try
+        {
+            if (File.Exists(ChecksumCacheFile))
+            {
+                var lines = File.ReadAllLines(ChecksumCacheFile);
+                if (lines.Length >= 2 && lines[0] == stamp && lines[1].Length == 64)
+                {
+                    SetGameChecksum(lines[1]);
+                    return;
+                }
+            }
+        }
+        catch (Exception) { /* fall through and rehash */ }
+
+        System.Threading.Tasks.Task.Run(() =>
+        {
+            try
+            {
+                string hash = ComputeSHA256(exe);
+                SetGameChecksum(hash);
+                string tmp = ChecksumCacheFile + ".tmp";
+                File.WriteAllLines(tmp, new[] { stamp, hash });
+                File.Move(tmp, ChecksumCacheFile, overwrite: true);
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr("Game checksum failed: " + e.Message);
+            }
+        });
+    }
+
+    static void SetGameChecksum(string hash)
+    {
+        SettingsOperator.GameChecksum = hash;
+        ApiOperator.RefreshAgentString();
+    }
     
     public static string ComputeSHA256(string filePath)
     {

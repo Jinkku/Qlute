@@ -37,6 +37,8 @@ public class LeaderboardEntry
 	/// <summary>True if the server has this score's replay (apiv2/getreplay/{id}).</summary>
 	public bool replay { get; set; }
 	public bool Active { get; set; }
+	/// <summary>Profile picture URL, sent with each getleaderboard row.</summary>
+	public string pfp { get; set; }
 	public Texture2D ProfilePicture { get; set; }
 }
 public partial class ApiOperator : Node
@@ -160,32 +162,54 @@ public partial class ApiOperator : Node
 			int beatmapId = SettingsOperator.SessionConfig.BeatmapID;
 			LeaderboardList = entries;
 			LeaderboardStatus = 2; // Set status to loaded
-			// Profile pictures load one by one with awaits in between; picking another song meanwhile clears or
-			// replaces LeaderboardList, so walk our own copy and stop once the song changed.
-			using var client = new System.Net.Http.HttpClient { Timeout = TimeSpan.FromSeconds(10) };
-			foreach (var leaderboardEntry in new List<LeaderboardEntry>(entries))
-			{
-				if (SettingsOperator.SessionConfig.BeatmapID != beatmapId || !ReferenceEquals(LeaderboardList, entries)) return;
-				try
-				{
-					using var req = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, SettingsOperator.GetSetting("api") + "apiv2/getstat/pfp_path");
-					req.Headers.Add("USERNAME", leaderboardEntry.username);
-					using var res = await client.SendAsync(req);
-					var pfp_path = JsonDocument.Parse(await res.Content.ReadAsStringAsync()).RootElement.GetProperty("url").GetString();
-					await DownloadImage(pfp_path, (ImageTexture texture) =>
-					{
-						leaderboardEntry.ProfilePicture = texture;
-					});
-				}
-				catch (Exception e)
-				{
-					GD.PrintErr($"Couldn't load a leaderboard picture: {e.Message}");
-				}
-				// `score` comes from the server (computed from the replay, pp v3 / competitive score).
-			}
+			// Profile pictures load in parallel. Picking another song meanwhile clears or replaces
+			// LeaderboardList, so only apply a picture while our list is still the current one.
+			bool Current() => SettingsOperator.SessionConfig.BeatmapID == beatmapId && ReferenceEquals(LeaderboardList, entries);
+			var loads = new List<Task>(entries.Count);
+			foreach (var leaderboardEntry in entries)
+				loads.Add(LoadLeaderboardPicture(leaderboardEntry, Current));
+			await Task.WhenAll(loads);
 			GD.Print("Leaderboard loaded successfully.");
 		}
 	}
+	private static async Task LoadLeaderboardPicture(LeaderboardEntry entry, Func<bool> current)
+	{
+		try
+		{
+			string url = entry.pfp;
+			if (string.IsNullOrEmpty(url)) // older servers don't send it with the leaderboard
+			{
+				using var req = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, SettingsOperator.GetSetting("api") + "apiv2/getstat/pfp_path");
+				req.Headers.Add("USERNAME", entry.username);
+				using var res = await Http.SendAsync(req);
+				url = JsonDocument.Parse(await res.Content.ReadAsStringAsync()).RootElement.GetProperty("url").GetString();
+			}
+			if (!current()) return;
+			if (AvatarCache.TryGetValue(url, out var cached))
+			{
+				entry.ProfilePicture = cached;
+				return;
+			}
+			await DownloadImage(url, texture =>
+			{
+				if (AvatarCache.Count >= AvatarCacheMax) AvatarCache.Clear();
+				AvatarCache[url] = texture;
+				if (current()) entry.ProfilePicture = texture;
+			});
+		}
+		catch (Exception e)
+		{
+			GD.PrintErr($"Couldn't load a leaderboard picture: {e.Message}");
+		}
+	}
+
+	// Avatars by URL, so switching back and forth between songs doesn't download the same pictures again.
+	private const int AvatarCacheMax = 256;
+	private static readonly Dictionary<string, ImageTexture> AvatarCache = new();
+
+	/// <summary>One HttpClient for the whole game (a new one per request leaks sockets and redoes TLS).</summary>
+	public static readonly System.Net.Http.HttpClient Http = new() { Timeout = TimeSpan.FromSeconds(15) };
+
 	public static void ReloadLeaderboard(int BeatmapID)
 	{
 		if (SettingsOperator.NoConnectionToGameServer)
@@ -246,15 +270,22 @@ public partial class ApiOperator : Node
 	}
 
 	
+	private static string _appName;
+
+	/// <summary>Rebuilds the User-Agent; called again once the background exe hash is done.</summary>
+	public static void RefreshAgentString()
+	{
+		_appName ??= ProjectSettings.GetSetting("application/config/name").ToString();
+		string agent = $"{_appName}-{SettingsOperator.GameChecksum}";
+		AgentHeaders = new string[] { $"User-Agent: {agent}" };
+		AgentString = agent;
+	}
+
 	public static int LeaderboardStatus = 0; // 0 = Not loaded, 1 = Loading, 2 = Loaded
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		AgentString = $"{ProjectSettings.GetSetting("application/config/name").ToString()}-{SettingsOperator.GameChecksum}";
-		AgentHeaders = new string[]
-		{
-			$"User-Agent: {AgentString}"
-		};
+		RefreshAgentString();
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		Instance = this;
 		var savedName = SettingsOperator.GetSetting("username")?.ToString();
@@ -741,8 +772,7 @@ public partial class ApiOperator : Node
 
 	public static async Task<string> FetchData(string url)
 	{
-		using var client = new System.Net.Http.HttpClient();
-		return await client.GetStringAsync(url);
+		return await Http.GetStringAsync(url);
 	}
 	
 	public static async Task
@@ -751,9 +781,8 @@ public partial class ApiOperator : Node
 		try
 		{
 			// 1. Download the image
-			using (var client = new System.Net.Http.HttpClient())
 			{
-				byte[] imageBytes = await client.GetByteArrayAsync(path);
+				byte[] imageBytes = await Http.GetByteArrayAsync(path);
 
 				// 2. Create a Godot Image object
 				Godot.Image image = new Godot.Image();
