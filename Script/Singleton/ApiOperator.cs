@@ -266,7 +266,7 @@ public partial class ApiOperator : Node
 		}
 		if ((Username != null || PasswordHash != null) && SettingsOperator.SessionConfig.Loggedin == false && Check.CheckBoolValue(SettingsOperator.GetSetting("stayloggedin").ToString()))
 		{
-			GD.Print("Attempting to login with username: " + Username);
+			GD.Print("Attempting to log in with the saved account...");
 			UPlayerName.Instance.Text = Username;
 
 			ApiOperator.Login(Username, PasswordHash);
@@ -464,7 +464,6 @@ public partial class ApiOperator : Node
 
 	public void Check_Info(string Username)
 	{
-		GD.Print("Using Profile: " + Username);
 		InfoApi.Request(SettingsOperator.GetSetting("api") + "apiv2/getstat/full", new string[] { $"USERNAME: {Username}", $"User-Agent: {AgentString}" });
 	}
 
@@ -548,6 +547,11 @@ public partial class ApiOperator : Node
 	
 	private long Timer { get; set; }
 	private string Status = "N/A";
+	/// <summary>What the server last got (account + text) and when, so the status is only sent when it changes.</summary>
+	private string _sentStatus;
+	private long _sentStatusAt;
+	/// <summary>The server shows players as online for 60 s after their last status, so refresh well before that.</summary>
+	private const long StatusKeepAliveSeconds = 30;
 
 	private void CheckStatus()
 	{
@@ -569,14 +573,20 @@ public partial class ApiOperator : Node
 		{
 			Status = $"Listening to {Artist} - {Title}";
 		}
+		CheckStatusDC(); // local Discord pipe, not the network
+		long now = DateTimeOffset.Now.ToUnixTimeSeconds();
+		string key = Username + "\n" + Status;
+		if (key == _sentStatus && now - _sentStatusAt < StatusKeepAliveSeconds) return;
+		_sentStatus = key;
+		_sentStatusAt = now;
 		string[] Headers = new string[] {
 		$"NOWPLAYING: {Status}",
 		$"USERNAME: {Username}",
 		$"PASSWORD: {PasswordHash}",
 		$"User-Agent: {AgentString}"
 		};
+		StatusChecker.CancelRequest();
 		StatusChecker.Request(SettingsOperator.GetSetting("api") + "apiv2/setstatus", Headers);
-		CheckStatusDC();
 	}
 
 	public void CheckStatusDC()

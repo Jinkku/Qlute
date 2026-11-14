@@ -30,7 +30,7 @@ public partial class SteamEngine : Node
                 return;
             }
 
-            GD.Print($"[Steam] Success! Logged in as: {SteamFriends.GetPersonaName()}");
+            GD.Print("[Steam] Success! Steam is running.");
             UpdateRichPresence("Exploring Main Menu", "Menu");
 
         }
