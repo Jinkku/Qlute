@@ -4,7 +4,9 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DiscordRichPresence" Version="1.6.1.70" />
+    <PackageReference Include="DiscordRichPresence" Version="1.143.0" />
+    <!-- DiscordRichPresence asks for 12.0.2, which has a known vulnerability (GHSA-5crp-9r3c-p9vr) -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Markdig" Version="1.4.0" />
     <PackageReference Include="NVorbis" Version="1.0.0-rc.2" />
     <PackageReference Include="Steamworks.NET" Version="2024.8.0" />
