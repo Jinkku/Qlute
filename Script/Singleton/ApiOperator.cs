@@ -238,7 +238,8 @@ public partial class ApiOperator : Node
 		};
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		Instance = this;
-		Username = SettingsOperator.GetSetting("username")?.ToString();
+		var savedName = SettingsOperator.GetSetting("username")?.ToString();
+		Username = string.IsNullOrWhiteSpace(savedName) ? "Guest" : savedName; // nothing saved: stay "Guest", not null
 		PasswordHash = SettingsOperator.GetSetting("password")?.ToString();
 		LoginApi = new HttpRequest();
 		InfoApi = new HttpRequest();
@@ -264,7 +265,7 @@ public partial class ApiOperator : Node
 		{
 			InitDiscord();
 		}
-		if ((Username != null || PasswordHash != null) && SettingsOperator.SessionConfig.Loggedin == false && Check.CheckBoolValue(SettingsOperator.GetSetting("stayloggedin").ToString()))
+		if (Username != "Guest" && !string.IsNullOrEmpty(PasswordHash) && SettingsOperator.SessionConfig.Loggedin == false && Check.CheckBoolValue(SettingsOperator.GetSetting("stayloggedin").ToString()))
 		{
 			GD.Print("Attempting to log in with the saved account...");
 			UPlayerName.Instance.Text = Username;
@@ -646,7 +647,7 @@ public partial class ApiOperator : Node
 	public static async Task<string> DownloadReplay(LeaderboardEntry entry)
 	{
 		if (entry == null || entry.id <= 0 || !entry.replay) return null;
-		static string Clean(string s) => string.Concat((s ?? "").Split(System.IO.Path.GetInvalidFileNameChars()));
+		static string Clean(string s) => Replay.CleanName(s);
 		string path = $"{SettingsOperator.replaydir}/[{Clean(entry.username)}] [{Clean(SettingsOperator.SessionConfig.BeatmapMapper)}] {Clean(SettingsOperator.SessionConfig.BeatmapArtist)} - {Clean(SettingsOperator.SessionConfig.BeatmapTitle)} [{Clean(SettingsOperator.SessionConfig.BeatmapDifficultyName)}]-{entry.time}.qrf";
 		if (System.IO.File.Exists(path)) return path;
 		try

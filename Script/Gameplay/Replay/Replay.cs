@@ -182,6 +182,9 @@ public static class Replay
             GD.PrintErr("[Qlute] ", err);
         }
     }
+    /// <summary>Drops characters that can't be in a file name (beatmap titles can have / : ? etc.).</summary>
+    public static string CleanName(object s) => string.Concat((s?.ToString() ?? "").Split(Path.GetInvalidFileNameChars()));
+
     /// <summary>
     /// Resets the replay cache and set the file path for the replay file.
     /// </summary>
@@ -189,7 +192,7 @@ public static class Replay
     {
         ReplayCache.Clear();
         GD.Print("[Qlute] Resetting Replay cache...");
-        FilePath = $"{SettingsOperator.replaydir}/[{ApiOperator.Username}] [{SettingsOperator.SessionConfig.BeatmapMapper.ToString()}] {SettingsOperator.SessionConfig.BeatmapArtist.ToString()} - {SettingsOperator.SessionConfig.BeatmapTitle.ToString()} [{SettingsOperator.SessionConfig.BeatmapDifficultyName.ToString()}]-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.qrf";
+        FilePath = $"{SettingsOperator.replaydir}/[{CleanName(ApiOperator.Username)}] [{CleanName(SettingsOperator.SessionConfig.BeatmapMapper)}] {CleanName(SettingsOperator.SessionConfig.BeatmapArtist)} - {CleanName(SettingsOperator.SessionConfig.BeatmapTitle)} [{CleanName(SettingsOperator.SessionConfig.BeatmapDifficultyName)}]-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.qrf";
         if (!quiet) GD.Print($"[Qlute] Set file path to {FilePath}");
         SettingsOperator.SpectatorMode = false;
     }
