@@ -103,15 +103,9 @@ public partial class TaikoGameCore : Control
 	private float[] LastKeyPressTime = new float[4] { float.MinValue, float.MinValue, float.MinValue, float.MinValue };
 
 	// Unstable Rate: stores raw hit offsets (ms) to compute std-dev * 10
-	private List<float> HitOffsets = new List<float>();
+	private RunningUnstableRate HitOffsets;
 	private static readonly Game.ScoreCalculator ScoreCalc = new Game.ScoreCalculator();
-	private float ComputeUnstableRate()
-	{
-		if (HitOffsets.Count < 2) return 0f;
-		float mean = HitOffsets.Average();
-		float variance = HitOffsets.Select(x => (x - mean) * (x - mean)).Average();
-		return (float)Math.Sqrt(variance) * 10f;
-	}
+	private float ComputeUnstableRate() => HitOffsets.Value;
 	private void ShowPauseMenu()
 	{
 		Cursor.CursorVisible = true;
@@ -275,7 +269,7 @@ public partial class TaikoGameCore : Control
 		// No mode-specific star rating yet: the map's NoMod max pp with the pp mod factors.
 		maxPpMods = SettingsOperator.Gameplaycfg.maxpp * Game.PerformanceCalculator.PpMultiplier(ModsOperator.AliasOf(ModsOperator.Mods));
 
-		HitOffsets.Clear();
+		HitOffsets.Reset();
 		Array.Fill(LastKeyPressTime, float.MinValue);
 		GD.Print("Loading beatmap...");
 		if (SettingsOperator.SessionConfig.BeatmapURL != null) ReloadBeatmap(SettingsOperator.SessionConfig.BeatmapURL.ToString());
@@ -710,6 +704,7 @@ private void _GameNoteTick(double delta)
                 {
                     float hitOffsetMs = notex - HitPoint;
                     SettingsOperator.Addms(hitOffsetMs);
+                    HitOffsets.Add(hitOffsetMs);
                     SettingsOperator.Gameplaycfg.ms = ComputeUnstableRate();
                 }
 

@@ -167,7 +167,7 @@ public partial class TapGameCore : Control
 	private Vector2 FieldOffset;
 	private float FieldScale = 1f;
 	private readonly List<(Vector2 pos, Texture2D tex, float time)> Popups = new();
-	private readonly List<float> HitOffsets = new List<float>();
+	private RunningUnstableRate HitOffsets;
 
 	private string _hitSoundPath;
 	private string HitSoundPath => _hitSoundPath ??= "res://SelectableSkins/Slia/Sounds/" + (
@@ -523,7 +523,7 @@ public partial class TapGameCore : Control
 		KeyCodes[0] = SettingsOperator.GetSetting("TapKey0")?.ToString() ?? "Z";
 		KeyCodes[1] = SettingsOperator.GetSetting("TapKey1")?.ToString() ?? "X";
 
-		HitOffsets.Clear();
+		HitOffsets.Reset();
 		if (SettingsOperator.SessionConfig.BeatmapURL != null) ReloadBeatmap(SettingsOperator.SessionConfig.BeatmapURL.ToString());
 		if (Objects.Count > 0) CursorPos = Objects[0].Pos;
 		for (int i = 0; i < Objects.Count; i++) Objects[i].Index = i;
@@ -758,13 +758,7 @@ public partial class TapGameCore : Control
 			.SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 	}
 
-	private float ComputeUnstableRate()
-	{
-		if (HitOffsets.Count < 2) return 0f;
-		float mean = HitOffsets.Average();
-		float variance = HitOffsets.Select(x => (x - mean) * (x - mean)).Average();
-		return (float)Math.Sqrt(variance) * 10f;
-	}
+	private float ComputeUnstableRate() => HitOffsets.Value;
 
 	public static float ReloadAccuracy(int max, int great, int meh, int bad) => Gameplay.ReloadAccuracy(max, great, meh, bad);
 
