@@ -149,19 +149,38 @@ public partial class ApiOperator : Node
 		}
 		else
 		{
-			LeaderboardList.Clear();
-			LeaderboardStatus = 2; // Set status to loaded
-			LeaderboardList = JsonSerializer.Deserialize<List<LeaderboardEntry>>((string)Encoding.UTF8.GetString(body));
-			foreach (var leaderboardEntry in LeaderboardList)
+			List<LeaderboardEntry> entries;
+			try { entries = JsonSerializer.Deserialize<List<LeaderboardEntry>>(Encoding.UTF8.GetString(body)) ?? new(); }
+			catch (Exception e)
 			{
-				var client = new System.Net.Http.HttpClient();
-				client.DefaultRequestHeaders.Add("USERNAME", leaderboardEntry.username);
-				var pfp_path = await client.GetStringAsync(SettingsOperator.GetSetting("api") + "apiv2/getstat/pfp_path");
-				pfp_path = JsonDocument.Parse(pfp_path).RootElement.GetProperty("url").GetString();
-				await DownloadImage(pfp_path, (ImageTexture texture) =>
+				GD.PrintErr("Leaderboard JSON was invalid: " + e.Message);
+				LeaderboardStatus = 0;
+				return;
+			}
+			int beatmapId = SettingsOperator.SessionConfig.BeatmapID;
+			LeaderboardList = entries;
+			LeaderboardStatus = 2; // Set status to loaded
+			// Profile pictures load one by one with awaits in between; picking another song meanwhile clears or
+			// replaces LeaderboardList, so walk our own copy and stop once the song changed.
+			using var client = new System.Net.Http.HttpClient { Timeout = TimeSpan.FromSeconds(10) };
+			foreach (var leaderboardEntry in new List<LeaderboardEntry>(entries))
+			{
+				if (SettingsOperator.SessionConfig.BeatmapID != beatmapId || !ReferenceEquals(LeaderboardList, entries)) return;
+				try
 				{
-					leaderboardEntry.ProfilePicture = texture;
-				});
+					using var req = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, SettingsOperator.GetSetting("api") + "apiv2/getstat/pfp_path");
+					req.Headers.Add("USERNAME", leaderboardEntry.username);
+					using var res = await client.SendAsync(req);
+					var pfp_path = JsonDocument.Parse(await res.Content.ReadAsStringAsync()).RootElement.GetProperty("url").GetString();
+					await DownloadImage(pfp_path, (ImageTexture texture) =>
+					{
+						leaderboardEntry.ProfilePicture = texture;
+					});
+				}
+				catch (Exception e)
+				{
+					GD.PrintErr($"Couldn't load a leaderboard picture: {e.Message}");
+				}
 				// `score` comes from the server (computed from the replay, pp v3 / competitive score).
 			}
 			GD.Print("Leaderboard loaded successfully.");
