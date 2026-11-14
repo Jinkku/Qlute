@@ -523,9 +523,9 @@ public partial class ApiOperator : Node
 			}
 			else if (Username != "Guest" && PasswordHash != null && responseCode != 200)
 			{
-				NoticeText = "Retring...";
+				// Couldn't reach the server (a wrong password still comes back as 200). Retry with backoff.
 				SettingsOperator.NoConnectionToGameServer = true;
-				ApiOperator.Login(Username, PasswordHash);
+				ScheduleLoginRetry();
 			}
 			else
 			{
@@ -551,7 +551,43 @@ public partial class ApiOperator : Node
 		}
 		return builder.ToString();
 	}
+	private const int MaxLoginRetries = 8;   // 2+4+8+16+32+60+60+60 s, about 4 minutes
+	private const double MaxLoginRetryDelay = 60;
+	private static int _loginRetries;
+	private static double _loginRetryDelay = 2;
+	private static int _loginGeneration; // a new manual login cancels pending retries
+
+	private void ScheduleLoginRetry()
+	{
+		if (_loginRetries >= MaxLoginRetries)
+		{
+			NoticeText = "Couldn't reach the server. Try logging in again later.";
+			return;
+		}
+		_loginRetries++;
+		double delay = _loginRetryDelay;
+		_loginRetryDelay = Math.Min(_loginRetryDelay * 2, MaxLoginRetryDelay);
+		NoticeText = $"Couldn't reach the server, retrying in {delay:0} s...";
+		int generation = _loginGeneration;
+		string user = Username, pass = PasswordHash;
+		GetTree().CreateTimer(delay, processAlways: true).Timeout += () =>
+		{
+			if (generation != _loginGeneration || SettingsOperator.SessionConfig.Loggedin
+			    || SettingsOperator.SessionConfig.Loggingin || Username != user) return;
+			SendLogin(user, pass);
+		};
+	}
+
 	public static void Login(string username, string password)
+	{
+		// A login the player asked for starts the retry count over.
+		_loginGeneration++;
+		_loginRetries = 0;
+		_loginRetryDelay = 2;
+		SendLogin(username, password);
+	}
+
+	private static void SendLogin(string username, string password)
 	{
 		SettingsOperator.SessionConfig.Loggingin = true;
 		Username = username;
