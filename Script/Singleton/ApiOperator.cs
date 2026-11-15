@@ -73,6 +73,10 @@ public partial class ApiOperator : Node
 			Submitted = false;
 			SettingsOperator.JustPlayedScore = false;
 			GD.Print("Submitting score....");
+			// Secret medals for how the play was finished (player's own clock / volume)
+			if (DateTime.Now.Hour is >= 2 and < 5) MedalPopup.Claim("nightowl");
+			if (AudioPlayer.MasterVol <= 0 || AudioServer.IsBusMute(0) || AudioServer.GetBusVolumeDb(0) <= -60)
+				MedalPopup.Claim("muted");
 			int BeatmapID = SettingsOperator.SessionConfig.BeatmapID;
 			int BeatmapSetID = SettingsOperator.SessionConfig.BeatmapSetID;
 			double MAX = SettingsOperator.Gameplaycfg.Max;

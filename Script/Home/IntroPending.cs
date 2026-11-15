@@ -12,6 +12,7 @@ public partial class IntroPending : Control
 	private Tween LogoTween {get;set;}
 	private bool HeartbeatHover { get; set; }
 	private int beattick = 1;
+	private int _heartbeats; // beats in a row with the mouse on the logo, for the "Doki Doki" medal
 	private Timer GobackHome { get; set; }
 	
 	// Called when the node enters the scene tree for the first time.
@@ -101,6 +102,8 @@ public partial class IntroPending : Control
 	{
 		if (HeartbeatHover && beattick < 4) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/heartbeat.wav");
 		if (HeartbeatHover && beattick == 4) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/downbeat.wav");
+		_heartbeats = HeartbeatHover ? _heartbeats + 1 : 0;
+		if (_heartbeats == 64) MedalPopup.Claim("heartbeat");
 		if (beattick > 3) beattick = 1;
 		else beattick++; // for the feedback of hovering the Qlute logo
 		StartLogoBounce();

@@ -230,6 +230,7 @@ public partial class Gameplay : Control
 	{
 		
 		Instance = this;
+		global::PauseMenu.PausesThisPlay = 0;
 		GD.Print("Setting up stuff...");
 		speedold = AudioPlayer.Instance.PitchScale;
 		seed = new Random().Next(1,214562543);

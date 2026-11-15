@@ -8,6 +8,8 @@ public partial class PauseMenu : Control
 	private Tween PauseTween { get; set; }
 	private int MaxChild {get;set;}
 	private int Childint { get; set; }
+	/// <summary>Pauses in the current play (reset when gameplay starts), for the "Pause Addict" medal.</summary>
+	public static int PausesThisPlay { get; set; }
     public override void _ExitTree()
     {
         Cursor.CursorVisible = false;
@@ -29,6 +31,7 @@ public partial class PauseMenu : Control
 		PauseTween.TweenProperty(this, "modulate", new Color(1f, 1f, 1f, 1f), 0.4f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		PauseTween.Play();
 		MaxChild = GetNode<VBoxContainer>("PanelContainer/VBoxContainer").GetChildCount();
+		if (!Gameplay.Dead && ++PausesThisPlay == 10) MedalPopup.Claim("pauses");
 		Childint = 0;
 		if (Gameplay.Dead)
 		{
@@ -108,6 +111,7 @@ public partial class PauseMenu : Control
 		}
 	}
 	private void _exit(){
+			if (SettingsOperator.Gameplaycfg.Bad >= 20) MedalPopup.Claim("ragequit"); // "Rage Quit"
 			GetTree().Paused = false;
 			FadeOut();
 			BeatmapBackground.FlashEnable = true;

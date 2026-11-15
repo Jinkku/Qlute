@@ -153,6 +153,53 @@ public partial class MedalPopup : CanvasLayer
 		}
 	}
 
+	private static readonly HashSet<string> Claimed = new(); // "account/name" already sent this session
+
+	/// <summary>
+	/// A secret medal only the game can see (the Konami code, a rage quit...): asks the server to record it
+	/// (POST apiv2/medals/claim/NAME, NAME from Chikara views.CLIENT_MEDALS) and pops it up the first time.
+	/// Logged-out players and spectating don't count.
+	/// </summary>
+	public static async void Claim(string name)
+	{
+		if (Instance == null || !OnlineApi.Available || SettingsOperator.SpectatorMode || SettingsOperator.NoConnectionToGameServer) return;
+		var who = ApiOperator.Username;
+		if (!Claimed.Add(who + "/" + name)) return;
+		try
+		{
+			using var req = PlayerApi.Authed(HttpMethod.Post, "apiv2/medals/claim/" + Uri.EscapeDataString(name));
+			using var res = await ApiOperator.Http.SendAsync(req);
+			if (!res.IsSuccessStatusCode)
+			{
+				if ((int)res.StatusCode >= 500) Claimed.Remove(who + "/" + name); // try again next time
+				return;
+			}
+			var json = JsonNode.Parse(await res.Content.ReadAsStringAsync());
+			if (who == ApiOperator.Username) Show(Read(json?["medals"]));
+		}
+		catch (Exception e)
+		{
+			Claimed.Remove(who + "/" + name);
+			GD.Print($"[Medals] couldn't claim {name}: {e.Message}");
+		}
+	}
+
+	// ↑↑↓↓←→←→ B A, anywhere in the game: "Cheat Code"
+	private static readonly Key[] Konami = { Key.Up, Key.Up, Key.Down, Key.Down, Key.Left, Key.Right, Key.Left, Key.Right, Key.B, Key.A };
+	private int _konami;
+
+	private void TrackKonami(InputEvent e)
+	{
+		if (e is not InputEventKey { Pressed: true, Echo: false } k) return;
+		var key = k.PhysicalKeycode != Key.None ? k.PhysicalKeycode : k.Keycode;
+		_konami = key == Konami[_konami] ? _konami + 1 : key == Konami[0] ? 1 : 0;
+		if (_konami == Konami.Length)
+		{
+			_konami = 0;
+			Claim("konami");
+		}
+	}
+
 	public static List<Medal> Read(JsonNode node) =>
 		(node as JsonArray)?.OfType<JsonObject>().Select(m => new Medal
 		{
@@ -312,6 +359,7 @@ public partial class MedalPopup : CanvasLayer
 
 	public override void _Input(InputEvent e)
 	{
+		TrackKonami(e);
 		if (!_active || !_backdrop.Visible) return;
 		if (e.IsActionPressed("ui_cancel"))
 		{
