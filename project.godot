@@ -38,7 +38,6 @@ config/branch="dev"
 [audio]
 
 buses/default_bus_layout="uid://gw4d3826ldol"
-driver/driver="ALSA"
 
 [autoload]
 
