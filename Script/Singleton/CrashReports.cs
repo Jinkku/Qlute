@@ -53,6 +53,10 @@ public static class CrashReports
 		options.Set("send_default_pii", false);
 		// Log lines can't be scrubbed once they're breadcrumbs, so don't turn every print into one.
 		options.Set("logger_messages_as_breadcrumbs", false);
+		// No Sentry Logs either: they'd send every print unscrubbed, and the addon (1.3.0) passes each line to a
+		// printf-style function as the format, so a line with "%20s" in it (Browse logs the search URL: "monster s"
+		// -> "monster%20s") reads a missing argument and crashes the game with signal 11.
+		options.Set("enable_logs", false);
 		options.Set("before_send", Callable.From<GodotObject, GodotObject>(Scrub));
 	}
 
