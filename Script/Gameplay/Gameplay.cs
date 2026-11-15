@@ -496,21 +496,6 @@ public partial class Gameplay : Control
     }
 
     /// <summary>
-    /// True when the column's first unhit note (the one a press would take) is inside the widest (meh) hit
-    /// window at time <paramref name="t"/>. Same bounds as JudgeDiff's meh branch; mirrored by ppv2calc.py.
-    /// </summary>
-    private bool FirstUnhitInWindow(int column, int t)
-    {
-	    for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
-	    {
-		    if (Notes[i].NotePart != column || Notes[i].hit) continue;
-		    int x = t + Notes[i].timing + nodeSize;
-		    return x > -(SettingsOperator.MehJudge / 2) - 15 && x < (SettingsOperator.MehJudge / 2) + 15;
-	    }
-	    return false;
-    }
-
-    /// <summary>
     /// Misses every unhit note that is more than MISS_LATE_MS late at time <paramref name="t"/>.
     /// </summary>
     private void MissPass(int t)
@@ -538,10 +523,10 @@ public partial class Gameplay : Control
 	    {
 		    if (!SettingsOperator.SpectatorMode) Replay.AddReplay(t, col);
 		    long elapsed = (long)t - LastKeyPressTime[col];
-		    if (elapsed >= 0 && elapsed < SPAM_COOLDOWN_MS && !FirstUnhitInWindow(col, t))
+		    if (elapsed >= 0 && elapsed < SPAM_COOLDOWN_MS)
 		    {
-			    // Too soon after the last accepted press and nothing to hit: forced miss, press ignored.
-			    // (Fast jacks are fine: the next note in the column is already inside the hit window.)
+			    // Too soon after the last accepted press: forced miss, press ignored.
+			    // Same rule as the server's ppv2calc.py _simulate (no hit-window exception there).
 			    TriggerSpamMiss(col);
 			    continue;
 		    }
