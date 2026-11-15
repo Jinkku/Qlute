@@ -108,6 +108,7 @@ public partial class SettingsOperator : Node
         { "scaled", false },
         { "windowmode", 0 },
         { "master", 80 },
+        { "audiodevice", "Default" }, // Settings > Audio: sound output (AudioPlayer.SetOutputDevice)
         { "sample", 80 },
         { "backgrounddim", 70 },
         { "audiooffset", 0 },

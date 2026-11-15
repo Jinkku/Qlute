@@ -179,14 +179,12 @@ public static class PerformanceCalculator
 
 	/// <summary>
 	/// Map level 1..100 from NoMod SS pp: Lv 1 &lt;= 5pp, Lv 100 &gt;= 1500pp,
-	/// 1 + 99 * ((pp - 5) / 1495)^0.8 in between (floored, 2..99). Same as ppv2calc.level_from_pp.
+	/// 1 + 99 * ((pp - 5) / 1495)^0.8 in between (floored, 2..99).
 	/// </summary>
 	public static int LevelFromPp(double pp)
 	{
-		if (!(pp > LevelMinPp)) return 1;
-		if (pp >= LevelMaxPp) return 100;
 		double x = (pp - LevelMinPp) / (LevelMaxPp - LevelMinPp);
-		return Math.Clamp((int)Math.Floor(1.0 + 99.0 * Math.Pow(x, LevelCurve)), 2, 99);
+		return (int)(1.0 + 99.0 * Math.Pow(x, LevelCurve));
 	}
 
 	// ------------------------------------------------------------------ score

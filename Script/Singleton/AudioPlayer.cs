@@ -32,6 +32,18 @@ public partial class AudioPlayer : AudioStreamPlayer
         SampleVol = int.TryParse(SettingsOperator.GetSetting("sample").ToString(), out int smp) ? smp : 70;
         VolumeDb = ToDB(MasterVol);
         VolumeKnob.SavedValue = AudioPlayer.MasterVol;
+        // The sound output picked in Settings > Audio, if it's still plugged in.
+        var device = SettingsOperator.GetSetting("audiodevice")?.ToString();
+        if (!string.IsNullOrEmpty(device) && device != "Default" && System.Array.IndexOf(AudioServer.GetOutputDeviceList(), device) >= 0)
+            AudioServer.OutputDevice = device;
+    }
+
+    /// <summary>Plays the game's sound on <paramref name="device"/> (a name from AudioServer.GetOutputDeviceList) and remembers it.</summary>
+    public static void SetOutputDevice(string device)
+    {
+        if (string.IsNullOrEmpty(device)) device = "Default";
+        AudioServer.OutputDevice = device;
+        SettingsOperator.SetSetting("audiodevice", device);
     }
 
     public static float ToDB(float value)

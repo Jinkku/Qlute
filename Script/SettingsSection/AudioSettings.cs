@@ -8,6 +8,7 @@ public partial class AudioSettings : PanelContainer
 	public HSlider OffsetSlider { get; set; }
 	public Label OffsetTicker { get; set; }
 	public Label AoaTicker { get; set; }
+	public OptionButton DeviceSelector { get; set; }
 	private float MS { get; set; }
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -16,6 +17,12 @@ public partial class AudioSettings : PanelContainer
 		OffsetSlider = GetNode<HSlider>("Rows/AudioOffset");
 		OffsetTicker = GetNode<Label>("Rows/AudioTicker");
 		AoaTicker = GetNode<Label>("Rows/AoaTicker");
+		DeviceSelector = GetNode<OptionButton>("Rows/AudioSelector");
+		DeviceSelector.Visible = true; // hidden placeholder in Audio.tscn until this was wired up
+		GetNode<Label>("Rows/AudioNotice").Visible = true;
+		FillDevices();
+		DeviceSelector.ItemSelected += OnDeviceSelected;
+		DeviceSelector.GetPopup().AboutToPopup += FillDevices; // headphones plugged in since: list them too
 		var offset = Num.Float(SettingsOperator.GetSetting("audiooffset")?.ToString(), 0, commaFallback: true);
 		if (offset != 0)
 		{
@@ -47,6 +54,30 @@ public partial class AudioSettings : PanelContainer
 			OffsetButton.Disabled = false;
 		}
 	}
+	// ------------------------------------------------------------------ output device
+
+	/// <summary>Lists the sound outputs Godot can see ("Default" follows the system's default device).</summary>
+	private void FillDevices()
+	{
+		DeviceSelector.Clear();
+		string current = AudioServer.OutputDevice;
+		var devices = AudioServer.GetOutputDeviceList();
+		for (int i = 0; i < devices.Length; i++)
+		{
+			DeviceSelector.AddItem(devices[i] == "Default" ? "Default (system)" : devices[i], i);
+			DeviceSelector.SetItemMetadata(i, devices[i]);
+			if (devices[i] == current) DeviceSelector.Selected = i;
+		}
+		DeviceSelector.TooltipText = "Where the game's sound plays. \"Default\" follows your system's sound settings.";
+	}
+
+	private void OnDeviceSelected(long index)
+	{
+		string device = DeviceSelector.GetItemMetadata((int)index).AsString();
+		AudioPlayer.SetOutputDevice(device);
+		Notify.Post($"Sound now plays on {(device == "Default" ? "your system's default device" : device)}");
+	}
+
 	private void _on_audio_offset_value_changed(float value)
 	{
 		SettingsOperator.SetSetting("audiooffset", 200 - value);
