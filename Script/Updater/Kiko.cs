@@ -77,7 +77,7 @@ public partial class Kiko : Node
                 {
                     GD.Print($"[Kiko] Installing to '{gamePath}' (attempt {attempt})");
                     using (var archive = ZipFile.OpenRead(zipPath))
-                        archive.ExtractToDirectory(gamePath, true);
+                        InstallArchive(archive, gamePath);
                     last = null;
                     break;
                 }
@@ -105,6 +105,63 @@ public partial class Kiko : Node
             GD.PrintErr($"[Kiko] Failed to start the game: {ex.Message}");
         }
         GetTree().Quit();
+    }
+
+    private const string NewSuffix = ".kiko-new", OldSuffix = ".kiko-old";
+
+    /// <summary>
+    /// Extracts the update over the game folder without writing into files that are still in use. Each file is
+    /// unpacked next to its target and then renamed over it: on Linux that works even while the old file is still
+    /// running (Sentry's crashpad_handler outlives the game: "Text file busy"); on Windows a running file can't be
+    /// replaced but can be renamed, so it's moved aside as *.kiko-old and removed on a later start.
+    /// </summary>
+    private static void InstallArchive(ZipArchive archive, string gamePath)
+    {
+        string root = Path.GetFullPath(gamePath);
+        string rootSlash = root.EndsWith(Path.DirectorySeparatorChar) ? root : root + Path.DirectorySeparatorChar;
+        foreach (var entry in archive.Entries)
+        {
+            string dest = Path.GetFullPath(Path.Combine(root, entry.FullName));
+            if (!dest.StartsWith(rootSlash, StringComparison.Ordinal))
+                throw new IOException($"Bad path in the update: {entry.FullName}");
+            if (entry.Name == "") // a folder
+            {
+                Directory.CreateDirectory(dest);
+                continue;
+            }
+            Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
+            string fresh = dest + NewSuffix;
+            entry.ExtractToFile(fresh, true); // keeps the zip's Unix permissions (executables stay executable)
+            try
+            {
+                File.Move(fresh, dest, true);
+            }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+            {
+                if (!File.Exists(dest)) throw;
+                string old = dest + OldSuffix;
+                try { if (File.Exists(old)) File.Delete(old); } catch { /* still in use from a previous update */ old = dest + OldSuffix + DateTime.Now.Ticks; }
+                File.Move(dest, old);
+                File.Move(fresh, dest);
+            }
+        }
+    }
+
+    /// <summary>Removes files an earlier update moved aside (they were in use then) and half-written ones.</summary>
+    private static void CleanUpOldInstallFiles()
+    {
+        try
+        {
+            string gamePath = SettingsOperator.GetSetting("gamepath")?.ToString();
+            if (string.IsNullOrEmpty(gamePath) || !Directory.Exists(gamePath)) return;
+            foreach (var f in Directory.EnumerateFiles(gamePath, "*.kiko-*", SearchOption.AllDirectories))
+                if (f.Contains(OldSuffix) || f.EndsWith(NewSuffix))
+                    try { File.Delete(f); } catch { /* still running: next time */ }
+        }
+        catch (Exception e)
+        {
+            GD.Print($"[Kiko] Couldn't clean up old update files: {e.Message}");
+        }
     }
 
     /// <summary>Waits (up to 30s) for the game that launched us, identified by --pid=N.</summary>
@@ -148,6 +205,7 @@ public partial class Kiko : Node
         }
         else if (!args.Contains("--ignore-update"))
         {
+            CleanUpOldInstallFiles();
 #if !DEBUG
             if (UpdateReady)
             {
