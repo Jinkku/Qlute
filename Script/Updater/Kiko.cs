@@ -38,21 +38,6 @@ public partial class Kiko : Node
         "Linux" => "Qlute.x86_64",
         _ => ""
     };
-	private void CopyDirectory(string sourceDir, string destDir)
-		{
-			Directory.CreateDirectory(destDir);
-			foreach (var file in Directory.GetFiles(sourceDir))
-			{
-				string destFile = Path.Combine(destDir, Path.GetFileName(file));
-				File.Copy(file, destFile, true);
-			}
-			foreach (var dir in Directory.GetDirectories(sourceDir))
-			{
-				string destSubDir = Path.Combine(destDir, Path.GetFileName(dir));
-				CopyDirectory(dir, destSubDir);
-			}
-		}
-
     /// <summary>
     /// Runs in the freshly extracted build (started with --update): waits for the old game to exit,
     /// installs the zip over gamepath, launches the installed game and quits. It must never keep
@@ -64,8 +49,16 @@ public partial class Kiko : Node
         string executablePath = Path.Combine(gamePath, executableName);
         try
         {
-            if (!File.Exists(zipPath))
+            // The zip is wherever the game that downloaded it put it: /tmp/Qlute/<platform>.zip now, straight in the
+            // temp folder for builds up to 2026.11.13. Failing both, install from the folder this build was unpacked
+            // to (it holds the same files as the zip).
+            string zip = new[] { zipPath, Path.Combine(Path.GetTempPath(), platformZip) }.FirstOrDefault(File.Exists);
+            string ownDir = Path.GetDirectoryName(OS.GetExecutablePath());
+            bool fromOwnDir = zip == null && ownDir != null && File.Exists(Path.Combine(ownDir, executableName))
+                && Path.GetFullPath(ownDir).TrimEnd(Path.DirectorySeparatorChar) != Path.GetFullPath(gamePath).TrimEnd(Path.DirectorySeparatorChar);
+            if (zip == null && !fromOwnDir)
                 throw new FileNotFoundException($"Update file not found: {zipPath}");
+            GD.Print(zip != null ? $"[Kiko] Installing from {zip}" : $"[Kiko] No update zip, installing from {ownDir}");
 
             WaitForOldGame();
 
@@ -76,8 +69,12 @@ public partial class Kiko : Node
                 try
                 {
                     GD.Print($"[Kiko] Installing to '{gamePath}' (attempt {attempt})");
-                    using (var archive = ZipFile.OpenRead(zipPath))
+                    if (zip != null)
+                    {
+                        using var archive = ZipFile.OpenRead(zip);
                         InstallArchive(archive, gamePath);
+                    }
+                    else InstallDirectory(ownDir, gamePath);
                     last = null;
                     break;
                 }
@@ -129,21 +126,42 @@ public partial class Kiko : Node
                 Directory.CreateDirectory(dest);
                 continue;
             }
-            Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
-            string fresh = dest + NewSuffix;
-            entry.ExtractToFile(fresh, true); // keeps the zip's Unix permissions (executables stay executable)
-            try
-            {
-                File.Move(fresh, dest, true);
-            }
-            catch (Exception e) when (e is IOException or UnauthorizedAccessException)
-            {
-                if (!File.Exists(dest)) throw;
-                string old = dest + OldSuffix;
-                try { if (File.Exists(old)) File.Delete(old); } catch { /* still in use from a previous update */ old = dest + OldSuffix + DateTime.Now.Ticks; }
-                File.Move(dest, old);
-                File.Move(fresh, dest);
-            }
+            ReplaceFile(dest, fresh => entry.ExtractToFile(fresh, true)); // keeps the zip's Unix permissions
+        }
+    }
+
+    /// <summary>Same as <see cref="InstallArchive"/>, from an unpacked build's folder.</summary>
+    private static void InstallDirectory(string sourceDir, string gamePath)
+    {
+        string src = Path.GetFullPath(sourceDir), root = Path.GetFullPath(gamePath);
+        foreach (var file in Directory.EnumerateFiles(src, "*", SearchOption.AllDirectories))
+        {
+            if (file.Contains(".kiko-")) continue;
+            string dest = Path.Combine(root, Path.GetRelativePath(src, file));
+            ReplaceFile(dest, fresh => File.Copy(file, fresh, true)); // File.Copy keeps the Unix permissions
+        }
+    }
+
+    /// <summary>
+    /// Writes the new file next to <paramref name="dest"/> with <paramref name="write"/>, then renames it over the
+    /// old one. If the old one can't be replaced (Windows, still running) it's moved aside as *.kiko-old first.
+    /// </summary>
+    private static void ReplaceFile(string dest, Action<string> write)
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
+        string fresh = dest + NewSuffix;
+        write(fresh);
+        try
+        {
+            File.Move(fresh, dest, true);
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            if (!File.Exists(dest)) throw;
+            string old = dest + OldSuffix;
+            try { if (File.Exists(old)) File.Delete(old); } catch { /* still in use from a previous update */ old = dest + OldSuffix + DateTime.Now.Ticks; }
+            File.Move(dest, old);
+            File.Move(fresh, dest);
         }
     }
 
