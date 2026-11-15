@@ -21,14 +21,11 @@ public partial class Bootstrap : Control
 
 	private void PlayIntro()
 	{
-		if (Check.CheckBoolValue(SettingsOperator.GetSetting("hidedevintro").ToString()))
-		{
+		#if !DEBUG
 			animationPlayer.Play("Intro");
-		}
-		else
-		{
+		#else
 			animationPlayer.Play("IntroDev");
-		}
+		#endif
 	}
     public override void _Process(double delta)
 	{

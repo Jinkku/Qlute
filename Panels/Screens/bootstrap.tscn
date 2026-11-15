@@ -325,19 +325,6 @@ color = Color(0, 0, 0, 1)
 root_node = NodePath("../CenterContainer/logo")
 libraries/ = SubResource("AnimationLibrary_rpwbx")
 
-[node name="Noticestrip" type="Label" parent="." unique_id=1782320170]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 200
-text = "Loli"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="DisclaimerEpilepsy" type="VBoxContainer" parent="." unique_id=7729165]
 modulate = Color(0, 0, 0, 0)
 layout_mode = 1
@@ -414,16 +401,16 @@ texture = ExtResource("4_8teab")
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.820312, 0, 1)
 theme_override_font_sizes/font_size = 18
-text = "!! Experimental Build !!"
+text = "!! Development Build !!"
 horizontal_alignment = 1
 
 [node name="ExperimentalDesc" type="Label" parent="CenterContainer/ExperimentalDisclaimer/Expeeee" unique_id=1080401958]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Qlute is still in its experimental stage, you will run into some bugs and glitches
-so totally normal! for now...
+text = "You are running a development build of Qlute.
+You will not be able to submit scores on this build unless u use the latest build on the Official Website
 
-Feel free to contribute, give feedback, or just vibe with us. <3"
+Also please report bugs when you are checking out the source code pls ;w;"
 horizontal_alignment = 1
 vertical_alignment = 1
 
