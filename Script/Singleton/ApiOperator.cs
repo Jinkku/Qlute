@@ -367,6 +367,7 @@ public partial class ApiOperator : Node
 		}
 		Godot.Collections.Dictionary json = parser.Data.AsGodotDictionary();
 		GD.Print(text);
+		MedalPopup.ShowFromReply(text); // medals this play unlocked
 		if (json.ContainsKey("rankedmap") && json.ContainsKey("error") && (int)json["rankedmap"] > 0 && (int)json["error"] == 0)
 		{
 			Submitted = true;
@@ -560,6 +561,7 @@ public partial class ApiOperator : Node
 				SettingsOperator.SessionConfig.Loggedin = true;
 				NoticeText = "";
 				ModerationApi.RefreshMe(); // team members get the admin panel button
+				MedalPopup.CheckSoon(); // medals earned since last time (website, rank changes...)
 				// The server now stores passwords salted; accounts still on the old unsalted hash are asked to pick a new one.
 				// Logging in on the website sends them straight to the change-password page.
 				if (json.ContainsKey("change_password") && (bool)json["change_password"])

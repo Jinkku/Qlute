@@ -548,7 +548,8 @@ public partial class PlayerProfilePanel : Control
 		var tile = new PanelContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill, MouseFilter = MouseFilterEnum.Pass, MouseDefaultCursorShape = CursorShape.Help };
 		tile.AddThemeStyleboxOverride("panel", Look(false));
 		var how = string.IsNullOrEmpty(m.Hint) ? m.Desc : m.Hint;
-		tile.TooltipText = (m.Achieved ? "Got it! " : "") + how;
+		var got = m.AchievedAt > 0 ? $"Got it on {System.DateTimeOffset.FromUnixTimeSeconds(m.AchievedAt).LocalDateTime:d MMM yyyy}! " : "Got it! ";
+		tile.TooltipText = (m.Achieved ? got : "") + how;
 
 		var h = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
 		h.AddThemeConstantOverride("separation", 12);

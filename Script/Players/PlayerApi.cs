@@ -37,6 +37,8 @@ public static class PlayerApi
 	{
 		public string Title = "", Desc = "", Hint = "";
 		public bool Achieved;
+		/// <summary>When it was first earned (unix), 0 if unknown.</summary>
+		public long AchievedAt;
 	}
 
 	public class Profile : Player
@@ -192,6 +194,7 @@ public static class PlayerApi
 				p.Medals = medals.OfType<JsonObject>().Select(m => new Medal
 				{
 					Title = OnlineApi.Str(m, "title") ?? "", Desc = OnlineApi.Str(m, "desc") ?? "", Hint = OnlineApi.Str(m, "hint") ?? "", Achieved = OnlineApi.Bool(m, "achieved"),
+					AchievedAt = OnlineApi.Long(m, "achieved_at"),
 				}).ToList();
 			p.Best = ReadPlays(json["best"]);
 			p.Recent = ReadPlays(json["recent"]);
