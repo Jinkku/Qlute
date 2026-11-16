@@ -496,6 +496,7 @@ public partial class TapGameCore : Control
 
 	public override void _Ready()
 	{
+		if (!LanNetwork.InMatch) LanNetwork.ShowingMatchResults = false; // a solo play: its results get Play Again
 		speedold = AudioPlayer.Instance.PitchScale;
 		seed = new Random().Next(1, 214562543);
 		Gameplay.seed = seed;

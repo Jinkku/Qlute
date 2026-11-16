@@ -231,6 +231,7 @@ public partial class Gameplay : Control
 		
 		Instance = this;
 		global::PauseMenu.PausesThisPlay = 0;
+		if (!LanNetwork.InMatch) LanNetwork.ShowingMatchResults = false; // a solo play: its results get Play Again
 		GD.Print("Setting up stuff...");
 		speedold = AudioPlayer.Instance.PitchScale;
 		seed = new Random().Next(1,214562543);
@@ -432,6 +433,7 @@ public partial class Gameplay : Control
 	    if (SettingsOperator.SpectatorMode) return;
 
 	    if (!(@event is InputEventKey Key)) return;
+	    if (Key.Echo) return; // holding a key: the OS repeats it, but that's still one press
 	    var keycode = Key.Keycode.ToString();
 	    for (int i = 0; i < 4; i++)
 	    {

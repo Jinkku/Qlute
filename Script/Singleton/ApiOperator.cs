@@ -163,6 +163,10 @@ public partial class ApiOperator : Node
 				LeaderboardStatus = 0;
 				return;
 			}
+			// The server sends hit counts but no accuracy: work it out the same way the game does.
+			foreach (var e in entries)
+				if (e.Accuracy <= 0 && e.MAX + e.GOOD + e.MEH + e.BAD > 0)
+					e.Accuracy = Gameplay.ReloadAccuracy(e.MAX, e.GOOD, e.MEH, e.BAD);
 			int beatmapId = SettingsOperator.SessionConfig.BeatmapID;
 			LeaderboardList = entries;
 			LeaderboardStatus = 2; // Set status to loaded

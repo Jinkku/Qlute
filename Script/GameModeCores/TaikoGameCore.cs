@@ -223,7 +223,7 @@ public partial class TaikoGameCore : Control
 
 	public override void _Ready()
 	{
-		
+		if (!LanNetwork.InMatch) LanNetwork.ShowingMatchResults = false; // a solo play: its results get Play Again
 		GD.Print("Setting up stuff...");
 		speedold = AudioPlayer.Instance.PitchScale;
 		seed = new Random().Next(1,214562543);
@@ -426,6 +426,7 @@ public partial class TaikoGameCore : Control
 
 	    // 1. Quick Guard: If it's not a keyboard key event, ignore it immediately
 	    if (@event is not InputEventKey keyEvent) return;
+	    if (keyEvent.Echo) return; // holding a key: the OS repeats it, but that's still one press
 
 	    // 2. Performance Fix: Only read IsPressed once per event, not inside a loop
 	    bool pressed = keyEvent.IsPressed();
