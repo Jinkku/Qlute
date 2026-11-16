@@ -12,10 +12,11 @@ public static class PerformanceCalculator
 {
 	public const int PpVersion = 3;
 
-	// Judgement weights in sixths (1, 1/2, 1/3, 0) so accuracy and score stay integer.
-	public const int WPerfect = 6, WGreat = 3, WMeh = 2;
+	// Score weights in tenths (1, 0.7, 0.3, 0) so score stays integer:
+	// all Perfect = 1,000,000, all Great = 700,000, all Meh = 300,000 on NoMod.
+	public const int WPerfect = 10, WGreat = 7, WMeh = 3;
 
-	// Score: 900k accuracy + 100k combo on NoMod, times the score multiplier.
+	// Score: 900k accuracy + 100k combo on NoMod, times the score multiplier. Each miss takes off 900k / notes.
 	public const long ScoreAccPortion = 900_000;
 	public const long ScoreComboPortion = 100_000;
 	public const int ComboCap = 400;
@@ -30,13 +31,13 @@ public static class PerformanceCalculator
 	const double StarScale = 0.028;
 
 	// Performance
-	const double PpScale = 1.13; // calibrated: Hommarju - Slluuddggee [Slliimmee] SS = 124pp (its osu!mania value)
+	const double PpScale = 1.243; // 1.13 (Hommarju - Slluuddggee [Slliimmee] SS = 124pp, its osu!mania value) + 10%
 	const double PpStarPower = 2.8;
 	const double LengthBonusMax = 0.15;
 	const double LengthBonusNotes = 2000;
-	const double AccFloor = 0.70;
-	const double AccPower = 1.5;
-	const double MissBase = 0.98;
+	const double GreatBase = 0.999; // each (length-normalised) Great keeps 99.9% of the pp
+	const double MehBase = 0.995;   // each Meh keeps 99.5%
+	const double MissBase = 0.98;   // each miss keeps 98%
 	const double MissNormalNotes = 1000;
 
 	// Applied in this order (NF, SL, BT, AM). Rate mods change the star rating instead of pp.
@@ -149,11 +150,11 @@ public static class PerformanceCalculator
 	{
 		if (noteCount <= 0) return 0.0;
 		bad = Math.Max(bad, noteCount - perfect - great - meh);
-		double acc = (double)(WPerfect * perfect + WGreat * great + WMeh * meh) / (WPerfect * noteCount);
-		double accFactor = Math.Pow(Math.Max(0.0, (acc - AccFloor) / (1.0 - AccFloor)), AccPower);
-		double effMisses = bad * Math.Min(1.0, MissNormalNotes / noteCount);
-		double missFactor = Math.Pow(MissBase, effMisses);
-		return maxPp * accFactor * missFactor;
+		double norm = Math.Min(1.0, MissNormalNotes / noteCount);
+		double greatFactor = Math.Pow(GreatBase, great * norm);
+		double mehFactor = Math.Pow(MehBase, meh * norm);
+		double missFactor = Math.Pow(MissBase, bad * norm);
+		return maxPp * greatFactor * mehFactor * missFactor;
 	}
 
 	/// <summary>
@@ -173,13 +174,14 @@ public static class PerformanceCalculator
 
 	// ------------------------------------------------------------------ level
 
-	const double LevelMinPp = 5.0;     // Lv 1 = 0..5 pp
-	const double LevelMaxPp = 1500.0;  // Lv 100 = 1500 pp and up
-	const double LevelCurve = 0.8;     // < 1: levels rise faster at low pp (Lv 7 = 50-60pp)
+	// Scaled with PpScale (+10%), so a map keeps the same level as before the pp boost.
+	const double LevelMinPp = 5.5;     // Lv 1 = 0..5.5 pp
+	const double LevelMaxPp = 1650.0;  // Lv 100 = 1650 pp and up
+	const double LevelCurve = 0.8;     // < 1: levels rise faster at low pp (Lv 7 = 55-65pp)
 
 	/// <summary>
-	/// Map level 1..100 from NoMod SS pp: Lv 1 &lt;= 5pp, Lv 100 &gt;= 1500pp,
-	/// 1 + 99 * ((pp - 5) / 1495)^0.8 in between (floored, 2..99).
+	/// Map level 1..100 from NoMod SS pp: Lv 1 &lt;= 5.5pp, Lv 100 &gt;= 1650pp,
+	/// 1 + 99 * ((pp - 5.5) / 1644.5)^0.8 in between (floored, 2..99).
 	/// </summary>
 	public static int LevelFromPp(double pp)
 	{
@@ -210,18 +212,24 @@ public static class PerformanceCalculator
 	public static int LiveScore(int noteCount, int perfect, int great, int meh, int bad, long comboPortion, double multiplier)
 	{
 		int judged = perfect + great + meh + bad;
-		return judged <= 0 ? 0 : ComputeScore(Math.Max(noteCount, judged), perfect, great, meh, comboPortion, multiplier);
+		return judged <= 0 ? 0 : ComputeScore(Math.Max(noteCount, judged), perfect, great, meh, bad, comboPortion, multiplier);
 	}
 
-	/// <summary>0..1,000,000 on NoMod (SS = exactly 1,000,000), times the score multiplier.</summary>
-	public static int ComputeScore(int noteCount, int perfect, int great, int meh, long comboPortion, double multiplier)
+	/// <summary>
+	/// 0..1,000,000 on NoMod (SS = exactly 1,000,000), times the score multiplier.
+	/// Every miss takes off one perfect note's accuracy value (ScoreAccPortion / noteCount); the score never goes below 0.
+	/// </summary>
+	public static int ComputeScore(int noteCount, int perfect, int great, int meh, int bad, long comboPortion, double multiplier)
 	{
 		if (noteCount <= 0) return 0;
 		long accNum = WPerfect * (long)perfect + WGreat * (long)great + WMeh * (long)meh;
 		long accDen = WPerfect * (long)noteCount;
 		long comboDen = ComboPortionMax(noteCount);
+		long missNum = WPerfect * (long)Math.Max(bad, 0);
 		// Integers below 2^53: each division is one correctly rounded double op, same as Python.
 		double baseScore = (double)(ScoreAccPortion * accNum) / accDen + (double)(ScoreComboPortion * comboPortion) / comboDen;
+		baseScore -= (double)(ScoreAccPortion * missNum) / accDen;
+		if (baseScore < 0) baseScore = 0;
 		return (int)Math.Floor(baseScore * multiplier + 0.5);
 	}
 }

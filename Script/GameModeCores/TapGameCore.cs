@@ -900,7 +900,7 @@ public partial class TapGameCore : Control
 		// While playing: counts up from 0 to the final score. Once finished: the exact final score.
 		score = Finished
 			? ScoreCalc.ProcessScore(SettingsOperator.Gameplaycfg.NoteCount, SettingsOperator.Gameplaycfg.Max,
-				SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, comboPortion, scoreMult)
+				SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, comboPortion, scoreMult)
 			: Game.PerformanceCalculator.LiveScore(SettingsOperator.Gameplaycfg.NoteCount, SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great,
 				SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, comboPortion, scoreMult);
 		if (!Finished) SettingsOperator.Gameplaycfg.pp = CurrentPerformance(false);
@@ -931,7 +931,7 @@ public partial class TapGameCore : Control
 				Finished = true;
 				SettingsOperator.Gameplaycfg.pp = CurrentPerformance(true);
 				score = ScoreCalc.ProcessScore(SettingsOperator.Gameplaycfg.NoteCount, SettingsOperator.Gameplaycfg.Max,
-					SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, comboPortion, scoreMult);
+					SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, comboPortion, scoreMult);
 				Replay.SaveReplay();
 				ApiOperator.SS();
 				if (!SettingsOperator.Marathon)

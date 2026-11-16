@@ -713,7 +713,7 @@ private void _GameNoteTick(double delta)
 		// While playing: counts up from 0 to the final score. Once finished: the exact final score the server saves.
 		score = Finished
 			? ScoreCalc.ProcessScore(PerfNoteCount, SettingsOperator.Gameplaycfg.Max,
-				SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, ComboPortion, ScoreMult)
+				SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, ComboPortion, ScoreMult)
 			: PerformanceCalculator.LiveScore(PerfNoteCount, SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great,
 				SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, ComboPortion, ScoreMult);
 		if (!Finished)
@@ -747,7 +747,7 @@ private void _GameNoteTick(double delta)
 				MissPass(SongEndMs); // final misses, before the result is saved / submitted
 				SettingsOperator.Gameplaycfg.pp = FinalPerformance();
 				score = ScoreCalc.ProcessScore(PerfNoteCount, SettingsOperator.Gameplaycfg.Max,
-					SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, ComboPortion, ScoreMult);
+					SettingsOperator.Gameplaycfg.Great, SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad, ComboPortion, ScoreMult);
 				Replay.SaveReplay();
 				ApiOperator.SS();
 				if (!SettingsOperator.Marathon)
