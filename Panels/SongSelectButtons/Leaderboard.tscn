@@ -1,196 +1,267 @@
-[gd_scene load_steps=16 format=3 uid="uid://b8wmh5ui3lgly"]
+[gd_scene format=3 uid="uid://b8wmh5ui3lgly"]
 
-[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="1_kgn3a"]
 [ext_resource type="Script" uid="uid://bp6h74gm3lwau" path="res://Script/SongSelect/Leaderboard.cs" id="1_ysfsi"]
-[ext_resource type="Script" uid="uid://r1nchdkq185" path="res://Script/SongSelect/LeaderboardRank.cs" id="2_wkrig"]
-[ext_resource type="Texture2D" uid="uid://brygxnbtgntug" path="res://Resources/System/ResultsScreen/Ranks/SS.png" id="4_vt3mq"]
+[ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="2_guest"]
+[ext_resource type="FontFile" uid="uid://2atq5vkw7df7" path="res://Fonts/font-bold.otf" id="3_bold"]
+[ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="4_font"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wbm6w"]
-bg_color = Color(0.2, 0.2, 0.2, 0.8)
-corner_radius_top_left = 19
-corner_radius_top_right = 19
-corner_radius_bottom_right = 19
-corner_radius_bottom_left = 19
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_row"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1bkjm"]
-bg_color = Color(0.2, 0.2, 0.4, 0.8)
-corner_radius_top_left = 19
-corner_radius_top_right = 19
-corner_radius_bottom_right = 19
-corner_radius_bottom_left = 19
+[sub_resource type="FontVariation" id="FontVariation_bold"]
+fallbacks = Array[Font]([ExtResource("4_font")])
+base_font = ExtResource("3_bold")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wkrig"]
-bg_color = Color(0.4, 0.4, 0.4, 0.8)
-corner_radius_top_left = 19
-corner_radius_top_right = 19
-corner_radius_bottom_right = 19
-corner_radius_bottom_left = 19
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ysfsi"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wkrig"]
-content_margin_left = 3.75
-content_margin_top = 3.75
-content_margin_right = 3.75
-content_margin_bottom = 3.75
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vt3mq"]
-bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 19
-corner_radius_top_right = 19
-corner_radius_bottom_right = 19
-corner_radius_bottom_left = 19
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6nid0"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1bkjm"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y1q14"]
-content_margin_left = 5.0
-content_margin_top = 2.5
-content_margin_right = 5.0
-content_margin_bottom = 2.5
-bg_color = Color(0, 0, 0, 0.25)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+bg_color = Color(0.08, 0.06, 0.1, 0.82)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 10
+anti_aliasing_size = 1.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vt3mq"]
-content_margin_left = 6.25
-content_margin_top = 2.5
-content_margin_right = 6.25
-content_margin_bottom = 2.5
+[sub_resource type="Shader" id="Shader_rounded"]
+code = "shader_type canvas_item;
+// Rounded corners for the avatar (the card already clips to its own shape, so the avatar can't clip itself).
+uniform vec2 size = vec2(54.0, 54.0);
+uniform float radius = 10.0;
+varying vec2 local;
+void vertex() { local = VERTEX; }
+void fragment() {
+	vec2 q = abs(local - size * 0.5) - (size * 0.5 - radius);
+	float d = length(max(q, 0.0)) - radius;
+	COLOR.a *= clamp(0.5 - d, 0.0, 1.0);
+}
+"
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y1q14"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rounded"]
+shader = SubResource("Shader_rounded")
+shader_parameter/size = Vector2(54, 54)
+shader_parameter/radius = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ago"]
+content_margin_left = 7.0
+content_margin_top = 0.0
+content_margin_right = 7.0
+content_margin_bottom = 0.0
+bg_color = Color(1, 1, 1, 0.1)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mod"]
+content_margin_left = 7.0
+content_margin_top = 0.0
+content_margin_right = 7.0
+content_margin_bottom = 0.0
+bg_color = Color(0.62, 0.45, 1, 0.85)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grade"]
+bg_color = Color(1, 1, 1, 1)
+skew = Vector2(0.2, 0)
 
 [node name="Leaderboard" type="Button"]
-custom_minimum_size = Vector2(412.5, 75)
-offset_left = 6.25
-offset_right = 623.75
-offset_bottom = 75.0
-theme_override_styles/normal = SubResource("StyleBoxFlat_wbm6w")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_1bkjm")
-theme_override_styles/hover = SubResource("StyleBoxFlat_wkrig")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ysfsi")
+custom_minimum_size = Vector2(0, 70)
+offset_right = 590.0
+offset_bottom = 70.0
+focus_mode = 0
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_row")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_row")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_row")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_row")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_row")
 script = ExtResource("1_ysfsi")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="Slide" type="Control" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 6
+mouse_filter = 2
 
-[node name="Rank" type="Label" parent="HBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 15
-theme_override_styles/normal = SubResource("StyleBoxEmpty_wkrig")
+[node name="Rank" type="Label" parent="Slide"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 40.0
+grow_vertical = 2
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 19
 text = "#1"
-horizontal_alignment = 1
-script = ExtResource("2_wkrig")
+horizontal_alignment = 2
+vertical_alignment = 1
 
-[node name="Mask" type="PanelContainer" parent="HBoxContainer"]
-clip_children = 1
-custom_minimum_size = Vector2(75, 75)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_vt3mq")
+[node name="Card" type="PanelContainer" parent="Slide"]
+unique_name_in_owner = true
+clip_children = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 47.0
+offset_top = 3.0
+offset_right = -8.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
 
-[node name="Picture" type="TextureRect" parent="HBoxContainer/Mask"]
-custom_minimum_size = Vector2(75, 75)
+[node name="Margin" type="MarginContainer" parent="Slide/Card"]
 layout_mode = 2
 mouse_filter = 2
-texture = ExtResource("1_kgn3a")
-expand_mode = 1
-stretch_mode = 4
+theme_override_constants/margin_left = 7
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 
-[node name="VSeparator2" type="VSeparator" parent="HBoxContainer"]
+[node name="Row" type="HBoxContainer" parent="Slide/Card/Margin"]
 layout_mode = 2
-theme_override_styles/separator = SubResource("StyleBoxEmpty_6nid0")
+mouse_filter = 2
+theme_override_constants/separation = 8
 
-[node name="UserInfo" type="VBoxContainer" parent="HBoxContainer"]
+[node name="Picture" type="TextureRect" parent="Slide/Card/Margin/Row"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_rounded")
+custom_minimum_size = Vector2(54, 54)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("2_guest")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Who" type="VBoxContainer" parent="Slide/Card/Margin/Row"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 1.8
-theme_override_constants/separation = 6
+mouse_filter = 2
+theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Score" type="Label" parent="HBoxContainer/UserInfo"]
+[node name="Top" type="HBoxContainer" parent="Slide/Card/Margin/Row/Who"]
 layout_mode = 2
-size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Ago" type="Label" parent="Slide/Card/Margin/Row/Who/Top"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_ago")
+text = "3mo"
+
+[node name="Username" type="Label" parent="Slide/Card/Margin/Row/Who"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 19
+text = "Username"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="ComboBox" type="VBoxContainer" parent="Slide/Card/Margin/Row"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -2
+alignment = 1
+
+[node name="Caption" type="Label" parent="Slide/Card/Margin/Row/ComboBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.55)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 11
+text = "MAX COMBO"
+
+[node name="Combo" type="Label" parent="Slide/Card/Margin/Row/ComboBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "0x"
+
+[node name="AccBox" type="VBoxContainer" parent="Slide/Card/Margin/Row"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -2
+alignment = 1
+
+[node name="Caption" type="Label" parent="Slide/Card/Margin/Row/AccBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.55)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 11
+text = "ACCURACY"
+
+[node name="Accuracy" type="Label" parent="Slide/Card/Margin/Row/AccBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "100.00%"
+
+[node name="ScoreBox" type="VBoxContainer" parent="Slide/Card/Margin/Row"]
+custom_minimum_size = Vector2(108, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Score" type="Label" parent="Slide/Card/Margin/Row/ScoreBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_bold")
 theme_override_font_sizes/font_size = 25
-theme_override_styles/normal = SubResource("StyleBoxEmpty_1bkjm")
 text = "1,000,000"
-vertical_alignment = 1
+horizontal_alignment = 2
 
-[node name="Moreinfo" type="HBoxContainer" parent="HBoxContainer/UserInfo"]
+[node name="Mods" type="HBoxContainer" parent="Slide/Card/Margin/Row/ScoreBox"]
+unique_name_in_owner = true
 layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+alignment = 2
 
-[node name="Accuracy" type="Label" parent="HBoxContainer/UserInfo/Moreinfo"]
-custom_minimum_size = Vector2(50, 0)
+[node name="ModPill" type="Label" parent="Slide/Card/Margin/Row/ScoreBox/Mods"]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
-theme_override_font_sizes/font_size = 15
-theme_override_styles/normal = SubResource("StyleBoxFlat_y1q14")
-text = "4%"
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_mod")
+text = "DT"
+
+[node name="GradeTab" type="PanelContainer" parent="Slide/Card/Margin/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(46, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_grade")
+
+[node name="Grade" type="Label" parent="Slide/Card/Margin/Row/GradeTab"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.35)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 22
+text = "SS"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Username" type="Label" parent="HBoxContainer/UserInfo/Moreinfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 15
-theme_override_styles/normal = SubResource("StyleBoxEmpty_vt3mq")
-text = "REALLYBIGASSNAMEEEEEEEEEEEEEe"
-vertical_alignment = 1
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="Col2" type="VBoxContainer" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = -6
-alignment = 1
-
-[node name="Mods" type="Label" parent="HBoxContainer/Col2"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("StyleBoxEmpty_y1q14")
-text = "Mods here yadayada"
-horizontal_alignment = 2
-vertical_alignment = 1
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="Combo" type="Label" parent="HBoxContainer/Col2"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("StyleBoxEmpty_y1q14")
-text = "0x"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="created" type="Label" parent="HBoxContainer/Col2"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("StyleBoxEmpty_y1q14")
-text = "35dys"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="Medal" type="TextureRect" parent="HBoxContainer"]
-custom_minimum_size = Vector2(43.75, 31.25)
-layout_mode = 2
-size_flags_horizontal = 6
-size_flags_vertical = 4
-size_flags_stretch_ratio = 0.4
-texture = ExtResource("4_vt3mq")
-expand_mode = 1
-stretch_mode = 5
 
 [connection signal="pressed" from="." to="." method="_stats"]

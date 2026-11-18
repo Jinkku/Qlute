@@ -46,7 +46,7 @@ public partial class SongSelect : Control
 	private Button LeaderboardGlobal { get; set; }
 	private Button LeaderboardDetails { get; set; }
 	private PanelContainer DetailsExtended { get; set; }
-	private ScrollContainer Leaderboardinfo { get; set; }
+	private Control Leaderboardinfo { get; set; }
 	private bool Update { get; set; }
 
 	private int OldSongID { get; set; }
@@ -284,7 +284,7 @@ public partial class SongSelect : Control
 		LeaderboardLocal = GetNode<Button>("SongDetails/Leaderboard Panel/Rows/Box4/Local");
 		LeaderboardDetails = GetNode<Button>("SongDetails/Leaderboard Panel/Rows/Box4/Details");
 		DetailsExtended = GetNode<PanelContainer>("SongDetails/Leaderboard Panel/Rows/Details");
-		Leaderboardinfo = GetNode<ScrollContainer>("SongDetails/Leaderboard Panel/Rows/LeaderboardInfo");
+		Leaderboardinfo = GetNode<Control>("SongDetails/Leaderboard Panel/Rows/LeaderboardInfo");
 		StartButton = GetNode<TextureButton>("BottomBar/Start");
 		StartButton.Visible = false; // Start the button off with being hidden.
 		scrollBar.Value = SettingsOperator.SessionConfig.SongID;
