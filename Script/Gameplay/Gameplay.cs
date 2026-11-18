@@ -146,25 +146,24 @@ public partial class Gameplay : Control
 		MainScreenAnimation.Connect("finished", new Callable(this, nameof(ShowPauseMenu)));
 	}
 	private int maxrndvalue { get; set; }
-	public void ReloadBeatmap(string filepath)
+	/// <summary>A parsed mania chart: playable notes (Random mod applied) and the map as the server rates it.</summary>
+	public sealed class ManiaChart
 	{
-		Notes.Clear();
-		using var file = FileAccess.Open(filepath, FileAccess.ModeFlags.Read);
-		var text = file.GetAsText();
-		var lines = text.Split("\n");
-		var part = 0;
-		var timing = 0;
-		var timen = -1;
+		public readonly List<NotesEn> Notes = new();
+		/// <summary>Real columns (never Random's), duplicates removed.</summary>
+		public readonly List<(int time, int col)> Rated = new();
+	}
+
+	/// <summary>
+	/// Reads the [HitObjects] of a mania .osu. Pure (no Godot nodes or settings), so <see cref="ChartPreload"/>
+	/// runs it on a worker thread while the loading screen shows.
+	/// </summary>
+	public static ManiaChart ParseChart(IEnumerable<string> lines, int seed, bool random)
+	{
+		var chart = new ManiaChart();
 		var BaseRnd = new Random(seed);
 		var isHitObjectSection = false;
-		int index = 0;
-		BeatmapLegend beatmap = SettingsOperator.Beatmaps[SettingsOperator.SessionConfig.SongID];
-		dance = beatmap.Dance;
-		SongEndMs = (int)beatmap.Timetotal;
-
 		var seen = new HashSet<(int timing, int section)>();
-		// The map as the server rates it: real columns (never Random's), duplicates removed.
-		var ratedNotes = new List<(int time, int col)>();
 		var ratedSeen = new HashSet<(int, int)>();
 
 		foreach (string line in lines)
@@ -174,29 +173,32 @@ public partial class Gameplay : Control
 			if (string.IsNullOrWhiteSpace(line) || line.StartsWith('[')) break;
 
 			string[] section = line.Split(':', ',');
-			timing = Convert.ToInt32(section[2]);
+			int timing = Convert.ToInt32(section[2]);
 
 			int realPart = Math.Clamp((int)Math.Floor(Convert.ToInt32(section[0]) * 4 / 512.0), 0, 3);
-			if (ratedSeen.Add((timing, realPart))) ratedNotes.Add((timing, realPart));
-			if (ModsOperator.Mods["random"])
-				part = BaseRnd.Next(0, 4);
-			else
-				part = realPart;
+			if (ratedSeen.Add((timing, realPart))) chart.Rated.Add((timing, realPart));
+			int part = random ? BaseRnd.Next(0, 4) : realPart;
 
-			timen = -timing;
-			var key = (timen, part);
-
-			// ✅ Skip duplicates in O(1), no linear scan
-			if (seen.Contains(key)) { index++; continue; }
-			seen.Add(key);
-
-			Notes.Add(new NotesEn
-			{
-				timing = timen,
-				NotePart = part,
-			});
-			index++;
+			// Skip duplicates in O(1), no linear scan
+			if (!seen.Add((-timing, part))) continue;
+			chart.Notes.Add(new NotesEn { timing = -timing, NotePart = part });
 		}
+		return chart;
+	}
+
+	public void ReloadBeatmap(string filepath)
+	{
+		Notes.Clear();
+		BeatmapLegend beatmap = SettingsOperator.Beatmaps[SettingsOperator.SessionConfig.SongID];
+		dance = beatmap.Dance;
+		SongEndMs = (int)beatmap.Timetotal;
+
+		// Normally already parsed by the loading screen (ChartPreload); else parse it here.
+		var chart = ChartPreload.TakeChart<ManiaChart>(filepath, 0, out int preloadSeed);
+		if (chart != null) seed = preloadSeed;
+		else chart = ParseChart(ChartPreload.ReadLines(filepath), seed, ModsOperator.Mods["random"]);
+		Notes.AddRange(chart.Notes);
+		var ratedNotes = chart.Rated;
 
 		MaxNotes = Notes.Count;
 

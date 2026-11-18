@@ -68,9 +68,19 @@ public class BeatmapLegend
 	/// </summary>
 	public List<(int time, int col)> RatedNotes { get { EnsureDetails(); return _ratedNotes; } set => _ratedNotes = value; }
 	private List<(int time, int col)> _ratedNotes;
+	private static readonly object DetailsLock = new(); // ChartPreload loads details on a worker thread
+	/// <summary>True once ppv2sets / Dance / RatedNotes are loaded (reading them won't parse the .osu).</summary>
+	public bool HasDetails() => _ppv2sets != null && _dance != null && _ratedNotes != null;
+	/// <summary>Load ppv2sets / Dance / RatedNotes now (parses the .osu; slow for huge maps, so ChartPreload calls it off the main thread).</summary>
+	public void LoadDetails() => EnsureDetails();
 	private void EnsureDetails()
 	{
-		if (_ppv2sets != null && _dance != null && _ratedNotes != null) return;
+		if (HasDetails()) return;
+		lock (DetailsLock) EnsureDetailsLocked();
+	}
+	private void EnsureDetailsLocked()
+	{
+		if (HasDetails()) return;
 		if (string.IsNullOrEmpty(Rawurl) || !System.IO.File.Exists(Rawurl))
 		{
 			_ppv2sets ??= new List<float>();

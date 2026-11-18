@@ -124,9 +124,14 @@ public partial class StoryboardPlayer : Control
 			if (!Check.CheckBoolValue(SettingsOperator.GetSetting(SettingKey)?.ToString() ?? "true")) return null;
 			var osu = SettingsOperator.SessionConfig.BeatmapURL;
 			if (string.IsNullOrEmpty(osu) || !File.Exists(osu)) return null;
-			var doc = StoryboardDoc.LoadForBeatmap(osu);
-			if (doc.IsEmpty) return null;
-			doc.CompileAll();
+			// Normally parsed + compiled by the loading screen's worker (ChartPreload); else do it now.
+			if (!ChartPreload.TryTakeStoryboard(osu, out var doc))
+			{
+				doc = StoryboardDoc.LoadForBeatmap(osu);
+				if (doc.IsEmpty) return null;
+				doc.CompileAll();
+			}
+			if (doc == null) return null;
 
 			var player = new StoryboardPlayer
 			{

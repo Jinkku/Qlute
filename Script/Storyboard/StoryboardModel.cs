@@ -423,11 +423,12 @@ public class StoryboardDoc
 	/// <summary>
 	/// Storyboard of a difficulty: its own [Events] plus the set's .osb (if any), like osu! plays it.
 	/// </summary>
-	public static StoryboardDoc LoadForBeatmap(string osuPath)
+	/// <param name="osuLines">The .osu's lines if already read (ChartPreload), else it is read here.</param>
+	public static StoryboardDoc LoadForBeatmap(string osuPath, string[] osuLines = null)
 	{
 		var doc = new StoryboardDoc();
 		if (string.IsNullOrEmpty(osuPath) || !File.Exists(osuPath)) return doc;
-		var osuLines = File.ReadAllLines(osuPath);
+		osuLines ??= File.ReadAllLines(osuPath);
 		doc.Widescreen = ReadWidescreen(osuLines);
 		doc.ParseFile(osuLines, fromOsb: false);
 		var osb = FindOsb(osuPath);

@@ -195,8 +195,7 @@ public partial class TapGameCore : Control
 	{
 		Objects.Clear();
 		ComboColours.Clear();
-		using var file = FileAccess.Open(filepath, FileAccess.ModeFlags.Read);
-		var lines = file.GetAsText().Split("\n");
+		var lines = ChartPreload.TakeLines(filepath); // read by the loading screen's worker when it could
 		BeatmapLegend beatmap = SettingsOperator.Beatmaps[SettingsOperator.SessionConfig.SongID];
 		dance = beatmap.Dance;
 

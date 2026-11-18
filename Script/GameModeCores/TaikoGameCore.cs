@@ -129,80 +129,64 @@ public partial class TaikoGameCore : Control
 		MainScreenAnimation.Connect("finished", new Callable(this, nameof(ShowPauseMenu)));
 	}
 	private int maxrndvalue { get; set; }
-	public void ReloadBeatmap(string filepath)
+	/// <summary>
+	/// Reads the [HitObjects] of a taiko .osu into drums. Pure (no Godot nodes or settings), so
+	/// <see cref="ChartPreload"/> runs it on a worker thread while the loading screen shows.
+	/// </summary>
+	public static List<DrumEn> ParseChart(IEnumerable<string> lines)
 	{
-		Notes.Clear();
-		using var file = FileAccess.Open(filepath, FileAccess.ModeFlags.Read);
-		var text = file.GetAsText();
-		var lines = text.Split("\n");
-		var part = 0;
-		var timing = 0;
-		var timen = -1;
-		var BaseRnd = new Random(seed);
+		var drums = new List<DrumEn>();
 		var isHitObjectSection = false;
-		int index = 0;
-		BeatmapLegend beatmap = SettingsOperator.Beatmaps[SettingsOperator.SessionConfig.SongID];
-		dance = beatmap.Dance;
-
 		var seen = new HashSet<(int timing, int section)>();
-	
+
 		foreach (string line in lines)
 		{
-			DrumEn PreLegend = new DrumEn();
 			if (line.Trim() == "[HitObjects]") { isHitObjectSection = true; continue; }
 			if (!isHitObjectSection) continue;
 			if (string.IsNullOrWhiteSpace(line) || line.StartsWith('[')) break;
 
+			var PreLegend = new DrumEn();
 			string[] section = line.Split(':', ',');
-			timing = Convert.ToInt32(section[2]);
-			part = Convert.ToInt32(section[3]);
+			int timing = Convert.ToInt32(section[2]);
+			int part = Convert.ToInt32(section[3]);
 
-			switch (part)
+			// Hit object type 1 = circle (normal note); the hitsound (section[4]) decides red/blue/big.
+			// Type 2 (slider: drumroll) and 8 (spinner: denden) have no drum type yet.
+			if (part == 1)
 			{
-				case 1:
-					// Hit Object type 1 = Circle (Normal Note)
-					// In Taiko, the 'type' (section[4]) determines if it's Red/Blue/Big
-					var DrumType = Convert.ToInt32(section[4]);
-					if (DrumType == 0)
-					{
-						PreLegend.DrumType = DrumTypeGroup.Inside;
-					} else if (DrumType == 2 || DrumType == 8) {
-						PreLegend.DrumType = DrumTypeGroup.Outside;
-					} else if (DrumType == 4) {
-						PreLegend.DrumType = DrumTypeGroup.Inside;
-						PreLegend.DrumBig = true;
-					} else if (DrumType == 6)
-					{
-						// "big blue" 
-						PreLegend.DrumType = DrumTypeGroup.Outside;
-						PreLegend.DrumBig = true;
-					}
-
-					break;
-
-				case 2:
-					// Hit Object type 2 = Slider ("swell" / Drumroll)
-					break;
-
-				case 8:
-					// Hit Object type 8 = Spinner ("spinner" / Denden)
-					break;
-
-				default:
-					// Handle unexpected object types if necessary
-					break;
+				var DrumType = Convert.ToInt32(section[4]);
+				if (DrumType == 0)
+				{
+					PreLegend.DrumType = DrumTypeGroup.Inside;
+				} else if (DrumType == 2 || DrumType == 8) {
+					PreLegend.DrumType = DrumTypeGroup.Outside;
+				} else if (DrumType == 4) {
+					PreLegend.DrumType = DrumTypeGroup.Inside;
+					PreLegend.DrumBig = true;
+				} else if (DrumType == 6)
+				{
+					// "big blue"
+					PreLegend.DrumType = DrumTypeGroup.Outside;
+					PreLegend.DrumBig = true;
+				}
 			}
-			timen = -timing;
-			var key = (timen, part);
 
-			// ✅ Skip duplicates in O(1), no linear scan
-			if (seen.Contains(key)) { index++; continue; }
-			seen.Add(key);
-			PreLegend.timing = timen; 
-			Notes.Add(PreLegend);
-			
-			index++;
+			// Skip duplicates in O(1), no linear scan
+			if (!seen.Add((-timing, part))) continue;
+			PreLegend.timing = -timing;
+			drums.Add(PreLegend);
 		}
+		return drums;
+	}
+
+	public void ReloadBeatmap(string filepath)
+	{
+		Notes.Clear();
+		BeatmapLegend beatmap = SettingsOperator.Beatmaps[SettingsOperator.SessionConfig.SongID];
+		dance = beatmap.Dance;
+		// Normally already parsed by the loading screen (ChartPreload); else parse it here.
+		var drums = ChartPreload.TakeChart<List<DrumEn>>(filepath, 1, out _) ?? ParseChart(ChartPreload.ReadLines(filepath));
+		Notes.AddRange(drums);
 
 		MaxNotes = Notes.Count;
 	}
