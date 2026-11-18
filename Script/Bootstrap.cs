@@ -45,7 +45,10 @@ public partial class Bootstrap : Control
 			NewTween = CreateTween();
 			NewTween.TweenProperty(AudioPlayer.Instance, "volume_db", init, time).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 			NewTween.Play();
-			var num = SettingsOperator.RndSongID();
+			// The map you had selected last time, if it's still there; else a random one.
+			var last = SettingsOperator.GetSetting("lastbeatmap")?.ToString();
+			var num = string.IsNullOrEmpty(last) ? -1 : SettingsOperator.Beatmaps.FindIndex(b => b.Rawurl == last);
+			if (num < 0) num = SettingsOperator.RndSongID();
 			var PreviewTime = Math.Max(SettingsOperator.Beatmaps[num].PreviewTime - time, 0f);
 			SettingsOperator.SelectSongID(num, PreviewTime);
 		}

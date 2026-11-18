@@ -28,6 +28,7 @@ public partial class Display : PanelContainer
 		BackgroundDim.Value = SettingsOperator.SessionConfig.Backgrounddim;
 		AddToggle("Show beatmap storyboards", StoryboardPlayer.SettingKey);
 		AddToggle("Show beatmap shaders", BeatmapShaderLayer.SettingKey);
+		AddToggle("Pause when the game window loses focus", FocusPause.SettingKey);
 	}
 
 	/// <summary>A setting switch placed right under the "Fade out when on break" one.</summary>

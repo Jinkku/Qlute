@@ -116,6 +116,7 @@ public partial class PauseMenu : Control
 			FadeOut();
 			BeatmapBackground.FlashEnable = true;
 			SettingsOperator.toppaneltoggle(true);
-			GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
+			if (SettingsOperator.Marathon) MarathonRun.Stop(this); // keeps the songs played so far, back to the Marathon screen
+			else GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/song_select.tscn");
 	}
 }

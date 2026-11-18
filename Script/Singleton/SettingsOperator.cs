@@ -147,6 +147,8 @@ public partial class SettingsOperator : Node
         { "storyboard", true },    // play beatmap storyboards (and .ogv videos)
         { "beatmapshader", true }, // apply the shader a beatmap ships (made in the Create editor)
         { "notifseen", "" },        // "username:id" of the last website notification shown in game (ServerNotifications)
+        { "lastbeatmap", "" },      // .osu path of the last selected map, selected again on the next launch
+        { "pauseonfocusloss", true }, // pause a solo play when the window loses focus (FocusPause)
     };
     public Dictionary<string, object> Configurationbk { get; set; }
 
@@ -273,15 +275,9 @@ public partial class SettingsOperator : Node
         if (Beatmaps.Count > 0 && SessionConfig.SongID != -1)
         {
             var beatmap = Beatmaps[SessionConfig.SongID];
-            if (Check.CheckBoolValue(GetSetting("showunicode").ToString()) && beatmap.TitleUnicode != null && beatmap.ArtistUnicode != null)
-            {
-                SessionConfig.BeatmapTitle = beatmap.TitleUnicode;
-                SessionConfig.BeatmapArtist = beatmap.ArtistUnicode;
-            } else
-            {
-                SessionConfig.BeatmapTitle = beatmap.Title;
-                SessionConfig.BeatmapArtist = beatmap.Artist;
-            }
+            bool unicode = Check.CheckBoolValue(GetSetting("showunicode")?.ToString() ?? "false");
+            SessionConfig.BeatmapTitle = unicode && !string.IsNullOrWhiteSpace(beatmap.TitleUnicode) ? beatmap.TitleUnicode : beatmap.Title;
+            SessionConfig.BeatmapArtist = unicode && !string.IsNullOrWhiteSpace(beatmap.ArtistUnicode) ? beatmap.ArtistUnicode : beatmap.Artist;
         }
     }
     [Signal]
@@ -336,15 +332,12 @@ public partial class SettingsOperator : Node
             Start_reloadLeaderboard = true;
             var beatmap = Beatmaps[id];
             SessionConfig.BeatmapURL = beatmap.Rawurl;
-            if (beatmap.TitleUnicode != null && beatmap.ArtistUnicode != null)
-            {
-                SessionConfig.BeatmapTitle = beatmap.TitleUnicode;
-                SessionConfig.BeatmapArtist = beatmap.ArtistUnicode;
-            }else if (!Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString()) || ( beatmap.TitleUnicode == null && beatmap.ArtistUnicode == null ) )
-            {
-                SessionConfig.BeatmapTitle = beatmap.Title;
-                SessionConfig.BeatmapArtist = beatmap.Artist;
-            }
+            // "Show original language" on: the unicode title/artist where the map has them, else the romanised ones.
+            // (It used to show unicode whenever a map had it, ignoring the setting, and kept the previous map's
+            // title when only one of the two existed.)
+            bool unicode = Check.CheckBoolValue(GetSetting("showunicode")?.ToString() ?? "false");
+            SessionConfig.BeatmapTitle = unicode && !string.IsNullOrWhiteSpace(beatmap.TitleUnicode) ? beatmap.TitleUnicode : beatmap.Title;
+            SessionConfig.BeatmapArtist = unicode && !string.IsNullOrWhiteSpace(beatmap.ArtistUnicode) ? beatmap.ArtistUnicode : beatmap.Artist;
             SessionConfig.BeatmapDifficultyName = beatmap.Version;
             SessionConfig.bpm = (int)beatmap.Bpm;
             Gameplaycfg.TimeTotalGame = beatmap.Timetotal * 0.001f;
@@ -359,6 +352,7 @@ public partial class SettingsOperator : Node
             //SessionConfig.GameMode = beatmap.GameModeID; 
             SessionConfig.GameMode = GetSelectedGameMode(); // Mode picked in song select (0 Mania, 1 Taiko, 3 Tap!)
             SessionConfig.SongID = id;
+            if (!Marathon && !SpectatorMode && !string.IsNullOrEmpty(beatmap.Rawurl)) SetSetting("lastbeatmap", beatmap.Rawurl); // reopened on next launch
             string bgpath = beatmap.Path.PathJoin(beatmap.Background ?? "");
             // Identify the background by path + last write time instead of hashing the file
             string bgKey = null;
@@ -1019,6 +1013,7 @@ public partial class SettingsOperator : Node
             case (int)NotificationApplicationFocusOut:
                 GD.Print($"Detected not focused going to {UnfocusedFPS} FPS");
                 Unfocused = true;
+                FocusPause.Lost();
                 if (!SettingsOperator.inGameplay && !ForceUncapped)
                     Engine.MaxFps = UnfocusedFPS;
                 break;

@@ -232,6 +232,7 @@ public partial class Gameplay : Control
 		Instance = this;
 		global::PauseMenu.PausesThisPlay = 0;
 		if (!LanNetwork.InMatch) LanNetwork.ShowingMatchResults = false; // a solo play: its results get Play Again
+		FocusPause.Reset();
 		GD.Print("Setting up stuff...");
 		speedold = AudioPlayer.Instance.PitchScale;
 		seed = new Random().Next(1,214562543);
@@ -758,10 +759,7 @@ private void _GameNoteTick(double delta)
 				}
 				else
 				{
-					SettingsOperator.MarathonID++;
-					if (SettingsOperator.MarathonID >= SettingsOperator.MarathonMapPaths.Count - 1) GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/ResultScreenv2.tscn");
-					SettingsOperator.SelectSongID(SettingsOperator.MarathonMapPaths[SettingsOperator.MarathonID]);
-					GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/SongLoadingScreen.tscn");
+					MarathonRun.SongFinished(this, score); // next song, or the end of the run
 				}
 			}
 
@@ -789,18 +787,10 @@ private void _GameNoteTick(double delta)
 				AudioPlayer.Instance.PitchScale = speedold;
 				GetNode<SceneTransition>("/root/Transition").Switch(LanNetwork.Instance.ReturnScene);
 			}
-			else if (Input.IsActionJustPressed("pausemenu") && !SettingsOperator.Marathon)
+			else if (Input.IsActionJustPressed("pausemenu") || FocusPause.Take(Dead))
 			{
 				Cursor.CursorVisible = true;
 				ShowPauseMenu();
-			}
-			else if (Input.IsActionJustPressed("pausemenu") && SettingsOperator.Marathon)
-			{
-				Cursor.CursorVisible = true;
-				SettingsOperator.toppaneltoggle(true);
-				BeatmapBackground.FlashEnable = true;
-				GetNode<SceneTransition>("/root/Transition").Switch("res://Panels/Screens/MarathonMode.tscn");
-				SettingsOperator.Marathon = false;
 			}
 			else if (Input.IsActionJustPressed("retry") && !SettingsOperator.Marathon && !LanNetwork.InMatch)
 			{

@@ -21,6 +21,10 @@ public partial class Sample : Node
 
   public static void PlaySample(string path, float audiopitch = 1)
   {
+    // Pitch 0 or below is an engine error (the results score tick starts at 0% accuracy), and every distinct pitch
+    // gets its own cached player, so round it: a tick rising in tiny steps made hundreds of players.
+    if (float.IsNaN(audiopitch)) audiopitch = 1;
+    audiopitch = MathF.Round(Math.Clamp(audiopitch, 0.05f, 4f) * 50f) / 50f;
     if (Instance == null || !Instance.IsInsideTree())
     {
       Pending.Add((path, audiopitch));
