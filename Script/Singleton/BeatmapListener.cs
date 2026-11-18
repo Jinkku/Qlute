@@ -227,6 +227,30 @@ public partial class BeatmapListener : Node
 			Notify.Post("Imported\n" + name);
 		}).CallDeferred());
 	}
+	/// <summary>
+	/// A set being updated (ApiOperator.UpdateBeatmapSet): once its folder is imported again, the map with this
+	/// BeatmapID (else this difficulty name, else the set's first) is selected, like before the update.
+	/// </summary>
+	public static (string Folder, int BeatmapID, string Version) SelectAfterImport;
+
+	private static void SelectUpdatedMap(string dir)
+	{
+		var (folder, id, version) = SelectAfterImport;
+		if (folder == null) return;
+		string norm(string p) => Path.GetFullPath(p).TrimEnd('/', '\\');
+		string target = norm(dir);
+		if (norm(folder) != target) return;
+		SelectAfterImport = default;
+		bool inSet(BeatmapLegend b) => !string.IsNullOrEmpty(b.Rawurl) && norm(Path.GetDirectoryName(b.Rawurl)) == target;
+		int pick = id > 0 ? global::SettingsOperator.Beatmaps.FindIndex(b => inSet(b) && b.BeatmapID == id) : -1;
+		if (pick < 0) pick = global::SettingsOperator.Beatmaps.FindIndex(b => inSet(b) && b.Version == version);
+		if (pick < 0) pick = global::SettingsOperator.Beatmaps.FindIndex(inSet);
+		if (pick < 0) return;
+		for (int i = 0; i < global::SettingsOperator.Beatmaps.Count; i++) global::SettingsOperator.Beatmaps[i].ID = i;
+		global::SettingsOperator.SessionConfig.SongID = -1; // select it for real, even if the index didn't change
+		((SceneTree)Engine.GetMainLoop()).Root.GetNode<global::SettingsOperator>("SettingsOperator").SelectSongID(pick);
+	}
+
 	/// <summary>Downloads being unzipped in the background right now.</summary>
 	private readonly HashSet<string> _extracting = new();
 
@@ -260,6 +284,7 @@ public partial class BeatmapListener : Node
 				GD.Print("Extracted and moved " + file + " to " + beatmapDir);
 				var name = Parse_BeatmapDir(beatmapDir.Replace("\\", "/"));
 				Notify.Post("Imported\n" + name);
+				SelectUpdatedMap(beatmapDir);
 			}).CallDeferred());
 		}
 	}

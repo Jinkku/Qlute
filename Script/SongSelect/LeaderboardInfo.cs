@@ -80,6 +80,7 @@ public partial class LeaderboardInfo : Control
 	private List<LeaderboardEntry> oldLeaderboardList { get; set; } = new List<LeaderboardEntry>();
 	private readonly List<Leaderboard> _rows = new();
 	private string _noScoresText;
+	private Button _updateButton;
 	private int _focus;
 	private float _focusSmooth, _scroll;
 
@@ -89,6 +90,9 @@ public partial class LeaderboardInfo : Control
 		Leaderboards = GetNode<VBoxContainer>("Leaderboard");
 		NoBeatmap = GetNode<Label>("NoBeatmap");
 		_noScoresText = NoBeatmap.Text;
+		// "UpdateMap" (song_select.tscn): shown when the server says our copy of the map is outdated / modified.
+		_updateButton = GetNodeOrNull<Button>("UpdateMap");
+		if (_updateButton != null) _updateButton.Pressed += UpdateMap;
 		MouseFilter = MouseFilterEnum.Stop; // takes the wheel (rows pass it up)
 		refreshl();
 	}
@@ -98,6 +102,7 @@ public partial class LeaderboardInfo : Control
 		oldLeaderboardList = ApiOperator.LeaderboardList;
 		foreach (var row in _rows) row.QueueFree();
 		_rows.Clear();
+		if (_updateButton != null) _updateButton.Visible = false;
 		_focus = 0;
 		_focusSmooth = 0;
 		_scroll = 0;
@@ -105,12 +110,21 @@ public partial class LeaderboardInfo : Control
 		if (scores.Count < 1 && (FakeCount > 0 || ApiOperator.LeaderboardStatus == 2))
 		{
 			// The server recognises maps by the hash of the .osu: say why there's nothing when it didn't recognise ours.
-			NoBeatmap.Text = FakeCount == 0 && SettingsOperator.LeaderboardType == 1 ? ApiOperator.LeaderboardMapStatus switch
+			string status = FakeCount == 0 && SettingsOperator.LeaderboardType == 1 ? ApiOperator.LeaderboardMapStatus : "";
+			bool canUpdate = !string.IsNullOrEmpty(ApiOperator.LeaderboardMapDownload);
+			NoBeatmap.Text = status switch
 			{
-				"modified" => "Your copy of this beatmap is different from the server's\n(it was edited or is outdated), so it has no leaderboard.\nRe-download it to see and submit scores.",
+				"outdated" => "This beatmap was updated on the server.\n" + (canUpdate ? "Update it to see and submit scores." : "Re-download it to see and submit scores."),
+				"modified" => "Your copy of this beatmap is different from the server's\n(it was edited or is outdated), so it has no leaderboard.\n" + (canUpdate ? "Re-download it to see and submit scores." : ""),
 				"unknown" => "This beatmap isn't on the server,\nso it has no leaderboard.",
 				_ => _noScoresText,
-			} : _noScoresText;
+			};
+			if (_updateButton != null)
+			{
+				_updateButton.Visible = canUpdate && status is "outdated" or "modified";
+				_updateButton.Disabled = false;
+				_updateButton.Text = status == "outdated" ? "Update beatmap" : "Re-download beatmap";
+			}
 			NoBeatmap.Visible = true;
 			Leaderboards.Visible = false;
 			return;
@@ -133,6 +147,19 @@ public partial class LeaderboardInfo : Control
 			t.TweenProperty(row, "modulate:a", 1f, 0.2f);
 			rank++;
 		}
+	}
+
+	private void UpdateMap()
+	{
+		int id = SettingsOperator.SessionConfig.SongID;
+		var map = id >= 0 && id < SettingsOperator.Beatmaps.Count ? SettingsOperator.Beatmaps[id] : null;
+		if (!ApiOperator.UpdateBeatmapSet(map))
+		{
+			Notify.Post("Couldn't update this beatmap", Type: NotificationIcons.NotificationType.Warning);
+			return;
+		}
+		_updateButton.Disabled = true;
+		_updateButton.Text = "Updating...";
 	}
 
 	public override void _GuiInput(InputEvent e)

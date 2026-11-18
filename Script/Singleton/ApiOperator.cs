@@ -19,6 +19,11 @@ public class BeatmapDownloader
 	public BrowseCatalogLegend Source { get; set; }
 	/// <summary>The progress card; completed or failed when the download ends.</summary>
 	public NotificationLegend Notification { get; set; }
+	/// <summary>
+	/// Set for an update of a set the player already has (<see cref="ApiOperator.UpdateBeatmapSet"/>): that set's folder.
+	/// Its old difficulties are removed when the download is done and the new version is unpacked into the same folder.
+	/// </summary>
+	public string ReplaceFolder { get; set; }
 	/// <summary>Seconds since the last byte arrived (a stalled download is given up after a while).</summary>
 	public double Idle { get; set; }
 	public bool Done { get; set; }
@@ -157,6 +162,9 @@ public partial class ApiOperator : Node
 	/// differs from the server's: edited or outdated), "unknown" (not a map the server has), or "" (not known / older server).
 	/// </summary>
 	public static string LeaderboardMapStatus = "";
+	/// <summary>For an "outdated" / "modified" copy: the server's set id and where to download its version ("" if none).</summary>
+	public static int LeaderboardMapSetId;
+	public static string LeaderboardMapDownload = "";
 	private static int _leaderboardTicket;
 
 	public async void _LeaderboardAPIDone(long result, long responseCode, string[] headers, byte[] body)
@@ -184,9 +192,17 @@ public partial class ApiOperator : Node
 					e.Accuracy = Gameplay.ReloadAccuracy(e.MAX, e.GOOD, e.MEH, e.BAD);
 			int beatmapId = SettingsOperator.SessionConfig.BeatmapID;
 			LeaderboardMapStatus = "";
+			LeaderboardMapSetId = 0;
+			LeaderboardMapDownload = "";
 			foreach (var h in headers)
-				if (h.StartsWith("Beatmap-Status:", StringComparison.OrdinalIgnoreCase))
-					LeaderboardMapStatus = h["Beatmap-Status:".Length..].Trim().ToLowerInvariant();
+			{
+				int colon = h.IndexOf(':');
+				if (colon < 0) continue;
+				string name = h[..colon].Trim(), value = h[(colon + 1)..].Trim();
+				if (name.Equals("Beatmap-Status", StringComparison.OrdinalIgnoreCase)) LeaderboardMapStatus = value.ToLowerInvariant();
+				else if (name.Equals("Beatmap-Setid", StringComparison.OrdinalIgnoreCase)) int.TryParse(value, out LeaderboardMapSetId);
+				else if (name.Equals("Beatmap-Download", StringComparison.OrdinalIgnoreCase)) LeaderboardMapDownload = value;
+			}
 			LeaderboardList = entries;
 			LeaderboardStatus = 2; // Set status to loaded
 			// Profile pictures load in parallel. Picking another song meanwhile clears or replaces
@@ -255,6 +271,8 @@ public partial class ApiOperator : Node
 			// leaderboard; the ids go along as a hint. Hashing a big map takes a moment, so it runs off the main thread.
 			LeaderboardStatus = 1; // Set status to loading
 			LeaderboardMapStatus = "";
+			LeaderboardMapSetId = 0;
+			LeaderboardMapDownload = "";
 			string path = SettingsOperator.SessionConfig.BeatmapURL;
 			int setId = SettingsOperator.SessionConfig.BeatmapSetID;
 			int ticket = ++_leaderboardTicket;
@@ -539,6 +557,50 @@ public partial class ApiOperator : Node
 
 	public static List<BeatmapDownloader> DownloadList = new List<BeatmapDownloader>();
 
+	/// <summary>
+	/// Downloads the server's version of the selected map's set (its leaderboard said our copy is outdated or modified)
+	/// and puts it in place of the old one: same folder, old difficulties removed, the same map selected afterwards.
+	/// </summary>
+	public static bool UpdateBeatmapSet(BeatmapLegend map)
+	{
+		if (map == null || string.IsNullOrEmpty(LeaderboardMapDownload)) return false;
+		string folder = !string.IsNullOrEmpty(map.Path) && Directory.Exists(map.Path) ? map.Path : Path.GetDirectoryName(map.Rawurl ?? "");
+		if (string.IsNullOrEmpty(folder) || !Directory.Exists(folder)) return false;
+		string url = LeaderboardMapDownload.Replace(" ", "%20");
+		string info = $"{map.Artist} - {map.Title} from {map.Mapper}";
+		if (DownloadList.Exists(d => !d.Done && (d.Url == url || d.ReplaceFolder == folder)))
+		{
+			Notify.Post("Already updating", Description: info);
+			return true;
+		}
+		DownloadList.Add(new BeatmapDownloader
+		{
+			Url = url,
+			Info = info,
+			BeatmapID = LeaderboardMapSetId > 0 ? LeaderboardMapSetId : Math.Abs(folder.GetHashCode()),
+			ReplaceFolder = folder,
+		});
+		BeatmapListener.SelectAfterImport = (folder, map.BeatmapID, map.Version);
+		return true;
+	}
+
+	/// <summary>Removes the old difficulties of a set being updated (their .osu files and library entries).</summary>
+	private static void RemoveOldDifficulties(string folder)
+	{
+		string norm(string p) => Path.GetFullPath(p).TrimEnd('/', '\\');
+		string target = norm(folder);
+		foreach (var osu in Directory.GetFiles(folder, "*.osu"))
+			File.Delete(osu);
+		int removed = global::SettingsOperator.Beatmaps.RemoveAll(b => !string.IsNullOrEmpty(b.Rawurl) && norm(Path.GetDirectoryName(b.Rawurl)) == target);
+		if (removed == 0) return;
+		// The list shifted: renumber and select a map that still exists (the updated one is selected after import).
+		for (int i = 0; i < global::SettingsOperator.Beatmaps.Count; i++) global::SettingsOperator.Beatmaps[i].ID = i;
+		int keep = Math.Clamp(global::SettingsOperator.SessionConfig.SongID, 0, Math.Max(0, global::SettingsOperator.Beatmaps.Count - 1));
+		global::SettingsOperator.SessionConfig.SongID = -1;
+		global::SettingsOperator.SessionConfig.ReloadDB = true;
+		if (global::SettingsOperator.Beatmaps.Count > 0) ((SceneTree)Engine.GetMainLoop()).Root.GetNode<global::SettingsOperator>("SettingsOperator").SelectSongID(keep);
+	}
+
 	/// <summary>A download with no new bytes for this long is given up (the server or connection hung).</summary>
 	private const double DownloadStallSeconds = 60;
 
@@ -547,6 +609,9 @@ public partial class ApiOperator : Node
 		if (downloader.Done) return;
 		string tempFilePath = Path.Combine(SettingsOperator.downloadsdir, $"{downloader.BeatmapID}.osz.tmp");
 		string finalFilePath = Path.Combine(SettingsOperator.downloadsdir, $"{downloader.BeatmapID}.osz");
+		// An update is unpacked into the set's own folder (the importer unpacks <name>.osz into beatmaps/<name>).
+		if (downloader.ReplaceFolder != null)
+			finalFilePath = Path.Combine(SettingsOperator.downloadsdir, Path.GetFileName(downloader.ReplaceFolder.TrimEnd('/', '\\')) + ".osz");
 		string error = DownloadError(result, responseCode);
 		if (error == null && !LooksLikeZip(tempFilePath))
 			error = "The server sent something that isn't a beatmap file. Try again in a bit.";
@@ -554,6 +619,7 @@ public partial class ApiOperator : Node
 		{
 			try
 			{
+				if (downloader.ReplaceFolder != null) RemoveOldDifficulties(downloader.ReplaceFolder);
 				if (File.Exists(finalFilePath)) File.Delete(finalFilePath);
 				File.Move(tempFilePath, finalFilePath); // BeatmapListener picks it up and imports it
 				GD.Print($"Beatmap downloaded successfully to: {finalFilePath}");
