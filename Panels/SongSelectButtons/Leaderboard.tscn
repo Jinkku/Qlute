@@ -7,69 +7,69 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wbm6w"]
 bg_color = Color(0.2, 0.2, 0.2, 0.8)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1bkjm"]
 bg_color = Color(0.2, 0.2, 0.4, 0.8)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wkrig"]
 bg_color = Color(0.4, 0.4, 0.4, 0.8)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ysfsi"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wkrig"]
-content_margin_left = 3.0
-content_margin_top = 3.0
-content_margin_right = 3.0
-content_margin_bottom = 3.0
+content_margin_left = 3.75
+content_margin_top = 3.75
+content_margin_right = 3.75
+content_margin_bottom = 3.75
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vt3mq"]
 bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6nid0"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1bkjm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y1q14"]
-content_margin_left = 4.0
-content_margin_top = 2.0
-content_margin_right = 4.0
-content_margin_bottom = 2.0
+content_margin_left = 5.0
+content_margin_top = 2.5
+content_margin_right = 5.0
+content_margin_bottom = 2.5
 bg_color = Color(0, 0, 0, 0.25)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vt3mq"]
-content_margin_left = 5.0
-content_margin_top = 2.0
-content_margin_right = 5.0
-content_margin_bottom = 2.0
+content_margin_left = 6.25
+content_margin_top = 2.5
+content_margin_right = 6.25
+content_margin_bottom = 2.5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y1q14"]
 
 [node name="Leaderboard" type="Button"]
-custom_minimum_size = Vector2(330, 60)
-offset_left = 5.0
-offset_right = 499.0
-offset_bottom = 60.0
+custom_minimum_size = Vector2(412.5, 75)
+offset_left = 6.25
+offset_right = 623.75
+offset_bottom = 75.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_wbm6w")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_1bkjm")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wkrig")
@@ -83,11 +83,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 5
+theme_override_constants/separation = 6
 
 [node name="Rank" type="Label" parent="HBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxEmpty_wkrig")
 text = "#1"
 horizontal_alignment = 1
@@ -95,12 +95,12 @@ script = ExtResource("2_wkrig")
 
 [node name="Mask" type="PanelContainer" parent="HBoxContainer"]
 clip_children = 1
-custom_minimum_size = Vector2(60, 60)
+custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_vt3mq")
 
 [node name="Picture" type="TextureRect" parent="HBoxContainer/Mask"]
-custom_minimum_size = Vector2(60, 60)
+custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("1_kgn3a")
@@ -115,13 +115,13 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_6nid0")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.8
-theme_override_constants/separation = 5
+theme_override_constants/separation = 6
 alignment = 1
 
 [node name="Score" type="Label" parent="HBoxContainer/UserInfo"]
 layout_mode = 2
 size_flags_horizontal = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1bkjm")
 text = "1,000,000"
 vertical_alignment = 1
@@ -130,9 +130,9 @@ vertical_alignment = 1
 layout_mode = 2
 
 [node name="Accuracy" type="Label" parent="HBoxContainer/UserInfo/Moreinfo"]
-custom_minimum_size = Vector2(40, 0)
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_y1q14")
 text = "4%"
 horizontal_alignment = 1
@@ -141,7 +141,7 @@ vertical_alignment = 1
 [node name="Username" type="Label" parent="HBoxContainer/UserInfo/Moreinfo"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxEmpty_vt3mq")
 text = "REALLYBIGASSNAMEEEEEEEEEEEEEe"
 vertical_alignment = 1
@@ -151,13 +151,13 @@ text_overrun_behavior = 3
 [node name="Col2" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = -5
+theme_override_constants/separation = -6
 alignment = 1
 
 [node name="Mods" type="Label" parent="HBoxContainer/Col2"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("StyleBoxEmpty_y1q14")
 text = "Mods here yadayada"
 horizontal_alignment = 2
@@ -168,7 +168,7 @@ text_overrun_behavior = 3
 [node name="Combo" type="Label" parent="HBoxContainer/Col2"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("StyleBoxEmpty_y1q14")
 text = "0x"
 horizontal_alignment = 2
@@ -177,14 +177,14 @@ vertical_alignment = 1
 [node name="created" type="Label" parent="HBoxContainer/Col2"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("StyleBoxEmpty_y1q14")
 text = "35dys"
 horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="Medal" type="TextureRect" parent="HBoxContainer"]
-custom_minimum_size = Vector2(35, 25)
+custom_minimum_size = Vector2(43.75, 31.25)
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4

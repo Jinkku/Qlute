@@ -903,7 +903,7 @@ public partial class SettingsOperator : Node
         }
 
         if (!IsInstanceValid(_infoBar)) _infoBar = GetTree().Root.GetNodeOrNull<ColorRect>("TopPanelOnTop/InfoBar");
-        if (_infoBar != null) TopPanelPosition = _infoBar.Position.Y + 50;
+        if (_infoBar != null) TopPanelPosition = _infoBar.Position.Y + 63;
         if (Input.IsActionJustPressed("Hide Panel"))
         {
             toppaneltoggle(SessionConfig.TopPanelHide);

@@ -4,77 +4,77 @@
 [ext_resource type="PackedScene" uid="uid://cs1yw4bti3qhr" path="res://Panels/Overlays/ModEmblemResults.tscn" id="2_w2ft7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wunyc"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0.230469, 0.230469, 0.230469, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_43aj5"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0.35686275, 0.3137255, 0.7490196, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w2ft7"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0.16862746, 0.22745098, 0.43137255, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xnhch"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0.117647, 0.0980392, 0.137255, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_43aj5"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xnhch"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
+content_margin_left = 12.5
+content_margin_top = 12.5
+content_margin_right = 12.5
+content_margin_bottom = 12.5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_w2ft7"]
-content_margin_left = 5.0
-content_margin_right = 5.0
+content_margin_left = 6.25
+content_margin_right = 6.25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j7feq"]
-content_margin_left = 5.0
+content_margin_left = 6.25
 content_margin_top = 0.0
-content_margin_right = 5.0
-content_margin_bottom = 2.0
+content_margin_right = 6.25
+content_margin_bottom = 2.5
 bg_color = Color(1, 1, 1, 0.1)
-corner_radius_bottom_right = 15
-expand_margin_left = 6.0
-expand_margin_top = 6.0
-expand_margin_right = 10.0
-expand_margin_bottom = 10.0
+corner_radius_bottom_right = 19
+expand_margin_left = 7.5
+expand_margin_top = 7.5
+expand_margin_right = 12.5
+expand_margin_bottom = 12.5
 
 [node name="ModButton" type="Button" unique_id=481407611]
-custom_minimum_size = Vector2(400, 65)
-offset_right = 8.0
-offset_bottom = 8.0
+custom_minimum_size = Vector2(500, 81.25)
+offset_right = 10.0
+offset_bottom = 10.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_wunyc")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_43aj5")
 theme_override_styles/hover = SubResource("StyleBoxFlat_w2ft7")
@@ -100,7 +100,7 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_xnhch")
 
 [node name="H" type="HBoxContainer" parent="Margin" unique_id=9393891]
 layout_mode = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 19
 
 [node name="ModEmblem" parent="Margin/H" unique_id=1476244224 instance=ExtResource("2_w2ft7")]
 layout_mode = 2
@@ -109,14 +109,14 @@ text = "NA"
 [node name="Pill" type="VBoxContainer" parent="Margin/H" unique_id=148253781]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 7
+theme_override_constants/separation = 9
 alignment = 1
 
 [node name="Title" type="Label" parent="Margin/H/Pill" unique_id=1437972188]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxEmpty_w2ft7")
 text = "Mod Title"
 
@@ -124,7 +124,7 @@ text = "Mod Title"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_j7feq")
 text = "Damage"
 vertical_alignment = 1

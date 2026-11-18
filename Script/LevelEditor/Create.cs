@@ -278,7 +278,7 @@ public partial class Create : Control
 		// ButtonFade makes its label at runtime; the copy would show the Verify label on top of its own
 		foreach (var child in btn.GetChildren()) { btn.RemoveChild(child); child.Free(); }
 		btn.StringText = title;
-		btn.CustomMinimumSize = new Vector2(Math.Max(100, title.Length * 11), 0);
+		btn.CustomMinimumSize = new Vector2(Math.Max(125, title.Length * 14 + 20), 0); // room for the label at the 1080p font size
 		verifyBtn.GetParent().AddChild(btn);
 		btn.Pressed += () => Menu(mode);
 		return panel;
@@ -491,7 +491,7 @@ public partial class Create : Control
 		AddChild(dlg);
 		dlg.FileSelected += p => { onPicked(p); dlg.QueueFree(); };
 		dlg.Canceled += dlg.QueueFree;
-		dlg.PopupCentered(new Vector2I(900, 600));
+		dlg.PopupCentered(new Vector2I(1125, 750));
 	}
 
 	private void OnFilesDropped(string[] files)
@@ -748,8 +748,8 @@ public partial class Create : Control
 		column.AddChild(new HSeparator());
 		void Tool(string text, string tip, Action action)
 		{
-			var b = new Button { Text = text, TooltipText = tip, FocusMode = FocusModeEnum.None, CustomMinimumSize = new Vector2(80, 34) };
-			b.AddThemeFontSizeOverride("font_size", 13);
+			var b = new Button { Text = text, TooltipText = tip, FocusMode = FocusModeEnum.None, CustomMinimumSize = new Vector2(100, 43) };
+			b.AddThemeFontSizeOverride("font_size", 16);
 			b.Pressed += action;
 			column.AddChild(b);
 		}
@@ -759,11 +759,11 @@ public partial class Create : Control
 		Tool("To taps", "Turn the selected hold notes into taps", () => EditSelection(n => n.EndTime = -1));
 
 		var sounds = new HBoxContainer();
-		sounds.AddThemeConstantOverride("separation", 2);
+		sounds.AddThemeConstantOverride("separation", 3);
 		foreach (var (label, flag, tip) in new[] { ("W", 2, "whistle"), ("F", 4, "finish"), ("C", 8, "clap") })
 		{
-			var b = new Button { Text = label, TooltipText = $"Toggle the {tip} hitsound on the selected notes", FocusMode = FocusModeEnum.None, CustomMinimumSize = new Vector2(25, 30) };
-			b.AddThemeFontSizeOverride("font_size", 13);
+			var b = new Button { Text = label, TooltipText = $"Toggle the {tip} hitsound on the selected notes", FocusMode = FocusModeEnum.None, CustomMinimumSize = new Vector2(31.25f, 38) };
+			b.AddThemeFontSizeOverride("font_size", 16);
 			b.Pressed += () => ToggleHitsound(flag);
 			sounds.AddChild(b);
 		}
@@ -1491,7 +1491,7 @@ public partial class Create : Control
 		var dlg = new ConfirmationDialog { Title = title, OkButtonText = "OK" };
 		var box = new VBoxContainer();
 		box.AddChild(new Label { Text = label });
-		var edit = new LineEdit { Text = initial, CustomMinimumSize = new Vector2(320, 0) };
+		var edit = new LineEdit { Text = initial, CustomMinimumSize = new Vector2(400, 0) };
 		box.AddChild(edit);
 		dlg.AddChild(box);
 		AddChild(dlg);

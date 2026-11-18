@@ -9,36 +9,36 @@ bg_color = Color(0.117647, 0.0980392, 0.137255, 1)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qtebl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i2qhk"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-corner_radius_top_right = 25
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
+corner_radius_top_right = 31
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lrmyl"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ifhjv"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_do4l5"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 
 [node name="ControlPanel" type="PanelContainer"]
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -50.0
+offset_top = -62.5
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_amdr4")
@@ -48,7 +48,7 @@ layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="BackButton" type="Button" parent="Box"]
-custom_minimum_size = Vector2(108, 50)
+custom_minimum_size = Vector2(135, 62.5)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_qtebl")
 theme_override_styles/hover = SubResource("StyleBoxFlat_i2qhk")
@@ -64,9 +64,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 1.0
-offset_right = -18.0
-offset_bottom = 1.0
+offset_top = 1.25
+offset_right = -22.5
+offset_bottom = 1.25
 grow_horizontal = 2
 grow_vertical = 2
 text = "Back"
@@ -77,14 +77,14 @@ vertical_alignment = 1
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 50.0
+offset_right = 62.5
 grow_vertical = 2
 texture = ExtResource("2_eljtg")
 stretch_mode = 3
 
 [node name="Next" type="Button" parent="Box"]
 visible = false
-custom_minimum_size = Vector2(108, 50)
+custom_minimum_size = Vector2(135, 62.5)
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_styles/focus = SubResource("StyleBoxEmpty_qtebl")

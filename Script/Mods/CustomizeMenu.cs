@@ -30,15 +30,15 @@ public partial class CustomizeMenu : PanelContainer
 		{
 			customizebtn.StringText = "Close Customize";
 			// Move the mod menu panel down
-			_customizeTween.TweenProperty(_modmenuPanel, "size", new Vector2(_modmenuPanel.Size.X - 400, _modmenuPanel.Size.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-			_customizeTween.TweenProperty(this, "position", new Vector2(Position.X - 400, Position.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+			_customizeTween.TweenProperty(_modmenuPanel, "size", new Vector2(_modmenuPanel.Size.X - 500, _modmenuPanel.Size.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+			_customizeTween.TweenProperty(this, "position", new Vector2(Position.X - 500, Position.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		}
 		else
 		{
 			customizebtn.StringText = "Customize";
 			// Move the mod menu panel back to its original position
-			_customizeTween.TweenProperty(_modmenuPanel, "size", new Vector2(_modmenuPanel.Size.X + 400, _modmenuPanel.Size.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-			_customizeTween.TweenProperty(this, "position", new Vector2(Position.X + 400, Position.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+			_customizeTween.TweenProperty(_modmenuPanel, "size", new Vector2(_modmenuPanel.Size.X + 500, _modmenuPanel.Size.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+			_customizeTween.TweenProperty(this, "position", new Vector2(Position.X + 500, Position.Y), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		}
 		_customizeTween.Play();
 	}

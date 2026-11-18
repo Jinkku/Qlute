@@ -6,27 +6,27 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eu4ee"]
 bg_color = Color(0.136719, 0.136719, 0.136719, 1)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fuyg4"]
-content_margin_left = 15.0
-content_margin_right = 15.0
+content_margin_left = 18.75
+content_margin_right = 18.75
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_brkpi"]
 bg_color = Color(0, 0, 0, 0.392157)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
 
 [node name="ModEmblem" type="PanelContainer"]
-custom_minimum_size = Vector2(80, 30)
-offset_right = 40.0
-offset_bottom = 40.0
+custom_minimum_size = Vector2(100, 37.5)
+offset_right = 50.0
+offset_bottom = 50.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_eu4ee")
 script = ExtResource("1_gnskv")
 metadata/ModName = ""
@@ -39,7 +39,7 @@ alignment = 1
 [node name="Name" type="Label" parent="Customizations"]
 use_parent_material = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxEmpty_fuyg4")
 text = "DT"
 horizontal_alignment = 1

@@ -48,7 +48,7 @@ public partial class MultiplayerList : PanelContainer
 		_filter.ItemSelected += _ => { _seenRooms = -1; _seenOnline = -1; };
 
 		// Direct connect, for networks that block broadcasts.
-		_directIp = new LineEdit { PlaceholderText = "IP or IP:port", CustomMinimumSize = new Vector2(170, 0) };
+		_directIp = new LineEdit { PlaceholderText = "IP or IP:port", CustomMinimumSize = new Vector2(213, 0) };
 		_directIp.TextSubmitted += _ => JoinDirect();
 		var joinButton = LanUi.Style(new Button { Text = "Join IP" });
 		joinButton.Pressed += JoinDirect;
@@ -170,7 +170,7 @@ public partial class MultiplayerList : PanelContainer
 		}
 		var count = players.GetNode<Label>("PlayerCount");
 		count.Visible = true;
-		count.CustomMinimumSize = new Vector2(110, 50);
+		count.CustomMinimumSize = new Vector2(138, 63);
 		count.Text = $"{playerCount} player{(playerCount == 1 ? "" : "s")}";
 	}
 

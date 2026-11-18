@@ -34,14 +34,14 @@ public partial class Playfield : Control
 				Label.AnchorTop = 1f;
 				Label.AnchorRight = 0.5f;
 				Label.AnchorBottom = 1f;
-				Label.OffsetLeft = -50;
-				Label.OffsetTop = -19;
-				Label.OffsetRight = 50;
+				Label.OffsetLeft = -63;
+				Label.OffsetTop = -23.75f;
+				Label.OffsetRight = 63;
 				Label.OffsetBottom = 0;
 				Label.GrowHorizontal = GrowDirection.Both;
 				Label.GrowVertical = GrowDirection.Begin;
 
-				Label.Position = new Vector2(Label.Position.X, Label.Position.Y - 100);
+				Label.Position = new Vector2(Label.Position.X, Label.Position.Y - 125);
 				Label.Text = SettingsOperator.GetSetting($"Key{id}").ToString();
 				tween.TweenProperty(Label, "self_modulate:a", 0, 0.5f).SetDelay(1);
 				KeyLabels.Add(Label);

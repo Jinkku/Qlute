@@ -11,36 +11,36 @@ bg_color = Color(0.164706, 0.137255, 0.172549, 1)
 bg_color = Color(0, 0, 0, 0.196078)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_diqlj"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 20.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 25.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nyj5r"]
-content_margin_left = 10.0
-content_margin_top = 5.0
-content_margin_right = 10.0
-content_margin_bottom = 5.0
+content_margin_left = 12.5
+content_margin_top = 6.25
+content_margin_right = 12.5
+content_margin_bottom = 6.25
 bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tmh7k"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rw8iw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o5vd0"]
-content_margin_left = 5.0
-content_margin_top = 2.0
-content_margin_right = 5.0
-content_margin_bottom = 2.0
+content_margin_left = 6.25
+content_margin_top = 2.5
+content_margin_right = 6.25
+content_margin_bottom = 2.5
 bg_color = Color(0.279999, 0.234604, 0.292969, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [node name="PanelContainer" type="PanelContainer" unique_id=100824197]
 anchors_preset = 15
@@ -55,7 +55,7 @@ script = ExtResource("1_tmh7k")
 layout_mode = 2
 
 [node name="Title" type="PanelContainer" parent="VBoxContainer" unique_id=131790557]
-custom_minimum_size = Vector2(0, 150)
+custom_minimum_size = Vector2(0, 187.5)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_r6ipc")
 
@@ -66,7 +66,7 @@ size_flags_vertical = 8
 [node name="Title" type="Label" parent="VBoxContainer/Title/H" unique_id=1600240066]
 layout_mode = 2
 size_flags_vertical = 8
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxEmpty_diqlj")
 text = "Multiplayer List"
 vertical_alignment = 2
@@ -74,14 +74,14 @@ vertical_alignment = 2
 [node name="Marg" type="MarginContainer" parent="VBoxContainer/Title/H" unique_id=657397393]
 layout_mode = 2
 size_flags_horizontal = 10
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
+theme_override_constants/margin_left = 19
+theme_override_constants/margin_top = 19
+theme_override_constants/margin_right = 19
+theme_override_constants/margin_bottom = 19
 
 [node name="Tools" type="HBoxContainer" parent="VBoxContainer/Title/H/Marg" unique_id=1318270261]
 layout_mode = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 19
 
 [node name="CheckButton" type="CheckButton" parent="VBoxContainer/Title/H/Marg/Tools" unique_id=556793730]
 layout_mode = 2
@@ -100,7 +100,7 @@ popup/item_2/id = 2
 
 [node name="Refresh" type="Button" parent="VBoxContainer/Title/H/Marg/Tools" unique_id=1154956953]
 self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(187.5, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_nyj5r")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_nyj5r")
@@ -121,7 +121,7 @@ vertical_alignment = 1
 
 [node name="CR2" type="Button" parent="VBoxContainer/Title/H/Marg/Tools" unique_id=1645453357]
 self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(187.5, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_nyj5r")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_nyj5r")
@@ -142,7 +142,7 @@ vertical_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=125681276]
 layout_mode = 2
-theme_override_constants/separation = 25
+theme_override_constants/separation = 31
 theme_override_styles/separator = SubResource("StyleBoxEmpty_rw8iw")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=1451045385]
@@ -150,7 +150,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer" unique_id=1508342007]
-custom_minimum_size = Vector2(700, 0)
+custom_minimum_size = Vector2(875, 0)
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 3

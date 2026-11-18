@@ -105,7 +105,7 @@ public partial class TopPanel : ColorRect
 			_tween.TweenProperty(ChatBox, "position", new Vector2(0, GetViewportRect().Size.Y - ChatBox.Size.Y), 0.3f)
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
-			_tween.TweenProperty(GetTree().CurrentScene, "position", new Vector2(0, -50), 0.3f)
+			_tween.TweenProperty(GetTree().CurrentScene, "position", new Vector2(0, -63), 0.3f)
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
 			_tween.TweenProperty(GetTree().CurrentScene, "modulate", new Color(0.5f, 0.5f, 0.5f, 1f), 0.3f)
@@ -183,7 +183,7 @@ public partial class TopPanel : ColorRect
 				NotiCard.Modulate = new Color(1f, 1f, 1f, 0f);
 				var tween = NotiCard.CreateTween();
 				tween.SetParallel(true);
-				tween.TweenProperty(NotiCard, "position:x", GetViewportRect().Size.X - NotiCard.Size.X - 10, 0.4f)
+				tween.TweenProperty(NotiCard, "position:x", GetViewportRect().Size.X - NotiCard.Size.X - 13, 0.4f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
 				tween.TweenProperty(NotiCard, "modulate", new Color(1f, 1f, 1f, 1f), 0.4f)

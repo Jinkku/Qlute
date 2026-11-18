@@ -4,15 +4,15 @@
 [ext_resource type="Script" uid="uid://dw3mrygoabesl" path="res://Script/SettingsSection/GameplaySettings.cs" id="2_a1pxt"]
 
 [node name="Gameplay" type="PanelContainer" unique_id=1784822534]
-custom_minimum_size = Vector2(250, 0)
-offset_right = 40.0
-offset_bottom = 40.0
+custom_minimum_size = Vector2(312.5, 0)
+offset_right = 50.0
+offset_bottom = 50.0
 theme_override_styles/panel = ExtResource("1_a1pxt")
 script = ExtResource("2_a1pxt")
 
 [node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Title" type="Label" parent="Rows" unique_id=528032714]
 layout_mode = 2

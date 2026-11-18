@@ -9,14 +9,14 @@ variation_opentype = {
 }
 
 [node name="Lan" type="PanelContainer"]
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 50.0
+offset_bottom = 50.0
 theme_override_styles/panel = ExtResource("2_tab")
 script = ExtResource("1_lan")
 
 [node name="Rows" type="VBoxContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Section" type="Label" parent="Rows"]
 layout_mode = 2

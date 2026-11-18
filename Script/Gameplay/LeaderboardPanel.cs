@@ -62,8 +62,8 @@ public partial class LeaderboardPanel : PanelContainer
 			leaderboardEntry.SetMeta("rank", ranknum);
 			leaderboardEntry.SetMeta("playing", false);
 			LeaderboardContainer.AddChild(leaderboardEntry);
-			leaderboardEntry.Position = new Vector2(0, ((ranknum - 1) * leaderboardEntry.Size.Y) + (ranknum * 5)); // Adjust position based on rank
-			LeadSize += (int)leaderboardEntry.Size.Y + 5;
+			leaderboardEntry.Position = new Vector2(0, ((ranknum - 1) * leaderboardEntry.Size.Y) + (ranknum * 6)); // Adjust position based on rank
+			LeadSize += (int)leaderboardEntry.Size.Y + 6;
 			leaderboardEntry.ProcessMode = ProcessModeEnum.Pausable;
 			leaderboardEntry.Visible = false;
 			LeaderboardEntries.Add(new LeaderboardStatus
@@ -85,7 +85,7 @@ public partial class LeaderboardPanel : PanelContainer
 		playerEntry.SetMeta("rank", ranknum);
 		playerEntry.SetMeta("username", User);
 		playerEntry.SetMeta("playing", true);
-		playerEntry.Position = new Vector2(0, ((ranknum - 1) * playerEntry.Size.Y) + (ranknum * 5)); // Adjust position based on rank
+		playerEntry.Position = new Vector2(0, ((ranknum - 1) * playerEntry.Size.Y) + (ranknum * 6)); // Adjust position based on rank
 		LeaderboardContainer.AddChild(playerEntry);
 		LeaderboardEntries.Add(new LeaderboardStatus
 		{
@@ -109,9 +109,9 @@ public partial class LeaderboardPanel : PanelContainer
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	private Vector2 Convert_Position(PanelContainer Node, int ID)
 	{
-		float Y = -5;
+		float Y = -6;
 		Y += ID * Node.Size.Y; // Grabs Node ID then times it to the Node's Size
-		Y += (ID + 1) * 5; // Then Adds a offset of 5
+		Y += (ID + 1) * 6; // Then Adds a offset of 6
 		return new Vector2(0, Y); // returns value
 	}
 	private int oldscore { get; set; }

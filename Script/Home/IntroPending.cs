@@ -181,8 +181,8 @@ public partial class IntroPending : Control
     public override void _PhysicsProcess(double delta)
     {
 		Vector2 screenSize = GetViewportRect().Size;
-		float offsetX = (SettingsOperator.MouseMovement.X / screenSize.X * 5) - 5;
-		float offsetY = (SettingsOperator.MouseMovement.Y / screenSize.Y * 5) - 5;
+		float offsetX = (SettingsOperator.MouseMovement.X / screenSize.X * 6.25f) - 6.25f;
+		float offsetY = (SettingsOperator.MouseMovement.Y / screenSize.Y * 6.25f) - 6.25f;
 
 		Position = new Vector2(offsetX, offsetY);
     }

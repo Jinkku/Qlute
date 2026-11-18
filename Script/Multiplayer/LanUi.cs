@@ -25,8 +25,8 @@ public static class LanUi
 	private static StyleBoxFlat Box(Color c)
 	{
 		var sb = new StyleBoxFlat { BgColor = c };
-		sb.SetCornerRadiusAll(8);
-		sb.SetContentMarginAll(8);
+		sb.SetCornerRadiusAll(10);
+		sb.SetContentMarginAll(10);
 		return sb;
 	}
 

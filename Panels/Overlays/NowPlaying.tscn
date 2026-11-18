@@ -9,65 +9,65 @@
 [ext_resource type="Texture2D" uid="uid://7jh4dm1rrsff" path="res://Resources/System/MusicPlayer/Next.png" id="8_617ia"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wsnno"]
-content_margin_bottom = 15.0
+content_margin_bottom = 18.75
 bg_color = Color(0.160784, 0.160784, 0.160784, 1)
-border_width_bottom = 3
+border_width_bottom = 4
 border_color = Color(0.498039, 0.415686, 0.952941, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="Texture2DRD" id="Texture2DRD_pkmya"]
 
 [sub_resource type="Texture2DRD" id="Texture2DRD_617ia"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6vilc"]
-content_margin_top = 5.0
-content_margin_bottom = 5.0
+content_margin_top = 6.25
+content_margin_bottom = 6.25
 bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h74x6"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 bg_color = Color(0, 0, 0, 0.588235)
 draw_center = false
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s31hx"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 bg_color = Color(0, 0.648438, 1, 0.588235)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jkubj"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 bg_color = Color(0.21875, 0.21875, 0.21875, 0.588235)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h74x6"]
 
 [node name="NowPlaying" type="PanelContainer"]
 clip_children = 2
-custom_minimum_size = Vector2(370, 150)
-offset_right = 40.0
-offset_bottom = 40.0
+custom_minimum_size = Vector2(462.5, 187.5)
+offset_right = 50.0
+offset_bottom = 50.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_wsnno")
 script = ExtResource("1_jkubj")
 
@@ -91,7 +91,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/normal_font_size = 14
+theme_override_font_sizes/normal_font_size = 18
 text = "Artist - verrryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy Big Title!"
 scroll_following = true
 autowrap_mode = 0
@@ -108,18 +108,18 @@ script = ExtResource("4_6pqoc")
 
 [node name="SPACE" type="MarginContainer" parent="V"]
 layout_mode = 2
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_bottom = 5
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_bottom = 6
 
 [node name="PlayerControls" type="HBoxContainer" parent="V"]
 layout_mode = 2
 alignment = 1
 
 [node name="Prev" type="Button" parent="V/PlayerControls"]
-custom_minimum_size = Vector2(30, 30)
+custom_minimum_size = Vector2(37.5, 37.5)
 layout_mode = 2
-theme_override_constants/icon_max_width = 30
-theme_override_font_sizes/font_size = 12
+theme_override_constants/icon_max_width = 38
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_h74x6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_s31hx")
 theme_override_styles/hover = SubResource("StyleBoxFlat_jkubj")
@@ -128,10 +128,10 @@ icon = ExtResource("6_pkmya")
 icon_alignment = 1
 
 [node name="Play" type="Button" parent="V/PlayerControls"]
-custom_minimum_size = Vector2(30, 30)
+custom_minimum_size = Vector2(37.5, 37.5)
 layout_mode = 2
-theme_override_constants/icon_max_width = 30
-theme_override_font_sizes/font_size = 12
+theme_override_constants/icon_max_width = 38
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_h74x6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_s31hx")
 theme_override_styles/hover = SubResource("StyleBoxFlat_jkubj")
@@ -140,10 +140,10 @@ icon = ExtResource("6_2pwl0")
 icon_alignment = 1
 
 [node name="Next" type="Button" parent="V/PlayerControls"]
-custom_minimum_size = Vector2(30, 30)
+custom_minimum_size = Vector2(37.5, 37.5)
 layout_mode = 2
-theme_override_constants/icon_max_width = 30
-theme_override_font_sizes/font_size = 12
+theme_override_constants/icon_max_width = 38
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_h74x6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_s31hx")
 theme_override_styles/hover = SubResource("StyleBoxFlat_jkubj")

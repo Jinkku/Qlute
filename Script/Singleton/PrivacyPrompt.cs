@@ -34,7 +34,7 @@ public partial class PrivacyPrompt : CanvasLayer
 		center.SetAnchorsPreset(Control.LayoutPreset.FullRect);
 		dim.AddChild(center);
 
-		var panel = new PanelContainer { CustomMinimumSize = new Vector2(560, 0) };
+		var panel = new PanelContainer { CustomMinimumSize = new Vector2(700, 0) };
 		center.AddChild(panel);
 		if (panel.GetThemeStylebox("panel") is StyleBoxFlat themed)
 		{
@@ -46,11 +46,11 @@ public partial class PrivacyPrompt : CanvasLayer
 		foreach (var side in new[] { "left", "right", "top", "bottom" }) margin.AddThemeConstantOverride($"margin_{side}", 24);
 		panel.AddChild(margin);
 		var rows = new VBoxContainer();
-		rows.AddThemeConstantOverride("separation", 12);
+		rows.AddThemeConstantOverride("separation", 15);
 		margin.AddChild(rows);
 
 		var title = new Label { Text = "Before you play" };
-		title.AddThemeFontSizeOverride("font_size", 26);
+		title.AddThemeFontSizeOverride("font_size", 33);
 		rows.AddChild(title);
 		rows.AddChild(Text("These are all off unless you turn them on. You can change them any time in Settings."));
 
@@ -63,7 +63,7 @@ public partial class PrivacyPrompt : CanvasLayer
 
 		var buttons = new HBoxContainer { Alignment = BoxContainer.AlignmentMode.End };
 		rows.AddChild(buttons);
-		var ok = new Button { Text = "Continue", CustomMinimumSize = new Vector2(140, 40) };
+		var ok = new Button { Text = "Continue", CustomMinimumSize = new Vector2(175, 50) };
 		ok.Pressed += Apply;
 		buttons.AddChild(ok);
 		ok.CallDeferred(Control.MethodName.GrabFocus);
@@ -73,14 +73,14 @@ public partial class PrivacyPrompt : CanvasLayer
 	{
 		Text = text,
 		AutowrapMode = TextServer.AutowrapMode.WordSmart,
-		CustomMinimumSize = new Vector2(500, 0),
+		CustomMinimumSize = new Vector2(625, 0),
 		Modulate = new Color(1, 1, 1, 0.75f),
 	};
 
 	private static CheckButton Option(VBoxContainer parent, string name, string description)
 	{
 		var box = new VBoxContainer();
-		box.AddThemeConstantOverride("separation", 2);
+		box.AddThemeConstantOverride("separation", 3);
 		var toggle = new CheckButton { Text = name, ButtonPressed = false };
 		box.AddChild(toggle);
 		box.AddChild(Text(description));

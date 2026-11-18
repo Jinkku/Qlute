@@ -5,10 +5,10 @@
 [ext_resource type="PackedScene" uid="uid://c4ca3nunb7uk" path="res://Panels/Overlays/VolumeKnob.tscn" id="3_0tmqw"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ew4jh"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 texture = ExtResource("1_koaag")
 
 [node name="VolumeLayer" type="CanvasLayer" unique_id=1959460631]
@@ -18,7 +18,7 @@ follow_viewport_enabled = true
 [node name="VolumeControl" type="PanelContainer" parent="." unique_id=1252821071]
 process_mode = 3
 z_index = 1000
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(250, 0)
 anchors_preset = 9
 anchor_bottom = 1.0
 grow_vertical = 2
@@ -27,7 +27,7 @@ script = ExtResource("1_ew4jh")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VolumeControl" unique_id=208869232]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 25
 alignment = 1
 
 [node name="Master" parent="VolumeControl/VBoxContainer" unique_id=1028432286 instance=ExtResource("3_0tmqw")]
@@ -37,7 +37,7 @@ VolumeTitle = "Music"
 ShowMute = true
 
 [node name="Sample" parent="VolumeControl/VBoxContainer" unique_id=1208704163 instance=ExtResource("3_0tmqw")]
-custom_minimum_size = Vector2(180, 180)
+custom_minimum_size = Vector2(225, 225)
 layout_mode = 2
 value = 67.0
 VolumeTitle = "Sample"

@@ -12,10 +12,10 @@ material = SubResource("ShaderMaterial_7qcgk")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -10.0
-offset_top = -10.0
-offset_right = 10.0
-offset_bottom = 10.0
+offset_left = -12.5
+offset_top = -12.5
+offset_right = 12.5
+offset_bottom = 12.5
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_ybdrj")
@@ -35,7 +35,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Flash" type="TextureRect" parent="." unique_id=702067170]
-custom_minimum_size = Vector2(427, 0)
+custom_minimum_size = Vector2(533.75, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

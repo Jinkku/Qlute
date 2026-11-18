@@ -154,13 +154,13 @@ public static class PlayerOverlays
 	}
 
 	/// <summary>Rounded website pill button (.pf-btn / .bm-button): primary = lavender with dark bold text, else quiet.</summary>
-	public static Button PillButton(string text, bool primary = false, string tooltip = null, int size = 14, Color? bg = null, Color? hover = null)
+	public static Button PillButton(string text, bool primary = false, string tooltip = null, int size = 18, Color? bg = null, Color? hover = null)
 	{
 		var b = new Button { Text = text, TooltipText = tooltip ?? "", FocusMode = Control.FocusModeEnum.None, MouseDefaultCursorShape = Control.CursorShape.PointingHand };
 		b.AddThemeFontSizeOverride("font_size", size);
 		PaintPill(b, primary, bg, hover);
-		b.AddThemeConstantOverride("icon_max_width", 16);
-		b.AddThemeConstantOverride("h_separation", 7);
+		b.AddThemeConstantOverride("icon_max_width", 20);
+		b.AddThemeConstantOverride("h_separation", 9);
 		return b;
 	}
 
@@ -168,7 +168,7 @@ public static class PlayerOverlays
 	{
 		var normal = bg ?? (primary ? Accent : Quiet);
 		var over = hover ?? (primary ? AccentHover : QuietHover);
-		StyleBox S(Color c) => border is { } line ? new PillBox(c, line, 16, 8) : Style(c, 99, 16, 8);
+		StyleBox S(Color c) => border is { } line ? new PillBox(c, line, 20, 10) : Style(c, 124, 20, 10);
 		b.AddThemeStyleboxOverride("normal", S(normal));
 		b.AddThemeStyleboxOverride("hover", S(over));
 		b.AddThemeStyleboxOverride("pressed", S(over));
@@ -184,23 +184,23 @@ public static class PlayerOverlays
 	}
 
 	/// <summary>Uppercase dim caption over a big white value (.pf-tile / .bm-stat).</summary>
-	public static PanelContainer StatTile(string caption, string value, int valueSize = 21, Color? valueColor = null, string sub = null)
+	public static PanelContainer StatTile(string caption, string value, int valueSize = 26, Color? valueColor = null, string sub = null)
 	{
-		var p = Panel(Tile, 12, 16, 14);
+		var p = Panel(Tile, 15, 20, 18);
 		var v = new VBoxContainer { MouseFilter = Control.MouseFilterEnum.Ignore };
-		v.AddThemeConstantOverride("separation", 4);
+		v.AddThemeConstantOverride("separation", 5);
 		p.AddChild(v);
 		v.AddChild(Caption(caption));
 		var val = Text(value, valueSize, valueColor, bold: true, trim: true);
 		val.TooltipText = value;
 		val.MouseFilter = Control.MouseFilterEnum.Pass;
 		v.AddChild(val);
-		if (!string.IsNullOrEmpty(sub)) v.AddChild(Text(sub, 12, Dim));
+		if (!string.IsNullOrEmpty(sub)) v.AddChild(Text(sub, 15, Dim));
 		return p;
 	}
 
 	/// <summary>Small uppercase, letter-spaced dim label (.pf-tile-label, .bm-stat p, .bm-meta dt).</summary>
-	public static Label Caption(string text, Color? color = null) => Text(text.ToUpperInvariant(), 11, color ?? Dim);
+	public static Label Caption(string text, Color? color = null) => Text(text.ToUpperInvariant(), 14, color ?? Dim);
 
 	/// <summary>
 	/// A rounded bar track (level bar, hit distribution, preview progress): fill the returned row with
@@ -237,7 +237,7 @@ public static class PlayerOverlays
 	public const string ClockGlyph = "<circle cx=\"12\" cy=\"13\" r=\"8\" fill=\"none\" stroke-width=\"2.4\"/><path fill=\"none\" stroke-width=\"2.4\" stroke-linecap=\"round\" d=\"M12 9v4.5l3 2M9.5 2.5h5\"/>";
 
 	/// <summary>A small icon as a control (for chips / rows).</summary>
-	public static TextureRect IconRect(string glyph, Color color, float size = 13)
+	public static TextureRect IconRect(string glyph, Color color, float size = 16.25f)
 	{
 		return new TextureRect
 		{
@@ -250,10 +250,10 @@ public static class PlayerOverlays
 	/// <summary>Segmented tabs (.pb-tabs / .cs-options): returns the bar; Add buttons with <see cref="SegmentButton"/>.</summary>
 	public static PanelContainer SegmentBar(out HBoxContainer row)
 	{
-		var bar = Panel(new Color("#00000033"), 10, 3, 3);
+		var bar = Panel(new Color("#00000033"), 13, 4, 4);
 		bar.SizeFlagsHorizontal = Control.SizeFlags.ShrinkBegin;
 		row = new HBoxContainer();
-		row.AddThemeConstantOverride("separation", 2);
+		row.AddThemeConstantOverride("separation", 3);
 		bar.AddChild(row);
 		return bar;
 	}
@@ -261,21 +261,21 @@ public static class PlayerOverlays
 	public static Button SegmentButton(string text)
 	{
 		var b = new Button { Text = text, FocusMode = Control.FocusModeEnum.None, MouseDefaultCursorShape = Control.CursorShape.PointingHand };
-		b.AddThemeFontSizeOverride("font_size", 14);
+		b.AddThemeFontSizeOverride("font_size", 18);
 		PaintSegment(b, false);
 		return b;
 	}
 
 	public static void PaintSegment(Button b, bool on)
 	{
-		var normal = Style(on ? Quiet : Colors.Transparent, 8, 14, 6);
-		if (on) { normal.BorderColor = Accent; normal.BorderWidthBottom = 2; }
-		var hover = on ? normal : Style(Tile, 8, 14, 6);
+		var normal = Style(on ? Quiet : Colors.Transparent, 10, 18, 8);
+		if (on) { normal.BorderColor = Accent; normal.BorderWidthBottom = 3; }
+		var hover = on ? normal : Style(Tile, 10, 18, 8);
 		b.AddThemeStyleboxOverride("normal", normal);
 		b.AddThemeStyleboxOverride("hover", hover);
 		b.AddThemeStyleboxOverride("pressed", normal);
 		b.AddThemeStyleboxOverride("hover_pressed", normal);
-		b.AddThemeStyleboxOverride("disabled", Style(Colors.Transparent, 8, 14, 6));
+		b.AddThemeStyleboxOverride("disabled", Style(Colors.Transparent, 10, 18, 8));
 		b.AddThemeStyleboxOverride("focus", new StyleBoxEmpty());
 		var c = on ? Colors.White : new Color("#ffffff8c");
 		b.AddThemeColorOverride("font_color", c);
@@ -335,7 +335,7 @@ public static class PlayerOverlays
 		_ => new Color("#555055"),
 	};
 
-	public static StyleBoxFlat Style(Color bg, int radius = 0, int marginX = 15, int marginY = 10)
+	public static StyleBoxFlat Style(Color bg, int radius = 0, int marginX = 19, int marginY = 13)
 	{
 		var s = new StyleBoxFlat { BgColor = bg };
 		s.SetCornerRadiusAll(radius);
@@ -347,7 +347,7 @@ public static class PlayerOverlays
 		return s;
 	}
 
-	public static PanelContainer Panel(Color bg, int radius = 0, int marginX = 15, int marginY = 10)
+	public static PanelContainer Panel(Color bg, int radius = 0, int marginX = 19, int marginY = 13)
 	{
 		var p = new PanelContainer();
 		p.AddThemeStyleboxOverride("panel", Style(bg, radius, marginX, marginY));
@@ -372,7 +372,7 @@ public static class PlayerOverlays
 	}
 
 	/// <summary>Label. trim: shrink with "..." to fit (only for labels that get their width from an expanding parent).</summary>
-	public static Label Text(string text, int size = 14, Color? color = null, bool wrap = false, bool bold = false, bool trim = false)
+	public static Label Text(string text, int size = 18, Color? color = null, bool wrap = false, bool bold = false, bool trim = false)
 	{
 		var l = new Label { Text = text, TextOverrunBehavior = trim ? TextServer.OverrunBehavior.TrimEllipsis : TextServer.OverrunBehavior.NoTrimming, MouseFilter = Control.MouseFilterEnum.Ignore };
 		if (trim) l.ClipText = true;
@@ -384,9 +384,9 @@ public static class PlayerOverlays
 	}
 
 	/// <summary>Small rounded pill (.pp / .mod / .rank).</summary>
-	public static PanelContainer PillLabel(string text, Color bg, int size = 13, float minWidth = 0)
+	public static PanelContainer PillLabel(string text, Color bg, int size = 16, float minWidth = 0)
 	{
-		var p = Panel(bg, 5, 10, 4);
+		var p = Panel(bg, 6, 13, 5);
 		p.CustomMinimumSize = new Vector2(minWidth, 0);
 		p.MouseFilter = Control.MouseFilterEnum.Ignore;
 		var l = Text(text, size, bold: true);
@@ -398,7 +398,7 @@ public static class PlayerOverlays
 	}
 
 	/// <summary>Picture with the website's 5px corners; guest picture until the real one arrives.</summary>
-	public static PanelContainer Picture(string url, float size, int radius = 5)
+	public static PanelContainer Picture(string url, float size, int radius = 6)
 	{
 		var frame = new PanelContainer { ClipChildren = CanvasItem.ClipChildrenMode.Only, CustomMinimumSize = new Vector2(size, size), MouseFilter = Control.MouseFilterEnum.Ignore, SizeFlagsVertical = Control.SizeFlags.ShrinkCenter };
 		frame.AddThemeStyleboxOverride("panel", Style(Colors.White, radius, 0, 0));
@@ -422,13 +422,13 @@ public static class PlayerOverlays
 	/// <summary>The ".infoboxtitle" strip: small caption on the left, optional controls on the right.</summary>
 	public static HBoxContainer TitleBar(Control parent, string caption)
 	{
-		var strip = Panel(TitleStrip, 0, 15, 8);
-		strip.CustomMinimumSize = new Vector2(0, 40);
+		var strip = Panel(TitleStrip, 0, 19, 10);
+		strip.CustomMinimumSize = new Vector2(0, 50);
 		parent.AddChild(strip);
 		var row = new HBoxContainer();
-		row.AddThemeConstantOverride("separation", 8);
+		row.AddThemeConstantOverride("separation", 10);
 		strip.AddChild(row);
-		var l = Text(caption, 13);
+		var l = Text(caption, 16);
 		l.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
 		l.VerticalAlignment = VerticalAlignment.Center;
 		row.AddChild(l);
@@ -439,11 +439,11 @@ public static class PlayerOverlays
 	public static Button FlatButton(string text, string tooltip = null)
 	{
 		var b = new Button { Text = text, TooltipText = tooltip ?? "", Flat = true, FocusMode = Control.FocusModeEnum.None, MouseDefaultCursorShape = Control.CursorShape.PointingHand };
-		b.AddThemeFontSizeOverride("font_size", 13);
-		b.AddThemeStyleboxOverride("normal", Style(Pill, 5, 10, 4));
-		b.AddThemeStyleboxOverride("hover", Style(ModPill, 5, 10, 4));
-		b.AddThemeStyleboxOverride("pressed", Style(ModPill, 5, 10, 4));
-		b.AddThemeStyleboxOverride("disabled", Style(Pill, 5, 10, 4));
+		b.AddThemeFontSizeOverride("font_size", 16);
+		b.AddThemeStyleboxOverride("normal", Style(Pill, 6, 13, 5));
+		b.AddThemeStyleboxOverride("hover", Style(ModPill, 6, 13, 5));
+		b.AddThemeStyleboxOverride("pressed", Style(ModPill, 6, 13, 5));
+		b.AddThemeStyleboxOverride("disabled", Style(Pill, 6, 13, 5));
 		return b;
 	}
 }

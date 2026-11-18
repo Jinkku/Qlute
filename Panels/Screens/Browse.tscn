@@ -12,10 +12,10 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 0.0392157)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
 
 [sub_resource type="Gradient" id="Shade_gradient"]
 colors = PackedColorArray(0.0705882, 0.0588235, 0.0862745, 0.69, 0.0705882, 0.0588235, 0.0862745, 0.94)
@@ -26,90 +26,90 @@ width = 8
 fill_to = Vector2(0, 1)
 
 [sub_resource type="StyleBoxFlat" id="Search_normal"]
-content_margin_left = 16.0
-content_margin_top = 12.0
-content_margin_right = 16.0
-content_margin_bottom = 12.0
+content_margin_left = 20.0
+content_margin_top = 15.0
+content_margin_right = 20.0
+content_margin_bottom = 15.0
 bg_color = Color(1, 1, 1, 0.0627451)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 0.0784314)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="Search_focus"]
-content_margin_left = 16.0
-content_margin_top = 12.0
-content_margin_right = 16.0
-content_margin_bottom = 12.0
+content_margin_left = 20.0
+content_margin_top = 15.0
+content_margin_right = 20.0
+content_margin_bottom = 15.0
 bg_color = Color(1, 1, 1, 0.0862745)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.952941, 0.729412, 1, 0.6)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-expand_margin_left = 2.0
-expand_margin_top = 2.0
-expand_margin_right = 2.0
-expand_margin_bottom = 2.0
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_left = 2.5
+expand_margin_top = 2.5
+expand_margin_right = 2.5
+expand_margin_bottom = 2.5
 
 [sub_resource type="StyleBoxFlat" id="Toggle_normal"]
-content_margin_left = 16.0
-content_margin_right = 16.0
+content_margin_left = 20.0
+content_margin_right = 20.0
 bg_color = Color(1, 1, 1, 0.0627451)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 0.0784314)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxFlat" id="Toggle_on"]
-content_margin_left = 16.0
-content_margin_right = 16.0
+content_margin_left = 20.0
+content_margin_right = 20.0
 bg_color = Color(1, 1, 1, 0.101961)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 0.0784314)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [sub_resource type="StyleBoxEmpty" id="Empty"]
 
 [sub_resource type="StyleBoxFlat" id="Sortbar_box"]
-content_margin_left = 15.0
-content_margin_top = 10.0
-content_margin_right = 15.0
-content_margin_bottom = 10.0
+content_margin_left = 18.75
+content_margin_top = 12.5
+content_margin_right = 18.75
+content_margin_bottom = 12.5
 draw_center = false
 border_width_top = 1
 border_color = Color(1, 1, 1, 0.0784314)
 
 [sub_resource type="StyleBoxFlat" id="Sort_track"]
-content_margin_left = 3.0
-content_margin_top = 3.0
-content_margin_right = 3.0
-content_margin_bottom = 3.0
+content_margin_left = 3.75
+content_margin_top = 3.75
+content_margin_right = 3.75
+content_margin_bottom = 3.75
 bg_color = Color(0, 0, 0, 0.2)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
 
 [sub_resource type="Animation" id="Animation_1f010"]
 length = 0.001
@@ -172,8 +172,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 50.0
-offset_bottom = -50.0
+offset_top = 62.5
+offset_bottom = -62.5
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -190,14 +190,14 @@ horizontal_scroll_mode = 0
 [node name="Page" type="MarginContainer" parent="BeatmapSec/Scroll" unique_id=1623184323]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 30
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 30
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 38
+theme_override_constants/margin_top = 23
+theme_override_constants/margin_right = 38
+theme_override_constants/margin_bottom = 30
 
 [node name="Content" type="VBoxContainer" parent="BeatmapSec/Scroll/Page" unique_id=2040329830]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 18
 
 [node name="Panel" type="PanelContainer" parent="BeatmapSec/Scroll/Page/Content" unique_id=101476422]
 clip_children = 1
@@ -224,43 +224,43 @@ theme_override_constants/separation = 0
 
 [node name="Top" type="MarginContainer" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner" unique_id=853901123]
 layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 14
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 12
+theme_override_constants/margin_left = 19
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 19
+theme_override_constants/margin_bottom = 15
 
 [node name="VBox" type="VBoxContainer" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/Top" unique_id=1621517151]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 15
 
 [node name="Heading" type="Label" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/Top/VBox" unique_id=314756128]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "beatmap listing"
 
 [node name="SearchRow" type="HBoxContainer" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/Top/VBox" unique_id=1132976983]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="SearchBox" type="LineEdit" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/Top/VBox/SearchRow" unique_id=681424566]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_placeholder_color = Color(1, 1, 1, 0.35)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("Search_normal")
 theme_override_styles/focus = SubResource("Search_focus")
 placeholder_text = "Search titles, artists, mappers, tags, sources..."
 clear_button_enabled = true
 
 [node name="FiltersButton" type="Button" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/Top/VBox/SearchRow" unique_id=926223968]
-custom_minimum_size = Vector2(108, 0)
+custom_minimum_size = Vector2(135, 0)
 layout_mode = 2
 focus_mode = 0
 theme_override_colors/font_color = Color(1, 1, 1, 0.8)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_pressed_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 19
 theme_override_styles/normal = SubResource("Toggle_normal")
 theme_override_styles/pressed = SubResource("Toggle_on")
 theme_override_styles/hover = SubResource("Toggle_on")
@@ -280,13 +280,13 @@ theme_override_styles/panel = SubResource("Sortbar_box")
 
 [node name="HBox" type="HBoxContainer" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/SortBar" unique_id=452455988]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 18
 
 [node name="Label" type="Label" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/SortBar/HBox" unique_id=1442620953]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.54902, 0.862745, 1, 1)
 theme_override_fonts/font = ExtResource("4_bold")
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 14
 text = "SORT"
 
 [node name="Track" type="PanelContainer" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/SortBar/HBox" unique_id=1713068283]
@@ -295,12 +295,12 @@ theme_override_styles/panel = SubResource("Sort_track")
 
 [node name="SortOptions" type="HBoxContainer" parent="BeatmapSec/Scroll/Page/Content/Panel/Inner/SortBar/HBox/Track" unique_id=1086377272]
 layout_mode = 2
-theme_override_constants/separation = 2
+theme_override_constants/separation = 3
 
 [node name="Beatmaps" type="GridContainer" parent="BeatmapSec/Scroll/Page/Content" unique_id=629038110]
 layout_mode = 2
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 10
+theme_override_constants/h_separation = 13
+theme_override_constants/v_separation = 13
 columns = 4
 
 [node name="Hint" type="Label" parent="BeatmapSec/Scroll/Page/Content" unique_id=1406382475]
@@ -316,19 +316,20 @@ layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 theme_override_colors/font_color = Color(0.952941, 0.729412, 1, 1)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 16
 text = "Clear filters"
 flat = true
 
 [node name="ControlPanel" parent="." unique_id=1035389225 instance=ExtResource("2_287m4")]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 1
 
 [node name="Loadingicon" type="Sprite2D" parent="." unique_id=440900807]
+scale = Vector2(1.25, 1.25)
 visible = false
 z_index = 5
 texture_filter = 2
-position = Vector2(175, 25)
+position = Vector2(218.75, 31.25)
 texture = ExtResource("3_287m4")
 
 [node name="Loadinganimation" type="AnimationPlayer" parent="Loadingicon" unique_id=783617607]

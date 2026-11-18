@@ -53,14 +53,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 72
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 90
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
 
 [node name="Root" type="VBoxContainer" parent="Margin" unique_id=157873008]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 20
 
 [node name="Header" parent="Margin/Root" unique_id=124944339 instance=ExtResource("4_header")]
 layout_mode = 2
@@ -68,7 +68,7 @@ layout_mode = 2
 [node name="Columns" type="HBoxContainer" parent="Margin/Root" unique_id=1637945642]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 16
+theme_override_constants/separation = 20
 
 [node name="Players" parent="Margin/Root/Columns" unique_id=4316891 instance=ExtResource("5_players")]
 layout_mode = 2
@@ -82,8 +82,8 @@ layout_mode = 2
 [node name="TransferHostDialog" type="ConfirmationDialog" parent="." unique_id=520067919]
 oversampling_override = 1.0
 title = "Change host"
-position = Vector2i(0, 36)
-size = Vector2i(460, 160)
+position = Vector2i(0, 45)
+size = Vector2i(575, 200)
 ok_button_text = "Make host"
 dialog_autowrap = true
 

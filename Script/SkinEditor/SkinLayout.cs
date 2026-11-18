@@ -32,6 +32,9 @@ public class SkinLayoutEntry
 public static class SkinLayout
 {
 	public const string CustomizablePath = "res://Panels/GameplayElements/Customizable/";
+	/// <summary>settings.json key saying which base resolution the layout's X/Y pixels are for. Missing = 720 (older skins).</summary>
+	public const string BaseKey = "LayoutBase";
+	public const int BaseHeight = 1080;
 	public const string AddedMeta = "skin_layout_key";
 	public static readonly string[] PointNames =
 	{

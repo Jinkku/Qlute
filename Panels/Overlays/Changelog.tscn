@@ -3,22 +3,22 @@
 [ext_resource type="Script" uid="uid://28tapmbq8w6k" path="res://Script/Changelog/Changelog.cs" id="1_rvpxu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tivcd"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0.2627451, 0.21960784, 0.27450982, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d5ayf"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0, 0, 0, 0.101960786)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [node name="ChangeLog" type="Control"]
 z_index = 4
@@ -37,8 +37,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 140.0
-offset_right = -140.0
+offset_left = 175.0
+offset_right = -175.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_behavior_recursive = 2
@@ -51,7 +51,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 25
+theme_override_constants/separation = 31
 
 [node name="Title" type="Label" parent="Pill/Scroll/Rows"]
 layout_mode = 2

@@ -333,10 +333,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -210.0
-offset_top = -260.0
-offset_right = 210.0
-offset_bottom = -147.0
+offset_left = -262.5
+offset_top = -325.0
+offset_right = 262.5
+offset_bottom = -183.75
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
@@ -349,7 +349,7 @@ stretch_mode = 2
 
 [node name="DisclaimerText" type="Label" parent="DisclaimerEpilepsy" unique_id=2096121912]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "Disclaimer
 This game can have rapidly changing colours
 Please take caution if you are affected by epilepsy "
@@ -379,34 +379,35 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -719.5
-offset_top = -57.5
-offset_right = 719.5
-offset_bottom = 57.5
+offset_left = -899.375
+offset_top = -71.875
+offset_right = 899.375
+offset_bottom = 71.875
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Jingle" type="AudioStreamPlayer" parent="CenterContainer/ExperimentalDisclaimer/Expeeee" unique_id=1056321109]
 
 [node name="RotatingBox" type="Control" parent="CenterContainer/ExperimentalDisclaimer/Expeeee" unique_id=1410837934]
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="HeartHeartHeart" type="Sprite2D" parent="CenterContainer/ExperimentalDisclaimer/Expeeee/RotatingBox" unique_id=501475973]
+scale = Vector2(1.25, 1.25)
 texture = ExtResource("4_8teab")
 
 [node name="ExperimentalTitle" type="Label" parent="CenterContainer/ExperimentalDisclaimer/Expeeee" unique_id=125247420]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.820312, 0, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 text = "!! Development Build !!"
 horizontal_alignment = 1
 
 [node name="ExperimentalDesc" type="Label" parent="CenterContainer/ExperimentalDisclaimer/Expeeee" unique_id=1080401958]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "You are running a development build of Qlute.
 You will not be able to submit scores on this build unless u use the latest build on the Official Website
 
@@ -423,14 +424,14 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -145.5
-offset_top = -38.0
-offset_right = 145.5
-offset_bottom = 38.0
+offset_left = -181.875
+offset_top = -47.5
+offset_right = 181.875
+offset_bottom = 47.5
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(145.5, 36.65)
-theme_override_font_sizes/font_size = 64
+pivot_offset = Vector2(181.875, 45.8125)
+theme_override_font_sizes/font_size = 80
 text = "Welcome"
 horizontal_alignment = 1
 vertical_alignment = 1

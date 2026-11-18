@@ -16,8 +16,8 @@ public partial class SkinEditorCanvas : Control
 	private static readonly Color Accent = new(1f, 0.6f, 0.1f);
 	private static readonly Color AnchorColour = new(1f, 0.3f, 0.45f);
 	private static readonly Color OriginColour = new(1f, 0.85f, 0.2f);
-	private const float HandleRadius = 7f;
-	private const float RotateDistance = 28f;
+	private const float HandleRadius = 8.75f;
+	private const float RotateDistance = 35f;
 	private const float MinScale = 0.05f;
 
 	private enum DragMode { None, Move, Scale, Rotate }
@@ -241,7 +241,7 @@ public partial class SkinEditorCanvas : Control
 	{
 		if (_clipboard == null || string.IsNullOrEmpty(_clipboardScene)) return;
 		var t = _clipboard.Clone();
-		t.X += 20; t.Y += 20;
+		t.X += 25; t.Y += 25;
 		AddComponent(_clipboardScene, t);
 	}
 
@@ -323,7 +323,7 @@ public partial class SkinEditorCanvas : Control
 		handle = Vector2I.Zero;
 		rotate = false;
 		if (c == null) return false;
-		if (RotateKnob(c).DistanceTo(global) <= HandleRadius + 2)
+		if (RotateKnob(c).DistanceTo(global) <= HandleRadius + 3)
 		{
 			rotate = true;
 			return true;
@@ -331,7 +331,7 @@ public partial class SkinEditorCanvas : Control
 		var t = ElementGlobal(c);
 		foreach (var h in Handles(c))
 		{
-			if ((t * HandleLocal(h, c.Size)).DistanceTo(global) <= HandleRadius + 2)
+			if ((t * HandleLocal(h, c.Size)).DistanceTo(global) <= HandleRadius + 3)
 			{
 				handle = h;
 				return true;
@@ -495,7 +495,7 @@ public partial class SkinEditorCanvas : Control
 
 		bool ctrl = key.CtrlPressed || key.MetaPressed;
 		bool handled = true;
-		float step = key.ShiftPressed ? 10f : 1f;
+		float step = key.ShiftPressed ? 12.5f : 1f;
 		switch (key.Keycode)
 		{
 			case Key.Z when ctrl && key.ShiftPressed: Redo(); break;
@@ -523,7 +523,7 @@ public partial class SkinEditorCanvas : Control
 		var pts = new[] { t * Vector2.Zero, t * new Vector2(size.X, 0), t * size, t * new Vector2(0, size.Y) };
 		for (int i = 0; i < 4; i++)
 		{
-			if (dashed) DrawDashedLine(pts[i], pts[(i + 1) % 4], colour, width, 6f);
+			if (dashed) DrawDashedLine(pts[i], pts[(i + 1) % 4], colour, width, 7.5f);
 			else DrawLine(pts[i], pts[(i + 1) % 4], colour, width, true);
 		}
 	}
@@ -540,7 +540,7 @@ public partial class SkinEditorCanvas : Control
 			bool hidden = Layout.TryGetValue(SkinLayout.KeyOf(c), out var e) && !e.Visible;
 			if (hidden) continue;
 			var col = c == _hovered ? new Color(1, 1, 1, 0.8f) : new Color(1, 1, 1, 0.18f);
-			DrawQuad(ElementGlobal(c), c.Size, col, c == _hovered ? 2f : 1f);
+			DrawQuad(ElementGlobal(c), c.Size, col, c == _hovered ? 2.5f : 1.25f);
 		}
 
 		var sel = Selected;
@@ -551,7 +551,7 @@ public partial class SkinEditorCanvas : Control
 		bool selHidden = !entry.Visible;
 		var accent = selHidden ? new Color(0.6f, 0.6f, 0.6f) : Accent;
 
-		DrawQuad(t, size, accent, 2f, selHidden);
+		DrawQuad(t, size, accent, 2.5f, selHidden);
 
 		// Anchor (on parent) linked to origin (on element).
 		var anchorGlobal = ParentGlobal(sel) * (SkinLayout.Frac(entry.Anchor) * SkinLayout.ParentSize(sel));
@@ -559,26 +559,26 @@ public partial class SkinEditorCanvas : Control
 		DrawDashedLine(anchorGlobal, originGlobal, new Color(AnchorColour, 0.8f), 1.5f, 5f);
 		DrawColoredPolygon(new[]
 		{
-			anchorGlobal + new Vector2(0, -7), anchorGlobal + new Vector2(7, 0),
-			anchorGlobal + new Vector2(0, 7), anchorGlobal + new Vector2(-7, 0),
+			anchorGlobal + new Vector2(0, -8.75f), anchorGlobal + new Vector2(8.75f, 0),
+			anchorGlobal + new Vector2(0, 8.75f), anchorGlobal + new Vector2(-8.75f, 0),
 		}, AnchorColour);
-		DrawCircle(originGlobal, 5f, OriginColour);
-		DrawCircle(originGlobal, 5f, Colors.Black, false, 1f);
+		DrawCircle(originGlobal, 6.25f, OriginColour);
+		DrawCircle(originGlobal, 6.25f, Colors.Black, false, 1.25f);
 
 		if (!selHidden)
 		{
 			var topCentre = t * new Vector2(size.X / 2, 0);
 			var knob = RotateKnob(sel);
-			DrawLine(topCentre, knob, accent, 1.5f, true);
-			DrawCircle(knob, HandleRadius - 1, Colors.White);
-			DrawCircle(knob, HandleRadius - 1, accent, false, 2f, true);
+			DrawLine(topCentre, knob, accent, 1.875f, true);
+			DrawCircle(knob, HandleRadius - 1.25f, Colors.White);
+			DrawCircle(knob, HandleRadius - 1.25f, accent, false, 2.5f, true);
 
 			foreach (var h in Handles(sel))
 			{
 				var p = t * HandleLocal(h, size);
-				var r = new Rect2(p - Vector2.One * (HandleRadius - 2), Vector2.One * (HandleRadius - 2) * 2);
+				var r = new Rect2(p - Vector2.One * (HandleRadius - 3), Vector2.One * (HandleRadius - 3) * 3);
 				DrawRect(r, Colors.White);
-				DrawRect(r, accent, false, 2f);
+				DrawRect(r, accent, false, 2.5f);
 			}
 		}
 
@@ -588,8 +588,8 @@ public partial class SkinEditorCanvas : Control
 		var corners = new[] { t * Vector2.Zero, t * new Vector2(size.X, 0), t * size, t * new Vector2(0, size.Y) };
 		var top = corners.MinBy(p => p.Y);
 		var left = corners.Min(p => p.X);
-		var textPos = new Vector2(left, top.Y - (selHidden ? 10 : RotateDistance + 12));
-		DrawString(font, textPos + Vector2.One, label, HorizontalAlignment.Left, -1, 14, new Color(0, 0, 0, 0.7f));
-		DrawString(font, textPos, label, HorizontalAlignment.Left, -1, 14, accent);
+		var textPos = new Vector2(left, top.Y - (selHidden ? 13 : RotateDistance + 15));
+		DrawString(font, textPos + Vector2.One, label, HorizontalAlignment.Left, -1, 18, new Color(0, 0, 0, 0.7f));
+		DrawString(font, textPos, label, HorizontalAlignment.Left, -1, 18, accent);
 	}
 }

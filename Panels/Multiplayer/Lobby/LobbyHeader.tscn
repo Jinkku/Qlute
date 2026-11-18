@@ -27,18 +27,18 @@ LeaveButton = NodePath("H/Leave")
 
 [node name="H" type="HBoxContainer" parent="." unique_id=753663337]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 25
 
 [node name="Info" type="VBoxContainer" parent="H" unique_id=433247258]
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-theme_override_constants/separation = 8
+theme_override_constants/separation = 10
 
 [node name="TitleRow" type="HBoxContainer" parent="H/Info" unique_id=1619868220]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="RoomTitle" type="Label" parent="H/Info/TitleRow" unique_id=1142352440]
 layout_mode = 2
@@ -47,9 +47,9 @@ text = "Room name"
 
 [node name="RenameEdit" type="LineEdit" parent="H/Info/TitleRow" unique_id=1978412538]
 visible = false
-custom_minimum_size = Vector2(340, 0)
+custom_minimum_size = Vector2(425, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 25
 placeholder_text = "Room name"
 max_length = 40
 select_all_on_focus = true
@@ -63,36 +63,36 @@ text = "Rename"
 
 [node name="Pills" type="HBoxContainer" parent="H/Info" unique_id=576668507]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="Host" type="Label" parent="H/Info/Pills" unique_id=1654114151]
 layout_mode = 2
 theme_type_variation = &"LobbyAccentPill"
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 13
 text = "HOST  name"
 
 [node name="Players" type="Label" parent="H/Info/Pills" unique_id=1991542315]
 layout_mode = 2
 theme_type_variation = &"LobbyPill"
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 13
 text = "1 PLAYER"
 
 [node name="Phase" type="Label" parent="H/Info/Pills" unique_id=732306094]
 layout_mode = 2
 theme_type_variation = &"LobbyPill"
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 13
 text = "IN LOBBY"
 
 [node name="Countdown" type="VBoxContainer" parent="H" unique_id=973230536]
-custom_minimum_size = Vector2(250, 0)
+custom_minimum_size = Vector2(312.5, 0)
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_constants/separation = 2
+theme_override_constants/separation = 3
 
 [node name="Caption" type="Label" parent="H/Countdown" unique_id=49968946]
 layout_mode = 2
 theme_type_variation = &"LobbySubtle"
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "WAITING FOR A BEATMAP"
 horizontal_alignment = 1
 
@@ -103,27 +103,27 @@ text = "-:--"
 horizontal_alignment = 1
 
 [node name="Bar" type="ProgressBar" parent="H/Countdown" unique_id=147926364]
-custom_minimum_size = Vector2(0, 6)
+custom_minimum_size = Vector2(0, 7.5)
 layout_mode = 2
 show_percentage = false
 
 [node name="HostControls" type="VBoxContainer" parent="H" unique_id=355046941]
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="TimerRow" type="HBoxContainer" parent="H/HostControls" unique_id=1783281066]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="Minus" type="Button" parent="H/HostControls/TimerRow" unique_id=11742464]
-custom_minimum_size = Vector2(62, 0)
+custom_minimum_size = Vector2(77.5, 0)
 layout_mode = 2
 tooltip_text = "Shorter countdown"
 text = "-15s"
 
 [node name="Value" type="Label" parent="H/HostControls/TimerRow" unique_id=110060925]
-custom_minimum_size = Vector2(56, 0)
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 tooltip_text = "Countdown length"
 mouse_filter = 0
@@ -132,7 +132,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Plus" type="Button" parent="H/HostControls/TimerRow" unique_id=1474023447]
-custom_minimum_size = Vector2(62, 0)
+custom_minimum_size = Vector2(77.5, 0)
 layout_mode = 2
 tooltip_text = "Longer countdown"
 text = "+15s"
@@ -144,7 +144,7 @@ text = "Start now"
 
 [node name="Spectate" type="Button" parent="H" unique_id=1769519517]
 visible = false
-custom_minimum_size = Vector2(140, 60)
+custom_minimum_size = Vector2(175, 75)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Watch the players in the match (grid or one by one)"
@@ -152,7 +152,7 @@ theme_type_variation = &"LobbyGhostButton"
 text = "Spectate"
 
 [node name="Ready" type="Button" parent="H" unique_id=1275420087]
-custom_minimum_size = Vector2(140, 60)
+custom_minimum_size = Vector2(175, 75)
 layout_mode = 2
 size_flags_vertical = 4
 theme_type_variation = &"LobbyReadyButton"
@@ -160,7 +160,7 @@ toggle_mode = true
 text = "Ready up"
 
 [node name="Leave" type="Button" parent="H" unique_id=675865480]
-custom_minimum_size = Vector2(120, 60)
+custom_minimum_size = Vector2(150, 75)
 layout_mode = 2
 size_flags_vertical = 4
 theme_type_variation = &"LobbyDangerButton"

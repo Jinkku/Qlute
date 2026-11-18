@@ -59,8 +59,8 @@ _data = {
 [node name="AccountButton" type="Button"]
 process_mode = 3
 self_modulate = Color(0.5, 0, 0.421875, 1)
-offset_right = 200.0
-offset_bottom = 50.0
+offset_right = 250.0
+offset_bottom = 62.5
 mouse_filter = 1
 theme_override_styles/normal = SubResource("StyleBoxFlat_fw7wp")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_qq0m8")
@@ -72,8 +72,8 @@ script = ExtResource("1_d1csl")
 [node name="ProfilePicture" type="TextureRect" parent="."]
 process_mode = 3
 layout_mode = 0
-offset_right = 50.0
-offset_bottom = 50.0
+offset_right = 62.5
+offset_bottom = 62.5
 texture = ExtResource("1_2c1a5")
 expand_mode = 1
 stretch_mode = 4
@@ -82,20 +82,20 @@ stretch_mode = 4
 process_mode = 3
 visible = false
 layout_mode = 0
-offset_left = 55.0
-offset_top = 25.0
-offset_right = 103.0
-offset_bottom = 44.0
+offset_left = 68.75
+offset_top = 31.25
+offset_right = 128.75
+offset_bottom = 55.0
 text = "#?"
 script = ExtResource("2_d1csl")
 
 [node name="UPlayerName" type="Label" parent="."]
 process_mode = 3
 layout_mode = 1
-offset_left = 55.0
-offset_top = 5.0
-offset_right = 196.0
-offset_bottom = 46.0
+offset_left = 68.75
+offset_top = 6.25
+offset_right = 245.0
+offset_bottom = 57.5
 text = "If your seeing 
 this... it broke :<"
 clip_text = true
@@ -103,10 +103,11 @@ text_overrun_behavior = 3
 script = ExtResource("3_fij06")
 
 [node name="Loadingicon" type="Sprite2D" parent="."]
+scale = Vector2(1.25, 1.25)
 process_mode = 3
 visible = false
 texture_filter = 1
-position = Vector2(175, 25)
+position = Vector2(218.75, 31.25)
 texture = ExtResource("4_8qi8d")
 
 [node name="Loadinganimation" type="AnimationPlayer" parent="Loadingicon"]
@@ -117,11 +118,11 @@ libraries = {
 
 [node name="Placeholder" type="Control" parent="."]
 process_mode = 3
-custom_minimum_size = Vector2(69, 60)
+custom_minimum_size = Vector2(86.25, 75)
 layout_mode = 1
 anchors_preset = 0
-offset_right = 80.0
-offset_bottom = 41.0
+offset_right = 100.0
+offset_bottom = 51.25
 script = ExtResource("5_eaukw")
 
 [connection signal="pressed" from="." to="." method="_on_AccountButton_pressed"]

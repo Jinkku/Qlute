@@ -24,11 +24,19 @@ public partial class NotePool : Control
 			return; // every note would be fully transparent, so skip the whole loop
 
 		float hitPoint   = Gameplay.HitPoint;
-		float invHit     = 1f / hitPoint;          // multiply instead of divide per note
-		float scroll     = Gameplay.notex;
+		float songMs     = Gameplay.gametime;
+		const float pxPerMs = Gameplay.PxPerMs;
+		const float k    = UiScale.Factor;       // skin note images are sized for the old 1280x720 layout
 		float fieldX     = Gameplay.PlayFieldPOS.X;
+		// Lane step from the real lane sections (their gap is rounded to whole pixels), so notes stay on their lanes.
+		var lanesBox     = Gameplay.Chart;
+		float laneStep   = lanesBox != null && lanesBox.GetChildCount() > 1
+			? ((Control)lanesBox.GetChild(1)).Position.X - ((Control)lanesBox.GetChild(0)).Position.X
+			: 105 * UiScale.Factor;
 		float viewHeight = GetViewportRect().Size.Y;
-		float backH      = Back.GetHeight();
+		var backSize     = Back.GetSize() * k;
+		var foreSize     = Fore.GetSize() * k;
+		float backH      = backSize.Y;
 
 		int maxNotes = Gameplay.MaxNotes;
 		int start = Math.Min(maxNotes, Gameplay.NoteTick);
@@ -42,7 +50,7 @@ public partial class NotePool : Control
 			int part = note.NotePart;
 			if ((uint)part >= (uint)laneCount) continue;   // catches -1 and out of range in one compare
 
-			float y = note.timing + scroll;
+			float y = hitPoint + (note.timing + songMs) * pxPerMs;
 
 			// Cull notes that are off-screen
 			if (y > viewHeight || y + backH < 0) continue;
@@ -51,16 +59,16 @@ public partial class NotePool : Control
 			float alpha = 1f;
 			if (slice)
 			{
-				alpha = (note.timing + scroll) / (viewHeight / 2);
+				alpha = y / (viewHeight / 2);
 				if (alpha <= 0f) continue;                 // invisible, don't draw
 				if (alpha > 1f) alpha = 1f;
 			}
 
 			Color c = lanes[part] * 3;
-			var pos = new Vector2(fieldX + 105 * part, y);
+			var pos = new Vector2(fieldX + laneStep * part, y);
 
-			DrawTexture(Back, pos, new Color(c.R, c.G, c.B, alpha));
-			DrawTexture(Fore, pos, new Color(1f, 1f, 1f, alpha));
+			DrawTextureRect(Back, new Rect2(pos, backSize), false, new Color(c.R, c.G, c.B, alpha));
+			DrawTextureRect(Fore, new Rect2(pos, foreSize), false, new Color(1f, 1f, 1f, alpha));
 		}
 	}
 	private Texture2D Back { get; set; }

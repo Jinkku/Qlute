@@ -19,7 +19,7 @@ public partial class SkinElementRefRect : ReferenceRect
     public override void _Ready()
     {
         BottomRight = GetNode<Button>("BottomRight");
-        Position = new Vector2(100, 100);
+        Position = new Vector2(125, 125);
     }
 
     private void brsideedge(bool br)

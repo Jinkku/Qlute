@@ -101,8 +101,8 @@ public partial class Browse : Control
 	public static int ScrollVertical { get; set; }
 
 	private const int PerPage = 50;
-	private const int CardWidth = 340; // catalog.css: minmax(340px, 1fr)
-	private const int Gap = 10;
+	private const int CardWidth = 425; // catalog.css: minmax(340px, 1fr)
+	private const int Gap = 13;
 	private const string Mine = "mine";
 	/// <summary>Storyboard filter and badges (Browse, cards, beatmap info). Storyboards play in game.</summary>
 	public static readonly bool ShowStoryboard = true;
@@ -209,7 +209,7 @@ public partial class Browse : Control
 
 		// The line explaining the recommendation, above the cards.
 		RecInfo = new Label { AutowrapMode = TextServer.AutowrapMode.WordSmart, Visible = false };
-		RecInfo.AddThemeFontSizeOverride("font_size", 14);
+		RecInfo.AddThemeFontSizeOverride("font_size", 18);
 		RecInfo.AddThemeColorOverride("font_color", new Color(1, 1, 1, 0.85f));
 		BeatmapGrid.GetParent().AddChild(RecInfo);
 		BeatmapGrid.GetParent().MoveChild(RecInfo, BeatmapGrid.GetIndex());
@@ -269,15 +269,15 @@ public partial class Browse : Control
 	private static void EnsureStyles()
 	{
 		if (chipOff != null) return;
-		chipOff   = Box(new Color(1, 1, 1, 0), 999, 12, 5, new Color(1, 1, 1, 0), 0, ChipBorder);
-		chipHover = Box(new Color(1, 1, 1, 0.07f), 999, 12, 5, new Color(1, 1, 1, 0), 0, ChipBorder);
+		chipOff   = Box(new Color(1, 1, 1, 0), 999, 15, 6.25f, new Color(1, 1, 1, 0), 0, ChipBorder);
+		chipHover = Box(new Color(1, 1, 1, 0.07f), 999, 15, 6.25f, new Color(1, 1, 1, 0), 0, ChipBorder);
 		// one smooth outline (PillBox): a StyleBoxFlat border is lighter where its straight and round parts meet
-		chipOn    = new PillBox(new Color(0.72f, 0.5f, 0.82f, 0.26f), new Color(0.953f, 0.729f, 1f, 0.4f), 12, 5, ChipBorder)
-			{ GlowColor = new Color(0.953f, 0.729f, 1f, 0.12f), GlowSize = 8 };
-		sortOff   = Box(new Color(1, 1, 1, 0), 8, 13, 6);
-		sortHover = Box(new Color(1, 1, 1, 0.063f), 8, 13, 6);
-		sortOn    = Box(new Color(1, 1, 1, 0.11f), 8, 13, 6, null, 2);
-		rowLine = new StyleBoxFlat { DrawCenter = false, BorderColor = new Color(1, 1, 1, 0.06f), BorderWidthTop = 1, ContentMarginTop = 6, ContentMarginBottom = 6 };
+		chipOn    = new PillBox(new Color(0.72f, 0.5f, 0.82f, 0.26f), new Color(0.953f, 0.729f, 1f, 0.4f), 15, 6.25f, ChipBorder)
+			{ GlowColor = new Color(0.953f, 0.729f, 1f, 0.12f), GlowSize = 10 };
+		sortOff   = Box(new Color(1, 1, 1, 0), 10, 16.25f, 8);
+		sortHover = Box(new Color(1, 1, 1, 0.063f), 10, 16.25f, 8);
+		sortOn    = Box(new Color(1, 1, 1, 0.11f), 10, 16.25f, 8, null, 3);
+		rowLine = new StyleBoxFlat { DrawCenter = false, BorderColor = new Color(1, 1, 1, 0.06f), BorderWidthTop = 1, ContentMarginTop = 8, ContentMarginBottom = 8 };
 	}
 
 	/// <summary>A small filled circle, the "on" marker in front of a selected chip.</summary>
@@ -305,7 +305,7 @@ public partial class Browse : Control
 		b.AddThemeStyleboxOverride("hover", on ? chipOn! : chipHover!);
 		b.AddThemeStyleboxOverride("pressed", chipOn!);
 		b.AddThemeStyleboxOverride("focus", new StyleBoxEmpty());
-		b.AddThemeFontSizeOverride("font_size", 14);
+		b.AddThemeFontSizeOverride("font_size", 18);
 		b.AddThemeColorOverride("font_color", on ? Colors.White : Dim);
 		b.AddThemeColorOverride("font_hover_color", Colors.White);
 		b.AddThemeColorOverride("font_pressed_color", Colors.White);
@@ -313,8 +313,8 @@ public partial class Browse : Control
 		{
 			b.AddThemeFontOverride("font", BoldFont);
 			b.Icon = Dot(dot);
-			b.AddThemeConstantOverride("icon_max_width", 6);
-			b.AddThemeConstantOverride("h_separation", 7);
+			b.AddThemeConstantOverride("icon_max_width", 8);
+			b.AddThemeConstantOverride("h_separation", 9);
 		}
 		b.Pressed += pressed;
 		return b;
@@ -324,22 +324,22 @@ public partial class Browse : Control
 	{
 		var row = new PanelContainer();
 		if (Filters.GetChildCount() > 0) row.AddThemeStyleboxOverride("panel", rowLine!);
-		else row.AddThemeStyleboxOverride("panel", new StyleBoxFlat { DrawCenter = false, ContentMarginTop = 6, ContentMarginBottom = 6 });
+		else row.AddThemeStyleboxOverride("panel", new StyleBoxFlat { DrawCenter = false, ContentMarginTop = 8, ContentMarginBottom = 8 });
 		var h = new HBoxContainer();
-		h.AddThemeConstantOverride("separation", 10);
+		h.AddThemeConstantOverride("separation", 13);
 		var l = new Label
 		{
 			Text = label.ToUpperInvariant(),
-			CustomMinimumSize = new Vector2(96, 30),
+			CustomMinimumSize = new Vector2(120, 38),
 			VerticalAlignment = VerticalAlignment.Center,
 			SizeFlagsVertical = SizeFlags.ShrinkBegin,
 		};
 		l.AddThemeFontOverride("font", BoldFont);
-		l.AddThemeFontSizeOverride("font_size", 11);
+		l.AddThemeFontSizeOverride("font_size", 14);
 		l.AddThemeColorOverride("font_color", LabelColour);
 		var flow = new HFlowContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
-		flow.AddThemeConstantOverride("h_separation", 6);
-		flow.AddThemeConstantOverride("v_separation", 4);
+		flow.AddThemeConstantOverride("h_separation", 8);
+		flow.AddThemeConstantOverride("v_separation", 5);
 		foreach (var c in chips) flow.AddChild(c);
 		h.AddChild(l);
 		h.AddChild(flow);
@@ -421,7 +421,7 @@ public partial class Browse : Control
 			b.AddThemeStyleboxOverride("hover", on ? sortOn! : sortHover!);
 			b.AddThemeStyleboxOverride("pressed", sortOn!);
 			b.AddThemeStyleboxOverride("focus", new StyleBoxEmpty());
-			b.AddThemeFontSizeOverride("font_size", 14);
+			b.AddThemeFontSizeOverride("font_size", 18);
 			b.AddThemeColorOverride("font_color", on ? Colors.White : Dim);
 			b.AddThemeColorOverride("font_hover_color", Colors.White);
 			if (on) b.AddThemeFontOverride("font", BoldFont);
@@ -728,12 +728,12 @@ public partial class Browse : Control
 		ScrollVertical = BeatmapScroll.ScrollVertical;
 
 		var area = BeatmapSec().GetGlobalRect();
-		Loadingicon.Position = new Vector2(area.GetCenter().X, BeatmapGrid.GetGlobalRect().Position.Y + 60);
+		Loadingicon.Position = new Vector2(area.GetCenter().X, BeatmapGrid.GetGlobalRect().Position.Y + 75);
 
 		// Infinite scroll: fetch the next page when the end is near.
 		var bar = BeatmapScroll.GetVScrollBar();
 		if (!isLoading && !done && Extras.GetMilliseconds() - lastFail > 3000
-			&& ScrollVertical + BeatmapScroll.Size.Y > bar.MaxValue - 600)
+			&& ScrollVertical + BeatmapScroll.Size.Y > bar.MaxValue - 750)
 			LoadPage();
 	}
 

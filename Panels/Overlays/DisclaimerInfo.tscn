@@ -4,24 +4,24 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hn86h"]
 bg_color = Color(0, 0, 0, 0.54902)
-border_width_left = 10
+border_width_left = 13
 border_color = Color(1, 1, 1, 1)
 border_blend = true
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ikwxx"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
+content_margin_left = 12.5
+content_margin_top = 12.5
+content_margin_right = 12.5
+content_margin_bottom = 12.5
 
 [node name="DisclaimerInfo" type="PanelContainer"]
-custom_minimum_size = Vector2(400, 0)
-offset_right = 400.0
-offset_bottom = 104.0
+custom_minimum_size = Vector2(500, 0)
+offset_right = 500.0
+offset_bottom = 130.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_hn86h")
 script = ExtResource("1_ikwxx")
 ColorScheme = Color(1, 1, 1, 1)

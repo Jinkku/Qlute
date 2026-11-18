@@ -4,70 +4,70 @@
 [ext_resource type="PackedScene" uid="uid://cg1d7mkb34w3e" path="res://Panels/Multiplayer/Overlay/Player.tscn" id="1_r3avh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ixxv"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0.371094, 0.371094, 0.371094, 0.588235)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xfkca"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0.331512, 0.476228, 0.554688, 0.588235)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_obo01"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0.46875, 0.46875, 0.46875, 0.588235)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rnm46"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gcijc"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 bg_color = Color(1, 1, 1, 0.156863)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fl6o3"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
+content_margin_left = 12.5
+content_margin_top = 12.5
+content_margin_right = 12.5
+content_margin_bottom = 12.5
 bg_color = Color(1, 1, 1, 0.156863)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="LabelSettings" id="LabelSettings_rnm46"]
 
 [node name="MultiplayerRoom" type="Button" unique_id=182610380]
-custom_minimum_size = Vector2(700, 100)
-offset_right = 700.0
-offset_bottom = 100.0
+custom_minimum_size = Vector2(875, 125)
+offset_right = 875.0
+offset_bottom = 125.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_1ixxv")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_xfkca")
 theme_override_styles/hover = SubResource("StyleBoxFlat_obo01")
@@ -81,10 +81,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
+theme_override_constants/margin_left = 19
+theme_override_constants/margin_top = 19
+theme_override_constants/margin_right = 19
+theme_override_constants/margin_bottom = 19
 
 [node name="Columns" type="HBoxContainer" parent="MarginContainer" unique_id=1833464668]
 layout_mode = 2
@@ -94,7 +94,7 @@ layout_mode = 2
 text = "Multiplayer Name"
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Columns" unique_id=1283247140]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
@@ -105,7 +105,7 @@ layout_mode = 2
 
 [node name="PlayerCount" type="Label" parent="MarginContainer/Columns/PanelContainer/Players" unique_id=76624884]
 visible = false
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(62.5, 62.5)
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_styles/normal = SubResource("StyleBoxFlat_fl6o3")

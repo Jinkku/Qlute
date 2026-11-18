@@ -59,7 +59,7 @@ public partial class RankUpdate : Control
 		UserCard = GD.Load<PackedScene>("res://Panels/UserCard/UserCard.tscn").Instantiate().GetNode<PanelContainer>(".");
 		UserCard.Set("PauseRealTime", true);
 		AddChild(UserCard);
-		UserCard.Position = new Vector2(0, 60);
+		UserCard.Position = new Vector2(0, 75);
 		Rank = UserCard.GetNode<Label>("SplitV/BottomPart/Sections/Rank/Value");
 		Performance = UserCard.GetNode<Label>("SplitV/BottomPart/Sections/Performance/Value");
 		OperatorRank = UserCard.GetNode<Label>("SplitV/BottomPart/Sections/Rank/Operation");
@@ -78,8 +78,8 @@ public partial class RankUpdate : Control
 			Modulate = new Color(1f, 1f, 1f, 0f);
 			Realtime = true;
 			Updated = false;
-			var tmppos = new Vector2(10, Position.Y);
-			var backpos = new Vector2(Position.X - 10, Position.Y);
+			var tmppos = new Vector2(13, Position.Y);
+			var backpos = new Vector2(Position.X - 13, Position.Y);
 			Position = backpos;
 
 			//New Card

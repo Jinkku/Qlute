@@ -12,7 +12,7 @@ public partial class Effect : Control
 	{
 		GD.Print(Size);
 		GD.Print($"Effect Template is {Template}");
-		SqSize = new Vector2(113f, 113f);
+		SqSize = new Vector2(141.25f, 141.25f);
 		if (!Engine.IsEditorHint() && !Template)
 		{
 			GD.Print($"Effect is doing animation");
@@ -36,7 +36,7 @@ public partial class Effect : Control
 
 	public override void _Draw()
 	{
-		DrawRect(new Rect2(new Vector2(Position.X - SqSize.X / 2, Position.Y - SqSize.Y / 2 ), SqSize),new Color(1f,1f,1f,1f),false,3f);
+		DrawRect(new Rect2(new Vector2(Position.X - SqSize.X / 2, Position.Y - SqSize.Y / 2 ), SqSize),new Color(1f,1f,1f,1f),false,3.75f);
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)

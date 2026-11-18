@@ -22,19 +22,19 @@ namespace GodotRichTextHeaders
                 {
                     // H1
                     var text = line.TrimStart('#', ' ');
-                    sb.AppendLine($"[font_size=20]{text}[/font_size]");
+                    sb.AppendLine($"[font_size=25]{text}[/font_size]");
                 }
                 else if (Regex.IsMatch(line, @"^\s*##\s+"))
                 {
                     // H2
                     var text = line.TrimStart('#', ' ');
-                    sb.AppendLine($"[color=#ffbf47][font_size=18]~ {text}[/font_size][/color]");
+                    sb.AppendLine($"[color=#ffbf47][font_size=23]~ {text}[/font_size][/color]");
                 }
                 else if (Regex.IsMatch(line, @"^\s*###\s+"))
                 {
                     // H3
                     var text = line.TrimStart('#', ' ');
-                    sb.AppendLine($"[font_size=16]~ {text}[/font_size]");
+                    sb.AppendLine($"[font_size=20]~ {text}[/font_size]");
                 }
                 else
                 {

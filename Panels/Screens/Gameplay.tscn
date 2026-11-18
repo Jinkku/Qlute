@@ -36,10 +36,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -42.0
-offset_top = -160.0
-offset_right = 42.0
-offset_bottom = -98.0
+offset_left = -52.5
+offset_top = -200.0
+offset_right = 52.5
+offset_bottom = -122.5
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -58,26 +58,26 @@ grow_vertical = 2
 
 [node name="LatencyProfiler" parent="HUD" unique_id=431232302 instance=ExtResource("5_wpryt")]
 layout_mode = 0
-offset_left = 874.0
-offset_top = 309.0
-offset_right = 1013.0
-offset_bottom = 350.0
+offset_left = 1092.5
+offset_top = 386.25
+offset_right = 1266.25
+offset_bottom = 437.5
 
 [node name="ScoreBar" parent="HUD" unique_id=1893795981 instance=ExtResource("2_tii4h")]
 layout_mode = 1
-offset_top = 40.0
-offset_right = 420.0
-offset_bottom = 140.0
+offset_top = 50.0
+offset_right = 525.0
+offset_bottom = 175.0
 
 [node name="SongProgress" parent="HUD" unique_id=1127191830 instance=ExtResource("4_alds2")]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = -30.0
-offset_right = -10.0
-offset_bottom = -11.0
+offset_left = 12.5
+offset_top = -37.5
+offset_right = -12.5
+offset_bottom = -13.75
 grow_vertical = 0
 
 [node name="Leaderboard" parent="HUD" unique_id=1474490500 instance=ExtResource("10_wpryt")]
@@ -85,10 +85,10 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 25.0
-offset_top = -160.0
-offset_right = 345.0
-offset_bottom = 160.0
+offset_left = 31.25
+offset_top = -200.0
+offset_right = 431.25
+offset_bottom = 200.0
 grow_vertical = 2
 scale = Vector2(0.8, 0.8)
 
@@ -99,10 +99,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -35.0
-offset_top = -100.0
-offset_right = -30.0
-offset_bottom = 100.0
+offset_left = -43.75
+offset_top = -125.0
+offset_right = -37.5
+offset_bottom = 125.0
 grow_horizontal = 0
 grow_vertical = 2
 

@@ -5,14 +5,14 @@
 
 [node name="Player" type="TextureRect"]
 clip_children = 1
-custom_minimum_size = Vector2(50, 50)
-offset_right = 40.0
-offset_bottom = 40.0
+custom_minimum_size = Vector2(62.5, 62.5)
+offset_right = 50.0
+offset_bottom = 50.0
 texture = ExtResource("1_mffyp")
 expand_mode = 1
 
 [node name="Icon" type="TextureRect" parent="."]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(62.5, 62.5)
 layout_mode = 0
 texture = ExtResource("2_mffyp")
 expand_mode = 1

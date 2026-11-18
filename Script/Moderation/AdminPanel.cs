@@ -41,7 +41,7 @@ public partial class AdminPanel : Control
 		AddChild(center);
 
 		var view = GetViewportRect().Size;
-		var panel = new PanelContainer { CustomMinimumSize = new Vector2(Mathf.Min(1000, view.X - 40), Mathf.Min(760, view.Y - 80)) };
+		var panel = new PanelContainer { CustomMinimumSize = new Vector2(Mathf.Min(1250, view.X - 50), Mathf.Min(950, view.Y - 100)) };
 		panel.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(PlayerOverlays.Page, 0, 0, 0));
 		center.AddChild(panel);
 		var outer = new VBoxContainer();
@@ -59,9 +59,9 @@ public partial class AdminPanel : Control
 		close.Pressed += Close;
 		bar.AddChild(close);
 
-		var tabsBox = PlayerOverlays.Panel(PlayerOverlays.Box, 0, 15, 10);
+		var tabsBox = PlayerOverlays.Panel(PlayerOverlays.Box, 0, 19, 13);
 		outer.AddChild(tabsBox);
-		var tabs = ModUi.Row(8);
+		var tabs = ModUi.Row(10);
 		tabsBox.AddChild(tabs);
 		foreach (var (tab, text) in new[] { (Tab.Reports, "Reports"), (Tab.Players, "Players"), (Tab.Bans, "Bans"), (Tab.Team, "Team"),
 			(Tab.Notices, "Notices") })
@@ -73,13 +73,13 @@ public partial class AdminPanel : Control
 		}
 
 		_scroll = new ScrollContainer { SizeFlagsVertical = SizeFlags.ExpandFill, HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled };
-		var pageBox = PlayerOverlays.Panel(PlayerOverlays.Box, 0, 15, 12);
+		var pageBox = PlayerOverlays.Panel(PlayerOverlays.Box, 0, 19, 15);
 		pageBox.SizeFlagsVertical = SizeFlags.ExpandFill;
 		outer.AddChild(pageBox);
 		pageBox.AddChild(_scroll);
 		var pageCol = ModUi.Column(10);
 		_scroll.AddChild(pageCol);
-		_hint = ModUi.Para("", 14, PlayerOverlays.Dim);
+		_hint = ModUi.Para("", 18, PlayerOverlays.Dim);
 		pageCol.AddChild(_hint);
 		_page = ModUi.Column(10);
 		pageCol.AddChild(_page);
@@ -136,7 +136,7 @@ public partial class AdminPanel : Control
 		foreach (var (tab, b) in _tabButtons)
 		{
 			var active = tab == _tab || (tab == Tab.Players && _tab == Tab.User);
-			b.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(active ? PlayerOverlays.StatusStrip : PlayerOverlays.Pill, 5, 10, 4));
+			b.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(active ? PlayerOverlays.StatusStrip : PlayerOverlays.Pill, 6, 13, 5));
 			if (tab == Tab.Reports) b.Text = ModerationApi.OpenReports > 0 ? $"Reports ({ModerationApi.OpenReports})" : "Reports";
 			if (tab == Tab.Notices) b.Visible = ModerationApi.IsAdmin; // site content: admins only
 		}
@@ -168,7 +168,7 @@ public partial class AdminPanel : Control
 		foreach (var (text, active, go) in items)
 		{
 			var b = ModUi.Button(text);
-			if (active) b.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(PlayerOverlays.StatusStrip, 5, 10, 4));
+			if (active) b.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(PlayerOverlays.StatusStrip, 6, 13, 5));
 			b.Pressed += go;
 			row.AddChild(b);
 		}
@@ -180,7 +180,7 @@ public partial class AdminPanel : Control
 	private BaseButton NameButton(string username)
 	{
 		var b = new LinkButton { Text = username, Underline = LinkButton.UnderlineMode.OnHover, MouseDefaultCursorShape = CursorShape.PointingHand };
-		b.AddThemeFontSizeOverride("font_size", 15);
+		b.AddThemeFontSizeOverride("font_size", 19);
 		b.AddThemeFontOverride("font", PlayerOverlays.Bold);
 		b.AddThemeColorOverride("font_color", Colors.White);
 		b.Pressed += () => OpenUser(username);
@@ -217,13 +217,13 @@ public partial class AdminPanel : Control
 		head.AddChild(ModUi.Pill(r.CategoryText, PlayerOverlays.ModPill));
 		v.AddChild(head);
 
-		v.AddChild(ModUi.Para($"#{r.Id} reported by {r.Reporter} {ModUi.When(r.Created)} from the {(r.Source == "game" ? "game" : "website")}", 12, PlayerOverlays.Dim));
+		v.AddChild(ModUi.Para($"#{r.Id} reported by {r.Reporter} {ModUi.When(r.Created)} from the {(r.Source == "game" ? "game" : "website")}", 15, PlayerOverlays.Dim));
 		v.AddChild(ModUi.Quote(r.Details));
-		if (!string.IsNullOrEmpty(r.Context)) v.AddChild(ModUi.Para("Context: " + r.Context, 12, PlayerOverlays.Dim));
+		if (!string.IsNullOrEmpty(r.Context)) v.AddChild(ModUi.Para("Context: " + r.Context, 15, PlayerOverlays.Dim));
 		if (r.Status != "open")
-			v.AddChild(ModUi.Para($"{r.Status} by {r.HandledBy} {ModUi.When(r.HandledAt)}{(string.IsNullOrEmpty(r.Note) ? "" : ": " + r.Note)}", 12, PlayerOverlays.Dim));
+			v.AddChild(ModUi.Para($"{r.Status} by {r.HandledBy} {ModUi.When(r.HandledAt)}{(string.IsNullOrEmpty(r.Note) ? "" : ": " + r.Note)}", 15, PlayerOverlays.Dim));
 
-		var msg = ModUi.Para("", 12, ModUi.Accent);
+		var msg = ModUi.Para("", 15, ModUi.Accent);
 		var actions = ModUi.Flow(6);
 		var openPlayer = ModUi.Button("Open player");
 		openPlayer.Pressed += () => OpenUser(r.Target);
@@ -234,7 +234,7 @@ public partial class AdminPanel : Control
 			ban.Pressed += () => OpenUser(r.Target, r.Id);
 			actions.AddChild(ban);
 			var note = ModUi.Input("Note (optional)", 500);
-			note.CustomMinimumSize = new Vector2(200, 0);
+			note.CustomMinimumSize = new Vector2(250, 0);
 			actions.AddChild(note);
 			var resolve = ModUi.Button("Resolve", ModUi.Green);
 			resolve.Pressed += () => Act(msg, () => ModerationApi.CloseReport(r.Id, "resolved", note.Text.Trim()), refreshMe: true);
@@ -281,7 +281,7 @@ public partial class AdminPanel : Control
 		_search.Text = _arg;
 		bar.AddChild(_search);
 		_restrictedOnly = new CheckBox { Text = "Restricted only", FocusMode = FocusModeEnum.None };
-		_restrictedOnly.AddThemeFontSizeOverride("font_size", 13);
+		_restrictedOnly.AddThemeFontSizeOverride("font_size", 16);
 		bar.AddChild(_restrictedOnly);
 		_page.AddChild(bar);
 		_results = ModUi.Column(8);
@@ -313,7 +313,7 @@ public partial class AdminPanel : Control
 			if (u.Restricted) head.AddChild(ModUi.Pill("restricted", ModUi.Red));
 			if (u.Staff != "") head.AddChild(ModUi.Pill(u.Staff, ModUi.Purple));
 			v.AddChild(head);
-			v.AddChild(ModUi.Para($"{(u.Rank > 0 ? $"#{u.Rank:N0}" : "Unranked")} · joined {ModUi.When(u.Joined)} · last seen {ModUi.When(u.LastSeen)}", 12, PlayerOverlays.Dim));
+			v.AddChild(ModUi.Para($"{(u.Rank > 0 ? $"#{u.Rank:N0}" : "Unranked")} · joined {ModUi.When(u.Joined)} · last seen {ModUi.When(u.LastSeen)}", 15, PlayerOverlays.Dim));
 		}
 	}
 
@@ -334,7 +334,7 @@ public partial class AdminPanel : Control
 		Hint("");
 
 		var head = ModUi.Flow(10);
-		head.AddChild(PlayerOverlays.Text(u.Username, 24, bold: true));
+		head.AddChild(PlayerOverlays.Text(u.Username, 30, bold: true));
 		head.AddChild(u.Restricted ? ModUi.Pill("restricted", ModUi.Red) : ModUi.Pill("in good standing", ModUi.Green));
 		if (u.Staff != "") head.AddChild(ModUi.Pill(u.Staff, ModUi.Purple));
 		var profile = ModUi.Button("view profile");
@@ -344,36 +344,36 @@ public partial class AdminPanel : Control
 		_page.AddChild(ModUi.Para(
 			$"Rank: {(u.Rank > 0 ? $"#{u.Rank:N0}" : "unranked")}   {u.Points:N0}pp   {u.Accuracy:0}% acc   {u.Scores:N0} scores   " +
 			$"joined {ModUi.When(u.Joined)}   last seen {ModUi.When(u.LastSeen)}   sent {u.ReportsSent} report{(u.ReportsSent == 1 ? "" : "s")}",
-			13, new Color(1, 1, 1, 0.8f)));
+			16, new Color(1, 1, 1, 0.8f)));
 
 		if (u.Restricted) UnbanForm(u);
 		else if (u.CanBan) BanForm(u);
-		else _page.AddChild(ModUi.Para("You can't ban this account (yourself, or a team member you don't outrank).", 13, PlayerOverlays.Dim));
+		else _page.AddChild(ModUi.Para("You can't ban this account (yourself, or a team member you don't outrank).", 16, PlayerOverlays.Dim));
 
 		_page.AddChild(SectionTitle($"Bans ({u.Bans.Count})"));
-		if (u.Bans.Count == 0) _page.AddChild(ModUi.Para("No bans.", 13, PlayerOverlays.Dim));
+		if (u.Bans.Count == 0) _page.AddChild(ModUi.Para("No bans.", 16, PlayerOverlays.Dim));
 		foreach (var b in u.Bans) _page.AddChild(BanCard(b));
 
 		_page.AddChild(SectionTitle($"Reports about them ({u.ReportsAgainst.Count})"));
-		if (u.ReportsAgainst.Count == 0) _page.AddChild(ModUi.Para("No reports.", 13, PlayerOverlays.Dim));
+		if (u.ReportsAgainst.Count == 0) _page.AddChild(ModUi.Para("No reports.", 16, PlayerOverlays.Dim));
 		foreach (var r in u.ReportsAgainst) _page.AddChild(ReportCard(r));
 	}
 
 	private void BanForm(ModerationApi.UserRow u)
 	{
 		var v = ModUi.Card(_page, PlayerOverlays.Pill);
-		v.AddChild(PlayerOverlays.Text($"Ban {u.Username}{(_reportId > 0 ? $" (from report #{_reportId})" : "")}", 15, bold: true));
-		v.AddChild(PlayerOverlays.Text("Reason (the player sees this)", 13));
+		v.AddChild(PlayerOverlays.Text($"Ban {u.Username}{(_reportId > 0 ? $" (from report #{_reportId})" : "")}", 19, bold: true));
+		v.AddChild(PlayerOverlays.Text("Reason (the player sees this)", 16));
 		var reason = ModUi.Input("e.g. Using an auto-player on ranked maps", 500);
 		v.AddChild(reason);
 
-		v.AddChild(PlayerOverlays.Text("Length", 13));
+		v.AddChild(PlayerOverlays.Text("Length", 16));
 		var row = ModUi.Row(8);
 		var length = ModUi.Options();
 		foreach (var (text, _) in Lengths) length.AddItem(text);
 		length.Selected = 3; // 1 week
 		row.AddChild(length);
-		var amount = new SpinBox { MinValue = 1, MaxValue = 3650, Value = 2, Step = 1, Visible = false, CustomMinimumSize = new Vector2(90, 0) };
+		var amount = new SpinBox { MinValue = 1, MaxValue = 3650, Value = 2, Step = 1, Visible = false, CustomMinimumSize = new Vector2(113, 0) };
 		row.AddChild(amount);
 		var unit = ModUi.Options("hours", "days", "weeks");
 		unit.Selected = 1;
@@ -383,10 +383,10 @@ public partial class AdminPanel : Control
 		v.AddChild(row);
 
 		var closeReports = new CheckBox { Text = "Mark their open reports as resolved", ButtonPressed = true, FocusMode = FocusModeEnum.None };
-		closeReports.AddThemeFontSizeOverride("font_size", 13);
+		closeReports.AddThemeFontSizeOverride("font_size", 16);
 		v.AddChild(closeReports);
 
-		var msg = ModUi.Para("", 12, ModUi.Accent);
+		var msg = ModUi.Para("", 15, ModUi.Accent);
 		var ban = ModUi.ConfirmButton("Ban", "Click again to ban", ModUi.Red, () =>
 		{
 			var text = reason.Text.Trim();
@@ -406,11 +406,11 @@ public partial class AdminPanel : Control
 		var v = ModUi.Card(_page, PlayerOverlays.Pill);
 		var active = u.Bans.Find(b => b.Active);
 		v.AddChild(PlayerOverlays.Text(active == null ? "Restricted by hand (no ban record)"
-			: active.Permanent ? "Banned permanently" : $"Banned, ends {ModUi.When(active.Expires)} ({ModUi.Date(active.Expires)})", 15, bold: true));
-		if (active != null) v.AddChild(ModUi.Para($"Reason: {active.Reason} · by {active.IssuedBy} {ModUi.When(active.Created)}", 12, PlayerOverlays.Dim));
+			: active.Permanent ? "Banned permanently" : $"Banned, ends {ModUi.When(active.Expires)} ({ModUi.Date(active.Expires)})", 19, bold: true));
+		if (active != null) v.AddChild(ModUi.Para($"Reason: {active.Reason} · by {active.IssuedBy} {ModUi.When(active.Created)}", 15, PlayerOverlays.Dim));
 		var note = ModUi.Input("Note (optional): why lift it?", 500);
 		v.AddChild(note);
-		var msg = ModUi.Para("", 12, ModUi.Accent);
+		var msg = ModUi.Para("", 15, ModUi.Accent);
 		var lift = ModUi.ConfirmButton("Lift ban / unrestrict", "Click again to unrestrict", ModUi.Green,
 			() => Act(msg, () => ModerationApi.Unban(u.Username, note.Text.Trim())));
 		var buttons = ModUi.Row();
@@ -430,9 +430,9 @@ public partial class AdminPanel : Control
 		v.AddChild(head);
 		v.AddChild(ModUi.Quote(b.Reason));
 		v.AddChild(ModUi.Para($"By {b.IssuedBy} {ModUi.When(b.Created)} · {(b.Permanent ? "no end date" : b.Active ? $"ends {ModUi.When(b.Expires)} ({ModUi.Date(b.Expires)})" : $"was set to end {ModUi.Date(b.Expires)}")}" +
-			(b.ReportId > 0 ? $" · report #{b.ReportId}" : ""), 12, PlayerOverlays.Dim));
+			(b.ReportId > 0 ? $" · report #{b.ReportId}" : ""), 15, PlayerOverlays.Dim));
 		if (!string.IsNullOrEmpty(b.LiftedBy))
-			v.AddChild(ModUi.Para($"Lifted by {b.LiftedBy} {ModUi.When(b.LiftedAt)}{(string.IsNullOrEmpty(b.LiftNote) ? "" : ": " + b.LiftNote)}", 12, PlayerOverlays.Dim));
+			v.AddChild(ModUi.Para($"Lifted by {b.LiftedBy} {ModUi.When(b.LiftedAt)}{(string.IsNullOrEmpty(b.LiftNote) ? "" : ": " + b.LiftNote)}", 15, PlayerOverlays.Dim));
 		return holder;
 	}
 
@@ -462,17 +462,17 @@ public partial class AdminPanel : Control
 		if (error != null) { Hint(error); return; }
 		Hint("");
 		_page.AddChild(ModUi.Para("Team members get the \"Making the game better\" medal (moderators also get \"Team Moderator\") and can open this panel (here and on the website). " +
-			"Moderators handle reports and bans; admins can also ban moderators and change the team.", 13, PlayerOverlays.Dim));
+			"Moderators handle reports and bans; admins can also ban moderators and change the team.", 16, PlayerOverlays.Dim));
 		foreach (var s in list)
 		{
 			var v = ModUi.Card(_page);
 			var head = ModUi.Flow(8);
 			head.AddChild(NameButton(s.Username));
 			head.AddChild(ModUi.Pill(s.Role, ModUi.Purple));
-			head.AddChild(PlayerOverlays.Text($"added {ModUi.When(s.Added)}{(string.IsNullOrEmpty(s.AddedBy) ? "" : " by " + s.AddedBy)}", 12, PlayerOverlays.Dim));
+			head.AddChild(PlayerOverlays.Text($"added {ModUi.When(s.Added)}{(string.IsNullOrEmpty(s.AddedBy) ? "" : " by " + s.AddedBy)}", 15, PlayerOverlays.Dim));
 			v.AddChild(head);
 			if (!canEdit || s.Username == ApiOperator.Username) continue;
-			var msg = ModUi.Para("", 12, ModUi.Accent);
+			var msg = ModUi.Para("", 15, ModUi.Accent);
 			var actions = ModUi.Row(6);
 			var other = s.Role == "admin" ? "mod" : "admin";
 			var role = ModUi.Button($"Make {other}");
@@ -492,7 +492,7 @@ public partial class AdminPanel : Control
 		row.AddChild(who);
 		var newRole = ModUi.Options("Moderator", "Admin");
 		row.AddChild(newRole);
-		var addMsg = ModUi.Para("", 12, ModUi.Accent);
+		var addMsg = ModUi.Para("", 15, ModUi.Accent);
 		var add = ModUi.Button("Add", ModUi.Green);
 		add.Pressed += () =>
 		{
@@ -519,14 +519,14 @@ public partial class AdminPanel : Control
 		AddChild(dialog);
 		dialog.FileSelected += path => { chosen(path); dialog.QueueFree(); };
 		dialog.Canceled += dialog.QueueFree;
-		dialog.PopupCentered(new Vector2I(900, 600));
+		dialog.PopupCentered(new Vector2I(1125, 750));
 	}
 
 	/// <summary>"Choose image..." button that remembers the file and shows its name.</summary>
 	private Control FilePicker(string title, Action<string> chosen, string buttonText = "Choose image...")
 	{
 		var row = ModUi.Row(8);
-		var label = PlayerOverlays.Text("No file chosen", 12, PlayerOverlays.Dim, trim: true);
+		var label = PlayerOverlays.Text("No file chosen", 15, PlayerOverlays.Dim, trim: true);
 		label.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		label.VerticalAlignment = VerticalAlignment.Center;
 		var pick = ModUi.Button(buttonText);
@@ -553,21 +553,21 @@ public partial class AdminPanel : Control
 		if (!Current(mine)) return;
 		if (error != null) { Hint(error); return; }
 		Hint("");
-		_page.AddChild(ModUi.Para("These banners rotate on the home screen, top to bottom. Clicking one opens its link.", 13, PlayerOverlays.Dim));
-		if (list.Count == 0) _page.AddChild(ModUi.Para("No notices yet. The home screen shows no banners.", 13, PlayerOverlays.Dim));
+		_page.AddChild(ModUi.Para("These banners rotate on the home screen, top to bottom. Clicking one opens its link.", 16, PlayerOverlays.Dim));
+		if (list.Count == 0) _page.AddChild(ModUi.Para("No notices yet. The home screen shows no banners.", 16, PlayerOverlays.Dim));
 		for (int i = 0; i < list.Count; i++) _page.AddChild(NoticeCard(list[i], i, list.Count));
 
 		_page.AddChild(SectionTitle("Add a notice"));
 		var v = ModUi.Card(_page, PlayerOverlays.Pill);
 		string file = null;
 		v.AddChild(FilePicker("Pick the notice image", path => file = path));
-		v.AddChild(PlayerOverlays.Text("Title", 13));
+		v.AddChild(PlayerOverlays.Text("Title", 16));
 		var title = ModUi.Input("e.g. Halloween event", 200);
 		v.AddChild(title);
-		v.AddChild(PlayerOverlays.Text("Link when clicked (optional)", 13));
+		v.AddChild(PlayerOverlays.Text("Link when clicked (optional)", 16));
 		var link = ModUi.Input("https://...", 500);
 		v.AddChild(link);
-		var msg = ModUi.Para("", 12, ModUi.Accent);
+		var msg = ModUi.Para("", 15, ModUi.Accent);
 		var add = ModUi.Button("Add notice", ModUi.Green);
 		add.Pressed += () =>
 		{
@@ -586,12 +586,12 @@ public partial class AdminPanel : Control
 		var v = ModUi.Card(holder, alpha: n.Active ? 1 : 0.75f);
 		var row = ModUi.Row(14);
 		v.AddChild(row);
-		row.AddChild(WebImage(n.Image, new Vector2(200, 130)));
+		row.AddChild(WebImage(n.Image, new Vector2(250, 163)));
 		var col = ModUi.Column(6);
 		row.AddChild(col);
 
 		var head = ModUi.Flow(8);
-		head.AddChild(PlayerOverlays.Text(string.IsNullOrEmpty(n.Text) ? "(untitled)" : n.Text, 15, bold: true));
+		head.AddChild(PlayerOverlays.Text(string.IsNullOrEmpty(n.Text) ? "(untitled)" : n.Text, 19, bold: true));
 		head.AddChild(n.Active ? ModUi.Pill("shown", ModUi.Green) : ModUi.Pill("hidden", PlayerOverlays.ModPill));
 		col.AddChild(head);
 		var title = ModUi.Input("Title", 200);
@@ -603,7 +603,7 @@ public partial class AdminPanel : Control
 		string file = null;
 		col.AddChild(FilePicker("Pick a new image", path => file = path, "Replace image..."));
 
-		var msg = ModUi.Para("", 12, ModUi.Accent);
+		var msg = ModUi.Para("", 15, ModUi.Accent);
 		var actions = ModUi.Flow(6);
 		var save = ModUi.Button("Save", ModUi.Green);
 		save.Pressed += () => Act(msg, () => ModerationApi.EditNotice(n.Id, title.Text.Trim(), link.Text.Trim(), file));

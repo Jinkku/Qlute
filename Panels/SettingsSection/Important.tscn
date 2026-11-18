@@ -8,13 +8,13 @@ variation_opentype = {
 }
 
 [node name="Important" type="PanelContainer" unique_id=1784822534]
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 50.0
+offset_bottom = 50.0
 theme_override_styles/panel = ExtResource("1_0ggam")
 
 [node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Section" type="Label" parent="Rows" unique_id=118251586]
 layout_mode = 2

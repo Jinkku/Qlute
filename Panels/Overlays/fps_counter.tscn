@@ -3,17 +3,17 @@
 [ext_resource type="Script" uid="uid://b1bto8b25fr5r" path="res://Script/Singleton/FpsCounter.cs" id="1_8u44f"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nt8dy"]
-content_margin_left = 5.0
-content_margin_top = 2.0
-content_margin_right = 5.0
-content_margin_bottom = 2.0
+content_margin_left = 6.25
+content_margin_top = 2.5
+content_margin_right = 6.25
+content_margin_bottom = 2.5
 bg_color = Color(0, 0, 0, 0.6)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
 shadow_color = Color(0, 0, 0, 1)
-shadow_offset = Vector2(0, 4)
+shadow_offset = Vector2(0, 5)
 
 [sub_resource type="FontVariation" id="FontVariation_5gjgc"]
 variation_opentype = {
@@ -22,21 +22,21 @@ variation_opentype = {
 
 [sub_resource type="LabelSettings" id="LabelSettings_u8wtu"]
 font = SubResource("FontVariation_5gjgc")
-font_size = 12
+font_size = 15
 
 [node name="FPSCounter" type="PanelContainer" unique_id=2009380641]
 process_mode = 3
 z_index = 1000
-custom_minimum_size = Vector2(60, 35)
+custom_minimum_size = Vector2(75, 43.75)
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -65.0
-offset_top = -45.0
-offset_right = -10.0
-offset_bottom = -10.0
+offset_left = -81.25
+offset_top = -56.25
+offset_right = -12.5
+offset_bottom = -12.5
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 1
@@ -46,7 +46,7 @@ script = ExtResource("1_8u44f")
 [node name="Latency" type="Label" parent="." unique_id=275298795]
 layout_mode = 2
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "100.00ms"
 label_settings = SubResource("LabelSettings_u8wtu")
 horizontal_alignment = 2
@@ -54,7 +54,7 @@ horizontal_alignment = 2
 [node name="FPS" type="Label" parent="." unique_id=971931647]
 layout_mode = 2
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "9999fps"
 label_settings = SubResource("LabelSettings_u8wtu")
 horizontal_alignment = 2

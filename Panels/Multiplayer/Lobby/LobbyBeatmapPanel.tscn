@@ -14,8 +14,8 @@ colors = PackedColorArray(0.03, 0.03, 0.05, 0.92, 0.03, 0.03, 0.05, 0.55, 0.03, 
 gradient = SubResource("Gradient_shade")
 
 [node name="LobbyBeatmapPanel" type="PanelContainer" unique_id=1154276679 node_paths=PackedStringArray("AddButton", "QueueHeading", "QueueList", "OwnHeading", "OwnCard", "MissingRow", "DownloadButton", "TransferBar")]
-offset_right = 602.0
-offset_bottom = 287.0
+offset_right = 752.5
+offset_bottom = 358.75
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.6
 theme = ExtResource("1_theme")
@@ -33,7 +33,7 @@ TransferBar = NodePath("V/MissingRow/TransferBar")
 
 [node name="V" type="VBoxContainer" parent="." unique_id=1451521263]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 15
 
 [node name="Heading" type="Label" parent="V" unique_id=119099045]
 layout_mode = 2
@@ -42,7 +42,7 @@ text = "Beatmap"
 
 [node name="ButtonFade" type="Button" parent="V" unique_id=1938684832]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 script = ExtResource("3_1iqwh")
 StringText = "Add beatmap"
@@ -57,7 +57,7 @@ text = "Queue (x)"
 [node name="Hero" type="PanelContainer" parent="V" unique_id=632535259]
 visible = false
 clip_children = 2
-custom_minimum_size = Vector2(0, 170)
+custom_minimum_size = Vector2(0, 212.5)
 clip_contents = true
 layout_mode = 2
 theme_type_variation = &"LobbyHero"
@@ -78,15 +78,15 @@ expand_mode = 1
 
 [node name="Margin" type="MarginContainer" parent="V/Hero" unique_id=1004412267]
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 20
 
 [node name="Info" type="VBoxContainer" parent="V/Hero/Margin" unique_id=1179784516]
 layout_mode = 2
 size_flags_vertical = 8
-theme_override_constants/separation = 4
+theme_override_constants/separation = 5
 
 [node name="Title" type="Label" parent="V/Hero/Margin/Info" unique_id=51513822]
 layout_mode = 2
@@ -98,14 +98,14 @@ text_overrun_behavior = 3
 [node name="Artist" type="Label" parent="V/Hero/Margin/Info" unique_id=973041710]
 layout_mode = 2
 theme_type_variation = &"LobbySubtle"
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 clip_text = true
 text_overrun_behavior = 3
 
 [node name="Chips" type="HBoxContainer" parent="V/Hero/Margin/Info" unique_id=1813234657]
 visible = false
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="Difficulty" type="Label" parent="V/Hero/Margin/Info/Chips" unique_id=218118891]
 layout_mode = 2
@@ -132,7 +132,7 @@ text_overrun_behavior = 3
 [node name="MissingRow" type="HBoxContainer" parent="V" unique_id=254971332]
 visible = false
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Label" type="Label" parent="V/MissingRow" unique_id=793972411]
 layout_mode = 2
@@ -146,7 +146,7 @@ tooltip_text = "Try downloading it again (Qlute first, then the room)"
 text = "Retry download"
 
 [node name="TransferBar" type="ProgressBar" parent="V/MissingRow" unique_id=208285623]
-custom_minimum_size = Vector2(160, 10)
+custom_minimum_size = Vector2(200, 12.5)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4

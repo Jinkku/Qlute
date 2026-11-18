@@ -14,136 +14,136 @@
 [ext_resource type="Script" uid="uid://babskjhowme4a" path="res://Script/ResultsScreenv2/LeaderboardInfoResult.cs" id="11_8y25b"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_anm4q"]
-content_margin_left = 20.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
+content_margin_left = 25.0
+content_margin_top = 12.5
+content_margin_right = 12.5
+content_margin_bottom = 12.5
 bg_color = Color(0, 0, 0, 0.70000005)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-expand_margin_left = 35.0
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
+expand_margin_left = 43.75
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gw5a4"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
+content_margin_left = 12.5
+content_margin_top = 12.5
+content_margin_right = 12.5
+content_margin_bottom = 12.5
 bg_color = Color(0, 0, 0, 0.45000002)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kpst7"]
-content_margin_left = 42.0
+content_margin_left = 52.5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kpst7"]
-content_margin_left = 20.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
+content_margin_left = 25.0
+content_margin_top = 12.5
+content_margin_right = 12.5
+content_margin_bottom = 12.5
 bg_color = Color(0, 0, 0, 0.45000002)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_661fp"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
+content_margin_left = 12.5
+content_margin_top = 12.5
+content_margin_right = 12.5
+content_margin_bottom = 12.5
 bg_color = Color(0, 0, 0, 0.70000005)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-expand_margin_left = 55.0
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
+expand_margin_left = 68.75
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4oeqo"]
-content_margin_left = 15.0
-content_margin_top = 10.0
-content_margin_right = 15.0
-content_margin_bottom = 10.0
+content_margin_left = 18.75
+content_margin_top = 12.5
+content_margin_right = 18.75
+content_margin_bottom = 12.5
 bg_color = Color(0, 0, 0, 0.70000005)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6dcqk"]
 bg_color = Color(0, 0, 0, 0.70000005)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2qgfu"]
 bg_color = Color(0, 0, 0, 0.4509804)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8y25b"]
-content_margin_left = 25.0
+content_margin_left = 31.25
 texture = ExtResource("4_p8vf7")
 modulate_color = Color(1, 1, 1, 0.70000005)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8y25b"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0.2265625, 0.2265625, 0.2265625, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cyywx"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 35.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 43.75
 bg_color = Color(1, 1, 1, 0.1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7qog1"]
 bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o4gfc"]
-content_margin_left = 15.0
-content_margin_top = 5.0
-content_margin_right = 15.0
-content_margin_bottom = 5.0
+content_margin_left = 18.75
+content_margin_top = 6.25
+content_margin_right = 18.75
+content_margin_bottom = 6.25
 bg_color = Color(1, 1, 1, 0.1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_476ju"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 bg_color = Color(0, 0, 0, 0.45000002)
 
 [node name="ResultScreenv2" type="Control" unique_id=1081809708]
@@ -168,14 +168,14 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="Details" type="PanelContainer" parent="MainScreen" unique_id=865529597]
-custom_minimum_size = Vector2(617, 142)
+custom_minimum_size = Vector2(771.25, 177.5)
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -284.0
-offset_right = 617.0
-offset_bottom = -142.0
+offset_top = -355.0
+offset_right = 771.25
+offset_bottom = -177.5
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_anm4q")
 
@@ -183,16 +183,16 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_anm4q")
 layout_mode = 2
 
 [node name="Stick" type="PanelContainer" parent="MainScreen/Details/Misc" unique_id=660097717]
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -53.0
-offset_top = -34.0
-offset_right = 1.0
-offset_bottom = 10.0
+offset_left = -66.25
+offset_top = -42.5
+offset_right = 1.25
+offset_bottom = 12.5
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_gw5a4")
@@ -204,17 +204,17 @@ text = "Masterpiece of a song >w<"
 vertical_alignment = 1
 
 [node name="Level" type="PanelContainer" parent="MainScreen/Details/Misc" unique_id=1090326346]
-custom_minimum_size = Vector2(100, 44)
+custom_minimum_size = Vector2(125, 55)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -99.0
-offset_top = -34.0
-offset_right = 1.0
-offset_bottom = 10.0
+offset_left = -123.75
+offset_top = -42.5
+offset_right = 1.25
+offset_bottom = 12.5
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 8
@@ -228,34 +228,34 @@ vertical_alignment = 1
 
 [node name="Details" type="VBoxContainer" parent="MainScreen/Details" unique_id=2019293827]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="Title" type="Label" parent="MainScreen/Details/Details" unique_id=102327686]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.43137255, 0.84705883, 1, 1)
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 30
 text = "Amazing Songs"
 
 [node name="Artist" type="Label" parent="MainScreen/Details/Details" unique_id=1255235972]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "idiotplier"
 
 [node name="Mapper" type="Label" parent="MainScreen/Details/Details" unique_id=1022717015]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "mapped by tappa"
 
 [node name="ScoreCount" type="PanelContainer" parent="MainScreen" unique_id=1424154699]
-custom_minimum_size = Vector2(640, 142)
+custom_minimum_size = Vector2(800, 177.5)
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 20.0
-offset_top = -119.0
-offset_right = 660.0
-offset_bottom = 23.0
+offset_left = 25.0
+offset_top = -148.75
+offset_right = 825.0
+offset_bottom = 28.75
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_661fp")
 
@@ -264,11 +264,11 @@ layout_mode = 2
 
 [node name="Score" type="Label" parent="MainScreen/ScoreCount/HBoxContainer" unique_id=1729836171]
 layout_mode = 2
-theme_override_font_sizes/font_size = 90
+theme_override_font_sizes/font_size = 113
 text = "123,456,789"
 
 [node name="Perfect" type="TextureRect" parent="MainScreen/ScoreCount/HBoxContainer" unique_id=2038277710]
-custom_minimum_size = Vector2(120, 100)
+custom_minimum_size = Vector2(150, 125)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
@@ -281,21 +281,21 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 21.0
-offset_top = 46.0
-offset_right = 651.0
-offset_bottom = 125.0
+offset_left = 26.25
+offset_top = 57.5
+offset_right = 813.75
+offset_bottom = 156.25
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="PERFECT" type="PanelContainer" parent="MainScreen/HITCOUNT" unique_id=890498563]
-custom_minimum_size = Vector2(150, 79)
+custom_minimum_size = Vector2(187.5, 98.75)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/HITCOUNT/PERFECT" unique_id=1343445743]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 15
 
 [node name="Title" type="Label" parent="MainScreen/HITCOUNT/PERFECT/VBoxContainer" unique_id=141633072]
 layout_mode = 2
@@ -303,19 +303,19 @@ text = "PERFECT"
 
 [node name="Count" type="Label" parent="MainScreen/HITCOUNT/PERFECT/VBoxContainer" unique_id=1392368523]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "999,456"
 clip_text = true
 text_overrun_behavior = 3
 
 [node name="GREAT" type="PanelContainer" parent="MainScreen/HITCOUNT" unique_id=834916288]
-custom_minimum_size = Vector2(150, 79)
+custom_minimum_size = Vector2(187.5, 98.75)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/HITCOUNT/GREAT" unique_id=1494336839]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 15
 
 [node name="Title" type="Label" parent="MainScreen/HITCOUNT/GREAT/VBoxContainer" unique_id=6263436]
 layout_mode = 2
@@ -323,19 +323,19 @@ text = "GREAT"
 
 [node name="Count" type="Label" parent="MainScreen/HITCOUNT/GREAT/VBoxContainer" unique_id=948321300]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "999,456"
 clip_text = true
 text_overrun_behavior = 3
 
 [node name="MEH" type="PanelContainer" parent="MainScreen/HITCOUNT" unique_id=1391934489]
-custom_minimum_size = Vector2(150, 79)
+custom_minimum_size = Vector2(187.5, 98.75)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/HITCOUNT/MEH" unique_id=888623134]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 15
 
 [node name="Title" type="Label" parent="MainScreen/HITCOUNT/MEH/VBoxContainer" unique_id=977331257]
 layout_mode = 2
@@ -343,19 +343,19 @@ text = "MEH"
 
 [node name="Count" type="Label" parent="MainScreen/HITCOUNT/MEH/VBoxContainer" unique_id=1244748875]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "999,456"
 clip_text = true
 text_overrun_behavior = 3
 
 [node name="MISS" type="PanelContainer" parent="MainScreen/HITCOUNT" unique_id=1608210537]
-custom_minimum_size = Vector2(150, 79)
+custom_minimum_size = Vector2(187.5, 98.75)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/HITCOUNT/MISS" unique_id=927511578]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 15
 
 [node name="Title" type="Label" parent="MainScreen/HITCOUNT/MISS/VBoxContainer" unique_id=1487944434]
 layout_mode = 2
@@ -363,7 +363,7 @@ text = "MISS"
 
 [node name="Count" type="Label" parent="MainScreen/HITCOUNT/MISS/VBoxContainer" unique_id=245389450]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "999,456"
 clip_text = true
 text_overrun_behavior = 3
@@ -373,22 +373,22 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 9.0
-offset_top = 136.0
-offset_right = 656.0
-offset_bottom = 215.0
+offset_left = 11.25
+offset_top = 170.0
+offset_right = 820.0
+offset_bottom = 268.75
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 alignment = 1
 
 [node name="Accuracy" type="PanelContainer" parent="MainScreen/Additional" unique_id=70376905]
-custom_minimum_size = Vector2(118, 79)
+custom_minimum_size = Vector2(147.5, 98.75)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/Additional/Accuracy" unique_id=1127610927]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 15
 
 [node name="Title" type="Label" parent="MainScreen/Additional/Accuracy/VBoxContainer" unique_id=219888036]
 layout_mode = 2
@@ -396,19 +396,19 @@ text = "Accuracy"
 
 [node name="Count" type="Label" parent="MainScreen/Additional/Accuracy/VBoxContainer" unique_id=1383883800]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "100%"
 clip_text = true
 text_overrun_behavior = 3
 
 [node name="Combo" type="PanelContainer" parent="MainScreen/Additional" unique_id=879300807]
-custom_minimum_size = Vector2(118, 79)
+custom_minimum_size = Vector2(147.5, 98.75)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/Additional/Combo" unique_id=738295650]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 15
 
 [node name="Title" type="Label" parent="MainScreen/Additional/Combo/VBoxContainer" unique_id=1939808925]
 layout_mode = 2
@@ -416,19 +416,19 @@ text = "Combo"
 
 [node name="Count" type="Label" parent="MainScreen/Additional/Combo/VBoxContainer" unique_id=218672718]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "456,789x"
 clip_text = true
 text_overrun_behavior = 3
 
 [node name="AvgHit" type="PanelContainer" parent="MainScreen/Additional" unique_id=809866881]
-custom_minimum_size = Vector2(118, 79)
+custom_minimum_size = Vector2(147.5, 98.75)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/Additional/AvgHit" unique_id=1361508592]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 15
 
 [node name="Title" type="Label" parent="MainScreen/Additional/AvgHit/VBoxContainer" unique_id=1006640267]
 layout_mode = 2
@@ -436,19 +436,19 @@ text = "Average Hit"
 
 [node name="Count" type="Label" parent="MainScreen/Additional/AvgHit/VBoxContainer" unique_id=444114609]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "200ms"
 clip_text = true
 text_overrun_behavior = 3
 
 [node name="pp" type="PanelContainer" parent="MainScreen/Additional" unique_id=736527930]
-custom_minimum_size = Vector2(118, 79)
+custom_minimum_size = Vector2(147.5, 98.75)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/Additional/pp" unique_id=977841209]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 15
 
 [node name="Title" type="Label" parent="MainScreen/Additional/pp/VBoxContainer" unique_id=1806061485]
 layout_mode = 2
@@ -456,19 +456,19 @@ text = "pp"
 
 [node name="Count" type="Label" parent="MainScreen/Additional/pp/VBoxContainer" unique_id=482269841]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "99,999pp"
 clip_text = true
 text_overrun_behavior = 3
 
 [node name="Rankgain" type="PanelContainer" parent="MainScreen/Additional" unique_id=1056596546]
-custom_minimum_size = Vector2(126, 79)
+custom_minimum_size = Vector2(157.5, 98.75)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/Additional/Rankgain" unique_id=1110998016]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 15
 
 [node name="Title" type="Label" parent="MainScreen/Additional/Rankgain/VBoxContainer" unique_id=2114707573]
 layout_mode = 2
@@ -476,7 +476,7 @@ text = "Rank"
 
 [node name="Count" type="Label" parent="MainScreen/Additional/Rankgain/VBoxContainer" unique_id=934221541]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "+#999,999"
 clip_text = true
 text_overrun_behavior = 3
@@ -486,25 +486,25 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 9.0
-offset_top = 229.0
-offset_right = 711.0
-offset_bottom = 297.0
+offset_left = 11.25
+offset_top = 286.25
+offset_right = 888.75
+offset_bottom = 371.25
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 alignment = 1
 
 [node name="Card" type="PanelContainer" parent="MainScreen/Additional2" unique_id=420127389]
-custom_minimum_size = Vector2(346, 53)
+custom_minimum_size = Vector2(432.5, 66.25)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_6dcqk")
 
 [node name="Column" type="HBoxContainer" parent="MainScreen/Additional2/Card" unique_id=1690230028]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Number" type="PanelContainer" parent="MainScreen/Additional2/Card/Column" unique_id=1950822967]
-custom_minimum_size = Vector2(97, 0)
+custom_minimum_size = Vector2(121.25, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_2qgfu")
@@ -532,11 +532,11 @@ text = "Guest"
 
 [node name="Achieved" type="Label" parent="MainScreen/Additional2/Card/Column/Row" unique_id=1905258294]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "achieved on 12th Dec 2025"
 
 [node name="Mods" type="PanelContainer" parent="MainScreen/Additional2" unique_id=1219264962]
-custom_minimum_size = Vector2(346, 53)
+custom_minimum_size = Vector2(432.5, 66.25)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_4oeqo")
 
@@ -551,23 +551,23 @@ size_flags_vertical = 2
 text = "Mods"
 
 [node name="Mods" type="HBoxContainer" parent="MainScreen/Additional2/Mods/VBoxContainer" unique_id=1788923982]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 37.5)
 layout_mode = 2
-theme_override_constants/separation = 3
+theme_override_constants/separation = 4
 script = ExtResource("4_476ju")
 
 [node name="Rank" type="PanelContainer" parent="MainScreen" unique_id=1101197781]
-custom_minimum_size = Vector2(657, 533)
+custom_minimum_size = Vector2(821.25, 666.25)
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -599.0
-offset_top = -266.5
-offset_right = 58.0
-offset_bottom = 266.5
+offset_left = -748.75
+offset_top = -333.125
+offset_right = 72.5
+offset_bottom = 333.125
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_8y25b")
@@ -576,11 +576,14 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_8y25b")
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
+offset_transform_enabled = true
+offset_transform_position = Vector2(55, 0)
+offset_transform_scale = Vector2(1.2, 1.2)
 step = 0.01
 value = 85.0
 fill_mode = 4
 texture_progress = ExtResource("5_476ju")
-texture_progress_offset = Vector2(10, 0)
+texture_progress_offset = Vector2(12.5, 0)
 
 [node name="RankEmblem" type="TextureRect" parent="MainScreen/Rank/AccuracyProgress" unique_id=1394883834]
 layout_mode = 1
@@ -594,7 +597,7 @@ texture = ExtResource("6_6dcqk")
 stretch_mode = 3
 
 [node name="Hint" type="TextureRect" parent="MainScreen/Rank" unique_id=66971676]
-custom_minimum_size = Vector2(493, 494)
+custom_minimum_size = Vector2(616.25, 617.5)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
@@ -621,24 +624,24 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.2)
 
 [node name="Moreinfo" type="PanelContainer" parent="MoreInfo" unique_id=1330329966]
-custom_minimum_size = Vector2(1200, 570)
+custom_minimum_size = Vector2(1500, 712.5)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -457.0
-offset_top = -257.0
-offset_right = 457.0
-offset_bottom = 257.0
+offset_left = -571.25
+offset_top = -321.25
+offset_right = 571.25
+offset_bottom = 321.25
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8y25b")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MoreInfo/Moreinfo" unique_id=2078730392]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Title" type="Label" parent="MoreInfo/Moreinfo/VBoxContainer" unique_id=466136043]
 layout_mode = 2
@@ -652,7 +655,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Moreinfo" type="PanelContainer" parent="MoreInfo/Moreinfo/VBoxContainer" unique_id=171404438]
-custom_minimum_size = Vector2(0, 120)
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_cyywx")
 
@@ -661,8 +664,8 @@ layout_mode = 2
 
 [node name="GridContainer" type="GridContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer" unique_id=1995587788]
 layout_mode = 2
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 30
+theme_override_constants/h_separation = 13
+theme_override_constants/v_separation = 38
 columns = 2
 
 [node name="Rank" type="HBoxContainer" parent="MoreInfo/Moreinfo/VBoxContainer/Moreinfo/VBoxContainer/GridContainer" unique_id=196882870]
@@ -688,8 +691,8 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = 12.5
-offset_bottom = 31.5
+offset_top = 15.625
+offset_bottom = 39.375
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -720,8 +723,8 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = 12.5
-offset_bottom = 31.5
+offset_top = 15.625
+offset_bottom = 39.375
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -752,8 +755,8 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = 12.5
-offset_bottom = 31.5
+offset_top = 15.625
+offset_bottom = 39.375
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -784,8 +787,8 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = 12.5
-offset_bottom = 31.5
+offset_top = 15.625
+offset_bottom = 39.375
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -816,8 +819,8 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = 12.5
-offset_bottom = 31.5
+offset_top = 15.625
+offset_bottom = 39.375
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -848,8 +851,8 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = 12.5
-offset_bottom = 31.5
+offset_top = 15.625
+offset_bottom = 39.375
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -877,24 +880,24 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.2)
 
 [node name="Ranking" type="PanelContainer" parent="Ranking" unique_id=1731049703]
-custom_minimum_size = Vector2(1200, 570)
+custom_minimum_size = Vector2(1500, 712.5)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -457.0
-offset_top = -257.0
-offset_right = 457.0
-offset_bottom = 257.0
+offset_left = -571.25
+offset_top = -321.25
+offset_right = 571.25
+offset_bottom = 321.25
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8y25b")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ranking/Ranking" unique_id=2067630919]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Title" type="Label" parent="Ranking/Ranking/VBoxContainer" unique_id=129887447]
 layout_mode = 2
@@ -902,7 +905,7 @@ text = "Ranking"
 
 [node name="Banner" type="PanelContainer" parent="Ranking/Ranking/VBoxContainer" unique_id=29482874]
 clip_children = 1
-custom_minimum_size = Vector2(0, 80)
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_7qog1")
 
@@ -918,26 +921,26 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 20.0
-offset_top = -20.0
-offset_right = 149.0
-offset_bottom = 20.0
+offset_left = 25.0
+offset_top = -25.0
+offset_right = 186.25
+offset_bottom = 25.0
 grow_vertical = 2
 
 [node name="Title" type="Label" parent="Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer" unique_id=735519973]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.43137255, 0.84705883, 1, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Amazing Songs"
 
 [node name="Artist" type="Label" parent="Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer" unique_id=2110787699]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Artist"
 
 [node name="mapped" type="Label" parent="Ranking/Ranking/VBoxContainer/Banner/Banner/VBoxContainer" unique_id=1144355094]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "mapped by Tappa"
 
 [node name="CurrentLead" parent="Ranking/Ranking/VBoxContainer" unique_id=694549031 instance=ExtResource("10_8y25b")]
@@ -949,93 +952,93 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_o4gfc")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ranking/Ranking/VBoxContainer/Legend" unique_id=1384347099]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Label7" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer" unique_id=976937931]
-custom_minimum_size = Vector2(60, 0)
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Rank"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Label" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer" unique_id=2131323974]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Player Details"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Label8" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer" unique_id=1480988545]
-custom_minimum_size = Vector2(108, 0)
+custom_minimum_size = Vector2(135, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Score"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Label6" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer" unique_id=1652388033]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Accuracy"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Label10" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer" unique_id=712001933]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Combo"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Label2" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer" unique_id=1957422277]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Perfect"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Label3" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer" unique_id=1858449785]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Great"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Label4" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer" unique_id=245638963]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Meh"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Label5" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer" unique_id=1498134681]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Miss"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Label9" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer" unique_id=989472049]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "pp"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Label11" type="Label" parent="Ranking/Ranking/VBoxContainer/Legend/HBoxContainer" unique_id=392792530]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Mods"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1051,13 +1054,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="BottomBar" type="PanelContainer" parent="." unique_id=862576277]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -50.0
+offset_top = -62.5
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_476ju")
@@ -1066,8 +1069,8 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_476ju")
 layout_mode = 2
 
 [node name="Back" type="Button" parent="BottomBar/HBoxContainer" unique_id=1272468725]
-self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(148, 0)
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(185, 0)
 layout_mode = 2
 script = ExtResource("8_p8vf7")
 FocusColour = Color(0.9137255, 0.109803915, 0.109803915, 1)
@@ -1076,8 +1079,8 @@ StringText = "Back"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="WatchReplay" type="Button" parent="BottomBar/HBoxContainer" unique_id=1879247638]
-self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(148, 0)
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(185, 0)
 layout_mode = 2
 script = ExtResource("8_p8vf7")
 FocusColour = Color(0.23175389, 0.58984375, 0.17050171, 1)
@@ -1086,8 +1089,8 @@ StringText = "Watch Replay"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Screenshot" type="Button" parent="BottomBar/HBoxContainer" unique_id=15500693]
-self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(148, 0)
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(185, 0)
 layout_mode = 2
 script = ExtResource("8_p8vf7")
 FocusColour = Color(0.88671875, 0.41218567, 0.8357933, 1)
@@ -1096,8 +1099,8 @@ StringText = "Screenshot"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Ranking" type="Button" parent="BottomBar/HBoxContainer" unique_id=1437803074]
-self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(148, 0)
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(185, 0)
 layout_mode = 2
 script = ExtResource("8_p8vf7")
 FocusColour = Color(0.10253906, 0.5999719, 0.625, 1)
@@ -1106,16 +1109,16 @@ StringText = "Ranking"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="MoreInfo" type="Button" parent="BottomBar/HBoxContainer" unique_id=428968984]
-self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(148, 0)
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(185, 0)
 layout_mode = 2
 script = ExtResource("8_p8vf7")
 StringText = "More Info"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="PlayAgain" type="Button" parent="BottomBar/HBoxContainer" unique_id=459395514]
-self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(148, 0)
+self_modulate = Color(0.21568628, 0.21568628, 0.21960784, 1)
+custom_minimum_size = Vector2(185, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 script = ExtResource("8_p8vf7")

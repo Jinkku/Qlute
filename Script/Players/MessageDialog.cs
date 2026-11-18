@@ -21,20 +21,20 @@ public partial class MessageDialog : Control
 		center.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
 		AddChild(center);
 
-		var panel = new PanelContainer { CustomMinimumSize = new Vector2(Mathf.Min(460, GetViewportRect().Size.X - 40), 0) };
+		var panel = new PanelContainer { CustomMinimumSize = new Vector2(Mathf.Min(575, GetViewportRect().Size.X - 50), 0) };
 		panel.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(PlayerOverlays.Page, 0, 0, 0));
 		center.AddChild(panel);
 		var outer = new VBoxContainer();
 		outer.AddThemeConstantOverride("separation", 0);
 		panel.AddChild(outer);
-		outer.AddChild(new ColorRect { Color = _accent, CustomMinimumSize = new Vector2(0, 4) });
+		outer.AddChild(new ColorRect { Color = _accent, CustomMinimumSize = new Vector2(0, 5) });
 
-		var box = PlayerOverlays.Panel(PlayerOverlays.Box, 0, 20, 16);
+		var box = PlayerOverlays.Panel(PlayerOverlays.Box, 0, 25, 20);
 		outer.AddChild(box);
-		var v = ModUi.Column(10);
+		var v = ModUi.Column(13);
 		box.AddChild(v);
-		v.AddChild(PlayerOverlays.Text(_title, 20, bold: true, wrap: true));
-		v.AddChild(PlayerOverlays.Text(_text, 14, wrap: true));
+		v.AddChild(PlayerOverlays.Text(_title, 25, bold: true, wrap: true));
+		v.AddChild(PlayerOverlays.Text(_text, 18, wrap: true));
 		var ok = PlayerOverlays.FlatButton("OK");
 		ok.SizeFlagsHorizontal = SizeFlags.ShrinkEnd;
 		ok.FocusMode = FocusModeEnum.All;

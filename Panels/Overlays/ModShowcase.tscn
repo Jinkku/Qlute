@@ -9,7 +9,7 @@ shader_parameter/x_offset = 0.0
 
 [node name="ModsShown" type="HBoxContainer"]
 material = SubResource("ShaderMaterial_2gsb0")
-custom_minimum_size = Vector2(90, 30)
-offset_right = 40.0
-offset_bottom = 40.0
+custom_minimum_size = Vector2(112.5, 37.5)
+offset_right = 50.0
+offset_bottom = 50.0
 script = ExtResource("1_vak2j")

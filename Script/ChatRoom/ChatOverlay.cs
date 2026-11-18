@@ -221,7 +221,7 @@ public partial class ChatOverlay : PanelContainer
 		if (online && lan)
 		{
 			var r = NewRoomButton.GetGlobalRect();
-			_newRoomMenu.Popup(new Rect2I((Vector2I)(r.Position + new Vector2(0, -60)), Vector2I.Zero));
+			_newRoomMenu.Popup(new Rect2I((Vector2I)(r.Position + new Vector2(0, -75)), Vector2I.Zero));
 		}
 		else if (online || lan) CreateRoom(online);
 	}

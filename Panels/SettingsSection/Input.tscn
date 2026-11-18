@@ -10,14 +10,14 @@ variation_opentype = {
 }
 
 [node name="Input" type="PanelContainer" unique_id=1784822534]
-offset_right = 384.0
-offset_bottom = 300.0
+offset_right = 480.0
+offset_bottom = 375.0
 theme_override_styles/panel = ExtResource("1_3oobx")
 script = ExtResource("1_jqh0c")
 
 [node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Section" type="Label" parent="Rows" unique_id=118251586]
 layout_mode = 2
@@ -54,7 +54,7 @@ text = "Key 0"
 
 [node name="Key0" type="Button" parent="Rows/Selection/Key0" unique_id=206608926]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(62.5, 62.5)
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_3oobx")
@@ -71,7 +71,7 @@ text = "Key 1"
 
 [node name="Key1" type="Button" parent="Rows/Selection/Key1" unique_id=981810548]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(62.5, 62.5)
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_3oobx")
@@ -88,7 +88,7 @@ text = "Key 2"
 
 [node name="Key2" type="Button" parent="Rows/Selection/Key2" unique_id=1157584166]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(62.5, 62.5)
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_3oobx")
@@ -105,7 +105,7 @@ text = "Key 3"
 
 [node name="Key3" type="Button" parent="Rows/Selection/Key3" unique_id=633540495]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(62.5, 62.5)
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_3oobx")

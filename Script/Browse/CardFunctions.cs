@@ -18,7 +18,7 @@ public partial class CardFunctions : Button
 	[Export] public string? BannerPicture { get; set; }
 	public TextureRect Cover { get; private set; } = null!;
 
-	private const int Thumb = 88, Radius = 10;
+	private const int Thumb = 110, Radius = 13;
 	private int _status;
 	private int ID { get; set; }
 	private bool _isVisible, _hovered, _favorited;
@@ -71,8 +71,8 @@ public partial class CardFunctions : Button
 	{
 		var s = PlayerOverlays.Style(CardBg, Radius, 0, 0, new Color(hover ? "#f3baff55" : "#ffffff0f"));
 		s.ShadowColor = new Color(hover ? "#00000066" : "#00000047");
-		s.ShadowSize = hover ? 16 : 8;
-		s.ShadowOffset = new Vector2(0, hover ? 6 : 2);
+		s.ShadowSize = hover ? 20 : 10;
+		s.ShadowOffset = new Vector2(0, hover ? 8 : 3);
 		foreach (var key in new[] { "normal", "hover", "pressed", "hover_pressed", "disabled" }) AddThemeStyleboxOverride(key, s);
 		AddThemeStyleboxOverride("focus", new StyleBoxEmpty());
 	}
@@ -112,14 +112,14 @@ public partial class CardFunctions : Button
 		thumb.AddChild(edge);
 		_stripe = new ColorRect { MouseFilter = MouseFilterEnum.Ignore };
 		_stripe.SetAnchorsAndOffsetsPreset(LayoutPreset.RightWide);
-		_stripe.OffsetLeft = -3;
+		_stripe.OffsetLeft = -3.75f;
 		edge.AddChild(_stripe);
 		_preview = new Button { Icon = PlayerOverlays.SvgIcon(PlayerOverlays.PlayGlyph), ExpandIcon = true, IconAlignment = HorizontalAlignment.Center,
 			TooltipText = "Play preview", FocusMode = FocusModeEnum.None, MouseDefaultCursorShape = CursorShape.PointingHand };
-		_preview.AddThemeConstantOverride("icon_max_width", 18);
-		_preview.AddThemeFontSizeOverride("font_size", 17);
+		_preview.AddThemeConstantOverride("icon_max_width", 23);
+		_preview.AddThemeFontSizeOverride("font_size", 21);
 		_preview.AddThemeColorOverride("font_shadow_color", new Color(0, 0, 0, 1));
-		_preview.AddThemeConstantOverride("shadow_outline_size", 4);
+		_preview.AddThemeConstantOverride("shadow_outline_size", 5);
 		foreach (var key in new[] { "font_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color" }) _preview.AddThemeColorOverride(key, Colors.White);
 		_preview.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(new Color("#0000007a"), 0, 0, 0));
 		_preview.AddThemeStyleboxOverride("hover", PlayerOverlays.Style(new Color("#f3baff66"), 0, 0, 0));
@@ -158,15 +158,15 @@ public partial class CardFunctions : Button
 		var mapperRow = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
 		mapperRow.AddThemeConstantOverride("separation", 0);
 		body.AddChild(mapperRow);
-		_mapperPrefix = PlayerOverlays.Text("mapped by ", 11, new Color("#ffffff80"));
+		_mapperPrefix = PlayerOverlays.Text("mapped by ", 14, new Color("#ffffff80"));
 		mapperRow.AddChild(_mapperPrefix);
-		Mapper = PlayerOverlays.Text("", 11, PlayerOverlays.Accent, trim: true);
+		Mapper = PlayerOverlays.Text("", 14, PlayerOverlays.Accent, trim: true);
 		Mapper.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		mapperRow.AddChild(Mapper);
 		// a claimed / self-uploaded set's mapper opens their profile (catalog.py mapper_user)
 		_mapperLink = new Button { Flat = true, Visible = false, FocusMode = FocusModeEnum.None, MouseDefaultCursorShape = CursorShape.PointingHand, ClipText = true, Alignment = HorizontalAlignment.Left };
 		_mapperLink.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-		_mapperLink.AddThemeFontSizeOverride("font_size", 11);
+		_mapperLink.AddThemeFontSizeOverride("font_size", 14);
 		foreach (var key in new[] { "normal", "hover", "pressed", "hover_pressed", "focus" }) _mapperLink.AddThemeStyleboxOverride(key, new StyleBoxEmpty());
 		_mapperLink.AddThemeColorOverride("font_color", PlayerOverlays.Accent);
 		_mapperLink.AddThemeColorOverride("font_hover_color", Colors.White);
@@ -174,16 +174,17 @@ public partial class CardFunctions : Button
 		_mapperLink.Pressed += () => { if (!string.IsNullOrEmpty(Set?.mapper_user)) PlayerOverlays.OpenProfile(Set.mapper_user); };
 		mapperRow.AddChild(_mapperLink);
 
-		_submitted = PlayerOverlays.Text("", 11, new Color("#ffffff59"), trim: true);
+		_submitted = PlayerOverlays.Text("", 14, new Color("#ffffff59"), trim: true);
 		_submitted.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		body.AddChild(_submitted);
 
 		// level pills: one line, clipped (catalog-diffs is nowrap + overflow hidden)
-		_diffs = new Control { CustomMinimumSize = new Vector2(0, 20), ClipContents = true, MouseFilter = MouseFilterEnum.Ignore };
+		_diffs = new Control { CustomMinimumSize = new Vector2(0, 25), ClipContents = true, MouseFilter = MouseFilterEnum.Ignore };
 		body.AddChild(_diffs);
-		_diffRow = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore, Position = new Vector2(0, 5) };
-		_diffRow.AddThemeConstantOverride("separation", 4);
+		_diffRow = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore, Position = new Vector2(0, 6.25f) };
+		_diffRow.AddThemeConstantOverride("separation", 5);
 		_diffs.AddChild(_diffRow);
+		_diffRow.AddChild(_statusPill); // RANKED / SPECIAL / UNRANKED first, then the level pills
 
 		// actions: favourite + download / play, over a fade on the right
 		// inside a rounded mask, so the fade keeps the card's right corners round
@@ -196,10 +197,10 @@ public partial class CardFunctions : Button
 		var fade = PlayerOverlays.GradientRect(new[] { new Color(CardBg, 0), CardBg, CardBg }, new[] { 0f, 0.35f, 1f }, Vector2.Zero, new Vector2(1, 0));
 		_actions.AddChild(Fill(fade));
 		var buttons = new HBoxContainer { Alignment = BoxContainer.AlignmentMode.End, MouseFilter = MouseFilterEnum.Ignore };
-		buttons.AddThemeConstantOverride("separation", 6);
+		buttons.AddThemeConstantOverride("separation", 8);
 		buttons.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
-		buttons.OffsetLeft = 40;
-		buttons.OffsetRight = -10;
+		buttons.OffsetLeft = 50;
+		buttons.OffsetRight = -13;
 		_actions.AddChild(buttons);
 
 		_fav = RoundButton(HeartHollow);
@@ -209,14 +210,14 @@ public partial class CardFunctions : Button
 		_download.TooltipText = "Download";
 		_download.Pressed += () => { if (Set != null) ApiOperator.DownloadBeatmap(Set); };
 		buttons.AddChild(_download);
-		_play = PlayerOverlays.PillButton("Play", primary: true, "Already downloaded: open it in song select", 13);
+		_play = PlayerOverlays.PillButton("Play", primary: true, "Already downloaded: open it in song select", 16);
 		_play.SizeFlagsVertical = SizeFlags.ShrinkCenter;
 		_play.Visible = false;
 		_play.Pressed += PlayLocal;
 		buttons.AddChild(_play);
 		// width of the strip: fade (40) + buttons + right padding (10)
-		buttons.MinimumSizeChanged += () => { _actionsWidth = buttons.GetCombinedMinimumSize().X + 50; SetActions(_actions.Modulate.A); };
-		_actionsWidth = 120;
+		buttons.MinimumSizeChanged += () => { _actionsWidth = buttons.GetCombinedMinimumSize().X + 63; SetActions(_actions.Modulate.A); };
+		_actionsWidth = 150;
 		SetActions(0);
 
 		Pressed += OpenInfo;
@@ -226,15 +227,15 @@ public partial class CardFunctions : Button
 	private static Button RoundButton(Texture2D icon, Color? bg = null, Color? hover = null, Color? border = null)
 	{
 		var b = new Button { Icon = icon, ExpandIcon = true, FocusMode = FocusModeEnum.None, MouseDefaultCursorShape = CursorShape.PointingHand,
-			CustomMinimumSize = new Vector2(32, 32), SizeFlagsVertical = SizeFlags.ShrinkCenter, IconAlignment = HorizontalAlignment.Center };
-		b.AddThemeConstantOverride("icon_max_width", 16);
+			CustomMinimumSize = new Vector2(40, 40), SizeFlagsVertical = SizeFlags.ShrinkCenter, IconAlignment = HorizontalAlignment.Center };
+		b.AddThemeConstantOverride("icon_max_width", 20);
 		PaintRound(b, bg ?? new Color("#ffffff14"), hover ?? new Color("#ffffff2e"), border ?? new Color("#ffffff2e"));
 		return b;
 	}
 
 	private static void PaintRound(Button b, Color bg, Color hover, Color border)
 	{
-		StyleBox S(Color c) => new PillBox(c, border, 8, 8); // one smooth ring (a StyleBoxFlat border shows light joins)
+		StyleBox S(Color c) => new PillBox(c, border, 10, 10); // one smooth ring (a StyleBoxFlat border shows light joins)
 		b.AddThemeStyleboxOverride("normal", S(bg));
 		b.AddThemeStyleboxOverride("hover", S(hover));
 		b.AddThemeStyleboxOverride("pressed", S(hover));
@@ -303,7 +304,7 @@ public partial class CardFunctions : Button
 		// status pill + the matching colour on the thumbnail edge
 		var accent = PlayerOverlays.StatusAccent(status);
 		_stripe.Color = accent;
-		_statusPill.AddThemeStyleboxOverride("panel", new PillBox(new Color(accent, 0.16f), new Color(accent, 0.45f), 6, 0));
+		_statusPill.AddThemeStyleboxOverride("panel", new PillBox(new Color(accent, 0.16f), new Color(accent, 0.45f), 8, 0));
 		var statusLabel = _statusPill.GetChild<Label>(0);
 		statusLabel.Text = StatusName(status).ToUpperInvariant();
 		statusLabel.AddThemeColorOverride("font_color", accent);
@@ -316,7 +317,7 @@ public partial class CardFunctions : Button
 			var tip = (d.recommended ? "Recommended for you - " : "") + (d.version ?? "") + (d.pp > 0 ? $" - {Math.Round(d.pp)}pp" : "");
 			_diffRow.AddChild(LevelPill(d.level, tip, d.recommended));
 		}
-		if (diffs.Count > 8) _diffRow.AddChild(PlayerOverlays.Text($"+{diffs.Count - 8}", 10, new Color("#ffffff80")));
+		if (diffs.Count > 8) _diffRow.AddChild(PlayerOverlays.Text($"+{diffs.Count - 8}", 13, new Color("#ffffff80")));
 		if (set.nsfw) _diffRow.AddChild(Badge("EXPLICIT", true));
 		if (Browse.ShowVideo && set.video) _diffRow.AddChild(Badge("VIDEO", false));
 		if (Browse.ShowStoryboard && set.storyboard) _diffRow.AddChild(Badge("STORYBOARD", false));
@@ -336,26 +337,26 @@ public partial class CardFunctions : Button
 	public static Color StatusColour(int status) => PlayerOverlays.StatusAccent(status);
 
 	/// <summary>".catalog-diffs .mod": a glowing dot + "Lv N" in the level's colour (black from Lv 70).</summary>
-	public static Control LevelPill(double level, string tooltip = "", bool recommended = false, int size = 10)
+	public static Control LevelPill(double level, string tooltip = "", bool recommended = false, int size = 13)
 	{
 		bool black = PlayerOverlays.LevelIsBlack(level);
 		var lv = PlayerOverlays.LevelColor(level);
 		Color bg = black ? Colors.Black : new Color(lv, 0.14f), border = black ? new Color("#ffffff40") : new Color(lv, 0.3f), text = lv;
 		if (recommended) { bg = new Color("#f3baff38"); border = new Color("#f3baffcc"); text = Colors.White; }
 		var p = new PanelContainer();
-		var style = new PillBox(bg, border, 6, 0);
-		style.ContentMarginLeft = 5;
+		var style = new PillBox(bg, border, 8, 0);
+		style.ContentMarginLeft = 6.25f;
 		p.AddThemeStyleboxOverride("panel", style);
 		p.TooltipText = tooltip;
 		p.MouseFilter = string.IsNullOrEmpty(tooltip) ? MouseFilterEnum.Ignore : MouseFilterEnum.Pass;
 		p.SizeFlagsVertical = SizeFlags.ShrinkCenter;
 		var h = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
-		h.AddThemeConstantOverride("separation", 4);
+		h.AddThemeConstantOverride("separation", 5);
 		p.AddChild(h);
-		var dot = new Panel { CustomMinimumSize = new Vector2(5, 5), SizeFlagsVertical = SizeFlags.ShrinkCenter, MouseFilter = MouseFilterEnum.Ignore };
-		var dotStyle = PlayerOverlays.Style(black ? Colors.White : lv, 3, 0, 0);
+		var dot = new Panel { CustomMinimumSize = new Vector2(6.25f, 6.25f), SizeFlagsVertical = SizeFlags.ShrinkCenter, MouseFilter = MouseFilterEnum.Ignore };
+		var dotStyle = PlayerOverlays.Style(black ? Colors.White : lv, 4, 0, 0);
 		dotStyle.ShadowColor = new Color(black ? PlayerOverlays.Accent : lv, 0.8f);
-		dotStyle.ShadowSize = 3;
+		dotStyle.ShadowSize = 4;
 		dot.AddThemeStyleboxOverride("panel", dotStyle);
 		h.AddChild(dot);
 		h.AddChild(PlayerOverlays.Text($"Lv {level:0}", size, text));
@@ -364,13 +365,13 @@ public partial class CardFunctions : Button
 
 	private static PanelContainer Badge(string text, bool warn)
 	{
-		var p = PlayerOverlays.Panel(Colors.Transparent, 4, 6, 0);
-		var s = PlayerOverlays.Style(Colors.Transparent, 4, 6, 0, warn ? new Color("#ff7a7a99") : new Color("#ffffff33"));
+		var p = PlayerOverlays.Panel(Colors.Transparent, 5, 8, 0);
+		var s = PlayerOverlays.Style(Colors.Transparent, 5, 8, 0, warn ? new Color("#ff7a7a99") : new Color("#ffffff33"));
 		s.DrawCenter = false;
 		p.AddThemeStyleboxOverride("panel", s);
 		p.MouseFilter = MouseFilterEnum.Ignore;
 		p.SizeFlagsVertical = SizeFlags.ShrinkCenter;
-		p.AddChild(PlayerOverlays.Text(text, 9, warn ? new Color("#ff9a9a") : new Color("#ffffffbb"), bold: true));
+		p.AddChild(PlayerOverlays.Text(text, 11, warn ? new Color("#ff9a9a") : new Color("#ffffffbb"), bold: true));
 		return p;
 	}
 
@@ -415,7 +416,7 @@ public partial class CardFunctions : Button
 	private void SetActions(float t)
 	{
 		_actions.Modulate = new Color(1, 1, 1, t);
-		var shift = 10 * (1 - t);
+		var shift = 13 * (1 - t);
 		_actions.OffsetLeft = -_actionsWidth + shift;
 		_actions.OffsetRight = shift;
 		var filter = t > 0.5f ? MouseFilterEnum.Stop : MouseFilterEnum.Ignore;

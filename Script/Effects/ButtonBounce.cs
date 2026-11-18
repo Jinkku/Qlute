@@ -18,7 +18,7 @@ public partial class ButtonBounce : Button
 	private Label TextNode { get; set; }
 	private Tween tween { get; set; }
 
-	private float vsize = 95;
+	private float vsize = 118.75f;
 	public override void _Ready()
 	{
 		vsize = Size.Y;
@@ -37,10 +37,10 @@ public partial class ButtonBounce : Button
 			TextNode.AnchorTop = 0.0f;
 			TextNode.AnchorRight = 1.0f;
 			TextNode.AnchorBottom = 1.0f;
-			TextNode.OffsetBottom = 0.0f;
-			TextNode.OffsetTop = 0.0f;
-			TextNode.OffsetLeft = 0.0f;
-			TextNode.OffsetRight = 0.0f;
+			TextNode.OffsetBottom = 0f;
+			TextNode.OffsetTop = 0f;
+			TextNode.OffsetLeft = 0f;
+			TextNode.OffsetRight = 0f;
 			TextNode.GrowHorizontal = GrowDirection.Both;
 			TextNode.GrowVertical = GrowDirection.Both;
 			TextNode.VerticalAlignment = VerticalAlignment.Center;
@@ -52,7 +52,7 @@ public partial class ButtonBounce : Button
 		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/hover.wav");
 		tween?.Kill();
 		tween = GetTree().CreateTween();
-		tween.TweenProperty(this, "custom_minimum_size", new Vector2(180, vsize), 0.2f)
+		tween.TweenProperty(this, "custom_minimum_size", new Vector2(225, vsize), 0.2f)
 			.SetTrans(Tween.TransitionType.Bounce)
 			.SetEase(Tween.EaseType.Out);
 		tween.Play();
@@ -62,7 +62,7 @@ public partial class ButtonBounce : Button
 		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/hover.wav");
 		tween?.Kill();
 		tween = GetTree().CreateTween();
-		tween.TweenProperty(this, "custom_minimum_size", new Vector2(154, vsize), 0.2f)
+		tween.TweenProperty(this, "custom_minimum_size", new Vector2(193, vsize), 0.2f)
 			.SetTrans(Tween.TransitionType.Bounce)
 			.SetEase(Tween.EaseType.Out);
 		tween.Play();
@@ -73,7 +73,7 @@ public partial class ButtonBounce : Button
 		Sample.PlaySample("res://SelectableSkins/Slia/Sounds/selected.wav");
 		tween?.Kill();
 		tween = GetTree().CreateTween();
-		tween.TweenProperty(this, "custom_minimum_size", new Vector2(180, vsize), 0.2f)
+		tween.TweenProperty(this, "custom_minimum_size", new Vector2(225, vsize), 0.2f)
 			.SetTrans(Tween.TransitionType.Bounce)
 			.SetEase(Tween.EaseType.Out);
 		tween.Play();
@@ -82,7 +82,7 @@ public partial class ButtonBounce : Button
 	{
 		tween?.Kill();
 		tween = GetTree().CreateTween();
-		tween.TweenProperty(this, "custom_minimum_size", new Vector2(154, vsize), 0.2f)
+		tween.TweenProperty(this, "custom_minimum_size", new Vector2(193, vsize), 0.2f)
 			.SetTrans(Tween.TransitionType.Bounce)
 			.SetEase(Tween.EaseType.Out);
 		tween.Play();

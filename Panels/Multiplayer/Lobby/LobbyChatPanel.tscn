@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://bv2rvdovucw5f" path="res://Script/Multiplayer/Lobby/LobbyChatPanel.cs" id="2_script"]
 
 [node name="LobbyChatPanel" type="PanelContainer" unique_id=1222436781 node_paths=PackedStringArray("Log", "Input")]
-custom_minimum_size = Vector2(340, 0)
+custom_minimum_size = Vector2(425, 0)
 theme = ExtResource("1_theme")
 theme_type_variation = &"LobbyCard"
 script = ExtResource("2_script")
@@ -13,7 +13,7 @@ Input = NodePath("V/Input")
 
 [node name="V" type="VBoxContainer" parent="." unique_id=87602213]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 15
 
 [node name="Heading" type="Label" parent="V" unique_id=862263191]
 layout_mode = 2

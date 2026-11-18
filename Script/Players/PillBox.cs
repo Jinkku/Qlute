@@ -11,7 +11,7 @@ public partial class PillBox : StyleBox
 {
 	public Color Bg = Colors.Transparent;
 	public Color Border = Colors.Transparent;
-	public float BorderWidth = 1;
+	public float BorderWidth = 1.25f;
 	public Color GlowColor = Colors.Transparent;
 	public int GlowSize;
 
@@ -19,7 +19,7 @@ public partial class PillBox : StyleBox
 
 	public PillBox() { }
 
-	public PillBox(Color bg, Color border, float padX, float padY, float borderWidth = 1)
+	public PillBox(Color bg, Color border, float padX, float padY, float borderWidth = 1.25f)
 	{
 		Bg = bg;
 		Border = border;
@@ -52,7 +52,7 @@ public partial class PillBox : StyleBox
 	private StyleBoxFlat MakeGlow()
 	{
 		var s = new StyleBoxFlat { BgColor = Colors.Transparent, DrawCenter = false, ShadowColor = GlowColor, ShadowSize = GlowSize, CornerDetail = 24 };
-		s.SetCornerRadiusAll(999);
+		s.SetCornerRadiusAll(1249);
 		return s;
 	}
 

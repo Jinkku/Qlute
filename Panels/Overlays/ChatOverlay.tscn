@@ -8,15 +8,15 @@
 bg_color = Color(0.27884218, 0.23010254, 0.56640625, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lxvh4"]
-content_margin_left = 15.0
-content_margin_top = 5.0
-content_margin_right = 15.0
-content_margin_bottom = 5.0
+content_margin_left = 18.75
+content_margin_top = 6.25
+content_margin_right = 18.75
+content_margin_bottom = 6.25
 bg_color = Color(0.3736979, 0.328125, 0.65625, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2rbjs"]
-content_margin_left = 5.0
-content_margin_right = 5.0
+content_margin_left = 6.25
+content_margin_right = 6.25
 bg_color = Color(0, 0, 0, 0.470588)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xs1ts"]
@@ -25,20 +25,20 @@ bg_color = Color(0, 0, 0, 0.25)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0r8ct"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lxvh4"]
-content_margin_left = 15.0
-content_margin_top = 10.0
-content_margin_right = 15.0
-content_margin_bottom = 10.0
+content_margin_left = 18.75
+content_margin_top = 12.5
+content_margin_right = 18.75
+content_margin_bottom = 12.5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_people"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
+content_margin_left = 12.5
+content_margin_top = 12.5
+content_margin_right = 12.5
+content_margin_bottom = 12.5
 bg_color = Color(0, 0, 0, 0.25)
 
 [node name="ChatOverlay" type="PanelContainer" unique_id=1920737100 node_paths=PackedStringArray("Status", "RoomList", "NewRoomButton", "Log", "Input", "Empty", "PeopleTitle", "PeopleList", "LeaveButton", "NameEdit", "PowerButton", "TurnOnButton")]
-custom_minimum_size = Vector2(0, 254)
+custom_minimum_size = Vector2(0, 317.5)
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
@@ -62,7 +62,7 @@ layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="Title" type="PanelContainer" parent="ChatV" unique_id=472841855]
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lxvh4")
 
@@ -70,7 +70,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_lxvh4")
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="ChatV/Title/TitleH" unique_id=484748094]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture = ExtResource("1_0r8ct")
 expand_mode = 4
@@ -88,7 +88,7 @@ text = "Looking for players on this network..."
 horizontal_alignment = 2
 
 [node name="NameEdit" type="LineEdit" parent="ChatV/Title/TitleH" unique_id=264784671]
-custom_minimum_size = Vector2(220, 0)
+custom_minimum_size = Vector2(275, 0)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/normal = SubResource("StyleBoxFlat_2rbjs")
@@ -107,7 +107,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 0
 
 [node name="ChatRooms" type="PanelContainer" parent="ChatV/ChatSect" unique_id=1653973637]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_xs1ts")
 
@@ -175,7 +175,7 @@ placeholder_text = "You are chatting as: Guest"
 max_length = 500
 
 [node name="People" type="PanelContainer" parent="ChatV/ChatSect" unique_id=877472267]
-custom_minimum_size = Vector2(220, 0)
+custom_minimum_size = Vector2(275, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_people")
 

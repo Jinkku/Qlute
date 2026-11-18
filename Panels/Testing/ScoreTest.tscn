@@ -14,50 +14,50 @@ script = ExtResource("1_8rr42")
 
 [node name="Score" type="HSlider" parent="."]
 layout_mode = 2
-offset_left = 99.0
-offset_top = 121.0
-offset_right = 399.0
-offset_bottom = 140.0
+offset_left = 123.75
+offset_top = 151.25
+offset_right = 498.75
+offset_bottom = 175.0
 max_value = 2e+06
 
 [node name="MAX" type="HSlider" parent="."]
 layout_mode = 2
-offset_left = 99.0
-offset_top = 144.0
-offset_right = 399.0
-offset_bottom = 163.0
+offset_left = 123.75
+offset_top = 180.0
+offset_right = 498.75
+offset_bottom = 203.75
 max_value = 1000.0
 
 [node name="GREAT" type="HSlider" parent="."]
 layout_mode = 2
-offset_left = 99.0
-offset_top = 167.0
-offset_right = 399.0
-offset_bottom = 186.0
+offset_left = 123.75
+offset_top = 208.75
+offset_right = 498.75
+offset_bottom = 232.5
 max_value = 1000.0
 
 [node name="MEH" type="HSlider" parent="."]
 layout_mode = 2
-offset_left = 100.0
-offset_top = 190.0
-offset_right = 400.0
-offset_bottom = 209.0
+offset_left = 125.0
+offset_top = 237.5
+offset_right = 500.0
+offset_bottom = 261.25
 max_value = 1000.0
 
 [node name="BAD" type="HSlider" parent="."]
 layout_mode = 2
-offset_left = 100.0
-offset_top = 213.0
-offset_right = 400.0
-offset_bottom = 232.0
+offset_left = 125.0
+offset_top = 266.25
+offset_right = 500.0
+offset_bottom = 290.0
 max_value = 1000.0
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_left = 41.0
-offset_top = 122.0
-offset_right = 95.0
-offset_bottom = 229.0
+offset_left = 51.25
+offset_top = 152.5
+offset_right = 118.75
+offset_bottom = 286.25
 text = "Score
 MAX
 GREAT
@@ -66,10 +66,10 @@ BAD"
 
 [node name="ScoreOverlay" parent="." instance=ExtResource("2_5nyr6")]
 layout_mode = 1
-offset_left = 541.0
-offset_top = 148.0
-offset_right = -319.0
-offset_bottom = -472.0
+offset_left = 676.25
+offset_top = 185.0
+offset_right = -398.75
+offset_bottom = -590.0
 
 [connection signal="value_changed" from="Score" to="." method="_changed"]
 [connection signal="value_changed" from="MAX" to="." method="_max"]

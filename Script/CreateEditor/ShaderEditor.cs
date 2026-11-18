@@ -86,16 +86,16 @@ public partial class ShaderEditor : Control
 
 	private Control BuildSidePanel()
 	{
-		var panel = new PanelContainer { CustomMinimumSize = new Vector2(380, 0) };
+		var panel = new PanelContainer { CustomMinimumSize = new Vector2(475, 0) };
 		panel.AddThemeStyleboxOverride("panel", new StyleBoxFlat
 		{
-			BgColor = new Color(0.08f, 0.1f, 0.08f, 0.94f), ContentMarginLeft = 10, ContentMarginRight = 10, ContentMarginTop = 10, ContentMarginBottom = 10,
+			BgColor = new Color(0.08f, 0.1f, 0.08f, 0.94f), ContentMarginLeft = 13, ContentMarginRight = 13, ContentMarginTop = 13, ContentMarginBottom = 13,
 		});
 		var box = new VBoxContainer();
 		panel.AddChild(box);
 		box.AddChild(new Label { Text = "Preview", ThemeTypeVariation = "HeaderSmall" });
 
-		var container = new SubViewportContainer { Stretch = true, CustomMinimumSize = new Vector2(360, 202) };
+		var container = new SubViewportContainer { Stretch = true, CustomMinimumSize = new Vector2(450, 253) };
 		_viewport = new SubViewport { HandleInputLocally = false, TransparentBg = false };
 		container.AddChild(_viewport);
 		box.AddChild(container);
@@ -127,7 +127,7 @@ public partial class ShaderEditor : Control
 
 		var buttons = new HBoxContainer();
 		var add = new Button { Text = "Add node", FocusMode = FocusModeEnum.None, SizeFlagsHorizontal = SizeFlags.ExpandFill };
-		add.Pressed += () => OpenAddMenu(_graph.Size / 2 - new Vector2(80, 40));
+		add.Pressed += () => OpenAddMenu(_graph.Size / 2 - new Vector2(100, 50));
 		buttons.AddChild(add);
 		var reset = new Button { Text = "Start over", FocusMode = FocusModeEnum.None, SizeFlagsHorizontal = SizeFlags.ExpandFill, TooltipText = "Back to an empty graph (no shader). Saving then removes the shader file." };
 		reset.Pressed += () =>
@@ -146,15 +146,15 @@ public partial class ShaderEditor : Control
 			       "Whatever reaches Output is shown during gameplay. Select a node and press Delete to remove it.",
 			AutowrapMode = TextServer.AutowrapMode.WordSmart,
 			Modulate = new Color(1, 1, 1, 0.7f),
-			CustomMinimumSize = new Vector2(340, 0),
+			CustomMinimumSize = new Vector2(425, 0),
 		};
-		_help.AddThemeFontSizeOverride("font_size", 12);
+		_help.AddThemeFontSizeOverride("font_size", 15);
 		box.AddChild(_help);
 
 		var showCode = new CheckBox { Text = "Show generated shader code", FocusMode = FocusModeEnum.None };
 		box.AddChild(showCode);
 		_code = new TextEdit { Editable = false, Visible = false, SizeFlagsVertical = SizeFlags.ExpandFill, WrapMode = TextEdit.LineWrappingMode.None };
-		_code.AddThemeFontSizeOverride("font_size", 11);
+		_code.AddThemeFontSizeOverride("font_size", 14);
 		showCode.Toggled += on => { _code.Visible = on; _recompile = true; };
 		box.AddChild(_code);
 		return panel;
@@ -208,7 +208,7 @@ public partial class ShaderEditor : Control
 			Title = def.Title,
 			PositionOffset = new Vector2(node.X, node.Y),
 			TooltipText = def.Help ?? "",
-			CustomMinimumSize = new Vector2(150, 0),
+			CustomMinimumSize = new Vector2(188, 0),
 		};
 		g.SetMeta("id", node.Id);
 		StyleNode(g, def.Category);
@@ -226,7 +226,7 @@ public partial class ShaderEditor : Control
 					var spin = new SpinBox
 					{
 						MinValue = -100000, MaxValue = 100000, Step = 0.001, AllowGreater = true, AllowLesser = true,
-						Value = node.Get("in" + r, port.Default), CustomMinimumSize = new Vector2(80, 0),
+						Value = node.Get("in" + r, port.Default), CustomMinimumSize = new Vector2(100, 0),
 						SelectAllOnFocus = true, Name = "Value",
 					};
 					spin.ValueChanged += v =>
@@ -257,7 +257,7 @@ public partial class ShaderEditor : Control
 			var picker = new ColorPickerButton
 			{
 				Color = new Color(node.Get("r", 1), node.Get("g", 0.4f), node.Get("b", 0.8f), node.Get("a", 1)),
-				CustomMinimumSize = new Vector2(120, 28),
+				CustomMinimumSize = new Vector2(150, 35),
 			};
 			picker.ColorChanged += c =>
 			{
@@ -305,15 +305,15 @@ public partial class ShaderEditor : Control
 		{
 			BgColor = bg,
 			CornerRadiusTopLeft = top, CornerRadiusTopRight = top, CornerRadiusBottomLeft = bottom, CornerRadiusBottomRight = bottom,
-			ContentMarginLeft = 10, ContentMarginRight = 10, ContentMarginTop = 4, ContentMarginBottom = 6,
-			BorderColor = new Color(1f, 0.85f, 0.3f), BorderWidthLeft = border ? 2 : 0, BorderWidthRight = border ? 2 : 0,
-			BorderWidthTop = border ? 2 : 0, BorderWidthBottom = border ? 2 : 0,
+			ContentMarginLeft = 13, ContentMarginRight = 13, ContentMarginTop = 5, ContentMarginBottom = 8,
+			BorderColor = new Color(1f, 0.85f, 0.3f), BorderWidthLeft = border ? 3 : 0, BorderWidthRight = border ? 3 : 0,
+			BorderWidthTop = border ? 3 : 0, BorderWidthBottom = border ? 3 : 0,
 		};
 		var body = new Color(0.13f, 0.14f, 0.15f, 0.98f);
-		g.AddThemeStyleboxOverride("panel", Box(body, 0, 6, false));
-		g.AddThemeStyleboxOverride("panel_selected", Box(body, 0, 6, true));
-		g.AddThemeStyleboxOverride("titlebar", Box(title, 6, 0, false));
-		g.AddThemeStyleboxOverride("titlebar_selected", Box(title.Lightened(0.15f), 6, 0, true));
+		g.AddThemeStyleboxOverride("panel", Box(body, 0, 8, false));
+		g.AddThemeStyleboxOverride("panel_selected", Box(body, 0, 8, true));
+		g.AddThemeStyleboxOverride("titlebar", Box(title, 8, 0, false));
+		g.AddThemeStyleboxOverride("titlebar_selected", Box(title.Lightened(0.15f), 8, 0, true));
 	}
 
 	/// <summary>A connected input doesn't use its typed-in value, so hide the box.</summary>

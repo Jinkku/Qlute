@@ -43,7 +43,7 @@ public partial class HomeScreen : Control
 		{
 			SettingsOperator.SelectSongID(SettingsOperator.RndSongID(), seek: 0, ishome: true);
 		}
-		SongIndicator.Position = new Vector2(SongIndicator.Position.X, SettingsOperator.TopPanelPosition + 10);
+		SongIndicator.Position = new Vector2(SongIndicator.Position.X, SettingsOperator.TopPanelPosition + 13);
 		_subunf();
 	}
 	private void _marathonmode()

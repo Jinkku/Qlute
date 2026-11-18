@@ -103,7 +103,7 @@ public partial class BeatmapBackground : TextureRect
 		{
 			GD.Print("[Qlute] Switching to Specified image");
 			Switch_Background(SettingsOperator.SessionConfig.Background, Instant);
-			Size = new Vector2(GetViewportRect().Size[0] + 20, GetViewportRect().Size[1] + 20);
+			Size = new Vector2(GetViewportRect().Size[0] + 25, GetViewportRect().Size[1] + 25);
 			Position = new Vector2(GetViewportRect().Size[0] - 5, GetViewportRect().Size[1] - 5);
 		}
 		else if ((DefaultTexture == null || Texture != DefaultTexture) && SettingsOperator.SessionConfig.Background == null)
@@ -111,7 +111,7 @@ public partial class BeatmapBackground : TextureRect
 			GD.Print("[Qlute] Switching to Default background");
 			DefaultTexture = SettingsOperator.GetNullImage();
 			Switch_Background(DefaultTexture, Instant);
-			Size = new Vector2(GetViewportRect().Size[0] + 20, GetViewportRect().Size[1] + 20);
+			Size = new Vector2(GetViewportRect().Size[0] + 25, GetViewportRect().Size[1] + 25);
 			Position = new Vector2(GetViewportRect().Size[0] - 5, GetViewportRect().Size[1] - 5);	
 		}
 	}
@@ -141,8 +141,8 @@ public partial class BeatmapBackground : TextureRect
 		FlashingDisableSetting = Check.CheckBoolValue(SettingsOperator.GetSetting("dflashing").ToString());
 		oldmod = SelfModulate;
 		
-		float offsetX = (SettingsOperator.MouseMovement.X / screenSize.X * 10) - 10;
-		float offsetY = (SettingsOperator.MouseMovement.Y / screenSize.Y * 10) - 10;
+		float offsetX = (SettingsOperator.MouseMovement.X / screenSize.X * 13) - 13;
+		float offsetY = (SettingsOperator.MouseMovement.Y / screenSize.Y * 13) - 13;
 
 		Position = new Vector2(offsetX, offsetY); // Sets the position via mouse movements.
 

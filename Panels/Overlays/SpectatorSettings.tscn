@@ -6,25 +6,25 @@
 [ext_resource type="Script" uid="uid://ctgdfml2vqvm0" path="res://Script/Spectator/misc.gd" id="3_lnka0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mvjke"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0, 0, 0, 0.196078)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n2d5a"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0.02, 0.02, 0.02, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [node name="SpectatorSettings" type="Control" unique_id=1133708844]
-custom_minimum_size = Vector2(400, 400)
+custom_minimum_size = Vector2(500, 500)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,13 +34,13 @@ grow_vertical = 2
 script = ExtResource("1_uk8rj")
 
 [node name="SpectatorMenu" type="PanelContainer" parent="." unique_id=1053406924]
-custom_minimum_size = Vector2(300, 0)
+custom_minimum_size = Vector2(375, 0)
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -197.0
+offset_left = -246.25
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_mvjke")
@@ -49,14 +49,14 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_mvjke")
 layout_mode = 2
 
 [node name="Speed" type="PanelContainer" parent="SpectatorMenu/V" unique_id=1581817321]
-custom_minimum_size = Vector2(0, 110)
+custom_minimum_size = Vector2(0, 137.5)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_n2d5a")
 script = ExtResource("2_lnka0")
 
 [node name="Rows" type="VBoxContainer" parent="SpectatorMenu/V/Speed" unique_id=1839673608]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Title" type="Label" parent="SpectatorMenu/V/Speed/Rows" unique_id=89156267]
 layout_mode = 2
@@ -78,10 +78,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -360.0
-offset_top = 20.0
-offset_right = -310.0
-offset_bottom = 70.0
+offset_left = -450.0
+offset_top = 25.0
+offset_right = -387.5
+offset_bottom = 87.5
 grow_horizontal = 0
 texture = ExtResource("3_eus8y")
 script = ExtResource("3_lnka0")

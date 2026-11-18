@@ -3,9 +3,9 @@
 [ext_resource type="Script" uid="uid://da5wukscc4c75" path="res://Script/Browse/CardFunctions.cs" id="1_pttee"]
 
 [node name="MusicCard" type="Button"]
-custom_minimum_size = Vector2(0, 88)
-offset_right = 340.0
-offset_bottom = 88.0
+custom_minimum_size = Vector2(0, 110)
+offset_right = 425.0
+offset_bottom = 110.0
 size_flags_horizontal = 3
 focus_mode = 0
 mouse_default_cursor_shape = 2

@@ -13,7 +13,7 @@ fill_from = Vector2(0, 1)
 bg_color = Color(0, 0, 0, 0.568627)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fb5mu"]
-content_margin_left = 25.0
+content_margin_left = 31.25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mjmn2"]
 bg_color = Color(0, 0, 0, 0.843137)
@@ -44,7 +44,7 @@ stretch_mode = 6
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 50.0
+offset_bottom = 62.5
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ipi4j")
 
@@ -60,8 +60,8 @@ text = "Testing Scenes"
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_top = 50.0
-offset_right = 300.0
+offset_top = 62.5
+offset_right = 375.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_mjmn2")
 
@@ -79,7 +79,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 300.0
-offset_top = 50.0
+offset_left = 375.0
+offset_top = 62.5
 grow_horizontal = 2
 grow_vertical = 2

@@ -6,32 +6,32 @@
 [ext_resource type="PackedScene" uid="uid://cwouhf00ofyuh" path="res://Panels/GameplayElements/Customizable/PPCounter.tscn" id="4_qwbhl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6s3ea"]
-content_margin_left = 10.0
-content_margin_top = 10.0
+content_margin_left = 12.5
+content_margin_top = 12.5
 bg_color = Color(0, 0, 0, 0.498039)
 skew = Vector2(0.5, 0)
 border_color = Color(0, 0.171875, 1, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-expand_margin_left = 45.0
-expand_margin_right = 25.0
-expand_margin_bottom = 5.0
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+expand_margin_left = 56.25
+expand_margin_right = 31.25
+expand_margin_bottom = 6.25
 
 [node name="FullScoreOverlay" type="Control" groups=["Gameplay"]]
 process_mode = 3
 process_priority = 1
-custom_minimum_size = Vector2(420, 100)
+custom_minimum_size = Vector2(525, 125)
 layout_mode = 3
 anchors_preset = 0
-offset_right = 359.0
-offset_bottom = 100.0
+offset_right = 448.75
+offset_bottom = 125.0
 
 [node name="ScoreBarBack" type="PanelContainer" parent="."]
 layout_mode = 0
-offset_right = 359.0
-offset_bottom = 100.0
+offset_right = 448.75
+offset_bottom = 125.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_6s3ea")
 
 [node name="ScoreInfo" type="VBoxContainer" parent="ScoreBarBack"]
@@ -52,7 +52,7 @@ layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="ScoreBarBack/ScoreInfo"]
 layout_mode = 2
-theme_override_constants/margin_bottom = 5
+theme_override_constants/margin_bottom = 6
 
 [node name="HealthBar" parent="ScoreBarBack/ScoreInfo" instance=ExtResource("4_046dq")]
 layout_mode = 2

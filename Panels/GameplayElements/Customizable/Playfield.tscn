@@ -5,8 +5,8 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cb4c3"]
 bg_color = Color(1, 1, 1, 0.588235)
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [node name="Playfield" type="Control" unique_id=686998507]
 layout_mode = 3
@@ -14,8 +14,8 @@ anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -200.0
-offset_right = 200.0
+offset_left = -250.0
+offset_right = 250.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2mm1x")
@@ -28,16 +28,16 @@ anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -206.0
-offset_right = 206.0
-offset_bottom = -50.0
+offset_left = -257.5
+offset_right = 257.5
+offset_bottom = -62.5
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
 [node name="Section1" type="PanelContainer" parent="ChartSections" unique_id=2091561494]
 self_modulate = Color(0.0392157, 0.0392157, 0.0392157, 1)
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_cb4c3")
 
@@ -46,7 +46,7 @@ layout_mode = 2
 
 [node name="Section2" type="PanelContainer" parent="ChartSections" unique_id=1266876680]
 self_modulate = Color(0.0392157, 0.0392157, 0.0392157, 1)
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_cb4c3")
 
@@ -55,7 +55,7 @@ layout_mode = 2
 
 [node name="Section3" type="PanelContainer" parent="ChartSections" unique_id=1063190678]
 self_modulate = Color(0.0392157, 0.0392157, 0.0392157, 1)
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_cb4c3")
 
@@ -64,7 +64,7 @@ layout_mode = 2
 
 [node name="Section4" type="PanelContainer" parent="ChartSections" unique_id=566783130]
 self_modulate = Color(0.0392157, 0.0392157, 0.0392157, 1)
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_cb4c3")
 
@@ -72,40 +72,44 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_cb4c3")
 layout_mode = 2
 
 [node name="Guard" type="ColorRect" parent="." unique_id=1229691932]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(125, 0)
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -6.0
-offset_top = -205.0
-offset_right = 6.0
-offset_bottom = -200.0
+offset_left = -7.5
+offset_top = -256.25
+offset_right = 7.5
+offset_bottom = -250.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 color = Color(1, 1, 1, 0)
 
 [node name="Note1" parent="Guard" unique_id=230947442 instance=ExtResource("1_6jlou")]
+scale = Vector2(1.25, 1.25)
 self_modulate = Color(1, 1, 1, 0.25)
-position = Vector2(0, -45)
+position = Vector2(0, -56.25)
 
 [node name="Note2" parent="Guard" unique_id=1634780964 instance=ExtResource("1_6jlou")]
+scale = Vector2(1.25, 1.25)
 self_modulate = Color(1, 1, 1, 0.25)
-position = Vector2(104, -45)
+position = Vector2(130, -56.25)
 NotePart = 1
 metadata/part = 1
 
 [node name="Note3" parent="Guard" unique_id=806681802 instance=ExtResource("1_6jlou")]
+scale = Vector2(1.25, 1.25)
 self_modulate = Color(1, 1, 1, 0.25)
-position = Vector2(208, -45)
+position = Vector2(260, -56.25)
 NotePart = 2
 metadata/part = 2
 
 [node name="Note4" parent="Guard" unique_id=2065769152 instance=ExtResource("1_6jlou")]
+scale = Vector2(1.25, 1.25)
 self_modulate = Color(1, 1, 1, 0.25)
-position = Vector2(312, -45)
+position = Vector2(390, -56.25)
 NotePart = 3
 metadata/part = 3
 

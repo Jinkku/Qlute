@@ -111,7 +111,7 @@ public partial class Global : Node
 				SkinEditorAni.TweenProperty(ControlPanel, "position:y", ControlPanel.Position.Y + ControlPanel.Size.Y, 0.5f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
-				SkinEditorAni.TweenProperty(Error, "position:y", Error.Position.Y + Error.Size.Y + 50, 0.5f)
+				SkinEditorAni.TweenProperty(Error, "position:y", Error.Position.Y + Error.Size.Y + 63, 0.5f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
 				SkinEditorAni.TweenProperty(_CurrentScene, "size", GetViewport().GetVisibleRect().Size, 0.5f)

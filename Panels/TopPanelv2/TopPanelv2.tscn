@@ -23,28 +23,28 @@ fill_to = Vector2(1, 0.996933)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e57m5"]
 bg_color = Color(0.85105014, 0.85105014, 0.85105014, 0.15)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_88b8v"]
-content_margin_left = 12.0
-content_margin_right = 12.0
+content_margin_left = 15.0
+content_margin_right = 15.0
 bg_color = Color(0.8509804, 0.8509804, 0.8509804, 0.4509804)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nny0l"]
-content_margin_left = 12.0
-content_margin_right = 12.0
+content_margin_left = 15.0
+content_margin_right = 15.0
 bg_color = Color(0.85105014, 0.85105014, 0.85105014, 0.35000002)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ank2i"]
 
@@ -53,29 +53,29 @@ spacing_top = 1
 spacing_bottom = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_phkx3"]
-content_margin_left = 12.0
-content_margin_right = 12.0
+content_margin_left = 15.0
+content_margin_right = 15.0
 bg_color = Color(0.85105014, 0.85105014, 0.85105014, 0.15)
-corner_radius_top_left = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0d1ka"]
-content_margin_left = 12.0
-content_margin_right = 12.0
+content_margin_left = 15.0
+content_margin_right = 15.0
 bg_color = Color(0.85105014, 0.85105014, 0.85105014, 0.45000002)
-corner_radius_top_left = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_21f6s"]
-content_margin_left = 12.0
-content_margin_right = 12.0
+content_margin_left = 15.0
+content_margin_right = 15.0
 bg_color = Color(0.85105014, 0.85105014, 0.85105014, 0.35000002)
-corner_radius_top_left = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_bottom_left = 19
 
 [node name="InfoBar" type="ColorRect" unique_id=671856596]
 process_mode = 3
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 63.5)
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
@@ -89,8 +89,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 50.0
-offset_bottom = 64.0
+offset_top = 62.5
+offset_bottom = 80.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -106,20 +106,20 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -99.0
+offset_left = -123.75
 grow_horizontal = 0
 grow_vertical = 2
-theme_override_constants/separation = 5
+theme_override_constants/separation = 6
 
 [node name="UserList" type="Button" parent="Widgets" unique_id=1762351887]
 process_mode = 3
-tooltip_text = "Players online"
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+tooltip_text = "Players online"
 mouse_filter = 1
-theme_override_constants/icon_max_width = 28
+theme_override_constants/icon_max_width = 35
 theme_override_styles/normal = SubResource("StyleBoxFlat_e57m5")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_88b8v")
 theme_override_styles/hover = SubResource("StyleBoxFlat_nny0l")
@@ -130,12 +130,12 @@ icon_alignment = 1
 
 [node name="ChangeLog" type="Button" parent="Widgets" unique_id=1519787787]
 process_mode = 3
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 1
-theme_override_constants/icon_max_width = 28
+theme_override_constants/icon_max_width = 35
 theme_override_styles/normal = SubResource("StyleBoxFlat_e57m5")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_88b8v")
 theme_override_styles/hover = SubResource("StyleBoxFlat_nny0l")
@@ -146,12 +146,12 @@ icon_alignment = 1
 
 [node name="NowPlayer" type="Button" parent="Widgets" unique_id=509986978]
 process_mode = 3
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 1
-theme_override_constants/icon_max_width = 28
+theme_override_constants/icon_max_width = 35
 theme_override_styles/normal = SubResource("StyleBoxFlat_e57m5")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_88b8v")
 theme_override_styles/hover = SubResource("StyleBoxFlat_nny0l")
@@ -163,12 +163,12 @@ script = ExtResource("3_0d1ka")
 
 [node name="Browse" type="Button" parent="Widgets" unique_id=1386290017]
 process_mode = 3
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 1
-theme_override_constants/icon_max_width = 28
+theme_override_constants/icon_max_width = 35
 theme_override_styles/normal = SubResource("StyleBoxFlat_e57m5")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_88b8v")
 theme_override_styles/hover = SubResource("StyleBoxFlat_nny0l")
@@ -179,12 +179,12 @@ icon_alignment = 1
 
 [node name="Chat" type="Button" parent="Widgets" unique_id=1274049794]
 process_mode = 3
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 1
-theme_override_constants/icon_max_width = 28
+theme_override_constants/icon_max_width = 35
 theme_override_styles/normal = SubResource("StyleBoxFlat_e57m5")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_88b8v")
 theme_override_styles/hover = SubResource("StyleBoxFlat_nny0l")
@@ -195,12 +195,12 @@ icon_alignment = 1
 
 [node name="Settings" type="Button" parent="Widgets" unique_id=1999111531]
 process_mode = 3
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 1
-theme_override_constants/icon_max_width = 28
+theme_override_constants/icon_max_width = 35
 theme_override_styles/normal = SubResource("StyleBoxFlat_e57m5")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_88b8v")
 theme_override_styles/hover = SubResource("StyleBoxFlat_nny0l")
@@ -212,10 +212,10 @@ script = ExtResource("8_dcn2n")
 
 [node name="Clock" type="RichTextLabel" parent="Widgets" unique_id=1586674962]
 process_mode = 3
-custom_minimum_size = Vector2(120, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_fonts/normal_font = SubResource("FontVariation_0d1ka")
-theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/normal_font_size = 15
 bbcode_enabled = true
 text = "Time
 [color=#FF9D00]current run[/color]"
@@ -233,11 +233,11 @@ autostart = true
 
 [node name="Notifications" type="Button" parent="Widgets" unique_id=161884438]
 process_mode = 3
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 1
-theme_override_constants/icon_max_width = 28
+theme_override_constants/icon_max_width = 35
 theme_override_styles/normal = SubResource("StyleBoxFlat_phkx3")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_0d1ka")
 theme_override_styles/hover = SubResource("StyleBoxFlat_21f6s")

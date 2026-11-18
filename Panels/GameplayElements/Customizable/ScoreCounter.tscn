@@ -5,12 +5,12 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_lvexv"]
 font = ExtResource("1_2x87l")
-font_size = 30
+font_size = 38
 shadow_color = Color(0, 0, 0, 0.403922)
 shadow_offset = Vector2(0, 0)
 
 [node name="Score" type="Label" groups=["Gameplay"]]
-custom_minimum_size = Vector2(230, 40)
+custom_minimum_size = Vector2(287.5, 50)
 text = "00000000"
 label_settings = SubResource("LabelSettings_lvexv")
 clip_text = true

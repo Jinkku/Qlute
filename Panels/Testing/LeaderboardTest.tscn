@@ -13,34 +13,34 @@ script = ExtResource("1_lis1s")
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0
-offset_left = 22.0
-offset_top = 188.0
-offset_right = 361.0
-offset_bottom = 215.0
+offset_left = 27.5
+offset_top = 235.0
+offset_right = 451.25
+offset_bottom = 268.75
 text = "Restart"
 
 [node name="Button2" type="Button" parent="."]
 layout_mode = 0
-offset_left = 22.0
-offset_top = 248.0
-offset_right = 361.0
-offset_bottom = 287.0
+offset_left = 27.5
+offset_top = 310.0
+offset_right = 451.25
+offset_bottom = 358.75
 text = "Kill"
 
 [node name="HSlider" type="HSlider" parent="."]
 layout_mode = 2
-offset_left = 41.0
-offset_top = 98.0
-offset_right = 341.0
-offset_bottom = 117.0
+offset_left = 51.25
+offset_top = 122.5
+offset_right = 426.25
+offset_bottom = 146.25
 max_value = 2e+06
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_left = 41.0
-offset_top = 122.0
-offset_right = 350.0
-offset_bottom = 163.0
+offset_left = 51.25
+offset_top = 152.5
+offset_right = 437.5
+offset_bottom = 203.75
 text = "Score changer~
 (should make the card go up if works)"
 

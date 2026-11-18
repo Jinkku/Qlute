@@ -46,39 +46,39 @@ _data = {
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wvjpw"]
 bg_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_28gti"]
-content_margin_left = 15.0
+content_margin_left = 18.75
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b2ms5"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jj613"]
-content_margin_left = 10.0
-content_margin_right = 20.0
+content_margin_left = 12.5
+content_margin_right = 25.0
 bg_color = Color(0.92549, 0.294118, 0.180392, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0hfqi"]
-content_margin_left = 10.0
-content_margin_right = 20.0
+content_margin_left = 12.5
+content_margin_right = 25.0
 bg_color = Color(0.666667, 0.222387, 0.142361, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jr6c1"]
-content_margin_left = 10.0
-content_margin_right = 20.0
+content_margin_left = 12.5
+content_margin_right = 25.0
 bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5hbj0"]
 bg_color = Color(0, 0, 0, 0.54902)
-border_width_left = 10
+border_width_left = 13
 border_color = Color(0.761719, 0.261841, 0.261841, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [node name="LoadingMarathonScreen" type="Control"]
 layout_mode = 3
@@ -113,24 +113,24 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -192.0
-offset_top = -165.0
-offset_right = 192.0
-offset_bottom = 165.0
+offset_left = -240.0
+offset_top = -206.25
+offset_right = 240.0
+offset_bottom = 206.25
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 60
+theme_override_constants/margin_left = 19
+theme_override_constants/margin_top = 19
+theme_override_constants/margin_right = 19
+theme_override_constants/margin_bottom = 75
 
 [node name="H" type="VBoxContainer" parent="InfoBox"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Previewimage" type="PanelContainer" parent="InfoBox/H"]
 clip_children = 2
-custom_minimum_size = Vector2(100, 200)
+custom_minimum_size = Vector2(125, 250)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wvjpw")
 
@@ -143,26 +143,26 @@ script = ExtResource("4_j17v6")
 
 [node name="Title" type="Label" parent="InfoBox/H"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxEmpty_28gti")
 text = "Preparing right now..."
 horizontal_alignment = 1
 
 [node name="Artist" type="Label" parent="InfoBox/H"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxEmpty_28gti")
 text = "Good Luck! <3"
 horizontal_alignment = 1
 
 [node name="BackButton" type="Button" parent="."]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -50.0
-offset_right = 108.0
+offset_top = -62.5
+offset_right = 135.0
 grow_vertical = 0
 theme_override_styles/focus = SubResource("StyleBoxEmpty_b2ms5")
 theme_override_styles/hover = SubResource("StyleBoxFlat_jj613")
@@ -173,10 +173,10 @@ icon = ExtResource("5_5uchb")
 
 [node name="DisclaimerInfo" parent="." instance=ExtResource("6_qypgs")]
 layout_mode = 0
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 420.0
-offset_bottom = 102.0
+offset_left = 25.0
+offset_top = 25.0
+offset_right = 525.0
+offset_bottom = 127.5
 theme_override_styles/panel = SubResource("StyleBoxFlat_5hbj0")
 
 [node name="title" parent="DisclaimerInfo/DisclaimerSort" index="0"]

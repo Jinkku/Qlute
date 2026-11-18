@@ -5,35 +5,35 @@
 [ext_resource type="Script" uid="uid://dxlp3pg2t1kfb" path="res://Script/ResultsScreenv2/ModsResultsScreenShowcase.cs" id="3_t84r2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o4gfc"]
-content_margin_left = 15.0
-content_margin_top = 5.0
-content_margin_right = 15.0
-content_margin_bottom = 5.0
+content_margin_left = 18.75
+content_margin_top = 6.25
+content_margin_right = 18.75
+content_margin_bottom = 6.25
 bg_color = Color(1, 1, 1, 0.1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t84r2"]
 bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [node name="RankLeaderboard" type="PanelContainer"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_o4gfc")
 script = ExtResource("1_o4gfc")
 
 [node name="Columns" type="HBoxContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Rank" type="Label" parent="Columns"]
-custom_minimum_size = Vector2(60, 0)
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 text = "#999"
 horizontal_alignment = 1
@@ -45,75 +45,75 @@ layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_t84r2")
 
 [node name="Pic" type="TextureRect" parent="Columns/ProfilePicture"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture = ExtResource("1_lcudt")
 expand_mode = 1
 stretch_mode = 6
 
 [node name="Row1" type="VBoxContainer" parent="Columns"]
-custom_minimum_size = Vector2(146, 0)
+custom_minimum_size = Vector2(182.5, 0)
 layout_mode = 2
 alignment = 1
 
 [node name="Username" type="Label" parent="Columns/Row1"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Player name"
 clip_text = true
 text_overrun_behavior = 3
 
 [node name="Achieved" type="Label" parent="Columns/Row1"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "achieved Dec 12th, 2025"
 
 [node name="Score" type="Label" parent="Columns"]
-custom_minimum_size = Vector2(108, 0)
+custom_minimum_size = Vector2(135, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.24433899, 0.62666, 0.93359375, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 25
 text = "456,789,123"
 horizontal_alignment = 1
 
 [node name="Accuracy" type="Label" parent="Columns"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "100.00%"
 horizontal_alignment = 1
 
 [node name="Combo" type="Label" parent="Columns"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "9,999x"
 horizontal_alignment = 1
 
 [node name="Perfect" type="Label" parent="Columns"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "999"
 horizontal_alignment = 1
 
 [node name="Great" type="Label" parent="Columns"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "999"
 horizontal_alignment = 1
 
 [node name="Meh" type="Label" parent="Columns"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "999"
 horizontal_alignment = 1
 
 [node name="Miss" type="Label" parent="Columns"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "999"
 horizontal_alignment = 1
 
 [node name="pp" type="Label" parent="Columns"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "4,000pp"
 horizontal_alignment = 1
@@ -121,6 +121,6 @@ horizontal_alignment = 1
 [node name="Mods" type="HBoxContainer" parent="Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = -25
+theme_override_constants/separation = -31
 script = ExtResource("3_t84r2")
 External = true

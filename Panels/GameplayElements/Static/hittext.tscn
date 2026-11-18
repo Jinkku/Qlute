@@ -3,19 +3,19 @@
 [ext_resource type="Texture2D" uid="uid://b5vrrq802xw01" path="res://SelectableSkins/Slia/Judgement/JudgePerfect.png" id="1_24n0b"]
 
 [node name="HitText" type="TextureRect"]
-custom_minimum_size = Vector2(260, 57)
+custom_minimum_size = Vector2(325, 71.25)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -100.0
-offset_top = -33.5
-offset_right = 100.0
-offset_bottom = 23.5
+offset_left = -125.0
+offset_top = -41.875
+offset_right = 125.0
+offset_bottom = 29.375
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(100, 28.5)
+pivot_offset = Vector2(125, 35.625)
 texture = ExtResource("1_24n0b")
 expand_mode = 2
 stretch_mode = 5

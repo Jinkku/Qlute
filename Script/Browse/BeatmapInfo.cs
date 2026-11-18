@@ -36,7 +36,7 @@ public partial class BeatmapInfo : Control
 	private static Color Tile => PlayerOverlays.Tile;
 	private static readonly Color HeroButton = new("#00000066");
 	private static readonly Color HeroButtonHover = new("#ffffff33");
-	private const int MaxComment = 1000, SidePad = 15;
+	private const int MaxComment = 1000, SidePad = 19;
 
 	public BeatmapInfo() : this(null, null) { }
 	public BeatmapInfo(BrowseCatalogLegend set, Texture2D cover)
@@ -60,7 +60,7 @@ public partial class BeatmapInfo : Control
 		AddChild(center);
 
 		var view = GetViewportRect().Size;
-		_panel = new PanelContainer { CustomMinimumSize = new Vector2(Mathf.Min(1160, view.X - 40), Mathf.Min(820, view.Y - 60)) };
+		_panel = new PanelContainer { CustomMinimumSize = new Vector2(Mathf.Min(1450, view.X - 90), Mathf.Min(1025, view.Y - 75)) };
 		_panel.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(PlayerOverlays.Page, 0, 0, 0));
 		center.AddChild(_panel);
 
@@ -82,7 +82,7 @@ public partial class BeatmapInfo : Control
 		var scroll = new ScrollContainer { SizeFlagsVertical = SizeFlags.ExpandFill, HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled };
 		outer.AddChild(scroll);
 		_page = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
-		_page.AddThemeConstantOverride("separation", 12); // .bm-section margin-top
+		_page.AddThemeConstantOverride("separation", 15); // .bm-section margin-top
 		scroll.AddChild(_page);
 
 		_scene = GetTree().CurrentScene;
@@ -93,11 +93,11 @@ public partial class BeatmapInfo : Control
 
 		if (_set?.beatmaps is not { Count: > 0 })
 		{
-			var box = Section(40);
+			var box = Section(50);
 			var v = new VBoxContainer();
 			box.AddChild(v);
-			v.AddChild(Centered(PlayerOverlays.Text("o-o", 32, bold: true)));
-			v.AddChild(Centered(PlayerOverlays.Text("This beatmap doesn't exist (or isn't on Qlute yet).", 16, bold: true)));
+			v.AddChild(Centered(PlayerOverlays.Text("o-o", 40, bold: true)));
+			v.AddChild(Centered(PlayerOverlays.Text("This beatmap doesn't exist (or isn't on Qlute yet).", 20, bold: true)));
 			return;
 		}
 		_diffs = _set.beatmaps.OrderBy(d => d.level).ThenBy(d => d.count_circles).ToList();
@@ -164,9 +164,9 @@ public partial class BeatmapInfo : Control
 	public override void _PhysicsProcess(double delta)
 	{
 		// CSS auto-fill grids, measured from the panel (a grid's own width follows its columns).
-		var width = _panel.Size.X - SidePad * 2 - 12;
-		if (IsInstanceValid(_stats)) _stats.Columns = PlayerOverlays.AutoColumns(width, 140, 10);
-		if (IsInstanceValid(_meta)) _meta.Columns = PlayerOverlays.AutoColumns(width, 220, 10);
+		var width = _panel.Size.X - SidePad * 2 - 15;
+		if (IsInstanceValid(_stats)) _stats.Columns = PlayerOverlays.AutoColumns(width, 175, 13);
+		if (IsInstanceValid(_meta)) _meta.Columns = PlayerOverlays.AutoColumns(width, 275, 13);
 	}
 
 	private string WebUrl() => $"{PlayerApi.Base.TrimEnd('/')}/beatmapset/{_set.id}" + (_current != null ? $"/{_current.id}" : "");
@@ -176,14 +176,14 @@ public partial class BeatmapInfo : Control
 	// =====================================================================
 
 	/// <summary>A website ".infobox .bm-section": 15px sides, 20px top / bottom.</summary>
-	private PanelContainer Section(int marginY = 20)
+	private PanelContainer Section(int marginY = 25)
 	{
 		var p = PlayerOverlays.Panel(PlayerOverlays.Box, 0, SidePad, marginY);
 		_page.AddChild(p);
 		return p;
 	}
 
-	private static VBoxContainer Body(PanelContainer box, int separation = 8)
+	private static VBoxContainer Body(PanelContainer box, int separation = 10)
 	{
 		var v = new VBoxContainer();
 		v.AddThemeConstantOverride("separation", separation);
@@ -204,7 +204,7 @@ public partial class BeatmapInfo : Control
 	/// <summary>.bm-button: rounded pill. In the hero the quiet ones sit on a dark glass.</summary>
 	private static Button WebButton(string text, bool primary = false, string tooltip = "", bool hero = false)
 	{
-		var b = PlayerOverlays.PillButton(text, primary, tooltip, 15,
+		var b = PlayerOverlays.PillButton(text, primary, tooltip, 19,
 			primary ? null : hero ? HeroButton : new Color("#ffffff28"),
 			primary ? null : hero ? HeroButtonHover : new Color("#ffffff40"));
 		return b;
@@ -213,8 +213,8 @@ public partial class BeatmapInfo : Control
 	private static GridContainer AutoGrid(Control parent)
 	{
 		var grid = new GridContainer { Columns = 3, SizeFlagsHorizontal = SizeFlags.ExpandFill };
-		grid.AddThemeConstantOverride("h_separation", 10);
-		grid.AddThemeConstantOverride("v_separation", 10);
+		grid.AddThemeConstantOverride("h_separation", 13);
+		grid.AddThemeConstantOverride("v_separation", 13);
 		parent.AddChild(grid);
 		return grid;
 	}
@@ -228,7 +228,7 @@ public partial class BeatmapInfo : Control
 
 	private void Hero()
 	{
-		var hero = new PanelContainer { CustomMinimumSize = new Vector2(0, 300), ClipContents = true };
+		var hero = new PanelContainer { CustomMinimumSize = new Vector2(0, 375), ClipContents = true };
 		hero.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(PlayerOverlays.Page, 0, 0, 0));
 		_page.AddChild(hero);
 
@@ -254,42 +254,42 @@ public partial class BeatmapInfo : Control
 		var margin = new MarginContainer { MouseFilter = MouseFilterEnum.Ignore };
 		margin.AddThemeConstantOverride("margin_left", SidePad + 8);
 		margin.AddThemeConstantOverride("margin_right", SidePad + 8);
-		margin.AddThemeConstantOverride("margin_top", 24);
-		margin.AddThemeConstantOverride("margin_bottom", 20);
+		margin.AddThemeConstantOverride("margin_top", 30);
+		margin.AddThemeConstantOverride("margin_bottom", 25);
 		hero.AddChild(margin);
 
 		var v = new VBoxContainer { Alignment = BoxContainer.AlignmentMode.End };
-		v.AddThemeConstantOverride("separation", 4);
+		v.AddThemeConstantOverride("separation", 5);
 		margin.AddChild(v);
 
 		var status = _diffs[0].ranked;
-		var statusPill = PlayerOverlays.Panel(new Color("#000000b0"), 99, 11, 4);
+		var statusPill = PlayerOverlays.Panel(new Color("#000000b0"), 124, 14, 5);
 		statusPill.SizeFlagsHorizontal = SizeFlags.ShrinkBegin;
-		statusPill.AddChild(PlayerOverlays.Text(CardFunctions.StatusName(status), 13, PlayerOverlays.StatusAccent(status), bold: true));
+		statusPill.AddChild(PlayerOverlays.Text(CardFunctions.StatusName(status), 16, PlayerOverlays.StatusAccent(status), bold: true));
 		v.AddChild(statusPill);
 
 		Label Shadowed(Label l)
 		{
 			l.AddThemeColorOverride("font_shadow_color", new Color(0, 0, 0, 0.8f));
-			l.AddThemeConstantOverride("shadow_offset_y", 2);
-			l.AddThemeConstantOverride("shadow_outline_size", 6);
+			l.AddThemeConstantOverride("shadow_offset_y", 3);
+			l.AddThemeConstantOverride("shadow_outline_size", 8);
 			return l;
 		}
-		v.AddChild(Shadowed(PlayerOverlays.Text(_set.title ?? "", 36, wrap: true, bold: true)));
+		v.AddChild(Shadowed(PlayerOverlays.Text(_set.title ?? "", 45, wrap: true, bold: true)));
 		var sub = new Color("#ffffffb0");
 		if (!string.IsNullOrEmpty(_set.title_unicode) && _set.title_unicode != _set.title)
-			v.AddChild(Shadowed(PlayerOverlays.Text(_set.title_unicode, 14, sub)));
-		v.AddChild(Shadowed(PlayerOverlays.Text(_set.artist ?? "", 20, new Color("#ffffffe0"))));
+			v.AddChild(Shadowed(PlayerOverlays.Text(_set.title_unicode, 18, sub)));
+		v.AddChild(Shadowed(PlayerOverlays.Text(_set.artist ?? "", 25, new Color("#ffffffe0"))));
 
 		// "mapped by <b>NAME</b> · uploaded DATE" (the name opens the mapper's profile when the set is linked)
 		var mapped = new HBoxContainer();
 		mapped.AddThemeConstantOverride("separation", 0);
-		mapped.AddChild(Shadowed(PlayerOverlays.Text("mapped by ", 14, sub)));
+		mapped.AddChild(Shadowed(PlayerOverlays.Text("mapped by ", 18, sub)));
 		if (!string.IsNullOrEmpty(_set.mapper_user))
 		{
 			var link = new Button { Text = _set.creator ?? "", Flat = true, FocusMode = FocusModeEnum.None, MouseDefaultCursorShape = CursorShape.PointingHand, TooltipText = $"{_set.mapper_user}'s profile" };
 			link.AddThemeFontOverride("font", PlayerOverlays.Bold);
-			link.AddThemeFontSizeOverride("font_size", 14);
+			link.AddThemeFontSizeOverride("font_size", 18);
 			foreach (var key in new[] { "normal", "hover", "pressed", "hover_pressed", "focus" }) link.AddThemeStyleboxOverride(key, new StyleBoxEmpty());
 			link.AddThemeColorOverride("font_color", Accent);
 			link.AddThemeColorOverride("font_hover_color", Colors.White);
@@ -297,15 +297,15 @@ public partial class BeatmapInfo : Control
 			link.Pressed += () => PlayerOverlays.OpenProfile(who);
 			mapped.AddChild(link);
 		}
-		else mapped.AddChild(Shadowed(PlayerOverlays.Text(_set.creator ?? "", 14, bold: true)));
+		else mapped.AddChild(Shadowed(PlayerOverlays.Text(_set.creator ?? "", 18, bold: true)));
 		if (_set.last_updated > 0)
-			mapped.AddChild(Shadowed(PlayerOverlays.Text($" · uploaded {DateTimeOffset.FromUnixTimeSeconds((long)_set.last_updated).LocalDateTime:MMMM d, yyyy}", 14, sub)));
+			mapped.AddChild(Shadowed(PlayerOverlays.Text($" · uploaded {DateTimeOffset.FromUnixTimeSeconds((long)_set.last_updated).LocalDateTime:MMMM d, yyyy}", 18, sub)));
 		v.AddChild(mapped);
 
 		// .bm-hero-stats chips
 		var chips = new HFlowContainer();
-		chips.AddThemeConstantOverride("h_separation", 6);
-		chips.AddThemeConstantOverride("v_separation", 6);
+		chips.AddThemeConstantOverride("h_separation", 8);
+		chips.AddThemeConstantOverride("v_separation", 8);
 		var longest = _diffs.Max(d => d.total_length);
 		var lvs = _diffs.Select(d => (int)Math.Round(d.level)).ToList();
 		var plays = _set.play_count > 0 ? _set.play_count : _diffs.Sum(d => d.playcount);
@@ -317,21 +317,21 @@ public partial class BeatmapInfo : Control
 			(PlayerOverlays.PlayGlyph, $"{Num(plays)} plays"),
 		})
 		{
-			var chip = PlayerOverlays.Panel(new Color("#00000070"), 99, 11, 5);
+			var chip = PlayerOverlays.Panel(new Color("#00000070"), 124, 14, 6);
 			var h = new HBoxContainer();
-			h.AddThemeConstantOverride("separation", 6);
-			h.AddChild(icon.StartsWith("<") ? PlayerOverlays.IconRect(icon, Accent) : PlayerOverlays.Text(icon, 13, Accent));
-			h.AddChild(PlayerOverlays.Text(text, 13, new Color("#ffffffe0")));
+			h.AddThemeConstantOverride("separation", 8);
+			h.AddChild(icon.StartsWith("<") ? PlayerOverlays.IconRect(icon, Accent) : PlayerOverlays.Text(icon, 16, Accent));
+			h.AddChild(PlayerOverlays.Text(text, 16, new Color("#ffffffe0")));
 			chip.AddChild(h);
 			chips.AddChild(chip);
 		}
-		v.AddChild(new Control { CustomMinimumSize = new Vector2(0, 8) });
+		v.AddChild(new Control { CustomMinimumSize = new Vector2(0, 10) });
 		v.AddChild(chips);
 
 		var buttons = new HFlowContainer();
-		buttons.AddThemeConstantOverride("h_separation", 8);
-		buttons.AddThemeConstantOverride("v_separation", 8);
-		v.AddChild(new Control { CustomMinimumSize = new Vector2(0, 10) });
+		buttons.AddThemeConstantOverride("h_separation", 10);
+		buttons.AddThemeConstantOverride("v_separation", 10);
+		v.AddChild(new Control { CustomMinimumSize = new Vector2(0, 13) });
 		v.AddChild(buttons);
 
 		_download = WebButton("↓  Download", primary: true, "Download this set");
@@ -378,7 +378,7 @@ public partial class BeatmapInfo : Control
 		fillRow.AddChild(_previewFill);
 		_previewRest = new Control { SizeFlagsHorizontal = SizeFlags.ExpandFill, MouseFilter = MouseFilterEnum.Ignore };
 		fillRow.AddChild(_previewRest);
-		v.AddChild(new Control { CustomMinimumSize = new Vector2(0, 6) });
+		v.AddChild(new Control { CustomMinimumSize = new Vector2(0, 8) });
 		v.AddChild(_previewBar);
 	}
 
@@ -421,11 +421,11 @@ public partial class BeatmapInfo : Control
 	{
 		var v = Body(Section());
 		_tabs = new HFlowContainer();
-		_tabs.AddThemeConstantOverride("h_separation", 8);
-		_tabs.AddThemeConstantOverride("v_separation", 8);
+		_tabs.AddThemeConstantOverride("h_separation", 10);
+		_tabs.AddThemeConstantOverride("v_separation", 10);
 		v.AddChild(_tabs);
-		v.AddChild(new Control { CustomMinimumSize = new Vector2(0, 6) });
-		_diffName = PlayerOverlays.Text("", 22, bold: true, wrap: true);
+		v.AddChild(new Control { CustomMinimumSize = new Vector2(0, 8) });
+		_diffName = PlayerOverlays.Text("", 28, bold: true, wrap: true);
 		v.AddChild(_diffName);
 		_stats = AutoGrid(v);
 	}
@@ -442,8 +442,8 @@ public partial class BeatmapInfo : Control
 			var b = new Button { TooltipText = d.version ?? "", FocusMode = FocusModeEnum.None, MouseDefaultCursorShape = CursorShape.PointingHand };
 			StyleBoxFlat S(Color bg)
 			{
-				var s = PlayerOverlays.Style(bg, 99, 0, 0, on ? lv : Colors.Transparent, 2);
-				s.ContentMarginLeft = 8; s.ContentMarginRight = 14; s.ContentMarginTop = s.ContentMarginBottom = 7;
+				var s = PlayerOverlays.Style(bg, 124, 0, 0, on ? lv : Colors.Transparent, 3);
+				s.ContentMarginLeft = 10; s.ContentMarginRight = 18; s.ContentMarginTop = s.ContentMarginBottom = 8.75f;
 				return s;
 			}
 			b.AddThemeStyleboxOverride("normal", S(on ? new Color("#ffffff14") : Tile));
@@ -453,26 +453,26 @@ public partial class BeatmapInfo : Control
 
 			// A Button doesn't lay out children: put the content in a box and size the button from it.
 			var margin = new MarginContainer { MouseFilter = MouseFilterEnum.Ignore };
-			margin.AddThemeConstantOverride("margin_left", 8);
-			margin.AddThemeConstantOverride("margin_right", 14);
-			margin.AddThemeConstantOverride("margin_top", 7);
-			margin.AddThemeConstantOverride("margin_bottom", 7);
+			margin.AddThemeConstantOverride("margin_left", 10);
+			margin.AddThemeConstantOverride("margin_right", 18);
+			margin.AddThemeConstantOverride("margin_top", 9);
+			margin.AddThemeConstantOverride("margin_bottom", 9);
 			margin.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
 			var h = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
-			h.AddThemeConstantOverride("separation", 8);
+			h.AddThemeConstantOverride("separation", 10);
 			margin.AddChild(h);
-			var badge = PlayerOverlays.Panel(black ? Colors.Black : lv, 99, 8, 2);
-			if (black) badge.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(Colors.Black, 99, 8, 2, new Color("#ffffff40")));
+			var badge = PlayerOverlays.Panel(black ? Colors.Black : lv, 124, 10, 3);
+			if (black) badge.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(Colors.Black, 124, 10, 3, new Color("#ffffff40")));
 			badge.MouseFilter = MouseFilterEnum.Ignore;
 			badge.SizeFlagsVertical = SizeFlags.ShrinkCenter;
-			badge.AddChild(PlayerOverlays.Text($"Lv {d.level:0}", 12, black ? Colors.White : PlayerOverlays.Ink, bold: true));
+			badge.AddChild(PlayerOverlays.Text($"Lv {d.level:0}", 15, black ? Colors.White : PlayerOverlays.Ink, bold: true));
 			h.AddChild(badge);
-			var name = PlayerOverlays.Text(d.version ?? "", 14, on ? Colors.White : new Color("#ffffffcc"), bold: on);
+			var name = PlayerOverlays.Text(d.version ?? "", 18, on ? Colors.White : new Color("#ffffffcc"), bold: on);
 			name.SizeFlagsVertical = SizeFlags.ShrinkCenter;
 			name.ClipText = true;
 			name.TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis;
 			var font = on ? PlayerOverlays.Bold : name.GetThemeFont("font");
-			name.CustomMinimumSize = new Vector2(Mathf.Min(220, font.GetStringSize(name.Text, HorizontalAlignment.Left, -1, 14).X + 2), 0);
+			name.CustomMinimumSize = new Vector2(Mathf.Min(275, font.GetStringSize(name.Text, HorizontalAlignment.Left, -1, 18).X + 3), 0);
 			h.AddChild(name);
 			b.AddChild(margin);
 			margin.MinimumSizeChanged += () => b.CustomMinimumSize = margin.GetCombinedMinimumSize();
@@ -511,8 +511,8 @@ public partial class BeatmapInfo : Control
 		if (d.playcount > 0) tiles.Add(("Plays", Num(d.playcount)));
 		foreach (var (k, val) in tiles)
 		{
-			var tile = PlayerOverlays.StatTile(k, val, 21);
-			tile.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(Tile, 12, 14, 12));
+			var tile = PlayerOverlays.StatTile(k, val, 26);
+			tile.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(Tile, 15, 18, 15));
 			tile.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 			_stats.AddChild(tile);
 		}
@@ -531,15 +531,15 @@ public partial class BeatmapInfo : Control
 		_meta = AutoGrid(v);
 		var tags = (_set.tags ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Distinct().ToList();
 		if (tags.Count == 0) return;
-		v.AddChild(new Control { CustomMinimumSize = new Vector2(0, 4) });
+		v.AddChild(new Control { CustomMinimumSize = new Vector2(0, 5) });
 		v.AddChild(PlayerOverlays.Caption("Tags"));
 		_tags = new HFlowContainer();
-		_tags.AddThemeConstantOverride("h_separation", 6);
-		_tags.AddThemeConstantOverride("v_separation", 6);
+		_tags.AddThemeConstantOverride("h_separation", 8);
+		_tags.AddThemeConstantOverride("v_separation", 8);
 		foreach (var tag in tags)
 		{
-			var chip = PlayerOverlays.Panel(new Color("#ffffff14"), 99, 11, 4);
-			chip.AddChild(PlayerOverlays.Text(tag, 13, new Color("#ffffffd8")));
+			var chip = PlayerOverlays.Panel(new Color("#ffffff14"), 124, 14, 5);
+			chip.AddChild(PlayerOverlays.Text(tag, 16, new Color("#ffffffd8")));
 			_tags.AddChild(chip);
 		}
 		v.AddChild(_tags);
@@ -570,12 +570,12 @@ public partial class BeatmapInfo : Control
 		rows.Add(("Beatmap ID", _current?.id.ToString() ?? "", null));
 		foreach (var (k, val, colour) in rows)
 		{
-			var tile = PlayerOverlays.Panel(Tile, 12, 14, 11);
+			var tile = PlayerOverlays.Panel(Tile, 15, 18, 14);
 			tile.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 			var t = new VBoxContainer();
-			t.AddThemeConstantOverride("separation", 4);
+			t.AddThemeConstantOverride("separation", 5);
 			t.AddChild(PlayerOverlays.Caption(k));
-			var value = PlayerOverlays.Text(val, 15, colour, bold: colour == Accent, trim: true);
+			var value = PlayerOverlays.Text(val, 19, colour, bold: colour == Accent, trim: true);
 			value.TooltipText = val;
 			value.MouseFilter = MouseFilterEnum.Pass;
 			t.AddChild(value);
@@ -597,25 +597,25 @@ public partial class BeatmapInfo : Control
 
 	private void BoardSection()
 	{
-		var v = Body(Section(), 6);
+		var v = Body(Section(), 8);
 		_boardTitle = Heading("Leaderboard");
 		v.AddChild(_boardTitle);
 		_board = new VBoxContainer();
-		_board.AddThemeConstantOverride("separation", 5);
+		_board.AddThemeConstantOverride("separation", 6);
 		v.AddChild(_board);
 	}
 
 	private static readonly (string head, int width, bool right)[] Columns =
 	{
-		("#", 40, false), ("", 40, false), ("Player", 0, false), ("Score", 96, true), ("Accuracy", 80, true),
-		("Combo", 66, true), ("Perfect", 62, true), ("Great", 54, true), ("Meh", 46, true), ("Miss", 46, true),
-		("pp", 58, true), ("Mods", 84, false), ("Set", 100, false),
+		("#", 50, false), ("", 50, false), ("Player", 0, false), ("Score", 120, true), ("Accuracy", 100, true),
+		("Combo", 83, true), ("Perfect", 78, true), ("Great", 68, true), ("Meh", 58, true), ("Miss", 58, true),
+		("pp", 73, true), ("Mods", 105, false), ("Set", 125, false),
 	};
 
 	private static HBoxContainer BoardRow(Control[] cells)
 	{
 		var h = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
-		h.AddThemeConstantOverride("separation", 8);
+		h.AddThemeConstantOverride("separation", 10);
 		for (int i = 0; i < cells.Length; i++)
 		{
 			var (_, width, _) = Columns[i];
@@ -627,7 +627,7 @@ public partial class BeatmapInfo : Control
 		return h;
 	}
 
-	private static Label Cell(string text, int i, Color? colour = null, bool bold = false, int size = 14)
+	private static Label Cell(string text, int i, Color? colour = null, bool bold = false, int size = 18)
 	{
 		var l = PlayerOverlays.Text(text, size, colour, bold: bold, trim: Columns[i].width == 0);
 		if (Columns[i].right) l.HorizontalAlignment = HorizontalAlignment.Right;
@@ -652,8 +652,8 @@ public partial class BeatmapInfo : Control
 			_board.AddChild(Empty(d.ranked == 0 ? "Unranked maps don't have a leaderboard." : "No scores yet. Be the first to set one!"));
 			return;
 		}
-		var header = Columns.Select((c, i) => (Control)Cell(c.head.ToUpperInvariant(), i, PlayerOverlays.Dim, size: 11)).ToArray();
-		var headBox = PlayerOverlays.Panel(Colors.Transparent, 0, 10, 2);
+		var header = Columns.Select((c, i) => (Control)Cell(c.head.ToUpperInvariant(), i, PlayerOverlays.Dim, size: 14)).ToArray();
+		var headBox = PlayerOverlays.Panel(Colors.Transparent, 0, 13, 3);
 		headBox.AddChild(BoardRow(header));
 		_board.AddChild(headBox);
 
@@ -666,8 +666,8 @@ public partial class BeatmapInfo : Control
 			var bg = me ? new Color("#f3baff24") : Tile;
 			StyleBoxFlat RowStyle(Color c)
 			{
-				var st = PlayerOverlays.Style(c, 8, 10, 7);
-				if (rank <= 3) { st.BorderColor = Podium[rank - 1]; st.BorderWidthLeft = 4; st.ContentMarginLeft = 6; }
+				var st = PlayerOverlays.Style(c, 10, 13, 9);
+				if (rank <= 3) { st.BorderColor = Podium[rank - 1]; st.BorderWidthLeft = 5; st.ContentMarginLeft = 8; }
 				return st;
 			}
 			var rowBox = new PanelContainer { MouseFilter = MouseFilterEnum.Pass };
@@ -677,23 +677,23 @@ public partial class BeatmapInfo : Control
 			rowBox.MouseEntered += () => rowBox.AddThemeStyleboxOverride("panel", hover);
 			rowBox.MouseExited += () => rowBox.AddThemeStyleboxOverride("panel", normal);
 
-			var gradePill = PlayerOverlays.PillLabel(grade, PlayerOverlays.GradeColor(grade), 12);
-			gradePill.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(PlayerOverlays.GradeColor(grade), 7, 6, 2));
+			var gradePill = PlayerOverlays.PillLabel(grade, PlayerOverlays.GradeColor(grade), 15);
+			gradePill.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(PlayerOverlays.GradeColor(grade), 9, 8, 3));
 			gradePill.SizeFlagsHorizontal = SizeFlags.ShrinkBegin;
 
 			// .bm-player: round picture + name, opens their profile
 			var player = new Button { FocusMode = FocusModeEnum.None, MouseDefaultCursorShape = CursorShape.PointingHand, TooltipText = $"Open {s.Username}'s profile" };
 			foreach (var key in new[] { "normal", "hover", "pressed", "hover_pressed", "focus" }) player.AddThemeStyleboxOverride(key, new StyleBoxEmpty());
 			var who = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
-			who.AddThemeConstantOverride("separation", 9);
+			who.AddThemeConstantOverride("separation", 11);
 			who.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
-			if (!string.IsNullOrEmpty(s.Pfp)) who.AddChild(PlayerOverlays.Picture(s.Pfp, 28, 14));
-			var nameLabel = PlayerOverlays.Text(s.Username, 14, bold: true, trim: true);
+			if (!string.IsNullOrEmpty(s.Pfp)) who.AddChild(PlayerOverlays.Picture(s.Pfp, 35, 18));
+			var nameLabel = PlayerOverlays.Text(s.Username, 18, bold: true, trim: true);
 			nameLabel.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 			nameLabel.VerticalAlignment = VerticalAlignment.Center;
 			who.AddChild(nameLabel);
 			player.AddChild(who);
-			player.CustomMinimumSize = new Vector2(0, 28);
+			player.CustomMinimumSize = new Vector2(0, 35);
 			player.MouseEntered += () => nameLabel.AddThemeColorOverride("font_color", Accent);
 			player.MouseExited += () => nameLabel.RemoveThemeColorOverride("font_color");
 			var name = s.Username;
@@ -702,12 +702,12 @@ public partial class BeatmapInfo : Control
 			var mods = new[] { "DT", "HT", "SL", "BT", "RND", "NF" }.Where(m => s.Mods.Contains(m)).ToList();
 			if (Math.Abs(s.Speed - 1) > 0.001) mods.Add($"{s.Speed:0.##}x");
 			var modBox = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
-			modBox.AddThemeConstantOverride("separation", 3);
-			if (mods.Count == 0) modBox.AddChild(PlayerOverlays.Text("-", 13, new Color("#ffffff80")));
+			modBox.AddThemeConstantOverride("separation", 4);
+			if (mods.Count == 0) modBox.AddChild(PlayerOverlays.Text("-", 16, new Color("#ffffff80")));
 			foreach (var m in mods)
 			{
-				var pill = PlayerOverlays.PillLabel(m, PlayerOverlays.ModPill, 11);
-				pill.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(PlayerOverlays.ModPill, 5, 6, 2));
+				var pill = PlayerOverlays.PillLabel(m, PlayerOverlays.ModPill, 14);
+				pill.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(PlayerOverlays.ModPill, 6, 8, 3));
 				modBox.AddChild(pill);
 			}
 			var when = Cell(s.Time > 0 ? PlayerApi.Ago(s.Time) : "-", 12, new Color("#ffffff80"), size: 13);
@@ -739,28 +739,28 @@ public partial class BeatmapInfo : Control
 
 	private void CommentSection()
 	{
-		var v = Body(Section(), 10);
+		var v = Body(Section(), 13);
 		var head = new HBoxContainer();
-		head.AddThemeConstantOverride("separation", 8);
+		head.AddThemeConstantOverride("separation", 10);
 		head.AddChild(Heading("Comments"));
-		_commentCount = PlayerOverlays.Text("", 16, new Color("#ffffff80"));
+		_commentCount = PlayerOverlays.Text("", 20, new Color("#ffffff80"));
 		_commentCount.SizeFlagsVertical = SizeFlags.ShrinkCenter;
 		head.AddChild(_commentCount);
 		v.AddChild(head);
 
 		var form = new VBoxContainer();
-		form.AddThemeConstantOverride("separation", 8);
+		form.AddThemeConstantOverride("separation", 10);
 		v.AddChild(form);
 		_commentText = new TextEdit
 		{
 			PlaceholderText = BeatmapSocialApi.LoggedIn ? "Say something about this map..." : "Log in to leave a comment.",
-			CustomMinimumSize = new Vector2(0, 76),
+			CustomMinimumSize = new Vector2(0, 95),
 			WrapMode = TextEdit.LineWrappingMode.Boundary,
 			Editable = BeatmapSocialApi.LoggedIn,
 		};
-		_commentText.AddThemeFontSizeOverride("font_size", 15);
-		var normal = PlayerOverlays.Style(new Color("#ffffff0d"), 12, 12, 10, new Color("#ffffff14"));
-		var focus = PlayerOverlays.Style(new Color("#ffffff14"), 12, 12, 10, new Color("#f3baff99"));
+		_commentText.AddThemeFontSizeOverride("font_size", 19);
+		var normal = PlayerOverlays.Style(new Color("#ffffff0d"), 15, 15, 13, new Color("#ffffff14"));
+		var focus = PlayerOverlays.Style(new Color("#ffffff14"), 15, 15, 13, new Color("#f3baff99"));
 		_commentText.AddThemeStyleboxOverride("normal", normal);
 		_commentText.AddThemeStyleboxOverride("focus", focus);
 		_commentText.AddThemeStyleboxOverride("read_only", normal);
@@ -786,11 +786,11 @@ public partial class BeatmapInfo : Control
 		form.AddChild(_commentText);
 
 		var foot = new HBoxContainer();
-		foot.AddThemeConstantOverride("separation", 12);
-		_commentStatus = PlayerOverlays.Text(BeatmapSocialApi.LoggedIn ? "Ctrl+Enter to post" : "", 13, new Color("#ffffff80"), trim: true);
+		foot.AddThemeConstantOverride("separation", 15);
+		_commentStatus = PlayerOverlays.Text(BeatmapSocialApi.LoggedIn ? "Ctrl+Enter to post" : "", 16, new Color("#ffffff80"), trim: true);
 		_commentStatus.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		foot.AddChild(_commentStatus);
-		_commentLeft = PlayerOverlays.Text(MaxComment.ToString(), 13, new Color("#ffffff80"));
+		_commentLeft = PlayerOverlays.Text(MaxComment.ToString(), 16, new Color("#ffffff80"));
 		_commentLeft.SizeFlagsVertical = SizeFlags.ShrinkCenter;
 		foot.AddChild(_commentLeft);
 		_send = WebButton("Post comment", primary: true);
@@ -800,7 +800,7 @@ public partial class BeatmapInfo : Control
 		form.AddChild(foot);
 
 		_comments = new VBoxContainer();
-		_comments.AddThemeConstantOverride("separation", 8);
+		_comments.AddThemeConstantOverride("separation", 10);
 		v.AddChild(_comments);
 
 		_more = WebButton("Show older comments");
@@ -812,29 +812,29 @@ public partial class BeatmapInfo : Control
 
 	private Control CommentCard(BeatmapSocialApi.Comment c)
 	{
-		var card = PlayerOverlays.Panel(Tile, 12, 12, 10);
+		var card = PlayerOverlays.Panel(Tile, 15, 15, 13);
 		card.SetMeta("comment", c.Id);
 		var h = new HBoxContainer();
-		h.AddThemeConstantOverride("separation", 12);
+		h.AddThemeConstantOverride("separation", 15);
 		card.AddChild(h);
-		var pic = PlayerOverlays.Picture(c.Pfp, 40, 20);
+		var pic = PlayerOverlays.Picture(c.Pfp, 50, 25);
 		pic.SizeFlagsVertical = SizeFlags.ShrinkBegin;
 		h.AddChild(pic);
 
 		var body = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
-		body.AddThemeConstantOverride("separation", 2);
+		body.AddThemeConstantOverride("separation", 3);
 		h.AddChild(body);
 		var head = new HBoxContainer();
-		head.AddThemeConstantOverride("separation", 10);
+		head.AddThemeConstantOverride("separation", 13);
 		var name = new Button { Text = c.Username, Flat = true, FocusMode = FocusModeEnum.None, MouseDefaultCursorShape = CursorShape.PointingHand, TooltipText = $"Open {c.Username}'s profile" };
 		name.AddThemeFontOverride("font", PlayerOverlays.Bold);
-		name.AddThemeFontSizeOverride("font_size", 14);
+		name.AddThemeFontSizeOverride("font_size", 18);
 		foreach (var key in new[] { "normal", "hover", "pressed", "focus" }) name.AddThemeStyleboxOverride(key, new StyleBoxEmpty());
 		name.AddThemeColorOverride("font_hover_color", Accent);
 		var who = c.Username;
 		name.Pressed += () => PlayerOverlays.OpenProfile(who);
 		head.AddChild(name);
-		var when = PlayerOverlays.Text(PlayerApi.Ago(c.Created), 13, new Color("#ffffff80"));
+		var when = PlayerOverlays.Text(PlayerApi.Ago(c.Created), 16, new Color("#ffffff80"));
 		when.SizeFlagsVertical = SizeFlags.ShrinkCenter;
 		when.TooltipText = DateTimeOffset.FromUnixTimeSeconds(c.Created).LocalDateTime.ToString("f");
 		when.MouseFilter = MouseFilterEnum.Pass;
@@ -843,11 +843,11 @@ public partial class BeatmapInfo : Control
 		if (c.CanDelete)
 		{
 			var del = new Button { Text = "Delete", Flat = true, FocusMode = FocusModeEnum.None, MouseDefaultCursorShape = CursorShape.PointingHand, TooltipText = "Delete this comment" };
-			del.AddThemeFontSizeOverride("font_size", 12);
+			del.AddThemeFontSizeOverride("font_size", 15);
 			del.AddThemeColorOverride("font_color", new Color("#ff9a9a"));
 			del.AddThemeColorOverride("font_hover_color", new Color("#ffbcbc"));
 			del.AddThemeStyleboxOverride("normal", new StyleBoxEmpty());
-			del.AddThemeStyleboxOverride("hover", PlayerOverlays.Style(new Color("#ff7a7a22"), 5, 8, 2));
+			del.AddThemeStyleboxOverride("hover", PlayerOverlays.Style(new Color("#ff7a7a22"), 6, 10, 3));
 			bool armed = false;
 			del.Pressed += async () =>
 			{
@@ -863,7 +863,7 @@ public partial class BeatmapInfo : Control
 			head.AddChild(del);
 		}
 		body.AddChild(head);
-		var text = PlayerOverlays.Text(c.Text, 14, new Color("#ffffffdd"), wrap: true);
+		var text = PlayerOverlays.Text(c.Text, 18, new Color("#ffffffdd"), wrap: true);
 		text.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		body.AddChild(text);
 		return card;

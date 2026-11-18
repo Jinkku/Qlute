@@ -30,6 +30,15 @@ public partial class Gameplay : Control
 	//public static Label Hits { get; set; }
 	public HBoxContainer Chart { get; set; }
 	public int HitPoint { get; set; }
+	/// <summary>Distance from the bottom of the playfield to the hit line (150 in the old 1280x720 layout).</summary>
+	public const float HitFromBottom = 150f * UiScale.Factor;
+	/// <summary>
+	/// Mania scroll: pixels a note moves per millisecond. Picked so a note takes as long to fall from the top of the
+	/// screen to the hit line as it did at the old 1280x720 base (570 ms at 1 px/ms): (1080 - 187.5) / 570.
+	/// </summary>
+	public const float PxPerMs = (1080f - HitFromBottom) / (720f - 150f);
+	/// <summary>Screen Y of a note's top: the hit line plus how far away it is in time.</summary>
+	public float NoteY(int timing) => HitPoint + (timing + gametime) * PxPerMs;
 	private Tween MainScreenAnimation { get; set; }
 	public List<KeyL> Keys = new List<KeyL>();
 	public int JudgeResult = -1;
@@ -130,7 +139,7 @@ public partial class Gameplay : Control
 		PivotOffset = new Vector2(Size.X / 2, Size.Y / 2);
 		MainScreenAnimation.TweenInterval(0.5f);
 		MainScreenAnimation.Parallel().TweenProperty(this, "modulate", new Color(1f, 0.8f, 0.8f, 1f), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-		MainScreenAnimation.Parallel().TweenProperty(this, "position", new Vector2(Position.X, Position.Y + 20), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		MainScreenAnimation.Parallel().TweenProperty(this, "position", new Vector2(Position.X, Position.Y + 25), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		MainScreenAnimation.Parallel().TweenProperty(this, "rotation", 0.05f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		MainScreenAnimation.Parallel().TweenProperty(AudioPlayer.Instance, "pitch_scale", 0.01f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		MainScreenAnimation.Parallel().TweenProperty(this, "scale", Scale * 0.7f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
@@ -274,22 +283,22 @@ public partial class Gameplay : Control
 		meh = new ColorRect();
 		meh.Color = new Color(0.5f, 0f, 0f, 0.3f);
 		meh.Visible = false;
-		meh.Size = new Vector2(450, SettingsOperator.MehJudge);
-		meh.Position = new Vector2(0, -SettingsOperator.MehJudge / 2);
+		meh.Size = new Vector2(450 * UiScale.Factor, SettingsOperator.MehJudge * PxPerMs);
+		meh.Position = new Vector2(0, -SettingsOperator.MehJudge / 2 * PxPerMs);
 		GetNode<ColorRect>("Playfield/Guard").AddChild(meh);
 
 		great = new ColorRect();
 		great.Color = new Color(0f, 0.5f, 0f, 0.3f);
 		great.Visible = false;
-		great.Size = new Vector2(450, SettingsOperator.GreatJudge);
-		great.Position = new Vector2(0, -SettingsOperator.GreatJudge / 2);
+		great.Size = new Vector2(450 * UiScale.Factor, SettingsOperator.GreatJudge * PxPerMs);
+		great.Position = new Vector2(0, -SettingsOperator.GreatJudge / 2 * PxPerMs);
 		GetNode<ColorRect>("Playfield/Guard").AddChild(great);
 
 		perfect = new ColorRect();
 		perfect.Color = new Color(0f, 0f, 0.5f, 0.3f);
 		perfect.Visible = false;
-		perfect.Size = new Vector2(450, SettingsOperator.PerfectJudge * 2);
-		perfect.Position = new Vector2(0, -SettingsOperator.PerfectJudge);
+		perfect.Size = new Vector2(450 * UiScale.Factor, SettingsOperator.PerfectJudge * 2 * PxPerMs);
+		perfect.Position = new Vector2(0, -SettingsOperator.PerfectJudge * PxPerMs);
 		GetNode<ColorRect>("Playfield/Guard").AddChild(perfect);
 
 		foreach (int i in Enumerable.Range(1, 4))
@@ -321,7 +330,7 @@ public partial class Gameplay : Control
 		}
 
 		// LAN match: send the chart once so spectators can draw this playfield live.
-		if (LanNetwork.InMatch) LanNetwork.Instance.SpecSendChart(Notes, (int)GetViewportRect().Size.Y);
+		if (LanNetwork.InMatch) LanNetwork.Instance.SpecSendChart(Notes, (int)(GetViewportRect().Size.Y / PxPerMs)); // in 720p units (1 px = 1 ms), what spectators expect
 
 		if (SettingsOperator.SpectatorMode)
 		{
@@ -635,7 +644,7 @@ private void _GameNoteTick(double delta)
 		_viewportHeight = viewportSize;
 
 		
-		if (!BreakTime && songstarted && Notes[Math.Min(Notes.Count - 1, NoteTick)].timing  + gametime + HitPoint <= -4500)
+		if (!BreakTime && songstarted && Notes[Math.Min(Notes.Count - 1, NoteTick)].timing  + gametime + HitPoint / PxPerMs <= -4500) // same timing as at the 720p base
 		{
 			NoteBreakTiming = -(int)(Notes[Math.Min(Notes.Count - 1, NoteTick)].timing);
 			BreakNow();
@@ -672,7 +681,9 @@ private void _GameNoteTick(double delta)
 		for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
 		{
 			var Note = Notes[i];
-			if (Note.timing + notex > viewportSize + 150)
+			// Part of judging (notes before NoteTick can't be hit any more), so it stays in the old 720p units:
+			// a note leaves 300 ms after its hit time, exactly as before the 1080p base. Not a pixel test.
+			if (Note.timing + gametime + HitPoint / PxPerMs > viewportSize / UiScale.ScreenRatio + 150)
 			{
 				NoteTick++;
 			}
@@ -731,7 +742,7 @@ private void _GameNoteTick(double delta)
 			scoretween.Play();
 		}
 		SettingsOperator.Gameplaycfg.Score = scoreint; // Set the score of the player
-		HitPoint = (int)Chart.Size.Y - 150;
+		HitPoint = (int)(Chart.Size.Y - HitFromBottom);
 		try
 		{
 			// DEATH
@@ -871,7 +882,7 @@ private void _GameNoteTick(double delta)
 	public void Hittext(Texture2D Image)
 	{
 		hittext.Modulate = new Color(1f, 1f, 1f, 1f);
-		hittext.Position = new Vector2(hittextoldpos.X, hittextoldpos.Y - 10);
+		hittext.Position = new Vector2(hittextoldpos.X, hittextoldpos.Y - 13);
 		if (hittext.Texture != Image)
 			hittext.Texture = Image;
 		//tween.TweenProperty(hittext, "position", new Vector2(hittext.Position.X,hittext.Position.Y+10), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);

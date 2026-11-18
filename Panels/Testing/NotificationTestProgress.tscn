@@ -13,26 +13,26 @@ script = ExtResource("1_uw1lk")
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0
-offset_left = 133.0
-offset_top = 162.0
-offset_right = 280.0
-offset_bottom = 200.0
+offset_left = 166.25
+offset_top = 202.5
+offset_right = 350.0
+offset_bottom = 250.0
 text = "Start Progress Notification"
 
 [node name="Button2" type="Button" parent="."]
 layout_mode = 0
-offset_left = 134.0
-offset_top = 107.0
-offset_right = 375.0
-offset_bottom = 146.0
+offset_left = 167.5
+offset_top = 133.75
+offset_right = 468.75
+offset_bottom = 182.5
 text = "Notification Test"
 
 [node name="HSlider" type="HSlider" parent="."]
 layout_mode = 0
-offset_left = 113.0
-offset_top = 218.0
-offset_right = 400.0
-offset_bottom = 237.0
+offset_left = 141.25
+offset_top = 272.5
+offset_right = 500.0
+offset_bottom = 296.25
 
 [connection signal="pressed" from="Button" to="." method="_Start"]
 [connection signal="pressed" from="Button2" to="." method="_Notify"]

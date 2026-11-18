@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://i4jv56448sp8" path="res://Script/Gameplay/HitCounter.cs" id="1_kw2u5"]
 
 [node name="Hits" type="RichTextLabel" groups=["Gameplay"]]
-offset_right = 122.0
-offset_bottom = 82.3333
+offset_right = 152.5
+offset_bottom = 102.9166
 bbcode_enabled = true
 text = "[color=#00B5FF]0[/color]
 [color=#00ff08]0[/color]

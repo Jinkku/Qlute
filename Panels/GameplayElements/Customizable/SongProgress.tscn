@@ -6,11 +6,11 @@
 [ext_resource type="Script" uid="uid://b5cki5a0hjvn6" path="res://Script/Gameplay/TimeLeft.cs" id="3_annr6"]
 
 [node name="SongProgress" type="ProgressBar" groups=["Gameplay"]]
-custom_minimum_size = Vector2(0, 19)
+custom_minimum_size = Vector2(0, 23.75)
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 30.0
-offset_bottom = 49.0
+offset_top = 37.5
+offset_bottom = 61.25
 grow_horizontal = 2
 value = 56.0
 show_percentage = false
@@ -18,10 +18,10 @@ script = ExtResource("1_fvb55")
 
 [node name="Current" type="Label" parent="."]
 layout_mode = 0
-offset_left = 10.0
-offset_top = -30.0
-offset_right = 67.0
-offset_bottom = -9.0
+offset_left = 12.5
+offset_top = -37.5
+offset_right = 83.75
+offset_bottom = -11.25
 theme_override_fonts/font = ExtResource("1_u1xd0")
 text = "00:00"
 script = ExtResource("2_s7jbt")
@@ -31,10 +31,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -76.0
-offset_top = -30.0
-offset_right = -10.0
-offset_bottom = -9.0
+offset_left = -95.0
+offset_top = -37.5
+offset_right = -12.5
+offset_bottom = -11.25
 grow_horizontal = 0
 theme_override_fonts/font = ExtResource("1_u1xd0")
 text = "-00:00"

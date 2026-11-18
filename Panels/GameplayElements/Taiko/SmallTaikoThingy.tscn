@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://6beyf8g51jqg" path="res://Script/Taiko/TaikoDrum.cs" id="2_jq43c"]
 
 [node name="SmallTaikoThingyF" type="Sprite2D" unique_id=1803368397]
+scale = Vector2(1.25, 1.25)
 texture = ExtResource("1_p1rhc")
 script = ExtResource("2_jq43c")
 

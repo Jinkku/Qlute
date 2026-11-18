@@ -5,22 +5,22 @@
 [ext_resource type="PackedScene" uid="uid://cfg55dbl1ip8a" path="res://Panels/GameplayElements/Static/note.tscn" id="3_rhii7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2w2hw"]
-content_margin_left = 25.0
-content_margin_top = 25.0
-content_margin_right = 25.0
-content_margin_bottom = 25.0
+content_margin_left = 31.25
+content_margin_top = 31.25
+content_margin_right = 31.25
+content_margin_bottom = 31.25
 bg_color = Color(0.0784314, 0.0980392, 0.129412, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yo81l"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0, 0, 0, 0.4)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_a0i2m"]
 viewport_path = NodePath("SubViewport")
@@ -36,10 +36,10 @@ script = ExtResource("1_2x1ew")
 
 [node name="Panel" type="HBoxContainer" parent="." unique_id=889889914]
 layout_mode = 2
-theme_override_constants/separation = 25
+theme_override_constants/separation = 31
 
 [node name="Scrolls" type="ScrollContainer" parent="Panel" unique_id=352091464]
-custom_minimum_size = Vector2(600, 0)
+custom_minimum_size = Vector2(750, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_yo81l")
@@ -49,19 +49,19 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 15
+theme_override_constants/separation = 19
 alignment = 1
 
 [node name="Section1" type="Label" parent="Panel/Scrolls/SettingsRows" unique_id=411784194]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.765625, 1, 1)
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 30
 text = "- Infomation"
 
 [node name="Skin Name" type="HBoxContainer" parent="Panel/Scrolls/SettingsRows" unique_id=1056609719]
-custom_minimum_size = Vector2(0, 45)
+custom_minimum_size = Vector2(0, 56.25)
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Label" type="Label" parent="Panel/Scrolls/SettingsRows/Skin Name" unique_id=840568850]
 layout_mode = 2
@@ -77,14 +77,14 @@ text = "Funny Name"
 [node name="Section2" type="Label" parent="Panel/Scrolls/SettingsRows" unique_id=33010902]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.765625, 1, 1)
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 30
 text = "- Gameplay"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/Scrolls/SettingsRows" unique_id=1364126168]
 visible = false
-custom_minimum_size = Vector2(0, 45)
+custom_minimum_size = Vector2(0, 56.25)
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Label" type="Label" parent="Panel/Scrolls/SettingsRows/HBoxContainer" unique_id=1828941573]
 layout_mode = 2
@@ -98,9 +98,9 @@ size_flags_horizontal = 3
 text = "Funny Name"
 
 [node name="NoteLaneColour1" type="HBoxContainer" parent="Panel/Scrolls/SettingsRows" unique_id=1859411461]
-custom_minimum_size = Vector2(0, 45)
+custom_minimum_size = Vector2(0, 56.25)
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Label" type="Label" parent="Panel/Scrolls/SettingsRows/NoteLaneColour1" unique_id=1080982645]
 layout_mode = 2
@@ -114,9 +114,9 @@ size_flags_horizontal = 3
 edit_alpha = false
 
 [node name="NoteLaneColour2" type="HBoxContainer" parent="Panel/Scrolls/SettingsRows" unique_id=1026924840]
-custom_minimum_size = Vector2(0, 45)
+custom_minimum_size = Vector2(0, 56.25)
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Label" type="Label" parent="Panel/Scrolls/SettingsRows/NoteLaneColour2" unique_id=1547920226]
 layout_mode = 2
@@ -130,9 +130,9 @@ size_flags_horizontal = 3
 edit_alpha = false
 
 [node name="NoteLaneColour3" type="HBoxContainer" parent="Panel/Scrolls/SettingsRows" unique_id=1459475831]
-custom_minimum_size = Vector2(0, 45)
+custom_minimum_size = Vector2(0, 56.25)
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Label" type="Label" parent="Panel/Scrolls/SettingsRows/NoteLaneColour3" unique_id=35499277]
 layout_mode = 2
@@ -146,9 +146,9 @@ size_flags_horizontal = 3
 edit_alpha = false
 
 [node name="NoteLaneColour4" type="HBoxContainer" parent="Panel/Scrolls/SettingsRows" unique_id=1272479569]
-custom_minimum_size = Vector2(0, 45)
+custom_minimum_size = Vector2(0, 56.25)
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Label" type="Label" parent="Panel/Scrolls/SettingsRows/NoteLaneColour4" unique_id=1486128501]
 layout_mode = 2
@@ -173,25 +173,26 @@ transparent_bg = true
 gui_disable_input = true
 
 [node name="Playfield" parent="SubViewport" unique_id=1729280365 instance=ExtResource("2_rmy11")]
+offset_left = -256.0
+offset_right = 244.0
 
 [node name="NoteBack" parent="SubViewport" unique_id=158203638 instance=ExtResource("3_rhii7")]
-position = Vector2(50, 0)
 
 [node name="NoteBack3" parent="SubViewport" unique_id=702763846 instance=ExtResource("3_rhii7")]
-position = Vector2(50, 197.65)
+position = Vector2(0, 200)
 
 [node name="NoteBack4" parent="SubViewport" unique_id=1635052304 instance=ExtResource("3_rhii7")]
-position = Vector2(362, 197.65)
+position = Vector2(381, 200)
 NotePart = 3
 metadata/part = 3
 
 [node name="NoteBack2" parent="SubViewport" unique_id=1738664793 instance=ExtResource("3_rhii7")]
-position = Vector2(154, 100)
+position = Vector2(124, 114)
 NotePart = 1
 metadata/part = 1
 
 [node name="NoteBack5" parent="SubViewport" unique_id=1190974198 instance=ExtResource("3_rhii7")]
-position = Vector2(258, 37.745)
+position = Vector2(250, 43.181)
 NotePart = 2
 metadata/part = 2
 

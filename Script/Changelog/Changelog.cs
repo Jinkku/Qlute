@@ -32,7 +32,7 @@ public partial class Changelog : Control
 			var Body = new RichTextLabel();
 			Body.FitContent = true;
 			Body.BbcodeEnabled = true;
-			Body.Text = MdHeadersToBbcode.Convert($"[color=#4fbfff][font_size=24]{col["tag_name"]}[/font_size][/color]\n[font_size=14]Released on {col["published_at"].ToString().Split("T").First()}[/font_size]\n\n{col["body"]}");
+			Body.Text = MdHeadersToBbcode.Convert($"[color=#4fbfff][font_size=30]{col["tag_name"]}[/font_size][/color]\n[font_size=18]Released on {col["published_at"].ToString().Split("T").First()}[/font_size]\n\n{col["body"]}");
 			Body.SizeFlagsVertical = SizeFlags.ExpandFill;
 			Body.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 			Rows.AddChild(Body);

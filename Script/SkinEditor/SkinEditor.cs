@@ -49,6 +49,7 @@ public partial class SkinEditor : Control
 		{"NoteLane3" , Skin.Element.LaneNotes[2].ToHtml(false)},
 		{"NoteLane4" , Skin.Element.LaneNotes[3].ToHtml(false)},
 		{"Layout" , Skin.Element.Layout},
+		{SkinLayout.BaseKey , SkinLayout.BaseHeight}, // layout X/Y are 1920x1080 pixels
 	};
 
 	private static bool HasWritablePath(SkinningLegend skin) =>
@@ -245,8 +246,8 @@ public partial class SkinEditor : Control
 		{
 			Settings = GD.Load<PackedScene>("res://Panels/SkinEditorElements/Settings.tscn").Instantiate().GetNode<PanelContainer>(".");
 			AddChild(Settings);
-			Settings.Size = new Vector2(Settings.Size.X, Settings.Size.Y - 150);
-			Settings.Position = new Vector2(Settings.Position.X, 100);
+			Settings.Size = new Vector2(Settings.Size.X, Settings.Size.Y - 188);
+			Settings.Position = new Vector2(Settings.Position.X, 125);
 		}
 	}
 
@@ -277,10 +278,10 @@ public partial class SkinEditor : Control
 		AddChild(Canvas);
 		MoveChild(Canvas, 0); // below every panel so the sidebars keep their input
 		Canvas.SetAnchorsPreset(LayoutPreset.FullRect);
-		Canvas.OffsetLeft = 222;
-		Canvas.OffsetTop = 104;
-		Canvas.OffsetRight = -230;
-		Canvas.OffsetBottom = -50;
+		Canvas.OffsetLeft = 278;
+		Canvas.OffsetTop = 130;
+		Canvas.OffsetRight = -288;
+		Canvas.OffsetBottom = -63;
 		Canvas.SelectionChanged += RefreshInspector;
 		Canvas.LayoutChanged += RefreshInspector;
 		Canvas.LayoutChanged += QueueAutoSave;
@@ -342,14 +343,14 @@ public partial class SkinEditor : Control
 	{
 		var l = new Label { Text = text };
 		l.AddThemeColorOverride("font_color", new Color(0, 0.765625f, 1));
-		l.AddThemeFontSizeOverride("font_size", 18);
+		l.AddThemeFontSizeOverride("font_size", 23);
 		return l;
 	}
 
 	private SpinBox AddSpin(Container parent, string label, double min, double max, double step, Action<SkinLayoutEntry, float> set)
 	{
 		var row = new HBoxContainer();
-		row.AddChild(new Label { Text = label, CustomMinimumSize = new Vector2(70, 0) });
+		row.AddChild(new Label { Text = label, CustomMinimumSize = new Vector2(88, 0) });
 		var spin = new SpinBox
 		{
 			MinValue = min, MaxValue = max, Step = step,
@@ -376,7 +377,7 @@ public partial class SkinEditor : Control
 	{
 		var rows = GetNode<VBoxContainer>("Extras/Scroll/Rows");
 		Inspector = new VBoxContainer();
-		Inspector.AddThemeConstantOverride("separation", 6);
+		Inspector.AddThemeConstantOverride("separation", 8);
 		rows.AddChild(Inspector);
 
 		Inspector.AddChild(Header("Components"));
@@ -389,7 +390,7 @@ public partial class SkinEditor : Control
 		Inspector.AddChild(SelectedName);
 
 		var props = new VBoxContainer();
-		props.AddThemeConstantOverride("separation", 6);
+		props.AddThemeConstantOverride("separation", 8);
 		Properties = props;
 		Inspector.AddChild(props);
 
@@ -413,8 +414,8 @@ public partial class SkinEditor : Control
 			SkinLayout.SetOffsetFromCurrent(c, e);
 		}));
 
-		PosX = AddSpin(props, "X", -4000, 4000, 1, (e, v) => e.X = v);
-		PosY = AddSpin(props, "Y", -4000, 4000, 1, (e, v) => e.Y = v);
+		PosX = AddSpin(props, "X", -5000, 5000, 1, (e, v) => e.X = v);
+		PosY = AddSpin(props, "Y", -5000, 5000, 1, (e, v) => e.Y = v);
 		ScaleX = AddSpin(props, "Scale X", 0.05, 10, 0.01, (e, v) => e.ScaleX = Math.Max(0.05f, v));
 		ScaleY = AddSpin(props, "Scale Y", 0.05, 10, 0.01, (e, v) => e.ScaleY = Math.Max(0.05f, v));
 		RotationBox = AddSpin(props, "Rotation", -180, 180, 1, (e, v) => e.Rotation = v);

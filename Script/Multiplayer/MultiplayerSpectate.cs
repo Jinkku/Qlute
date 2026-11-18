@@ -152,7 +152,7 @@ public partial class MultiplayerSpectate : Control
 		t.View = new LanPlayfieldView
 		{
 			SizeFlagsVertical = SizeFlags.ExpandFill,
-			CustomMinimumSize = new Vector2(120, 160),
+			CustomMinimumSize = new Vector2(150, 200),
 		};
 		stack.AddChild(t.View);
 		t.Waiting = new Label

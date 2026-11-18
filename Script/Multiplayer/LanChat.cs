@@ -779,8 +779,8 @@ public partial class LanChatSelfTest : Node
 			var layer = new CanvasLayer { Layer = 100 };
 			AddChild(layer);
 			layer.AddChild(_overlay);
-			_overlay.Size = new Vector2(GetViewport().GetVisibleRect().Size.X, 300);
-			_overlay.Position = new Vector2(0, GetViewport().GetVisibleRect().Size.Y - 300);
+			_overlay.Size = new Vector2(GetViewport().GetVisibleRect().Size.X, 375);
+			_overlay.Position = new Vector2(0, GetViewport().GetVisibleRect().Size.Y - 375);
 			GetTree().CreateTimer(1.5).Timeout += () =>
 			{
 				GetViewport().GetTexture().GetImage().SavePng(shot);

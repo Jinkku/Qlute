@@ -10,10 +10,10 @@
 [ext_resource type="Texture2D" uid="uid://ey0q5n5ojnr" path="res://Resources/Game/Leaderboard/LeaderboardMask.png" id="6_38vqk"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2ryxt"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 25.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 31.25
 texture = ExtResource("3_2ryxt")
 texture_margin_left = 15.0
 texture_margin_top = 15.0
@@ -22,45 +22,45 @@ texture_margin_bottom = 15.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m0l06"]
 bg_color = Color(0.5, 0.5, 0.5, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5cm84"]
-content_margin_top = 5.0
+content_margin_top = 6.25
 content_margin_right = 0.0
-content_margin_bottom = 5.0
+content_margin_bottom = 6.25
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vqons"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fvdrv"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 bg_color = Color(1, 1, 1, 0.196078)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ed8p7"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 bg_color = Color(0, 0, 0, 0.196078)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1di71"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 10.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 12.5
 bg_color = Color(0, 0, 0, 0.196078)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4q8ht"]
@@ -80,28 +80,28 @@ self_modulate = Color(0.392157, 0.392157, 0.392157, 1)
 layout_mode = 1
 
 [node name="AlertBox" type="PanelContainer" parent="."]
-custom_minimum_size = Vector2(500, 0)
+custom_minimum_size = Vector2(625, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -250.0
-offset_right = 250.0
-offset_bottom = 250.0
+offset_left = -312.5
+offset_top = -312.5
+offset_right = 312.5
+offset_bottom = 312.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_2ryxt")
 
 [node name="Box" type="VBoxContainer" parent="AlertBox"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Profile" type="PanelContainer" parent="AlertBox/Box"]
 clip_children = 1
-custom_minimum_size = Vector2(60, 60)
+custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
@@ -121,7 +121,7 @@ text = "played by aquapoki"
 horizontal_alignment = 1
 
 [node name="Rank" type="TextureRect" parent="AlertBox/Box"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(125, 125)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
@@ -134,14 +134,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 60
 text = "SS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Score" type="Label" parent="AlertBox/Box"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 40
 theme_override_styles/normal = SubResource("StyleBoxEmpty_5cm84")
 text = "0,000,000"
 horizontal_alignment = 1
@@ -154,19 +154,19 @@ horizontal_alignment = 1
 
 [node name="Artist" type="Label" parent="AlertBox/Box"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Artist"
 horizontal_alignment = 1
 
 [node name="Difficulty" type="Label" parent="AlertBox/Box"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Difficulty"
 horizontal_alignment = 1
 
 [node name="Creator" type="Label" parent="AlertBox/Box"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "Creator"
 horizontal_alignment = 1
 
@@ -176,7 +176,7 @@ size_flags_horizontal = 4
 columns = 5
 
 [node name="pp" type="PanelContainer" parent="AlertBox/Box/Info"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
@@ -190,13 +190,13 @@ horizontal_alignment = 1
 
 [node name="Text" type="Label" parent="AlertBox/Box/Info/pp/VC"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0"
 horizontal_alignment = 1
 
 [node name="MAX" type="PanelContainer" parent="AlertBox/Box/Info"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
@@ -210,13 +210,13 @@ horizontal_alignment = 1
 
 [node name="Text" type="Label" parent="AlertBox/Box/Info/MAX/VC"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0"
 horizontal_alignment = 1
 
 [node name="GREAT" type="PanelContainer" parent="AlertBox/Box/Info"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
@@ -230,13 +230,13 @@ horizontal_alignment = 1
 
 [node name="Text" type="Label" parent="AlertBox/Box/Info/GREAT/VC"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0"
 horizontal_alignment = 1
 
 [node name="MEH" type="PanelContainer" parent="AlertBox/Box/Info"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
@@ -250,13 +250,13 @@ horizontal_alignment = 1
 
 [node name="Text" type="Label" parent="AlertBox/Box/Info/MEH/VC"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0"
 horizontal_alignment = 1
 
 [node name="BAD" type="PanelContainer" parent="AlertBox/Box/Info"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
@@ -270,13 +270,13 @@ horizontal_alignment = 1
 
 [node name="Text" type="Label" parent="AlertBox/Box/Info/BAD/VC"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0"
 horizontal_alignment = 1
 
 [node name="Combo" type="PanelContainer" parent="AlertBox/Box/Info"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
@@ -290,13 +290,13 @@ horizontal_alignment = 1
 
 [node name="Text" type="Label" parent="AlertBox/Box/Info/Combo/VC"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0"
 horizontal_alignment = 1
 
 [node name="Accuracy" type="PanelContainer" parent="AlertBox/Box/Info"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
@@ -310,13 +310,13 @@ horizontal_alignment = 1
 
 [node name="Text" type="Label" parent="AlertBox/Box/Info/Accuracy/VC"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "100%"
 horizontal_alignment = 1
 
 [node name="AvgHit" type="PanelContainer" parent="AlertBox/Box/Info"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
@@ -330,14 +330,14 @@ horizontal_alignment = 1
 
 [node name="Text" type="Label" parent="AlertBox/Box/Info/AvgHit/VC"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0ms"
 horizontal_alignment = 1
 
 [node name="TRank" type="PanelContainer" parent="AlertBox/Box/Info"]
 visible = false
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
@@ -351,14 +351,14 @@ horizontal_alignment = 1
 
 [node name="Text" type="Label" parent="AlertBox/Box/Info/TRank/VC"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "#0"
 horizontal_alignment = 1
 
 [node name="TPP" type="PanelContainer" parent="AlertBox/Box/Info"]
 visible = false
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fvdrv")
 
@@ -372,13 +372,13 @@ horizontal_alignment = 1
 
 [node name="Text" type="Label" parent="AlertBox/Box/Info/TPP/VC"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_ed8p7")
 text = "0pp"
 horizontal_alignment = 1
 
 [node name="PlayerButtons" type="PanelContainer" parent="."]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -394,7 +394,7 @@ alignment = 1
 
 [node name="Replay" type="Button" parent="PlayerButtons/Options"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(180, 40)
+custom_minimum_size = Vector2(225, 50)
 layout_mode = 2
 script = ExtResource("6_4q8ht")
 StringText = "Watch Replay"
@@ -402,7 +402,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Retry" type="Button" parent="PlayerButtons/Options"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(180, 40)
+custom_minimum_size = Vector2(225, 50)
 layout_mode = 2
 script = ExtResource("6_4q8ht")
 StringText = "Retry"
@@ -410,7 +410,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Continue" type="Button" parent="PlayerButtons/Options"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(180, 40)
+custom_minimum_size = Vector2(225, 50)
 layout_mode = 2
 script = ExtResource("6_4q8ht")
 StringText = "Continue"
@@ -418,23 +418,23 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="AddCollection" type="Button" parent="PlayerButtons/Options"]
 visible = false
-custom_minimum_size = Vector2(50, 0)
+custom_minimum_size = Vector2(62.5, 0)
 layout_mode = 2
 text = "+"
 
 [node name="LeaderboardList" type="PanelContainer" parent="."]
-custom_minimum_size = Vector2(400, 0)
+custom_minimum_size = Vector2(500, 0)
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_left = -400.0
-offset_bottom = -54.0
+offset_left = -500.0
+offset_bottom = -67.5
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_1di71")
 
 [node name="LeaderboardInfo" type="ScrollContainer" parent="LeaderboardList"]
 clip_children = 1
-custom_minimum_size = Vector2(350, 500)
+custom_minimum_size = Vector2(437.5, 625)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4

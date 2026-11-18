@@ -13,7 +13,7 @@ public partial class PlayerProfilePanel : Control
 	private readonly List<(GridContainer grid, float min, float gap, int max)> _autoGrids = new();
 	private GridContainer _scoreCols;
 
-	private const int SidePad = 15, Gap = 12;
+	private const int SidePad = 19, Gap = 15;
 
 	public PlayerProfilePanel() : this("") { }
 	public PlayerProfilePanel(string username) => _username = username.Trim();
@@ -33,7 +33,7 @@ public partial class PlayerProfilePanel : Control
 		AddChild(center);
 
 		var view = GetViewportRect().Size;
-		_panel = new PanelContainer { CustomMinimumSize = new Vector2(Mathf.Min(1160, view.X - 40), Mathf.Min(820, view.Y - 60)) };
+		_panel = new PanelContainer { CustomMinimumSize = new Vector2(Mathf.Min(1450, view.X - 90), Mathf.Min(1025, view.Y - 75)) };
 		_panel.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(PlayerOverlays.Page, 0, 0, 0));
 		center.AddChild(_panel);
 
@@ -54,7 +54,7 @@ public partial class PlayerProfilePanel : Control
 		_page = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
 		_page.AddThemeConstantOverride("separation", Gap);
 		scroll.AddChild(_page);
-		Section(_page).AddChild(PlayerOverlays.Text($"Loading {_username}'s profile...", 14, PlayerOverlays.Dim));
+		Section(_page).AddChild(PlayerOverlays.Text($"Loading {_username}'s profile...", 18, PlayerOverlays.Dim));
 
 		// Same as the chat overlay: keep the scene underneath from reacting while this is open.
 		_scene = GetTree().CurrentScene;
@@ -87,7 +87,7 @@ public partial class PlayerProfilePanel : Control
 	public override void _PhysicsProcess(double delta)
 	{
 		// From the panel, not the grids: a grid's width follows its columns, which would feed back.
-		var width = _panel.Size.X - SidePad * 2 - 12;
+		var width = _panel.Size.X - SidePad * 2 - 15;
 		foreach (var (grid, min, gap, max) in _autoGrids)
 		{
 			if (!IsInstanceValid(grid)) continue;
@@ -97,7 +97,7 @@ public partial class PlayerProfilePanel : Control
 		}
 		if (IsInstanceValid(_scoreCols))
 		{
-			var columns = _panel.Size.X >= 900 ? 2 : 1; // profile.css: one column under 900px
+			var columns = _panel.Size.X >= 1125 ? 2 : 1; // profile.css: one column under 900px
 			if (_scoreCols.Columns != columns) _scoreCols.Columns = columns;
 		}
 	}
@@ -138,18 +138,18 @@ public partial class PlayerProfilePanel : Control
 		foreach (var c in _page.GetChildren()) c.QueueFree();
 		if (p == null)
 		{
-			Section(_page).AddChild(PlayerOverlays.Text(error ?? "Couldn't load this profile.", 14, PlayerOverlays.Dim, wrap: true));
+			Section(_page).AddChild(PlayerOverlays.Text(error ?? "Couldn't load this profile.", 18, PlayerOverlays.Dim, wrap: true));
 			return;
 		}
 		if (p.Restricted)
 		{
-			var box = Section(_page, 40);
+			var box = Section(_page, 50);
 			var msg = new VBoxContainer();
 			box.AddChild(msg);
-			var face = PlayerOverlays.Text("o-o", 32, bold: true);
+			var face = PlayerOverlays.Text("o-o", 40, bold: true);
 			face.HorizontalAlignment = HorizontalAlignment.Center;
 			msg.AddChild(face);
-			var t = PlayerOverlays.Text("This profile has been privated QnQ", 16, bold: true);
+			var t = PlayerOverlays.Text("This profile has been privated QnQ", 20, bold: true);
 			t.HorizontalAlignment = HorizontalAlignment.Center;
 			msg.AddChild(t);
 			return;
@@ -168,14 +168,14 @@ public partial class PlayerProfilePanel : Control
 	// =====================================================================
 
 	/// <summary>A website ".infobox .pf-section": dark box, 15px sides, 20px top / bottom.</summary>
-	private static PanelContainer Section(Control parent, int marginY = 20)
+	private static PanelContainer Section(Control parent, int marginY = 25)
 	{
 		var box = PlayerOverlays.Panel(PlayerOverlays.Box, 0, SidePad, marginY);
 		parent.AddChild(box);
 		return box;
 	}
 
-	private static VBoxContainer SectionBody(PanelContainer box, int separation = 12)
+	private static VBoxContainer SectionBody(PanelContainer box, int separation = 15)
 	{
 		var v = new VBoxContainer();
 		v.AddThemeConstantOverride("separation", separation);
@@ -186,14 +186,14 @@ public partial class PlayerProfilePanel : Control
 	private static Label SectionTitle(string text) => PlayerOverlays.Text(text, 17, bold: true);
 
 	/// <summary>".pf-sec-head": title on the left, dim note on the right.</summary>
-	private static Label SectionHead(VBoxContainer parent, string title, string note = "", int titleSize = 17)
+	private static Label SectionHead(VBoxContainer parent, string title, string note = "", int titleSize = 21)
 	{
 		var head = new HBoxContainer();
-		head.AddThemeConstantOverride("separation", 10);
+		head.AddThemeConstantOverride("separation", 13);
 		var t = PlayerOverlays.Text(title, titleSize, bold: true);
 		t.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		head.AddChild(t);
-		var n = PlayerOverlays.Text(note, 13, PlayerOverlays.Dim);
+		var n = PlayerOverlays.Text(note, 16, PlayerOverlays.Dim);
 		n.SizeFlagsVertical = SizeFlags.ShrinkCenter;
 		head.AddChild(n);
 		parent.AddChild(head);
@@ -201,7 +201,7 @@ public partial class PlayerProfilePanel : Control
 	}
 
 	/// <summary>fit: CSS auto-fit (columns never outnumber the items, so they stretch) instead of auto-fill.</summary>
-	private GridContainer AutoGrid(Control parent, float min, int gap = 10, bool fit = false)
+	private GridContainer AutoGrid(Control parent, float min, int gap = 13, bool fit = false)
 	{
 		var grid = new GridContainer { Columns = 1, SizeFlagsHorizontal = SizeFlags.ExpandFill };
 		grid.AddThemeConstantOverride("h_separation", gap);
@@ -264,94 +264,94 @@ public partial class PlayerProfilePanel : Control
 		var margin = new MarginContainer { MouseFilter = MouseFilterEnum.Ignore };
 		margin.AddThemeConstantOverride("margin_left", SidePad + 8);
 		margin.AddThemeConstantOverride("margin_right", SidePad + 8);
-		margin.AddThemeConstantOverride("margin_top", 28);
-		margin.AddThemeConstantOverride("margin_bottom", 28);
+		margin.AddThemeConstantOverride("margin_top", 35);
+		margin.AddThemeConstantOverride("margin_bottom", 35);
 		hero.AddChild(margin);
 		var v = new VBoxContainer();
-		v.AddThemeConstantOverride("separation", 14);
+		v.AddThemeConstantOverride("separation", 18);
 		margin.AddChild(v);
 
 		var row = new HBoxContainer();
-		row.AddThemeConstantOverride("separation", 22);
+		row.AddThemeConstantOverride("separation", 28);
 		v.AddChild(row);
 
 		// avatar: 120px, 22px corners, faint border, shadow, green dot when online
-		var avatar = new Control { CustomMinimumSize = new Vector2(120, 120), SizeFlagsVertical = SizeFlags.ShrinkCenter, MouseFilter = MouseFilterEnum.Ignore };
+		var avatar = new Control { CustomMinimumSize = new Vector2(150, 150), SizeFlagsVertical = SizeFlags.ShrinkCenter, MouseFilter = MouseFilterEnum.Ignore };
 		var shadow = new Panel { MouseFilter = MouseFilterEnum.Ignore };
-		var shadowStyle = PlayerOverlays.Style(new Color("#00000070"), 22, 0, 0);
+		var shadowStyle = PlayerOverlays.Style(new Color("#00000070"), 28, 0, 0);
 		shadowStyle.ShadowColor = new Color("#00000070");
-		shadowStyle.ShadowSize = 18;
-		shadowStyle.ShadowOffset = new Vector2(0, 10);
+		shadowStyle.ShadowSize = 23;
+		shadowStyle.ShadowOffset = new Vector2(0, 13);
 		shadow.AddThemeStyleboxOverride("panel", shadowStyle);
 		shadow.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
 		avatar.AddChild(shadow);
-		var pic = PlayerOverlays.FramedPicture(p.Pfp, 120, 22, new Color("#ffffff30"), 3);
+		var pic = PlayerOverlays.FramedPicture(p.Pfp, 150, 28, new Color("#ffffff30"), 4);
 		pic.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
 		avatar.AddChild(pic);
 		if (p.Online)
 		{
-			var dot = Circle(20, PlayerOverlays.Presence, new Color("#2a2230"), 4);
+			var dot = Circle(25, PlayerOverlays.Presence, new Color("#2a2230"), 5);
 			dot.TooltipText = "online";
 			dot.MouseFilter = MouseFilterEnum.Pass;
-			dot.Position = new Vector2(104, 104);
+			dot.Position = new Vector2(130, 130);
 			avatar.AddChild(dot);
 		}
 		row.AddChild(avatar);
 
 		var ident = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill, SizeFlagsVertical = SizeFlags.ShrinkCenter };
-		ident.AddThemeConstantOverride("separation", 10);
+		ident.AddThemeConstantOverride("separation", 13);
 		row.AddChild(ident);
 		var nameRow = new HBoxContainer();
-		nameRow.AddThemeConstantOverride("separation", 12);
+		nameRow.AddThemeConstantOverride("separation", 15);
 		ident.AddChild(nameRow);
-		var name = PlayerOverlays.Text(p.Username, 34, bold: true);
+		var name = PlayerOverlays.Text(p.Username, 43, bold: true);
 		name.AddThemeColorOverride("font_shadow_color", new Color(0, 0, 0, string.IsNullOrEmpty(p.Banner) ? 0 : 0.7f));
-		name.AddThemeConstantOverride("shadow_offset_y", 2);
-		name.AddThemeConstantOverride("shadow_outline_size", 6);
+		name.AddThemeConstantOverride("shadow_offset_y", 3);
+		name.AddThemeConstantOverride("shadow_outline_size", 8);
 		nameRow.AddChild(name);
 		if (p.TeamRole is "mod" or "admin")
 		{
 			// .team-badge
 			var badge = PlayerOverlays.PillLabel(p.TeamRole == "admin" ? "Team Admin" : "Team Moderator",
-				new Color(p.TeamRole == "admin" ? "#6620d6" : "#983aaf"), 14);
-			badge.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(new Color(p.TeamRole == "admin" ? "#6620d6" : "#983aaf"), 5, 12, 5));
+				new Color(p.TeamRole == "admin" ? "#6620d6" : "#983aaf"), 18);
+			badge.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(new Color(p.TeamRole == "admin" ? "#6620d6" : "#983aaf"), 6, 15, 6));
 			badge.SizeFlagsVertical = SizeFlags.ShrinkCenter;
 			nameRow.AddChild(badge);
 		}
 
 		var meta = new HFlowContainer();
-		meta.AddThemeConstantOverride("h_separation", 16);
-		meta.AddThemeConstantOverride("v_separation", 8);
+		meta.AddThemeConstantOverride("h_separation", 20);
+		meta.AddThemeConstantOverride("v_separation", 10);
 		ident.AddChild(meta);
 		var presence = new HBoxContainer();
-		presence.AddThemeConstantOverride("separation", 6);
-		if (p.Online) presence.AddChild(Circle(8, PlayerOverlays.Presence, new Color("#6ee7a033"), 0));
-		presence.AddChild(PlayerOverlays.Text(PlayerOverlays.StatusLine(p).Replace("Last Seen", "Last seen"), 14,
+		presence.AddThemeConstantOverride("separation", 8);
+		if (p.Online) presence.AddChild(Circle(10, PlayerOverlays.Presence, new Color("#6ee7a033"), 0));
+		presence.AddChild(PlayerOverlays.Text(PlayerOverlays.StatusLine(p).Replace("Last Seen", "Last seen"), 18,
 			p.Online ? new Color("#9ff0c0") : PlayerOverlays.Dim));
 		meta.AddChild(presence);
 		if (p.Joined > 0)
 		{
-			var joined = PlayerOverlays.Text($"Joined {System.DateTimeOffset.FromUnixTimeSeconds(p.Joined).ToLocalTime():d MMMM yyyy}", 14, PlayerOverlays.Dim);
+			var joined = PlayerOverlays.Text($"Joined {System.DateTimeOffset.FromUnixTimeSeconds(p.Joined).ToLocalTime():d MMMM yyyy}", 18, PlayerOverlays.Dim);
 			joined.TooltipText = PlayerApi.Ago(p.Joined);
 			joined.MouseFilter = MouseFilterEnum.Pass;
 			meta.AddChild(joined);
 		}
 
 		// .pf-rank-block
-		var rank = PlayerOverlays.Panel(new Color("#00000040"), 14, 18, 12);
+		var rank = PlayerOverlays.Panel(new Color("#00000040"), 18, 23, 15);
 		rank.SizeFlagsVertical = SizeFlags.ShrinkCenter;
 		row.AddChild(rank);
 		var rv = new VBoxContainer();
-		rv.AddThemeConstantOverride("separation", 2);
+		rv.AddThemeConstantOverride("separation", 3);
 		rank.AddChild(rv);
 		Label Right(Label l) { l.HorizontalAlignment = HorizontalAlignment.Right; return l; }
 		rv.AddChild(Right(PlayerOverlays.Caption("Global rank")));
-		rv.AddChild(Right(PlayerOverlays.Text(p.Rank > 0 ? $"#{p.Rank:N0}" : "#?", 32, bold: true)));
-		rv.AddChild(Right(PlayerOverlays.Text($"{p.Points:N0} pp", 15, PlayerOverlays.Accent, bold: true)));
+		rv.AddChild(Right(PlayerOverlays.Text(p.Rank > 0 ? $"#{p.Rank:N0}" : "#?", 40, bold: true)));
+		rv.AddChild(Right(PlayerOverlays.Text($"{p.Points:N0} pp", 19, PlayerOverlays.Accent, bold: true)));
 
 		// .pf-actions
 		var actions = new HBoxContainer { Alignment = BoxContainer.AlignmentMode.End };
-		actions.AddThemeConstantOverride("separation", 8);
+		actions.AddThemeConstantOverride("separation", 10);
 		var self = p.Username == ApiOperator.Username;
 		if (SettingsOperator.SessionConfig.Loggedin && !self)
 		{
@@ -389,18 +389,18 @@ public partial class PlayerProfilePanel : Control
 	private void Stats(PlayerApi.Profile p)
 	{
 		var v = SectionBody(Section(_page));
-		var tiles = AutoGrid(v, 150, fit: true);
+		var tiles = AutoGrid(v, 188, fit: true);
 
 		// level tile with its progress bar
-		var level = PlayerOverlays.Panel(PlayerOverlays.Tile, 12, 16, 14);
+		var level = PlayerOverlays.Panel(PlayerOverlays.Tile, 15, 20, 18);
 		level.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		var lv = new VBoxContainer();
-		lv.AddThemeConstantOverride("separation", 4);
+		lv.AddThemeConstantOverride("separation", 5);
 		level.AddChild(lv);
 		lv.AddChild(PlayerOverlays.Caption("Level"));
-		lv.AddChild(PlayerOverlays.Text(p.Level.ToString("N0"), 21, bold: true));
+		lv.AddChild(PlayerOverlays.Text(p.Level.ToString("N0"), 26, bold: true));
 		var pct = Mathf.Clamp(p.LevelPct, 0, 100);
-		var track = PlayerOverlays.Track(6, new Color("#ffffff1f"), out var fillRow);
+		var track = PlayerOverlays.Track(8, new Color("#ffffff1f"), out var fillRow);
 		track.TooltipText = $"{pct}% to level {p.Level + 1}";
 		track.MouseFilter = MouseFilterEnum.Pass;
 		if (pct > 0)
@@ -412,7 +412,7 @@ public partial class PlayerProfilePanel : Control
 		}
 		if (pct < 100) fillRow.AddChild(new Control { SizeFlagsHorizontal = SizeFlags.ExpandFill, SizeFlagsStretchRatio = 100 - pct, MouseFilter = MouseFilterEnum.Ignore });
 		lv.AddChild(track);
-		lv.AddChild(PlayerOverlays.Text($"{pct}% to next", 12, PlayerOverlays.Dim));
+		lv.AddChild(PlayerOverlays.Text($"{pct}% to next", 15, PlayerOverlays.Dim));
 		tiles.AddChild(level);
 
 		var list = new List<(string, string)>
@@ -424,7 +424,7 @@ public partial class PlayerProfilePanel : Control
 		};
 		foreach (var (k, val) in list)
 		{
-			var tile = PlayerOverlays.StatTile(k, val, 21);
+			var tile = PlayerOverlays.StatTile(k, val, 26);
 			tile.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 			tiles.AddChild(tile);
 		}
@@ -437,10 +437,10 @@ public partial class PlayerProfilePanel : Control
 		};
 		var total = hits.Sum(h => h.n);
 		var hv = new VBoxContainer();
-		hv.AddThemeConstantOverride("separation", 10);
+		hv.AddThemeConstantOverride("separation", 13);
 		v.AddChild(hv);
-		SectionHead(hv, "Hit distribution", $"{total:N0} notes hit", 14);
-		var hitbar = PlayerOverlays.Track(12, new Color("#ffffff14"), out var hitRow, 2);
+		SectionHead(hv, "Hit distribution", $"{total:N0} notes hit", 18);
+		var hitbar = PlayerOverlays.Track(15, new Color("#ffffff14"), out var hitRow, 3);
 		hitbar.TooltipText = string.Join(", ", hits.Select(h => $"{h.label} {h.n:N0}"));
 		hitbar.MouseFilter = MouseFilterEnum.Pass;
 		foreach (var (label, n, color) in hits)
@@ -449,24 +449,24 @@ public partial class PlayerProfilePanel : Control
 			hitRow.AddChild(new ColorRect
 			{
 				Color = color, SizeFlagsHorizontal = SizeFlags.ExpandFill, SizeFlagsStretchRatio = n,
-				CustomMinimumSize = new Vector2(3, 0), MouseFilter = MouseFilterEnum.Ignore,
+				CustomMinimumSize = new Vector2(3.75f, 0), MouseFilter = MouseFilterEnum.Ignore,
 			});
 		}
 		hv.AddChild(hitbar);
 		var legend = new HFlowContainer();
-		legend.AddThemeConstantOverride("h_separation", 18);
-		legend.AddThemeConstantOverride("v_separation", 6);
+		legend.AddThemeConstantOverride("h_separation", 23);
+		legend.AddThemeConstantOverride("v_separation", 8);
 		foreach (var (label, n, color) in hits)
 		{
 			var item = new HBoxContainer();
-			item.AddThemeConstantOverride("separation", 6);
-			var swatch = PlayerOverlays.Panel(color, 3, 0, 0);
-			swatch.CustomMinimumSize = new Vector2(10, 10);
+			item.AddThemeConstantOverride("separation", 8);
+			var swatch = PlayerOverlays.Panel(color, 4, 0, 0);
+			swatch.CustomMinimumSize = new Vector2(13, 13);
 			swatch.SizeFlagsVertical = SizeFlags.ShrinkCenter;
 			item.AddChild(swatch);
-			item.AddChild(PlayerOverlays.Text(label, 13, PlayerOverlays.Dim));
-			item.AddChild(PlayerOverlays.Text(n.ToString("N0"), 13, bold: true));
-			item.AddChild(PlayerOverlays.Text(total > 0 ? $"{n * 100.0 / total:0.0}%" : "0%", 11, PlayerOverlays.Dim));
+			item.AddChild(PlayerOverlays.Text(label, 16, PlayerOverlays.Dim));
+			item.AddChild(PlayerOverlays.Text(n.ToString("N0"), 16, bold: true));
+			item.AddChild(PlayerOverlays.Text(total > 0 ? $"{n * 100.0 / total:0.0}%" : "0%", 14, PlayerOverlays.Dim));
 			legend.AddChild(item);
 		}
 		hv.AddChild(legend);
@@ -480,8 +480,8 @@ public partial class PlayerProfilePanel : Control
 	{
 		var self = p.Username == ApiOperator.Username && SettingsOperator.SessionConfig.Loggedin;
 		if (string.IsNullOrWhiteSpace(p.Bio) && !self) return;
-		var v = SectionBody(Section(_page), 8);
-		var head = new Control { CustomMinimumSize = new Vector2(0, 34) };
+		var v = SectionBody(Section(_page), 10);
+		var head = new Control { CustomMinimumSize = new Vector2(0, 43) };
 		var title = SectionTitle("About me");
 		title.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
 		title.HorizontalAlignment = HorizontalAlignment.Center;
@@ -498,7 +498,7 @@ public partial class PlayerProfilePanel : Control
 		v.AddChild(head);
 		if (string.IsNullOrWhiteSpace(p.Bio))
 		{
-			var empty = PlayerOverlays.Text("You haven't written anything about yourself yet.", 14, new Color("#ffffff80"));
+			var empty = PlayerOverlays.Text("You haven't written anything about yourself yet.", 18, new Color("#ffffff80"));
 			empty.HorizontalAlignment = HorizontalAlignment.Center;
 			v.AddChild(empty);
 			return;
@@ -512,10 +512,10 @@ public partial class PlayerProfilePanel : Control
 			AutowrapMode = TextServer.AutowrapMode.WordSmart,
 			SelectionEnabled = true,
 			MouseFilter = MouseFilterEnum.Pass,
-			Text = "[center]" + BioBBCode.ToGodot(p.Bio.Trim(), 14) + "[/center]",
+			Text = "[center]" + BioBBCode.ToGodot(p.Bio.Trim(), 18) + "[/center]",
 		};
-		text.AddThemeFontSizeOverride("normal_font_size", 14);
-		text.AddThemeFontSizeOverride("bold_font_size", 14);
+		text.AddThemeFontSizeOverride("normal_font_size", 18);
+		text.AddThemeFontSizeOverride("bold_font_size", 18);
 		text.AddThemeFontOverride("bold_font", PlayerOverlays.Bold);
 		text.AddThemeColorOverride("default_color", new Color("#ffffffdd"));
 		text.AddThemeConstantOverride("line_separation", 4);
@@ -536,15 +536,15 @@ public partial class PlayerProfilePanel : Control
 		if (medals.Count == 0) return;
 		var v = SectionBody(Section(_page));
 		SectionHead(v, "Medals", $"{medals.Count(m => m.Achieved)} / {medals.Count} earned");
-		var grid = AutoGrid(v, 210);
+		var grid = AutoGrid(v, 263);
 		foreach (var m in medals.OrderBy(m => !m.Achieved)) grid.AddChild(MedalTile(m));
 	}
 
 	private static Control MedalTile(PlayerApi.Medal m)
 	{
 		StyleBoxFlat Look(bool hover) => m.Achieved
-			? PlayerOverlays.Style(new Color("#f3baff1c"), 12, 14, 12, new Color(hover ? "#f3baff99" : "#f3baff40"))
-			: PlayerOverlays.Style(PlayerOverlays.Tile, 12, 14, 12, new Color(hover ? "#f3baff99" : "#00000000"));
+			? PlayerOverlays.Style(new Color("#f3baff1c"), 15, 18, 15, new Color(hover ? "#f3baff99" : "#f3baff40"))
+			: PlayerOverlays.Style(PlayerOverlays.Tile, 15, 18, 15, new Color(hover ? "#f3baff99" : "#00000000"));
 		var tile = new PanelContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill, MouseFilter = MouseFilterEnum.Pass, MouseDefaultCursorShape = CursorShape.Help };
 		tile.AddThemeStyleboxOverride("panel", Look(false));
 		var how = string.IsNullOrEmpty(m.Hint) ? m.Desc : m.Hint;
@@ -552,20 +552,20 @@ public partial class PlayerProfilePanel : Control
 		tile.TooltipText = (m.Achieved ? got : "") + how;
 
 		var h = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
-		h.AddThemeConstantOverride("separation", 12);
+		h.AddThemeConstantOverride("separation", 15);
 		tile.AddChild(h);
-		var icon = new PanelContainer { CustomMinimumSize = new Vector2(36, 36), SizeFlagsVertical = SizeFlags.ShrinkCenter, MouseFilter = MouseFilterEnum.Ignore };
-		icon.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(m.Achieved ? PlayerOverlays.Accent : new Color("#ffffff20"), 18, 0, 0));
-		var glyph = PlayerOverlays.Text(m.Achieved ? "★" : "?", 18, m.Achieved ? PlayerOverlays.Ink : new Color("#ffffffaa"));
+		var icon = new PanelContainer { CustomMinimumSize = new Vector2(45, 45), SizeFlagsVertical = SizeFlags.ShrinkCenter, MouseFilter = MouseFilterEnum.Ignore };
+		icon.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(m.Achieved ? PlayerOverlays.Accent : new Color("#ffffff20"), 23, 0, 0));
+		var glyph = PlayerOverlays.Text(m.Achieved ? "★" : "?", 23, m.Achieved ? PlayerOverlays.Ink : new Color("#ffffffaa"));
 		glyph.HorizontalAlignment = HorizontalAlignment.Center;
 		glyph.VerticalAlignment = VerticalAlignment.Center;
 		icon.AddChild(glyph);
 		h.AddChild(icon);
 
 		var text = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill, MouseFilter = MouseFilterEnum.Ignore };
-		text.AddThemeConstantOverride("separation", 2);
-		text.AddChild(PlayerOverlays.Text(m.Title, 14, bold: true, trim: true));
-		var desc = PlayerOverlays.Text(m.Desc, 12, PlayerOverlays.Dim, trim: true);
+		text.AddThemeConstantOverride("separation", 3);
+		text.AddChild(PlayerOverlays.Text(m.Title, 18, bold: true, trim: true));
+		var desc = PlayerOverlays.Text(m.Desc, 15, PlayerOverlays.Dim, trim: true);
 		text.AddChild(desc);
 		h.AddChild(text);
 
@@ -596,11 +596,11 @@ public partial class PlayerProfilePanel : Control
 		var box = Section(parent);
 		box.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		box.SizeFlagsVertical = SizeFlags.Fill;
-		var v = SectionBody(box, 6);
+		var v = SectionBody(box, 8);
 		v.AddChild(SectionTitle(title));
 		if (plays.Count == 0)
 		{
-			var l = PlayerOverlays.Text(empty, 14, PlayerOverlays.Dim);
+			var l = PlayerOverlays.Text(empty, 18, PlayerOverlays.Dim);
 			l.HorizontalAlignment = HorizontalAlignment.Center;
 			v.AddChild(l);
 			return;
@@ -617,42 +617,42 @@ public partial class PlayerProfilePanel : Control
 	private static Control ScoreCard(PlayerApi.Play s, double share)
 	{
 		var card = new PanelContainer { MouseFilter = MouseFilterEnum.Pass };
-		var normal = PlayerOverlays.Style(PlayerOverlays.Tile, 10, 12, 10);
-		var hover = PlayerOverlays.Style(PlayerOverlays.Tile2, 10, 12, 10);
+		var normal = PlayerOverlays.Style(PlayerOverlays.Tile, 13, 15, 13);
+		var hover = PlayerOverlays.Style(PlayerOverlays.Tile2, 13, 15, 13);
 		card.AddThemeStyleboxOverride("panel", normal);
 		card.MouseEntered += () => card.AddThemeStyleboxOverride("panel", hover);
 		card.MouseExited += () => card.AddThemeStyleboxOverride("panel", normal);
 		var h = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
-		h.AddThemeConstantOverride("separation", 10);
+		h.AddThemeConstantOverride("separation", 13);
 		card.AddChild(h);
 
 		var grade = PlayerApi.Grade(s);
-		var badge = PlayerOverlays.PillLabel(grade, PlayerOverlays.GradeColor(grade), 14, 44);
-		badge.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(PlayerOverlays.GradeColor(grade), 8, 10, 4));
+		var badge = PlayerOverlays.PillLabel(grade, PlayerOverlays.GradeColor(grade), 18, 55);
+		badge.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(PlayerOverlays.GradeColor(grade), 10, 13, 5));
 		badge.SizeFlagsVertical = SizeFlags.ShrinkCenter;
 		h.AddChild(badge);
 
 		var info = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill, Alignment = BoxContainer.AlignmentMode.Center, MouseFilter = MouseFilterEnum.Ignore };
-		info.AddThemeConstantOverride("separation", 2);
+		info.AddThemeConstantOverride("separation", 3);
 		var line1 = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
 		line1.AddThemeConstantOverride("separation", 0);
-		line1.AddChild(PlayerOverlays.Text(s.Beatmap, 14, bold: true));
-		var by = PlayerOverlays.Text(string.IsNullOrEmpty(s.Artist) ? "" : $" by {s.Artist}", 14, trim: true);
+		line1.AddChild(PlayerOverlays.Text(s.Beatmap, 18, bold: true));
+		var by = PlayerOverlays.Text(string.IsNullOrEmpty(s.Artist) ? "" : $" by {s.Artist}", 18, trim: true);
 		by.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		line1.AddChild(by);
 		info.AddChild(line1);
 		var line2 = $"{s.Difficulty} - {PlayerApi.Ago(s.Created)}";
 		if (System.Math.Abs(s.Speed - 1) > 0.001) line2 += $" ({s.Speed:0.##}x)";
 		if (share >= 0) line2 += $" (weighted {(int)System.Math.Round(share * 100)}%)";
-		info.AddChild(PlayerOverlays.Text(line2, 12, PlayerOverlays.Dim, trim: true));
+		info.AddChild(PlayerOverlays.Text(line2, 15, PlayerOverlays.Dim, trim: true));
 		h.AddChild(info);
 
 		var right = new HBoxContainer { SizeFlagsVertical = SizeFlags.ShrinkCenter, MouseFilter = MouseFilterEnum.Ignore };
-		right.AddThemeConstantOverride("separation", 4);
+		right.AddThemeConstantOverride("separation", 5);
 		foreach (var mod in Mods(s.Mods))
 		{
-			var m = PlayerOverlays.PillLabel(mod, PlayerOverlays.ModPill, 12);
-			m.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(PlayerOverlays.ModPill, 5, 7, 3));
+			var m = PlayerOverlays.PillLabel(mod, PlayerOverlays.ModPill, 15);
+			m.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(PlayerOverlays.ModPill, 6, 9, 4));
 			right.AddChild(m);
 		}
 		if (share >= 0) right.AddChild(Pp($"{(int)(s.Points * share)}pp*", "Weighted"));
@@ -663,8 +663,8 @@ public partial class PlayerProfilePanel : Control
 
 	private static Label Pp(string text, string tooltip)
 	{
-		var l = PlayerOverlays.Text(text, 13, PlayerOverlays.Accent, bold: true);
-		l.CustomMinimumSize = new Vector2(46, 0);
+		var l = PlayerOverlays.Text(text, 16, PlayerOverlays.Accent, bold: true);
+		l.CustomMinimumSize = new Vector2(58, 0);
 		l.HorizontalAlignment = HorizontalAlignment.Right;
 		if (tooltip != null) { l.TooltipText = tooltip; l.MouseFilter = MouseFilterEnum.Pass; }
 		return l;
@@ -677,7 +677,7 @@ public partial class PlayerProfilePanel : Control
 	// Beatmaps they uploaded or claimed: Ranked / Special / Unranked tabs (apiv2/search?uploader=)
 	// =====================================================================
 
-	private const int CardMin = 340, CardGap = 10, PerPage = 50;
+	private const int CardMin = 425, CardGap = 13, PerPage = 50;
 
 	private async void Beatmaps(PlayerApi.Profile p)
 	{
@@ -701,11 +701,11 @@ public partial class PlayerProfilePanel : Control
 		if (tabs.All(t => Count(t.status) == 0)) { box.QueueFree(); return; }
 		box.Visible = true;
 
-		var v = SectionBody(box, 10);
+		var v = SectionBody(box, 13);
 		v.AddChild(SectionTitle("Beatmaps"));
 		v.AddChild(PlayerOverlays.SegmentBar(out var row));
 		var grid = AutoGrid(v, CardMin, CardGap);
-		var hint = PlayerOverlays.Text("", 14, new Color("#ffffffaa"));
+		var hint = PlayerOverlays.Text("", 18, new Color("#ffffffaa"));
 		hint.HorizontalAlignment = HorizontalAlignment.Center;
 		hint.Visible = false;
 		v.AddChild(hint);
@@ -779,17 +779,17 @@ public partial class PlayerProfilePanel : Control
 
 	private void Favorites(string username)
 	{
-		var v = SectionBody(Section(_page), 10);
+		var v = SectionBody(Section(_page), 13);
 		var head = new HBoxContainer();
-		head.AddThemeConstantOverride("separation", 6);
+		head.AddThemeConstantOverride("separation", 8);
 		head.AddChild(SectionTitle("Favourite Beatmaps"));
-		var count = PlayerOverlays.Text("", 15, new Color("#ffffff80"));
+		var count = PlayerOverlays.Text("", 19, new Color("#ffffff80"));
 		count.SizeFlagsVertical = SizeFlags.ShrinkCenter;
 		head.AddChild(count);
 		v.AddChild(head);
 
 		var grid = AutoGrid(v, CardMin, CardGap);
-		var hint = PlayerOverlays.Text("Loading favourites...", 14, new Color("#ffffffaa"), wrap: true);
+		var hint = PlayerOverlays.Text("Loading favourites...", 18, new Color("#ffffffaa"), wrap: true);
 		hint.HorizontalAlignment = HorizontalAlignment.Center;
 		v.AddChild(hint);
 		var more = PlayerOverlays.PillButton("Show more");

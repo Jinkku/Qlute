@@ -41,27 +41,27 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = -110.0
-offset_right = 220.0
-offset_bottom = -48.0
+offset_left = 25.0
+offset_top = -137.5
+offset_right = 275.0
+offset_bottom = -60.0
 grow_vertical = 0
 
 [node name="ScoreBar" parent="HUD" instance=ExtResource("2_tii4h")]
 layout_mode = 1
-offset_top = 40.0
-offset_right = 420.0
-offset_bottom = 140.0
+offset_top = 50.0
+offset_right = 525.0
+offset_bottom = 175.0
 
 [node name="SongProgress" parent="HUD" instance=ExtResource("4_alds2")]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = -30.0
-offset_right = -10.0
-offset_bottom = -11.0
+offset_left = 12.5
+offset_top = -37.5
+offset_right = -12.5
+offset_bottom = -13.75
 grow_vertical = 0
 
 [node name="Leaderboard" parent="HUD" instance=ExtResource("10_wpryt")]
@@ -69,10 +69,10 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 25.0
-offset_top = 20.0
-offset_right = 345.0
-offset_bottom = 340.0
+offset_left = 31.25
+offset_top = 25.0
+offset_right = 431.25
+offset_bottom = 425.0
 grow_vertical = 2
 scale = Vector2(0.8, 0.8)
 
@@ -83,10 +83,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -35.0
-offset_top = 40.0
-offset_right = -30.0
-offset_bottom = 240.0
+offset_left = -43.75
+offset_top = 50.0
+offset_right = -37.5
+offset_bottom = 300.0
 grow_horizontal = 0
 grow_vertical = 2
 

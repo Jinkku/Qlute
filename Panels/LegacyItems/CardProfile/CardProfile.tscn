@@ -4,14 +4,14 @@
 [ext_resource type="Script" uid="uid://dhsh41f2tur4g" path="res://Script/LegacyItems/CardProfile/CardProfile.cs" id="2_5e70r"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5e70r"]
-content_margin_right = 15.0
+content_margin_right = 18.75
 content_margin_bottom = 0.0
 
 [node name="CardProfile" type="TextureRect" unique_id=598196432]
 self_modulate = Color(0.70370483, 0.48046875, 1, 1)
-custom_minimum_size = Vector2(280, 75)
-offset_right = 280.0
-offset_bottom = 75.0
+custom_minimum_size = Vector2(350, 93.75)
+offset_right = 350.0
+offset_bottom = 93.75
 texture = ExtResource("1_5e70r")
 expand_mode = 1
 script = ExtResource("2_5e70r")
@@ -23,13 +23,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -162.0
-offset_top = -27.0
-offset_right = -10.0
-offset_bottom = -8.0
+offset_left = -202.5
+offset_top = -33.75
+offset_right = -12.5
+offset_bottom = -10.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 13
 text = "Accuracy - 100.00%"
 horizontal_alignment = 2
 vertical_alignment = 2
@@ -39,7 +39,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -3.0
+offset_bottom = -3.75
 grow_horizontal = 2
 grow_vertical = 2
 offset_transform_enabled = true
@@ -48,17 +48,17 @@ alignment = 1
 
 [node name="Username" type="Label" parent="Leftside" unique_id=2014141991]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxEmpty_5e70r")
 text = "Username"
 text_overrun_behavior = 5
 
 [node name="pp" type="Label" parent="Leftside" unique_id=330402387]
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 13
 text = "99,999pp"
 
 [node name="Score" type="Label" parent="Leftside" unique_id=770542654]
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 13
 text = "999,999,999"

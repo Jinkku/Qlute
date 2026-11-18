@@ -64,7 +64,7 @@ public partial class StoryboardEditor : Control
 	private static PanelContainer Panel(float width)
 	{
 		var p = new PanelContainer { CustomMinimumSize = new Vector2(width, 0) };
-		var style = new StyleBoxFlat { BgColor = new Color(0.08f, 0.1f, 0.08f, 0.92f), ContentMarginLeft = 10, ContentMarginRight = 10, ContentMarginTop = 10, ContentMarginBottom = 10 };
+		var style = new StyleBoxFlat { BgColor = new Color(0.08f, 0.1f, 0.08f, 0.92f), ContentMarginLeft = 13, ContentMarginRight = 13, ContentMarginTop = 13, ContentMarginBottom = 13 };
 		p.AddThemeStyleboxOverride("panel", style);
 		return p;
 	}
@@ -84,12 +84,12 @@ public partial class StoryboardEditor : Control
 
 	private Control BuildObjectPanel()
 	{
-		var panel = Panel(240);
+		var panel = Panel(300);
 		var box = new VBoxContainer();
 		panel.AddChild(box);
 		box.AddChild(Title("Storyboard objects"));
 		_objects = new ItemList { SizeFlagsVertical = SizeFlags.ExpandFill, FocusMode = FocusModeEnum.None, TextOverrunBehavior = TextServer.OverrunBehavior.TrimEllipsis };
-		_objects.AddThemeFontSizeOverride("font_size", 13);
+		_objects.AddThemeFontSizeOverride("font_size", 16);
 		_objects.ItemSelected += i => Select(ObjectAtRow((int)i));
 		_objects.ItemActivated += i =>
 		{
@@ -112,7 +112,7 @@ public partial class StoryboardEditor : Control
 			AutowrapMode = TextServer.AutowrapMode.WordSmart,
 			Modulate = new Color(1, 1, 1, 0.6f),
 		};
-		_hint.AddThemeFontSizeOverride("font_size", 11);
+		_hint.AddThemeFontSizeOverride("font_size", 14);
 		box.AddChild(_hint);
 		return panel;
 	}
@@ -155,7 +155,7 @@ public partial class StoryboardEditor : Control
 
 	private Control BuildPropertyPanel()
 	{
-		var panel = Panel(320);
+		var panel = Panel(400);
 		var scroll = new ScrollContainer { HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled };
 		panel.AddChild(scroll);
 		_props = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
@@ -209,8 +209,8 @@ public partial class StoryboardEditor : Control
 
 		_props.AddChild(new HSeparator());
 		_props.AddChild(Title("Commands"));
-		_commands = new ItemList { CustomMinimumSize = new Vector2(0, 150), FocusMode = FocusModeEnum.None };
-		_commands.AddThemeFontSizeOverride("font_size", 13);
+		_commands = new ItemList { CustomMinimumSize = new Vector2(0, 188), FocusMode = FocusModeEnum.None };
+		_commands.AddThemeFontSizeOverride("font_size", 16);
 		_commands.ItemSelected += i => { _selectedCommand = (int)i; LoadCommandEditor(); };
 		_commands.ItemActivated += i =>
 		{
@@ -270,7 +270,7 @@ public partial class StoryboardEditor : Control
 	{
 		var box = new VBoxContainer();
 		var l = new Label { Text = label, Modulate = new Color(1, 1, 1, 0.75f) };
-		l.AddThemeFontSizeOverride("font_size", 12);
+		l.AddThemeFontSizeOverride("font_size", 15);
 		box.AddChild(l);
 		c.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		box.AddChild(c);
@@ -280,7 +280,7 @@ public partial class StoryboardEditor : Control
 	private static SpinBox Spin(double min, double max, double step) => new()
 	{
 		MinValue = min, MaxValue = max, Step = step, AllowGreater = true, AllowLesser = true,
-		SizeFlagsHorizontal = SizeFlags.ExpandFill, CustomMinimumSize = new Vector2(60, 0),
+		SizeFlagsHorizontal = SizeFlags.ExpandFill, CustomMinimumSize = new Vector2(75, 0),
 		SelectAllOnFocus = true,
 	};
 
@@ -753,15 +753,15 @@ public partial class StoryboardPreviewOverlay : Control
 		var colour = Host.Editable ? new Color(1f, 0.85f, 0.2f) : new Color(0.6f, 0.6f, 0.6f);
 		if (corners != null)
 		{
-			for (int i = 0; i < 4; i++) DrawLine(corners[i], corners[(i + 1) % 4], colour, 2);
+			for (int i = 0; i < 4; i++) DrawLine(corners[i], corners[(i + 1) % 4], colour, 3);
 		}
 		var anchor = Host.SelectedAnchor();
 		if (anchor is { } at)
 		{
-			DrawLine(at - new Vector2(8, 0), at + new Vector2(8, 0), colour, 2);
-			DrawLine(at - new Vector2(0, 8), at + new Vector2(0, 8), colour, 2);
+			DrawLine(at - new Vector2(10, 0), at + new Vector2(10, 0), colour, 3);
+			DrawLine(at - new Vector2(0, 10), at + new Vector2(0, 10), colour, 3);
 			if (!Host.SelectedVisibleNow)
-				DrawString(GetThemeDefaultFont(), at + new Vector2(10, -6), "not visible now", HorizontalAlignment.Left, -1, 12, colour);
+				DrawString(GetThemeDefaultFont(), at + new Vector2(13, -8), "not visible now", HorizontalAlignment.Left, -1, 15, colour);
 		}
 	}
 }

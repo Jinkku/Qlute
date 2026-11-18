@@ -46,7 +46,7 @@ public partial class ButtonFade : Button
     
     private void resize()
     {
-	    Size = new Vector2(Math.Max(oldsizex, _buttonText.Size.X + 20), Math.Max(oldsizey, _buttonText.Size.Y + 20));
+	    Size = new Vector2(Math.Max(oldsizex, _buttonText.Size.X + 25), Math.Max(oldsizey, _buttonText.Size.Y + 25));
     }
     private bool Hovered = false;
     private Tween _focus_animation;

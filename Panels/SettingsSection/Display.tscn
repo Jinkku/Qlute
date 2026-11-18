@@ -9,47 +9,47 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u12hm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4rrg5"]
-content_margin_left = 8.0
-content_margin_top = 15.0
-content_margin_right = 8.0
-content_margin_bottom = 15.0
+content_margin_left = 10.0
+content_margin_top = 18.75
+content_margin_right = 10.0
+content_margin_bottom = 18.75
 bg_color = Color(0, 0, 0, 0.392157)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nx0f5"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lwltm"]
-content_margin_left = 5.0
-content_margin_right = 5.0
+content_margin_left = 6.25
+content_margin_right = 6.25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npfg4"]
-content_margin_left = 5.0
-content_margin_right = 5.0
+content_margin_left = 6.25
+content_margin_right = 6.25
 bg_color = Color(1, 1, 1, 0.196078)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tuuye"]
 
 [node name="Display" type="PanelContainer" unique_id=1784822534]
-custom_minimum_size = Vector2(0, 480)
-offset_right = 40.0
-offset_bottom = 40.0
+custom_minimum_size = Vector2(0, 600)
+offset_right = 530.0
+offset_bottom = 609.5
 theme_override_styles/panel = ExtResource("1_3rl3a")
 script = ExtResource("1_lcyqc")
 
 [node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Title" type="Label" parent="Rows" unique_id=528032714]
 layout_mode = 2
@@ -64,7 +64,7 @@ text = "Window mode"
 [node name="WindowSelector" type="OptionButton" parent="Rows" unique_id=1760207384]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_u12hm")
-theme_override_constants/arrow_margin = 10
+theme_override_constants/arrow_margin = 13
 item_count = 3
 popup/item_0/text = "Fullscreen"
 popup/item_0/id = 0
@@ -82,7 +82,7 @@ text = "Limit FPS"
 layout_mode = 2
 theme_override_styles/disabled = SubResource("StyleBoxFlat_4rrg5")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_u12hm")
-theme_override_constants/arrow_margin = 10
+theme_override_constants/arrow_margin = 13
 selected = 1
 item_count = 5
 popup/item_0/text = "VSync"
@@ -106,7 +106,7 @@ text = "Screen resolution"
 [node name="Resolution" type="OptionButton" parent="Rows" unique_id=33542966]
 visible = false
 layout_mode = 2
-theme_override_constants/arrow_margin = 10
+theme_override_constants/arrow_margin = 13
 selected = 0
 item_count = 1
 popup/item_0/text = "Default"

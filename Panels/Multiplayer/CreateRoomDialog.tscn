@@ -3,28 +3,28 @@
 [ext_resource type="Script" path="res://Script/Multiplayer/CreateRoomDialog.cs" id="1_script"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-content_margin_left = 24.0
-content_margin_top = 20.0
-content_margin_right = 24.0
-content_margin_bottom = 20.0
+content_margin_left = 30.0
+content_margin_top = 25.0
+content_margin_right = 30.0
+content_margin_bottom = 25.0
 bg_color = Color(0.141176, 0.164706, 0.219608, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 shadow_color = Color(0, 0, 0, 0.4)
-shadow_size = 12
+shadow_size = 15
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_map"]
-content_margin_left = 10.0
-content_margin_top = 6.0
-content_margin_right = 10.0
-content_margin_bottom = 6.0
+content_margin_left = 12.5
+content_margin_top = 7.5
+content_margin_right = 12.5
+content_margin_bottom = 7.5
 bg_color = Color(0, 0, 0, 0.25)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="CreateRoomDialog" type="Control" node_paths=PackedStringArray("NameEdit", "Visibility", "VisibilityHint", "BeatmapName", "ChangeBeatmap", "ClearBeatmap", "CancelButton", "CreateButton")]
 layout_mode = 3
@@ -61,18 +61,18 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="Center"]
-custom_minimum_size = Vector2(620, 0)
+custom_minimum_size = Vector2(775, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
 [node name="Rows" type="VBoxContainer" parent="Center/Panel"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Title" type="Label" parent="Center/Panel/Rows"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.488281, 0.784119, 1, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 38
 text = "Create a room"
 
 [node name="NameLabel" type="Label" parent="Center/Panel/Rows"]
@@ -98,7 +98,7 @@ popup/item_1/id = 1
 
 [node name="VisibilityHint" type="Label" parent="Center/Panel/Rows"]
 modulate = Color(1, 1, 1, 0.6)
-custom_minimum_size = Vector2(570, 0)
+custom_minimum_size = Vector2(712.5, 0)
 layout_mode = 2
 autowrap_mode = 3
 
@@ -115,7 +115,7 @@ size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_map")
 
 [node name="BeatmapName" type="Label" parent="Center/Panel/Rows/BeatmapRow/BeatmapBox"]
-custom_minimum_size = Vector2(1, 0)
+custom_minimum_size = Vector2(1.25, 0)
 layout_mode = 2
 text = "None"
 text_overrun_behavior = 3
@@ -129,7 +129,7 @@ layout_mode = 2
 text = "Clear"
 
 [node name="Spacer" type="Control" parent="Center/Panel/Rows"]
-custom_minimum_size = Vector2(0, 6)
+custom_minimum_size = Vector2(0, 7.5)
 layout_mode = 2
 
 [node name="Buttons" type="HBoxContainer" parent="Center/Panel/Rows"]
@@ -137,11 +137,11 @@ layout_mode = 2
 alignment = 2
 
 [node name="Cancel" type="Button" parent="Center/Panel/Rows/Buttons"]
-custom_minimum_size = Vector2(120, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Cancel"
 
 [node name="Create" type="Button" parent="Center/Panel/Rows/Buttons"]
-custom_minimum_size = Vector2(160, 0)
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Create room"

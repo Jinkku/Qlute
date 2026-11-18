@@ -82,7 +82,7 @@ public partial class InfoBar : ColorRect
 			_tween.TweenProperty(ChatBox, "position", new Vector2(0, GetViewportRect().Size.Y - ChatBox.Size.Y), 0.3f)
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
-			_tween.TweenProperty(GetTree().CurrentScene, "position", new Vector2(0, -50), 0.3f)
+			_tween.TweenProperty(GetTree().CurrentScene, "position", new Vector2(0, -63), 0.3f)
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
 			_tween.TweenProperty(GetTree().CurrentScene, "modulate", new Color(0.5f, 0.5f, 0.5f, 1f), 0.3f)
@@ -129,7 +129,7 @@ public partial class InfoBar : ColorRect
 			TopPanel.AddChild(VolumePanel);
 			GetTree().CurrentScene.GetNode(".").SetProcessInput(false);
 			var _tween = VolumePanel.CreateTween();
-			VolumePanel.Position = new Vector2(-VolumePanel.Size.X, 50);
+			VolumePanel.Position = new Vector2(-VolumePanel.Size.X, 63);
 			VolumePanel.Size = new Vector2(VolumePanel.Size.X, GetViewportRect().Size[1]);
 			VolumePanel.MouseFilter = Control.MouseFilterEnum.Ignore;
 			VolumePanel.Modulate = new Color(1f, 1f, 1f, 0f);
@@ -170,7 +170,7 @@ public partial class InfoBar : ColorRect
 				NotiCard.SetMeta("time", NotiInfo.Time);
 				AddChild(NotiCard);
 				var tween = NotiCard.CreateTween();
-				tween.TweenProperty(NotiCard, "position:x", GetViewportRect().Size.X - NotiCard.Size.X - 10, 0.2f)
+				tween.TweenProperty(NotiCard, "position:x", GetViewportRect().Size.X - NotiCard.Size.X - 13, 0.2f)
 					.SetTrans(Tween.TransitionType.Cubic)
 					.SetEase(Tween.EaseType.Out);
 				tween.Play();

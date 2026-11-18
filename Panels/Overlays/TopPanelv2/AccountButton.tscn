@@ -9,14 +9,14 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5yayb"]
 bg_color = Color(0.9452769, 0.9452769, 0.9452769, 1)
-corner_radius_bottom_right = 15
+corner_radius_bottom_right = 19
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yewru"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8fwpo"]
 bg_color = Color(1, 0, 0.84375, 1)
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
 
 [sub_resource type="Animation" id="Animation_1f010"]
 length = 0.001
@@ -59,8 +59,8 @@ _data = {
 [node name="AccountButton" type="Button" unique_id=1629758720]
 process_mode = 3
 self_modulate = Color(0.2421875, 0.2421875, 0.2421875, 1)
-offset_right = 200.0
-offset_bottom = 50.0
+offset_right = 250.0
+offset_bottom = 62.5
 theme_override_styles/normal = SubResource("StyleBoxFlat_5yayb")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_5yayb")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5yayb")
@@ -70,13 +70,13 @@ script = ExtResource("1_5yayb")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=2019225579]
 clip_children = 1
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(62.5, 62.5)
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_top = 5.0
-offset_right = 52.0
-offset_bottom = -5.0
+offset_top = 6.25
+offset_right = 65.0
+offset_bottom = -6.25
 grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8fwpo")
@@ -92,20 +92,20 @@ stretch_mode = 6
 process_mode = 3
 visible = false
 layout_mode = 0
-offset_left = 55.0
-offset_top = 25.0
-offset_right = 103.0
-offset_bottom = 44.0
+offset_left = 68.75
+offset_top = 31.25
+offset_right = 128.75
+offset_bottom = 55.0
 text = "#?"
 script = ExtResource("3_75g75")
 
 [node name="UPlayerName" type="Label" parent="." unique_id=1189898781]
 process_mode = 3
 layout_mode = 1
-offset_left = 57.0
-offset_top = 5.0
-offset_right = 198.0
-offset_bottom = 46.0
+offset_left = 71.25
+offset_top = 6.25
+offset_right = 247.5
+offset_bottom = 57.5
 text = "If your seeing 
 this... it broke :<"
 clip_text = true
@@ -113,10 +113,11 @@ text_overrun_behavior = 3
 script = ExtResource("4_kstth")
 
 [node name="Loadingicon" type="Sprite2D" parent="." unique_id=776531984]
+scale = Vector2(1.25, 1.25)
 process_mode = 3
 visible = false
 texture_filter = 1
-position = Vector2(175, 25)
+position = Vector2(218.75, 31.25)
 texture = ExtResource("5_m3his")
 
 [node name="Loadinganimation" type="AnimationPlayer" parent="Loadingicon" unique_id=380668583]
@@ -125,19 +126,19 @@ libraries/ = SubResource("AnimationLibrary_1f8y5")
 
 [node name="Placeholder" type="Control" parent="." unique_id=925967214]
 process_mode = 3
-custom_minimum_size = Vector2(69, 60)
+custom_minimum_size = Vector2(86.25, 75)
 layout_mode = 1
 anchors_preset = 0
-offset_right = 80.0
-offset_bottom = 41.0
+offset_right = 100.0
+offset_bottom = 51.25
 mouse_filter = 2
 script = ExtResource("6_en5jc")
 
 [node name="CardBorder" type="TextureRect" parent="." unique_id=297838460]
-custom_minimum_size = Vector2(230, 80)
+custom_minimum_size = Vector2(287.5, 100)
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 50.0
+offset_bottom = 50.0
 mouse_filter = 2
 expand_mode = 1
 

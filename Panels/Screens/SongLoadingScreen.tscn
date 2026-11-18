@@ -10,36 +10,36 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_28gti"]
 bg_color = Color(0.242188, 0.242188, 0.242188, 1)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-expand_margin_left = 150.0
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
+expand_margin_left = 187.5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ukgnb"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0.242188, 0.242188, 0.242188, 1)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-expand_margin_right = 30.0
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
+expand_margin_right = 37.5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_28gti"]
-content_margin_left = 15.0
+content_margin_left = 18.75
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cviis"]
-content_margin_left = 8.0
+content_margin_left = 10.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_731vf"]
-content_margin_left = 3.0
+content_margin_left = 3.75
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ukgnb"]
-content_margin_left = 15.0
+content_margin_left = 18.75
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pj3ow"]
 shader = ExtResource("4_5hbj0")
@@ -55,16 +55,16 @@ shader_parameter/x_offset = -8.0
 draw_center = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cviis"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 bg_color = Color(0, 0, 0, 0.196078)
 skew = Vector2(0.2, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_731vf"]
 shader = ExtResource("4_5hbj0")
@@ -94,16 +94,16 @@ one_shot = true
 
 [node name="Previewimage" type="PanelContainer" parent="." unique_id=600511256]
 clip_children = 2
-custom_minimum_size = Vector2(600, 400)
+custom_minimum_size = Vector2(750, 500)
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -200.0
-offset_right = 400.0
-offset_bottom = 200.0
+offset_top = -250.0
+offset_right = 500.0
+offset_bottom = 250.0
 grow_vertical = 2
-pivot_offset = Vector2(311, 298)
+pivot_offset = Vector2(388.75, 372.5)
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_28gti")
 
@@ -115,7 +115,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 57.0
+offset_right = 71.25
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_4pmu1")
@@ -130,10 +130,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -589.0
-offset_top = -92.0
-offset_right = 1.0
-offset_bottom = 92.0
+offset_left = -736.25
+offset_top = -115.0
+offset_right = 1.25
+offset_bottom = 115.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ukgnb")
@@ -145,7 +145,7 @@ alignment = 1
 
 [node name="Title" type="Label" parent="InfoBox/Box" unique_id=843293484]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxEmpty_28gti")
 text = "Sweet Dreams"
 clip_text = true
@@ -153,7 +153,7 @@ text_overrun_behavior = 3
 
 [node name="Artist" type="Label" parent="InfoBox/Box" unique_id=471813600]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxEmpty_cviis")
 text = "Tokana Nanashi"
 clip_text = true
@@ -161,7 +161,7 @@ text_overrun_behavior = 3
 
 [node name="Difficulty" type="Label" parent="InfoBox/Box" unique_id=1106519377]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxEmpty_731vf")
 text = "Love me like you take me away~"
 clip_text = true
@@ -170,7 +170,7 @@ text_overrun_behavior = 3
 [node name="Source" type="Label" parent="InfoBox/Box" unique_id=1647018462]
 visible = false
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ukgnb")
 text = "Source: MAKA PIE?!"
 clip_text = true
@@ -179,14 +179,14 @@ text_overrun_behavior = 3
 [node name="Creator" type="Label" parent="InfoBox/Box" unique_id=1956341986]
 material = SubResource("ShaderMaterial_pj3ow")
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxEmpty_bbpbm")
 text = "Creator: dummy"
 text_overrun_behavior = 3
 
 [node name="Infos" type="PanelContainer" parent="InfoBox/Box" unique_id=961638920]
 material = SubResource("ShaderMaterial_5hbj0")
-custom_minimum_size = Vector2(0, 19)
+custom_minimum_size = Vector2(0, 23.75)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5hbj0")
 
@@ -197,13 +197,13 @@ layout_mode = 2
 [node name="Level" type="Label" parent="InfoBox/Box/Infos/Sections" unique_id=1219921058]
 use_parent_material = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_cviis")
 text = "Lv. 42"
 
 [node name="Mods" type="HBoxContainer" parent="InfoBox/Box" unique_id=1717659836]
 material = SubResource("ShaderMaterial_731vf")
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 37.5)
 layout_mode = 2
 script = ExtResource("5_cviis")
 
@@ -217,10 +217,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -420.0
-offset_top = -102.0
-offset_right = -20.0
-offset_bottom = -20.0
+offset_left = -525.0
+offset_top = -127.5
+offset_right = -25.0
+offset_bottom = -25.0
 grow_horizontal = 0
 grow_vertical = 0
 

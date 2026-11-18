@@ -151,6 +151,11 @@ public class Skin
             if (json.TryGetValue("Layout", out var layout) && layout is JsonElement layoutJson && layoutJson.ValueKind == JsonValueKind.Object)
             {
                 PreElement.Layout = SkinLayout.Deserialize(layoutJson.GetRawText());
+                // Layouts saved before the 1920x1080 base (no "LayoutBase") are in 1280x720 layout pixels.
+                bool base1080 = json.TryGetValue(SkinLayout.BaseKey, out var lb) && lb is JsonElement lbj
+                    && lbj.ValueKind == JsonValueKind.Number && lbj.TryGetInt32(out var lbv) && lbv >= SkinLayout.BaseHeight;
+                if (!base1080)
+                    foreach (var e in PreElement.Layout.Values) { e.X *= UiScale.Factor; e.Y *= UiScale.Factor; }
             }
             foreach (int i in Enumerable.Range(0, 4))
             {

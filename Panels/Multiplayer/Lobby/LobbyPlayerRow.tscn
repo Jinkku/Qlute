@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c7qlt2q1n5tmy" path="res://Resources/System/guest.png" id="4_guest"]
 
 [node name="LobbyPlayerRow" type="PanelContainer" node_paths=PackedStringArray("NameLabel", "HostBadge", "YouBadge", "DetailLabel", "StatusPill", "MakeHostButton")]
-custom_minimum_size = Vector2(0, 58)
+custom_minimum_size = Vector2(0, 72.5)
 size_flags_horizontal = 3
 theme = ExtResource("1_theme")
 theme_type_variation = &"LobbyRow"
@@ -20,11 +20,11 @@ MakeHostButton = NodePath("H/MakeHost")
 
 [node name="H" type="HBoxContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Avatar" type="TextureRect" parent="H"]
 clip_children = 1
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_vertical = 4
 texture = ExtResource("3_mask")
@@ -45,7 +45,7 @@ stretch_mode = 6
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-theme_override_constants/separation = 4
+theme_override_constants/separation = 5
 
 [node name="Name" type="Label" parent="H/Info"]
 layout_mode = 2
@@ -55,7 +55,7 @@ text_overrun_behavior = 3
 
 [node name="Tags" type="HBoxContainer" parent="H/Info"]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="Status" type="Label" parent="H/Info/Tags"]
 layout_mode = 2
@@ -78,7 +78,7 @@ text = "YOU"
 visible = false
 layout_mode = 2
 theme_type_variation = &"LobbySubtle"
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 15
 text = "0   100.00%   0x"
 
 [node name="MakeHost" type="Button" parent="H"]

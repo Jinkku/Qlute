@@ -10,38 +10,38 @@ bg_color = Color(0.117647, 0.0980392, 0.137255, 1)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_napsa"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_312qs"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-corner_radius_top_right = 25
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
+corner_radius_top_right = 31
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wb85x"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g88nb"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yr25w"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_njyxv"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-corner_radius_top_left = 35
-corner_radius_top_right = 35
-corner_radius_bottom_right = 35
-corner_radius_bottom_left = 35
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+corner_radius_top_left = 44
+corner_radius_top_right = 44
+corner_radius_bottom_right = 44
+corner_radius_bottom_left = 44
 
 [node name="SetupScreenEditor" type="Control"]
 layout_mode = 3
@@ -58,7 +58,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -50.0
+offset_top = -62.5
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_6ukjg")
@@ -68,7 +68,7 @@ layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="BackButton" type="Button" parent="ControlPanel/Box"]
-custom_minimum_size = Vector2(108, 50)
+custom_minimum_size = Vector2(135, 62.5)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_napsa")
 theme_override_styles/hover = SubResource("StyleBoxFlat_312qs")
@@ -84,9 +84,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 1.0
-offset_right = -18.0
-offset_bottom = 1.0
+offset_top = 1.25
+offset_right = -22.5
+offset_bottom = 1.25
 grow_horizontal = 2
 grow_vertical = 2
 text = "Back"
@@ -97,13 +97,13 @@ vertical_alignment = 1
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 50.0
+offset_right = 62.5
 grow_vertical = 2
 texture = ExtResource("1_lw0j6")
 stretch_mode = 3
 
 [node name="Next" type="Button" parent="ControlPanel/Box"]
-custom_minimum_size = Vector2(108, 50)
+custom_minimum_size = Vector2(135, 62.5)
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_styles/focus = SubResource("StyleBoxEmpty_napsa")
@@ -124,17 +124,17 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
-custom_minimum_size = Vector2(500, 500)
+custom_minimum_size = Vector2(625, 625)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -250.0
-offset_right = 250.0
-offset_bottom = 250.0
+offset_left = -312.5
+offset_top = -312.5
+offset_right = 312.5
+offset_bottom = 312.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_njyxv")

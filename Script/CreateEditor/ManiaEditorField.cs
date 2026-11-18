@@ -22,8 +22,8 @@ public partial class ManiaEditorField : Control
 {
 	public Create Editor { get; set; }
 
-	private const float BasePxPerMs = 0.45f;
-	private const int MaxLaneWidth = 100;
+	private const float BasePxPerMs = 0.5625f;
+	private const int MaxLaneWidth = 125;
 
 	// interaction state
 	private Vector2 _mouse;
@@ -83,9 +83,9 @@ public partial class ManiaEditorField : Control
 		get
 		{
 			var tex = Skin.Element?.NoteBack;
-			if (tex == null) return 20;
+			if (tex == null) return 25;
 			var s = tex.GetSize();
-			return Mathf.Clamp(LaneWidth * s.Y / Mathf.Max(1, s.X), 12, 40);
+			return Mathf.Clamp(LaneWidth * s.Y / Mathf.Max(1, s.X), 15, 50);
 		}
 	}
 
@@ -94,7 +94,7 @@ public partial class ManiaEditorField : Control
 		var h = NoteHeight;
 		var x = FieldLeft + (n.Lane + dl) * LaneWidth;
 		var y = TimeToY(n.Time + dt) - h / 2f;
-		return new Rect2(x + 2, y, LaneWidth - 4, h);
+		return new Rect2(x + 3, y, LaneWidth - 5, h);
 	}
 
 	private EditorNote NoteAt(Vector2 pos)
@@ -108,7 +108,7 @@ public partial class ManiaEditorField : Control
 		foreach (var n in map.Notes)
 		{
 			if (n.Lane != lane) continue;
-			var r = NoteRect(n).Grow(3);
+			var r = NoteRect(n).Grow(3.75f);
 			if (n.IsHold) r = r.Expand(new Vector2(r.Position.X, TimeToY(n.EndTime)));
 			if (!r.HasPoint(pos)) continue;
 			var d = Mathf.Abs(TimeToY(n.Time) - pos.Y);
@@ -136,8 +136,8 @@ public partial class ManiaEditorField : Control
 			DrawRect(new Rect2(left + i * LaneWidth, 0, LaneWidth, Size.Y), new Color(lane.R, lane.G, lane.B, 0.05f));
 			if (i > 0) DrawLine(new Vector2(left + i * LaneWidth, 0), new Vector2(left + i * LaneWidth, Size.Y), new Color(1, 1, 1, 0.08f));
 		}
-		DrawLine(new Vector2(left, 0), new Vector2(left, Size.Y), new Color(1, 1, 1, 0.3f), 2);
-		DrawLine(new Vector2(left + width, 0), new Vector2(left + width, Size.Y), new Color(1, 1, 1, 0.3f), 2);
+		DrawLine(new Vector2(left, 0), new Vector2(left, Size.Y), new Color(1, 1, 1, 0.3f), 3);
+		DrawLine(new Vector2(left + width, 0), new Vector2(left + width, Size.Y), new Color(1, 1, 1, 0.3f), 3);
 
 		// song start/end
 		DrawRect(new Rect2(left, TimeToY(0), width, Size.Y), new Color(0, 0, 0, 0.4f));
@@ -153,23 +153,23 @@ public partial class ManiaEditorField : Control
 		foreach (var tp in map.TimingPoints)
 		{
 			var y = TimeToY(tp.Offset);
-			if (y < -20 || y > Size.Y + 20) continue;
-			DrawLine(new Vector2(left - 70, y), new Vector2(left + width, y), new Color(1f, 0.2f, 0.2f, 0.9f), 2);
-			DrawString(font, new Vector2(left - 70, y - 4), $"{tp.Bpm:0.##} BPM", HorizontalAlignment.Left, -1, 12, new Color(1f, 0.5f, 0.5f));
+			if (y < -25 || y > Size.Y + 25) continue;
+			DrawLine(new Vector2(left - 88, y), new Vector2(left + width, y), new Color(1f, 0.2f, 0.2f, 0.9f), 3);
+			DrawString(font, new Vector2(left - 88, y - 5), $"{tp.Bpm:0.##} BPM", HorizontalAlignment.Left, -1, 15, new Color(1f, 0.5f, 0.5f));
 		}
 		if (map.PreviewTime >= 0)
 		{
 			var y = TimeToY(map.PreviewTime);
-			if (y > -20 && y < Size.Y + 20)
+			if (y > -25 && y < Size.Y + 25)
 			{
-				DrawLine(new Vector2(left + width, y), new Vector2(left + width + 70, y), new Color(0.3f, 1f, 0.5f, 0.9f), 2);
-				DrawString(font, new Vector2(left + width + 4, y - 4), "Preview", HorizontalAlignment.Left, -1, 12, new Color(0.5f, 1f, 0.6f));
+				DrawLine(new Vector2(left + width, y), new Vector2(left + width + 88, y), new Color(0.3f, 1f, 0.5f, 0.9f), 3);
+				DrawString(font, new Vector2(left + width + 5, y - 5), "Preview", HorizontalAlignment.Left, -1, 15, new Color(0.5f, 1f, 0.6f));
 			}
 		}
 
 		// notes
 		var sel = Editor.Selection;
-		var margin = 60 / PxPerMs;
+		var margin = 75 / PxPerMs;
 		foreach (var n in map.Notes)
 		{
 			var end = n.IsHold ? n.EndTime : n.Time;
@@ -196,14 +196,14 @@ public partial class ManiaEditorField : Control
 		}
 
 		// judgement line (= current time)
-		DrawRect(new Rect2(left, JudgeY - 1.5f, width, 3), new Color(1f, 1f, 1f, 0.9f));
-		DrawString(font, new Vector2(left + width + 6, JudgeY + 5), Editor.FormatTime(Now), HorizontalAlignment.Left, -1, 13, Colors.White);
+		DrawRect(new Rect2(left, JudgeY - 1.875f, width, 3.75f), new Color(1f, 1f, 1f, 0.9f));
+		DrawString(font, new Vector2(left + width + 8, JudgeY + 6.25f), Editor.FormatTime(Now), HorizontalAlignment.Left, -1, 16, Colors.White);
 
 		if (_boxSelecting)
 		{
 			var r = new Rect2(_boxStart, _mouse - _boxStart).Abs();
 			DrawRect(r, new Color(0.4f, 0.7f, 1f, 0.15f));
-			DrawRect(r, new Color(0.4f, 0.7f, 1f, 0.8f), false, 1.5f);
+			DrawRect(r, new Color(0.4f, 0.7f, 1f, 0.8f), false, 1.875f);
 		}
 	}
 
@@ -231,15 +231,15 @@ public partial class ManiaEditorField : Control
 		else DrawRect(r, laneColor);
 
 		if (selected)
-			DrawRect(r.Grow(2), new Color(1f, 0.85f, 0.2f, 1f), false, 2.5f);
+			DrawRect(r.Grow(3), new Color(1f, 0.85f, 0.2f, 1f), false, 3.125f);
 
 		// hitsound additions: W(histle) F(inish) C(lap)
 		if (n.HitSound != 0 && alpha > 0.5f)
 		{
 			var tag = ((n.HitSound & 2) != 0 ? "W" : "") + ((n.HitSound & 4) != 0 ? "F" : "") + ((n.HitSound & 8) != 0 ? "C" : "");
 			if (tag.Length > 0)
-				DrawString(GetThemeDefaultFont(), new Vector2(r.End.X - 4 - tag.Length * 8, r.Position.Y + r.Size.Y - 3), tag,
-					HorizontalAlignment.Left, -1, 11, new Color(0, 0, 0, 0.85f));
+				DrawString(GetThemeDefaultFont(), new Vector2(r.End.X - 5 - tag.Length * 10, r.Position.Y + r.Size.Y - 3.75f), tag,
+					HorizontalAlignment.Left, -1, 14, new Color(0, 0, 0, 0.85f));
 		}
 	}
 
@@ -259,7 +259,7 @@ public partial class ManiaEditorField : Control
 			if (from >= to) continue;
 
 			double step = tp.BeatLength / div;
-			if (step * PxPerMs < 3) step = tp.BeatLength; // too dense: only whole beats
+			if (step * PxPerMs < 3.75f) step = tp.BeatLength; // too dense: only whole beats
 			int subdiv = (int)Math.Round(tp.BeatLength / step);
 			long kStart = (long)Math.Ceiling((from - tp.Offset) / step);
 			long kEnd = (long)Math.Floor((to - tp.Offset) / step);
@@ -270,10 +270,10 @@ public partial class ManiaEditorField : Control
 				var y = TimeToY(t);
 				var c = TickColor(k, subdiv, tp.Meter, out var thick);
 				DrawLine(new Vector2(left, y), new Vector2(left + width, y), c, thick);
-				if (thick > 1.5f && k % ((long)subdiv * tp.Meter) == 0)
+				if (thick > 1.875f && k % ((long)subdiv * tp.Meter) == 0)
 				{
 					long measure = k / ((long)subdiv * tp.Meter);
-					DrawString(font, new Vector2(left + width + 6, y + 4), measure.ToString(), HorizontalAlignment.Left, -1, 11, new Color(1, 1, 1, 0.45f));
+					DrawString(font, new Vector2(left + width + 8, y + 5), measure.ToString(), HorizontalAlignment.Left, -1, 14, new Color(1, 1, 1, 0.45f));
 				}
 			}
 		}
@@ -281,13 +281,13 @@ public partial class ManiaEditorField : Control
 
 	private static Color TickColor(long k, int div, int meter, out float thick)
 	{
-		thick = 1f;
+		thick = 1.25f;
 		long r = ((k % div) + div) % div;
 		if (r == 0)
 		{
 			long beat = k / div;
-			if (((beat % meter) + meter) % meter == 0) { thick = 2.5f; return MeasureColor; }
-			thick = 1.5f;
+			if (((beat % meter) + meter) % meter == 0) { thick = 3.125f; return MeasureColor; }
+			thick = 1.875f;
 			return BeatColor;
 		}
 		int denom = (int)(div / Gcd(r, div));

@@ -10,17 +10,17 @@
 bg_color = Color(0.047, 0.059, 0.078, 0.8)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wk53w"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0.0784314, 0.0980392, 0.129412, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jucc0"]
 bg_color = Color(0.0790558, 0.0977497, 0.128906, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ee5vh"]
-content_margin_left = 25.0
+content_margin_left = 31.25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_17725"]
 bg_color = Color(1, 1, 1, 0.1)
@@ -34,15 +34,15 @@ bg_color = Color(1, 1, 1, 0.2)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wk53w"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_imael"]
-content_margin_left = 10.0
-content_margin_top = 5.0
-content_margin_right = 10.0
-content_margin_bottom = 5.0
+content_margin_left = 12.5
+content_margin_top = 6.25
+content_margin_right = 12.5
+content_margin_bottom = 6.25
 bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yvt2e"]
 
@@ -50,18 +50,18 @@ corner_radius_bottom_left = 15
 bg_color = Color(0.117647, 0.0980392, 0.137255, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_724hy"]
-content_margin_left = 10.0
-content_margin_right = 20.0
+content_margin_left = 12.5
+content_margin_right = 25.0
 bg_color = Color(0.927083, 0.296057, 0.178657, 0.658824)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ul0k5"]
-content_margin_left = 10.0
-content_margin_right = 20.0
+content_margin_left = 12.5
+content_margin_right = 25.0
 bg_color = Color(0.666667, 0.222387, 0.142361, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wjbl6"]
-content_margin_left = 10.0
-content_margin_right = 20.0
+content_margin_left = 12.5
+content_margin_right = 25.0
 bg_color = Color(0.92549, 0.294118, 0.180392, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y7e17"]
@@ -82,10 +82,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 220.0
-offset_top = 100.0
-offset_right = -230.0
-offset_bottom = -50.0
+offset_left = 275.0
+offset_top = 125.0
+offset_right = -287.5
+offset_bottom = -62.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_q65qw")
@@ -93,7 +93,7 @@ script = ExtResource("8_yvt2e")
 
 [node name="Label" type="Label" parent="Missing" unique_id=1745690443]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 30
 text = "Skinning not supported on this menu
 ono"
 horizontal_alignment = 1
@@ -103,9 +103,9 @@ vertical_alignment = 1
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_top = 100.0
-offset_right = 222.0
-offset_bottom = -50.0
+offset_top = 125.0
+offset_right = 277.5
+offset_bottom = -62.5
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wk53w")
 
@@ -139,15 +139,15 @@ layout_mode = 2
 script = ExtResource("2_ujy7e")
 
 [node name="Extras" type="PanelContainer" parent="." unique_id=1485082968]
-custom_minimum_size = Vector2(230, 0)
+custom_minimum_size = Vector2(287.5, 0)
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -230.0
-offset_top = 100.0
-offset_bottom = -50.0
+offset_left = -287.5
+offset_top = 125.0
+offset_bottom = -62.5
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wk53w")
@@ -164,7 +164,7 @@ size_flags_vertical = 3
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 104.0
+offset_bottom = 130.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jucc0")
 
@@ -172,7 +172,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_jucc0")
 layout_mode = 2
 
 [node name="PartA" type="HBoxContainer" parent="ToolBar/VBoxContainer" unique_id=2080813745]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 theme_override_constants/separation = 0
 
@@ -183,11 +183,11 @@ text = "Skin Editor"
 
 [node name="MarginContainer" type="MarginContainer" parent="ToolBar/VBoxContainer/PartA" unique_id=1971343195]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_right = 10
+theme_override_constants/margin_left = 13
+theme_override_constants/margin_right = 13
 
 [node name="File" type="MenuButton" parent="ToolBar/VBoxContainer/PartA" unique_id=919514036]
-custom_minimum_size = Vector2(80, 50)
+custom_minimum_size = Vector2(100, 62.5)
 layout_mode = 2
 text = "File"
 item_count = 4
@@ -201,7 +201,7 @@ popup/item_3/text = "Reload skin"
 popup/item_3/id = 3
 
 [node name="Edit" type="MenuButton" parent="ToolBar/VBoxContainer/PartA" unique_id=1710507326]
-custom_minimum_size = Vector2(80, 50)
+custom_minimum_size = Vector2(100, 62.5)
 layout_mode = 2
 text = "Edit"
 item_count = 3
@@ -216,7 +216,7 @@ popup/item_2/id = 2
 popup/item_2/disabled = true
 
 [node name="ViewPoints" type="HBoxContainer" parent="ToolBar/VBoxContainer/PartA" unique_id=941097110]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_constants/separation = 0
@@ -227,15 +227,15 @@ text = "View Points"
 
 [node name="MarginContainer" type="MarginContainer" parent="ToolBar/VBoxContainer/PartA/ViewPoints" unique_id=1706059809]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_right = 10
+theme_override_constants/margin_left = 13
+theme_override_constants/margin_right = 13
 
 [node name="GameplayViewpoints" type="HBoxContainer" parent="ToolBar/VBoxContainer/PartA/ViewPoints" unique_id=1941988927]
 layout_mode = 2
 theme_override_constants/separation = 0
 
 [node name="Main" type="Button" parent="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints" unique_id=664194958]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 tooltip_text = "View the preview of the game."
 theme_override_styles/normal = SubResource("StyleBoxFlat_17725")
@@ -245,7 +245,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_wk53w")
 text = "Game"
 
 [node name="Sprites" type="Button" parent="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints" unique_id=348308535]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 tooltip_text = "Change the feel."
 theme_override_styles/normal = SubResource("StyleBoxFlat_17725")
@@ -255,7 +255,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_wk53w")
 text = "Sprites"
 
 [node name="Settings" type="Button" parent="ToolBar/VBoxContainer/PartA/ViewPoints/GameplayViewpoints" unique_id=509786375]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 tooltip_text = "Tweak skin settings"
 theme_override_styles/normal = SubResource("StyleBoxFlat_17725")
@@ -266,7 +266,7 @@ text = "Skin
 Settings"
 
 [node name="PartB" type="HBoxContainer" parent="ToolBar/VBoxContainer" unique_id=1952167047]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 theme_override_constants/separation = 0
 
@@ -277,10 +277,10 @@ text = "Skin Elements"
 
 [node name="ScreensParts" type="MarginContainer" parent="ToolBar/VBoxContainer/PartB" unique_id=1953210741]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 13
+theme_override_constants/margin_top = 13
+theme_override_constants/margin_right = 13
+theme_override_constants/margin_bottom = 13
 
 [node name="Screens" type="HBoxContainer" parent="ToolBar/VBoxContainer/PartB/ScreensParts" unique_id=1324418984]
 layout_mode = 2
@@ -288,7 +288,7 @@ layout_mode = 2
 [node name="Gameplay" type="Button" parent="ToolBar/VBoxContainer/PartB/ScreensParts/Screens" unique_id=730326349]
 visible = false
 self_modulate = Color(0.262745, 0.321569, 0.415686, 1)
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(187.5, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_imael")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_imael")
@@ -313,7 +313,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -50.0
+offset_top = -62.5
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_7xm3b")

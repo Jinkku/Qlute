@@ -6,16 +6,16 @@
 
 [node name="Countdown" type="TextureProgressBar"]
 z_index = 1
-custom_minimum_size = Vector2(400, 400)
+custom_minimum_size = Vector2(500, 500)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -209.5
-offset_top = -200.0
-offset_right = 209.5
-offset_bottom = 200.0
+offset_left = -261.875
+offset_top = -250.0
+offset_right = 261.875
+offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
 step = 0.01
@@ -28,31 +28,31 @@ tint_progress = Color(0.45490196, 0.31764707, 0.76862746, 1)
 script = ExtResource("4_rhn7y")
 
 [node name="Takeabreak!" type="Label" parent="."]
-custom_minimum_size = Vector2(0, 130)
+custom_minimum_size = Vector2(0, 162.5)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 70.0
-offset_bottom = 200.0
+offset_top = 87.5
+offset_bottom = 250.0
 grow_horizontal = 2
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 50
 text = "Take a
 break!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Label" type="Label" parent="."]
-custom_minimum_size = Vector2(0, 150)
+custom_minimum_size = Vector2(0, 187.5)
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -200.0
-offset_bottom = -50.0
+offset_top = -250.0
+offset_bottom = -62.5
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 100
+theme_override_font_sizes/font_size = 125
 text = "10"
 horizontal_alignment = 1
 vertical_alignment = 1

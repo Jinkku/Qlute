@@ -10,46 +10,46 @@
 [ext_resource type="Texture2D" uid="uid://cqdd7a35bl0dh" path="res://Resources/Create/SeekH.png" id="9_cxjes"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vy1ai"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0.14901961, 0.24313726, 0.14901961, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a3rx6"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0, 0, 0, 0.313726)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_elvf5"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 bg_color = Color(0.0849609, 0.1875, 0.0849609, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cb8jd"]
 bg_color = Color(0, 0, 0, 0.235294)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_biwgm"]
 bg_color = Color(0.414062, 0.414062, 0.414062, 0.235294)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_376mh"]
 bg_color = Color(0, 0, 0, 0.313726)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pjdex"]
 
@@ -57,55 +57,55 @@ corner_radius_bottom_left = 5
 bg_color = Color(0, 0, 0, 0.568627)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ee5vh"]
-content_margin_left = 25.0
+content_margin_left = 31.25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cxjes"]
 bg_color = Color(1, 1, 1, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vy1ai"]
-content_margin_left = 10.0
-content_margin_right = 10.0
+content_margin_left = 12.5
+content_margin_right = 12.5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fn0xp"]
 bg_color = Color(0.15625, 0.15625, 0.15625, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-expand_margin_top = 3.0
-expand_margin_bottom = 3.0
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+expand_margin_top = 3.75
+expand_margin_bottom = 3.75
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_255xm"]
 bg_color = Color(0.6546936, 0.39453125, 1, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-expand_margin_top = 3.0
-expand_margin_bottom = 3.0
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+expand_margin_top = 3.75
+expand_margin_bottom = 3.75
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ryu8"]
 bg_color = Color(0.763393, 0.5859375, 1, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-expand_margin_top = 3.0
-expand_margin_bottom = 3.0
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+expand_margin_top = 3.75
+expand_margin_bottom = 3.75
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ecv8"]
-content_margin_left = 15.0
-content_margin_top = 5.0
-content_margin_right = 15.0
-content_margin_bottom = 5.0
+content_margin_left = 18.75
+content_margin_top = 6.25
+content_margin_right = 18.75
+content_margin_bottom = 6.25
 bg_color = Color(0, 0, 0, 0.588235)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ddpis"]
 bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 100
-corner_radius_top_right = 100
-corner_radius_bottom_right = 100
-corner_radius_bottom_left = 100
+corner_radius_top_left = 125
+corner_radius_top_right = 125
+corner_radius_bottom_right = 125
+corner_radius_bottom_left = 125
 
 [node name="Create" type="Control" unique_id=40791690]
 layout_mode = 3
@@ -135,8 +135,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 100.0
-offset_bottom = -50.0
+offset_top = 125.0
+offset_bottom = -62.5
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -163,8 +163,8 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
-theme_override_constants/h_separation = 15
-theme_override_constants/v_separation = 15
+theme_override_constants/h_separation = 19
+theme_override_constants/v_separation = 19
 columns = 2
 
 [node name="Title" type="VBoxContainer" parent="Info/Panel/Scroll/GridContainer"]
@@ -175,7 +175,7 @@ layout_mode = 2
 text = "Song Title"
 
 [node name="Value" type="LineEdit" parent="Info/Panel/Scroll/GridContainer/Title"]
-custom_minimum_size = Vector2(400, 50)
+custom_minimum_size = Vector2(500, 62.5)
 layout_mode = 2
 text = ""
 
@@ -187,7 +187,7 @@ layout_mode = 2
 text = "Song Artist"
 
 [node name="Value" type="LineEdit" parent="Info/Panel/Scroll/GridContainer/Artist"]
-custom_minimum_size = Vector2(400, 50)
+custom_minimum_size = Vector2(500, 62.5)
 layout_mode = 2
 text = ""
 
@@ -199,7 +199,7 @@ layout_mode = 2
 text = "Difficulty Name"
 
 [node name="Value" type="LineEdit" parent="Info/Panel/Scroll/GridContainer/Difficulty"]
-custom_minimum_size = Vector2(400, 50)
+custom_minimum_size = Vector2(500, 62.5)
 layout_mode = 2
 text = ""
 
@@ -211,7 +211,7 @@ layout_mode = 2
 text = "Mapper"
 
 [node name="Value" type="LineEdit" parent="Info/Panel/Scroll/GridContainer/Mapper"]
-custom_minimum_size = Vector2(400, 50)
+custom_minimum_size = Vector2(500, 62.5)
 layout_mode = 2
 text = ""
 editable = false
@@ -225,7 +225,7 @@ layout_mode = 2
 text = "Source (optional)"
 
 [node name="Value" type="LineEdit" parent="Info/Panel/Scroll/GridContainer/Source"]
-custom_minimum_size = Vector2(400, 50)
+custom_minimum_size = Vector2(500, 62.5)
 layout_mode = 2
 text = ""
 
@@ -237,7 +237,7 @@ layout_mode = 2
 text = "Tags (space separated)"
 
 [node name="Value" type="LineEdit" parent="Info/Panel/Scroll/GridContainer/Tags"]
-custom_minimum_size = Vector2(400, 50)
+custom_minimum_size = Vector2(500, 62.5)
 layout_mode = 2
 text = ""
 
@@ -252,7 +252,7 @@ text = "Overall Difficulty (timing strictness)"
 layout_mode = 2
 
 [node name="Value" type="HSlider" parent="Info/Panel/Scroll/GridContainer/OD/Box"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -261,7 +261,7 @@ step = 0.1
 value = 5.0
 
 [node name="ValueEdit" type="LineEdit" parent="Info/Panel/Scroll/GridContainer/OD/Box"]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 text = "5"
 alignment = 1
@@ -277,7 +277,7 @@ text = "HP Drain Rate"
 layout_mode = 2
 
 [node name="Value" type="HSlider" parent="Info/Panel/Scroll/GridContainer/HP/Box"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -286,7 +286,7 @@ step = 0.1
 value = 5.0
 
 [node name="ValueEdit" type="LineEdit" parent="Info/Panel/Scroll/GridContainer/HP/Box"]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 text = "5"
 alignment = 1
@@ -299,7 +299,7 @@ layout_mode = 2
 text = "Beatmap Background"
 
 [node name="Preview" type="TextureRect" parent="Info/Panel/Scroll/GridContainer/Background"]
-custom_minimum_size = Vector2(0, 120)
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 texture = ExtResource("2_vy1ai")
 expand_mode = 1
@@ -313,7 +313,7 @@ text_overrun_behavior = 3
 
 [node name="Pick" type="Button" parent="Info/Panel/Scroll/GridContainer/Background"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
 StringText = "Pick an image..."
@@ -334,7 +334,7 @@ text_overrun_behavior = 3
 
 [node name="Pick" type="Button" parent="Info/Panel/Scroll/GridContainer/Audio"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
 StringText = "Pick an audio file..."
@@ -357,7 +357,7 @@ layout_mode = 2
 
 [node name="SetCurrent" type="Button" parent="Info/Panel/Scroll/GridContainer/Preview/Box"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("6_fn0xp")
@@ -366,7 +366,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Clear" type="Button" parent="Info/Panel/Scroll/GridContainer/Preview/Box"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(100, 50)
+custom_minimum_size = Vector2(125, 62.5)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
 StringText = "Clear"
@@ -378,8 +378,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 100.0
-offset_bottom = -50.0
+offset_top = 125.0
+offset_bottom = -62.5
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -394,7 +394,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_vy1ai")
 
 [node name="Box" type="HBoxContainer" parent="Timing/Panel"]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 25
 
 [node name="ListBox" type="VBoxContainer" parent="Timing/Panel/Box"]
 layout_mode = 2
@@ -414,7 +414,7 @@ layout_mode = 2
 
 [node name="Add" type="Button" parent="Timing/Panel/Box/ListBox/Buttons"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("6_fn0xp")
@@ -423,7 +423,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Remove" type="Button" parent="Timing/Panel/Box/ListBox/Buttons"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("6_fn0xp")
@@ -431,9 +431,9 @@ StringText = "Remove selected"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Edit" type="VBoxContainer" parent="Timing/Panel/Box"]
-custom_minimum_size = Vector2(360, 0)
+custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="Title" type="Label" parent="Timing/Panel/Box/Edit"]
 layout_mode = 2
@@ -445,7 +445,7 @@ layout_mode = 2
 text = "Offset"
 
 [node name="Offset" type="SpinBox" parent="Timing/Panel/Box/Edit"]
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 min_value = -10000
 max_value = 3600000
@@ -456,7 +456,7 @@ suffix = "ms"
 
 [node name="UseCurrent" type="Button" parent="Timing/Panel/Box/Edit"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
 StringText = "Move to current time"
@@ -467,7 +467,7 @@ layout_mode = 2
 text = "BPM"
 
 [node name="Bpm" type="SpinBox" parent="Timing/Panel/Box/Edit"]
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 min_value = 1
 max_value = 2000
@@ -481,7 +481,7 @@ layout_mode = 2
 text = "Beats per measure"
 
 [node name="Meter" type="SpinBox" parent="Timing/Panel/Box/Edit"]
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 min_value = 1
 max_value = 16
@@ -504,7 +504,7 @@ text = "Tap Tempo (play the song and tap along)"
 
 [node name="Tap" type="Button" parent="Timing/Panel/Box/Edit"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
 StringText = "Tap (T)"
@@ -516,18 +516,18 @@ text = "Tap at least 4 times"
 
 [node name="ApplyTap" type="Button" parent="Timing/Panel/Box/Edit"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
 StringText = "Use tapped BPM"
 metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Help" type="Label" parent="Timing/Panel/Box/Edit"]
-custom_minimum_size = Vector2(360, 0)
+custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 size_flags_vertical = 10
 theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 16
 text = "Set the offset to the first downbeat of the song, then set the BPM. Add another timing point wherever the tempo changes."
 autowrap_mode = 3
 
@@ -537,8 +537,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 100.0
-offset_bottom = -50.0
+offset_top = 125.0
+offset_bottom = -62.5
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -569,7 +569,7 @@ size_flags_vertical = 3
 
 [node name="Run" type="Button" parent="Verify/Panel/Box"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
 StringText = "Run checks again"
@@ -580,8 +580,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 100.0
-offset_bottom = -50.0
+offset_top = 125.0
+offset_bottom = -62.5
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -591,8 +591,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 91.0
-offset_right = -207.0
+offset_left = 113.75
+offset_right = -258.75
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
@@ -603,14 +603,14 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -207.0
+offset_left = -258.75
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_a3rx6")
 
 [node name="ContextSections" type="VBoxContainer" parent="Compose/Info"]
 layout_mode = 2
-theme_override_constants/separation = 5
+theme_override_constants/separation = 6
 
 [node name="Title" type="Label" parent="Compose/Info/ContextSections"]
 layout_mode = 2
@@ -640,7 +640,7 @@ theme_override_colors/font_color = Color(0.952941, 0.729412, 1, 1)
 text = "- Beat Snap"
 
 [node name="Divisor" type="OptionButton" parent="Compose/Info/ContextSections"]
-custom_minimum_size = Vector2(0, 36)
+custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 focus_mode = 0
 selected = 3
@@ -668,7 +668,7 @@ theme_override_colors/font_color = Color(0.952941, 0.729412, 1, 1)
 text = "- Playback Speed"
 
 [node name="Rate" type="OptionButton" parent="Compose/Info/ContextSections"]
-custom_minimum_size = Vector2(0, 36)
+custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 focus_mode = 0
 selected = 3
@@ -701,7 +701,7 @@ text = "Hitsounds"
 layout_mode = 2
 size_flags_vertical = 10
 theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 14
 text = "Wheel: seek  Ctrl+Wheel: zoom
 Alt+Wheel: snap  Space: play
 Right click: delete note
@@ -717,7 +717,7 @@ autowrap_mode = 3
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 90.0
+offset_right = 112.5
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_elvf5")
 
@@ -725,10 +725,10 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_elvf5")
 layout_mode = 2
 
 [node name="Select" type="Button" parent="Compose/Creativity/ContextSections"]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 focus_mode = 0
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_cb8jd")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_biwgm")
 theme_override_styles/hover = SubResource("StyleBoxFlat_376mh")
@@ -737,10 +737,10 @@ toggle_mode = true
 text = "Select"
 
 [node name="Place" type="Button" parent="Compose/Creativity/ContextSections"]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 focus_mode = 0
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_cb8jd")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_biwgm")
 theme_override_styles/hover = SubResource("StyleBoxFlat_376mh")
@@ -749,10 +749,10 @@ toggle_mode = true
 text = "Place"
 
 [node name="Remove" type="Button" parent="Compose/Creativity/ContextSections"]
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 focus_mode = 0
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_cb8jd")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_biwgm")
 theme_override_styles/hover = SubResource("StyleBoxFlat_376mh")
@@ -762,20 +762,18 @@ text = "Remove"
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1288179839]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = -620.0
+offset_bottom = 125.0
 grow_horizontal = 2
-grow_vertical = 2
 color = Color(0.147895, 0.244792, 0.150923, 1)
 
 [node name="ToolBar" type="PanelContainer" parent="." unique_id=482834604]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 50.0
-offset_bottom = 100.0
+offset_top = 62.5
+offset_bottom = 125.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jucc0")
 
@@ -790,13 +788,13 @@ text = "Qlute/create"
 
 [node name="Spacer" type="MarginContainer" parent="ToolBar/HBoxContainer" unique_id=1671355952]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_right = 10
+theme_override_constants/margin_left = 13
+theme_override_constants/margin_right = 13
 
 [node name="DropDownMenu" type="Button" parent="ToolBar/HBoxContainer" unique_id=435246054]
 self_modulate = Color(0.21057129, 0.359375, 0.21057129, 1)
 z_index = 2
-custom_minimum_size = Vector2(100, 50)
+custom_minimum_size = Vector2(125, 62.5)
 layout_mode = 2
 theme = ExtResource("4_vy1ai")
 script = ExtResource("4_lwg7d")
@@ -810,7 +808,7 @@ metadata/_custom_type_script = "uid://dsfp3h2v5vijn"
 [node name="DropDownMenu2" type="Button" parent="ToolBar/HBoxContainer" unique_id=1861163358]
 self_modulate = Color(0.21057129, 0.359375, 0.21057129, 1)
 z_index = 2
-custom_minimum_size = Vector2(100, 50)
+custom_minimum_size = Vector2(125, 62.5)
 layout_mode = 2
 theme = ExtResource("4_vy1ai")
 script = ExtResource("4_lwg7d")
@@ -822,14 +820,14 @@ Items = Array[String](["Undo", "Redo", "Cut", "Copy", "Paste", "Delete", "Select
 metadata/_custom_type_script = "uid://dsfp3h2v5vijn"
 
 [node name="Menus" type="HBoxContainer" parent="ToolBar/HBoxContainer" unique_id=2007452899]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_constants/separation = 0
 
 [node name="Info" type="Button" parent="ToolBar/HBoxContainer/Menus" unique_id=2063442590]
 self_modulate = Color(0.15294118, 0.2627451, 0.15294118, 1)
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_cxjes")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_cxjes")
@@ -845,7 +843,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Compose" type="Button" parent="ToolBar/HBoxContainer/Menus" unique_id=451009107]
 self_modulate = Color(0.15294118, 0.2627451, 0.15294118, 1)
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_cxjes")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_cxjes")
@@ -861,7 +859,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Timing" type="Button" parent="ToolBar/HBoxContainer/Menus" unique_id=1908501628]
 self_modulate = Color(0.15294118, 0.2627451, 0.15294118, 1)
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_cxjes")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_cxjes")
@@ -877,7 +875,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Verify" type="Button" parent="ToolBar/HBoxContainer/Menus" unique_id=468789897]
 self_modulate = Color(0.15294118, 0.2627451, 0.15294118, 1)
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_cxjes")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_cxjes")
@@ -912,7 +910,7 @@ theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_7ryu8")
 step = 0.001
 
 [node name="TimeBox" type="PanelContainer" parent="ControlPanel/Box" index="2" unique_id=1172322703]
-custom_minimum_size = Vector2(120, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_styles/panel = SubResource("StyleBoxFlat_8ecv8")
@@ -932,7 +930,7 @@ layout_mode = 2
 
 [node name="SkipBack" type="Button" parent="ControlPanel/Box/Player/Columns" unique_id=475583245]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(39, 39)
+custom_minimum_size = Vector2(48.75, 48.75)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
 StringText = "X"
@@ -940,7 +938,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="PlayPause" type="Button" parent="ControlPanel/Box/Player/Columns" unique_id=862566763]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(39, 39)
+custom_minimum_size = Vector2(48.75, 48.75)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
 StringText = "X"
@@ -948,7 +946,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="SkipForward" type="Button" parent="ControlPanel/Box/Player/Columns" unique_id=752541916]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(39, 39)
+custom_minimum_size = Vector2(48.75, 48.75)
 layout_mode = 2
 script = ExtResource("6_fn0xp")
 StringText = "X"
@@ -963,7 +961,7 @@ text = "Test"
 
 [node name="Slider" type="SubViewport" parent="." unique_id=373308463]
 transparent_bg = true
-size = Vector2i(40, 40)
+size = Vector2i(50, 50)
 
 [node name="PanelContainer" type="PanelContainer" parent="Slider" unique_id=1894709482]
 anchors_preset = 15

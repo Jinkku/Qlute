@@ -74,20 +74,20 @@ public partial class MedalPopup : CanvasLayer
 
 		// Under the badge: "2 / 3", page dots, "Click to continue"
 		var footer = new VBoxContainer { MouseFilter = Control.MouseFilterEnum.Ignore, Alignment = BoxContainer.AlignmentMode.Begin };
-		footer.AddThemeConstantOverride("separation", 8);
+		footer.AddThemeConstantOverride("separation", 10);
 		footer.AnchorLeft = footer.AnchorRight = 0.5f;
 		footer.AnchorTop = footer.AnchorBottom = 0.5f;
-		footer.OffsetLeft = -200;
-		footer.OffsetRight = 200;
+		footer.OffsetLeft = -250;
+		footer.OffsetRight = 250;
 		_footer = footer;
 		_backdrop.AddChild(footer);
 
 		_dots = new HBoxContainer { MouseFilter = Control.MouseFilterEnum.Ignore, Alignment = BoxContainer.AlignmentMode.Center };
-		_dots.AddThemeConstantOverride("separation", 8);
+		_dots.AddThemeConstantOverride("separation", 10);
 		footer.AddChild(_dots);
-		_counter = Centered(PlayerOverlays.Text("", 14, new Color(1, 1, 1, 0.8f), bold: true));
+		_counter = Centered(PlayerOverlays.Text("", 18, new Color(1, 1, 1, 0.8f), bold: true));
 		footer.AddChild(_counter);
-		_tip = Centered(PlayerOverlays.Text("", 12, new Color(1, 1, 1, 0.45f)));
+		_tip = Centered(PlayerOverlays.Text("", 15, new Color(1, 1, 1, 0.45f)));
 		footer.AddChild(_tip);
 
 		if (Args.Contains("--medal-demo"))
@@ -274,13 +274,13 @@ public partial class MedalPopup : CanvasLayer
 	}
 
 	/// <summary>Badge diameter for this window: about half its height.</summary>
-	private float Diameter => Mathf.Clamp(GetViewport().GetVisibleRect().Size.Y * 0.5f, 240f, 440f);
+	private float Diameter => Mathf.Clamp(GetViewport().GetVisibleRect().Size.Y * 0.5f, 300f, 550f);
 
 	private void Layout()
 	{
 		float d = Diameter;
-		_footer.OffsetTop = d / 2 + 22;
-		_footer.OffsetBottom = d / 2 + 120;
+		_footer.OffsetTop = d / 2 + 28;
+		_footer.OffsetBottom = d / 2 + 150;
 		if (IsInstanceValid(_view) && !Mathf.IsEqualApprox(_view.Diameter, d)) _view.Resize(d);
 	}
 
@@ -388,11 +388,11 @@ public partial class MedalPopup : CanvasLayer
 			bool current = i == _batchShown;
 			var dot = new Panel
 			{
-				CustomMinimumSize = new Vector2(current ? 22 : 8, 8),
+				CustomMinimumSize = new Vector2(current ? 28 : 10, 10),
 				MouseFilter = Control.MouseFilterEnum.Ignore,
 			};
 			var col = current ? Colors.White : i < _batchShown ? new Color(1, 1, 1, 0.55f) : new Color(1, 1, 1, 0.2f);
-			dot.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(col, 4, 0, 0));
+			dot.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(col, 5, 0, 0));
 			_dots.AddChild(dot);
 		}
 	}

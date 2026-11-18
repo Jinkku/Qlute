@@ -91,7 +91,7 @@ public partial class DropDownMenu : Button
         int index = 0;
         foreach (string item in _items)
         {
-            var Button = new ButtonFade { StringText = item, CustomMinimumSize = new Vector2(240, 30), IdleColour = IdleColour, FocusColour = FocusColour, HighlightColour = HighlightColour};
+            var Button = new ButtonFade { StringText = item, CustomMinimumSize = new Vector2(300, 38), IdleColour = IdleColour, FocusColour = FocusColour, HighlightColour = HighlightColour};
             MenuEntries.AddChild(Button);
 
             int currentIndex = index; // capture the current index
@@ -111,8 +111,8 @@ public partial class DropDownMenu : Button
     }
     private void resize()
     {
-        Size = new Vector2(Math.Max(100, _buttonText.Size.X + 20), Math.Max(50, Size.Y));
-        CustomMinimumSize = new Vector2(Math.Max(100, _buttonText.Size.X + 20), Math.Max(50, CustomMinimumSize.Y));
+        Size = new Vector2(Math.Max(125, _buttonText.Size.X + 25), Math.Max(63, Size.Y));
+        CustomMinimumSize = new Vector2(Math.Max(125, _buttonText.Size.X + 25), Math.Max(63, CustomMinimumSize.Y));
     }
 
     private void Flipchecker()
@@ -145,10 +145,10 @@ public partial class DropDownMenu : Button
         _buttonText.AnchorBottom = 0.5f;
         _buttonText.GrowHorizontal = GrowDirection.Both;
         _buttonText.GrowVertical = GrowDirection.Both;
-        _buttonText.OffsetLeft = 0.5f;
-        _buttonText.OffsetRight = 0.5f;
-        _buttonText.OffsetTop = 0.5f;
-        _buttonText.OffsetBottom = 0.5f;
+        _buttonText.OffsetLeft = 0.625f;
+        _buttonText.OffsetRight = 0.625f;
+        _buttonText.OffsetTop = 0.625f;
+        _buttonText.OffsetBottom = 0.625f;
         _buttonText.Resized += resize;
         Theme = GD.Load<Theme>("res://Panels/CustomMenus/blank.tres"); // Sets theme
         _buttonText.Text = StringText;

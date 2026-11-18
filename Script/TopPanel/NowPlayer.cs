@@ -19,8 +19,8 @@ public partial class NowPlayer : Button
 			Card = GD.Load<PackedScene>("res://Panels/Overlays/NowPlaying.tscn").Instantiate().GetNode<PanelContainer>(".");
 			Card.ZIndex = -1;
 			AddChild(Card);
-			Card.Position = new Vector2((-Card.Size.X/2) + 35, -Card.Size.Y);
-			Tween.TweenProperty(Card, "position", new Vector2(Card.Position.X, SettingsOperator.TopPanelPosition + 10), 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			Card.Position = new Vector2((-Card.Size.X/2) + 43.75f, -Card.Size.Y);
+			Tween.TweenProperty(Card, "position", new Vector2(Card.Position.X, SettingsOperator.TopPanelPosition + 13), 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 			Tween.TweenProperty(GetTree().CurrentScene, "modulate", new Color(0.5f, 0.5f, 0.5f), 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 			Tween.Play();
 		}

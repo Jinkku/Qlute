@@ -16,22 +16,22 @@ public static class ModUi
 	public static LineEdit Input(string placeholder, int maxLength = 256)
 	{
 		var e = new LineEdit { PlaceholderText = placeholder, MaxLength = maxLength, ClearButtonEnabled = true, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
-		e.AddThemeFontSizeOverride("font_size", 13);
-		e.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(Field, 5, 10, 6));
-		e.AddThemeStyleboxOverride("focus", PlayerOverlays.Style(FieldFocus, 5, 10, 6));
+		e.AddThemeFontSizeOverride("font_size", 16);
+		e.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(Field, 6, 13, 8));
+		e.AddThemeStyleboxOverride("focus", PlayerOverlays.Style(FieldFocus, 6, 13, 8));
 		return e;
 	}
 
-	public static TextEdit TextArea(string placeholder, float height = 90)
+	public static TextEdit TextArea(string placeholder, float height = 113)
 	{
 		var t = new TextEdit
 		{
 			PlaceholderText = placeholder, WrapMode = TextEdit.LineWrappingMode.Boundary,
 			CustomMinimumSize = new Vector2(0, height), SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
 		};
-		t.AddThemeFontSizeOverride("font_size", 13);
-		t.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(Field, 5, 10, 6));
-		t.AddThemeStyleboxOverride("focus", PlayerOverlays.Style(FieldFocus, 5, 10, 6));
+		t.AddThemeFontSizeOverride("font_size", 16);
+		t.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(Field, 6, 13, 8));
+		t.AddThemeStyleboxOverride("focus", PlayerOverlays.Style(FieldFocus, 6, 13, 8));
 		return t;
 	}
 
@@ -41,11 +41,11 @@ public static class ModUi
 	public static OptionButton Options(params string[] items)
 	{
 		var o = new OptionButton { FocusMode = Control.FocusModeEnum.None };
-		o.AddThemeFontSizeOverride("font_size", 13);
+		o.AddThemeFontSizeOverride("font_size", 16);
 		foreach (var item in items) o.AddItem(item);
-		o.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(PlayerOverlays.Card, 5, 10, 6));
-		o.AddThemeStyleboxOverride("hover", PlayerOverlays.Style(PlayerOverlays.CardHover, 5, 10, 6));
-		o.AddThemeStyleboxOverride("pressed", PlayerOverlays.Style(PlayerOverlays.CardHover, 5, 10, 6));
+		o.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(PlayerOverlays.Card, 6, 13, 8));
+		o.AddThemeStyleboxOverride("hover", PlayerOverlays.Style(PlayerOverlays.CardHover, 6, 13, 8));
+		o.AddThemeStyleboxOverride("pressed", PlayerOverlays.Style(PlayerOverlays.CardHover, 6, 13, 8));
 		return o;
 	}
 
@@ -56,9 +56,9 @@ public static class ModUi
 		b.Flat = false; // flat buttons skip their styleboxes; these need the coloured backgrounds
 		if (bg is Color c)
 		{
-			b.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(new Color(c, 0.45f), 5, 10, 4));
-			b.AddThemeStyleboxOverride("hover", PlayerOverlays.Style(new Color(c, 0.75f), 5, 10, 4));
-			b.AddThemeStyleboxOverride("pressed", PlayerOverlays.Style(new Color(c, 0.75f), 5, 10, 4));
+			b.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(new Color(c, 0.45f), 6, 13, 5));
+			b.AddThemeStyleboxOverride("hover", PlayerOverlays.Style(new Color(c, 0.75f), 6, 13, 5));
+			b.AddThemeStyleboxOverride("pressed", PlayerOverlays.Style(new Color(c, 0.75f), 6, 13, 5));
 		}
 		return b;
 	}
@@ -86,19 +86,19 @@ public static class ModUi
 
 	public static Control Pill(string text, Color bg, Color? fg = null)
 	{
-		var p = PlayerOverlays.PillLabel(text, bg, 11);
+		var p = PlayerOverlays.PillLabel(text, bg, 14);
 		if (fg is Color c) p.GetChild<Label>(0).AddThemeColorOverride("font_color", c);
 		return p;
 	}
 
-	public static HBoxContainer Row(int gap = 8)
+	public static HBoxContainer Row(int gap = 10)
 	{
 		var r = new HBoxContainer();
 		r.AddThemeConstantOverride("separation", gap);
 		return r;
 	}
 
-	public static HFlowContainer Flow(int gap = 6)
+	public static HFlowContainer Flow(int gap = 8)
 	{
 		var f = new HFlowContainer();
 		f.AddThemeConstantOverride("h_separation", gap);
@@ -106,7 +106,7 @@ public static class ModUi
 		return f;
 	}
 
-	public static VBoxContainer Column(int gap = 6)
+	public static VBoxContainer Column(int gap = 8)
 	{
 		var v = new VBoxContainer { SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
 		v.AddThemeConstantOverride("separation", gap);
@@ -116,7 +116,7 @@ public static class ModUi
 	/// <summary>Rounded card holding a column.</summary>
 	public static VBoxContainer Card(Control parent, Color? bg = null, float alpha = 1)
 	{
-		var card = PlayerOverlays.Panel(bg ?? PlayerOverlays.Card, 8, 14, 10);
+		var card = PlayerOverlays.Panel(bg ?? PlayerOverlays.Card, 10, 18, 13);
 		card.Modulate = new Color(1, 1, 1, alpha);
 		parent.AddChild(card);
 		var v = Column(6);
@@ -125,7 +125,7 @@ public static class ModUi
 	}
 
 	/// <summary>Text that wraps inside the panel width.</summary>
-	public static Label Para(string text, int size = 13, Color? color = null)
+	public static Label Para(string text, int size = 16, Color? color = null)
 	{
 		var l = PlayerOverlays.Text(text, size, color, wrap: true);
 		l.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
@@ -135,8 +135,8 @@ public static class ModUi
 	/// <summary>Quoted text block (report details, ban reasons).</summary>
 	public static Control Quote(string text)
 	{
-		var box = PlayerOverlays.Panel(PlayerOverlays.Pill, 5, 10, 6);
-		box.AddChild(Para(text, 13));
+		var box = PlayerOverlays.Panel(PlayerOverlays.Pill, 6, 13, 8);
+		box.AddChild(Para(text, 16));
 		return box;
 	}
 

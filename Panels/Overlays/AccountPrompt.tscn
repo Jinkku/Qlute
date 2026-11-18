@@ -10,12 +10,12 @@
 Button/styles/focus = SubResource("StyleBoxEmpty_golg1")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_onmcp"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
+content_margin_left = 12.5
+content_margin_top = 12.5
+content_margin_right = 12.5
+content_margin_bottom = 12.5
 bg_color = Color(0.160784, 0.160784, 0.160784, 1)
-border_width_bottom = 3
+border_width_bottom = 4
 border_color = Color(0.498039, 0.415686, 0.952941, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6jcst"]
@@ -28,15 +28,15 @@ theme = SubResource("Theme_oahhy")
 script = ExtResource("1_ppf2d")
 
 [node name="AccPanel" type="PanelContainer" parent="."]
-custom_minimum_size = Vector2(300, 0)
+custom_minimum_size = Vector2(375, 0)
 layout_mode = 1
-offset_right = 300.0
-offset_bottom = 3.0
+offset_right = 375.0
+offset_bottom = 3.75
 theme_override_styles/panel = SubResource("StyleBoxFlat_onmcp")
 
 [node name="NotLog" type="VBoxContainer" parent="AccPanel"]
 layout_mode = 2
-theme_override_constants/separation = 5
+theme_override_constants/separation = 6
 
 [node name="HBoxContainer" type="HBoxContainer" parent="AccPanel/NotLog"]
 layout_mode = 2
@@ -54,7 +54,7 @@ clip_text = true
 text_overrun_behavior = 3
 
 [node name="Username" type="LineEdit" parent="AccPanel/NotLog"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 placeholder_text = "Username here..."
 
@@ -63,7 +63,7 @@ layout_mode = 2
 text = "Password"
 
 [node name="Password" type="LineEdit" parent="AccPanel/NotLog"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 placeholder_text = "Very secret password..."
 secret = true
@@ -78,7 +78,7 @@ layout_mode = 2
 
 [node name="Login" type="Button" parent="AccPanel/NotLog/HBoxContainer2"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_c5png")
@@ -87,7 +87,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Create" type="Button" parent="AccPanel/NotLog/HBoxContainer2"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_c5png")
@@ -104,7 +104,7 @@ size_flags_vertical = 0
 
 [node name="Logout" type="Button" parent="AccPanel/Log"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6jcst")
 script = ExtResource("2_c5png")
@@ -116,7 +116,7 @@ visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="AccPanel/Retring"]
-custom_minimum_size = Vector2(0, 100)
+custom_minimum_size = Vector2(0, 125)
 layout_mode = 2
 text = "Can't connect to game servers
 We will keep retring! :D"
@@ -125,7 +125,7 @@ vertical_alignment = 1
 
 [node name="Logout" type="Button" parent="AccPanel/Retring"]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_6jcst")
 script = ExtResource("2_c5png")

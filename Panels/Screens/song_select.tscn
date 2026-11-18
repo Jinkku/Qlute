@@ -101,93 +101,93 @@ expand_margin_bottom = 5.0
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xmk5a"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gf377"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 draw_center = false
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ihwey"]
-content_margin_left = 10.0
-content_margin_top = 5.0
-content_margin_right = 10.0
-content_margin_bottom = 5.0
+content_margin_left = 12.5
+content_margin_top = 6.25
+content_margin_right = 12.5
+content_margin_bottom = 6.25
 bg_color = Color(0.2, 0.2, 0.2, 0.5)
 skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0g2hw"]
-content_margin_left = 10.0
-content_margin_top = 5.0
-content_margin_right = 10.0
-content_margin_bottom = 5.0
+content_margin_left = 12.5
+content_margin_top = 6.25
+content_margin_right = 12.5
+content_margin_bottom = 6.25
 bg_color = Color(0.372, 0.363, 0.641, 1)
 skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fb0k2"]
-content_margin_left = 10.0
-content_margin_top = 5.0
-content_margin_right = 10.0
-content_margin_bottom = 5.0
+content_margin_left = 12.5
+content_margin_top = 6.25
+content_margin_right = 12.5
+content_margin_bottom = 6.25
 bg_color = Color(0.4, 0.4, 0.4, 0.8)
 skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aosrv"]
 bg_color = Color(0.2, 0.2, 0.2, 0.3)
 skew = Vector2(0.5, 0)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ndor5"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pgcs5"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0.078431375, 0.078431375, 0.078431375, 0.8)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-expand_margin_left = 65.0
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
+expand_margin_left = 81.25
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0g2hw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2gjtq"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xmk5a"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5rktx"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_left = 6.25
+content_margin_top = 6.25
+content_margin_right = 6.25
+content_margin_bottom = 6.25
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p2axe"]
 
@@ -216,7 +216,7 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -300.0
+offset_left = -375.0
 grow_horizontal = 0
 grow_vertical = 2
 
@@ -227,9 +227,9 @@ layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -8.0
-offset_top = 105.0
-offset_bottom = -50.0
+offset_left = -10.0
+offset_top = 131.25
+offset_bottom = -62.5
 grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 2
@@ -250,11 +250,11 @@ vertical_alignment = 1
 
 [node name="ControlBar" type="PanelContainer" parent="." unique_id=1342281278]
 z_index = 1
-custom_minimum_size = Vector2(0, 100)
+custom_minimum_size = Vector2(0, 125)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 34.0
+offset_bottom = 42.5
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ixo7g")
 
@@ -265,13 +265,13 @@ mouse_filter = 0
 alignment = 2
 
 [node name="SongSelectMode" type="Label" parent="ControlBar/AmazingPillar" unique_id=1151004506]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.4
 theme_override_colors/font_color = Color(1, 0.884155, 0.429688, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxEmpty_5rktx")
 horizontal_alignment = 2
 vertical_alignment = 1
@@ -301,34 +301,34 @@ clear_button_enabled = true
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_top = 73.5
-offset_right = 500.0
-offset_bottom = 26.5
+offset_top = 91.875
+offset_right = 625.0
+offset_bottom = 33.125
 grow_vertical = 2
 scale = Vector2(0.9, 0.9)
 
 [node name="SongInfo" type="PanelContainer" parent="SongDetails" unique_id=1163572430]
 z_index = 1
-custom_minimum_size = Vector2(400, 0)
+custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_p2axe")
 
 [node name="Rows" type="VBoxContainer" parent="SongDetails/SongInfo" unique_id=1246577479]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Column1" type="PanelContainer" parent="SongDetails/SongInfo/Rows" unique_id=1463596661]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_0g2hw")
 
 [node name="Title" type="Label" parent="SongDetails/SongInfo/Rows/Column1" unique_id=822597837]
-custom_minimum_size = Vector2(360, 40)
+custom_minimum_size = Vector2(450, 50)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.429688, 0.848511, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 25
 text = "Amazing Songs"
 vertical_alignment = 1
 autowrap_mode = 1
@@ -339,12 +339,12 @@ layout_mode = 2
 size_flags_horizontal = 8
 
 [node name="ExSongInfo" type="Label" parent="SongDetails/SongInfo/Rows" unique_id=1823610191]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.313726)
-theme_override_constants/line_spacing = 5
-theme_override_font_sizes/font_size = 12
+theme_override_constants/line_spacing = 6
+theme_override_font_sizes/font_size = 15
 text = "Nyama Shikima
 mapped by Naoma
 Shinji Kaoma"
@@ -380,7 +380,7 @@ Text = "Lv. 999"
 
 [node name="blank" type="HSeparator" parent="SongDetails" unique_id=2022233355]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 25
 theme_override_styles/separator = SubResource("StyleBoxEmpty_xmk5a")
 
 [node name="Leaderboard Panel" type="PanelContainer" parent="SongDetails" unique_id=115474256]
@@ -389,12 +389,12 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_gf377")
 
 [node name="Rows" type="VBoxContainer" parent="SongDetails/Leaderboard Panel" unique_id=1974626589]
 layout_mode = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 19
 
 [node name="Box4" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows" unique_id=1406803450]
-custom_minimum_size = Vector2(370, 0)
+custom_minimum_size = Vector2(462.5, 0)
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Details" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4" unique_id=1342331560]
 layout_mode = 2
@@ -454,7 +454,7 @@ toggle_mode = true
 text = "Teams"
 
 [node name="OpenExternal" type="Button" parent="SongDetails/Leaderboard Panel/Rows/Box4" unique_id=1138167561]
-custom_minimum_size = Vector2(22, 22)
+custom_minimum_size = Vector2(27.5, 27.5)
 layout_mode = 2
 tooltip_text = "Open in browser"
 theme_override_styles/normal = SubResource("StyleBoxFlat_ihwey")
@@ -464,7 +464,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_ndor5")
 icon = ExtResource("3_javs2")
 
 [node name="LeaderboardInfo" type="ScrollContainer" parent="SongDetails/Leaderboard Panel/Rows" unique_id=1589003153]
-custom_minimum_size = Vector2(370, 320)
+custom_minimum_size = Vector2(462.5, 400)
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 3
@@ -487,14 +487,14 @@ vertical_alignment = 1
 
 [node name="Details" type="PanelContainer" parent="SongDetails/Leaderboard Panel/Rows" unique_id=1690350623]
 visible = false
-custom_minimum_size = Vector2(0, 350)
+custom_minimum_size = Vector2(0, 437.5)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pgcs5")
 script = ExtResource("12_fb0k2")
 
 [node name="Info" type="VBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details" unique_id=985342489]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Row1" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details/Info" unique_id=591831385]
 layout_mode = 2
@@ -506,7 +506,7 @@ size_flags_stretch_ratio = 0.4
 text = "Accuracy"
 
 [node name="ProgressBar" type="ProgressBar" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row1" unique_id=1272542137]
-custom_minimum_size = Vector2(0, 10)
+custom_minimum_size = Vector2(0, 12.5)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -525,7 +525,7 @@ size_flags_stretch_ratio = 0.4
 text = "Difficulty"
 
 [node name="ProgressBar" type="ProgressBar" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row2" unique_id=1095152320]
-custom_minimum_size = Vector2(0, 10)
+custom_minimum_size = Vector2(0, 12.5)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -553,10 +553,10 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 110.0
-offset_top = -453.0
-offset_right = 510.0
-offset_bottom = -252.0
+offset_left = 137.5
+offset_top = -566.25
+offset_right = 637.5
+offset_bottom = -315.0
 grow_vertical = 0
 
 [node name="ModsScreen" parent="." unique_id=858960574 instance=ExtResource("6_4xos4")]
@@ -571,30 +571,30 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -100.0
+offset_top = -125.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 
 [node name="ModsShown" parent="BottomBar" unique_id=7962095 instance=ExtResource("7_p20rm")]
 layout_mode = 1
-offset_left = 105.0
-offset_right = 605.0
+offset_left = 131.25
+offset_right = 756.25
 mouse_filter = 2
 
 [node name="ControlPanel" parent="BottomBar" unique_id=226854940 instance=ExtResource("7_p2axe")]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62.5)
 layout_mode = 1
 
 [node name="Box" parent="BottomBar/ControlPanel" index="0"]
-theme_override_constants/separation = 5
+theme_override_constants/separation = 6
 
 [node name="BackButton" parent="BottomBar/ControlPanel/Box" index="0"]
 size_flags_vertical = 8
 
 [node name="Mode" type="Button" parent="BottomBar/ControlPanel/Box" index="1" unique_id=1991199864]
 visible = false
-custom_minimum_size = Vector2(108, 50)
+custom_minimum_size = Vector2(135, 62.5)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/normal = SubResource("StyleBoxFlat_2gjtq")
@@ -618,7 +618,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Mod" type="Button" parent="BottomBar/ControlPanel/Box" index="2" unique_id=1654882391]
-custom_minimum_size = Vector2(108, 50)
+custom_minimum_size = Vector2(135, 62.5)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/normal = SubResource("StyleBoxFlat_2gjtq")
@@ -642,7 +642,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Random" type="Button" parent="BottomBar/ControlPanel/Box" index="3" unique_id=1493602830]
-custom_minimum_size = Vector2(108, 50)
+custom_minimum_size = Vector2(135, 62.5)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/normal = SubResource("StyleBoxFlat_2gjtq")
@@ -667,7 +667,7 @@ vertical_alignment = 1
 
 [node name="Collections" type="Button" parent="BottomBar/ControlPanel/Box" index="4" unique_id=1217711355]
 visible = false
-custom_minimum_size = Vector2(108, 50)
+custom_minimum_size = Vector2(135, 62.5)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/normal = SubResource("StyleBoxFlat_2gjtq")
@@ -680,20 +680,20 @@ metadata/focus = Color(0.227451, 0.2, 0.258824, 1)
 metadata/highlight = Color(0.192993, 0.205833, 0.398438, 1)
 
 [node name="Start" type="TextureButton" parent="BottomBar" unique_id=1106559813]
-custom_minimum_size = Vector2(128, 128)
+custom_minimum_size = Vector2(160, 160)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -148.0
-offset_top = -140.0
-offset_right = -20.0
-offset_bottom = -12.0
+offset_left = -185.0
+offset_top = -175.0
+offset_right = -25.0
+offset_bottom = -15.0
 grow_horizontal = 0
 grow_vertical = 0
-pivot_offset = Vector2(64, 64)
+pivot_offset = Vector2(80, 80)
 texture_normal = ExtResource("7_0g2hw")
 ignore_texture_size = true
 stretch_mode = 4
@@ -702,10 +702,10 @@ stretch_mode = 4
 visible = false
 z_index = 3
 layout_mode = 0
-offset_left = 1073.0
-offset_top = 359.0
-offset_right = 1253.0
-offset_bottom = 427.0
+offset_left = 1341.25
+offset_top = 448.75
+offset_right = 1566.25
+offset_bottom = 533.75
 
 [node name="Bpmtick" type="Timer" parent="." unique_id=365811024]
 wait_time = 0.375

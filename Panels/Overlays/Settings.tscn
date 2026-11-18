@@ -29,23 +29,23 @@ bg_color = Color(1, 1, 1, 0.156863)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n2spt"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fn636"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
+content_margin_left = 12.5
+content_margin_top = 12.5
+content_margin_right = 12.5
+content_margin_bottom = 12.5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_llstv"]
 content_margin_left = 0.0
-content_margin_top = 25.0
+content_margin_top = 31.25
 
 [node name="SettingsPanel" type="PanelContainer" unique_id=1763606212]
 z_index = 3
 z_as_relative = false
-custom_minimum_size = Vector2(600, 0)
+custom_minimum_size = Vector2(750, 0)
 clip_contents = true
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 74.0
+offset_right = 92.5
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fn636")
 script = ExtResource("1_gfh6f")
@@ -54,7 +54,7 @@ script = ExtResource("1_gfh6f")
 layout_mode = 2
 
 [node name="Catagories" type="PanelContainer" parent="Panels" unique_id=593390362]
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(187.5, 0)
 clip_contents = true
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5b8eh")
@@ -66,7 +66,7 @@ alignment = 1
 
 [node name="Updates" type="Button" parent="Panels/Catagories/Cata" unique_id=113264100]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(62.5, 62.5)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
@@ -79,7 +79,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Display" type="Button" parent="Panels/Catagories/Cata" unique_id=346485907]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(62.5, 62.5)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
@@ -92,7 +92,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Audio" type="Button" parent="Panels/Catagories/Cata" unique_id=102082461]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(62.5, 62.5)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
@@ -105,7 +105,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Skinning" type="Button" parent="Panels/Catagories/Cata" unique_id=1722935615]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(62.5, 62.5)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
@@ -118,7 +118,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Input" type="Button" parent="Panels/Catagories/Cata" unique_id=958047629]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(62.5, 62.5)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
@@ -131,7 +131,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 
 [node name="Debug" type="Button" parent="Panels/Catagories/Cata" unique_id=1165767190]
 self_modulate = Color(0.227451, 0.2, 0.258824, 1)
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(62.5, 62.5)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_k6nch")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bjgno")
@@ -146,7 +146,7 @@ metadata/_custom_type_script = "uid://s3i5b8frncgd"
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/scrollbar_h_separation = 10
+theme_override_constants/scrollbar_h_separation = 13
 theme_override_styles/panel = SubResource("StyleBoxEmpty_fn636")
 horizontal_scroll_mode = 3
 
@@ -154,14 +154,14 @@ horizontal_scroll_mode = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 15
+theme_override_constants/separation = 19
 
 [node name="Name" type="Label" parent="Panels/Scroll/Sections" unique_id=2138111491]
 layout_mode = 2
 mouse_filter = 0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("5_k6nch")
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 45
 theme_override_styles/normal = SubResource("StyleBoxEmpty_llstv")
 text = "Settings"
 

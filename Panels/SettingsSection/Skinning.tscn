@@ -4,37 +4,37 @@
 [ext_resource type="Script" uid="uid://csqtqnvdjslaf" path="res://Script/SettingsPanel/SkinMode.cs" id="2_5ma6w"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btiu6"]
-content_margin_left = 8.0
-content_margin_top = 15.0
-content_margin_right = 8.0
-content_margin_bottom = 15.0
+content_margin_left = 10.0
+content_margin_top = 18.75
+content_margin_right = 10.0
+content_margin_bottom = 18.75
 bg_color = Color(0, 0, 0, 0.392157)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5kcqv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5w4v1"]
-content_margin_top = 10.0
-content_margin_bottom = 10.0
+content_margin_top = 12.5
+content_margin_bottom = 12.5
 bg_color = Color(0.128906, 0.128906, 0.128906, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5ma6w"]
 
 [node name="Skinning" type="PanelContainer" unique_id=1784822534]
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 50.0
+offset_bottom = 50.0
 theme_override_styles/panel = ExtResource("1_5ma6w")
 
 [node name="Rows" type="VBoxContainer" parent="." unique_id=1163683706]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 13
 
 [node name="Title" type="Label" parent="Rows" unique_id=528032714]
 layout_mode = 2
@@ -45,7 +45,7 @@ text = "Skinning"
 layout_mode = 2
 theme_override_styles/disabled = SubResource("StyleBoxFlat_btiu6")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_5kcqv")
-theme_override_constants/arrow_margin = 10
+theme_override_constants/arrow_margin = 13
 clip_text = true
 script = ExtResource("2_5ma6w")
 

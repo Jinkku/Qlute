@@ -42,6 +42,7 @@ public partial class TaikoGameCore : Control
 	//public static Label Ttiming { get; set; }
 	//public static Label Hits { get; set; }
 	public Control Road { get; set; }
+	/// <summary>Hit box X in old 1280x720 layout units (1 unit = 1 ms of scroll), so all the timing math stays as it was.</summary>
 	private int HitPoint { get; set; }
 	private Tween MainScreenAnimation { get; set; }
 	public List<DKeyL> Keys = new List<DKeyL>();
@@ -121,7 +122,7 @@ public partial class TaikoGameCore : Control
 		PivotOffset = new Vector2(Size.X / 2, Size.Y / 2);
 		MainScreenAnimation.TweenInterval(0.5f);
 		MainScreenAnimation.Parallel().TweenProperty(this, "modulate", new Color(1f, 0.8f, 0.8f, 1f), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-		MainScreenAnimation.Parallel().TweenProperty(this, "position", new Vector2(Position.X, Position.Y + 20), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
+		MainScreenAnimation.Parallel().TweenProperty(this, "position", new Vector2(Position.X, Position.Y + 25), Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		MainScreenAnimation.Parallel().TweenProperty(this, "rotation", 0.05f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		MainScreenAnimation.Parallel().TweenProperty(AudioPlayer.Instance, "pitch_scale", 0.01f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
 		MainScreenAnimation.Parallel().TweenProperty(this, "scale", Scale * 0.7f, Interval).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
@@ -320,7 +321,7 @@ public partial class TaikoGameCore : Control
 		if (LanNetwork.InMatch) LanNetwork.Instance.SpecSendChart(new LanSpecChart
 		{
 			Mode = 1,
-			Height = (int)GetViewportRect().Size.X,
+			Height = (int)(GetViewportRect().Size.X / UiScale.ScreenRatio), // old 1280-wide units, what spectators expect
 			Times = Notes.Select(n => -n.timing).ToArray(), // DrumEn.timing is stored negative
 			Lanes = Notes.Select(n => (byte)((int)n.DrumType + (n.DrumBig ? 2 : 0))).ToArray(),
 		});
@@ -655,7 +656,7 @@ private void _GameNoteTick(double delta)
     var viewportSize = 0f;
     if (IsInsideTree())
     {
-        viewportSize = GetViewportRect().Size.X;
+        viewportSize = GetViewportRect().Size.X / UiScale.ScreenRatio; // old units, like HitPoint
     }
 
     var NoteCount = 0;
@@ -690,7 +691,8 @@ private void _GameNoteTick(double delta)
 
             if (Note.Node != null)
             {
-                Note.Node.Position = new Vector2(hitPointLocal + (hitPointLocal - notex) * scrollspeed, 0);
+                // Same speed relative to the (wider) screen as before: 1.5 px per ms. notex - HitPoint = ms from the hit box.
+                Note.Node.Position = new Vector2(hitPointLocal + (hitPointLocal - HitPoint * UiScale.Factor - (notex - HitPoint) * UiScale.ScreenRatio) * scrollspeed, 0);
                 Ttick++;
 
                 DrumTypeGroup noteGroup = GetDrumGroup((int)Note.Node.DrumType);
@@ -776,7 +778,7 @@ private void _GameNoteTick(double delta)
 			scoretween.Play();
 		}
 		SettingsOperator.Gameplaycfg.Score = scoreint; // Set the score of the player
-		HitPoint = (int)HitBoxNode.Position.X;
+		HitPoint = (int)Math.Round(HitBoxNode.Position.X / UiScale.Factor);
 		try
 		{
 
@@ -914,7 +916,7 @@ private void _GameNoteTick(double delta)
 	public void Hittext(Texture2D Image)
 	{
 		hittext.Modulate = new Color(1f, 1f, 1f, 1f);
-		hittext.Position = new Vector2(hittextoldpos.X, hittextoldpos.Y - 10);
+		hittext.Position = new Vector2(hittextoldpos.X, hittextoldpos.Y - 13);
 		if (hittext.Texture != Image)
 			hittext.Texture = Image;
 		//tween.TweenProperty(hittext, "position", new Vector2(hittext.Position.X,hittext.Position.Y+10), 0.5f).SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
@@ -978,7 +980,7 @@ private void _GameNoteTick(double delta)
 			HealthBar.Heal((1 * (SettingsOperator.Gameplaycfg.Combo / 500)) + 1);
 			return 2;
 		}
-		else if (timing > GetViewportRect().Size.X + 60 && Note.Node.Visible)
+		else if (timing > GetViewportRect().Size.X / UiScale.ScreenRatio + 60 && Note.Node.Visible)
 		{
 			Hittext(Skin.Element.JudgeMiss);
 			SettingsOperator.Gameplaycfg.Bad++;

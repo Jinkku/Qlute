@@ -28,7 +28,7 @@ public partial class ReportDialog : Control
 		center.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
 		AddChild(center);
 
-		var panel = new PanelContainer { CustomMinimumSize = new Vector2(Mathf.Min(480, GetViewportRect().Size.X - 40), 0) };
+		var panel = new PanelContainer { CustomMinimumSize = new Vector2(Mathf.Min(600, GetViewportRect().Size.X - 50), 0) };
 		panel.AddThemeStyleboxOverride("panel", PlayerOverlays.Style(PlayerOverlays.Page, 0, 0, 0));
 		center.AddChild(panel);
 		var outer = new VBoxContainer();
@@ -39,28 +39,28 @@ public partial class ReportDialog : Control
 		close.Pressed += Close;
 		bar.AddChild(close);
 
-		var box = PlayerOverlays.Panel(PlayerOverlays.Box, 0, 18, 14);
+		var box = PlayerOverlays.Panel(PlayerOverlays.Box, 0, 23, 18);
 		outer.AddChild(box);
-		var v = ModUi.Column(8);
+		var v = ModUi.Column(10);
 		box.AddChild(v);
-		v.AddChild(PlayerOverlays.Text($"Report {_target}", 20, bold: true, trim: true));
-		v.AddChild(ModUi.Para("The Qlute team will look at this. False reports may get you restricted.", 12, PlayerOverlays.Dim));
+		v.AddChild(PlayerOverlays.Text($"Report {_target}", 25, bold: true, trim: true));
+		v.AddChild(ModUi.Para("The Qlute team will look at this. False reports may get you restricted.", 15, PlayerOverlays.Dim));
 
-		v.AddChild(PlayerOverlays.Text("What's wrong?", 13));
+		v.AddChild(PlayerOverlays.Text("What's wrong?", 16));
 		_category = ModUi.Options();
 		foreach (var (_, text) in ModerationApi.Categories) _category.AddItem(text);
 		v.AddChild(_category);
 
-		v.AddChild(PlayerOverlays.Text("What happened?", 13));
-		_details = ModUi.TextArea("Be specific: which map or score, what they said, when...", 110);
+		v.AddChild(PlayerOverlays.Text("What happened?", 16));
+		_details = ModUi.TextArea("Be specific: which map or score, what they said, when...", 138);
 		v.AddChild(_details);
 
-		v.AddChild(PlayerOverlays.Text("Link or score (optional)", 13));
+		v.AddChild(PlayerOverlays.Text("Link or score (optional)", 16));
 		_extra = ModUi.Input("e.g. a replay link or beatmap", 500);
 		_extra.Text = _context;
 		v.AddChild(_extra);
 
-		_status = ModUi.Para("", 13, ModUi.Accent);
+		_status = ModUi.Para("", 16, ModUi.Accent);
 		v.AddChild(_status);
 
 		var buttons = ModUi.Row();

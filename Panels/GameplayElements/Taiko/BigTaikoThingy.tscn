@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://jdwae263yf67" path="res://Resources/Game/Taiko/BigTaikoThingyOutline.png" id="2_tlhqe"]
 
 [node name="BigTaikoThingyF" type="Sprite2D" unique_id=392273260]
+scale = Vector2(1.25, 1.25)
 texture = ExtResource("1_ssald")
 script = ExtResource("2_3re5f")
 

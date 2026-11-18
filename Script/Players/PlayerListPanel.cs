@@ -6,7 +6,7 @@ using System.Linq;
 public partial class PlayerListPanel : PanelContainer
 {
 	private const double RefreshEvery = 10;
-	private const float Width = 380;
+	private const float Width = 475;
 
 	public bool Closing { get; private set; }
 
@@ -30,8 +30,8 @@ public partial class PlayerListPanel : PanelContainer
 		AddThemeStyleboxOverride("panel", PlayerOverlays.Style(PlayerOverlays.Page, 0, 0, 0));
 		var view = GetViewportRect().Size;
 		CustomMinimumSize = new Vector2(Width, 0);
-		Size = new Vector2(Width, Mathf.Min(640, view.Y * 0.75f));
-		Position = new Vector2(view.X - Width - 10, Top() - Size.Y);
+		Size = new Vector2(Width, Mathf.Min(800, view.Y * 0.75f));
+		Position = new Vector2(view.X - Width - 13, Top() - Size.Y);
 
 		var v = new VBoxContainer();
 		v.AddThemeConstantOverride("separation", 0);
@@ -52,40 +52,40 @@ public partial class PlayerListPanel : PanelContainer
 		close.Pressed += Close;
 		bar.AddChild(close);
 
-		var box = PlayerOverlays.Panel(PlayerOverlays.Box, 0, 15, 12);
+		var box = PlayerOverlays.Panel(PlayerOverlays.Box, 0, 19, 15);
 		box.SizeFlagsVertical = SizeFlags.ExpandFill;
 		v.AddChild(box);
 		var inner = new VBoxContainer();
-		inner.AddThemeConstantOverride("separation", 10);
+		inner.AddThemeConstantOverride("separation", 13);
 		box.AddChild(inner);
 
 		var head = new HBoxContainer();
 		inner.AddChild(head);
-		_title = PlayerOverlays.Text("Online", 18, bold: true);
+		_title = PlayerOverlays.Text("Online", 23, bold: true);
 		_title.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		head.AddChild(_title);
-		_count = PlayerOverlays.Text("", 18, bold: true);
+		_count = PlayerOverlays.Text("", 23, bold: true);
 		head.AddChild(_count);
 
 		_search = new LineEdit { PlaceholderText = "Search players...", ClearButtonEnabled = true, TooltipText = "Filters the list. Press Enter to open any player's profile, online or not." };
-		_search.AddThemeFontSizeOverride("font_size", 13);
-		_search.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(PlayerOverlays.Card, 5, 10, 6));
-		_search.AddThemeStyleboxOverride("focus", PlayerOverlays.Style(PlayerOverlays.CardHover, 5, 10, 6));
+		_search.AddThemeFontSizeOverride("font_size", 16);
+		_search.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(PlayerOverlays.Card, 6, 13, 8));
+		_search.AddThemeStyleboxOverride("focus", PlayerOverlays.Style(PlayerOverlays.CardHover, 6, 13, 8));
 		_search.TextChanged += _ => Rebuild();
 		_search.TextSubmitted += t => { if (!string.IsNullOrWhiteSpace(t)) PlayerOverlays.OpenProfile(t.Trim()); };
 		inner.AddChild(_search);
 
-		_hint = PlayerOverlays.Text("Loading...", 13, PlayerOverlays.Dim, wrap: true);
+		_hint = PlayerOverlays.Text("Loading...", 16, PlayerOverlays.Dim, wrap: true);
 		inner.AddChild(_hint);
 
 		var scroll = new ScrollContainer { SizeFlagsVertical = SizeFlags.ExpandFill, HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled };
 		inner.AddChild(scroll);
 		_rows = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
-		_rows.AddThemeConstantOverride("separation", 10);
+		_rows.AddThemeConstantOverride("separation", 13);
 		scroll.AddChild(_rows);
 
 		_tween = CreateTween().SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.Out);
-		_tween.TweenProperty(this, "position:y", Top() + 8, 0.25f);
+		_tween.TweenProperty(this, "position:y", Top() + 10, 0.25f);
 		SetMode(_friendsMode);
 	}
 
@@ -94,8 +94,8 @@ public partial class PlayerListPanel : PanelContainer
 		_friendsMode = friends;
 		_title.Text = friends ? "Friends" : "Online";
 		// The selected tab looks pressed.
-		_onlineTab.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(friends ? PlayerOverlays.Pill : PlayerOverlays.ModPill, 5, 10, 4));
-		_friendsTab.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(friends ? PlayerOverlays.ModPill : PlayerOverlays.Pill, 5, 10, 4));
+		_onlineTab.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(friends ? PlayerOverlays.Pill : PlayerOverlays.ModPill, 6, 13, 5));
+		_friendsTab.AddThemeStyleboxOverride("normal", PlayerOverlays.Style(friends ? PlayerOverlays.ModPill : PlayerOverlays.Pill, 6, 13, 5));
 		_players = new();
 		_count.Text = "";
 		_hint.Text = "Loading...";
@@ -105,7 +105,7 @@ public partial class PlayerListPanel : PanelContainer
 		Load();
 	}
 
-	private static float Top() => Mathf.Max(50, SettingsOperator.TopPanelPosition);
+	private static float Top() => Mathf.Max(63, SettingsOperator.TopPanelPosition);
 
 	public void Close()
 	{
@@ -190,7 +190,7 @@ public partial class PlayerListPanel : PanelContainer
 
 	private static StyleBoxFlat Rounded(Color bg, int margin = 0)
 	{
-		var s = PlayerOverlays.Style(bg, 15, margin, margin);
+		var s = PlayerOverlays.Style(bg, 19, margin, margin);
 		return s;
 	}
 
@@ -207,37 +207,37 @@ public partial class PlayerListPanel : PanelContainer
 		card.AddChild(split);
 
 		// top: picture (top-left and bottom-right corners rounded) + name and status
-		var top = new PanelContainer { CustomMinimumSize = new Vector2(0, 60), MouseFilter = MouseFilterEnum.Ignore };
+		var top = new PanelContainer { CustomMinimumSize = new Vector2(0, 75), MouseFilter = MouseFilterEnum.Ignore };
 		top.AddThemeStyleboxOverride("panel", Rounded(CardTop));
 		split.AddChild(top);
 		var topRow = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
-		topRow.AddThemeConstantOverride("separation", 15);
+		topRow.AddThemeConstantOverride("separation", 19);
 		top.AddChild(topRow);
 
-		var pic = PlayerOverlays.Picture(p.Pfp, 60, 0);
+		var pic = PlayerOverlays.Picture(p.Pfp, 75, 0);
 		var corners = PlayerOverlays.Style(Colors.White, 0, 0, 0);
-		corners.CornerRadiusTopLeft = corners.CornerRadiusBottomRight = 15;
+		corners.CornerRadiusTopLeft = corners.CornerRadiusBottomRight = 19;
 		pic.AddThemeStyleboxOverride("panel", corners);
 		topRow.AddChild(pic);
 
 		var info = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill, Alignment = BoxContainer.AlignmentMode.Center, MouseFilter = MouseFilterEnum.Ignore };
-		info.AddThemeConstantOverride("separation", 2);
-		info.AddChild(PlayerOverlays.Text(p.Username + (p.Username == ApiOperator.Username ? " (you)" : p.Mutual ? "  · mutual" : ""), 13, trim: true));
+		info.AddThemeConstantOverride("separation", 3);
+		info.AddChild(PlayerOverlays.Text(p.Username + (p.Username == ApiOperator.Username ? " (you)" : p.Mutual ? "  · mutual" : ""), 16, trim: true));
 		var statusRow = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
-		statusRow.AddThemeConstantOverride("separation", 6);
-		statusRow.AddChild(new ColorRect { Color = p.Online ? PlayerOverlays.OnlineDot : PlayerOverlays.OfflineDot, CustomMinimumSize = new Vector2(7, 7), SizeFlagsVertical = SizeFlags.ShrinkCenter, MouseFilter = MouseFilterEnum.Ignore });
-		var status = PlayerOverlays.Text(PlayerOverlays.StatusLine(p), 11, PlayerOverlays.Dim, trim: true);
+		statusRow.AddThemeConstantOverride("separation", 8);
+		statusRow.AddChild(new ColorRect { Color = p.Online ? PlayerOverlays.OnlineDot : PlayerOverlays.OfflineDot, CustomMinimumSize = new Vector2(8.75f, 8.75f), SizeFlagsVertical = SizeFlags.ShrinkCenter, MouseFilter = MouseFilterEnum.Ignore });
+		var status = PlayerOverlays.Text(PlayerOverlays.StatusLine(p), 14, PlayerOverlays.Dim, trim: true);
 		status.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		statusRow.AddChild(status);
 		info.AddChild(statusRow);
 		var pad = new MarginContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill, MouseFilter = MouseFilterEnum.Ignore };
-		pad.AddThemeConstantOverride("margin_right", 10);
+		pad.AddThemeConstantOverride("margin_right", 13);
 		pad.AddChild(info);
 		topRow.AddChild(pad);
 
 		// bottom: Global Rank | Performance
-		var bottom = new HBoxContainer { CustomMinimumSize = new Vector2(0, 56), MouseFilter = MouseFilterEnum.Ignore };
-		bottom.AddThemeConstantOverride("separation", 15);
+		var bottom = new HBoxContainer { CustomMinimumSize = new Vector2(0, 70), MouseFilter = MouseFilterEnum.Ignore };
+		bottom.AddThemeConstantOverride("separation", 19);
 		split.AddChild(bottom);
 		bottom.AddChild(Stat("Global Rank", $"#{p.Rank:N0}"));
 		bottom.AddChild(Stat("Performance", $"{p.Points:N0}pp"));
@@ -257,10 +257,10 @@ public partial class PlayerListPanel : PanelContainer
 	{
 		var v = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill, Alignment = BoxContainer.AlignmentMode.Center, MouseFilter = MouseFilterEnum.Ignore };
 		v.AddThemeConstantOverride("separation", 0);
-		var n = PlayerOverlays.Text(caption, 13, StatName);
+		var n = PlayerOverlays.Text(caption, 16, StatName);
 		n.HorizontalAlignment = HorizontalAlignment.Center;
 		v.AddChild(n);
-		var x = PlayerOverlays.Text(value, 13, StatValue, trim: true);
+		var x = PlayerOverlays.Text(value, 16, StatValue, trim: true);
 		x.HorizontalAlignment = HorizontalAlignment.Center;
 		v.AddChild(x);
 		return v;

@@ -115,13 +115,13 @@ public partial class AccountButton : Button
 			Card = GD.Load<PackedScene>("res://Panels/Overlays/AccountPrompt.tscn").Instantiate().GetNode<Control>(".");
 			Card.ZIndex = -1;
 			TopPanel.AddChild(Card);
-			Card.Position = new Vector2(0, -265);
+			Card.Position = new Vector2(0, -331.25f);
 			acctween.TweenProperty(Card, "position", new Vector2(0,SettingsOperator.TopPanelPosition), 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 			acctween.Play();
 		}
 		else
 		{
-			acctween.TweenProperty(Card, "position", new Vector2(0,-265), 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+			acctween.TweenProperty(Card, "position", new Vector2(0,-331.25f), 0.2f).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
 			acctween.TweenCallback(Callable.From(Card.QueueFree));
 		}
 		SettingsOperator.SessionConfig.ShowAccountProfile = !SettingsOperator.SessionConfig.ShowAccountProfile;}

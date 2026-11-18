@@ -81,7 +81,7 @@ public partial class SongSelect : Control
 	{
 		// Part of the loading Beatmaps
 		SongETick = 0;
-		startposition = ((int)GetViewportRect().Size.Y / 2) - 166;
+		startposition = ((int)GetViewportRect().Size.Y / 2) - 208;
 		ScrollSongs();
 	}
 
@@ -282,14 +282,14 @@ public partial class SongSelect : Control
 		NoBeatmap = GetNode<Label>("SongPanel/NoBeatmap");
 		NoBeatmap.Visible = true;
 		SongETick = 0;
-		startposition = ((int)GetViewportRect().Size.Y / 2) - 166;
+		startposition = ((int)GetViewportRect().Size.Y / 2) - 208;
 
 		SettingsOperator.Marathon = false;
 		ModScreen = GetNode<Control>("ModsScreen");
 		ModeScreen = GetNode<PanelContainer>("ModeScreen");
 		ModScreen.Visible = true;
 		ModeScreen.Visible = true;
-		ModeScreen.Position = new Vector2(110, GetViewportRect().Size.Y);
+		ModeScreen.Position = new Vector2(138, GetViewportRect().Size.Y);
 		ModScreen.Position = new Vector2(0, GetViewportRect().Size.Y);
 		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
 		SongTitle = GetNode<Label>("SongDetails/SongInfo/Rows/Column1/Title");
@@ -755,12 +755,12 @@ public partial class SongSelect : Control
 		if (ModsScreenActive) _Mods_show();
 		ModeScreen_Tween = ModeScreen.CreateTween();
 		var colour = new Color(1f, 1f, 1f, 1f);
-		var pos = new Vector2(110, GetViewportRect().Size.Y - ModeScreen.Size.Y - 50);
+		var pos = new Vector2(138, GetViewportRect().Size.Y - ModeScreen.Size.Y - 63);
 		if (ModeScreenActive)
 		{
 			ModeScreenActive = false;
 			colour = new Color(0f, 0f, 0f, 0f);
-			pos = new Vector2(110, GetViewportRect().Size.Y);
+			pos = new Vector2(138, GetViewportRect().Size.Y);
 		}else {
 			ModeScreenActive = true;
 		}

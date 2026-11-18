@@ -4,20 +4,20 @@
 [ext_resource type="Script" uid="uid://dq1crr4ppqjne" path="res://Script/Home/MusicBar.cs" id="2_la3v4"]
 
 [node name="MusicBar" type="TextureProgressBar"]
-custom_minimum_size = Vector2(400, 400)
+custom_minimum_size = Vector2(500, 500)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -200.0
-offset_right = 200.0
-offset_bottom = 200.0
+offset_left = -250.0
+offset_top = -250.0
+offset_right = 250.0
+offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
 rotation = 3.1415927
-pivot_offset = Vector2(200, 200)
+pivot_offset = Vector2(250, 250)
 mouse_filter = 2
 step = 0.01
 value = 80.0

@@ -42,7 +42,7 @@ public static class BioBBCode
 				return arg != null && Colour.IsMatch(arg.Trim()) ? ($"[color={arg.Trim()}]", "[/color]") : null;
 			case "size":
 				return arg != null && Sizes.TryGetValue(arg.Trim(), out var pct)
-					? ($"[font_size={Math.Max(6, baseSize * pct / 100)}]", "[/font_size]") : null;
+					? ($"[font_size={Math.Max(8, baseSize * pct / 100)}]", "[/font_size]") : null;
 			case "centre": case "center": return ("[center]", "[/center]");
 			case "url":
 				var link = Url(arg);
@@ -77,7 +77,7 @@ public static class BioBBCode
 		return list;
 	}
 
-	public static string ToGodot(string text, int baseSize = 14)
+	public static string ToGodot(string text, int baseSize = 18)
 	{
 		text = (text ?? "").Replace("\r\n", "\n").Replace('\r', '\n');
 		var tokens = Tokens(text);
