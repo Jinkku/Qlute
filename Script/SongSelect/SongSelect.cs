@@ -130,8 +130,11 @@ public partial class SongSelect : Control
 			// Filter header (placed by its anchors in song_select.tscn) on top, the carousel under it.
 			top = _header.Position.Y + Mathf.Max(_header.Size.Y, _header.GetCombinedMinimumSize().Y) + 16;
 		}
-		SongPanel.Size = new Vector2((WindowSize.X / 2.5f) + 50, WindowSize.Y - top - 70);
-		SongPanel.Position = new Vector2(left, top);
+		// The list runs the full screen height (behind the header and the bottom bar, which draw over it) so cards
+		// aren't sliced off mid-screen; the selection stays centred in the gap between the two.
+		SongPanel.Size = new Vector2((WindowSize.X / 2.5f) + 50, WindowSize.Y);
+		SongPanel.Position = new Vector2(left, 0);
+		if (_carousel != null) { _carousel.FocusTop = top; _carousel.FocusBottom = 70; }
 		ScrollSongs();
 	}
 

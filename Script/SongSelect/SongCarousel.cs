@@ -24,6 +24,11 @@ public partial class SongCarousel : Control
 	public float DiffH { get; private set; } = 66;
 	/// <summary>Cards start this far in, so the selected one can pop out left without being clipped.</summary>
 	public const float Inset = 34;
+	/// <summary>
+	/// The list fills the screen height, but the header covers its top and the bottom bar its bottom: the selection
+	/// is centred in the band between these two margins.
+	/// </summary>
+	public float FocusTop, FocusBottom;
 
 	private struct Row { public bool IsSet; public int Group; public int Song; public float Y; public float H; }
 
@@ -37,7 +42,7 @@ public partial class SongCarousel : Control
 
 	public SongCarousel()
 	{
-		ClipContents = true; // clean edges under the header and above the bottom bar
+		ClipContents = true; // the list spans the screen height, so this only trims at the screen edges
 		MouseFilter = MouseFilterEnum.Pass;
 		_setScene ??= GD.Load<PackedScene>(SetScene);
 		_diffScene ??= GD.Load<PackedScene>(DiffScene);
@@ -134,8 +139,9 @@ public partial class SongCarousel : Control
 		if (current != _selected && _groupOf.ContainsKey(current)) Follow(current);
 
 		_scroll = Mathf.Lerp(_scroll, _target, 1f - Mathf.Exp(-(float)delta * 9f));
-		float half = Size.Y / 2;
-		float top = _scroll - half - 150, bottom = _scroll + half + 150;
+		float bandTop = Mathf.Clamp(FocusTop, 0, Size.Y), bandBottom = Mathf.Max(bandTop, Size.Y - FocusBottom);
+		float centre = (bandTop + bandBottom) / 2, bandHalf = Mathf.Max(1, (bandBottom - bandTop) / 2);
+		float top = _scroll - centre - 150, bottom = _scroll + (Size.Y - centre) + 150;
 
 		// rows are sorted by Y: binary search the first one on screen
 		int lo = 0, hi = _rows.Count;
@@ -155,8 +161,8 @@ public partial class SongCarousel : Control
 				card.Modulate = new Color(1, 1, 1, 0);
 				card.CreateTween().TweenProperty(card, "modulate:a", 1f, 0.18f);
 			}
-			float screenY = r.Y - _scroll + half;
-			float d = Mathf.Clamp((screenY + r.H / 2 - half) / Mathf.Max(1, half), -1.4f, 1.4f);
+			float screenY = r.Y - _scroll + centre;
+			float d = Mathf.Clamp((screenY + r.H / 2 - centre) / bandHalf, -2f, 2f);
 			bool selected = r.IsSet ? r.Group == _expanded : r.Song == _selected;
 			// set cards curve away from the centre; an open set's difficulties stay in one straight, even column
 			float x = Inset + (r.IsSet ? d * d * Arc : Indent) - (selected ? PopOut : 0);
