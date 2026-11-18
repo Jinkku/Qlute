@@ -389,25 +389,35 @@ public partial class Kiko : Node
         Directory.CreateDirectory(updateDir);
         KikoApi.Timeout = 0;
         KikoApi.DownloadFile = zipPath;
+        NotificationLegend progress = null;
         KikoApi.RequestCompleted += (res, code, hdrs, bdy) =>
         {
             if (res != (long)HttpRequest.Result.Success || code != 200)
             {
                 GD.PrintErr($"[Kiko] Update download failed (result {res}, HTTP {code})");
                 isUpdating = false;
+                progress?.Fail("Couldn't download the update", (ApiOperator.DownloadError(res, code) ?? $"HTTP {code}") + "\nThe game will try again next time it starts.");
                 return;
             }
+            progress?.Complete("Update downloaded", "Checking the file...");
             string file = KikoApi.DownloadFile;
             Task.Run(() => Sha256Of(file)).ContinueWith(t =>
             {
                 Callable.From(() => OnDownloadHashed(file, t.IsCompletedSuccessfully ? t.Result : null, expectedSha256)).CallDeferred();
             });
         };
-        KikoApi.Request(downloadUrl, new string[] { "User-Agent: Qlute-Updater" });
-        Notify.Post("Downloading update...",
-            ProgressGetter: () => KikoApi.GetDownloadedBytes(),
-            Max: () => KikoApi.GetBodySize(),
+        var startError = KikoApi.Request(downloadUrl, new string[] { "User-Agent: Qlute-Updater" });
+        if (startError != Error.Ok)
+        {
+            GD.PrintErr($"[Kiko] Update download couldn't start: {startError}");
+            isUpdating = false;
+            return;
+        }
+        progress = Notify.Post("Downloading update", Description: tagName,
+            ProgressGetter: () => IsInstanceValid(KikoApi) ? KikoApi.GetDownloadedBytes() : 0,
+            Max: () => IsInstanceValid(KikoApi) ? KikoApi.GetBodySize() : -1,
             Type: NotificationIcons.NotificationType.Download);
+        progress.AutoComplete = false; // ended by RequestCompleted above
     }
 
     private static string Sha256Of(string file)
@@ -423,6 +433,8 @@ public partial class Kiko : Node
         {
             GD.PrintErr($"[Kiko] Update checksum mismatch (expected {expected}, got {actual ?? "error"}), discarding download.");
             try { File.Delete(file); } catch { }
+            Notify.Post("The update download was damaged", Description: "It was thrown away. The game will try again next time it starts.",
+                Type: NotificationIcons.NotificationType.Warning);
             return;
         }
         GD.Print("[Kiko] Update checksum verified.");
@@ -432,7 +444,7 @@ public partial class Kiko : Node
 
     private static void PostReadyNotification()
     {
-        Notify.Post("Update is ready to install!\nClick to install the update.",
+        Notify.Post("Update ready to install", Description: "Click here to install it.",
             uri: $"updatefile:/{zipPath}",
             Type: NotificationIcons.NotificationType.Download);
     }

@@ -57,20 +57,26 @@ public static class BeatmapSubmit
 			Notify.Post("Log in to submit beatmaps.", Type: NotificationIcons.NotificationType.Warning);
 			return null;
 		}
-		Notify.Post($"Submitting {label}...", ProgressGetter: () => (int)(Sent / 1024), Max: () => (int)Math.Max(1, Total / 1024),
+		var progress = Notify.Post("Submitting", Description: label, ProgressGetter: () => (int)(Sent / 1024), Max: () => (int)Math.Max(1, Total / 1024),
 			Type: NotificationIcons.NotificationType.Upload);
-		var (result, error) = await Submit(folder);
-		if (error != null)
+		progress.AutoComplete = false; // the server still checks the set after the last byte
+		(Result result, string error) outcome;
+		try { outcome = await Submit(folder); }
+		catch (Exception e) { outcome = (null, e.Message); }
+		var (result, error) = outcome;
+		if (error != null || result == null)
 		{
-			Notify.Post("Couldn't submit the beatmap:\n" + error, Type: NotificationIcons.NotificationType.Warning);
+			progress.Fail("Couldn't submit the beatmap", $"{label}\n{error ?? "Unknown error."}");
 			return null;
 		}
+		progress.Complete("Uploaded", label);
 		var names = string.Join(", ", result.Beatmaps.Select(b => b.Version));
-		var text = $"{(result.Updated ? "Updated" : "Submitted")} {label}\n{names}";
+		var text = $"{label}\n{names}";
 		if (result.Skipped.Count > 0) text += $"\nLeft out (not osu!mania 4K): {string.Join(", ", result.Skipped)}";
 		if (result.Removed.Count > 0) text += $"\nRemoved from the server: {string.Join(", ", result.Removed)}";
 		text += "\nClick to open its page.";
-		Notify.Post(text, uri: PlayerApi.Base.TrimEnd('/') + result.Url, Type: NotificationIcons.NotificationType.Send);
+		Notify.Post(result.Updated ? "Beatmap updated" : "Beatmap submitted", uri: PlayerApi.Base.TrimEnd('/') + result.Url,
+			Type: NotificationIcons.NotificationType.Send, Description: text);
 		return result;
 	}
 

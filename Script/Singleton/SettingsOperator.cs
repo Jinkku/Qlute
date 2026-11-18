@@ -146,6 +146,7 @@ public partial class SettingsOperator : Node
         { "privacyprompted", false }, // the first-launch privacy prompt was answered
         { "storyboard", true },    // play beatmap storyboards (and .ogv videos)
         { "beatmapshader", true }, // apply the shader a beatmap ships (made in the Create editor)
+        { "notifseen", "" },        // "username:id" of the last website notification shown in game (ServerNotifications)
     };
     public Dictionary<string, object> Configurationbk { get; set; }
 

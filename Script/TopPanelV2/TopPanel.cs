@@ -176,7 +176,6 @@ public partial class TopPanel : ColorRect
 				var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/Notification.tscn").Instantiate().GetNode<NotificationApplet>(".");
 				NotiCard.Position = new Vector2(GetViewportRect().Size.X, NotificationApplet.NextStackY());
 				NotificationListener.NotificationCards.Add(NotiCard);
-				NotiCard.Text = NotiInfo.Title;
 				NotiCard.SetMeta("id", NotificationListener.Count);
 				NotiCard.SetMeta("listid", NotificationListener.NotificationList.IndexOf(NotiInfo)); // this card's own notification, not the newest one
 				NotiCard.SetMeta("time", NotiInfo.Time);
@@ -193,6 +192,7 @@ public partial class TopPanel : ColorRect
 				tween.Play();
 				NotiInfo.Finished = true;
 				NotificationListener.Count++;
+				NotificationApplet.TrimPopups();
 			}
 		}
 	}

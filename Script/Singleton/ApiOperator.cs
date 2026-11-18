@@ -15,6 +15,13 @@ public class BeatmapDownloader
 	public string Info { get; set; }
 	public int BeatmapID { get; set; }
 	public int DownloadedBytes { get; set; }
+	/// <summary>The set it came from, so a failed download can be retried from its notification.</summary>
+	public BrowseCatalogLegend Source { get; set; }
+	/// <summary>The progress card; completed or failed when the download ends.</summary>
+	public NotificationLegend Notification { get; set; }
+	/// <summary>Seconds since the last byte arrived (a stalled download is given up after a while).</summary>
+	public double Idle { get; set; }
+	public bool Done { get; set; }
 }
 public class LeaderboardEntry
 {
@@ -482,57 +489,131 @@ public partial class ApiOperator : Node
 	public static void DownloadBeatmap(BrowseCatalogLegend BeatmapInfo)
 	{
 		var id = BeatmapInfo.id;
+		var Info = $"{BeatmapInfo.artist} - {BeatmapInfo.title} from {BeatmapInfo.creator}";
 		if (string.IsNullOrEmpty(BeatmapInfo.download_url))
 		{
-			Notify.Post("This beatmap can't be downloaded right now.");
+			Notify.Post("Can't download this beatmap right now", Description: Info, Type: NotificationIcons.NotificationType.Warning);
 			return;
 		}
-		var Artist = BeatmapInfo.artist;
-		var Title = BeatmapInfo.title;
-		var Creator = BeatmapInfo.creator;
-		var Info = $"{Artist} - {Title} from {Creator}";
-		if (DownloadList.Exists(d => d.Url == BeatmapInfo.download_url))
+		var url = BeatmapInfo.download_url.Replace(" ", "%20");
+		if (DownloadList.Exists(d => !d.Done && (d.Url == url || d.BeatmapID == id)))
 		{
-			Notify.Post("This beatmap is already being downloaded.");
+			Notify.Post("Already downloading", Description: Info);
 			return;
 		}
 
 		DownloadList.Add(new BeatmapDownloader
 		{
-			Url = BeatmapInfo.download_url.Replace(" ", "%20"),
+			Url = url,
 			Info = Info,
-			BeatmapID = id
+			BeatmapID = id,
+			Source = BeatmapInfo
 		});
 	}
 
 	public static List<BeatmapDownloader> DownloadList = new List<BeatmapDownloader>();
 
-	private void _on_download_completed(long result, long responseCode, string[] headers, byte[] body, int beatmap = 0)
+	/// <summary>A download with no new bytes for this long is given up (the server or connection hung).</summary>
+	private const double DownloadStallSeconds = 60;
+
+	private void _on_download_completed(long result, long responseCode, string[] headers, byte[] body, BeatmapDownloader downloader)
 	{
-		DownloadList.RemoveAll(d => d.BeatmapID == beatmap);
-		if (responseCode == 200)
+		if (downloader.Done) return;
+		string tempFilePath = Path.Combine(SettingsOperator.downloadsdir, $"{downloader.BeatmapID}.osz.tmp");
+		string finalFilePath = Path.Combine(SettingsOperator.downloadsdir, $"{downloader.BeatmapID}.osz");
+		string error = DownloadError(result, responseCode);
+		if (error == null && !LooksLikeZip(tempFilePath))
+			error = "The server sent something that isn't a beatmap file. Try again in a bit.";
+		if (error == null)
 		{
 			try
 			{
-				int id = beatmap; // Assuming ID is passed in headers
-				string tempFilePath = Path.Combine(SettingsOperator.downloadsdir, $"{id}.osz.tmp");
-				string finalFilePath = Path.Combine(SettingsOperator.downloadsdir, $"{id}.osz");
-
-				if (File.Exists(tempFilePath))
-				{
-					File.Move(tempFilePath, finalFilePath);
-				}
-
+				if (File.Exists(finalFilePath)) File.Delete(finalFilePath);
+				File.Move(tempFilePath, finalFilePath); // BeatmapListener picks it up and imports it
 				GD.Print($"Beatmap downloaded successfully to: {finalFilePath}");
 			}
 			catch (Exception ex)
 			{
-				Notify.Post($"Error saving beatmap: {ex.Message}");
+				error = $"Couldn't save it: {ex.Message}";
 			}
+		}
+		FinishDownload(downloader, error);
+	}
+
+	/// <summary>Ends a download either way: the notification always closes or shows the error, never stays stuck.</summary>
+	private void FinishDownload(BeatmapDownloader downloader, string error)
+	{
+		downloader.Done = true;
+		DownloadList.Remove(downloader);
+		if (error == null)
+		{
+			downloader.Notification?.Complete("Downloaded", downloader.Info);
 		}
 		else
 		{
-			Notify.Post($"Failed to download beatmap. HTTP Status: {responseCode}. You might be throttled ;w;");
+			GD.PrintErr($"[Download] {downloader.Info}: {error}");
+			try { File.Delete(Path.Combine(SettingsOperator.downloadsdir, $"{downloader.BeatmapID}.osz.tmp")); } catch { }
+			var source = downloader.Source;
+			string retry = source != null ? "\nClick to try again." : "";
+			if (downloader.Notification != null)
+			{
+				downloader.Notification.Fail("Download failed", $"{downloader.Info}\n{error}{retry}");
+				if (source != null) downloader.Notification.OnClick = () => DownloadBeatmap(source);
+			}
+			else
+			{
+				var n = Notify.Post("Download failed", Description: $"{downloader.Info}\n{error}{retry}", Type: NotificationIcons.NotificationType.Warning);
+				if (source != null) n.OnClick = () => DownloadBeatmap(source);
+			}
+		}
+		var request = downloader.Request;
+		downloader.Request = null;
+		if (request != null && IsInstanceValid(request)) request.QueueFree();
+	}
+
+	/// <summary>Why a download failed, in words a player understands, or null if it worked.</summary>
+	public static string DownloadError(long result, long responseCode)
+	{
+		switch ((HttpRequest.Result)result)
+		{
+			case HttpRequest.Result.Success: break;
+			case HttpRequest.Result.CantResolve:
+			case HttpRequest.Result.CantConnect:
+			case HttpRequest.Result.ConnectionError:
+			case HttpRequest.Result.NoResponse:
+				return "Couldn't reach the server. Check your internet connection.";
+			case HttpRequest.Result.TlsHandshakeError:
+				return "A secure connection to the server couldn't be made.";
+			case HttpRequest.Result.Timeout:
+				return "The server took too long to answer.";
+			case HttpRequest.Result.DownloadFileCantOpen:
+			case HttpRequest.Result.DownloadFileWriteError:
+				return "Couldn't write the file. Is your disk full?";
+			default:
+				return $"The download broke off ({(HttpRequest.Result)result}).";
+		}
+		if (responseCode == 200) return null;
+		return responseCode switch
+		{
+			404 => "This beatmap isn't on the server anymore.",
+			403 => "The server won't let you download this beatmap.",
+			429 => "Too many downloads at once. Wait a minute and try again.",
+			>= 500 => $"The server had a problem (HTTP {responseCode}). Try again later.",
+			_ => $"The server said HTTP {responseCode}."
+		};
+	}
+
+	/// <summary>.osz files are zips ("PK"); an error page saved as the download isn't.</summary>
+	private static bool LooksLikeZip(string path)
+	{
+		try
+		{
+			using var f = File.OpenRead(path);
+			return f.Length > 4 && f.ReadByte() == 'P' && f.ReadByte() == 'K';
+		}
+		catch
+		{
+			return false;
 		}
 	}
 
@@ -838,32 +919,40 @@ public partial class ApiOperator : Node
 			Timer = DateTimeOffset.Now.ToUnixTimeSeconds();
 			CheckStatus();
 		}
+		ServerNotifications.Tick(delta);
 
-		foreach (var downloader in DownloadList)
+		foreach (var downloader in DownloadList.ToArray()) // FinishDownload removes from the list
 		{
 			if (downloader.Request == null)
 			{
-				int id = downloader.BeatmapID;
-				string url = downloader.Url;
-				string Info = downloader.Info;
-
+				Directory.CreateDirectory(SettingsOperator.downloadsdir);
 				var downloadRequest = new HttpRequest();
 				AddChild(downloadRequest);
-				downloadRequest.Timeout = 0;
-				downloadRequest.RequestCompleted += (long result, long responseCode, string[] headers, byte[] body) => _on_download_completed(result, responseCode, headers, body, id);
-				downloadRequest.DownloadFile = Path.Combine(SettingsOperator.downloadsdir, $"{id}.osz.tmp");
-				downloadRequest.Request(url, method: HttpClient.Method.Get, customHeaders: AgentHeaders);
-
+				downloadRequest.Timeout = 0; // big sets take a while: the stall check below gives up on hung ones
+				var d = downloader;
+				downloadRequest.RequestCompleted += (long result, long responseCode, string[] headers, byte[] body) => _on_download_completed(result, responseCode, headers, body, d);
+				downloadRequest.DownloadFile = Path.Combine(SettingsOperator.downloadsdir, $"{downloader.BeatmapID}.osz.tmp");
 				downloader.Request = downloadRequest;
-
-				Notify.Post($"Downloading {Info}", ProgressGetter: () => downloadRequest.GetDownloadedBytes(), Max: () => downloadRequest.GetBodySize(), Type: NotificationIcons.NotificationType.Download);
+				downloader.Notification = Notify.Post("Downloading", Description: downloader.Info,
+					ProgressGetter: () => IsInstanceValid(downloadRequest) ? downloadRequest.GetDownloadedBytes() : 0,
+					Max: () => IsInstanceValid(downloadRequest) ? downloadRequest.GetBodySize() : -1,
+					Type: NotificationIcons.NotificationType.Download);
+				downloader.Notification.AutoComplete = false; // FinishDownload ends it
+				var err = downloadRequest.Request(downloader.Url, method: HttpClient.Method.Get, customHeaders: AgentHeaders);
+				if (err != Error.Ok) FinishDownload(downloader, $"The download couldn't start ({err}).");
 			}
-			else
+			else if (IsInstanceValid(downloader.Request))
 			{
-				if (downloader.DownloadedBytes != downloader.Request.GetDownloadedBytes())
+				int bytes = downloader.Request.GetDownloadedBytes();
+				if (bytes != downloader.DownloadedBytes)
 				{
-					downloader.DownloadedBytes = downloader.Request.GetDownloadedBytes();
-					downloader.Request.Timeout++;
+					downloader.DownloadedBytes = bytes;
+					downloader.Idle = 0;
+				}
+				else if ((downloader.Idle += delta) > DownloadStallSeconds)
+				{
+					downloader.Request.CancelRequest(); // doesn't emit RequestCompleted
+					FinishDownload(downloader, "The download stopped moving. Check your connection and try again.");
 				}
 			}
 		}

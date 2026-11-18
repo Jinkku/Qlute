@@ -11,15 +11,11 @@ public partial class NotificationPanel : ColorRect
 		NotificationCards = GetNode<VBoxContainer>("MarginContainer/ScrollContainer/VBoxContainer");
 		for (int i = NotificationListener.NotificationList.Count - 1; i >= 0; i--)
 		{
-			var NotiInfo = NotificationListener.NotificationList[i];
-			if (NotiInfo.ShowProgress == false)
-			{
-				var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/Notification.tscn").Instantiate().GetNode<Button>(".");
-				NotiCard.SetMeta("is_popup", false);
-				NotiCard.SetMeta("listid", i); // current index; the card keeps a reference after this
-				NotificationCards.AddChild(NotiCard);
-				NotiCard.Text = NotiInfo.Title;
-			}
+			// Every notification, downloads included: a running one shows its bar, a failed one its error.
+			var NotiCard = GD.Load<PackedScene>("res://Panels/Overlays/Notification.tscn").Instantiate().GetNode<Button>(".");
+			NotiCard.SetMeta("is_popup", false);
+			NotiCard.SetMeta("listid", i); // current index; the card keeps a reference after this
+			NotificationCards.AddChild(NotiCard); // the card draws its own title + description
 		}
 		ClearAll = GetNode<Button>("MarginContainer/ScrollContainer/VBoxContainer/ClearAll Button");
 		ClearAll.Disabled = true;
