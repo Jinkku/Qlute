@@ -132,26 +132,28 @@ public partial class CardFunctions : Button
 
 		// body
 		var margin = new MarginContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill, MouseFilter = MouseFilterEnum.Ignore };
-		margin.AddThemeConstantOverride("margin_left", 12);
-		margin.AddThemeConstantOverride("margin_top", 9);
-		margin.AddThemeConstantOverride("margin_right", 10);
-		margin.AddThemeConstantOverride("margin_bottom", 10);
+		_textMargin = margin;
+		margin.AddThemeConstantOverride("margin_left", 15);
+		margin.AddThemeConstantOverride("margin_top", 11);
+		margin.AddThemeConstantOverride("margin_right", 13);
+		margin.AddThemeConstantOverride("margin_bottom", 13);
 		_row.AddChild(margin);
 		var body = new VBoxContainer { Alignment = BoxContainer.AlignmentMode.Center, MouseFilter = MouseFilterEnum.Ignore };
 		body.AddThemeConstantOverride("separation", 1);
 		margin.AddChild(body);
 
 		_head = new HBoxContainer { MouseFilter = MouseFilterEnum.Ignore };
-		_head.AddThemeConstantOverride("separation", 7);
+		_head.AddThemeConstantOverride("separation", 9);
 		body.AddChild(_head);
-		Title = PlayerOverlays.Text("", 14, bold: true, trim: true);
+		Title = PlayerOverlays.Text("", 18, bold: true, trim: true);
 		_head.AddChild(Title);
 		_statusPill = new PanelContainer { SizeFlagsVertical = SizeFlags.ShrinkCenter, MouseFilter = MouseFilterEnum.Ignore };
-		_statusPill.AddChild(PlayerOverlays.Text("", 9, bold: true));
-		_head.AddChild(_statusPill);
+		_statusPill.AddChild(PlayerOverlays.Text("", 11, bold: true));
+		// (added to the start of the level row below, bottom left)
 		_head.Resized += FitTitle;
+		Resized += FitTitle; // the grid can narrow the card after it was laid out wider
 
-		Artist = PlayerOverlays.Text("", 12, new Color("#ffffffd0"), trim: true);
+		Artist = PlayerOverlays.Text("", 15, new Color("#ffffffd0"), trim: true);
 		Artist.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		body.AddChild(Artist);
 
@@ -247,13 +249,18 @@ public partial class CardFunctions : Button
 	/// <summary>A Button doesn't grow with its children, so follow the layout's height by hand.</summary>
 	private void FitHeight() => CustomMinimumSize = new Vector2(CustomMinimumSize.X, Mathf.Max(Thumb, _row.GetCombinedMinimumSize().Y));
 
-	/// <summary>The title takes its text width (up to what's left), so the status pill sits right after it like the website.</summary>
+	/// <summary>The title takes its text width, up to the width of the card's text column (then it trims with "...").</summary>
+	private MarginContainer _textMargin;
+
 	private void FitTitle()
 	{
-		if (Title == null) return;
+		if (Title == null || _textMargin == null || _head == null || _statusPill == null) return;
 		var font = Title.GetThemeFont("font");
 		var want = font.GetStringSize(Title.Text, HorizontalAlignment.Left, -1, Title.GetThemeFontSize("font_size")).X + 2;
-		var room = _head.Size.X - _statusPill.GetCombinedMinimumSize().X - 7;
+		// Room from the card's own width, not _head's: the title's minimum width holds _head open, so measuring
+		// _head let a title that was sized for a wider card push the card's text past its edge.
+		var text = Size.X - Thumb - _textMargin.GetThemeConstant("margin_left") - _textMargin.GetThemeConstant("margin_right");
+		var room = text - 2; // the status pill lives in the level row now, so the title gets the whole width
 		var w = Mathf.Max(0, Mathf.Min(want, room));
 		if (!Mathf.IsEqualApprox(Title.CustomMinimumSize.X, w)) Title.CustomMinimumSize = new Vector2(w, 0);
 	}
@@ -310,7 +317,7 @@ public partial class CardFunctions : Button
 		statusLabel.AddThemeColorOverride("font_color", accent);
 		CallDeferred(MethodName.FitTitle);
 
-		foreach (Node c in _diffRow.GetChildren()) c.QueueFree();
+		foreach (Node c in _diffRow.GetChildren()) if (c != _statusPill) c.QueueFree(); // keep the status pill
 		var diffs = (set.beatmaps ?? new List<CatalogBeatmapInfoLegend>()).OrderBy(d => d.level).ToList();
 		foreach (var d in diffs.Take(8))
 		{
