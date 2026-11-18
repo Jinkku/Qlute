@@ -95,6 +95,8 @@ public partial class ApiOperator : Node
 			string[] Headers = new string[] {
 				$"BeatmapID: {BeatmapID}",
 				$"BeatmapSetID: {BeatmapSetID}",
+				// The server recognises the map by this (an edited or outdated copy can't submit); the ids are a hint.
+				$"BeatmapHash: {BeatmapHash.Of(SettingsOperator.SessionConfig.BeatmapURL)}",
 				$"USERNAME: {SettingsOperator.GetSetting("username")}",
 				$"PASSWORD: {SettingsOperator.GetSetting("password")}",
 				$"MAX: {MAX}",
@@ -150,6 +152,12 @@ public partial class ApiOperator : Node
 		}
 	}
 	public static List<LeaderboardEntry> LeaderboardList = new List<LeaderboardEntry>();
+	/// <summary>
+	/// Why the online leaderboard is what it is (the server's Beatmap-Status): "ok", "modified" (our copy of the map
+	/// differs from the server's: edited or outdated), "unknown" (not a map the server has), or "" (not known / older server).
+	/// </summary>
+	public static string LeaderboardMapStatus = "";
+	private static int _leaderboardTicket;
 
 	public async void _LeaderboardAPIDone(long result, long responseCode, string[] headers, byte[] body)
 	{
@@ -175,6 +183,10 @@ public partial class ApiOperator : Node
 				if (e.Accuracy <= 0 && e.MAX + e.GOOD + e.MEH + e.BAD > 0)
 					e.Accuracy = Gameplay.ReloadAccuracy(e.MAX, e.GOOD, e.MEH, e.BAD);
 			int beatmapId = SettingsOperator.SessionConfig.BeatmapID;
+			LeaderboardMapStatus = "";
+			foreach (var h in headers)
+				if (h.StartsWith("Beatmap-Status:", StringComparison.OrdinalIgnoreCase))
+					LeaderboardMapStatus = h["Beatmap-Status:".Length..].Trim().ToLowerInvariant();
 			LeaderboardList = entries;
 			LeaderboardStatus = 2; // Set status to loaded
 			// Profile pictures load in parallel. Picking another song meanwhile clears or replaces
@@ -231,15 +243,29 @@ public partial class ApiOperator : Node
 		{
 			GD.Print("Skipping because connection to Game server is unverified");
 			return;
-		}else if (BeatmapID == -1)
+		}
+		else if (BeatmapID == -1 && SettingsOperator.LeaderboardType != 1) // online, the map is found by its hash
 		{
 			GD.Print("Skipping because BeatmapID is -1. Meaning there is not BeatmapID set.");
 			return;
 		}
 		else if (SettingsOperator.LeaderboardType == 1)
 		{
-			LeaderboardAPI.Request(SettingsOperator.GetSetting("api") + "apiv2/getleaderboard", new string[] { $"BEATMAPID: {BeatmapID}" , $"User-Agent: {AgentString}"});
+			// The server recognises the map by the hash of our .osu (BeatmapHash), so an edited or outdated copy gets no
+			// leaderboard; the ids go along as a hint. Hashing a big map takes a moment, so it runs off the main thread.
 			LeaderboardStatus = 1; // Set status to loading
+			LeaderboardMapStatus = "";
+			string path = SettingsOperator.SessionConfig.BeatmapURL;
+			int setId = SettingsOperator.SessionConfig.BeatmapSetID;
+			int ticket = ++_leaderboardTicket;
+			Task.Run(() => BeatmapHash.Of(path)).ContinueWith(t => Callable.From(() =>
+			{
+				if (ticket != _leaderboardTicket) return; // another map was picked meanwhile
+				var headers = new List<string> { $"BEATMAPID: {BeatmapID}", $"BEATMAPSETID: {setId}", $"User-Agent: {AgentString}" };
+				if (t.IsCompletedSuccessfully && !string.IsNullOrEmpty(t.Result)) headers.Add($"BEATMAPHASH: {t.Result}");
+				LeaderboardAPI.CancelRequest(); // a request for the previous map may still be running
+				LeaderboardAPI.Request(SettingsOperator.GetSetting("api") + "apiv2/getleaderboard", headers.ToArray());
+			}).CallDeferred());
 		}
 		else
 		{

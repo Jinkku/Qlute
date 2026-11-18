@@ -52,6 +52,7 @@ public static class ChartPreload
 			StoryboardDoc doc = null;
 			try { if (beatmap != null && !beatmap.HasDetails()) beatmap.LoadDetails(); }
 			catch (Exception e) { GD.PrintErr($"[ChartPreload] details: {e.Message}"); }
+			BeatmapHash.Of(path); // cached for the score submission at the end (no hashing a big map on the main thread then)
 			try
 			{
 				if (mode == 3) lines = ReadLines(path); // Tap! parses every section itself

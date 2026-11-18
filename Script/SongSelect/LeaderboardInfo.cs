@@ -79,6 +79,7 @@ public partial class LeaderboardInfo : Control
 	private Label NoBeatmap { get; set; }
 	private List<LeaderboardEntry> oldLeaderboardList { get; set; } = new List<LeaderboardEntry>();
 	private readonly List<Leaderboard> _rows = new();
+	private string _noScoresText;
 	private int _focus;
 	private float _focusSmooth, _scroll;
 
@@ -87,6 +88,7 @@ public partial class LeaderboardInfo : Control
 		_rowScene ??= GD.Load<PackedScene>(RowScene);
 		Leaderboards = GetNode<VBoxContainer>("Leaderboard");
 		NoBeatmap = GetNode<Label>("NoBeatmap");
+		_noScoresText = NoBeatmap.Text;
 		MouseFilter = MouseFilterEnum.Stop; // takes the wheel (rows pass it up)
 		refreshl();
 	}
@@ -102,6 +104,13 @@ public partial class LeaderboardInfo : Control
 		var scores = FakeCount > 0 ? FakeScores(FakeCount) : ApiOperator.LeaderboardList;
 		if (scores.Count < 1 && (FakeCount > 0 || ApiOperator.LeaderboardStatus == 2))
 		{
+			// The server recognises maps by the hash of the .osu: say why there's nothing when it didn't recognise ours.
+			NoBeatmap.Text = FakeCount == 0 && SettingsOperator.LeaderboardType == 1 ? ApiOperator.LeaderboardMapStatus switch
+			{
+				"modified" => "Your copy of this beatmap is different from the server's\n(it was edited or is outdated), so it has no leaderboard.\nRe-download it to see and submit scores.",
+				"unknown" => "This beatmap isn't on the server,\nso it has no leaderboard.",
+				_ => _noScoresText,
+			} : _noScoresText;
 			NoBeatmap.Visible = true;
 			Leaderboards.Visible = false;
 			return;
