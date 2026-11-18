@@ -1,177 +1,183 @@
 [gd_scene format=3 uid="uid://b2lw0mmphsddc"]
 
-[ext_resource type="Script" uid="uid://dye2ljj2ycrnx" path="res://Script/SongSelect/MusicCard.cs" id="1_aa04f"]
-[ext_resource type="StyleBox" uid="uid://fxawsqvq06j4" path="res://Resources/System/buttonidle.tres" id="2_nf3oy"]
-[ext_resource type="Texture2D" uid="uid://sfbrs7c6t7dr" path="res://DefaultWallpaper/future.png" id="5_q6s5x"]
-[ext_resource type="Texture2D" uid="uid://dk6q3l8r3s8h6" path="res://Resources/System/GamemodeIcons/standard.png" id="5_w67jm"]
-[ext_resource type="Script" uid="uid://buiifhesbwgmp" path="res://Script/SongSelect/RatingCard.cs" id="5_y5yk1"]
+[ext_resource type="Script" uid="uid://dye2ljj2ycrnx" path="res://Script/SongSelect/MusicCard.cs" id="1_card"]
+[ext_resource type="Script" uid="uid://cc2km16ylk8e" path="res://Script/SongSelect/LevelSkyline.cs" id="2_sky"]
+[ext_resource type="FontFile" uid="uid://2atq5vkw7df7" path="res://Fonts/font-bold.otf" id="3_bold"]
+[ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="4_font"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i3see"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
+bg_color = Color(0.11, 0.09, 0.13, 0.94)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+corner_detail = 10
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a1afo"]
-bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 15
-corner_radius_bottom_left = 15
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
+bg_color = Color(0.17, 0.14, 0.2, 0.96)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+corner_detail = 10
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w67jm"]
-bg_color = Color(0, 0, 0, 0.4)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5o4qg"]
-content_margin_left = 5.0
-content_margin_top = 3.0
-content_margin_right = 5.0
-content_margin_bottom = 3.0
-bg_color = Color(0.5, 0.5, 0.5, 1)
-corner_radius_top_left = 15
-corner_radius_bottom_left = 15
+[sub_resource type="Gradient" id="Gradient_shade"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.11, 0.09, 0.13, 0.94, 0.11, 0.09, 0.13, 0.85, 0.11, 0.09, 0.13, 0.15)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p0ncd"]
-content_margin_left = 5.0
-content_margin_top = 3.0
-content_margin_right = 5.0
-content_margin_bottom = 3.0
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_shade"]
+gradient = SubResource("Gradient_shade")
+width = 128
+height = 128
 
-[node name="MusicCard" type="Button" unique_id=1104822971]
-self_modulate = Color(0.647, 0.647, 0.647, 1)
-custom_minimum_size = Vector2(350, 88)
-anchors_preset = 10
-anchor_right = 1.0
-offset_right = 20.0
-offset_bottom = 78.0
-grow_horizontal = 2
-size_flags_horizontal = 3
+[sub_resource type="FontVariation" id="FontVariation_bold"]
+fallbacks = Array[Font]([ExtResource("4_font")])
+base_font = ExtResource("3_bold")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_status"]
+content_margin_left = 13.0
+content_margin_top = 5.0
+content_margin_right = 13.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 1, 1, 0.15)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="MusicCard" type="Button" unique_id=339608329]
+clip_children = 2
+custom_minimum_size = Vector2(0, 122)
+offset_right = 800.0
+offset_bottom = 122.0
+focus_mode = 0
 mouse_filter = 1
-theme_override_styles/normal = ExtResource("2_nf3oy")
-theme_override_styles/pressed = ExtResource("2_nf3oy")
-theme_override_styles/hover = ExtResource("2_nf3oy")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_i3see")
-toggle_mode = true
-script = ExtResource("1_aa04f")
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+script = ExtResource("1_card")
 
-[node name="SongBackgroundPreview" type="PanelContainer" parent="." unique_id=110071995]
-modulate = Color(0.901961, 0.901961, 0.901961, 1)
-clip_children = 1
-z_index = -1
+[node name="Cover" type="TextureRect" parent="." unique_id=1811376499]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.75)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_a1afo")
-
-[node name="BackgroundPreview" type="TextureRect" parent="SongBackgroundPreview" unique_id=1419142122]
-layout_mode = 2
-mouse_filter = 2
-texture = ExtResource("5_q6s5x")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2044164287]
+[node name="Shade" type="TextureRect" parent="." unique_id=280699583]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 55
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_shade")
+expand_mode = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=240998923]
-layout_mode = 2
-theme_override_constants/separation = 2
-alignment = 1
-
-[node name="SongInfo" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=1742664416]
-custom_minimum_size = Vector2(0, 48)
-layout_mode = 2
-mouse_filter = 1
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_outline_size = 10
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/normal_font_size = 12
-bbcode_enabled = true
-text = "[font_size=14]Mystery Song[/font_size]
-[font_size=10]idiotiplier[/font_size]
-[font_size=10]mapped by idiot[/font_size]
-"
-scroll_active = false
-vertical_alignment = 1
-threaded = true
-deselect_on_focus_loss_enabled = false
-drag_and_drop_selection_enabled = false
-
-[node name="InfoBoxBG" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=2120845562]
-layout_mode = 2
-size_flags_horizontal = 0
-mouse_filter = 1
-theme_override_styles/panel = SubResource("StyleBoxFlat_w67jm")
-
-[node name="InfoBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer/InfoBoxBG" unique_id=1131078001]
-layout_mode = 2
-size_flags_horizontal = 0
-theme_override_constants/separation = 0
-
-[node name="Ranked" type="PanelContainer" parent="MarginContainer/VBoxContainer/InfoBoxBG/InfoBox" unique_id=2074253409]
-self_modulate = Color(0, 0, 0, 1)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_5o4qg")
-
-[node name="RankText" type="Label" parent="MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Ranked" unique_id=327021470]
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_font_sizes/font_size = 10
-text = "Unknown"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Rating" type="Label" parent="MarginContainer/VBoxContainer/InfoBoxBG/InfoBox" unique_id=589001257]
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_font_sizes/font_size = 10
-theme_override_styles/normal = SubResource("StyleBoxEmpty_p0ncd")
-text = "Lv. 69"
-horizontal_alignment = 1
-script = ExtResource("5_y5yk1")
-
-[node name="Version" type="Label" parent="MarginContainer/VBoxContainer/InfoBoxBG/InfoBox" unique_id=2024111754]
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_font_sizes/font_size = 10
-theme_override_styles/normal = SubResource("StyleBoxEmpty_p0ncd")
-text = "Difficulty Name"
-
-[node name="Handle" type="Label" parent="." unique_id=716006510]
-visible = false
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -9.5
-offset_right = 40.0
-offset_bottom = 9.5
-grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "|"
-
-[node name="GameModeIcon" type="TextureRect" parent="." unique_id=2030585966]
-custom_minimum_size = Vector2(40, 40)
+[node name="Stripe" type="ColorRect" parent="." unique_id=148731820]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
+offset_right = 7.0
 grow_vertical = 2
-texture = ExtResource("5_w67jm")
-expand_mode = 1
-stretch_mode = 5
+mouse_filter = 2
 
-[connection signal="button_down" from="." to="." method="_highlight"]
-[connection signal="button_up" from="." to="." method="_focus"]
-[connection signal="mouse_entered" from="." to="." method="_focus"]
-[connection signal="mouse_exited" from="." to="." method="_unfocus"]
-[connection signal="pressed" from="." to="." method="_on_pressed"]
+[node name="Margin" type="MarginContainer" parent="." unique_id=203752480]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 26
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 90
+theme_override_constants/margin_bottom = 10
+
+[node name="Info" type="VBoxContainer" parent="Margin" unique_id=506595729]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Title" type="Label" parent="Margin/Info" unique_id=494103216]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 26
+text = "Amazing Title"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Artist" type="Label" parent="Margin/Info" unique_id=1137345094]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.85)
+theme_override_font_sizes/font_size = 18
+text = "Amazing Artist"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Mapper" type="Label" parent="Margin/Info" unique_id=708544860]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.62)
+theme_override_font_sizes/font_size = 15
+text = "mapped by idiot"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Bottom" type="HBoxContainer" parent="." unique_id=1750404481]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -90.0
+offset_top = -12.0
+offset_right = -90.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="Status" type="PanelContainer" parent="Bottom" unique_id=742513181]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_status")
+
+[node name="StatusText" type="Label" parent="Bottom/Status" unique_id=621066207]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 13
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Skyline" type="Control" parent="Bottom" unique_id=193811155]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+script = ExtResource("2_sky")

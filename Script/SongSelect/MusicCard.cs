@@ -1,271 +1,85 @@
 using Godot;
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using FileAccess = Godot.FileAccess;
 using System.Collections.Generic;
-using System.Threading;
-using Timer = Godot.Timer;
+using System.Linq;
 
-public partial class MusicCard : Button
+/// <summary>
+/// A beatmap set in song select's carousel (Panels/SongSelectButtons/MusicCard.tscn): cover, title, artist,
+/// "mapped by", status pill and a skyline of its difficulties' levels. Layout, fonts and styleboxes are in the scene;
+/// the colours that change with the state are the exports below.
+/// </summary>
+public partial class MusicCard : CarouselCard
 {
-	private SettingsOperator SettingsOperator { get; set; }
+	/// <summary>Border and title colour of the open set (the one holding the selected difficulty).</summary>
+	[Export] public Color OpenColor { get; set; } = new("#f3baff");
+	[Export] public int OpenBorderWidth { get; set; } = 3;
+	[Export] public Color TitleColor { get; set; } = Colors.White;
+	[Export] public float StripeWidth { get; set; } = 7;
+	[Export] public float OpenStripeWidth { get; set; } = 12;
 
-	[Export]
-	public int GameMode { get; set; } = 0;
-	private TextureRect GameModeIcon { get; set; }
-	public Button self { get; set; }
-	public TextureRect Cover { get; set; }
-	public Timer Wait { get; set; }
-	public TextureRect Preview { get; set; }
-	[Export]
-	public int SongID { get; set; } = -1;
-	[Export]
-	public int ButtonID { get; set; } = -1;
-	public int waitt = 0;
-	private bool isLoadingImage = false;
-	public string BackgroundPath = null;
-	private Texture2D texture { get; set; }
-	private RichTextLabel SongInfo { get; set; }
-	private Label Version { get; set; }
-	private PanelContainer Ranked { get; set; }
-	private Label RankedText { get; set; }
-	private BeatmapLegend Beatmap { get; set; }
-	public override void _ExitTree()
+	protected override bool IsSetCard => true;
+
+	private TextureRect _cover;
+	private ColorRect _stripe;
+	private Label _title, _artist, _mapper, _statusText;
+	private PanelContainer _status;
+	private LevelSkyline _skyline;
+	private string _coverPath;
+	private bool _expanded, _painted;
+
+	protected override void Setup()
 	{
-		_loadCts?.Cancel();
-		_loadCts?.Dispose();
-		_loadCts = null;
-		if (texture != null)
-		{
-			texture.Dispose();
-			texture = null;
-		}
-	}
-	private void ApplyLoadedImage(Image data)
-	{
-		if (!IsInstanceValid(this)) { data?.Dispose(); return; }
-
-		if (texture != null) { texture.Dispose(); texture = null; }
-
-		if (data == null)
-		{
-			texture = SettingsOperator.GetNullImage();
-		}
-		else
-		{
-			texture = ImageTexture.CreateFromImage(data);
-			data.Dispose();
-		}
-
-		if (texture != null && IsInstanceValid(Preview))
-		{
-			LoadTween?.Kill();
-			LoadTween = CreateTween();
-			LoadTween.TweenProperty(Preview, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f)
-				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-			LoadTween.Play();
-			Preview.Texture = texture;
-		}
-
-		isLoadingImage = false;
-	}
-	private CancellationTokenSource _loadCts;
-	private async void LoadExternalImage(string path)
-	{
-		if (isLoadingImage || string.IsNullOrEmpty(path)) return;
-		isLoadingImage = true;
-		_loadCts?.Dispose();
-		_loadCts = new CancellationTokenSource();
-		var token = _loadCts.Token;
-
-		try
-		{
-			await Task.Delay(250, token);
-			var data = await Task.Run(() =>
-				FileAccess.FileExists(path) ? Image.LoadFromFile(path) : null, token);
-
-			if (!IsInstanceValid(this) || token.IsCancellationRequested) { data?.Dispose(); return; }
-			CallDeferred(nameof(ApplyLoadedImage), data);
-		}
-		catch (OperationCanceledException) { }
+		_cover = GetNode<TextureRect>("%Cover");
+		_stripe = GetNode<ColorRect>("%Stripe");
+		_title = GetNode<Label>("%Title");
+		_artist = GetNode<Label>("%Artist");
+		_mapper = GetNode<Label>("%Mapper");
+		_status = GetNode<PanelContainer>("%Status");
+		_statusText = GetNode<Label>("%StatusText");
+		_skyline = GetNode<LevelSkyline>("%Skyline");
 	}
 
-
-	private Tween LoadTween { get; set; }
-	private bool Unicode { get; set; }
-
-	private void CheckUnicode()
+	public void Bind(List<int> songs, bool expanded)
 	{
-		string text = "";
-		if (Unicode && Beatmap.TitleUnicode != null && Beatmap.ArtistUnicode != null)
+		var b = SettingsOperator.Beatmaps[songs[0]];
+		SongId = songs[0];
+		bool uni = SongCarousel.Unicode;
+		_title.Text = uni && !string.IsNullOrWhiteSpace(b.TitleUnicode) ? b.TitleUnicode : b.Title;
+		_artist.Text = uni && !string.IsNullOrWhiteSpace(b.ArtistUnicode) ? b.ArtistUnicode : b.Artist;
+		_mapper.Text = $"mapped by {b.Mapper}  ·  {songs.Count} difficult{(songs.Count == 1 ? "y" : "ies")}";
+		_stripe.Color = SongFilter.SetColor(b);
+		var (name, colour) = Status(b.RankStatus);
+		_statusText.Text = name;
+		_statusText.AddThemeColorOverride("font_color", colour);
+		_status.AddThemeStyleboxOverride("panel", new PillBox(new Color(colour, 0.15f), new Color(colour, 0.6f), 10, 1));
+		_skyline.Levels = songs.Select(id => SettingsOperator.Beatmaps[id].Levelrating).ToList();
+		if (!_painted || _expanded != expanded)
 		{
-			text = $"[font_size=14]{Beatmap.TitleUnicode}[/font_size]\n[font_size=10]{Beatmap.ArtistUnicode}[/font_size]\n[font_size=10]mapped by {Beatmap.Mapper}[/font_size]";
+			_painted = true;
+			_expanded = expanded;
+			Restyle((s, _) =>
+			{
+				if (!expanded) return;
+				s.BorderColor = OpenColor;
+				s.SetBorderWidthAll(OpenBorderWidth);
+			});
+			// the open set: a wider stripe and a coloured title
+			_stripe.OffsetRight = _stripe.OffsetLeft + (expanded ? OpenStripeWidth : StripeWidth);
+			_title.AddThemeColorOverride("font_color", expanded ? OpenColor : TitleColor);
 		}
-		else
+		var path = b.Path + b.Background;
+		if (path != _coverPath)
 		{
-			text = $"[font_size=14]{Beatmap.Title}[/font_size]\n[font_size=10]{Beatmap.Artist}[/font_size]\n[font_size=10]mapped by {Beatmap.Mapper}[/font_size]";
-		}
-		SongInfo.Text = text;
-	}
-	private List<Color> Colors = new List<Color>([new Color(1, 0, 0),new Color(0, 1, 0), new Color(1, 1, 0), new Color(0, 0, 0)]);
-
-	private int _lastRankId = int.MinValue;
-	private void RefreshRank()
-	{
-		var rankid = SettingsOperator.Beatmaps[SongID].RankStatus;
-		if (rankid == _lastRankId) return;
-		_lastRankId = rankid;
-		if (rankid == 0)
-		{
-			RankedText.Text = "Unranked";
-			Ranked.SelfModulate = Colors[0];
-		} else if (rankid == 1)
-		{
-			RankedText.Text = "Ranked";
-			Ranked.SelfModulate = Colors[1];
-		} else if (rankid == 2)
-		{
-			RankedText.Text = "Special";
-			Ranked.SelfModulate = Colors[2];
-		}else if (rankid == -1)
-		{
-			RankedText.Text = "Unknown";
-			Ranked.SelfModulate = Colors[3];
-		}
-	}
-	
-	private void ReloadInfo(bool force = false)
-	{
-		var newUnicode = Check.CheckBoolValue(SettingsOperator.GetSetting("showunicode").ToString());
-		if (Unicode != newUnicode || force)
-		{
-			Unicode = newUnicode;
-			CheckUnicode();
-			Version.Text = Beatmap.Version;
+			_coverPath = path;
+			_cover.Texture = null;
+			SongCarousel.LoadCover(b.Background == null ? null : path, tex => { if (IsInstanceValid(this) && _coverPath == path) _cover.Texture = tex; });
 		}
 	}
 
-	private void Gamemodeiconchange()
+	public static (string, Color) Status(int status) => status switch
 	{
-		switch (GameMode)
-		{
-			case -1 : GameModeIcon.Texture = GD.Load<Texture2D>("res://Resources/System/GamemodeIcons/Unknown.png"); break;
-			case 0 : GameModeIcon.Texture = GD.Load<Texture2D>("res://Resources/System/GamemodeIcons/standard.png"); break;
-			case 1 : GameModeIcon.Texture = GD.Load<Texture2D>("res://Resources/System/GamemodeIcons/Taiko.png"); break;
-			case 2 : GameModeIcon.Texture = GD.Load<Texture2D>("res://Resources/System/GamemodeIcons/Dash.png"); break;
-			case 3 : GameModeIcon.Texture = GD.Load<Texture2D>("res://Resources/System/GamemodeIcons/Tapo.png"); break;
-		}
-	}
-	public override void _Ready()
-	{
-		PivotOffset = new Vector2(Size.X / 2, Size.Y / 2);
-		SettingsOperator = GetNode<SettingsOperator>("/root/SettingsOperator");
-		self = GetNode<Button>(".");
-		Cover = GetTree().Root.GetNode<TextureRect>("Song Select/BeatmapBackground");
-		Preview = GetNode<TextureRect>("SongBackgroundPreview/BackgroundPreview");
-		SongInfo = GetNode<RichTextLabel>("MarginContainer/VBoxContainer/SongInfo");
-		Version = GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Version");
-		Ranked = GetNode<PanelContainer>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Ranked");
-		RankedText = GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Ranked/RankText");
-		GameModeIcon = GetNode<TextureRect>("GameModeIcon");
-		
-		Gamemodeiconchange();
-		
-		if (SongID == -1)
-			SongID = 0;
-
-		Beatmap = SettingsOperator.Beatmaps[SongID];
-
-		ReloadInfo(force: true);
-
-		if (BackgroundPath != null)
-		{
-			Preview.Modulate = new Color(0f, 0f, 0f, 1f);
-			LoadExternalImage(BackgroundPath);
-		}
-
-		SelfModulate = Checkid() ? toggledcolour : Idlecolour;
-	}
-
-	private Tween _focus_animation;
-	private void AnimationButton(Color colour, bool clicked=false)
-	{
-		_focus_animation?.Kill();
-
-		_focus_animation = CreateTween();
-		_focus_animation.SetParallel(true);
-		_focus_animation.TweenProperty(this, "self_modulate", colour, 0.2f)
-			.SetTrans(Tween.TransitionType.Cubic)
-			.SetEase(Tween.EaseType.Out);
-		if (clicked)
-		{
-			_focus_animation.TweenProperty(this, "position:x", -40, 0.2f)
-				.SetTrans(Tween.TransitionType.Cubic)
-				.SetEase(Tween.EaseType.Out);
-		}
-		else
-		{
-			_focus_animation.TweenProperty(this, "position:x", 0, 0.2f)
-				.SetTrans(Tween.TransitionType.Cubic)
-				.SetEase(Tween.EaseType.Out);
-		}
-	}
-
-	private Color Idlecolour = new Color(0.20f, 0.20f, 0.20f);
-	private Color Focuscolour = new Color(0.647f, 0.647f, 0.647f);
-	private Color highlightcolour = new Color(0.19f, 0.37f, 0.65f);
-	private Color toggledcolour = new Color(0.09f, 0.38f, 0.85f);
-
-	private void _highlight() => AnimationButton(highlightcolour);
-	private void _focus()
-	{
-		SettingsOperator.SessionConfig.SongIDHighlighted = SongID;
-		AnimationButton(Focuscolour, true);
-	}
-	private void _unfocus()
-	{
-		SettingsOperator.SessionConfig.SongIDHighlighted = -1;
-		AnimationButton(Checkid() ? toggledcolour : Idlecolour, false);
-	}
-	public void _on_pressed()
-	{
-		Connection_Button = true;
-		if (SettingsOperator.SessionConfig.SongID != SongID)
-		{
-			SettingsOperator.SelectSongID(SongID);	
-		}
-	}
-	private bool Accessed = false;
-	public static bool Connection_Button = false;
-	public bool Checkid()
-	{
-		return SettingsOperator.SessionConfig.SongID == SongID;
-	}
-
-	public override void _PhysicsProcess(double delta)
-	{
-			ReloadInfo();
-			RefreshRank();
-    }
-
-	public override void _Process(double _delta)
-	{
-		bool selected = Checkid();
-		if (ButtonPressed != selected)
-		{
-			ButtonPressed = selected;
-			Accessed = true;
-		}
-		if (ButtonPressed && Accessed)
-		{
-			AnimationButton(toggledcolour);
-			Accessed = false;
-		}
-		else if (!ButtonPressed && Accessed)
-		{
-			AnimationButton(Idlecolour);
-			Accessed = false;
-		}
-	}
+		1 => ("RANKED", new Color("#7ee37e")),
+		2 => ("SPECIAL", new Color("#f5cf6c")),
+		0 => ("UNRANKED", new Color("#c9c3d6")),
+		_ => ("LOCAL", new Color("#9aa7c7")),
+	};
 }

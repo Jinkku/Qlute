@@ -148,6 +148,7 @@ public partial class SettingsOperator : Node
         { "beatmapshader", true }, // apply the shader a beatmap ships (made in the Create editor)
         { "notifseen", "" },        // "username:id" of the last website notification shown in game (ServerNotifications)
         { "lastbeatmap", "" },      // .osu path of the last selected map, selected again on the next launch
+        { "songfilter", "" },       // song select sort + filters (SongFilter, JSON)
         { "pauseonfocusloss", true }, // pause a solo play when the window loses focus (FocusPause)
     };
     public Dictionary<string, object> Configurationbk { get; set; }

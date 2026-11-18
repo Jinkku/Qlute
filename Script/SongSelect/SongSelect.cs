@@ -15,7 +15,6 @@ public partial class SongSelect : Control
 {
 	// Called when the node enters the scene tree for the first time.
 	public SettingsOperator SettingsOperator { get; set; }
-	public PackedScene musiccardtemplate;
 	public Label SongTitle { get; set; }
 	public Label ExSongInfo { get; set; }
 	private PanelContainer LevelRating { get; set; }
@@ -48,8 +47,6 @@ public partial class SongSelect : Control
 	private Button LeaderboardDetails { get; set; }
 	private PanelContainer DetailsExtended { get; set; }
 	private ScrollContainer Leaderboardinfo { get; set; }
-	private static Vector2? _cachedCardSize;
-	private Vector2 CardSize;
 	private bool Update { get; set; }
 
 	private int OldSongID { get; set; }
@@ -58,23 +55,43 @@ public partial class SongSelect : Control
 	int scrolloldvalue { get; set; }
 	private List<int> FilteredIndices { get; set; } = new List<int>();
 
+	/// <summary>Where each SongID sits in <see cref="FilteredIndices"/> (the scroll position of its card).</summary>
+	private readonly Dictionary<int, int> _filterPos = new();
+	private int PosOf(int songId) => _filterPos.TryGetValue(songId, out var p) ? p : -1;
+
+	/// <summary>The list to show: search text + filters + sort (SongFilter). Empty = nothing matches.</summary>
 	private void RebuildFilter(string query)
 	{
-		FilteredIndices.Clear();
-		bool hasQuery = !string.IsNullOrEmpty(query);
 		bool lanFilter = LanNetwork.Picking != LanNetwork.PickMode.None && LanNetwork.Instance != null;
-		for (int i = 0; i < SettingsOperator.Beatmaps.Count; i++)
+		var list = SongFilter.Apply(query, lanFilter ? i => LanNetwork.Instance.PickFilter(i) : null); // LAN: e.g. only the up-next set
+		FilteredIndices.Clear();
+		FilteredIndices.AddRange(list);
+		_filterPos.Clear();
+		for (int i = 0; i < FilteredIndices.Count; i++) _filterPos[FilteredIndices[i]] = i;
+	}
+
+	/// <summary>
+	/// Filters the list again without reloading the scene: cards for beatmaps that are still listed stay (just move),
+	/// and the selected song keeps playing if it's still in the list. Used by search, filters and new imports.
+	/// </summary>
+	private void ApplyFilters(bool rebuildCards = false)
+	{
+		RebuildFilter(Searchtext);
+		_lastStartIndex = int.MinValue;
+		_lastEndIndex = int.MinValue;
+		scrollBar.MaxValue = Math.Max(1, FilteredIndices.Count);
+		int current = PosOf(SettingsOperator.SessionConfig.SongID);
+		if (current < 0 && FilteredIndices.Count > 0)
 		{
-			var b = SettingsOperator.Beatmaps[i];
-			if (lanFilter && !LanNetwork.Instance.PickFilter(i)) continue; // e.g. only the up-next set's difficulties
-			if (!hasQuery ||
-			    b.Title.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-			    b.Artist.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-			    b.Mapper.Contains(query, StringComparison.OrdinalIgnoreCase))
-			{
-				FilteredIndices.Add(i);
-			}
+			current = 0; // the selected song was filtered out: pick the first one shown
+			SettingsOperator.SelectSongID(FilteredIndices[0]);
 		}
+		scrolltween?.Kill();
+		scrollBar.Value = Math.Max(0, current);
+		ScrollSongs();
+		_carousel?.SetData(FilteredIndices);
+		UpdateFilterButton();
+		FillHeader();
 	}
 
 	private void _valuechangedscroll(float value)
@@ -106,32 +123,24 @@ public partial class SongSelect : Control
 		WindowSizeCenter = WindowSize / 2;
 
 		Control SongPanel = GetNode<Control>("SongPanel");
-		SongPanel.Size = new Vector2((WindowSize.X / 2.5f) + 40, WindowSize.Y - 150);
-		SongPanel.Position = new Vector2(WindowSize.X - (WindowSize.X / 2.5f), 105);
+		float left = WindowSize.X - (WindowSize.X / 2.5f);
+		float top = 131.25f;
+		if (_header != null)
+		{
+			// Filter header (placed by its anchors in song_select.tscn) on top, the carousel under it.
+			top = _header.Position.Y + Mathf.Max(_header.Size.Y, _header.GetCombinedMinimumSize().Y) + 16;
+		}
+		SongPanel.Size = new Vector2((WindowSize.X / 2.5f) + 50, WindowSize.Y - top - 70);
+		SongPanel.Position = new Vector2(left, top);
 		ScrollSongs();
-	}
-
-	public void AddSongList(int virtualId)
-	{
-		int realId = FilteredIndices.Count > 0 ? FilteredIndices[virtualId] : virtualId;
-		MusicCard button = (MusicCard)musiccardtemplate.Instantiate();
-		var Rating = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Rating");
-		var Version = button.GetNode<Label>("MarginContainer/VBoxContainer/InfoBoxBG/InfoBox/Version");
-		button.Position = new Vector2(0, startposition + (CardSize.Y * virtualId));
-		button.Name = virtualId.ToString();
-		button.SetMeta("SongIndex", virtualId);
-		button.ClipText = true;
-		button.BackgroundPath = SettingsOperator.Beatmaps[realId].Path + SettingsOperator.Beatmaps[realId].Background;
-		button.SongID = realId;
-		button.GameMode = SettingsOperator.Beatmaps[realId].GameModeID;
-		GetNode<Control>("SongPanel").AddChild(button);
-		SongEntry.Add(button);
 	}
 
 	private void _on_random()
 	{
-		SettingsOperator.SelectSongID(SettingsOperator.RndSongID());
-		scrollmode(exactvalue: SettingsOperator.SessionConfig.SongID);
+		if (FilteredIndices.Count == 0) return;
+		var pick = FilteredIndices[Random.Shared.Next(FilteredIndices.Count)]; // only from what's listed (search / filters)
+		SettingsOperator.SelectSongID(pick);
+		scrollmode(exactvalue: PosOf(pick));
 	}
 
 	private Tween Ani { get; set; }
@@ -236,37 +245,8 @@ public partial class SongSelect : Control
 
 	private void Search(string value)
 	{
-		RebuildFilter(value);
-
-		for (int i = SongEntry.Count - 1; i >= 0; i--)
-		{
-			var entry = SongEntry[i];
-			entry.GetParent()?.RemoveChild(entry);
-			entry.Free();
-		}
-		SongEntry.Clear();
-
-		// force ScrollSongs to rebuild even if the index range is numerically unchanged
-		_lastStartIndex = int.MinValue;
-		_lastEndIndex = int.MinValue;
-
-		if (FilteredIndices.Count > 0)
-		{
-			int firstReal = FilteredIndices[0];
-			SettingsOperator.SelectSongID(firstReal);
-			scrollBar.Value = 0;
-		}
-		else if (string.IsNullOrEmpty(value))
-		{
-			scrollBar.Value = Math.Max(0, SettingsOperator.SessionConfig.SongID);
-		}
-		else if (FilteredIndices.Count == 0)
-		{
-			scrollBar.Value = 0;
-		}
-
-		scrollBar.MaxValue = FilteredIndices.Count;
-		ScrollSongs();
+		Searchtext = value;
+		ApplyFilters(); // no rebuild of the whole list, and the song keeps playing if it still matches
 	}
 
 	public override void _Ready()
@@ -278,7 +258,6 @@ public partial class SongSelect : Control
 		RankStatus = GetNode<PanelContainer>("SongDetails/SongInfo/Rows/Column1/RankBox");
 		ContextMenu = GetNode<BeatmapContextMenu>("ContextMenu");
 		ContextMenu.Visible = false;
-		musiccardtemplate = ResourceLoader.Load<PackedScene>("res://Panels/SongSelectButtons/MusicCard.tscn");
 		NoBeatmap = GetNode<Label>("SongPanel/NoBeatmap");
 		NoBeatmap.Visible = true;
 		SongETick = 0;
@@ -306,14 +285,6 @@ public partial class SongSelect : Control
 		StartButton = GetNode<TextureButton>("BottomBar/Start");
 		StartButton.Visible = false; // Start the button off with being hidden.
 		scrollBar.Value = SettingsOperator.SessionConfig.SongID;
-		if (_cachedCardSize == null)
-		{
-			var MusicCardTemp = (MusicCard)musiccardtemplate.Instantiate();
-			_cachedCardSize = new Vector2(MusicCardTemp.Size.X, MusicCardTemp.Size.Y + 5);
-			MusicCardTemp.Free();	
-			GD.Print("Setting card size for the first time");
-		}
-		CardSize = _cachedCardSize.Value;
 		CheckLeaderboardMode();
 		RebuildFilter(""); // Populate FilteredIndices with all songs on load
 		// Setting scrollBar.Value above already spawned a few cards from the unfiltered list; drop them so a
@@ -324,15 +295,19 @@ public partial class SongSelect : Control
 			SongEntry[i].Free();
 		}
 		SongEntry.Clear();
-		if (LanNetwork.Picking != LanNetwork.PickMode.None && FilteredIndices.Count > 0 && FilteredIndices.Count < SettingsOperator.Beatmaps.Count)
+		if (FilteredIndices.Count > 0)
 		{
-			// The LAN picker is filtered, so scroll positions are filtered indices rather than SongIDs.
-			int pos = FilteredIndices.IndexOf(SettingsOperator.SessionConfig.SongID);
+			// Scroll positions are positions in the filtered list (search / filters / LAN picker), not SongIDs.
+			int pos = PosOf(SettingsOperator.SessionConfig.SongID);
 			if (pos < 0) { pos = 0; SettingsOperator.SelectSongID(FilteredIndices[0]); }
 			scrollBar.MaxValue = FilteredIndices.Count;
 			scrollBar.Value = pos;
-			AnimationSong = true; // skip the first-frame jump to SongID
 		}
+		AnimationSong = true; // the position is set above
+		_knownCount = SettingsOperator.Beatmaps.Count;
+		BuildFilterUi();
+		BuildHeader();
+		BuildCarousel();
 		_lastStartIndex = int.MinValue;
 		_lastEndIndex = int.MinValue;
 		ScrollSongs();
@@ -407,85 +382,11 @@ public partial class SongSelect : Control
 	}
 	private int _lastStartIndex = int.MinValue;
 	private int _lastEndIndex = int.MinValue;
+	/// <summary>The carousel (SongCarousel) draws the list; this only clears any old-style cards.</summary>
 	private void ScrollSongs()
 	{
-	    if (scrollBar == null)
-	        return;
-
-	    int cardHeight = (int)(CardSize.Y + 5);
-	    int itemCount = (int)(WindowSize.Y / cardHeight);
-	    int totalCount = FilteredIndices.Count > 0 ? FilteredIndices.Count : SettingsOperator.Beatmaps.Count;
-
-	    int startIndex = Math.Max(0, (int)scrollBar.Value - (itemCount / 2));
-	    int endIndex = Math.Min(totalCount, (int)scrollBar.Value + (itemCount / 2) + 2);
-
-	    bool noResults = FilteredIndices.Count < 1 && !string.IsNullOrEmpty(Searchtext);
-	    bool rangeChanged = startIndex != _lastStartIndex || endIndex != _lastEndIndex;
-
-	    if (rangeChanged && !noResults)
-	    {
-	        _lastStartIndex = startIndex;
-	        _lastEndIndex = endIndex;
-
-	        var visible = new Dictionary<int, Button>(SongEntry.Count);
-	        for (int i = 0; i < SongEntry.Count; i++)
-	        {
-	            Button btn = SongEntry[i];
-	            if (btn != null && btn.HasMeta("SongIndex"))
-	                visible[(int)btn.GetMeta("SongIndex")] = btn;
-	        }
-
-	        for (int i = SongEntry.Count - 1; i >= 0; i--)
-	        {
-	            Button button = SongEntry[i];
-	            if (!button.HasMeta("SongIndex"))
-	            {
-	                SongEntry.RemoveAt(i);
-	                continue;
-	            }
-
-	            int buttonIndex = (int)button.GetMeta("SongIndex");
-	            if (buttonIndex < startIndex || buttonIndex >= endIndex)
-	            {
-	                button.GetParent()?.RemoveChild(button);
-	                button.Free();
-	                SongEntry.RemoveAt(i);
-	                visible.Remove(buttonIndex);
-	            }
-	        }
-
-	        SongLoaded = 0;
-	        for (int i = startIndex; i < endIndex; i++)
-	        {
-	            if (!visible.ContainsKey(i))
-	            {
-	                AddSongList(i);
-	                SongLoaded++;
-	            }
-	        }
-	    }
-
-	    if (noResults)
-	        return;
-
-	    // Always refresh position/scale so the scroll animation stays smooth every frame
-	    foreach (var entry in SongEntry)
-	    {
-	        if (!entry.HasMeta("SongIndex")) continue;
-	        int i = (int)entry.GetMeta("SongIndex");
-
-	        float targetY = startposition + (CardSize.Y * i) - (CardSize.Y * (float)scrollBar.Value);
-	        if (!Mathf.IsEqualApprox(entry.Position.Y, targetY))
-	            entry.Position = new Vector2(entry.Position.X, targetY);
-
-	        float screenY = entry.GlobalPosition.Y + (entry.Size.Y * 0.5f);
-	        float distance = Mathf.Abs(screenY - WindowSizeCenter.Y);
-	        float radial = Mathf.Pow(Mathf.Clamp(distance / WindowSizeCenter.Y, 0f, 1f), 0.6f);
-	        float scale = 1.0f - (radial * 0.15f);
-
-	        entry.Scale = new Vector2(scale, scale);
-	        entry.ZIndex = 0;
-	    }
+		for (int i = SongEntry.Count - 1; i >= 0; i--) { SongEntry[i].GetParent()?.RemoveChild(SongEntry[i]); SongEntry[i].Free(); }
+		SongEntry.Clear();
 	}
 
 	private object _songPanelState;
@@ -505,7 +406,7 @@ public partial class SongSelect : Control
 		{
 			// Update song details
 			ExSongInfo.Text =
-				$"by {SettingsOperator.SessionConfig.BeatmapArtist}\nmapped by {SettingsOperator.SessionConfig.BeatmapMapper}\nDifficulty: {SettingsOperator.SessionConfig.BeatmapDifficultyName}";
+				$"by {SettingsOperator.SessionConfig.BeatmapArtist}\nmapped by {SettingsOperator.SessionConfig.BeatmapMapper}{SetInfo()}\nDifficulty: {SettingsOperator.SessionConfig.BeatmapDifficultyName}";
 			InfoBox.Text(Songpp,
 				"+" + SettingsOperator.GetMaxPpWithMods().ToString("N0") + "pp"); // same as the server (pp v3)
 			InfoBox.Text(LevelRating,
@@ -583,7 +484,8 @@ public partial class SongSelect : Control
 
 	private string NoBeatmapCount = "You have no beatmaps!\nvisit the catalog to find some!\n<3";
 
-	private string NoBeatmapSearch = "You might need to narrow your search terms\n</3";
+	private string NoBeatmapSearch = "Nothing matches your search\n</3";
+	private string NoBeatmapFilters = "Nothing matches your search and filters\n(press Filters > Reset to see everything)";
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
@@ -593,14 +495,18 @@ public partial class SongSelect : Control
 		CheckRankStatus();
 		// Show Play button if SongID is set.
 		StartButton.Visible = (SettingsOperator.SessionConfig.SongID != -1);
-		NoBeatmap.Visible = (SettingsOperator.Beatmaps.Count == 0) ||
-		                    (FilteredIndices.Count == 0 && !string.IsNullOrEmpty(Searchtext));
-
-		if (SettingsOperator.Beatmaps.Count == 0 && NoBeatmap.Text != NoBeatmapCount &&
-		    !string.IsNullOrEmpty(Searchtext))
-			NoBeatmap.Text = NoBeatmapCount;
-		else if (FilteredIndices.Count == 0 & NoBeatmap.Text != NoBeatmapCount)
-			NoBeatmap.Text = NoBeatmapSearch;
+		NoBeatmap.Visible = SettingsOperator.Beatmaps.Count == 0 || FilteredIndices.Count == 0;
+		var noText = SettingsOperator.Beatmaps.Count == 0 ? NoBeatmapCount
+			: SongFilter.ActiveCount > 0 ? NoBeatmapFilters : NoBeatmapSearch;
+		if (NoBeatmap.Text != noText) NoBeatmap.Text = noText;
+		_filterPanel?.Refresh(FilteredIndices.Count, SettingsOperator.Beatmaps.Count);
+		UpdateHeaderCount();
+		// Collections changed (e.g. right-click > remove) while showing one: filter again.
+		if (_seenCollections != Collections.Version)
+		{
+			_seenCollections = Collections.Version;
+			if (!string.IsNullOrEmpty(SongFilter.Current.Collection)) ApplyFilters();
+		}
 
 		if (Input.IsMouseButtonPressed(MouseButton.Right) && SettingsOperator.SessionConfig.SongIDHighlighted != -1)
 		{
@@ -644,16 +550,19 @@ public partial class SongSelect : Control
 
 		if ((bool)SettingsOperator.SessionConfig.ReloadDB)
 		{
+			// New / deleted beatmaps: update the list in place instead of reloading song select.
 			SettingsOperator.SessionConfig.ReloadDB = false;
-			GetTree().ReloadCurrentScene();
+			bool removed = SettingsOperator.Beatmaps.Count < _knownCount; // indices shifted: cards must be rebuilt
+			_knownCount = SettingsOperator.Beatmaps.Count;
+			ApplyFilters(rebuildCards: removed);
 		}
 
-		scrollBar.MaxValue = FilteredIndices.Count > 0 ? FilteredIndices.Count : SettingsOperator.Beatmaps.Count;
+		scrollBar.MaxValue = Math.Max(1, FilteredIndices.Count);
 
 		if (!AnimationSong)
 		{
 			AnimationSong = !AnimationSong;
-			scrollBar.Value = SettingsOperator.SessionConfig.SongID;
+			scrollBar.Value = Math.Max(0, PosOf(SettingsOperator.SessionConfig.SongID));
 		}
 
 		checksongpanel();
@@ -662,7 +571,7 @@ public partial class SongSelect : Control
 		{
 			if (FilteredIndices.Count > 0)
 			{
-				int currentPos = FilteredIndices.IndexOf(SettingsOperator.SessionConfig.SongID);
+				int currentPos = PosOf(SettingsOperator.SessionConfig.SongID);
 				int prevPos = currentPos - 1 >= 0 ? currentPos - 1 : FilteredIndices.Count - 1;
 				SettingsOperator.SelectSongID(FilteredIndices[prevPos]);
 				scrollmode(exactvalue: prevPos);
@@ -672,7 +581,7 @@ public partial class SongSelect : Control
 		{
 			if (FilteredIndices.Count > 0)
 			{
-				int currentPos = FilteredIndices.IndexOf(SettingsOperator.SessionConfig.SongID);
+				int currentPos = PosOf(SettingsOperator.SessionConfig.SongID);
 				int nextPos = currentPos + 1 < FilteredIndices.Count ? currentPos + 1 : 0;
 				SettingsOperator.SelectSongID(FilteredIndices[nextPos]);
 				scrollmode(exactvalue: nextPos);
@@ -686,10 +595,11 @@ public partial class SongSelect : Control
 		{
 			_on_random();
 		}
-		else if (Input.IsActionJustPressed("Collections"))
+		else if (Input.IsActionJustPressed("Collections") && !blockinputwhentext)
 		{
+			ToggleFilters(); // collections live in the Filters panel
 		}
-		else if (Input.IsActionJustPressed("scrolldown") && scrollBar.Value + 1 < FilteredIndices.Count &&
+		else if (_carousel == null && Input.IsActionJustPressed("scrolldown") && scrollBar.Value + 1 < FilteredIndices.Count &&
 		         SongPanelAccess)
 		{
 			if (scrollvelocity < 0)
@@ -700,7 +610,7 @@ public partial class SongSelect : Control
 			scrollvelocity = Math.Min(scrollvelocity + 1, 2);
 			scrollmode(1 + scrollvelocity);
 		}
-		else if (Input.IsActionJustPressed("scrollup") && scrollBar.Value - 1 > -1 && SongPanelAccess)
+		else if (_carousel == null && Input.IsActionJustPressed("scrollup") && scrollBar.Value - 1 > -1 && SongPanelAccess)
 		{
 			if (scrollvelocity > 0)
 			{
@@ -713,19 +623,6 @@ public partial class SongSelect : Control
 		else if (Input.IsActionJustPressed("ui_accept") && FilteredIndices.Count > 0 && !blockinputwhentext)
 		{
 			_Start();
-		}
-		else if (MusicCard.Connection_Button && OldSongID == SettingsOperator.SessionConfig.SongID &&
-		         !blockinputwhentext)
-		{
-			_Start();
-			MusicCard.Connection_Button = false;
-		}
-		else if (MusicCard.Connection_Button && OldSongID != SettingsOperator.SessionConfig.SongID &&
-		         !blockinputwhentext)
-		{
-			int filteredPos = FilteredIndices.IndexOf(SettingsOperator.SessionConfig.SongID);
-			scrollmode(exactvalue: filteredPos >= 0 ? filteredPos : 0);
-			MusicCard.Connection_Button = false;
 		}
 	}
 
@@ -861,5 +758,184 @@ private void _Mods_show()
 		if (_lastRankStatus == ApiOperator.RankedStatus) return;
 		_lastRankStatus = ApiOperator.RankedStatus;
 		RankStatus.Set("Rankid", _lastRankStatus);
+	}
+
+	// ------------------------------------------------------------------ filters, collections, sets
+
+	private SongFilterPanel _filterPanel;
+	private Button _filterButton;
+	private int _seenCollections = -1;
+	/// <summary>Library size when the list was last built: fewer = something was deleted (indices shifted).</summary>
+	private int _knownCount;
+
+	/// <summary>" · 4 difficulties · set #123": which set the selected difficulty is from (two sets can share a song).</summary>
+	private static string SetInfo()
+	{
+		int id = SettingsOperator.SessionConfig.SongID;
+		if (id < 0 || id >= SettingsOperator.Beatmaps.Count) return "";
+		var b = SettingsOperator.Beatmaps[id];
+		int n = SongFilter.SetSize(b);
+		var text = n == 1 ? "  ·  1 difficulty" : $"  ·  {n} difficulties";
+		if (b.BeatmapSetID > 0) text += $"  ·  set #{b.BeatmapSetID}";
+		return text;
+	}
+
+	private void BuildFilterUi()
+	{
+		_filterButton = GetNode<Button>("%FiltersButton");
+		_filterButton.Pressed += ToggleFilters;
+
+		_filterPanel = new SongFilterPanel
+		{
+			Visible = false, ZIndex = 10, CustomMinimumSize = new Vector2(640, 0),
+			Selected = () => SettingsOperator.SessionConfig.SongID >= 0 && SettingsOperator.SessionConfig.SongID < SettingsOperator.Beatmaps.Count
+				? SettingsOperator.Beatmaps[SettingsOperator.SessionConfig.SongID] : null,
+		};
+		_filterPanel.Changed += () => ApplyFilters();
+		AddChild(_filterPanel);
+		_seenCollections = Collections.Version;
+		UpdateFilterButton();
+	}
+
+	private void ToggleFilters()
+	{
+		if (_filterPanel == null) return;
+		_filterPanel.Visible = !_filterPanel.Visible;
+		if (!_filterPanel.Visible) return;
+		_filterPanel.FillFromState();
+		// Right under the header, right-aligned with it.
+		var anchor = (_header ?? (Control)_filterButton).GetGlobalRect();
+		var size = _filterPanel.GetCombinedMinimumSize();
+		_filterPanel.Size = size; // only as tall as its content
+		_filterPanel.GlobalPosition = new Vector2(Mathf.Max(10, Mathf.Min(anchor.End.X, GetViewportRect().Size.X) - 18 - size.X), anchor.End.Y + 14);
+		_filterPanel.Modulate = new Color(1, 1, 1, 0);
+		_filterPanel.CreateTween().TweenProperty(_filterPanel, "modulate:a", 1f, 0.15f);
+	}
+
+	private void UpdateFilterButton()
+	{
+		if (_filterButton == null) return;
+		int n = SongFilter.ActiveCount;
+		_filterButton.Text = n > 0 ? $"Filters ({n})" : "Filters";
+	}
+
+	// ------------------------------------------------------------------ header + carousel
+
+	private SongCarousel _carousel;
+	private PanelContainer _header;
+	private LevelRangeSlider _levels;
+	private OptionButton _sortPick, _collectionPick;
+	private Button _sortDirection;
+	private Label _matchCount;
+	private int _headerCollections = -1;
+	private bool _headerQuiet;
+
+	private void BuildCarousel()
+	{
+		var panel = GetNode<Control>("SongPanel");
+		scrollBar.Visible = false; // the carousel scrolls itself (wheel, keys, selection)
+		_carousel = new SongCarousel { Name = "Carousel" };
+		_carousel.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
+		_carousel.Select = id => SettingsOperator.SelectSongID(id);
+		_carousel.Play = () => { if (!blockinputwhentext) _Start(); };
+		panel.AddChild(_carousel);
+		panel.MoveChild(_carousel, 0); // under the "no beatmaps" message
+		ScrollSongs(); // clears the old-style cards
+		_carousel.SetData(FilteredIndices);
+		_carousel.Follow(SettingsOperator.SessionConfig.SongID, instant: true);
+		_res_resize();
+		// The header only knows its height after its first layout: place the list under it again then.
+		_header.Resized += () => CallDeferred(MethodName._res_resize);
+		CallDeferred(MethodName._res_resize);
+	}
+
+	private Label _minChip, _maxChip;
+
+	/// <summary>
+	/// The search / level / sort header is "FilterHeader" in song_select.tscn (layout and styles are edited there);
+	/// this only finds its parts by unique name and wires them up.
+	/// </summary>
+	private void BuildHeader()
+	{
+		_header = GetNode<PanelContainer>("FilterHeader");
+		_matchCount = GetNode<Label>("%MatchCount");
+		_minChip = GetNode<Label>("%LevelMin");
+		_maxChip = GetNode<Label>("%LevelMax");
+
+		_levels = GetNode<LevelRangeSlider>("%LevelRange");
+		_levels.Moving += (min, max) => ShowLevelChips(min, max);
+		_levels.RangeChanged += (min, max) => { SongFilter.Current.LevelMin = min; SongFilter.Current.LevelMax = max; CommitHeader(); };
+
+		_sortPick = GetNode<OptionButton>("%SortPick");
+		_sortPick.Clear();
+		foreach (var sort in SongFilter.Sorts) _sortPick.AddItem("Sort: " + sort.name);
+		_sortPick.ItemSelected += i => { if (_headerQuiet) return; SongFilter.Current.Sort = SongFilter.Sorts[(int)i].mode; CommitHeader(); };
+
+		_sortDirection = GetNode<Button>("%SortDirection");
+		_sortDirection.Pressed += () => { SongFilter.Current.Descending = !SongFilter.Current.Descending; CommitHeader(); };
+
+		_collectionPick = GetNode<OptionButton>("%CollectionPick");
+		_collectionPick.ItemSelected += i =>
+		{
+			if (_headerQuiet) return;
+			SongFilter.Current.Collection = i == 0 ? null : _collectionPick.GetItemMetadata((int)i).AsString();
+			CommitHeader();
+		};
+		FillHeader();
+	}
+
+	private void ShowLevelChips(int min, int max)
+	{
+		if (_minChip == null) return;
+		_minChip.Text = $"Lv {min}";
+		_maxChip.Text = max >= 100 ? "100+" : $"Lv {max}";
+		// level colour mixed with white: the top levels are nearly black and vanished on the dark chip
+		_minChip.AddThemeColorOverride("font_color", SettingsOperator.ReturnLevelColour(Math.Min(min, 99)).Lerp(Colors.White, 0.45f));
+		_maxChip.AddThemeColorOverride("font_color", max >= 100 ? Colors.White : SettingsOperator.ReturnLevelColour(Math.Min(max, 99)).Lerp(Colors.White, 0.45f));
+	}
+
+	private void CommitHeader()
+	{
+		SongFilter.Save();
+		ApplyFilters();
+		if (_filterPanel?.Visible == true) _filterPanel.FillFromState();
+	}
+
+	/// <summary>Shows the saved filters in the header (after the Filters panel or a reset changed them).</summary>
+	private void FillHeader()
+	{
+		if (_header == null || _levels == null) return;
+		_headerQuiet = true;
+		var f = SongFilter.Current;
+		_levels.SetRange(f.LevelMin, f.LevelMax);
+		ShowLevelChips(_levels.Min, _levels.Max);
+		_sortPick.Select(Math.Max(0, Array.FindIndex(SongFilter.Sorts, x => x.mode == f.Sort)));
+		_sortDirection.Text = f.Descending ? "↓" : "↑";
+		_sortDirection.TooltipText = f.Descending ? "Descending" : "Ascending";
+		if (_headerCollections != Collections.Version || _collectionPick.ItemCount != Collections.Names.Count + 1)
+		{
+			_headerCollections = Collections.Version;
+			_collectionPick.Clear();
+			_collectionPick.AddItem("Collection: All beatmaps");
+			foreach (var name in Collections.Names)
+			{
+				_collectionPick.AddItem($"Collection: {name}  ({Collections.CountInLibrary(name)})");
+				_collectionPick.SetItemMetadata(_collectionPick.ItemCount - 1, name);
+			}
+		}
+		int sel = 0;
+		for (int i = 1; i < _collectionPick.ItemCount; i++)
+			if (string.Equals(_collectionPick.GetItemMetadata(i).AsString(), f.Collection, StringComparison.OrdinalIgnoreCase)) sel = i;
+		_collectionPick.Select(sel);
+		_headerQuiet = false;
+	}
+
+	private void UpdateHeaderCount()
+	{
+		if (_matchCount == null) return;
+		int total = SettingsOperator.Beatmaps.Count, n = FilteredIndices.Count;
+		var text = n == total ? $"{total:N0} maps" : $"{n:N0} match{(n == 1 ? "" : "es")}";
+		if (_matchCount.Text != text) _matchCount.Text = text;
+		if (_headerCollections != Collections.Version) FillHeader();
 	}
 }

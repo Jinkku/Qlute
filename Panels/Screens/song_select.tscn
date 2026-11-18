@@ -21,80 +21,141 @@
 [ext_resource type="Script" uid="uid://jiq8w3wo2uhl" path="res://Script/SongSelect/SongDetails/Details.cs" id="12_fb0k2"]
 [ext_resource type="PackedScene" uid="uid://07ub4tqkb550" path="res://Panels/SongSelectElements/Modes.tscn" id="18_dhkys"]
 [ext_resource type="Script" uid="uid://0xn63uccdk6j" path="res://Script/TimerwithBPM/Bpmtick.cs" id="20_ihwey"]
+[ext_resource type="FontFile" uid="uid://2atq5vkw7df7" path="res://Fonts/font-bold.otf" id="21_hdrfont"]
+[ext_resource type="Script" uid="uid://dwverh123cxm5" path="res://Script/SongSelect/LevelRangeSlider.cs" id="22_hdrlvl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dhkys"]
-content_margin_left = 5.0
-content_margin_top = 50.0
-content_margin_right = 5.0
-content_margin_bottom = 50.0
+content_margin_left = 6.25
+content_margin_top = 62.5
+content_margin_right = 6.25
+content_margin_bottom = 62.5
 bg_color = Color(1, 1, 1, 0.4)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xaiyr"]
-content_margin_left = 5.0
-content_margin_top = 50.0
-content_margin_right = 5.0
-content_margin_bottom = 50.0
+content_margin_left = 6.25
+content_margin_top = 62.5
+content_margin_right = 6.25
+content_margin_bottom = 62.5
 bg_color = Color(1, 1, 1, 0.6)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s818e"]
-content_margin_left = 5.0
-content_margin_top = 50.0
-content_margin_right = 5.0
-content_margin_bottom = 50.0
+content_margin_left = 6.25
+content_margin_top = 62.5
+content_margin_right = 6.25
+content_margin_bottom = 62.5
 bg_color = Color(1, 1, 1, 0.8)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ixo7g"]
 bg_color = Color(0.078, 0.078, 0.078, 0.8)
 border_color = Color(0.265625, 0.63855, 1, 1)
-expand_margin_right = 25.0
-expand_margin_bottom = 5.0
+expand_margin_right = 31.25
+expand_margin_bottom = 6.25
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5rktx"]
-content_margin_left = 15.0
-content_margin_right = 15.0
+content_margin_left = 18.75
+content_margin_right = 18.75
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s8vjv"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
-bg_color = Color(1, 1, 1, 0.25)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hdrpanel"]
+content_margin_left = 46.0
+content_margin_top = 18.0
+content_margin_right = 30.0
+content_margin_bottom = 18.0
+bg_color = Color(0.07846785, 0.07846785, 0.07846785, 1)
+skew = Vector2(0.2, 0)
+border_width_left = 13
+border_width_bottom = 6
+border_color = Color(0.26666665, 0.4328125, 1, 1)
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
+expand_margin_left = 18.75
+expand_margin_right = 80.0
+expand_margin_bottom = 6.25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hdrfield"]
+content_margin_left = 16.0
+content_margin_top = 6.0
+content_margin_right = 16.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 1, 1, 0.06)
 skew = Vector2(0.2, 0)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-expand_margin_right = 35.0
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hdrhover"]
+content_margin_left = 16.0
+content_margin_top = 6.0
+content_margin_right = 16.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 1, 1, 0.11)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hdrchip"]
+content_margin_left = 14.0
+content_margin_top = 0.0
+content_margin_right = 14.0
+content_margin_bottom = 0.0
+bg_color = Color(0.9529412, 0.7294118, 1, 0.12)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hdrpressed"]
+content_margin_left = 16.0
+content_margin_top = 6.0
+content_margin_right = 16.0
+content_margin_bottom = 6.0
+bg_color = Color(0.9529412, 0.7294118, 1, 0.25)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hdrfocus"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p2axe"]
-content_margin_left = 15.0
-content_margin_top = 15.0
-content_margin_right = 15.0
-content_margin_bottom = 15.0
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
 bg_color = Color(0.07846785, 0.07846785, 0.07846785, 1)
 skew = Vector2(0.2, 0)
-border_width_right = 10
-border_width_bottom = 5
+border_width_right = 13
+border_width_bottom = 6
 border_color = Color(0.26666665, 0.4328125, 1, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-expand_margin_left = 35.0
-expand_margin_right = 15.0
-expand_margin_bottom = 5.0
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
+expand_margin_left = 43.75
+expand_margin_right = 18.75
+expand_margin_bottom = 6.25
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0g2hw"]
 
@@ -201,10 +262,10 @@ grow_vertical = 2
 script = ExtResource("1_fin0e")
 
 [node name="BeatmapBackground" parent="." unique_id=235856276 instance=ExtResource("2_wg4n2")]
-ShowStoryboard = true
 self_modulate = Color(0.9063318, 0.9063318, 0.9063318, 1)
 z_index = -5
 layout_mode = 1
+ShowStoryboard = true
 
 [node name="MusicVisualizer" parent="." unique_id=1490893864 instance=ExtResource("3_xaiyr")]
 modulate = Color(1, 1, 1, 0.67973864)
@@ -278,24 +339,187 @@ vertical_alignment = 1
 text_overrun_behavior = 3
 script = ExtResource("9_p2axe")
 
-[node name="Margin" type="MarginContainer" parent="ControlBar/AmazingPillar" unique_id=1480361346]
-layout_mode = 2
-theme_override_constants/margin_bottom = 5
+[node name="FilterHeader" type="PanelContainer" parent="." unique_id=962738861]
+z_index = 3
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6
+anchor_right = 1.0
+offset_left = -40.0
+offset_top = 91.875
+offset_bottom = 293.875
+theme_override_styles/panel = SubResource("StyleBoxFlat_hdrpanel")
 
-[node name="MarginContainer" type="MarginContainer" parent="ControlBar/AmazingPillar/Margin" unique_id=1065491016]
+[node name="Rows" type="VBoxContainer" parent="FilterHeader" unique_id=1840259665]
 layout_mode = 2
-size_flags_horizontal = 8
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 0
+theme_override_constants/separation = 12
 
-[node name="Beatmapsearch" type="LineEdit" parent="ControlBar/AmazingPillar/Margin/MarginContainer" unique_id=33041311]
-custom_minimum_size = Vector2(300, 0)
+[node name="SearchRow" type="MarginContainer" parent="FilterHeader/Rows" unique_id=2033482555]
 layout_mode = 2
-offset_transform_enabled = true
-theme_override_styles/normal = SubResource("StyleBoxFlat_s8vjv")
-theme_override_styles/focus = SubResource("StyleBoxFlat_s8vjv")
-placeholder_text = "search...."
+theme_override_constants/margin_left = 24
+
+[node name="Row" type="HBoxContainer" parent="FilterHeader/Rows/SearchRow" unique_id=1588438357]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Beatmapsearch" type="LineEdit" parent="FilterHeader/Rows/SearchRow/Row" unique_id=33041311]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("StyleBoxFlat_hdrfield")
+theme_override_styles/focus = SubResource("StyleBoxFlat_hdrhover")
+placeholder_text = "Search titles, artists, mappers, difficulties..."
 clear_button_enabled = true
+
+[node name="Count" type="PanelContainer" parent="FilterHeader/Rows/SearchRow/Row" unique_id=1447698786]
+custom_minimum_size = Vector2(130, 46)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hdrchip")
+
+[node name="MatchCount" type="Label" parent="FilterHeader/Rows/SearchRow/Row/Count" unique_id=1578556128]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.9529412, 0.7294118, 1, 1)
+theme_override_fonts/font = ExtResource("21_hdrfont")
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelRow" type="MarginContainer" parent="FilterHeader/Rows" unique_id=297874182]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+
+[node name="Row" type="HBoxContainer" parent="FilterHeader/Rows/LevelRow" unique_id=1650669257]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Caption" type="PanelContainer" parent="FilterHeader/Rows/LevelRow/Row" unique_id=1006688704]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hdrchip")
+
+[node name="Label" type="Label" parent="FilterHeader/Rows/LevelRow/Row/Caption" unique_id=511620601]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.9529412, 0.7294118, 1, 1)
+theme_override_fonts/font = ExtResource("21_hdrfont")
+theme_override_font_sizes/font_size = 16
+text = "Level"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MinBox" type="PanelContainer" parent="FilterHeader/Rows/LevelRow/Row" unique_id=1824270271]
+custom_minimum_size = Vector2(76, 46)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hdrfield")
+
+[node name="LevelMin" type="Label" parent="FilterHeader/Rows/LevelRow/Row/MinBox" unique_id=1879771235]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("21_hdrfont")
+theme_override_font_sizes/font_size = 16
+text = "Lv 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelRange" type="Control" parent="FilterHeader/Rows/LevelRow/Row" unique_id=816032182]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("22_hdrlvl")
+Labels = false
+
+[node name="MaxBox" type="PanelContainer" parent="FilterHeader/Rows/LevelRow/Row" unique_id=1010112906]
+custom_minimum_size = Vector2(76, 46)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hdrfield")
+
+[node name="LevelMax" type="Label" parent="FilterHeader/Rows/LevelRow/Row/MaxBox" unique_id=863022044]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("21_hdrfont")
+theme_override_font_sizes/font_size = 16
+text = "100+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SortRow" type="MarginContainer" parent="FilterHeader/Rows" unique_id=923359730]
+layout_mode = 2
+
+[node name="Row" type="HBoxContainer" parent="FilterHeader/Rows/SortRow" unique_id=1766216759]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SortPick" type="OptionButton" parent="FilterHeader/Rows/SortRow/Row" unique_id=1868142917]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("StyleBoxFlat_hdrfield")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hdrpressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hdrhover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hdrfocus")
+text_overrun_behavior = 3
+clip_text = true
+fit_to_longest_item = false
+
+[node name="SortDirection" type="Button" parent="FilterHeader/Rows/SortRow/Row" unique_id=1019476791]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(46, 46)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("StyleBoxFlat_hdrfield")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hdrpressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hdrhover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hdrfocus")
+text = "↑"
+
+[node name="CollectionPick" type="OptionButton" parent="FilterHeader/Rows/SortRow/Row" unique_id=1388219414]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("StyleBoxFlat_hdrfield")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hdrpressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hdrhover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hdrfocus")
+text_overrun_behavior = 3
+clip_text = true
+fit_to_longest_item = false
+
+[node name="FiltersButton" type="Button" parent="FilterHeader/Rows/SortRow/Row" unique_id=1131114264]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 46)
+layout_mode = 2
+tooltip_text = "Status, map mode and managing collections"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("StyleBoxFlat_hdrfield")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hdrpressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hdrhover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hdrfocus")
+text = "Filters"
 
 [node name="SongDetails" type="VBoxContainer" parent="." unique_id=1838294306]
 layout_mode = 1
@@ -716,9 +940,9 @@ script = ExtResource("20_ihwey")
 [connection signal="mouse_entered" from="SongPanel" to="." method="_songenter"]
 [connection signal="mouse_exited" from="SongPanel" to="." method="_songexit"]
 [connection signal="value_changed" from="SongPanel/VScrollBar" to="." method="_valuechangedscroll"]
-[connection signal="focus_entered" from="ControlBar/AmazingPillar/Margin/MarginContainer/Beatmapsearch" to="." method="searchfocus"]
-[connection signal="focus_exited" from="ControlBar/AmazingPillar/Margin/MarginContainer/Beatmapsearch" to="." method="searchunfocus"]
-[connection signal="text_changed" from="ControlBar/AmazingPillar/Margin/MarginContainer/Beatmapsearch" to="." method="SearchPrepare"]
+[connection signal="focus_entered" from="FilterHeader/Rows/SearchRow/Row/Beatmapsearch" to="." method="searchfocus"]
+[connection signal="focus_exited" from="FilterHeader/Rows/SearchRow/Row/Beatmapsearch" to="." method="searchunfocus"]
+[connection signal="text_changed" from="FilterHeader/Rows/SearchRow/Row/Beatmapsearch" to="." method="SearchPrepare"]
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Details" to="." method="_leaderboardmode" binds= [2]]
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Local" to="." method="_leaderboardmode" binds= [0]]
 [connection signal="pressed" from="SongDetails/Leaderboard Panel/Rows/Box4/Global" to="." method="_leaderboardmode" binds= [1]]

@@ -1,0 +1,124 @@
+[gd_scene format=3 uid="uid://um573ya7se44"]
+
+[ext_resource type="Script" uid="uid://33p4qgfifymq" path="res://Script/SongSelect/DifficultyCard.cs" id="1_card"]
+[ext_resource type="Script" uid="uid://pd1lcsjf4vki" path="res://Script/SongSelect/LevelMeter.cs" id="2_meter"]
+[ext_resource type="FontFile" uid="uid://2atq5vkw7df7" path="res://Fonts/font-bold.otf" id="3_bold"]
+[ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="4_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
+bg_color = Color(0.08, 0.06, 0.1, 0.95)
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
+corner_detail = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+
+[sub_resource type="FontVariation" id="FontVariation_bold"]
+fallbacks = Array[Font]([ExtResource("4_font")])
+base_font = ExtResource("3_bold")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_badge"]
+content_margin_left = 9.0
+content_margin_top = 1.0
+content_margin_right = 9.0
+content_margin_bottom = 1.0
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[node name="DifficultyCard" type="Button" unique_id=727039336]
+clip_children = 2
+custom_minimum_size = Vector2(0, 66)
+offset_right = 800.0
+offset_bottom = 66.0
+focus_mode = 0
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_normal")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_normal")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+script = ExtResource("1_card")
+
+[node name="Tab" type="ColorRect" parent="." unique_id=1508236827]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 10.0
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=1787451239]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 26
+theme_override_constants/margin_top = 7
+theme_override_constants/margin_right = 90
+theme_override_constants/margin_bottom = 7
+
+[node name="Rows" type="VBoxContainer" parent="Margin" unique_id=1339247135]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Top" type="HBoxContainer" parent="Margin/Rows" unique_id=868945107]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="DiffName" type="Label" parent="Margin/Rows/Top" unique_id=120054094]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 20
+
+[node name="Mapper" type="Label" parent="Margin/Rows/Top" unique_id=1837101552]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_font_sizes/font_size = 15
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Bottom" type="HBoxContainer" parent="Margin/Rows" unique_id=176342067]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Badge" type="PanelContainer" parent="Margin/Rows/Bottom" unique_id=473544576]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(68, 0)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+
+[node name="BadgeText" type="Label" parent="Margin/Rows/Bottom/Badge" unique_id=296309131]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.105882, 0.0862745, 0.12549, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+
+[node name="Meter" type="Control" parent="Margin/Rows/Bottom" unique_id=1705010341]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 12)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("2_meter")
