@@ -164,10 +164,33 @@ public partial class Gameplay : Control
 	/// Reads the [HitObjects] of a mania .osu. Pure (no Godot nodes or settings), so <see cref="ChartPreload"/>
 	/// runs it on a worker thread while the loading screen shows.
 	/// </summary>
-	public static ManiaChart ParseChart(IEnumerable<string> lines, int seed, bool random)
+	/// <summary>
+	/// Random mod (like osu!mania's): the 4 columns are shuffled once for the whole map from the seed, so chords stay
+	/// chords and no note is lost; never the unshuffled order. Mirrored by ppv2calc.py (_shuffled_columns).
+	/// </summary>
+	public static int[] ShuffledColumns(int seed)
+	{
+		var rnd = new Random(seed);
+		var cols = new[] { 0, 1, 2, 3 };
+		for (int attempt = 0; attempt < 32; attempt++)
+		{
+			for (int i = cols.Length - 1; i > 0; i--)
+			{
+				int j = rnd.Next(0, i + 1);
+				(cols[i], cols[j]) = (cols[j], cols[i]);
+			}
+			if (cols[0] != 0 || cols[1] != 1 || cols[2] != 2 || cols[3] != 3) break;
+		}
+		return cols;
+	}
+
+	/// <param name="legacyRandom">Old replays (no "#Random: columns" line): Random gave every note its own random
+	/// column. Only used to watch those replays the way they were played.</param>
+	public static ManiaChart ParseChart(IEnumerable<string> lines, int seed, bool random, bool legacyRandom = false)
 	{
 		var chart = new ManiaChart();
 		var BaseRnd = new Random(seed);
+		var shuffle = random && !legacyRandom ? ShuffledColumns(seed) : null;
 		var isHitObjectSection = false;
 		var seen = new HashSet<(int timing, int section)>();
 		var ratedSeen = new HashSet<(int, int)>();
@@ -183,7 +206,7 @@ public partial class Gameplay : Control
 
 			int realPart = Math.Clamp((int)Math.Floor(Convert.ToInt32(section[0]) * 4 / 512.0), 0, 3);
 			if (ratedSeen.Add((timing, realPart))) chart.Rated.Add((timing, realPart));
-			int part = random ? BaseRnd.Next(0, 4) : realPart;
+			int part = shuffle != null ? shuffle[realPart] : random ? BaseRnd.Next(0, 4) : realPart;
 
 			// Skip duplicates in O(1), no linear scan
 			if (!seen.Add((-timing, part))) continue;
@@ -202,7 +225,11 @@ public partial class Gameplay : Control
 		// Normally already parsed by the loading screen (ChartPreload); else parse it here.
 		var chart = ChartPreload.TakeChart<ManiaChart>(filepath, 0, out int preloadSeed);
 		if (chart != null) seed = preloadSeed;
-		else chart = ParseChart(ChartPreload.ReadLines(filepath), seed, ModsOperator.Mods["random"]);
+		else
+		{
+			if (Replay.Watching(out int replaySeed)) seed = replaySeed; // a replay plays its own Random columns
+			chart = ParseChart(ChartPreload.ReadLines(filepath), seed, ModsOperator.Mods["random"], Replay.WatchLegacyRandom);
+		}
 		Notes.AddRange(chart.Notes);
 		var ratedNotes = chart.Rated;
 

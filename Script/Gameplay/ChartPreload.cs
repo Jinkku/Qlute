@@ -35,7 +35,8 @@ public static class ChartPreload
 		// Everything the worker needs from settings / mods is read here, on the main thread.
 		bool random = ModsOperator.Mods.TryGetValue("random", out var r) && r;
 		bool storyboard = Check.CheckBoolValue(SettingsOperator.GetSetting(StoryboardPlayer.SettingKey)?.ToString() ?? "true");
-		int seed = new Random().Next(1, 214562543);
+		int seed = Replay.Watching(out int replaySeed) ? replaySeed : new Random().Next(1, 214562543); // a replay: its own Random columns
+		bool legacyRandom = Replay.WatchLegacyRandom;
 		int generation;
 		lock (Gate)
 		{
@@ -65,7 +66,7 @@ public static class ChartPreload
 					var stream = StreamLines(path, header);
 					chart = mode switch
 					{
-						0 => Gameplay.ParseChart(stream, seed, random),
+						0 => Gameplay.ParseChart(stream, seed, random, legacyRandom),
 						1 => TaikoGameCore.ParseChart(stream),
 						_ => null,
 					};

@@ -190,9 +190,25 @@ public static class Replay
     /// <summary>
     /// Resets the replay cache and set the file path for the replay file.
     /// </summary>
+    /// <summary>Seed of the replay being watched ("#Seed"), so Random puts the notes where they were. Null = not watching one.</summary>
+    public static int? WatchSeed { get; private set; }
+    /// <summary>The watched replay is from before Random shuffled columns (no "#Random: columns" line).</summary>
+    public static bool WatchLegacyRandom { get; private set; }
+    /// <summary>Header line new replays carry: Random shuffles whole columns (Gameplay.ShuffledColumns).</summary>
+    public const string RandomColumnsLine = "#Random: columns";
+
+    /// <summary>Watching a replay that has a seed (its Random columns must match the recording).</summary>
+    public static bool Watching(out int seed)
+    {
+        seed = WatchSeed ?? 0;
+        return SettingsOperator.SpectatorMode && WatchSeed != null;
+    }
+
     public static void ResetReplay(bool quiet = false)
     {
         ReplayCache.Clear();
+        WatchSeed = null;
+        WatchLegacyRandom = false;
         GD.Print("[Qlute] Resetting Replay cache...");
         FilePath = $"{SettingsOperator.replaydir}/[{CleanName(ApiOperator.Username)}] [{CleanName(SettingsOperator.SessionConfig.BeatmapMapper)}] {CleanName(SettingsOperator.SessionConfig.BeatmapArtist)} - {CleanName(SettingsOperator.SessionConfig.BeatmapTitle)} [{CleanName(SettingsOperator.SessionConfig.BeatmapDifficultyName)}]-{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.qrf";
         if (!quiet) GD.Print($"[Qlute] Set file path to {FilePath}");
@@ -235,6 +251,7 @@ public static class Replay
                 sb.Append($"#Mods: {ModsOperator.GetModAlias()}\n");
                 sb.Append($"#Points: {Num.Str(SettingsOperator.Gameplaycfg.pp)}\n");
                 sb.Append($"#Seed: {Gameplay.seed}\n");
+                if (ModsOperator.Mods["random"]) sb.Append(RandomColumnsLine).Append('\n');
                 sb.Append($"#Multiplier: {Num.Str(AudioPlayer.Instance.PitchScale)}\n");
                 foreach (ReplayLegend entry in ReplayCache)
                 {
@@ -266,11 +283,14 @@ public static class Replay
         GD.Print("[Qlute] Loading Replay...");
         using var file = Godot.FileAccess.Open(File, Godot.FileAccess.ModeFlags.Read);
         string[] cache = file.GetAsText().TrimEnd('\n').Split("\n");
+        bool columns = false;
         foreach (string entry in cache)
         {
             try
             {
-                if (!entry.StartsWith('#'))
+                if (entry.StartsWith("#Seed: ") && int.TryParse(entry["#Seed: ".Length..].Trim(), out var seed)) WatchSeed = seed;
+                else if (entry.TrimEnd('\r') == RandomColumnsLine) columns = true;
+                else if (!entry.StartsWith('#'))
                 {
                     var note = entry.Split(',');
                     int time = int.Parse(note[0].Trim());
@@ -283,6 +303,7 @@ public static class Replay
                 GD.Print(x);
             }
         }
+        WatchLegacyRandom = !columns;
         GD.Print("[Qlute] Completed Successfully!");
         SettingsOperator.SpectatorMode = true;
 	}
