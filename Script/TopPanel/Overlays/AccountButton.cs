@@ -11,8 +11,13 @@ public partial class AccountButton : Button
 	private string Urltmpcardborder { get; set; }
 	private TextureRect CardBorder { get; set; }
 	// Called when the node enters the scene tree for the first time.
+	/// <summary>The top bar's account button (the account dropdown's owner).</summary>
+	public static AccountButton Instance { get; private set; }
+	public override void _ExitTree() { if (Instance == this) Instance = null; }
+
 	public override void _Ready()
 	{
+		Instance = this;
 		TopPanel = GetNode<Control>("../");
 		PlayerName = GetNode<Label>("UPlayerName");
 		Ranking = GetNode<Label>("Ranking");
@@ -106,6 +111,12 @@ public partial class AccountButton : Button
 	private Control TopPanel { get; set; }
 	public Control Card;
 	public Tween acctween;
+	/// <summary>Closes the account dropdown if it's open.</summary>
+	public void CloseAccountPanel()
+	{
+		if (SettingsOperator.SessionConfig.ShowAccountProfile && IsInstanceValid(Card)) toggleaccountpanel();
+	}
+
 	public void toggleaccountpanel(){
 		var loggedin = SettingsOperator.SessionConfig.Loggedin;
 		acctween?.Kill();

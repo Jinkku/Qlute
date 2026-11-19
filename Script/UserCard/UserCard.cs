@@ -15,10 +15,21 @@ public partial class UserCard : PanelContainer
         Username = GetNode<Label>("SplitV/TopPart/Sections/Username");
         Rank = GetNode<Label>("SplitV/BottomPart/Sections/Rank/Value");
         Performance = GetNode<Label>("SplitV/BottomPart/Sections/Performance/Value");
-        // Clicking your own card opens your profile.
+        // Clicking your own card opens your profile. Its inner panels (PanelContainers stop the mouse by default)
+        // must let clicks through, or they never reach the card.
         MouseFilter = MouseFilterEnum.Stop;
         MouseDefaultCursorShape = CursorShape.PointingHand;
         TooltipText = "Open your profile";
+        IgnoreMouse(this);
+    }
+
+    private static void IgnoreMouse(Node node)
+    {
+        foreach (var child in node.GetChildren())
+        {
+            if (child is Control c) c.MouseFilter = MouseFilterEnum.Ignore;
+            IgnoreMouse(child);
+        }
     }
 
     public override void _GuiInput(InputEvent e)
@@ -26,6 +37,7 @@ public partial class UserCard : PanelContainer
         if (e is InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: false } && SettingsOperator.SessionConfig.Loggedin)
         {
             PlayerOverlays.OpenProfile(ApiOperator.Username);
+            AccountButton.Instance?.CloseAccountPanel(); // the account dropdown it sits in
             AcceptEvent();
         }
     }
