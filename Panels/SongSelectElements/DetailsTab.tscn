@@ -1,0 +1,364 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://jiq8w3wo2uhl" path="res://Script/SongSelect/SongDetails/Details.cs" id="1_details"]
+[ext_resource type="Script" path="res://Script/SongSelect/SongDetails/DensityGraph.cs" id="2_graph"]
+[ext_resource type="Script" path="res://Script/SongSelect/SongDetails/StatBar.cs" id="3_bar"]
+[ext_resource type="FontFile" uid="uid://2atq5vkw7df7" path="res://Fonts/font-bold.otf" id="4_bold"]
+[ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="5_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 18.75
+content_margin_top = 18.75
+content_margin_right = 18.75
+content_margin_bottom = 18.75
+bg_color = Color(0.078431375, 0.078431375, 0.078431375, 0.8)
+corner_radius_top_left = 19
+corner_radius_top_right = 19
+corner_radius_bottom_right = 19
+corner_radius_bottom_left = 19
+expand_margin_left = 81.25
+
+[sub_resource type="FontVariation" id="FontVariation_bold"]
+fallbacks = Array[Font]([ExtResource("5_font")])
+base_font = ExtResource("4_bold")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_badge"]
+content_margin_left = 14.0
+content_margin_top = 6.0
+content_margin_right = 14.0
+content_margin_bottom = 6.0
+bg_color = Color(0.36862746, 0.76862746, 1, 1)
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chip"]
+content_margin_left = 14.0
+content_margin_top = 4.0
+content_margin_right = 14.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.06)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.16)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_box"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 0.045)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tile"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 0.045)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+corner_detail = 10
+
+[node name="Details" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 437.5)
+offset_right = 700.0
+offset_bottom = 437.5
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+script = ExtResource("1_details")
+
+[node name="Info" type="VBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Header" type="HBoxContainer" parent="Info"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Badge" type="PanelContainer" parent="Info/Header"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(88, 0)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+
+[node name="BadgeText" type="Label" parent="Info/Header/Badge"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.105882354, 0.08627451, 0.1254902, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 24
+text = "Lv 0"
+horizontal_alignment = 1
+
+[node name="Names" type="VBoxContainer" parent="Info/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = -1
+
+[node name="DiffName" type="Label" parent="Info/Header/Names"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 28
+text = "Difficulty"
+text_overrun_behavior = 3
+
+[node name="Mapper" type="Label" parent="Info/Header/Names"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.6)
+theme_override_font_sizes/font_size = 18
+text = "mapped by"
+text_overrun_behavior = 3
+
+[node name="ModeChip" type="PanelContainer" parent="Info/Header"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_chip")
+
+[node name="ModeText" type="Label" parent="Info/Header/ModeChip"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "4K Mania"
+
+[node name="GraphBox" type="PanelContainer" parent="Info"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_box")
+
+[node name="Rows" type="VBoxContainer" parent="Info/GraphBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Top" type="HBoxContainer" parent="Info/GraphBox/Rows"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Caption" type="Label" parent="Info/GraphBox/Rows/Top"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 0.6)
+theme_override_font_sizes/font_size = 17
+text = "Note density"
+
+[node name="PeakText" type="Label" parent="Info/GraphBox/Rows/Top"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.6)
+theme_override_font_sizes/font_size = 17
+text = "peak 0 notes/s"
+horizontal_alignment = 2
+
+[node name="Graph" type="Control" parent="Info/GraphBox/Rows"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 92)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("2_graph")
+
+[node name="Times" type="HBoxContainer" parent="Info/GraphBox/Rows"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="StartTime" type="Label" parent="Info/GraphBox/Rows/Times"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 0.45)
+theme_override_font_sizes/font_size = 15
+text = "0:00"
+
+[node name="EndTime" type="Label" parent="Info/GraphBox/Rows/Times"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.45)
+theme_override_font_sizes/font_size = 15
+text = "0:00"
+horizontal_alignment = 2
+
+[node name="Meters" type="VBoxContainer" parent="Info"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="LevelRow" type="HBoxContainer" parent="Info/Meters"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Info/Meters/LevelRow"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.75)
+text = "Level"
+
+[node name="LevelBar" type="Control" parent="Info/Meters/LevelRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("3_bar")
+MaxValue = 100.0
+
+[node name="LevelValue" type="Label" parent="Info/Meters/LevelRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(84, 0)
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_bold")
+text = "0"
+horizontal_alignment = 2
+
+[node name="AccuracyRow" type="HBoxContainer" parent="Info/Meters"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Info/Meters/AccuracyRow"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.75)
+text = "Accuracy"
+
+[node name="AccuracyBar" type="Control" parent="Info/Meters/AccuracyRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("3_bar")
+
+[node name="AccuracyValue" type="Label" parent="Info/Meters/AccuracyRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(84, 0)
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_bold")
+text = "0"
+horizontal_alignment = 2
+
+[node name="Tiles" type="HBoxContainer" parent="Info"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Notes" type="PanelContainer" parent="Info/Tiles"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tile")
+
+[node name="Rows" type="VBoxContainer" parent="Info/Tiles/Notes"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -2
+
+[node name="Caption" type="Label" parent="Info/Tiles/Notes/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.55)
+theme_override_font_sizes/font_size = 15
+text = "Notes"
+
+[node name="NotesValue" type="Label" parent="Info/Tiles/Notes/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 24
+text = "0"
+
+[node name="HitWindow" type="PanelContainer" parent="Info/Tiles"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tile")
+
+[node name="Rows" type="VBoxContainer" parent="Info/Tiles/HitWindow"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -2
+
+[node name="Caption" type="Label" parent="Info/Tiles/HitWindow/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.55)
+theme_override_font_sizes/font_size = 15
+text = "Perfect"
+
+[node name="HitWindowValue" type="Label" parent="Info/Tiles/HitWindow/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 24
+text = "±0ms"
+
+[node name="Average" type="PanelContainer" parent="Info/Tiles"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tile")
+
+[node name="Rows" type="VBoxContainer" parent="Info/Tiles/Average"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -2
+
+[node name="Caption" type="Label" parent="Info/Tiles/Average/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.55)
+theme_override_font_sizes/font_size = 15
+text = "Average"
+
+[node name="AverageValue" type="Label" parent="Info/Tiles/Average/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 24
+text = "0/s"
+
+[node name="Peak" type="PanelContainer" parent="Info/Tiles"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tile")
+
+[node name="Rows" type="VBoxContainer" parent="Info/Tiles/Peak"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -2
+
+[node name="Caption" type="Label" parent="Info/Tiles/Peak/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.55)
+theme_override_font_sizes/font_size = 15
+text = "Peak"
+
+[node name="PeakValue" type="Label" parent="Info/Tiles/Peak/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 24
+text = "0/s"

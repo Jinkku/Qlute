@@ -18,7 +18,7 @@
 [ext_resource type="Script" uid="uid://blbe3d2880su3" path="res://Script/Effects/ScreenElementButton.cs" id="8_5rktx"]
 [ext_resource type="PackedScene" uid="uid://c1aa8tscp5u6p" path="res://Panels/Overlays/BeatmapContextMenu.tscn" id="9_1t01f"]
 [ext_resource type="Script" uid="uid://b7udx8fmtfcbg" path="res://Script/SongSelect/SongSelectMode.cs" id="9_p2axe"]
-[ext_resource type="Script" uid="uid://jiq8w3wo2uhl" path="res://Script/SongSelect/SongDetails/Details.cs" id="12_fb0k2"]
+[ext_resource type="PackedScene" path="res://Panels/SongSelectElements/DetailsTab.tscn" id="12_fb0k2"]
 [ext_resource type="PackedScene" uid="uid://07ub4tqkb550" path="res://Panels/SongSelectElements/Modes.tscn" id="18_dhkys"]
 [ext_resource type="Script" uid="uid://0xn63uccdk6j" path="res://Script/TimerwithBPM/Bpmtick.cs" id="20_ihwey"]
 [ext_resource type="FontFile" uid="uid://2atq5vkw7df7" path="res://Fonts/font-bold.otf" id="21_hdrfont"]
@@ -217,20 +217,6 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ndor5"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pgcs5"]
-content_margin_left = 18.75
-content_margin_top = 18.75
-content_margin_right = 18.75
-content_margin_bottom = 18.75
-bg_color = Color(0.078431375, 0.078431375, 0.078431375, 0.8)
-corner_radius_top_left = 19
-corner_radius_top_right = 19
-corner_radius_bottom_right = 19
-corner_radius_bottom_left = 19
-expand_margin_left = 81.25
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0g2hw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2gjtq"]
 content_margin_left = 6.25
@@ -732,67 +718,9 @@ grow_vertical = 2
 mouse_default_cursor_shape = 2
 text = "Update beatmap"
 
-[node name="Details" type="PanelContainer" parent="SongDetails/Leaderboard Panel/Rows" unique_id=1690350623]
+[node name="Details" parent="SongDetails/Leaderboard Panel/Rows" unique_id=1690350623 instance=ExtResource("12_fb0k2")]
 visible = false
-custom_minimum_size = Vector2(0, 437.5)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_pgcs5")
-script = ExtResource("12_fb0k2")
-
-[node name="Info" type="VBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details" unique_id=985342489]
-layout_mode = 2
-theme_override_constants/separation = 13
-
-[node name="Row1" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details/Info" unique_id=591831385]
-layout_mode = 2
-
-[node name="Title" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row1" unique_id=676478950]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.4
-text = "Accuracy"
-
-[node name="ProgressBar" type="ProgressBar" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row1" unique_id=1272542137]
-custom_minimum_size = Vector2(0, 12.5)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-max_value = 10.0
-value = 1.0
-show_percentage = false
-
-[node name="Row2" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details/Info" unique_id=637603663]
-material = SubResource("ShaderMaterial_0g2hw")
-layout_mode = 2
-
-[node name="Title" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row2" unique_id=891021794]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.4
-text = "Difficulty"
-
-[node name="ProgressBar" type="ProgressBar" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row2" unique_id=1095152320]
-custom_minimum_size = Vector2(0, 12.5)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-show_percentage = false
-
-[node name="Row3" type="HBoxContainer" parent="SongDetails/Leaderboard Panel/Rows/Details/Info" unique_id=246466322]
-visible = false
-material = SubResource("ShaderMaterial_0g2hw")
-layout_mode = 2
-
-[node name="Title" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row3" unique_id=167030974]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.4
-text = "Note Count"
-
-[node name="Value" type="Label" parent="SongDetails/Leaderboard Panel/Rows/Details/Info/Row3" unique_id=1824850769]
-layout_mode = 2
-text = "0"
-horizontal_alignment = 2
 
 [node name="ModeScreen" parent="." unique_id=77774883 instance=ExtResource("18_dhkys")]
 visible = false
