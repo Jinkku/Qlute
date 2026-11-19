@@ -26,6 +26,7 @@ public partial class Display : PanelContainer
 		NFadeout.ButtonPressed = Check.CheckBoolValue(SettingsOperator.GetSetting("dfadeout").ToString());
 		Windowmode.Selected = int.TryParse(SettingsOperator.GetSetting("windowmode")?.ToString(), out int mode) ? mode : 0;
 		BackgroundDim.Value = SettingsOperator.SessionConfig.Backgrounddim;
+		SetupScrollSpeed();
 		AddToggle("Show beatmap storyboards", StoryboardPlayer.SettingKey);
 		AddToggle("Show beatmap shaders", BeatmapShaderLayer.SettingKey);
 		AddToggle("Pause when the game window loses focus", FocusPause.SettingKey);
@@ -44,6 +45,28 @@ public partial class Display : PanelContainer
 		toggle.Toggled += on => SettingsOperator.SetSetting(key, on);
 	}
 	private int _added;
+
+	private HSlider _scrollSpeed;
+	private Label _scrollSpeedValue;
+
+	private void SetupScrollSpeed()
+	{
+		_scrollSpeed = GetNode<HSlider>("Rows/ScrollSpeedRow/ScrollSpeed");
+		_scrollSpeedValue = GetNode<Label>("Rows/ScrollSpeedRow/ScrollSpeedValue");
+		_scrollSpeed.MinValue = ScrollSpeed.Min;
+		_scrollSpeed.MaxValue = ScrollSpeed.Max;
+		_scrollSpeed.SetValueNoSignal(ScrollSpeed.Value);
+		ShowScrollSpeed(ScrollSpeed.Value, 0);
+		_scrollSpeed.ValueChanged += v => { if (!Mathf.IsEqualApprox((float)v, ScrollSpeed.Value)) ScrollSpeed.Set((float)v); };
+		ScrollSpeed.Changed += ShowScrollSpeed; // F3 / F4 while this is open
+		TreeExiting += () => ScrollSpeed.Changed -= ShowScrollSpeed;
+	}
+
+	private void ShowScrollSpeed(float speed, int direction)
+	{
+		_scrollSpeed.SetValueNoSignal(speed);
+		_scrollSpeedValue.Text = $"{speed:0} · {ScrollSpeed.MaxTimeRange / speed:0} ms";
+	}
 	
 	private void _backgrounddim_started(float value)
 	{

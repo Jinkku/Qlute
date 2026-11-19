@@ -148,6 +148,31 @@ text = "Background Dim"
 layout_mode = 2
 rounded = true
 
+[node name="ScrollSpeedTitle" type="Label" parent="Rows"]
+layout_mode = 2
+mouse_filter = 0
+tooltip_text = "osu!mania scale: a note is on screen for 11485 / speed ms. Change it in game with F3 / F4."
+text = "Scroll speed (F3 / F4 in game)"
+
+[node name="ScrollSpeedRow" type="HBoxContainer" parent="Rows"]
+layout_mode = 2
+theme_override_constants/separation = 13
+
+[node name="ScrollSpeed" type="HSlider" parent="Rows/ScrollSpeedRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 1.0
+max_value = 40.0
+value = 20.0
+rounded = true
+
+[node name="ScrollSpeedValue" type="Label" parent="Rows/ScrollSpeedRow"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "20 · 574 ms"
+horizontal_alignment = 2
+
 [node name="CheckButton2" type="CheckButton" parent="Rows" unique_id=664842431]
 visible = false
 layout_mode = 2

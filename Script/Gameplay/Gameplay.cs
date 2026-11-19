@@ -37,8 +37,14 @@ public partial class Gameplay : Control
 	/// screen to the hit line as it did at the old 1280x720 base (570 ms at 1 px/ms): (1080 - 187.5) / 570.
 	/// </summary>
 	public const float PxPerMs = (1080f - HitFromBottom) / (720f - 150f);
+	/// <summary>
+	/// How fast notes are drawn moving (px per ms), from the player's scroll speed (osu!mania scale, see ScrollSpeed):
+	/// a note takes ScrollSpeed.TimeRange ms from the top of the playfield to the hit line. Drawing only:
+	/// judging and the old-unit checks keep using <see cref="PxPerMs"/>.
+	/// </summary>
+	public float ScrollPxPerMs => HitPoint / ScrollSpeed.TimeRange;
 	/// <summary>Screen Y of a note's top: the hit line plus how far away it is in time.</summary>
-	public float NoteY(int timing) => HitPoint + (timing + gametime) * PxPerMs;
+	public float NoteY(int timing) => HitPoint + (timing + gametime) * ScrollPxPerMs;
 	private Tween MainScreenAnimation { get; set; }
 	public List<KeyL> Keys = new List<KeyL>();
 	public int JudgeResult = -1;
@@ -833,6 +839,7 @@ private void _GameNoteTick(double delta)
 				IncreaseDanceIndex();
 			}
 
+			ScrollSpeed.PollKeys();
 			if (!Finished) CheckReplayKey((int)Math.Floor(gametime));
 			_GameNoteTick(delta);
 			if (LanNetwork.InMatch) LanNetwork.Instance.SpecTime(gametime); // spectators follow this clock

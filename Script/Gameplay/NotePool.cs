@@ -25,7 +25,7 @@ public partial class NotePool : Control
 
 		float hitPoint   = Gameplay.HitPoint;
 		float songMs     = Gameplay.gametime;
-		const float pxPerMs = Gameplay.PxPerMs;
+		float pxPerMs    = Gameplay.ScrollPxPerMs; // the player's scroll speed
 		const float k    = UiScale.Factor;       // skin note images are sized for the old 1280x720 layout
 		float fieldX     = Gameplay.PlayFieldPOS.X;
 		// Lane step from the real lane sections (their gap is rounded to whole pixels), so notes stay on their lanes.
@@ -40,7 +40,8 @@ public partial class NotePool : Control
 
 		int maxNotes = Gameplay.MaxNotes;
 		int start = Math.Min(maxNotes, Gameplay.NoteTick);
-		int end   = Math.Min(Math.Min(maxNotes, Gameplay.NoteTick + 256), notes.Count);
+		// enough notes for a slow scroll speed on a dense map; the loop stops at the first one above the screen
+		int end   = Math.Min(Math.Min(maxNotes, Gameplay.NoteTick + 4096), notes.Count);
 
 		for (int i = start; i < end; i++)
 		{
@@ -52,8 +53,9 @@ public partial class NotePool : Control
 
 			float y = hitPoint + (note.timing + songMs) * pxPerMs;
 
-			// Cull notes that are off-screen
-			if (y > viewHeight || y + backH < 0) continue;
+			// Cull notes that are off-screen (notes are in time order: the rest are higher still)
+			if (y + backH < 0) break;
+			if (y > viewHeight) continue;
 
 			// Slice mod: fade based on position (was Note.Node.Modulate)
 			float alpha = 1f;

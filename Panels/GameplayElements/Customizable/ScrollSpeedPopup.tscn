@@ -1,0 +1,81 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Script/Gameplay/ScrollSpeedPopup.cs" id="1_popup"]
+[ext_resource type="FontFile" uid="uid://2atq5vkw7df7" path="res://Fonts/font-bold.otf" id="2_bold"]
+[ext_resource type="FontFile" uid="uid://rmdbc08vewyv" path="res://Fonts/font.ttf" id="3_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_box"]
+content_margin_left = 22.0
+content_margin_top = 8.0
+content_margin_right = 22.0
+content_margin_bottom = 8.0
+bg_color = Color(0.0784, 0.0667, 0.102, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78, 0.72, 1, 0.35)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 12
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 8
+
+[sub_resource type="FontVariation" id="FontVariation_bold"]
+fallbacks = Array[Font]([ExtResource("3_font")])
+base_font = ExtResource("2_bold")
+
+[node name="ScrollSpeedPopup" type="Control"]
+custom_minimum_size = Vector2(320, 62)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 320.0
+offset_bottom = 62.0
+mouse_filter = 2
+script = ExtResource("1_popup")
+
+[node name="Box" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_box")
+
+[node name="Row" type="HBoxContainer" parent="Box"]
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="Caption" type="Label" parent="Box/Row"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.65)
+theme_override_font_sizes/font_size = 19
+text = "Scroll speed"
+
+[node name="Arrow" type="Label" parent="Box/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.72, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "▲"
+
+[node name="Value" type="Label" parent="Box/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 30
+text = "20"
+
+[node name="Time" type="Label" parent="Box/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.5)
+theme_override_font_sizes/font_size = 16
+text = "574 ms"

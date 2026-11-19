@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://chb8dgjfmmjgt" path="res://Panels/GameplayElements/Customizable/Playfield.tscn" id="5_j387h"]
 [ext_resource type="PackedScene" uid="uid://dp0inqauwdmyy" path="res://Panels/GameplayElements/Customizable/unstablerate.tscn" id="8_acwn2"]
 [ext_resource type="PackedScene" uid="uid://bj38y6tgytge3" path="res://Panels/GameplayElements/Customizable/LeaderboardPanel.tscn" id="10_wpryt"]
+[ext_resource type="PackedScene" path="res://Panels/GameplayElements/Customizable/ScrollSpeedPopup.tscn" id="11_scroll"]
 
 [node name="Gameplay" type="Control" unique_id=1795130676]
 process_mode = 1
@@ -109,6 +110,17 @@ offset_right = -37.5
 offset_bottom = 125.0
 grow_horizontal = 0
 grow_vertical = 2
+
+[node name="ScrollSpeed" parent="HUD" instance=ExtResource("11_scroll")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -160.0
+offset_top = 150.0
+offset_right = 160.0
+offset_bottom = 212.0
+grow_horizontal = 2
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="timeout" from="Wait" to="." method="StartPlay"]

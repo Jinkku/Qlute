@@ -119,7 +119,7 @@ public partial class SettingsOperator : Node
         { "api", "https://qlute.jinkku.moe/" },
         { "client-id", null },
         { "client-secret", null },
-        { "scrollspeed", (int)1346 }, // 11485 ms max
+        { "scrollspeed", (int)20 }, // osu!mania scale 1..40 (ScrollSpeed.cs)
         { "fpsmode", 1 },
         { "showfps", false },
         { "showunicode", false },
