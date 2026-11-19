@@ -25,8 +25,34 @@ public class SkinLayoutEntry
 	public float ScaleY { get; set; } = 1;
 	public float Rotation { get; set; }
 	public bool Visible { get; set; } = true;
+	/// <summary>The component's own options (<see cref="ISkinSettings"/>), by key. Missing = the component's default.</summary>
+	public Dictionary<string, float> Settings { get; set; }
 
-	public SkinLayoutEntry Clone() => (SkinLayoutEntry)MemberwiseClone();
+	public SkinLayoutEntry Clone()
+	{
+		var copy = (SkinLayoutEntry)MemberwiseClone();
+		if (Settings != null) copy.Settings = new Dictionary<string, float>(Settings);
+		return copy;
+	}
+}
+
+/// <summary>One option a HUD component shows in the skin editor's inspector.</summary>
+/// <param name="Options">Pick-one labels (the value is the index); null = a number from Min to Max.</param>
+/// <param name="Toggle">An on/off switch (1 / 0).</param>
+public record SkinSetting(string Key, string Label, float Default, float Min = 0, float Max = 1, float Step = 0.01f,
+	string[] Options = null, bool Toggle = false, string Tooltip = null);
+
+/// <summary>
+/// A HUD component with options of its own (animation style, timings...) that the skin editor can change.
+/// The values are saved per skin in the layout entry; <see cref="ApplySkinSettings"/> runs whenever the layout is
+/// applied (every frame), so keep it cheap.
+/// </summary>
+public interface ISkinSettings
+{
+	IReadOnlyList<SkinSetting> SkinSettings { get; }
+	void ApplySkinSettings(IReadOnlyDictionary<string, float> values);
+	/// <summary>Show what the options do (the skin editor calls this after a change).</summary>
+	void PreviewSkinSettings();
 }
 
 public static class SkinLayout
@@ -92,8 +118,11 @@ public static class SkinLayout
 	/// <summary>Container new components get added to.</summary>
 	public static Control AddTarget(Control root) => root?.GetNodeOrNull<Control>("HUD") ?? root;
 
+	internal static readonly Dictionary<string, float> NoSettings = new();
+
 	public static void Apply(Control c, SkinLayoutEntry e)
 	{
+		if (c is ISkinSettings s) s.ApplySkinSettings(e.Settings ?? NoSettings);
 		if (!e.Visible)
 		{
 			c.Visible = false;
@@ -225,6 +254,7 @@ public partial class SkinLayoutApplier : Node
 		c.OffsetLeft = d.L; c.OffsetTop = d.T; c.OffsetRight = d.R; c.OffsetBottom = d.B;
 		c.PivotOffset = d.Pivot; c.Scale = d.Scale; c.Rotation = d.Rotation;
 		c.Visible = d.Visible; c.ProcessMode = d.Mode;
+		if (c is ISkinSettings s) s.ApplySkinSettings(SkinLayout.NoSettings);
 	}
 
 	public Control AddComponent(string key, string scenePath)

@@ -13,6 +13,10 @@ public partial class SkinEditor : Control
 	private VBoxContainer Menu { get; set; }
 	private HBoxContainer ViewPoints { get; set; }
 	private PopupMenu FileMenu { get; set; }
+	/// <summary>The skin editor is open (HUD components that normally hide, like popups, stay visible to be placed).</summary>
+	public static bool IsOpen { get; private set; }
+	public override void _EnterTree() => IsOpen = true;
+
 	public override void _Ready()
 	{
 		Skin.PreElement = Skin.Element;
@@ -164,6 +168,7 @@ public partial class SkinEditor : Control
 
 	public override void _ExitTree()
 	{
+		IsOpen = false;
 		if (_autoSaveIn >= 0) AutoSave(); // don't lose the last edit when the editor closes
 	}
 
@@ -424,6 +429,10 @@ public partial class SkinEditor : Control
 		VisibleBox.Toggled += on => EditSelected(e => e.Visible = on);
 		props.AddChild(VisibleBox);
 
+		CompSettings = new VBoxContainer();
+		CompSettings.AddThemeConstantOverride("separation", 8);
+		props.AddChild(CompSettings);
+
 		var buttons = new HBoxContainer();
 		var reset = new Button { Text = "Reset", SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
 		reset.Pressed += () => Canvas.ResetSelected();
@@ -487,9 +496,83 @@ public partial class SkinEditor : Control
 		Set(ScaleY, e.ScaleY);
 		Set(RotationBox, e.Rotation);
 		VisibleBox.SetPressedNoSignal(e.Visible);
+		RefreshComponentSettings(c, e);
 		RemoveButton.Text = added ? "Remove" : "Hide";
 		RemoveButton.Disabled = !added && !e.Visible;
 		_componentSignature = ""; // refresh highlight
+	}
+
+	// ---------------------------------------------------------------- the selected component's own options
+
+	private VBoxContainer CompSettings { get; set; }
+	private string _compSettingsKey;
+	private readonly Dictionary<string, Control> _compControls = new();
+
+	/// <summary>Builds (on a new selection) or refreshes the option rows of an <see cref="ISkinSettings"/> component.</summary>
+	private void RefreshComponentSettings(Control c, SkinLayoutEntry e)
+	{
+		var key = Canvas.SelectedKey;
+		if (key != _compSettingsKey)
+		{
+			_compSettingsKey = key;
+			_compControls.Clear();
+			foreach (var child in CompSettings.GetChildren()) child.QueueFree();
+			if (c is ISkinSettings comp && comp.SkinSettings.Count > 0)
+			{
+				CompSettings.AddChild(new HSeparator());
+				CompSettings.AddChild(Header("Options"));
+				foreach (var s in comp.SkinSettings) _compControls[s.Key] = AddSettingRow(s);
+			}
+		}
+		if (c is not ISkinSettings settings) return;
+		var focus = GetViewport().GuiGetFocusOwner();
+		foreach (var s in settings.SkinSettings)
+		{
+			if (!_compControls.TryGetValue(s.Key, out var ctl)) continue;
+			float v = e.Settings != null && e.Settings.TryGetValue(s.Key, out var stored) ? stored : s.Default;
+			switch (ctl)
+			{
+				case CheckBox box: box.SetPressedNoSignal(v >= 0.5f); break;
+				case OptionButton opt: opt.Select(Math.Clamp((int)v, 0, opt.ItemCount - 1)); break;
+				case SpinBox spin when focus == null || !spin.IsAncestorOf(focus): spin.SetValueNoSignal(v); break;
+			}
+		}
+	}
+
+	private Control AddSettingRow(SkinSetting s)
+	{
+		void Store(float v) => EditSelected((c, e) =>
+		{
+			e.Settings ??= new Dictionary<string, float>();
+			e.Settings[s.Key] = v;
+			SkinLayout.Apply(c, e);
+			(c as ISkinSettings)?.PreviewSkinSettings();
+		});
+		Control control;
+		if (s.Toggle)
+		{
+			var box = new CheckBox { Text = s.Label, TooltipText = s.Tooltip ?? "" };
+			box.Toggled += on => Store(on ? 1 : 0);
+			CompSettings.AddChild(box);
+			control = box;
+		}
+		else if (s.Options != null)
+		{
+			var opt = AddOption(CompSettings, s.Label, s.Options, i => Store(i));
+			opt.TooltipText = s.Tooltip ?? "";
+			control = opt;
+		}
+		else
+		{
+			var row = new HBoxContainer { TooltipText = s.Tooltip ?? "" };
+			row.AddChild(new Label { Text = s.Label, CustomMinimumSize = new Vector2(88, 0), AutowrapMode = TextServer.AutowrapMode.WordSmart, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill });
+			var spin = new SpinBox { MinValue = s.Min, MaxValue = s.Max, Step = s.Step, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill };
+			spin.ValueChanged += v => Store((float)v);
+			row.AddChild(spin);
+			CompSettings.AddChild(row);
+			control = spin;
+		}
+		return control;
 	}
 
 	private void RefreshComponentList()
