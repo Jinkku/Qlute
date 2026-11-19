@@ -409,7 +409,7 @@ public partial class SongSelect : Control
 		{
 			// Update song details
 			ExSongInfo.Text =
-				$"by {SettingsOperator.SessionConfig.BeatmapArtist}\nmapped by {SettingsOperator.SessionConfig.BeatmapMapper}{SetInfo()}\nDifficulty: {SettingsOperator.SessionConfig.BeatmapDifficultyName}";
+				$"by {SettingsOperator.SessionConfig.BeatmapArtist}\nmapped by {SettingsOperator.SessionConfig.BeatmapMapper}\nDifficulty: {SettingsOperator.SessionConfig.BeatmapDifficultyName}";
 			InfoBox.Text(Songpp,
 				"+" + SettingsOperator.GetMaxPpWithMods().ToString("N0") + "pp"); // same as the server (pp v3)
 			InfoBox.Text(LevelRating,
@@ -770,18 +770,6 @@ private void _Mods_show()
 	private int _seenCollections = -1;
 	/// <summary>Library size when the list was last built: fewer = something was deleted (indices shifted).</summary>
 	private int _knownCount;
-
-	/// <summary>" · 4 difficulties · set #123": which set the selected difficulty is from (two sets can share a song).</summary>
-	private static string SetInfo()
-	{
-		int id = SettingsOperator.SessionConfig.SongID;
-		if (id < 0 || id >= SettingsOperator.Beatmaps.Count) return "";
-		var b = SettingsOperator.Beatmaps[id];
-		int n = SongFilter.SetSize(b);
-		var text = n == 1 ? "  ·  1 difficulty" : $"  ·  {n} difficulties";
-		if (b.BeatmapSetID > 0) text += $"  ·  set #{b.BeatmapSetID}";
-		return text;
-	}
 
 	private void BuildFilterUi()
 	{

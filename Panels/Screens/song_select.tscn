@@ -340,6 +340,7 @@ text_overrun_behavior = 3
 script = ExtResource("9_p2axe")
 
 [node name="FilterHeader" type="PanelContainer" parent="." unique_id=962738861]
+z_index = 1
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.6
