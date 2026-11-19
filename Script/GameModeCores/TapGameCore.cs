@@ -266,6 +266,7 @@ public partial class TapGameCore : Control
 		W300 = 80f - 6f * OD;
 		W100 = 140f - 8f * OD;
 		W50 = 200f - 10f * OD;
+		UnstableRate.SetWindows((-W300, W300), (-W100, W100), (-W50, W50));
 		float rps = OD < 5 ? 1.5f + (2.5f - 1.5f) * OD / 5f : 2.5f + (3.75f - 2.5f) * (OD - 5f) / 5f;
 
 		int comboNumber = 0;
@@ -741,7 +742,7 @@ public partial class TapGameCore : Control
 			ComboAnimation();
 			if (o.Type != TapObjectType.Spinner)
 			{
-				SettingsOperator.Addms(offset);
+				SettingsOperator.Addms(offset, result);
 				HitOffsets.Add(offset);
 				SettingsOperator.Gameplaycfg.ms = ComputeUnstableRate();
 			}

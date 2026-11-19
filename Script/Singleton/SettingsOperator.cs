@@ -634,13 +634,14 @@ public partial class SettingsOperator : Node
         string formatted = $"{Extras.GetDayWithSuffix(date.Day)} {date:MMM yyyy}";
         return formatted;
     }
-    public static void Addms(float ms)
+    /// <param name="judge">0 Perfect, 1 Great, 2 Meh (colours the hit error meter's tick), -1 = unknown.</param>
+    public static void Addms(float ms, int judge = -1)
     {
         AllMiliSecondsFromBeatmap += ms;
         MiliSecondsFromBeatmapTimes++;
         // Drained by the UnstableRate HUD; cap it so modes/HUDs without that node don't grow it forever.
         if (UnstableRate.Rate.Count >= 256) UnstableRate.Rate.RemoveAt(0);
-        UnstableRate.Rate.Add(ms);
+        UnstableRate.Rate.Add((ms, judge));
     }
     public static float Getms() {
         return AllMiliSecondsFromBeatmap / MiliSecondsFromBeatmapTimes;

@@ -233,6 +233,7 @@ public partial class Gameplay : Control
 		SettingsOperator.PerfectJudge = (int)Math.Max(16,SettingsOperator.PerfectJudgeMin * scale);
 		SettingsOperator.GreatJudge = (int)(SettingsOperator.PerfectJudge * 4);
 		SettingsOperator.MehJudge = (int)(SettingsOperator.PerfectJudge * 6);
+		SetMeterWindows();
 		SettingsOperator.ResetScore();
 		SettingsOperator.Resetms();
 	}
@@ -558,7 +559,7 @@ public partial class Gameplay : Control
 		    JudgeResult = JudgeDiff(diff, Note);
 		    if (JudgeResult < 3)
 		    {
-			    SettingsOperator.Addms(diff + 50);
+			    SettingsOperator.Addms(diff + 50, JudgeResult);
 			    HitOffsets.Add(diff);
 			    SettingsOperator.Gameplaycfg.ms = ComputeUnstableRate();
 			    if (LanNetwork.InMatch) LanNetwork.Instance.SpecJudge(i, JudgeResult, gametime);
@@ -919,6 +920,16 @@ private void _GameNoteTick(double delta)
 	/// Returns 0 perfect, 1 great, 2 meh, 4 nothing (outside every window; the press is used up).
 	/// The windows are shifted by nodeSize, as they always were. Mirrored in ppv2calc.py.
 	/// </summary>
+	/// <summary>
+	/// Gives the hit error meter JudgeDiff's windows in the units Addms gets (diff + 50, so x - 4 with x = diff + nodeSize).
+	/// </summary>
+	private void SetMeterWindows()
+	{
+		float s = 50 - nodeSize; // meter value = x + s
+		int p = SettingsOperator.PerfectJudge, g = SettingsOperator.GreatJudge / 2, m = SettingsOperator.MehJudge / 2;
+		UnstableRate.SetWindows((-p - 5 + s, p + 15 + s), (-g - 5 + s, g + 15 + s), (-m - 15 + s, m + 15 + s));
+	}
+
 	public int JudgeDiff(int diff, NotesEn Note)
 	{
 		int x = diff + nodeSize;

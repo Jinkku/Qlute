@@ -202,6 +202,10 @@ public partial class TaikoGameCore : Control
 		SettingsOperator.PerfectJudge = (int)Math.Max(16,SettingsOperator.PerfectJudgeMin * scale);
 		SettingsOperator.GreatJudge = (int)(SettingsOperator.PerfectJudge * 4);
 		SettingsOperator.MehJudge = (int)(SettingsOperator.PerfectJudge * 6);
+		{ // the hit error meter's zones = checkjudge's windows (ms from the hit box)
+			int p = SettingsOperator.PerfectJudge, g = SettingsOperator.GreatJudge / 2, m = SettingsOperator.MehJudge / 2;
+			UnstableRate.SetWindows((-p - 5, p + 5), (-g - 5, g + 5), (-m - 15, m + 15));
+		}
 		SettingsOperator.ResetScore();
 		SettingsOperator.Resetms();
 	}
@@ -692,7 +696,7 @@ private void _GameNoteTick(double delta)
                 if (JudgeResult < 3)
                 {
                     float hitOffsetMs = notex - HitPoint;
-                    SettingsOperator.Addms(hitOffsetMs);
+                    SettingsOperator.Addms(hitOffsetMs, JudgeResult);
                     HitOffsets.Add(hitOffsetMs);
                     SettingsOperator.Gameplaycfg.ms = ComputeUnstableRate();
                 }
