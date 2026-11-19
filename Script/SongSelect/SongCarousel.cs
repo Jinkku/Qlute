@@ -15,6 +15,8 @@ public partial class SongCarousel : Control
 	public Action<int> Select;
 	/// <summary>The selected difficulty was clicked again: play it.</summary>
 	public Action Play;
+	/// <summary>A card was right-clicked without dragging: open its menu (SongID).</summary>
+	public Action<int> ContextMenu;
 
 	public const float Gap = 8, Indent = 46, PopOut = 30, Arc = 60, Overhang = 60;
 	/// <summary>The card scenes: edit their look in the editor. Row heights are their custom_minimum_size.y.</summary>
@@ -138,7 +140,8 @@ public partial class SongCarousel : Control
 		int current = SettingsOperator.SessionConfig.SongID;
 		if (current != _selected && _groupOf.ContainsKey(current)) Follow(current);
 
-		_scroll = Mathf.Lerp(_scroll, _target, 1f - Mathf.Exp(-(float)delta * 9f));
+		if (_rightHeld && !Input.IsMouseButtonPressed(MouseButton.Right)) _rightHeld = _rightDragging = false; // release missed (focus lost)
+		_scroll = Mathf.Lerp(_scroll, _target, 1f - Mathf.Exp(-(float)delta * (_rightDragging ? 18f : 9f)));
 		float bandTop = Mathf.Clamp(FocusTop, 0, Size.Y), bandBottom = Mathf.Max(bandTop, Size.Y - FocusBottom);
 		float centre = (bandTop + bandBottom) / 2, bandHalf = Mathf.Max(1, (bandBottom - bandTop) / 2);
 		float top = _scroll - centre - 150, bottom = _scroll + (Size.Y - centre) + 150;
@@ -184,6 +187,70 @@ public partial class SongCarousel : Control
 			_target = Mathf.Clamp(_target + step, 0, Mathf.Max(0, _contentH));
 			AcceptEvent();
 		}
+	}
+
+	// ------------------------------------------------------------------ right-click scrolling (like osu!)
+
+	private bool _rightHeld, _rightDragging;
+	private Vector2 _rightStart;
+	private int _rightSong = -1;
+	/// <summary>How far the mouse moves with the right button down on a card before it scrolls instead of opening the menu.</summary>
+	public const float RightDragThreshold = 8;
+
+	/// <summary>
+	/// Right button on the list: its height maps to the whole list, so the list jumps to the mouse and follows it
+	/// until the button is let go (even outside the list). On a card it only starts once the mouse moves; a plain
+	/// right click there opens the card's menu instead.
+	/// </summary>
+	public override void _Input(InputEvent e)
+	{
+		if (e is InputEventMouseButton mb && mb.ButtonIndex == MouseButton.Right)
+		{
+			if (mb.Pressed)
+			{
+				if (!IsVisibleInTree() || !UnderMouse()) return;
+				_rightHeld = true;
+				_rightDragging = false;
+				_rightStart = mb.GlobalPosition;
+				_rightSong = CardUnderMouse();
+				if (_rightSong < 0) { _rightDragging = true; ScrollToMouse(); }
+				GetViewport().SetInputAsHandled();
+			}
+			else if (_rightHeld)
+			{
+				if (!_rightDragging && _rightSong >= 0) ContextMenu?.Invoke(_rightSong);
+				_rightHeld = _rightDragging = false;
+				_rightSong = -1;
+				GetViewport().SetInputAsHandled();
+			}
+		}
+		else if (e is InputEventMouseMotion mm && _rightHeld)
+		{
+			if (!_rightDragging && mm.GlobalPosition.DistanceTo(_rightStart) > RightDragThreshold) _rightDragging = true;
+			if (_rightDragging) ScrollToMouse();
+		}
+	}
+
+	/// <summary>The mouse is over the list itself or one of its cards (not over something drawn on top of it).</summary>
+	private bool UnderMouse()
+	{
+		var hovered = GetViewport().GuiGetHoveredControl();
+		return hovered != null && (hovered == this || IsAncestorOf(hovered));
+	}
+
+	/// <summary>SongID of the card under the mouse, or -1 (empty space in the list).</summary>
+	private int CardUnderMouse()
+	{
+		for (Node n = GetViewport().GuiGetHoveredControl(); n != null && n != this; n = n.GetParent())
+			if (n is CarouselCard card) return card.Song;
+		return -1;
+	}
+
+	private void ScrollToMouse()
+	{
+		float bandTop = Mathf.Clamp(FocusTop, 0, Size.Y), bandBottom = Mathf.Max(bandTop + 1, Size.Y - FocusBottom);
+		float t = Mathf.Clamp((GetLocalMousePosition().Y - bandTop) / (bandBottom - bandTop), 0, 1);
+		_target = t * Mathf.Max(0, _contentH);
 	}
 
 	private void Bind(Control card, Row r)

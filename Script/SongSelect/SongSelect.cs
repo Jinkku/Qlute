@@ -490,6 +490,89 @@ public partial class SongSelect : Control
 	private string NoBeatmapSearch = "Nothing matches your search\n</3";
 	private string NoBeatmapFilters = "Nothing matches your search and filters\n(press Filters > Reset to see everything)";
 
+	private void OpenContextMenu(int songId)
+	{
+		ContextMenu.SongID = songId;
+		ContextMenuActive = true;
+		ContextMenu.Visible = true;
+		ContextMenuAni?.Kill();
+		ContextMenuAni = ContextMenu.CreateTween();
+		ContextMenuAni.SetParallel(true);
+		ContextMenuAni.TweenProperty(ContextMenu, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f)
+			.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		ContextMenuAni.TweenProperty(ContextMenu, "position", SettingsOperator.MouseMovement, 0.5f)
+			.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+	}
+
+	// ------------------------------------------------------------------ hold the background to hide the UI
+
+	/// <summary>Seconds the background must be held before the UI fades (a quick click does nothing).</summary>
+	public const double HideUiDelay = 0.15;
+	private const float HideUiFade = 0.25f;
+	private bool _bgHeld, _uiHidden, _leftWasDown;
+	private double _bgHeldFor;
+	private Tween _uiTween;
+	private readonly Dictionary<CanvasItem, float> _uiAlpha = new();
+
+	/// <summary>Nothing but the background (wallpaper, visualizer, empty list space) is under the mouse.</summary>
+	private bool OnBackground()
+	{
+		var hovered = GetViewport().GuiGetHoveredControl();
+		if (hovered == null || hovered == this || hovered == _carousel || hovered == GetNode("SongPanel")) return true;
+		foreach (var child in GetChildren())
+			if (IsBackdrop(child) && (child == hovered || child.IsAncestorOf(hovered))) return true;
+		return false;
+	}
+
+	/// <summary>
+	/// Polled rather than taken from _Input: children see input events first and some of them handle left clicks,
+	/// so a press on the background doesn't always reach this node.
+	/// </summary>
+	private void HoldToHideUi(double delta)
+	{
+		bool down = Input.IsMouseButtonPressed(MouseButton.Left);
+		bool justPressed = down && !_leftWasDown;
+		_leftWasDown = down;
+		if (justPressed && !ContextMenuActive && OnBackground()) { _bgHeld = true; _bgHeldFor = 0; }
+		if (!_bgHeld) return;
+		if (!down) { ReleaseBackground(); return; }
+		_bgHeldFor += delta;
+		if (!_uiHidden && _bgHeldFor >= HideUiDelay) SetUiHidden(true);
+	}
+
+	private void ReleaseBackground()
+	{
+		_bgHeld = false;
+		if (_uiHidden) SetUiHidden(false);
+	}
+
+	/// <summary>What stays when the UI hides: the background, the map's storyboard above it, and the visualizer.</summary>
+	private static bool IsBackdrop(Node n) => n is BeatmapBackground or MenuStoryboard || n.Name == "MusicVisualizer";
+
+	/// <summary>Fades every song select element except the backdrop (<see cref="IsBackdrop"/>) out, or back to how it was.</summary>
+	private void SetUiHidden(bool hide)
+	{
+		_uiHidden = hide;
+		_uiTween?.Kill();
+		_uiTween = CreateTween().SetParallel(true).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+		if (hide)
+		{
+			_uiAlpha.Clear();
+			foreach (var child in GetChildren())
+			{
+				if (child is not CanvasItem item || IsBackdrop(child)) continue;
+				_uiAlpha[item] = item.Modulate.A;
+				_uiTween.TweenProperty(item, "modulate:a", 0f, HideUiFade);
+			}
+		}
+		else
+		{
+			foreach (var (item, alpha) in _uiAlpha)
+				if (IsInstanceValid(item)) _uiTween.TweenProperty(item, "modulate:a", alpha, HideUiFade);
+			_uiAlpha.Clear();
+		}
+	}
+
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double _delta)
 	{
@@ -511,19 +594,10 @@ public partial class SongSelect : Control
 			if (!string.IsNullOrEmpty(SongFilter.Current.Collection)) ApplyFilters();
 		}
 
-		if (Input.IsMouseButtonPressed(MouseButton.Right) && SettingsOperator.SessionConfig.SongIDHighlighted != -1)
-		{
-			ContextMenu.SongID = SettingsOperator.SessionConfig.SongIDHighlighted;
-			ContextMenuActive = true;
-			ContextMenu.Visible = true;
-			ContextMenuAni?.Kill();
-			ContextMenuAni = ContextMenu.CreateTween();
-			ContextMenuAni.SetParallel(true);
-			ContextMenuAni.TweenProperty(ContextMenu, "modulate", new Color(1f, 1f, 1f, 1f), 0.5f)
-				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-			ContextMenuAni.TweenProperty(ContextMenu, "position", SettingsOperator.MouseMovement, 0.5f)
-				.SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
-		}
+		HoldToHideUi(_delta);
+		// (the carousel opens the menu itself on a right click without a drag: holding right scrolls the list)
+		if (_carousel == null && Input.IsMouseButtonPressed(MouseButton.Right) && SettingsOperator.SessionConfig.SongIDHighlighted != -1)
+			OpenContextMenu(SettingsOperator.SessionConfig.SongIDHighlighted);
 		else if (Input.IsMouseButtonPressed(MouseButton.Left) &&
 		         ContextMenuActive) // Hide context menu if left mouse button is pressed outside of it
 		{
@@ -829,6 +903,7 @@ private void _Mods_show()
 		_carousel.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
 		_carousel.Select = id => SettingsOperator.SelectSongID(id);
 		_carousel.Play = () => { if (!blockinputwhentext) _Start(); };
+		_carousel.ContextMenu = OpenContextMenu;
 		panel.AddChild(_carousel);
 		panel.MoveChild(_carousel, 0); // under the "no beatmaps" message
 		ScrollSongs(); // clears the old-style cards

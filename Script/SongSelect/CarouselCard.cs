@@ -9,6 +9,7 @@ public abstract partial class CarouselCard : Button
 {
 	internal SongCarousel Carousel;
 	protected int SongId = -1;
+	internal int Song => SongId;
 	protected abstract bool IsSetCard { get; }
 	private StyleBox _normal, _hover;
 
