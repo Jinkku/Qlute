@@ -9,6 +9,8 @@ using System.Linq;
 /// compared with the server's ppv2calc.py (they must match exactly). Run headless:
 ///   ... --headless --path /Storage/Qlute -- --replay-test=/path/file.qrf [--replay-test-version=DiffName]
 /// Prints one "[REPLAYTEST] result ..." line and quits. Use an XDG_DATA_HOME sandbox.
+/// --replay-test-seeks=20000:5000,30000:60000 seeks the replay (Gameplay.SeekTo) to 5000 ms once the song passes
+/// 20000 ms, then to 60000 once it passes 30000...: the result must match a run without seeks.
 /// </summary>
 public partial class ReplaySelfTest : Node
 {
@@ -18,6 +20,12 @@ public partial class ReplaySelfTest : Node
 
 	private double _t;
 	private bool _started, _done;
+	/// <summary>--replay-test-probes=5000,40000: print the counts once the song passes each time (to compare with seeks).</summary>
+	private readonly Queue<float> _probes = new(
+		(Value("--replay-test-probes=") ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries).Select(p => float.Parse(p, CultureInfo.InvariantCulture)).OrderBy(p => p));
+	private readonly Queue<(float at, float to)> _seeks = new(
+		(Value("--replay-test-seeks=") ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries)
+			.Select(p => p.Split(':')).Select(p => (float.Parse(p[0], CultureInfo.InvariantCulture), float.Parse(p[1], CultureInfo.InvariantCulture))));
 
 	public override void _Ready() => ProcessMode = ProcessModeEnum.Always;
 
@@ -28,6 +36,14 @@ public partial class ReplaySelfTest : Node
 		if (!_started && _t > 3 && SettingsOperator.Beatmaps.Count > 0) Start();
 		if (_started && (int)(_t / 10) != (int)((_t - delta) / 10))
 			GD.Print($"[REPLAYTEST] t={_t:0} song={SettingsOperator.Gameplaycfg.Time:0.00}/{SettingsOperator.Gameplaycfg.TimeTotalGame:0.00} playing={AudioPlayer.Instance.Playing} inst={Gameplay.Instance != null} started={Gameplay.Instance?.songstarted} paused={GetTree().Paused} scene={GetTree().CurrentScene?.Name}");
+		if (_started && _seeks.Count > 0 && Gameplay.Instance is { } g && g.CanSeek && g.gametime >= _seeks.Peek().at)
+		{
+			var (at, to) = _seeks.Dequeue();
+			g.SeekTo(to);
+			GD.Print($"[REPLAYTEST] seek at {at:0} -> {to:0}: now {g.gametime:0} P{SettingsOperator.Gameplaycfg.Max} G{SettingsOperator.Gameplaycfg.Great} M{SettingsOperator.Gameplaycfg.Meh} B{SettingsOperator.Gameplaycfg.Bad} combo {SettingsOperator.Gameplaycfg.Combo}");
+		}
+		while (_started && _probes.Count > 0 && Gameplay.Instance is { songstarted: true } pg && pg.gametime >= _probes.Peek())
+			GD.Print($"[REPLAYTEST] probe {_probes.Dequeue():0}: now {pg.gametime:0} P{SettingsOperator.Gameplaycfg.Max} G{SettingsOperator.Gameplaycfg.Great} M{SettingsOperator.Gameplaycfg.Meh} B{SettingsOperator.Gameplaycfg.Bad} combo {SettingsOperator.Gameplaycfg.Combo}");
 		if (_started && !_done && Gameplay.Instance is { Finished: true })
 		{
 			_done = true;

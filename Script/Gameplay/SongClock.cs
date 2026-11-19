@@ -28,6 +28,13 @@ public sealed class SongClock
 
 	public double Time => _time;
 
+	/// <summary>Jump to <paramref name="seconds"/> (after seeking the audio): resyncs to the audio on the next update.</summary>
+	public void Seek(double seconds)
+	{
+		_time = seconds;
+		_synced = false;
+	}
+
 	public void Reset()
 	{
 		_time = 0;

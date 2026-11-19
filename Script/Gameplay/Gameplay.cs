@@ -487,11 +487,12 @@ public partial class Gameplay : Control
 	    var Note = Notes[i];
 	    Hittext(Skin.Element.JudgeMiss);
 	    SettingsOperator.Gameplaycfg.Bad++;
-	    if (SettingsOperator.Gameplaycfg.Combo > 50) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
+	    if (SettingsOperator.Gameplaycfg.Combo > 50 && !_seeking) Sample.PlaySample("res://SelectableSkins/Slia/Sounds/combobreak.wav");
 	    SettingsOperator.Gameplaycfg.Combo = 0;
 	    BadCombo++;
 	    ComboAnimation();
 	    HealthBar.Damage(5 * BadCombo);
+	    if (_seeking) { Note.hit = true; return; }
 	    if (HurtAnimation != null && HurtAnimation.IsRunning()) HurtAnimation.Stop();
 	    if (GetTree().CurrentScene is CanvasItem canvasScene) canvasScene.Modulate = new Color(1f, 0.5f, 0.5f, 1f);
 	    HurtAnimation = CreateTween();
@@ -687,16 +688,122 @@ private void _GameNoteTick(double delta)
 			_lastJudgedMs = Math.Max(_lastJudgedMs, now);
 		}
 
+		AdvanceNoteTick(gametime, viewportSize);
+	}
+
+	/// <summary>Moves NoteTick past the notes that can't be hit any more at song time <paramref name="songMs"/>.</summary>
+	private void AdvanceNoteTick(float songMs, float viewportSize)
+	{
 		for (int i = Math.Min(MaxNotes, NoteTick); i < Math.Min(MaxNotes, NoteTick + 256); i++)
 		{
 			var Note = Notes[i];
 			// Part of judging (notes before NoteTick can't be hit any more), so it stays in the old 720p units:
 			// a note leaves 300 ms after its hit time, exactly as before the 1080p base. Not a pixel test.
-			if (Note.timing + gametime + HitPoint / PxPerMs > viewportSize / UiScale.ScreenRatio + 150)
+			if (Note.timing + songMs + HitPoint / PxPerMs > viewportSize / UiScale.ScreenRatio + 150)
 			{
 				NoteTick++;
 			}
 		}
+	}
+
+	// ------------------------------------------------------------------ replay seeking
+
+	/// <summary>True while <see cref="SeekTo"/> re-judges the replay: sounds, popups and animations are skipped.</summary>
+	private bool _seeking;
+	private static readonly List<int> NoPresses = new();
+	/// <summary>How far ← / → skip while watching a replay.</summary>
+	public const int SeekSkipMs = 5000;
+
+	/// <summary>Watching a replay (or auto) that is playing: the seek bar and arrow keys can move through it.</summary>
+	public bool CanSeek => SettingsOperator.SpectatorMode && songstarted && !Finished && !Dead && !LanNetwork.InMatch
+		&& Replay.ReplayCache.Count > 0 && Notes.Count > 0;
+
+	/// <summary>Song length for the seek bar (ms): the last note.</summary>
+	public int SongLengthMs => SongEndMs == int.MaxValue ? (int)(SettingsOperator.Gameplaycfg.TimeTotalGame * 1000) : SongEndMs;
+
+	/// <summary>
+	/// Jumps a replay to <paramref name="targetMs"/> (song time). The judgement state is rebuilt by re-judging every
+	/// recorded press up to there, in order, exactly like playback does, so score / combo / accuracy / health at the
+	/// new time are the same as if it had been watched from the start. Then the music jumps there.
+	/// </summary>
+	public void SeekTo(float targetMs)
+	{
+		if (!CanSeek) return;
+		int target = (int)Math.Floor(Math.Clamp(targetMs, 0, Math.Max(0, SongLengthMs - 1)));
+
+		_seeking = true;
+		try
+		{
+			SettingsOperator.ResetScore();
+			SettingsOperator.Resetms();
+			HitOffsets.Reset();
+			ComboPortion = 0;
+			BadCombo = 0;
+			HealthBar.Reset();
+			foreach (var n in Notes) n.hit = false;
+			NoteTick = 0;
+			ReplayINT = 0;
+			Array.Fill(LastKeyPressTime, long.MinValue);
+			QueuedPresses.Clear();
+			_lastJudgedMs = int.MinValue;
+
+			// Same order as playback: each frame judges (misses, then that frame's presses) and only then moves
+			// NoteTick on. Gaps between presses are walked in small steps so no note slips past NoteTick unjudged.
+			const int StepMs = 50;
+			var group = new List<int>();
+			var cache = Replay.ReplayCache;
+			int last = 0;
+			void Frame(int t, List<int> presses)
+			{
+				for (int s = last + StepMs; s < t; s += StepMs)
+				{
+					ProcessInputFrame(s, NoPresses);
+					AdvanceNoteTick(s, _viewportHeight);
+				}
+				ProcessInputFrame(t, presses);
+				AdvanceNoteTick(t, _viewportHeight);
+				if (SettingsOperator.Gameplaycfg.Combo > SettingsOperator.Gameplaycfg.MaxCombo)
+					SettingsOperator.Gameplaycfg.MaxCombo = SettingsOperator.Gameplaycfg.Combo;
+				last = t;
+			}
+			while (ReplayINT < cache.Count && cache[ReplayINT].Time <= target)
+			{
+				int t = cache[ReplayINT].Time;
+				group.Clear();
+				while (ReplayINT < cache.Count && cache[ReplayINT].Time == t)
+				{
+					int col = cache[ReplayINT].NoteTap;
+					if ((uint)col < 4u) group.Add(col);
+					ReplayINT++;
+				}
+				Frame(t, group);
+			}
+			Frame(target, NoPresses); // the misses up to the new time
+			_lastJudgedMs = target;
+			SettingsOperator.Gameplaycfg.ms = ComputeUnstableRate();
+			SettingsOperator.Gameplaycfg.Accuracy = ReloadAccuracy(SettingsOperator.Gameplaycfg.Max, SettingsOperator.Gameplaycfg.Great,
+				SettingsOperator.Gameplaycfg.Meh, SettingsOperator.Gameplaycfg.Bad);
+		}
+		finally
+		{
+			_seeking = false;
+		}
+		UnstableRate.Rate.Clear(); // the hit error meter starts fresh from here
+		for (int c = 0; c < Keys.Count; c++)
+			if (Keys[c].hit) hitnote(c, false, target);
+
+		// background flashes: carry on from the last one before the new time
+		DanceIndex = 0;
+		while (dance != null && DanceIndex + 1 < dance.Count && dance[DanceIndex + 1].time <= target) DanceIndex++;
+		// a break overlay from the old time no longer applies (the break check starts a new one if needed)
+		if (IsInstanceValid(Break)) Break.QueueFree();
+		BreakOver();
+
+		double songSeconds = target * 0.001 + startedtime - audioOffset;
+		AudioPlayer.Instance.Seek((float)songSeconds);
+		Clock.Seek(songSeconds);
+		gametime = target;
+		scoreint = score;
 	}
 
 	private Tween HUDTween { get; set; }
@@ -840,6 +947,8 @@ private void _GameNoteTick(double delta)
 			}
 
 			ScrollSpeed.PollKeys();
+			if (CanSeek && Input.IsActionJustPressed("ui_left")) SeekTo(gametime - SeekSkipMs); // replays: ← / → skip
+			else if (CanSeek && Input.IsActionJustPressed("ui_right")) SeekTo(gametime + SeekSkipMs);
 			if (!Finished) CheckReplayKey((int)Math.Floor(gametime));
 			_GameNoteTick(delta);
 			if (LanNetwork.InMatch) LanNetwork.Instance.SpecTime(gametime); // spectators follow this clock
@@ -891,6 +1000,7 @@ private void _GameNoteTick(double delta)
 	private bool erroredout = false;
 	public void Hittext(Texture2D Image)
 	{
+		if (_seeking) return;
 		hittext.Modulate = new Color(1f, 1f, 1f, 1f);
 		hittext.Position = new Vector2(hittextoldpos.X, hittextoldpos.Y - 13);
 		if (hittext.Texture != Image)
@@ -910,6 +1020,7 @@ private void _GameNoteTick(double delta)
 
 	private void ComboAnimation()
 	{
+		if (_seeking) return;
 		if (ComboCounter != null)
 		{
 			ComboCounter.Scale = new Vector2(1.0f, 1.2f);
