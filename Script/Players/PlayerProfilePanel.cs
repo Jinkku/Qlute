@@ -528,16 +528,47 @@ public partial class PlayerProfilePanel : Control
 	}
 
 	// =====================================================================
-	// Medals (.pf-medal): earned first, lavender tiles; locked ones dimmed. Tooltip = how to earn it.
+	// Medals (.pf-medal): grouped like the website (.pf-medal-group): the server's categories in its order, each with
+	// "x / y" earned and its medals easiest first. Lavender tiles when earned, dimmed when locked; tooltip = how to earn it.
 	// =====================================================================
 
 	private void Medals(List<PlayerApi.Medal> medals)
 	{
 		if (medals.Count == 0) return;
-		var v = SectionBody(Section(_page));
+		var v = SectionBody(Section(_page), 16);
 		SectionHead(v, "Medals", $"{medals.Count(m => m.Achieved)} / {medals.Count} earned");
-		var grid = AutoGrid(v, 263);
-		foreach (var m in medals.OrderBy(m => !m.Achieved)) grid.AddChild(MedalTile(m));
+		if (medals.All(m => string.IsNullOrEmpty(m.Category)))
+		{
+			// an older server without categories: one list, earned first
+			var all = AutoGrid(v, 263);
+			foreach (var m in medals.OrderBy(m => !m.Achieved)) all.AddChild(MedalTile(m));
+			return;
+		}
+		// Groups in the server's order (by category_order; first appearance if it isn't sent), medals by "order".
+		var index = medals.Select((m, i) => (m, i)).ToDictionary(x => x.m, x => x.i);
+		var groups = medals
+			.GroupBy(m => string.IsNullOrEmpty(m.Category) ? "Other" : m.Category)
+			.OrderBy(g => g.Min(m => m.CategoryOrder < 0 ? int.MaxValue : m.CategoryOrder))
+			.ThenBy(g => g.Min(m => index[m]));
+		foreach (var g in groups)
+		{
+			var items = g.OrderBy(m => m.Order < 0 ? int.MaxValue : m.Order).ThenBy(m => index[m]).ToList();
+			var head = new HBoxContainer();
+			head.AddThemeConstantOverride("separation", 13);
+			var name = PlayerOverlays.Text(g.Key.ToUpperInvariant(), 16, new Color("#ffffffcc"), bold: true); // .pf-medal-group-head
+			name.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+			head.AddChild(name);
+			var count = PlayerOverlays.Text($"{items.Count(m => m.Achieved)} / {items.Count}", 15, PlayerOverlays.Dim);
+			count.SizeFlagsVertical = SizeFlags.ShrinkCenter;
+			head.AddChild(count);
+			var group = new VBoxContainer();
+			group.AddThemeConstantOverride("separation", 10);
+			group.AddChild(head);
+			group.AddChild(new ColorRect { Color = new Color("#ffffff14"), CustomMinimumSize = new Vector2(0, 1), MouseFilter = MouseFilterEnum.Ignore });
+			v.AddChild(group);
+			var grid = AutoGrid(group, 263);
+			foreach (var m in items) grid.AddChild(MedalTile(m));
+		}
 	}
 
 	private static Control MedalTile(PlayerApi.Medal m)

@@ -39,6 +39,10 @@ public static class PlayerApi
 		public bool Achieved;
 		/// <summary>When it was first earned (unix), 0 if unknown.</summary>
 		public long AchievedAt;
+		/// <summary>The server's medal group (Chikara views.MEDAL_CATEGORIES), e.g. "Skill"; empty from older servers.</summary>
+		public string Category = "";
+		/// <summary>The group's place among the groups, and the medal's place inside it (-1 = not sent).</summary>
+		public int CategoryOrder = -1, Order = -1;
 	}
 
 	public class Profile : Player
@@ -195,6 +199,8 @@ public static class PlayerApi
 				{
 					Title = OnlineApi.Str(m, "title") ?? "", Desc = OnlineApi.Str(m, "desc") ?? "", Hint = OnlineApi.Str(m, "hint") ?? "", Achieved = OnlineApi.Bool(m, "achieved"),
 					AchievedAt = OnlineApi.Long(m, "achieved_at"),
+					Category = OnlineApi.Str(m, "category") ?? "",
+					CategoryOrder = (int)OnlineApi.Long(m, "category_order", -1), Order = (int)OnlineApi.Long(m, "order", -1),
 				}).ToList();
 			p.Best = ReadPlays(json["best"]);
 			p.Recent = ReadPlays(json["recent"]);
